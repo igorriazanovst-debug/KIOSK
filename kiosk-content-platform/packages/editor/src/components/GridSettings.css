@@ -1,0 +1,75 @@
+.grid-settings {
+  position: relative;
+}
+
+.grid-settings-modal {
+  position: absolute;
+  top: 50px;
+  right: 0;
+  width: 320px;
+  background: #252526;
+  border: 1px solid #3e3e42;
+  border-radius: 8px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+}
+
+.grid-settings-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px;
+  border-bottom: 1px solid #3e3e42;
+}
+
+.grid-settings-header h3 {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 600;
+  color: #cccccc;
+}
+
+.grid-settings-content {
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.setting-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.setting-field label {
+  font-size: 12px;
+  color: #cccccc;
+}
+
+.setting-field input[type="number"],
+.setting-field input[type="text"] {
+  width: 100%;
+}
+
+.setting-presets {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.setting-presets label {
+  font-size: 12px;
+  color: #cccccc;
+}
+
+.preset-buttons {
+  display: flex;
+  gap: 8px;
+}
+
+.preset-buttons button {
+  flex: 1;
+  font-size: 12px;
+  padding: 8px 12px;
+}

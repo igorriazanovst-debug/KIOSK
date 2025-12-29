@@ -1,0 +1,103 @@
+{
+  "version": "1.0.0",
+  "name": "Пример проекта - Информационный киоск",
+  "canvas": {
+    "width": 1920,
+    "height": 1080,
+    "backgroundColor": "#f0f0f0"
+  },
+  "widgets": [
+    {
+      "id": "widget-title",
+      "type": "text",
+      "x": 660,
+      "y": 100,
+      "width": 600,
+      "height": 100,
+      "rotation": 0,
+      "properties": {
+        "text": "Добро пожаловать!",
+        "fontSize": 48,
+        "color": "#2c3e50",
+        "fontWeight": "bold",
+        "textAlign": "center"
+      }
+    },
+    {
+      "id": "widget-btn-services",
+      "type": "button",
+      "x": 360,
+      "y": 400,
+      "width": 300,
+      "height": 200,
+      "rotation": 0,
+      "properties": {
+        "text": "Услуги",
+        "backgroundColor": "#3498db",
+        "textColor": "#ffffff",
+        "fontSize": 32
+      },
+      "events": [
+        {
+          "trigger": "click",
+          "actions": [
+            {
+              "type": "navigate",
+              "targetId": "page-services"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "widget-btn-info",
+      "type": "button",
+      "x": 810,
+      "y": 400,
+      "width": 300,
+      "height": 200,
+      "rotation": 0,
+      "properties": {
+        "text": "Информация",
+        "backgroundColor": "#2ecc71",
+        "textColor": "#ffffff",
+        "fontSize": 32
+      }
+    },
+    {
+      "id": "widget-btn-contacts",
+      "type": "button",
+      "x": 1260,
+      "y": 400,
+      "width": 300,
+      "height": 200,
+      "rotation": 0,
+      "properties": {
+        "text": "Контакты",
+        "backgroundColor": "#e74c3c",
+        "textColor": "#ffffff",
+        "fontSize": 32
+      }
+    },
+    {
+      "id": "widget-footer",
+      "type": "text",
+      "x": 660,
+      "y": 950,
+      "width": 600,
+      "height": 80,
+      "rotation": 0,
+      "properties": {
+        "text": "Нажмите на кнопку для получения информации",
+        "fontSize": 20,
+        "color": "#7f8c8d",
+        "textAlign": "center"
+      }
+    }
+  ],
+  "metadata": {
+    "createdAt": "2025-01-01T00:00:00.000Z",
+    "updatedAt": "2025-01-01T12:00:00.000Z",
+    "author": "Demo User"
+  }
+}

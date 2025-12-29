@@ -1,0 +1,165 @@
+{
+  "id": "example-kiosk",
+  "name": "Example Kiosk Project",
+  "canvas": {
+    "width": 1920,
+    "height": 1080,
+    "backgroundColor": "#1e1e1e"
+  },
+  "widgets": [
+    {
+      "id": "title-text",
+      "type": "text",
+      "x": 100,
+      "y": 100,
+      "width": 1720,
+      "height": 100,
+      "zIndex": 1,
+      "rotation": 0,
+      "locked": false,
+      "properties": {
+        "text": "Добро пожаловать в Kiosk Player!",
+        "fontSize": 48,
+        "fontFamily": "Arial",
+        "fontWeight": "bold",
+        "fontStyle": "normal",
+        "textAlign": "center",
+        "verticalAlign": "middle",
+        "textColor": "#ffffff",
+        "backgroundColor": "transparent",
+        "lineHeight": 1.2,
+        "padding": 20,
+        "textDecoration": "none"
+      }
+    },
+    {
+      "id": "description-text",
+      "type": "text",
+      "x": 100,
+      "y": 220,
+      "width": 1720,
+      "height": 200,
+      "zIndex": 1,
+      "rotation": 0,
+      "locked": false,
+      "properties": {
+        "text": "Это пример киоск-проекта.\n\nНажмите кнопку ниже для тестирования интерактивности.\nИспользуйте F11 для полноэкранного режима.",
+        "fontSize": 24,
+        "fontFamily": "Arial",
+        "fontWeight": "normal",
+        "fontStyle": "normal",
+        "textAlign": "center",
+        "verticalAlign": "top",
+        "textColor": "#cccccc",
+        "backgroundColor": "transparent",
+        "lineHeight": 1.5,
+        "padding": 20,
+        "textDecoration": "none"
+      }
+    },
+    {
+      "id": "test-button",
+      "type": "button",
+      "x": 760,
+      "y": 500,
+      "width": 400,
+      "height": 80,
+      "zIndex": 2,
+      "rotation": 0,
+      "locked": false,
+      "properties": {
+        "text": "🎉 Тестовая кнопка",
+        "backgroundColor": "#4a90e2",
+        "textColor": "#ffffff",
+        "fontSize": 24,
+        "fontFamily": "Arial",
+        "fontWeight": "bold",
+        "textAlign": "center",
+        "borderRadius": 12,
+        "borderWidth": 0,
+        "borderColor": "#000000",
+        "borderStyle": "solid",
+        "paddingX": 32,
+        "paddingY": 16,
+        "shadowEnabled": true,
+        "shadowColor": "#000000",
+        "shadowBlur": 20,
+        "shadowOffsetX": 0,
+        "shadowOffsetY": 4,
+        "shadowOpacity": 0.3,
+        "actions": [
+          {
+            "type": "popup",
+            "popupTitle": "Успех!",
+            "popupContent": "Интерактивность работает отлично!\n\nВсе действия кнопок и меню функционируют корректно в Player.",
+            "popupWidth": 500,
+            "popupHeight": 300
+          }
+        ]
+      }
+    },
+    {
+      "id": "background-shape",
+      "type": "shape",
+      "x": 0,
+      "y": 0,
+      "width": 1920,
+      "height": 1080,
+      "zIndex": 0,
+      "rotation": 0,
+      "locked": true,
+      "properties": {
+        "shapeType": "rectangle",
+        "fillColor": "#1e1e1e",
+        "strokeColor": "#333333",
+        "strokeWidth": 0,
+        "cornerRadius": 0,
+        "opacity": 1
+      }
+    },
+    {
+      "id": "info-box",
+      "type": "shape",
+      "x": 660,
+      "y": 700,
+      "width": 600,
+      "height": 300,
+      "zIndex": 1,
+      "rotation": 0,
+      "locked": false,
+      "properties": {
+        "shapeType": "rectangle",
+        "fillColor": "#2c3e50",
+        "strokeColor": "#4a90e2",
+        "strokeWidth": 2,
+        "cornerRadius": 16,
+        "opacity": 0.8
+      }
+    },
+    {
+      "id": "info-text",
+      "type": "text",
+      "x": 680,
+      "y": 720,
+      "width": 560,
+      "height": 260,
+      "zIndex": 2,
+      "rotation": 0,
+      "locked": false,
+      "properties": {
+        "text": "ℹ️ Информация\n\n✅ Все виджеты работают\n✅ Действия выполняются\n✅ F11 - полный экран\n✅ ESC - выход",
+        "fontSize": 18,
+        "fontFamily": "Arial",
+        "fontWeight": "normal",
+        "fontStyle": "normal",
+        "textAlign": "left",
+        "verticalAlign": "top",
+        "textColor": "#ffffff",
+        "backgroundColor": "transparent",
+        "lineHeight": 1.6,
+        "padding": 20,
+        "textDecoration": "none"
+      }
+    }
+  ]
+}

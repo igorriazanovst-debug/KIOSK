@@ -1,0 +1,20 @@
+{
+  "name": "kiosk-content-platform",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Content creation platform for touch screen kiosks",
+  "workspaces": [
+    "packages/*"
+  ],
+  "scripts": {
+    "dev:editor": "npm run dev --workspace=@kiosk/editor",
+    "dev:runtime": "npm run dev --workspace=@kiosk/runtime",
+    "build:all": "npm run build --workspaces",
+    "dev:electron": "npm run dev --workspace=@kiosk/electron-app",
+    "player:dev": "npm run electron:dev --workspace=@kiosk-platform/player",
+    "player:build": "npm run electron:build:win --workspace=@kiosk-platform/player"
+  },
+  "keywords": ["kiosk", "content-editor", "digital-signage"],
+  "author": "",
+  "license": "MIT"
+}
