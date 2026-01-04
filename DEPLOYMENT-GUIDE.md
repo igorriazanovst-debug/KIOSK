@@ -691,7 +691,7 @@ echo "Device ID: $DEVICE_ID"
 echo ""
 
 echo "6. Get Devices..."
-curl -s "$SERVER/api/devices" | jq '.data | length'
+curl -s "http://localhost:3001/api/devices" | jq '.data | length'
 echo ""
 
 # Cleanup

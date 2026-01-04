@@ -1,13 +1,11 @@
 /**
  * Media Library Component
  * Browse, upload, and manage media files from server
- * NOW WITH: Insert media into project as widgets!
  */
 
 import React, { useState, useEffect, useRef } from 'react';
 import { apiClient, MediaFile } from '../services/api-client';
 import { useServerStore } from '../stores/serverStore';
-import { useEditorStore } from '../stores/editorStore';
 import './MediaLibrary.css';
 
 interface MediaLibraryProps {
@@ -18,7 +16,6 @@ interface MediaLibraryProps {
 
 export const MediaLibrary: React.FC<MediaLibraryProps> = ({ onClose, onSelect, type = 'all' }) => {
   const { isConnected } = useServerStore();
-  const { addWidget, project } = useEditorStore();
   
   const [media, setMedia] = useState<MediaFile[]>([]);
   const [loading, setLoading] = useState(true);
@@ -45,24 +42,12 @@ export const MediaLibrary: React.FC<MediaLibraryProps> = ({ onClose, onSelect, t
       const params = filterType !== 'all' ? { type: filterType } : undefined;
       const result = await apiClient.getMedia(params);
       
-      // 🔍 DEBUG: Log media response
-      console.log('[MediaLibrary] Media loaded:', result);
-      
       if (result.success && result.data) {
-        // 🔍 DEBUG: Log first media item with URL
-        if (result.data.length > 0) {
-          const first = result.data[0];
-          const fullUrl = apiClient.getMediaUrl(first);
-          console.log('[MediaLibrary] First media:', first);
-          console.log('[MediaLibrary] Full URL:', fullUrl);
-        }
-        
         setMedia(result.data);
       } else {
         setError(result.error || 'Failed to load media');
       }
     } catch (err: any) {
-      console.error('[MediaLibrary] Load error:', err);
       setError(err.message || 'Network error');
     } finally {
       setLoading(false);
@@ -135,100 +120,6 @@ export const MediaLibrary: React.FC<MediaLibraryProps> = ({ onClose, onSelect, t
     if (onSelect) {
       onSelect(mediaFile);
     }
-  };
-
-  /**
-   * 🆕 NEW: Insert selected media into project as a widget
-   */
-  const handleInsertToProject = () => {
-    console.log('[MediaLibrary] Insert clicked');
-    console.log('[MediaLibrary] Selected media:', selectedMedia);
-    console.log('[MediaLibrary] Project:', project);
-    
-    if (!selectedMedia || !project) {
-      console.warn('[MediaLibrary] Missing selectedMedia or project');
-      return;
-    }
-
-    const mediaUrl = apiClient.getMediaUrl(selectedMedia);
-    console.log('[MediaLibrary] Media URL:', mediaUrl);
-    
-    // Определяем тип виджета по типу медиа
-    let widgetType: 'image' | 'video' = 'image';
-    let defaultProps: any = {};
-
-    if (selectedMedia.type === 'image') {
-      widgetType = 'image';
-      defaultProps = {
-        src: mediaUrl,
-        objectFit: 'contain',
-        borderEnabled: false,
-        clipShape: 'rectangle'
-      };
-    } else if (selectedMedia.type === 'video') {
-      widgetType = 'video';
-      defaultProps = {
-        src: mediaUrl,
-        sourceType: 'url',
-        autoplay: false,
-        loop: false,
-        muted: true,
-        controls: true,
-        objectFit: 'contain',
-        borderEnabled: false
-      };
-    } else {
-      alert('⚠️ Only images and videos can be inserted into project');
-      return;
-    }
-
-    // Определяем размеры виджета
-    let width = 400;
-    let height = 300;
-
-    if (selectedMedia.width && selectedMedia.height) {
-      const ratio = selectedMedia.width / selectedMedia.height;
-      const maxWidth = 600;
-      const maxHeight = 400;
-
-      if (selectedMedia.width > maxWidth || selectedMedia.height > maxHeight) {
-        // Масштабируем с сохранением пропорций
-        if (ratio > 1) {
-          width = maxWidth;
-          height = maxWidth / ratio;
-        } else {
-          height = maxHeight;
-          width = maxHeight * ratio;
-        }
-      } else {
-        width = selectedMedia.width;
-        height = selectedMedia.height;
-      }
-    }
-
-    // Создаем виджет в центре холста
-    const x = (project.canvas.width - width) / 2;
-    const y = (project.canvas.height - height) / 2;
-
-    const newWidget = {
-      id: `widget-${Date.now()}-${Math.random()}`,
-      type: widgetType,
-      x,
-      y,
-      width,
-      height,
-      zIndex: 0,
-      properties: defaultProps
-    };
-
-    // Добавляем виджет в проект
-    addWidget(newWidget);
-
-    // Показываем уведомление
-    alert(`✅ ${selectedMedia.type === 'image' ? 'Image' : 'Video'} widget added to project!`);
-    
-    // Закрываем Media Library
-    onClose();
   };
   
   const formatFileSize = (bytes: number) => {
@@ -350,13 +241,6 @@ export const MediaLibrary: React.FC<MediaLibraryProps> = ({ onClose, onSelect, t
                     <img
                       src={apiClient.getMediaUrl(mediaFile)}
                       alt={mediaFile.name}
-                      onError={(e) => {
-                        console.error('[MediaLibrary] Image load error:', mediaFile.name, apiClient.getMediaUrl(mediaFile));
-                        e.currentTarget.style.display = 'none';
-                      }}
-                      onLoad={() => {
-                        console.log('[MediaLibrary] Image loaded:', mediaFile.name);
-                      }}
                     />
                   )}
                   {mediaFile.type === 'video' && (
@@ -401,23 +285,12 @@ export const MediaLibrary: React.FC<MediaLibraryProps> = ({ onClose, onSelect, t
       </div>
       
       <div className="library-footer">
-        <p>{filteredMedia.length} file(s) • {(media.reduce((sum, m) => sum + m.file_size, 0) / (1024 * 1024)).toFixed(1)} MB total</p>
-        
-        {/* 🆕 NEW: Insert to Project button */}
-        {(() => {
-          console.log('[MediaLibrary] Render footer - selectedMedia:', selectedMedia);
-          console.log('[MediaLibrary] Render footer - project:', project);
-          return selectedMedia && (
-            <button 
-              className="insert-button" 
-              onClick={handleInsertToProject}
-              disabled={!project}
-              title={!project ? 'No project loaded' : `Insert ${selectedMedia.name} into project`}
-            >
-              ➕ Insert into Project
-            </button>
-          );
-        })()}
+        <p>{filteredMedia.length} file(s) • {media.reduce((sum, m) => sum + m.file_size, 0) / (1024 * 1024)} MB total</p>
+        {selectedMedia && onSelect && (
+          <button className="select-button" onClick={onClose}>
+            Select "{selectedMedia.name}"
+          </button>
+        )}
       </div>
     </div>
   );
