@@ -1,0 +1,794 @@
+From 1bf5a6de689281ab80cd76d319f110d296c90622 Mon Sep 17 00:00:00 2001
+From: Claude <claude@anthropic.com>
+Date: Sun, 4 Jan 2026 19:51:08 +0000
+Subject: [PATCH] feat(editor): Add media library import to project
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+- Add 'Insert into Project' button in Media Library
+- Implement handleInsertToProject() function to create widgets from media
+- Auto-detect media type (image/video) and create appropriate widget
+- Smart widget sizing based on media dimensions (max 600×400px)
+- Center widget placement on canvas
+- Add comprehensive debug logging for troubleshooting
+- Update MediaLibrary.css with insert button styles and animations
+
+This allows users to insert media files from the centralized library
+directly into their projects as Image or Video widgets with a single click.
+
+Fixed issues:
+- Missing 'Insert into Project' button
+- No way to use media from library in projects
+- Server media path configuration
+---
+ .../editor/src/components/MediaLibrary.css    | 325 ++++++++++++++
+ .../editor/src/components/MediaLibrary.tsx    | 424 ++++++++++++++++++
+ 2 files changed, 749 insertions(+)
+ create mode 100644 packages/editor/src/components/MediaLibrary.css
+ create mode 100644 packages/editor/src/components/MediaLibrary.tsx
+
+diff --git a/packages/editor/src/components/MediaLibrary.css b/packages/editor/src/components/MediaLibrary.css
+new file mode 100644
+index 0000000..67cd408
+--- /dev/null
++++ b/packages/editor/src/components/MediaLibrary.css
+@@ -0,0 +1,325 @@
++.media-library {
++  position: fixed;
++  top: 0;
++  left: 0;
++  right: 0;
++  bottom: 0;
++  background: #fff;
++  z-index: 2000;
++  display: flex;
++  flex-direction: column;
++}
++
++.library-header {
++  padding: 20px;
++  border-bottom: 1px solid #e0e0e0;
++  display: flex;
++  justify-content: space-between;
++  align-items: center;
++  background: #f5f5f5;
++}
++
++.library-header h2 {
++  margin: 0;
++  font-size: 24px;
++  color: #333;
++}
++
++.close-button {
++  background: none;
++  border: none;
++  font-size: 32px;
++  color: #999;
++  cursor: pointer;
++  padding: 0;
++  width: 40px;
++  height: 40px;
++  display: flex;
++  align-items: center;
++  justify-content: center;
++  border-radius: 4px;
++  transition: all 0.2s;
++}
++
++.close-button:hover {
++  background: #e0e0e0;
++  color: #333;
++}
++
++.library-toolbar {
++  padding: 16px 20px;
++  border-bottom: 1px solid #e0e0e0;
++  display: flex;
++  gap: 12px;
++  align-items: center;
++  background: #fafafa;
++}
++
++.search-input {
++  flex: 1;
++  padding: 10px 16px;
++  border: 1px solid #e0e0e0;
++  border-radius: 6px;
++  font-size: 14px;
++}
++
++.search-input:focus {
++  outline: none;
++  border-color: #2196f3;
++  box-shadow: 0 0 0 3px rgba(33, 150, 243, 0.1);
++}
++
++.type-select {
++  padding: 10px 16px;
++  border: 1px solid #e0e0e0;
++  border-radius: 6px;
++  font-size: 14px;
++  background: #fff;
++  cursor: pointer;
++}
++
++.upload-button {
++  padding: 10px 20px;
++  background: #ff9800;
++  color: #fff;
++  border: none;
++  border-radius: 6px;
++  font-size: 14px;
++  font-weight: 500;
++  cursor: pointer;
++  white-space: nowrap;
++  transition: background 0.2s;
++}
++
++.upload-button:hover {
++  background: #f57c00;
++}
++
++.upload-button:disabled {
++  background: #ccc;
++  cursor: not-allowed;
++}
++
++.library-content {
++  flex: 1;
++  overflow-y: auto;
++  padding: 20px;
++}
++
++.loading-state,
++.error-state,
++.empty-state {
++  display: flex;
++  flex-direction: column;
++  align-items: center;
++  justify-content: center;
++  padding: 60px 20px;
++  text-align: center;
++  color: #666;
++}
++
++.spinner {
++  width: 40px;
++  height: 40px;
++  border: 4px solid #f3f3f3;
++  border-top: 4px solid #2196f3;
++  border-radius: 50%;
++  animation: spin 1s linear infinite;
++  margin-bottom: 16px;
++}
++
++@keyframes spin {
++  0% { transform: rotate(0deg); }
++  100% { transform: rotate(360deg); }
++}
++
++.error-state button {
++  margin-top: 16px;
++  padding: 10px 24px;
++  background: #2196f3;
++  color: #fff;
++  border: none;
++  border-radius: 6px;
++  cursor: pointer;
++}
++
++.media-grid {
++  display: grid;
++  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
++  gap: 20px;
++}
++
++.media-card {
++  border: 2px solid #e0e0e0;
++  border-radius: 8px;
++  overflow: hidden;
++  cursor: pointer;
++  transition: all 0.2s;
++  background: #fff;
++}
++
++.media-card:hover {
++  border-color: #2196f3;
++  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
++}
++
++.media-card.selected {
++  border-color: #4caf50;
++  box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.2);
++}
++
++.media-preview {
++  width: 100%;
++  height: 150px;
++  background: #f5f5f5;
++  display: flex;
++  align-items: center;
++  justify-content: center;
++  overflow: hidden;
++  position: relative;
++}
++
++.media-preview img {
++  width: 100%;
++  height: 100%;
++  object-fit: cover;
++}
++
++.video-preview,
++.audio-preview {
++  font-size: 48px;
++  opacity: 0.3;
++  display: flex;
++  flex-direction: column;
++  align-items: center;
++  gap: 8px;
++}
++
++.duration {
++  font-size: 12px;
++  font-weight: 600;
++  color: #333;
++  background: rgba(255, 255, 255, 0.9);
++  padding: 4px 8px;
++  border-radius: 4px;
++  position: absolute;
++  bottom: 8px;
++  right: 8px;
++}
++
++.media-info {
++  padding: 12px;
++  position: relative;
++}
++
++.media-info h4 {
++  margin: 0 0 8px 0;
++  font-size: 14px;
++  font-weight: 500;
++  color: #333;
++  white-space: nowrap;
++  overflow: hidden;
++  text-overflow: ellipsis;
++}
++
++.media-details {
++  display: flex;
++  gap: 12px;
++  font-size: 12px;
++  color: #666;
++  margin-bottom: 8px;
++}
++
++.file-size,
++.dimensions {
++  display: inline-block;
++}
++
++.media-info .delete-button {
++  position: absolute;
++  top: 8px;
++  right: 8px;
++  background: rgba(255, 255, 255, 0.9);
++  border: none;
++  font-size: 16px;
++  cursor: pointer;
++  padding: 4px 8px;
++  border-radius: 4px;
++  opacity: 0;
++  transition: all 0.2s;
++}
++
++.media-card:hover .delete-button {
++  opacity: 0.6;
++}
++
++.media-info .delete-button:hover {
++  background: #ffebee;
++  opacity: 1 !important;
++}
++
++.library-footer {
++  padding: 16px 20px;
++  border-top: 1px solid #e0e0e0;
++  display: flex;
++  justify-content: space-between;
++  align-items: center;
++  background: #f5f5f5;
++  gap: 16px;
++}
++
++.library-footer p {
++  margin: 0;
++  font-size: 14px;
++  color: #666;
++}
++
++/* 🆕 NEW: Insert button styles */
++.insert-button {
++  padding: 10px 24px;
++  background: #4caf50;
++  color: #fff;
++  border: none;
++  border-radius: 6px;
++  font-size: 14px;
++  font-weight: 600;
++  cursor: pointer;
++  transition: all 0.2s;
++  white-space: nowrap;
++  display: flex;
++  align-items: center;
++  gap: 8px;
++}
++
++.insert-button:hover {
++  background: #45a049;
++  transform: translateY(-1px);
++  box-shadow: 0 4px 8px rgba(76, 175, 80, 0.3);
++}
++
++.insert-button:active {
++  transform: translateY(0);
++}
++
++.insert-button:disabled {
++  background: #ccc;
++  cursor: not-allowed;
++  transform: none;
++  box-shadow: none;
++}
++
++.select-button {
++  padding: 10px 24px;
++  background: #4caf50;
++  color: #fff;
++  border: none;
++  border-radius: 6px;
++  font-size: 14px;
++  font-weight: 500;
++  cursor: pointer;
++  transition: background 0.2s;
++}
++
++.select-button:hover {
++  background: #45a049;
++}
+diff --git a/packages/editor/src/components/MediaLibrary.tsx b/packages/editor/src/components/MediaLibrary.tsx
+new file mode 100644
+index 0000000..137894c
+--- /dev/null
++++ b/packages/editor/src/components/MediaLibrary.tsx
+@@ -0,0 +1,424 @@
++/**
++ * Media Library Component
++ * Browse, upload, and manage media files from server
++ * NOW WITH: Insert media into project as widgets!
++ */
++
++import React, { useState, useEffect, useRef } from 'react';
++import { apiClient, MediaFile } from '../services/api-client';
++import { useServerStore } from '../stores/serverStore';
++import { useEditorStore } from '../stores/editorStore';
++import './MediaLibrary.css';
++
++interface MediaLibraryProps {
++  onClose: () => void;
++  onSelect?: (media: MediaFile) => void;
++  type?: 'image' | 'video' | 'audio' | 'all';
++}
++
++export const MediaLibrary: React.FC<MediaLibraryProps> = ({ onClose, onSelect, type = 'all' }) => {
++  const { isConnected } = useServerStore();
++  const { addWidget, project } = useEditorStore();
++  
++  const [media, setMedia] = useState<MediaFile[]>([]);
++  const [loading, setLoading] = useState(true);
++  const [error, setError] = useState<string | null>(null);
++  const [searchQuery, setSearchQuery] = useState('');
++  const [filterType, setFilterType] = useState<'all' | 'image' | 'video' | 'audio'>(type);
++  const [uploading, setUploading] = useState(false);
++  const [selectedMedia, setSelectedMedia] = useState<MediaFile | null>(null);
++  
++  const fileInputRef = useRef<HTMLInputElement>(null);
++  
++  // Load media on mount
++  useEffect(() => {
++    if (isConnected) {
++      loadMedia();
++    }
++  }, [isConnected, filterType]);
++  
++  const loadMedia = async () => {
++    setLoading(true);
++    setError(null);
++    
++    try {
++      const params = filterType !== 'all' ? { type: filterType } : undefined;
++      const result = await apiClient.getMedia(params);
++      
++      // 🔍 DEBUG: Log media response
++      console.log('[MediaLibrary] Media loaded:', result);
++      
++      if (result.success && result.data) {
++        // 🔍 DEBUG: Log first media item with URL
++        if (result.data.length > 0) {
++          const first = result.data[0];
++          const fullUrl = apiClient.getMediaUrl(first);
++          console.log('[MediaLibrary] First media:', first);
++          console.log('[MediaLibrary] Full URL:', fullUrl);
++        }
++        
++        setMedia(result.data);
++      } else {
++        setError(result.error || 'Failed to load media');
++      }
++    } catch (err: any) {
++      console.error('[MediaLibrary] Load error:', err);
++      setError(err.message || 'Network error');
++    } finally {
++      setLoading(false);
++    }
++  };
++  
++  const handleUpload = async (files: FileList | null) => {
++    if (!files || files.length === 0) return;
++    
++    setUploading(true);
++    
++    try {
++      const uploadPromises = Array.from(files).map(async (file) => {
++        const result = await apiClient.uploadMedia(file);
++        
++        if (!result.success) {
++          console.error(`Failed to upload ${file.name}:`, result.error);
++        }
++        
++        return result;
++      });
++      
++      const results = await Promise.all(uploadPromises);
++      const successCount = results.filter((r) => r.success).length;
++      
++      if (successCount > 0) {
++        alert(`✅ ${successCount} file(s) uploaded successfully!`);
++        loadMedia(); // Reload list
++      }
++      
++      const failCount = results.length - successCount;
++      if (failCount > 0) {
++        alert(`⚠️ ${failCount} file(s) failed to upload`);
++      }
++    } catch (err: any) {
++      alert(`❌ Upload error: ${err.message}`);
++    } finally {
++      setUploading(false);
++      if (fileInputRef.current) {
++        fileInputRef.current.value = '';
++      }
++    }
++  };
++  
++  const handleDelete = async (mediaFile: MediaFile, e: React.MouseEvent) => {
++    e.stopPropagation();
++    
++    if (!confirm(`Delete "${mediaFile.name}"?\n\nThis action cannot be undone.`)) {
++      return;
++    }
++    
++    try {
++      const result = await apiClient.deleteMedia(mediaFile.id);
++      
++      if (result.success) {
++        loadMedia(); // Reload list
++        if (selectedMedia?.id === mediaFile.id) {
++          setSelectedMedia(null);
++        }
++      } else {
++        alert(`❌ Failed to delete: ${result.error}`);
++      }
++    } catch (err: any) {
++      alert(`❌ Error: ${err.message}`);
++    }
++  };
++  
++  const handleSelect = (mediaFile: MediaFile) => {
++    setSelectedMedia(mediaFile);
++    if (onSelect) {
++      onSelect(mediaFile);
++    }
++  };
++
++  /**
++   * 🆕 NEW: Insert selected media into project as a widget
++   */
++  const handleInsertToProject = () => {
++    console.log('[MediaLibrary] Insert clicked');
++    console.log('[MediaLibrary] Selected media:', selectedMedia);
++    console.log('[MediaLibrary] Project:', project);
++    
++    if (!selectedMedia || !project) {
++      console.warn('[MediaLibrary] Missing selectedMedia or project');
++      return;
++    }
++
++    const mediaUrl = apiClient.getMediaUrl(selectedMedia);
++    console.log('[MediaLibrary] Media URL:', mediaUrl);
++    
++    // Определяем тип виджета по типу медиа
++    let widgetType: 'image' | 'video' = 'image';
++    let defaultProps: any = {};
++
++    if (selectedMedia.type === 'image') {
++      widgetType = 'image';
++      defaultProps = {
++        src: mediaUrl,
++        objectFit: 'contain',
++        borderEnabled: false,
++        clipShape: 'rectangle'
++      };
++    } else if (selectedMedia.type === 'video') {
++      widgetType = 'video';
++      defaultProps = {
++        src: mediaUrl,
++        sourceType: 'url',
++        autoplay: false,
++        loop: false,
++        muted: true,
++        controls: true,
++        objectFit: 'contain',
++        borderEnabled: false
++      };
++    } else {
++      alert('⚠️ Only images and videos can be inserted into project');
++      return;
++    }
++
++    // Определяем размеры виджета
++    let width = 400;
++    let height = 300;
++
++    if (selectedMedia.width && selectedMedia.height) {
++      const ratio = selectedMedia.width / selectedMedia.height;
++      const maxWidth = 600;
++      const maxHeight = 400;
++
++      if (selectedMedia.width > maxWidth || selectedMedia.height > maxHeight) {
++        // Масштабируем с сохранением пропорций
++        if (ratio > 1) {
++          width = maxWidth;
++          height = maxWidth / ratio;
++        } else {
++          height = maxHeight;
++          width = maxHeight * ratio;
++        }
++      } else {
++        width = selectedMedia.width;
++        height = selectedMedia.height;
++      }
++    }
++
++    // Создаем виджет в центре холста
++    const x = (project.canvas.width - width) / 2;
++    const y = (project.canvas.height - height) / 2;
++
++    const newWidget = {
++      id: `widget-${Date.now()}-${Math.random()}`,
++      type: widgetType,
++      x,
++      y,
++      width,
++      height,
++      zIndex: 0,
++      properties: defaultProps
++    };
++
++    // Добавляем виджет в проект
++    addWidget(newWidget);
++
++    // Показываем уведомление
++    alert(`✅ ${selectedMedia.type === 'image' ? 'Image' : 'Video'} widget added to project!`);
++    
++    // Закрываем Media Library
++    onClose();
++  };
++  
++  const formatFileSize = (bytes: number) => {
++    if (bytes < 1024) return `${bytes} B`;
++    if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`;
++    return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
++  };
++  
++  const formatDuration = (seconds: number | undefined) => {
++    if (!seconds) return '';
++    const mins = Math.floor(seconds / 60);
++    const secs = Math.floor(seconds % 60);
++    return `${mins}:${secs.toString().padStart(2, '0')}`;
++  };
++  
++  // Filter media
++  const filteredMedia = media.filter((m) => {
++    return (
++      searchQuery === '' ||
++      m.name.toLowerCase().includes(searchQuery.toLowerCase())
++    );
++  });
++  
++  if (!isConnected) {
++    return (
++      <div className="media-library">
++        <div className="library-header">
++          <h2>Media Library</h2>
++          <button className="close-button" onClick={onClose}>×</button>
++        </div>
++        <div className="library-content">
++          <div className="empty-state">
++            <p>⚠️ Not connected to server</p>
++            <p>Enable server integration in settings to use media library.</p>
++          </div>
++        </div>
++      </div>
++    );
++  }
++  
++  return (
++    <div className="media-library">
++      <div className="library-header">
++        <h2>Media Library</h2>
++        <button className="close-button" onClick={onClose}>×</button>
++      </div>
++      
++      <div className="library-toolbar">
++        <input
++          type="text"
++          placeholder="Search media..."
++          value={searchQuery}
++          onChange={(e) => setSearchQuery(e.target.value)}
++          className="search-input"
++        />
++        
++        <select
++          value={filterType}
++          onChange={(e) => setFilterType(e.target.value as any)}
++          className="type-select"
++        >
++          <option value="all">All Types</option>
++          <option value="image">Images</option>
++          <option value="video">Videos</option>
++          <option value="audio">Audio</option>
++        </select>
++        
++        <input
++          ref={fileInputRef}
++          type="file"
++          multiple
++          accept="image/*,video/*,audio/*"
++          onChange={(e) => handleUpload(e.target.files)}
++          style={{ display: 'none' }}
++        />
++        
++        <button
++          className="upload-button"
++          onClick={() => fileInputRef.current?.click()}
++          disabled={uploading}
++        >
++          {uploading ? '⏳ Uploading...' : '📤 Upload Files'}
++        </button>
++      </div>
++      
++      <div className="library-content">
++        {loading && (
++          <div className="loading-state">
++            <div className="spinner"></div>
++            <p>Loading media...</p>
++          </div>
++        )}
++        
++        {error && (
++          <div className="error-state">
++            <p>❌ {error}</p>
++            <button onClick={loadMedia}>Retry</button>
++          </div>
++        )}
++        
++        {!loading && !error && filteredMedia.length === 0 && (
++          <div className="empty-state">
++            <p>📁 No media files found</p>
++            {searchQuery && <p>Try a different search term</p>}
++            {!searchQuery && <p>Upload your first file to get started!</p>}
++          </div>
++        )}
++        
++        {!loading && !error && filteredMedia.length > 0 && (
++          <div className="media-grid">
++            {filteredMedia.map((mediaFile) => (
++              <div
++                key={mediaFile.id}
++                className={`media-card ${selectedMedia?.id === mediaFile.id ? 'selected' : ''}`}
++                onClick={() => handleSelect(mediaFile)}
++              >
++                <div className="media-preview">
++                  {mediaFile.type === 'image' && (
++                    <img
++                      src={apiClient.getMediaUrl(mediaFile)}
++                      alt={mediaFile.name}
++                      onError={(e) => {
++                        console.error('[MediaLibrary] Image load error:', mediaFile.name, apiClient.getMediaUrl(mediaFile));
++                        e.currentTarget.style.display = 'none';
++                      }}
++                      onLoad={() => {
++                        console.log('[MediaLibrary] Image loaded:', mediaFile.name);
++                      }}
++                    />
++                  )}
++                  {mediaFile.type === 'video' && (
++                    <div className="video-preview">
++                      🎬
++                      {mediaFile.duration && (
++                        <span className="duration">{formatDuration(mediaFile.duration)}</span>
++                      )}
++                    </div>
++                  )}
++                  {mediaFile.type === 'audio' && (
++                    <div className="audio-preview">
++                      🎵
++                      {mediaFile.duration && (
++                        <span className="duration">{formatDuration(mediaFile.duration)}</span>
++                      )}
++                    </div>
++                  )}
++                </div>
++                
++                <div className="media-info">
++                  <h4 title={mediaFile.name}>{mediaFile.name}</h4>
++                  <div className="media-details">
++                    <span className="file-size">{formatFileSize(mediaFile.file_size)}</span>
++                    {mediaFile.width && mediaFile.height && (
++                      <span className="dimensions">{mediaFile.width}×{mediaFile.height}</span>
++                    )}
++                  </div>
++                  
++                  <button
++                    className="delete-button"
++                    onClick={(e) => handleDelete(mediaFile, e)}
++                    title="Delete file"
++                  >
++                    🗑️
++                  </button>
++                </div>
++              </div>
++            ))}
++          </div>
++        )}
++      </div>
++      
++      <div className="library-footer">
++        <p>{filteredMedia.length} file(s) • {(media.reduce((sum, m) => sum + m.file_size, 0) / (1024 * 1024)).toFixed(1)} MB total</p>
++        
++        {/* 🆕 NEW: Insert to Project button */}
++        {(() => {
++          console.log('[MediaLibrary] Render footer - selectedMedia:', selectedMedia);
++          console.log('[MediaLibrary] Render footer - project:', project);
++          return selectedMedia && (
++            <button 
++              className="insert-button" 
++              onClick={handleInsertToProject}
++              disabled={!project}
++              title={!project ? 'No project loaded' : `Insert ${selectedMedia.name} into project`}
++            >
++              ➕ Insert into Project
++            </button>
++          );
++        })()}
++      </div>
++    </div>
++  );
++};
+-- 
+2.43.0
+
