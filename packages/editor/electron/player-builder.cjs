@@ -1,11 +1,11 @@
 /**
- * Player Builder v2 - Улучшенная версия с надёжной проверкой зависимостей
+ * Player Builder v3 - ФИНАЛЬНАЯ ВЕРСИЯ
  * 
- * Этот скрипт:
- * 1. Копирует текущий проект в player/electron/project.json
- * 2. Проверяет и принудительно устанавливает зависимости Player
- * 3. Запускает сборку Player
- * 4. Возвращает путь к готовому установщику
+ * Исправления:
+ * - Автоматическое копирование 7zip-bin из глобальной установки
+ * - Удаление ссылок на иконку из package.json перед сборкой
+ * - Улучшенная обработка ошибок
+ * - Подробное логирование
  */
 
 const { spawn } = require('child_process');
@@ -28,7 +28,7 @@ class PlayerBuilder {
 
   async build() {
     try {
-      this.log('🚀 Начинаем сборку Player...', 'info');
+      this.log('🚀 Начинаем сборку Player v3...', 'info');
       this.onProgress(0, 'Подготовка...');
 
       // Шаг 1: Проверка существования папки Player
@@ -42,19 +42,23 @@ class PlayerBuilder {
       await this.copyProjectToPlayer();
       this.onProgress(10, 'Проект скопирован...');
 
-      // Шаг 3: ПРИНУДИТЕЛЬНАЯ установка зависимостей
+      // Шаг 3: Исправление package.json (удаление иконок)
+      await this.fixPackageJson();
+      this.onProgress(15, 'package.json исправлен...');
+
+      // Шаг 4: Установка зависимостей
       await this.ensureDependencies();
-      this.onProgress(40, 'Зависимости установлены...');
+      this.onProgress(50, 'Зависимости установлены...');
 
-      // Шаг 4: Сборка TypeScript и Vite
+      // Шаг 5: Сборка TypeScript и Vite
       await this.buildPlayer();
-      this.onProgress(70, 'Сборка завершена...');
+      this.onProgress(75, 'Сборка завершена...');
 
-      // Шаг 5: Создание установщика Electron
+      // Шаг 6: Создание установщика Electron
       await this.buildInstaller();
       this.onProgress(95, 'Установщик создан...');
 
-      // Шаг 6: Поиск готового установщика
+      // Шаг 7: Поиск готового установщика
       const installerPath = await this.findInstaller();
       this.onProgress(100, 'Готово!');
 
@@ -97,64 +101,136 @@ class PlayerBuilder {
     this.log(`✓ Проект сохранён: ${projectPath}`, 'success');
   }
 
-  async ensureDependencies() {
-    this.log('🔍 Проверка зависимостей Player...', 'info');
+  async fixPackageJson() {
+    this.log('🔧 Исправление package.json (удаление ссылок на иконку)...', 'info');
     
-    const nodeModulesPath = path.join(this.playerPath, 'node_modules');
     const packageJsonPath = path.join(this.playerPath, 'package.json');
-
-    // Проверяем существование package.json
+    
     if (!fs.existsSync(packageJsonPath)) {
-      throw new Error('package.json не найден в Player папке!');
+      throw new Error('package.json не найден!');
     }
 
-    // ВСЕГДА устанавливаем зависимости заново для надёжности
-    this.log('📦 Устанавливаем зависимости Player (это может занять несколько минут)...', 'info');
-    
     try {
-      // Удаляем старые node_modules если есть
-      if (fs.existsSync(nodeModulesPath)) {
-        this.log('🗑️ Удаляем старые node_modules...', 'warning');
-        await this.removeDirectory(nodeModulesPath);
+      // Читаем package.json
+      const packageJson = JSON.parse(fs.readFileSync(packageJsonPath, 'utf8'));
+
+      // Удаляем ссылки на иконку
+      if (packageJson.build && packageJson.build.win) {
+        delete packageJson.build.win.icon;
+        this.log('  ✓ Удалена ссылка win.icon', 'success');
       }
 
-      // Устанавливаем зависимости
-      await this.runCommand('npm', ['install', '--legacy-peer-deps'], this.playerPath);
-      this.log('✓ Основные зависимости установлены', 'success');
+      if (packageJson.build && packageJson.build.nsis) {
+        delete packageJson.build.nsis.installerIcon;
+        delete packageJson.build.nsis.uninstallerIcon;
+        this.log('  ✓ Удалены ссылки nsis.installerIcon и uninstallerIcon', 'success');
+      }
 
-      // Устанавливаем инструменты для сборки
-      this.log('📦 Устанавливаем инструменты для сборки...', 'info');
-      await this.runCommand('npm', ['install', '7zip-bin', 'app-builder-bin', '--save-dev', '--legacy-peer-deps'], this.playerPath);
-      this.log('✓ Инструменты для сборки установлены', 'success');
+      // Сохраняем исправленный package.json
+      fs.writeFileSync(packageJsonPath, JSON.stringify(packageJson, null, 2), 'utf8');
+      this.log('✓ package.json исправлен', 'success');
 
     } catch (error) {
-      this.log('⚠️ Ошибка установки зависимостей, пробуем альтернативный метод...', 'warning');
-      
-      // Альтернативный метод без удаления node_modules
-      await this.runCommand('npm', ['install', '--legacy-peer-deps', '--force'], this.playerPath);
-      await this.runCommand('npm', ['install', '7zip-bin', 'app-builder-bin', '--save-dev', '--legacy-peer-deps', '--force'], this.playerPath);
+      this.log(`⚠️ Не удалось исправить package.json: ${error.message}`, 'warning');
+      // Не критично - продолжаем
     }
   }
 
-  async removeDirectory(dirPath) {
-    return new Promise((resolve, reject) => {
-      // Используем системную команду для удаления (быстрее чем fs.rm)
-      const isWindows = process.platform === 'win32';
-      const command = isWindows ? 'rmdir' : 'rm';
-      const args = isWindows ? ['/s', '/q', dirPath] : ['-rf', dirPath];
+  async ensureDependencies() {
+    this.log('🔍 Установка зависимостей Player...', 'info');
+    
+    const nodeModulesPath = path.join(this.playerPath, 'node_modules');
 
-      const proc = spawn(command, args, { shell: true });
+    try {
+      // Проверяем node_modules
+      if (!fs.existsSync(nodeModulesPath)) {
+        this.log('📦 node_modules не найдены, устанавливаем...', 'info');
+        await this.runCommand('npm', ['install', '--legacy-peer-deps'], this.playerPath);
+      } else {
+        this.log('✓ node_modules уже установлены', 'success');
+      }
+
+      // Проверяем app-builder-bin
+      const appBuilderPath = path.join(nodeModulesPath, 'app-builder-bin');
+      if (!fs.existsSync(appBuilderPath)) {
+        this.log('📦 Устанавливаем app-builder-bin...', 'info');
+        await this.runCommand('npm', ['install', 'app-builder-bin', '--save-dev', '--legacy-peer-deps'], this.playerPath);
+      } else {
+        this.log('✓ app-builder-bin уже установлен', 'success');
+      }
+
+      // Проверяем 7zip-bin (ОСОБАЯ ОБРАБОТКА)
+      await this.ensure7zipBin();
+
+    } catch (error) {
+      throw new Error(`Ошибка установки зависимостей: ${error.message}`);
+    }
+  }
+
+  async ensure7zipBin() {
+    const sevenZipPath = path.join(this.playerPath, 'node_modules', '7zip-bin');
+    
+    if (fs.existsSync(sevenZipPath)) {
+      this.log('✓ 7zip-bin уже установлен', 'success');
+      return;
+    }
+
+    this.log('📦 Устанавливаем 7zip-bin (специальный метод)...', 'info');
+
+    try {
+      // Пробуем обычную установку
+      await this.runCommand('npm', ['install', '7zip-bin@5.2.0', '--save-dev', '--force'], this.playerPath);
       
-      proc.on('close', (code) => {
-        if (code === 0) {
-          resolve();
-        } else {
-          reject(new Error(`Failed to remove directory: ${dirPath}`));
-        }
-      });
+      if (fs.existsSync(sevenZipPath)) {
+        this.log('✓ 7zip-bin установлен через npm', 'success');
+        return;
+      }
+    } catch (error) {
+      this.log('⚠️ npm install не сработал, пробуем альтернативный метод...', 'warning');
+    }
 
-      proc.on('error', reject);
-    });
+    // Альтернативный метод: глобальная установка + копирование
+    try {
+      this.log('📦 Устанавливаем 7zip-bin глобально...', 'info');
+      await this.runCommand('npm', ['install', '-g', '7zip-bin@5.2.0'], this.playerPath);
+
+      // Находим путь к глобальному 7zip-bin
+      const globalNpmPath = process.platform === 'win32' 
+        ? path.join(process.env.APPDATA, 'npm', 'node_modules', '7zip-bin')
+        : '/usr/local/lib/node_modules/7zip-bin';
+
+      if (fs.existsSync(globalNpmPath)) {
+        this.log(`📦 Копируем 7zip-bin из ${globalNpmPath}...`, 'info');
+        await this.copyDirectory(globalNpmPath, sevenZipPath);
+        this.log('✓ 7zip-bin установлен через глобальную установку', 'success');
+      } else {
+        throw new Error('Не удалось найти глобально установленный 7zip-bin');
+      }
+
+    } catch (error) {
+      throw new Error(`Не удалось установить 7zip-bin: ${error.message}`);
+    }
+  }
+
+  async copyDirectory(src, dest) {
+    // Создаём целевую директорию
+    if (!fs.existsSync(dest)) {
+      fs.mkdirSync(dest, { recursive: true });
+    }
+
+    // Читаем содержимое исходной директории
+    const entries = fs.readdirSync(src, { withFileTypes: true });
+
+    for (const entry of entries) {
+      const srcPath = path.join(src, entry.name);
+      const destPath = path.join(dest, entry.name);
+
+      if (entry.isDirectory()) {
+        await this.copyDirectory(srcPath, destPath);
+      } else {
+        fs.copyFileSync(srcPath, destPath);
+      }
+    }
   }
 
   async buildPlayer() {
@@ -212,7 +288,7 @@ class PlayerBuilder {
         const text = data.toString();
         output += text;
         
-        // Логируем только важные строки для уменьшения шума
+        // Логируем важные строки
         const lines = text.split('\n');
         lines.forEach(line => {
           const trimmed = line.trim();
@@ -222,7 +298,8 @@ class PlayerBuilder {
             trimmed.includes('built') ||
             trimmed.includes('packages') ||
             trimmed.includes('added') ||
-            trimmed.includes('success')
+            trimmed.includes('building') ||
+            trimmed.includes('packaging')
           )) {
             this.log(trimmed, 'info');
           }
@@ -233,7 +310,7 @@ class PlayerBuilder {
         const text = data.toString();
         errorOutput += text;
         
-        // Игнорируем обычные npm warnings
+        // Игнорируем обычные warnings
         if (!text.toLowerCase().includes('warn') && 
             !text.includes('deprecated') &&
             !text.includes('EBADENGINE')) {
