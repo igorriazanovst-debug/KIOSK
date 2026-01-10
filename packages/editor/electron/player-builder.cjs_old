@@ -1,0 +1,206 @@
+/**
+ * Player Builder - Автоматическая генерация Player установщика
+ * 
+ * Этот скрипт:
+ * 1. Копирует текущий проект в player/electron/project.json
+ * 2. Запускает сборку Player
+ * 3. Возвращает путь к готовому установщику
+ */
+
+const { spawn } = require('child_process');
+const fs = require('fs');
+const path = require('path');
+
+class PlayerBuilder {
+  constructor(options = {}) {
+    this.projectData = options.projectData;
+    this.onProgress = options.onProgress || (() => {});
+    this.onLog = options.onLog || console.log;
+    this.playerPath = options.playerPath || path.join(__dirname, '../../player');
+  }
+
+  log(message, type = 'info') {
+    const timestamp = new Date().toLocaleTimeString();
+    const formattedMessage = `[${timestamp}] ${message}`;
+    this.onLog(formattedMessage, type);
+  }
+
+  async build() {
+    try {
+      this.log('🚀 Начинаем сборку Player...', 'info');
+      this.onProgress(0, 'Подготовка...');
+
+      // Шаг 1: Проверка существования папки Player
+      if (!fs.existsSync(this.playerPath)) {
+        throw new Error(`Player папка не найдена: ${this.playerPath}`);
+      }
+      this.log(`✓ Player папка найдена: ${this.playerPath}`, 'success');
+      this.onProgress(10, 'Проверка папки Player...');
+
+      // Шаг 2: Копирование проекта
+      await this.copyProjectToPlayer();
+      this.onProgress(20, 'Проект скопирован...');
+
+      // Шаг 3: Проверка зависимостей
+      await this.checkDependencies();
+      this.onProgress(30, 'Зависимости проверены...');
+
+      // Шаг 4: Сборка TypeScript и Vite
+      await this.buildPlayer();
+      this.onProgress(60, 'Сборка завершена...');
+
+      // Шаг 5: Создание установщика Electron
+      await this.buildInstaller();
+      this.onProgress(90, 'Установщик создан...');
+
+      // Шаг 6: Поиск готового установщика
+      const installerPath = await this.findInstaller();
+      this.onProgress(100, 'Готово!');
+
+      this.log('✅ Сборка успешно завершена!', 'success');
+      this.log(`📦 Установщик: ${installerPath}`, 'success');
+
+      return {
+        success: true,
+        installerPath: installerPath,
+        size: this.getFileSize(installerPath)
+      };
+
+    } catch (error) {
+      this.log(`❌ Ошибка: ${error.message}`, 'error');
+      return {
+        success: false,
+        error: error.message
+      };
+    }
+  }
+
+  async copyProjectToPlayer() {
+    this.log('📋 Копирование проекта в Player...', 'info');
+    
+    const projectPath = path.join(this.playerPath, 'electron', 'project.json');
+    const projectDir = path.dirname(projectPath);
+
+    // Создаём директорию если не существует
+    if (!fs.existsSync(projectDir)) {
+      fs.mkdirSync(projectDir, { recursive: true });
+    }
+
+    // Сохраняем проект
+    fs.writeFileSync(
+      projectPath,
+      JSON.stringify(this.projectData, null, 2),
+      'utf8'
+    );
+
+    this.log(`✓ Проект сохранён: ${projectPath}`, 'success');
+  }
+
+  async checkDependencies() {
+    this.log('🔍 Проверка зависимостей...', 'info');
+    
+    const nodeModulesPath = path.join(this.playerPath, 'node_modules');
+    
+    if (!fs.existsSync(nodeModulesPath)) {
+      this.log('⚠️ node_modules не найдены, устанавливаем зависимости...', 'warning');
+      await this.runCommand('npm', ['install'], this.playerPath);
+      this.log('✓ Зависимости установлены', 'success');
+    } else {
+      this.log('✓ Зависимости уже установлены', 'success');
+    }
+
+    // Проверка 7zip-bin и app-builder-bin
+    const requiredDeps = ['7zip-bin', 'app-builder-bin'];
+    const packageJson = JSON.parse(
+      fs.readFileSync(path.join(this.playerPath, 'package.json'), 'utf8')
+    );
+    
+    const missingDeps = requiredDeps.filter(
+      dep => !packageJson.devDependencies[dep]
+    );
+
+    if (missingDeps.length > 0) {
+      this.log(`⚠️ Устанавливаем дополнительные зависимости: ${missingDeps.join(', ')}`, 'warning');
+      await this.runCommand('npm', ['install', ...missingDeps, '--save-dev'], this.playerPath);
+      this.log('✓ Дополнительные зависимости установлены', 'success');
+    }
+  }
+
+  async buildPlayer() {
+    this.log('🔨 Сборка Player (TypeScript + Vite)...', 'info');
+    await this.runCommand('npm', ['run', 'build'], this.playerPath);
+    this.log('✓ Сборка Player завершена', 'success');
+  }
+
+  async buildInstaller() {
+    this.log('📦 Создание установщика Windows...', 'info');
+    await this.runCommand('npm', ['run', 'electron:build:win'], this.playerPath);
+    this.log('✓ Установщик создан', 'success');
+  }
+
+  async findInstaller() {
+    const distPath = path.join(this.playerPath, 'dist-electron');
+    const files = fs.readdirSync(distPath);
+    
+    const installerFile = files.find(file => 
+      file.endsWith('.exe') && file.includes('Setup')
+    );
+
+    if (!installerFile) {
+      throw new Error('Установщик не найден в dist-electron/');
+    }
+
+    return path.join(distPath, installerFile);
+  }
+
+  getFileSize(filePath) {
+    const stats = fs.statSync(filePath);
+    const sizeMB = (stats.size / (1024 * 1024)).toFixed(2);
+    return `${sizeMB} MB`;
+  }
+
+  runCommand(command, args, cwd) {
+    return new Promise((resolve, reject) => {
+      const process = spawn(command, args, {
+        cwd: cwd,
+        shell: true,
+        stdio: 'pipe'
+      });
+
+      let output = '';
+      let errorOutput = '';
+
+      process.stdout.on('data', (data) => {
+        const text = data.toString();
+        output += text;
+        // Логируем только важные строки
+        if (text.includes('✓') || text.includes('✔') || text.includes('built')) {
+          this.log(text.trim(), 'info');
+        }
+      });
+
+      process.stderr.on('data', (data) => {
+        const text = data.toString();
+        errorOutput += text;
+        // TypeScript warnings не критичны
+        if (!text.includes('TS') && !text.toLowerCase().includes('warning')) {
+          this.log(text.trim(), 'warning');
+        }
+      });
+
+      process.on('close', (code) => {
+        if (code === 0) {
+          resolve(output);
+        } else {
+          reject(new Error(`Command failed with code ${code}\n${errorOutput}`));
+        }
+      });
+
+      process.on('error', (error) => {
+        reject(error);
+      });
+    });
+  }
+}
+
+module.exports = PlayerBuilder;

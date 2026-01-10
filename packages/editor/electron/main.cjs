@@ -1,6 +1,8 @@
 const { app, BrowserWindow, ipcMain, dialog, Menu } = require('electron');
 const path = require('path');
 const fs = require('fs');
+const PlayerBuilder = require('./player-builder.cjs');
+
 // Простая проверка dev режима без electron-is-dev
 const isDev = !app.isPackaged;
 
@@ -149,7 +151,9 @@ function createWindow() {
   });
 }
 
+// ============================================
 // IPC Handlers
+// ============================================
 
 // Сохранить файл
 ipcMain.handle('save-file', async (event, data) => {
@@ -211,6 +215,93 @@ ipcMain.handle('select-directory', async () => {
 // Показать сообщение
 ipcMain.handle('show-message', async (event, options) => {
   return await dialog.showMessageBox(mainWindow, options);
+});
+
+// ============================================
+// НОВОЕ: Build Player Installer
+// ============================================
+ipcMain.handle('build-player-installer', async (event, projectData) => {
+  try {
+    console.log('[Editor] Starting player build...');
+
+    // Определяем путь к Player (относительно Editor)
+    const playerPath = path.join(__dirname, '../../player');
+
+    // Создаём builder
+    const builder = new PlayerBuilder({
+      projectData,
+      playerPath,
+      onProgress: (progress, message) => {
+        // Отправляем прогресс обратно в renderer
+        mainWindow.webContents.send('build-progress', { progress, message });
+        console.log(`[Builder] ${progress}% - ${message}`);
+      },
+      onLog: (message, type) => {
+        // Отправляем логи обратно в renderer
+        mainWindow.webContents.send('build-log', { message, type });
+        console.log(`[Builder] ${message}`);
+      }
+    });
+
+    // Запускаем сборку
+    const result = await builder.build();
+
+    if (result.success) {
+      console.log('[Editor] Build successful!');
+      console.log('[Editor] Installer:', result.installerPath);
+
+      // Предлагаем открыть папку с установщиком
+      const response = await dialog.showMessageBox(mainWindow, {
+        type: 'info',
+        title: 'Установщик создан!',
+        message: 'Player установщик успешно создан!',
+        detail: `Размер: ${result.size}\nПуть: ${result.installerPath}`,
+        buttons: ['Открыть папку', 'OK'],
+        defaultId: 0
+      });
+
+      if (response.response === 0) {
+        // Открыть папку с установщиком
+        const { shell } = require('electron');
+        shell.showItemInFolder(result.installerPath);
+      }
+
+      return { 
+        success: true, 
+        installerPath: result.installerPath,
+        size: result.size
+      };
+    } else {
+      console.error('[Editor] Build failed:', result.error);
+      
+      await dialog.showMessageBox(mainWindow, {
+        type: 'error',
+        title: 'Ошибка сборки',
+        message: 'Не удалось создать установщик Player',
+        detail: result.error
+      });
+
+      return { 
+        success: false, 
+        error: result.error 
+      };
+    }
+
+  } catch (error) {
+    console.error('[Editor] Build error:', error);
+    
+    await dialog.showMessageBox(mainWindow, {
+      type: 'error',
+      title: 'Ошибка',
+      message: 'Произошла ошибка при создании установщика',
+      detail: error.message
+    });
+
+    return { 
+      success: false, 
+      error: error.message 
+    };
+  }
 });
 
 // App lifecycle

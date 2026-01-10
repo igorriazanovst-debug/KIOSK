@@ -25,7 +25,7 @@
     "@types/uuid": "^9.0.0",
     "@vitejs/plugin-react": "^4.0.0",
     "7zip-bin": "^5.2.0",
-    "app-builder-bin": "^4.0.0",
+    "app-builder-bin": "^4.2.0",
     "concurrently": "^8.2.2",
     "dmg-builder": "^24.13.3",
     "electron": "^39.2.7",
@@ -62,7 +62,6 @@
           ]
         }
       ],
-      "icon": "assets/icon.ico",
       "sign": null,
       "signingHashAlgorithms": [
         "sha256"
@@ -74,8 +73,6 @@
       "createDesktopShortcut": true,
       "createStartMenuShortcut": true,
       "runAfterFinish": false,
-      "installerIcon": "assets/icon.ico",
-      "uninstallerIcon": "assets/icon.ico",
       "shortcutName": "Kiosk Player",
       "artifactName": "${productName}-Setup-${version}.${ext}"
     },

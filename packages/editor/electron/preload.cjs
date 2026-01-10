@@ -9,6 +9,26 @@ contextBridge.exposeInMainWorld('electronAPI', {
   selectDirectory: () => ipcRenderer.invoke('select-directory'),
   showMessage: (options) => ipcRenderer.invoke('show-message', options),
 
+  // НОВОЕ: Сборка Player установщика
+  buildPlayerInstaller: (projectData) => ipcRenderer.invoke('build-player-installer', projectData),
+  
+  // НОВОЕ: Подписка на события сборки
+  onBuildProgress: (callback) => {
+    const subscription = (event, data) => callback(data);
+    ipcRenderer.on('build-progress', subscription);
+    
+    // Возвращаем функцию отписки
+    return () => ipcRenderer.removeListener('build-progress', subscription);
+  },
+  
+  onBuildLog: (callback) => {
+    const subscription = (event, data) => callback(data);
+    ipcRenderer.on('build-log', subscription);
+    
+    // Возвращаем функцию отписки
+    return () => ipcRenderer.removeListener('build-log', subscription);
+  },
+
   // Получение событий от меню
   onMenuNewProject: (callback) => {
     ipcRenderer.on('menu-new-project', callback);

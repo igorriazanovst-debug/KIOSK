@@ -16,7 +16,7 @@
   background: #1e1e1e;
   border-radius: 12px;
   width: 90%;
-  max-width: 700px;
+  max-width: 800px;
   max-height: 90vh;
   display: flex;
   flex-direction: column;
@@ -47,9 +47,14 @@
   transition: all 0.2s;
 }
 
-.btn-close:hover {
+.btn-close:hover:not(:disabled) {
   background: #333;
   color: #fff;
+}
+
+.btn-close:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
 }
 
 .export-body {
@@ -57,6 +62,10 @@
   overflow-y: auto;
   flex: 1;
 }
+
+/* ============================================ */
+/* Export Options */
+/* ============================================ */
 
 .export-option-group {
   display: flex;
@@ -163,6 +172,241 @@
   color: #fff;
 }
 
+/* ============================================ */
+/* Build Progress */
+/* ============================================ */
+
+.build-progress-container {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.build-progress-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.build-progress-header h3 {
+  margin: 0;
+  color: #fff;
+  font-size: 18px;
+}
+
+.spinner {
+  animation: spin 1s linear infinite;
+  color: #4a90e2;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.progress-bar-container {
+  position: relative;
+  width: 100%;
+  height: 32px;
+  background: #252525;
+  border-radius: 16px;
+  overflow: hidden;
+  border: 1px solid #333;
+}
+
+.progress-bar {
+  height: 100%;
+  background: linear-gradient(90deg, #4a90e2, #357abd);
+  border-radius: 16px;
+  transition: width 0.3s ease;
+  position: relative;
+}
+
+.progress-bar::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.3),
+    transparent
+  );
+  animation: shimmer 2s infinite;
+}
+
+@keyframes shimmer {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+.progress-text {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: #fff;
+  font-weight: 600;
+  font-size: 14px;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+.progress-message {
+  color: #aaa;
+  font-size: 14px;
+  text-align: center;
+  margin: 0;
+}
+
+/* ============================================ */
+/* Build Logs */
+/* ============================================ */
+
+.build-logs {
+  background: #1a1a1a;
+  border: 1px solid #333;
+  border-radius: 8px;
+  padding: 12px;
+}
+
+.build-logs h4 {
+  margin: 0 0 12px 0;
+  color: #fff;
+  font-size: 14px;
+}
+
+.logs-content {
+  max-height: 300px;
+  overflow-y: auto;
+  font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+  font-size: 12px;
+  line-height: 1.6;
+}
+
+.logs-content::-webkit-scrollbar {
+  width: 8px;
+}
+
+.logs-content::-webkit-scrollbar-track {
+  background: #1a1a1a;
+}
+
+.logs-content::-webkit-scrollbar-thumb {
+  background: #333;
+  border-radius: 4px;
+}
+
+.logs-content::-webkit-scrollbar-thumb:hover {
+  background: #444;
+}
+
+.log-entry {
+  padding: 4px 0;
+  display: flex;
+  gap: 12px;
+}
+
+.log-time {
+  color: #666;
+  flex-shrink: 0;
+}
+
+.log-message {
+  color: #ccc;
+  flex: 1;
+}
+
+.log-entry.log-info .log-message {
+  color: #4a90e2;
+}
+
+.log-entry.log-success .log-message {
+  color: #4caf50;
+}
+
+.log-entry.log-warning .log-message {
+  color: #ff9800;
+}
+
+.log-entry.log-error .log-message {
+  color: #f44336;
+}
+
+/* ============================================ */
+/* Build Complete */
+/* ============================================ */
+
+.build-complete-container,
+.build-error-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  padding: 40px 20px;
+  text-align: center;
+}
+
+.build-complete-header,
+.build-error-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+}
+
+.build-complete-header h3,
+.build-error-header h3 {
+  margin: 0;
+  color: #fff;
+  font-size: 20px;
+}
+
+.icon-success {
+  color: #4caf50;
+}
+
+.icon-error {
+  color: #f44336;
+}
+
+.build-complete-container p,
+.build-error-container p {
+  color: #aaa;
+  margin: 0;
+}
+
+.error-message {
+  background: #2d1f1f;
+  border: 1px solid #5a3232;
+  border-radius: 6px;
+  padding: 12px 16px;
+  color: #f44336;
+  font-size: 14px;
+  max-width: 500px;
+}
+
+.build-complete-actions,
+.build-error-actions {
+  display: flex;
+  gap: 12px;
+  margin-top: 20px;
+}
+
+/* ============================================ */
+/* Footer */
+/* ============================================ */
+
 .export-footer {
   padding: 16px 24px;
   border-top: 1px solid #333;
@@ -178,8 +422,12 @@
   border-radius: 6px;
   color: #fff;
   font-size: 14px;
+  font-weight: 500;
   cursor: pointer;
   transition: background 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
 .btn-primary:hover:not(:disabled) {
@@ -198,6 +446,7 @@
   border-radius: 6px;
   color: #fff;
   font-size: 14px;
+  font-weight: 500;
   cursor: pointer;
   transition: all 0.2s;
 }
@@ -205,4 +454,17 @@
 .btn-secondary:hover {
   background: #3a3a3a;
   border-color: #555;
+}
+
+/* ============================================ */
+/* Animations */
+/* ============================================ */
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
