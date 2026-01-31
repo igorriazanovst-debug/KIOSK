@@ -1,0 +1,170 @@
+// packages/server/prisma/schema.prisma
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// Пользователи системы (админы и владельцы организаций)
+model User {
+  id             String        @id @default(uuid())
+  email          String        @unique
+  passwordHash   String
+  role           UserRole      @default(USER)
+  organizationId String?
+  
+  organization   Organization? @relation(fields: [organizationId], references: [id])
+  ownedOrgs      Organization[] @relation("OrganizationOwner")
+  auditLogs      AuditLog[]
+  
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
+  
+  @@index([email])
+  @@map("users")
+}
+
+enum UserRole {
+  ADMIN
+  USER
+}
+
+// Организации (компании-клиенты)
+model Organization {
+  id          String    @id @default(uuid())
+  name        String
+  ownerUserId String
+  
+  owner       User      @relation("OrganizationOwner", fields: [ownerUserId], references: [id])
+  users       User[]
+  licenses    License[]
+  
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  
+  @@index([ownerUserId])
+  @@map("organizations")
+}
+
+// Лицензии (подписки)
+model License {
+  id             String         @id @default(uuid())
+  licenseKey     String         @unique
+  organizationId String
+  plan           Plan
+  status         LicenseStatus  @default(ACTIVE)
+  seatsEditor    Int
+  seatsPlayer    Int
+  validFrom      DateTime
+  validUntil     DateTime
+  
+  organization   Organization   @relation(fields: [organizationId], references: [id])
+  devices        Device[]
+  auditLogs      AuditLog[]
+  
+  createdAt      DateTime       @default(now())
+  updatedAt      DateTime       @updatedAt
+  
+  @@index([licenseKey])
+  @@index([organizationId])
+  @@index([status])
+  @@map("licenses")
+}
+
+enum Plan {
+  BASIC
+  PRO
+  MAX
+}
+
+enum LicenseStatus {
+  ACTIVE
+  SUSPENDED
+  EXPIRED
+  CANCELLED
+}
+
+// Устройства (активированные editor/player)
+model Device {
+  id            String       @id @default(uuid())
+  deviceId      String       @unique // Hardware fingerprint
+  licenseId     String
+  appType       AppType
+  deviceName    String
+  osInfo        String
+  status        DeviceStatus @default(ACTIVE)
+  activatedAt   DateTime     @default(now())
+  deactivatedAt DateTime?
+  lastSeenAt    DateTime     @default(now())
+  
+  license       License      @relation(fields: [licenseId], references: [id])
+  tokens        Token[]
+  auditLogs     AuditLog[]
+  
+  createdAt     DateTime     @default(now())
+  updatedAt     DateTime     @updatedAt
+  
+  @@index([deviceId])
+  @@index([licenseId])
+  @@index([status])
+  @@map("devices")
+}
+
+enum AppType {
+  EDITOR
+  PLAYER
+}
+
+enum DeviceStatus {
+  ACTIVE
+  DEACTIVATED
+}
+
+// JWT токены (для отзыва)
+model Token {
+  id        String   @id @default(uuid())
+  deviceId  String
+  jti       String   @unique // JWT ID
+  tokenHash String   // Хэш токена для проверки
+  expiresAt DateTime
+  revoked   Boolean  @default(false)
+  revokedAt DateTime?
+  
+  device    Device   @relation(fields: [deviceId], references: [id])
+  
+  createdAt DateTime @default(now())
+  
+  @@index([jti])
+  @@index([deviceId])
+  @@index([expiresAt])
+  @@map("tokens")
+}
+
+// Audit Log (журнал действий)
+model AuditLog {
+  id        String   @id @default(uuid())
+  action    String   // activate, deactivate, refresh, login, etc.
+  userId    String?
+  deviceId  String?
+  licenseId String?
+  details   Json?    // Дополнительная информация
+  ipAddress String?
+  userAgent String?
+  
+  user      User?    @relation(fields: [userId], references: [id])
+  device    Device?  @relation(fields: [deviceId], references: [id])
+  license   License? @relation(fields: [licenseId], references: [id])
+  
+  createdAt DateTime @default(now())
+  
+  @@index([userId])
+  @@index([deviceId])
+  @@index([licenseId])
+  @@index([action])
+  @@index([createdAt])
+  @@map("audit_logs")
+}

@@ -1,0 +1,126 @@
+// packages/shared/src/constants/features.ts
+
+export enum Feature {
+  // Basic features (все планы)
+  EditPredefinedTemplates = 'edit_predefined_templates',
+  BasicExport = 'basic_export',
+  LocalStorage = 'local_storage',
+  
+  // Pro+ features
+  CreateCustomTemplates = 'create_custom_templates',
+  AdvancedExport = 'advanced_export',
+  CloudStorage = 'cloud_storage',
+  TeamCollaboration = 'team_collaboration',
+  PrioritySupport = 'priority_support',
+  
+  // Max features
+  CustomBranding = 'custom_branding',
+  ApiAccess = 'api_access',
+  AdvancedAnalytics = 'advanced_analytics',
+  DedicatedSupport = 'dedicated_support',
+  
+  // Player features
+  PlayerAutoUpdate = 'player_auto_update',
+  PlayerRemoteControl = 'player_remote_control',
+  PlayerAdvancedContent = 'player_advanced_content'
+}
+
+export interface FeatureDescription {
+  key: string;
+  name: string;
+  description: string;
+  category: 'editor' | 'player' | 'cloud' | 'support';
+}
+
+export const FEATURE_DESCRIPTIONS: Record<Feature, FeatureDescription> = {
+  [Feature.EditPredefinedTemplates]: {
+    key: 'edit_predefined_templates',
+    name: 'Edit Predefined Templates',
+    description: 'Edit content in pre-made templates',
+    category: 'editor'
+  },
+  [Feature.BasicExport]: {
+    key: 'basic_export',
+    name: 'Basic Export',
+    description: 'Export projects as standalone apps',
+    category: 'editor'
+  },
+  [Feature.LocalStorage]: {
+    key: 'local_storage',
+    name: 'Local Storage',
+    description: 'Save projects locally',
+    category: 'editor'
+  },
+  [Feature.CreateCustomTemplates]: {
+    key: 'create_custom_templates',
+    name: 'Custom Templates',
+    description: 'Create your own templates from scratch',
+    category: 'editor'
+  },
+  [Feature.AdvancedExport]: {
+    key: 'advanced_export',
+    name: 'Advanced Export',
+    description: 'Export with custom branding and settings',
+    category: 'editor'
+  },
+  [Feature.CloudStorage]: {
+    key: 'cloud_storage',
+    name: 'Cloud Storage',
+    description: 'Save and sync projects in the cloud',
+    category: 'cloud'
+  },
+  [Feature.TeamCollaboration]: {
+    key: 'team_collaboration',
+    name: 'Team Collaboration',
+    description: 'Share projects with team members',
+    category: 'cloud'
+  },
+  [Feature.PrioritySupport]: {
+    key: 'priority_support',
+    name: 'Priority Support',
+    description: '24/7 priority customer support',
+    category: 'support'
+  },
+  [Feature.CustomBranding]: {
+    key: 'custom_branding',
+    name: 'Custom Branding',
+    description: 'Remove branding and add your own',
+    category: 'editor'
+  },
+  [Feature.ApiAccess]: {
+    key: 'api_access',
+    name: 'API Access',
+    description: 'Programmatic access to platform features',
+    category: 'cloud'
+  },
+  [Feature.AdvancedAnalytics]: {
+    key: 'advanced_analytics',
+    name: 'Advanced Analytics',
+    description: 'Detailed usage analytics and reports',
+    category: 'cloud'
+  },
+  [Feature.DedicatedSupport]: {
+    key: 'dedicated_support',
+    name: 'Dedicated Support',
+    description: 'Dedicated account manager',
+    category: 'support'
+  },
+  [Feature.PlayerAutoUpdate]: {
+    key: 'player_auto_update',
+    name: 'Player Auto-Update',
+    description: 'Automatic updates for player apps',
+    category: 'player'
+  },
+  [Feature.PlayerRemoteControl]: {
+    key: 'player_remote_control',
+    name: 'Remote Control',
+    description: 'Control players remotely',
+    category: 'player'
+  },
+  [Feature.PlayerAdvancedContent]: {
+    key: 'player_advanced_content',
+    name: 'Advanced Content',
+    description: 'Support for advanced content types',
+    category: 'player'
+  }
+};

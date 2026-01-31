@@ -1,0 +1,23 @@
+{
+  "name": "@kiosk/shared",
+  "version": "1.0.0",
+  "description": "Shared types and utilities for Kiosk Content Platform",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "watch": "tsc --watch",
+    "clean": "rm -rf dist"
+  },
+  "keywords": [
+    "kiosk",
+    "types",
+    "shared"
+  ],
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "typescript": "^5.0.0"
+  },
+  "dependencies": {}
+}
