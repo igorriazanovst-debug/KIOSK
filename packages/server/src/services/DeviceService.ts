@@ -29,7 +29,7 @@ export class DeviceService {
     licenseId: string;
     appType: AppType;
     deviceName: string;
-    osInfo: string;
+    osInfo?: any;
   }) {
     const prisma = getPrismaClient();
     
