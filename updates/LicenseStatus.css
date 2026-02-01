@@ -1,0 +1,363 @@
+/* packages/editor/src/components/LicenseStatus.css */
+/* License status display styles */
+
+.license-status {
+  background: white;
+  border-radius: 12px;
+  padding: 24px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.license-status.not-activated {
+  border: 2px dashed #e0e0e0;
+  text-align: center;
+  padding: 40px 24px;
+}
+
+.license-status.expired {
+  border: 2px solid #ef5350;
+}
+
+.license-status.active {
+  border: 2px solid #4CAF50;
+}
+
+/* Status Header */
+.status-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.status-header h3 {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 600;
+  color: #1a1a1a;
+}
+
+.status-icon {
+  font-size: 32px;
+  margin-bottom: 8px;
+  display: block;
+}
+
+/* Plan Badge */
+.plan-badge {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.plan-badge[data-plan="basic"] {
+  background: #e3f2fd;
+  color: #1976d2;
+}
+
+.plan-badge[data-plan="pro"] {
+  background: #f3e5f5;
+  color: #7b1fa2;
+}
+
+.plan-badge[data-plan="max"] {
+  background: #fff3e0;
+  color: #e65100;
+}
+
+.plan-icon {
+  font-size: 18px;
+}
+
+/* Status Badge */
+.status-badge {
+  padding: 4px 12px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.status-badge.active {
+  background: #e8f5e9;
+  color: #2e7d32;
+}
+
+.status-badge.expiring {
+  background: #fff3e0;
+  color: #e65100;
+}
+
+.status-badge.expired {
+  background: #ffebee;
+  color: #c62828;
+}
+
+/* Expiration Info */
+.expiration-info {
+  margin-bottom: 20px;
+  padding: 12px;
+  background: #f5f5f5;
+  border-radius: 8px;
+  font-size: 13px;
+}
+
+.expiration-info .label {
+  font-weight: 500;
+  color: #666;
+  margin-right: 8px;
+}
+
+.expiration-info .value {
+  color: #333;
+}
+
+.expiration-info .remaining {
+  display: block;
+  margin-top: 4px;
+  color: #888;
+  font-size: 12px;
+}
+
+/* Device Info Section */
+.device-info-section {
+  margin-bottom: 20px;
+}
+
+.device-info-section h4 {
+  margin: 0 0 12px 0;
+  font-size: 14px;
+  font-weight: 600;
+  color: #333;
+}
+
+.info-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+  font-size: 13px;
+}
+
+.info-row .label {
+  font-weight: 500;
+  color: #666;
+  min-width: 90px;
+}
+
+.info-row .value {
+  font-family: 'Courier New', monospace;
+  color: #333;
+  background: #f5f5f5;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Features Section */
+.features-section {
+  margin-bottom: 20px;
+}
+
+.features-section h4 {
+  margin: 0 0 12px 0;
+  font-size: 14px;
+  font-weight: 600;
+  color: #333;
+}
+
+.features-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: 8px;
+}
+
+.feature-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  border-radius: 6px;
+  font-size: 13px;
+  transition: all 0.2s;
+}
+
+.feature-item.enabled {
+  background: #e8f5e9;
+  color: #2e7d32;
+}
+
+.feature-item.disabled {
+  background: #f5f5f5;
+  color: #999;
+}
+
+.feature-icon {
+  font-weight: bold;
+  font-size: 14px;
+}
+
+.feature-name {
+  font-weight: 500;
+}
+
+/* Seats Info */
+.seats-info {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 20px;
+  padding: 12px;
+  background: #f5f5f5;
+  border-radius: 8px;
+}
+
+.seats-item {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 13px;
+}
+
+.seats-label {
+  font-weight: 500;
+  color: #666;
+}
+
+.seats-value {
+  font-weight: 600;
+  color: #333;
+  font-size: 16px;
+}
+
+/* Actions Section */
+.actions-section {
+  padding-top: 16px;
+  border-top: 1px solid #e0e0e0;
+}
+
+.btn {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.btn-danger {
+  background: #ef5350;
+  color: white;
+}
+
+.btn-danger:hover:not(:disabled) {
+  background: #e53935;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(239, 83, 80, 0.3);
+}
+
+.btn-secondary {
+  background: #f5f5f5;
+  color: #333;
+}
+
+.btn-secondary:hover:not(:disabled) {
+  background: #e0e0e0;
+}
+
+/* Deactivate Dialog */
+.deactivate-dialog {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  animation: fadeIn 0.2s ease-in-out;
+}
+
+.dialog-content {
+  background: white;
+  border-radius: 12px;
+  padding: 24px;
+  max-width: 400px;
+  width: 90%;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+  animation: slideUp 0.3s ease-out;
+}
+
+.dialog-content h3 {
+  margin: 0 0 12px 0;
+  font-size: 18px;
+  font-weight: 600;
+  color: #333;
+}
+
+.dialog-content p {
+  margin: 0 0 16px 0;
+  font-size: 14px;
+  color: #666;
+  line-height: 1.5;
+}
+
+.error-message {
+  padding: 12px;
+  background: #ffebee;
+  border: 1px solid #ef5350;
+  border-radius: 8px;
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #c62828;
+  font-size: 13px;
+}
+
+.dialog-actions {
+  display: flex;
+  gap: 12px;
+  margin-top: 20px;
+}
+
+.dialog-actions .btn {
+  flex: 1;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
