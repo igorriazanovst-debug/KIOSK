@@ -1,0 +1,45 @@
+.devices-page { display: flex; flex-direction: column; gap: 16px; }
+
+.device-name { color: var(--text-primary); font-weight: 500; }
+.device-id { font-size: 11px; }
+.license-ref { font-size: 11px; }
+
+.last-seen { font-size: 12px; font-weight: 500; }
+.last-seen.online { color: var(--accent-green); }
+.last-seen.idle { color: var(--accent-orange); }
+.last-seen.offline { color: var(--text-muted); }
+
+.btn-deactivate {
+  background: transparent;
+  border: 1px solid rgba(239, 68, 68, 0.4);
+  color: var(--accent-red);
+  padding: 5px 10px;
+  border-radius: var(--radius-sm);
+  font-size: 11px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: background 0.15s;
+}
+.btn-deactivate:hover { background: rgba(239, 68, 68, 0.1); }
+
+/* Confirm overlay */
+.confirm-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+}
+.confirm-modal {
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 24px;
+  max-width: 380px;
+  width: 90%;
+}
+.confirm-modal h3 { font-size: 16px; color: var(--text-primary); margin-bottom: 8px; }
+.confirm-modal p { font-size: 13px; color: var(--text-secondary); margin-bottom: 18px; }
+.confirm-actions { display: flex; gap: 10px; justify-content: flex-end; }

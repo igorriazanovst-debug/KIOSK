@@ -1,0 +1,39 @@
+.plan-chart { display: flex; flex-direction: column; gap: 10px; }
+.plan-chart--empty { color: var(--text-muted); font-size: 13px; padding: 20px 0; }
+
+.plan-chart__row {
+  display: grid;
+  grid-template-columns: 70px 1fr 70px;
+  align-items: center;
+  gap: 10px;
+}
+
+.plan-chart__label {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+  text-align: right;
+}
+
+.plan-chart__bar-track {
+  height: 20px;
+  background: var(--bg-elevated);
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.plan-chart__bar {
+  height: 100%;
+  border-radius: 10px;
+  transition: width 0.4s ease;
+  min-width: 4px;
+}
+
+.plan-chart__value {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-primary);
+  font-variant-numeric: tabular-nums;
+}
+.plan-chart__share { color: var(--text-muted); font-weight: 400; }

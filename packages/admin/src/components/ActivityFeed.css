@@ -1,0 +1,41 @@
+.activity-feed { display: flex; flex-direction: column; gap: 0; }
+.activity-feed--empty { color: var(--text-muted); font-size: 13px; padding: 16px 0; }
+
+.activity-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--border);
+}
+.activity-item:last-child { border-bottom: none; }
+
+.activity-icon { font-size: 16px; flex-shrink: 0; width: 22px; text-align: center; }
+
+.activity-content {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.activity-action {
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+
+.activity-detail {
+  font-size: 11px;
+  color: var(--text-muted);
+}
+.activity-detail code { font-size: 10px; }
+
+.activity-time {
+  font-size: 11px;
+  color: var(--text-muted);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
