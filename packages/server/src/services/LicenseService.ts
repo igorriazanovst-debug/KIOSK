@@ -19,9 +19,6 @@ export class LicenseService {
     validFrom: Date;
     validUntil: Date;
     licenseKey?: string; // 🆕 Optional parameter
-    companyName?: string;
-    contactEmail?: string;
-    notes?: string;
   }) {
     const prisma = getPrismaClient();
     
@@ -146,9 +143,6 @@ export class LicenseService {
       seatsPlayer?: number;
       validUntil?: Date;
       status?: LicenseStatus | string;
-      companyName?: string;
-      contactEmail?: string;
-      notes?: string;
     }
   ) {
     const prisma = getPrismaClient();
@@ -164,9 +158,6 @@ export class LicenseService {
     if (updates.seatsEditor !== undefined) data.seatsEditor = updates.seatsEditor;
     if (updates.seatsPlayer !== undefined) data.seatsPlayer = updates.seatsPlayer;
     if (updates.validUntil) data.validUntil = updates.validUntil;
-    if (updates.companyName !== undefined) data.companyName = updates.companyName;
-    if (updates.contactEmail !== undefined) data.contactEmail = updates.contactEmail;
-    if (updates.notes !== undefined) data.notes = updates.notes;
     
     if (updates.status) {
       data.status = (typeof updates.status === 'string' 

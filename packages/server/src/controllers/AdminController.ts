@@ -125,8 +125,6 @@ export class AdminController {
     if (search) {
       where.OR = [
         { licenseKey: { contains: search as string, mode: 'insensitive' } },
-        { companyName: { contains: search as string, mode: 'insensitive' } },
-        { contactEmail: { contains: search as string, mode: 'insensitive' } }
       ];
     }
     
@@ -171,9 +169,6 @@ export class AdminController {
       seatsEditor, 
       seatsPlayer, 
       validUntil,
-      companyName,
-      contactEmail,
-      notes
     } = req.body;
     
     const prisma = getPrismaClient();
@@ -220,9 +215,6 @@ export class AdminController {
       seatsPlayer: seatsPlayer || planConfig.seatsPlayer,
       validFrom: new Date(),
       validUntil: new Date(validUntil),
-      companyName,
-      contactEmail,
-      notes
     });
     
     // Audit log
@@ -370,26 +362,33 @@ export class AdminController {
   
   
   /**
-   * POST /api/admin/devices/:id/deactivate
-   * Деактивировать устройство (админ)
+   * DELETE /api/admin/devices/:id
+   * Удалить (деактивировать) устройство
    */
-  static async deactivateDevice(req: Request, res: Response) {
+  static async deleteDevice(req: Request, res: Response) {
     const { id } = req.params;
     
-    const device = await DeviceService.deactivate(id);
+    const prisma = getPrismaClient();
+    const device = await prisma.device.findUnique({
+      where: { id }
+    });
     
-    await AuditService.logDeviceDeactivated({
+    if (!device) {
+      throw ApiError.notFound('Device not found');
+    }
+    
+    await DeviceService.deactivateDevice(device.deviceId);
+    
+    await AuditService.logDeactivation({
       deviceId: device.deviceId,
       licenseId: device.licenseId,
       userId: req.user!.id,
-      ipAddress: req.ip,
-      userAgent: req.get('user-agent')
+      ipAddress: req.ip
     });
     
     res.json({
       success: true,
-      message: 'Device deactivated successfully',
-      data: device
+      message: 'Device deactivated successfully'
     });
   }
   

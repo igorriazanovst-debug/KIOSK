@@ -39,7 +39,7 @@ export class DeviceService {
         licenseId: params.licenseId,
         appType: params.appType === AppType.Editor ? 'EDITOR' : 'PLAYER',
         deviceName: params.deviceName,
-        osInfo: params.osInfo,
+        osInfo: params.osInfo ? JSON.stringify(params.osInfo) : JSON.stringify({ platform: "unknown" }),
         status: 'ACTIVE',
         lastSeenAt: new Date()
       },
