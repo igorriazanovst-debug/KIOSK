@@ -25,7 +25,7 @@ export class LicenseService {
   }) {
     const prisma = getPrismaClient();
     
-    let finalLicenseKey: string = '';
+    let finalLicenseKey: string;
     
     if (params.licenseKey) {
       // Use provided license key
@@ -54,8 +54,8 @@ export class LicenseService {
     
     // Ensure plan is uppercase for database enum
     const planUpper = (typeof params.plan === 'string' 
-      ? String(params.plan).toUpperCase() 
-      : String(params.plan).toUpperCase()) as 'BASIC' | 'PRO' | 'MAX';
+      ? params.plan.toUpperCase() 
+      : params.plan.toUpperCase()) as 'BASIC' | 'PRO' | 'MAX';
     
     return prisma.license.create({
       data: {
@@ -67,6 +67,9 @@ export class LicenseService {
         seatsPlayer: params.seatsPlayer,
         validFrom: params.validFrom,
         validUntil: params.validUntil,
+        companyName: params.companyName || null,
+        contactEmail: params.contactEmail || null,
+        notes: params.notes || null
       },
       include: {
         organization: true
@@ -157,8 +160,8 @@ export class LicenseService {
     
     if (updates.plan) {
       data.plan = (typeof updates.plan === 'string' 
-        ? String(updates.plan).toUpperCase() 
-        : String(updates.plan).toUpperCase()) as 'BASIC' | 'PRO' | 'MAX';
+        ? updates.plan.toUpperCase() 
+        : updates.plan.toUpperCase()) as 'BASIC' | 'PRO' | 'MAX';
     }
     
     if (updates.seatsEditor !== undefined) data.seatsEditor = updates.seatsEditor;
@@ -170,8 +173,8 @@ export class LicenseService {
     
     if (updates.status) {
       data.status = (typeof updates.status === 'string' 
-        ? String(updates.status).toUpperCase() 
-        : String(updates.status).toUpperCase()) as 'ACTIVE' | 'SUSPENDED' | 'EXPIRED' | 'CANCELLED';
+        ? updates.status.toUpperCase() 
+        : updates.status.toUpperCase()) as 'ACTIVE' | 'SUSPENDED' | 'EXPIRED' | 'CANCELLED';
     }
     
     return prisma.license.update({

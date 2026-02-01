@@ -368,6 +368,24 @@ export class AdminController {
     });
   }
   
+  /**
+   * GET /api/admin/devices/:id
+   * Получить детали устройства
+   */
+  static async getDeviceDetails(req: Request, res: Response) {
+    const { id } = req.params;
+    
+    const device = await DeviceService.findById(id);
+    
+    if (!device) {
+      throw ApiError.notFound('Device not found');
+    }
+    
+    res.json({
+      success: true,
+      data: device
+    });
+  }
   
   /**
    * POST /api/admin/devices/:id/deactivate
