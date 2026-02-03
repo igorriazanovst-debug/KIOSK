@@ -144,16 +144,9 @@ export class AdminController {
       prisma.license.count({ where })
     ]);
     
-    
-    // Конвертируем BigInt в Number для JSON
-    const licensesWithNumbers = licenses.map(license => ({
-      ...license,
-      storageLimit: license.storageLimit ? Number(license.storageLimit) : 524288000
-    }));
-
     res.json({
       success: true,
-      data: licensesWithNumbers,
+      data: licenses,
       pagination: {
         page: Number(page),
         limit: Number(limit),

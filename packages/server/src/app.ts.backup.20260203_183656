@@ -13,11 +13,9 @@ import { errorHandler, notFoundHandler } from './middleware/errorHandler';
 import licenseRoutes from './routes/license.routes';
 import adminRoutes from './routes/admin.routes';
 
-// Client API routes
+// NEW: Client API routes
 import authRoutes from './routes/auth.routes';
 import projectRoutes from './routes/project.routes';
-
-// NEW: Client API routes
 
 
 // Загрузка переменных окружения
@@ -103,16 +101,6 @@ app.get('/', (req, res) => {
 // API Routes
 app.use('/api/license', licenseRoutes);
 app.use('/api/admin', adminRoutes);
-
-// Client API endpoints
-app.use('/api/auth', authRoutes);
-app.use('/api/projects', projectRoutes);
-
-// Storage stats endpoint (requires authentication)
-app.get('/api/storage/stats', async (req, res) => {
-  const { FileController } = await import('./controllers/FileController');
-  return FileController.getStorageStats(req, res);
-});
 
 // 404 handler
 app.use(notFoundHandler);

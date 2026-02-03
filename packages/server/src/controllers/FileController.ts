@@ -1,0 +1,278 @@
+// packages/server/src/controllers/FileController.ts
+import { Request, Response } from 'express';
+import { FileService } from '../services/FileService';
+import { ProjectService } from '../services/ProjectService';
+import { createAuditLog } from '../services/AuditService';
+import fs from 'fs/promises';
+
+export class FileController {
+  /**
+   * POST /api/projects/:projectId/files
+   * Загрузить файл в проект
+   */
+  static async uploadFile(req: Request, res: Response) {
+    try {
+      if (!req.client) {
+        return res.status(401).json({ error: 'Authentication required' });
+      }
+
+      const { projectId } = req.params;
+
+      if (!req.file) {
+        return res.status(400).json({
+          error: 'No file uploaded',
+          message: 'Please provide a file to upload'
+        });
+      }
+
+      // Дополнительные метаданные из body (если есть)
+      const { width, height, duration } = req.body;
+
+      const file = await FileService.uploadFile({
+        projectId,
+        organizationId: req.client.organizationId,
+        fileName: req.file.originalname,
+        mimeType: req.file.mimetype,
+        fileBuffer: req.file.buffer,
+        width: width ? parseInt(width) : undefined,
+        height: height ? parseInt(height) : undefined,
+        duration: duration ? parseInt(duration) : undefined
+      });
+
+      // Обновляем статистику проекта
+      await ProjectService.updateProjectStats(projectId);
+
+      await createAuditLog({
+        action: 'file_uploaded',
+        userId: req.client.userId,
+        licenseId: req.client.licenseId,
+        details: {
+          projectId,
+          fileId: file.id,
+          fileName: file.fileName,
+          fileSize: Number(file.fileSize)
+        },
+        ipAddress: req.ip,
+        userAgent: req.headers['user-agent']
+      });
+
+      return res.status(201).json({
+        success: true,
+        file: {
+          id: file.id,
+          fileName: file.fileName,
+          fileType: file.fileType,
+          mimeType: file.mimeType,
+          fileSize: Number(file.fileSize),
+          url: file.url,
+          width: file.width,
+          height: file.height,
+          duration: file.duration,
+          createdAt: file.createdAt
+        }
+      });
+
+    } catch (error) {
+      console.error('Upload file error:', error);
+
+      if (error instanceof Error && error.message.includes('not found')) {
+        return res.status(404).json({
+          error: 'Project not found',
+          message: error.message
+        });
+      }
+
+      return res.status(500).json({
+        error: 'Failed to upload file',
+        message: error instanceof Error ? error.message : 'Unknown error'
+      });
+    }
+  }
+
+  /**
+   * GET /api/projects/:projectId/files
+   * Получить список файлов проекта
+   */
+  static async listFiles(req: Request, res: Response) {
+    try {
+      if (!req.client) {
+        return res.status(401).json({ error: 'Authentication required' });
+      }
+
+      const { projectId } = req.params;
+
+      const files = await FileService.getProjectFiles(projectId, req.client.organizationId);
+
+      return res.json({
+        success: true,
+        count: files.length,
+        files: files.map(f => ({
+          id: f.id,
+          fileName: f.fileName,
+          fileType: f.fileType,
+          mimeType: f.mimeType,
+          fileSize: Number(f.fileSize),
+          url: f.url,
+          width: f.width,
+          height: f.height,
+          duration: f.duration,
+          thumbnail: f.thumbnail,
+          usageCount: f.usageCount,
+          createdAt: f.createdAt
+        }))
+      });
+
+    } catch (error) {
+      console.error('List files error:', error);
+
+      if (error instanceof Error && error.message.includes('not found')) {
+        return res.status(404).json({
+          error: 'Project not found',
+          message: error.message
+        });
+      }
+
+      return res.status(500).json({
+        error: 'Failed to list files',
+        message: error instanceof Error ? error.message : 'Unknown error'
+      });
+    }
+  }
+
+  /**
+   * GET /api/projects/:projectId/files/:fileId
+   * Скачать файл
+   */
+  static async downloadFile(req: Request, res: Response) {
+    try {
+      if (!req.client) {
+        return res.status(401).json({ error: 'Authentication required' });
+      }
+
+      const { projectId, fileId } = req.params;
+
+      const file = await FileService.getFileById(fileId, projectId, req.client.organizationId);
+
+      if (!file) {
+        return res.status(404).json({
+          error: 'File not found',
+          message: 'File does not exist or you do not have access'
+        });
+      }
+
+      // Получаем путь к файлу на диске
+      const filePath = FileService.getFilePath(file.storagePath);
+
+      // Проверяем что файл существует
+      try {
+        await fs.access(filePath);
+      } catch {
+        return res.status(404).json({
+          error: 'File not found on disk',
+          message: 'The file exists in database but not on disk'
+        });
+      }
+
+      // Увеличиваем счётчик использования (асинхронно)
+      FileService.incrementUsageCount(fileId).catch(console.error);
+
+      // Отправляем файл
+      res.setHeader('Content-Type', file.mimeType);
+      res.setHeader('Content-Disposition', `inline; filename="${file.fileName}"`);
+      res.setHeader('Content-Length', file.fileSize.toString());
+
+      return res.sendFile(filePath);
+
+    } catch (error) {
+      console.error('Download file error:', error);
+      return res.status(500).json({
+        error: 'Failed to download file',
+        message: error instanceof Error ? error.message : 'Unknown error'
+      });
+    }
+  }
+
+  /**
+   * DELETE /api/projects/:projectId/files/:fileId
+   * Удалить файл
+   */
+  static async deleteFile(req: Request, res: Response) {
+    try {
+      if (!req.client) {
+        return res.status(401).json({ error: 'Authentication required' });
+      }
+
+      const { projectId, fileId } = req.params;
+
+      await FileService.deleteFile(fileId, projectId, req.client.organizationId);
+
+      // Обновляем статистику проекта
+      await ProjectService.updateProjectStats(projectId);
+
+      await createAuditLog({
+        action: 'file_deleted',
+        userId: req.client.userId,
+        licenseId: req.client.licenseId,
+        details: {
+          projectId,
+          fileId
+        },
+        ipAddress: req.ip,
+        userAgent: req.headers['user-agent']
+      });
+
+      return res.json({
+        success: true,
+        message: 'File deleted successfully'
+      });
+
+    } catch (error) {
+      console.error('Delete file error:', error);
+
+      if (error instanceof Error && error.message.includes('not found')) {
+        return res.status(404).json({
+          error: 'File not found',
+          message: error.message
+        });
+      }
+
+      return res.status(500).json({
+        error: 'Failed to delete file',
+        message: error instanceof Error ? error.message : 'Unknown error'
+      });
+    }
+  }
+
+  /**
+   * GET /api/storage/stats
+   * Получить статистику использования хранилища
+   */
+  static async getStorageStats(req: Request, res: Response) {
+    try {
+      if (!req.client) {
+        return res.status(401).json({ error: 'Authentication required' });
+      }
+
+      const stats = await FileService.getStorageStats(req.client.organizationId);
+
+      return res.json({
+        success: true,
+        storage: {
+          used: stats.totalStorage,
+          limit: stats.storageLimit,
+          remaining: stats.remaining,
+          usedPercentage: Math.round((stats.totalStorage / stats.storageLimit) * 100),
+          totalFiles: stats.totalFiles
+        },
+        projects: stats.projects
+      });
+
+    } catch (error) {
+      console.error('Get storage stats error:', error);
+      return res.status(500).json({
+        error: 'Failed to get storage stats',
+        message: error instanceof Error ? error.message : 'Unknown error'
+      });
+    }
+  }
+}

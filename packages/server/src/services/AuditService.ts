@@ -224,3 +224,31 @@ export class AuditService {
     }));
   }
 }
+
+/**
+ * Создать запись в audit log
+ * Упрощённая версия для Client API
+ */
+export async function createAuditLog(params: {
+  action: string;
+  userId?: string;
+  deviceId?: string;
+  licenseId?: string;
+  details?: any;
+  ipAddress?: string;
+  userAgent?: string;
+}) {
+  const prisma = getPrismaClient();
+  
+  return prisma.auditLog.create({
+    data: {
+      action: params.action,
+      userId: params.userId || null,
+      deviceId: params.deviceId || null,
+      licenseId: params.licenseId || null,
+      details: params.details || null,
+      ipAddress: params.ipAddress || null,
+      userAgent: params.userAgent || null
+    }
+  });
+}
