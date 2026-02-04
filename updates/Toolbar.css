@@ -1,0 +1,229 @@
+/* Toolbar.css - ВЕРСИЯ 2.0 с аутентификацией */
+
+.toolbar {
+  height: 60px;
+  background: linear-gradient(180deg, #2a2a2a 0%, #252525 100%);
+  border-bottom: 1px solid #3e3e42;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 16px;
+  gap: 16px;
+  flex-shrink: 0;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.toolbar-section {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.toolbar-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 12px;
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: 6px;
+  color: #ccc;
+  font-size: 13px;
+  cursor: pointer;
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+
+.toolbar-btn:hover:not(:disabled) {
+  background: #3a3a3a;
+  border-color: #4a4a4a;
+  color: #fff;
+}
+
+.toolbar-btn:active:not(:disabled) {
+  background: #323232;
+}
+
+.toolbar-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.toolbar-btn.active {
+  background: rgba(74, 144, 226, 0.15);
+  border-color: #4a90e2;
+  color: #4a90e2;
+}
+
+.toolbar-btn svg {
+  flex-shrink: 0;
+}
+
+/* Zoom display */
+.toolbar-btn.zoom-display {
+  min-width: 60px;
+  justify-content: center;
+  font-weight: 600;
+  font-family: 'Courier New', monospace;
+}
+
+/* Preview button */
+.toolbar-btn.preview-btn {
+  background: linear-gradient(135deg, #4a90e2 0%, #357abd 100%);
+  border-color: #4a90e2;
+  color: #fff;
+  font-weight: 600;
+}
+
+.toolbar-btn.preview-btn:hover:not(:disabled) {
+  background: linear-gradient(135deg, #357abd 0%, #2868a8 100%);
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(74, 144, 226, 0.3);
+}
+
+.toolbar-btn.preview-btn:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+/* Login button */
+.toolbar-btn.login-btn {
+  background: rgba(74, 144, 226, 0.1);
+  border-color: #4a90e2;
+  color: #4a90e2;
+  font-weight: 600;
+  padding: 8px 16px;
+}
+
+.toolbar-btn.login-btn:hover {
+  background: rgba(74, 144, 226, 0.2);
+  border-color: #5a9ff0;
+}
+
+/* Auth section */
+.auth-section {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.auth-section.authenticated {
+  padding: 6px 6px 6px 12px;
+  background: rgba(74, 144, 226, 0.08);
+  border: 1px solid rgba(74, 144, 226, 0.2);
+  border-radius: 8px;
+}
+
+.user-info {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding-right: 8px;
+}
+
+.user-info svg {
+  color: #4a90e2;
+  flex-shrink: 0;
+}
+
+.user-details {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.org-name {
+  font-size: 13px;
+  font-weight: 600;
+  color: #fff;
+  line-height: 1;
+}
+
+.plan-badge {
+  font-size: 10px;
+  font-weight: 700;
+  color: #4a90e2;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  line-height: 1;
+}
+
+.logout-btn {
+  padding: 6px;
+  background: rgba(231, 76, 60, 0.1);
+  border-color: transparent;
+  color: #e74c3c;
+}
+
+.logout-btn:hover {
+  background: rgba(231, 76, 60, 0.2);
+  border-color: #e74c3c;
+}
+
+/* Divider */
+.toolbar-divider {
+  width: 1px;
+  height: 32px;
+  background: #3e3e42;
+  margin: 0 4px;
+}
+
+/* Responsive */
+@media (max-width: 1200px) {
+  .toolbar-btn span {
+    display: none;
+  }
+
+  .toolbar-btn {
+    padding: 8px;
+  }
+
+  .toolbar-btn.login-btn,
+  .toolbar-btn.preview-btn {
+    padding: 8px 12px;
+  }
+
+  .toolbar-btn.login-btn span,
+  .toolbar-btn.preview-btn span {
+    display: inline;
+  }
+}
+
+@media (max-width: 768px) {
+  .toolbar {
+    padding: 0 12px;
+    gap: 8px;
+  }
+
+  .toolbar-section {
+    gap: 4px;
+  }
+
+  .toolbar-divider {
+    display: none;
+  }
+
+  .org-name {
+    max-width: 100px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+}
+
+@media (max-width: 480px) {
+  .toolbar {
+    height: 50px;
+  }
+
+  .toolbar-btn {
+    padding: 6px;
+  }
+
+  .user-details {
+    display: none;
+  }
+
+  .auth-section.authenticated {
+    padding: 6px;
+  }
+}

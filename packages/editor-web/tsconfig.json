@@ -1,0 +1,33 @@
+{
+  "compilerOptions": {
+    "target": "ES2020",
+    "useDefineForClassFields": true,
+    "lib": ["ES2020", "DOM", "DOM.Iterable"],
+    "module": "ESNext",
+    "skipLibCheck": true,
+    "moduleResolution": "bundler",
+    "allowImportingTsExtensions": true,
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "noEmit": true,
+    "jsx": "react-jsx",
+    "strict": false,
+    "noUnusedLocals": false,
+    "noUnusedParameters": false,
+    "noFallthroughCasesInSwitch": false,
+    "types": ["node"]
+  },
+  "include": ["src"],
+  "exclude": [
+    "node_modules",
+    "src/components/DeviceManager.tsx",
+    "src/components/MediaLibrary.tsx",
+    "src/components/TemplatesLibrary.tsx",
+    "src/components/CanvasSettings.tsx",
+    "src/components/GridSettings.tsx",
+    "src/components/PropertiesPanel.tsx",
+    "src/App.alternative.tsx",
+    "src/services/LicenseService.ts",
+    "src/stores/serverStore.ts"
+  ]
+}

@@ -1,0 +1,42 @@
+.canvas-container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  background-color: #1e1e1e;
+  position: relative;
+  overflow: hidden;
+}
+
+.canvas-scroll {
+  flex: 1;
+  overflow: auto;
+  padding: 40px;
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
+}
+
+.canvas-wrapper {
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+  cursor: default;
+}
+
+.canvas-info {
+  position: absolute;
+  bottom: 8px;
+  left: 8px;
+  display: flex;
+  gap: 16px;
+  padding: 6px 12px;
+  background-color: rgba(37, 37, 38, 0.9);
+  border-radius: 4px;
+  font-size: 11px;
+  color: #cccccc;
+  pointer-events: none;
+}
+
+.canvas-info span {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}

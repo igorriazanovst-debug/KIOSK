@@ -1,0 +1,65 @@
+.action-editor {
+  margin-top: 8px;
+}
+
+.action-item {
+  background: #252525;
+  border: 1px solid #333;
+  border-radius: 8px;
+  padding: 12px;
+  margin-bottom: 12px;
+}
+
+.action-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid #333;
+}
+
+.action-number {
+  font-size: 12px;
+  font-weight: bold;
+  color: #4a90e2;
+  background: #1e1e1e;
+  padding: 4px 10px;
+  border-radius: 4px;
+}
+
+.btn-danger-small {
+  background: #e74c3c;
+  border: none;
+  color: #fff;
+  padding: 4px 10px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 12px;
+  transition: all 0.2s;
+}
+
+.btn-danger-small:hover {
+  background: #c0392b;
+  transform: scale(1.05);
+}
+
+.action-body {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.action-body .property-field {
+  margin-bottom: 0;
+}
+
+.action-body label {
+  font-size: 11px;
+}
+
+.action-body input,
+.action-body select,
+.action-body textarea {
+  font-size: 13px;
+}

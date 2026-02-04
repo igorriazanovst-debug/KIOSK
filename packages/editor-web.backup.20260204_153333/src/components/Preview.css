@@ -1,0 +1,148 @@
+.preview-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.95);
+  z-index: 10000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: fadeIn 0.2s ease-out;
+}
+
+.preview-overlay.fullscreen {
+  background: #000;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.preview-container {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.preview-header {
+  background: #1e1e1e;
+  padding: 12px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #333;
+  flex-shrink: 0;
+}
+
+.preview-title {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  color: #fff;
+  font-size: 16px;
+  font-weight: 500;
+}
+
+.preview-resolution {
+  font-size: 13px;
+  color: #888;
+  background: #252525;
+  padding: 4px 12px;
+  border-radius: 4px;
+}
+
+.preview-controls {
+  display: flex;
+  gap: 8px;
+}
+
+.preview-btn {
+  background: #2a2a2a;
+  border: 1px solid #333;
+  color: #fff;
+  padding: 8px;
+  border-radius: 4px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+}
+
+.preview-btn:hover {
+  background: #333;
+  border-color: #444;
+}
+
+.preview-content {
+  flex: 1;
+  overflow: auto;
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
+  padding: 0;
+}
+
+.preview-canvas {
+  transform-origin: top left;
+  box-sizing: border-box;
+}
+
+.preview-hints {
+  background: #1e1e1e;
+  padding: 8px 20px;
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+  border-top: 1px solid #333;
+  flex-shrink: 0;
+}
+
+.preview-hints span {
+  font-size: 12px;
+  color: #888;
+}
+
+/* Полноэкранный режим */
+.preview-overlay.fullscreen .preview-header,
+.preview-overlay.fullscreen .preview-hints {
+  display: none;
+}
+
+.preview-overlay.fullscreen .preview-content {
+  padding: 0;
+}
+
+/* Адаптивное масштабирование */
+@media (max-width: 1600px) {
+  .preview-content {
+    padding: 10px;
+  }
+}
+
+/* Скрытие скроллбаров в webkit браузерах для более чистого вида */
+.preview-content::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+.preview-content::-webkit-scrollbar-track {
+  background: #1a1a1a;
+}
+
+.preview-content::-webkit-scrollbar-thumb {
+  background: #444;
+  border-radius: 4px;
+}
+
+.preview-content::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
