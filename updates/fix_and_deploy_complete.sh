@@ -1,3 +1,40 @@
+#!/bin/bash
+
+# 🚀 Универсальный скрипт исправления LoginDialog
+# Исправляет Toolbar.tsx и делает полный deploy
+
+echo "=========================================="
+echo "🚀 ИСПРАВЛЕНИЕ И ДЕПЛОЙ LoginDialog"
+echo "=========================================="
+echo ""
+
+# Цвета для вывода
+GREEN='\033[0;32m'
+RED='\033[0;31m'
+YELLOW='\033[1;33m'
+NC='\033[0m' # No Color
+
+EDITOR_PATH="/opt/kiosk/kiosk-content-platform/packages/editor-web"
+TOOLBAR_PATH="$EDITOR_PATH/src/components/Toolbar.tsx"
+DEPLOY_PATH="/opt/kiosk/editor-web"
+
+# Проверка что скрипт запущен на сервере
+if [ ! -d "$EDITOR_PATH" ]; then
+    echo -e "${RED}❌ Директория не найдена: $EDITOR_PATH${NC}"
+    echo "   Запустите скрипт на production сервере!"
+    exit 1
+fi
+
+echo "1️⃣ Создаём backup..."
+BACKUP_PATH="$TOOLBAR_PATH.backup.$(date +%Y%m%d_%H%M%S)"
+cp "$TOOLBAR_PATH" "$BACKUP_PATH"
+echo -e "${GREEN}✅ Backup: $BACKUP_PATH${NC}"
+echo ""
+
+echo "2️⃣ Заменяем Toolbar.tsx на исправленную версию..."
+
+# Создаём временный файл с ПОЛНЫМ исправленным кодом
+cat > /tmp/Toolbar_FIXED.tsx << 'TOOLBAR_FIXED_EOF'
 /**
  * Toolbar Component - ВЕРСИЯ 2.0 ИСПРАВЛЕННАЯ
  * С интеграцией аутентификации и автосохранения
@@ -55,14 +92,7 @@ export const Toolbar: React.FC = () => {
           const valid = await apiClient.verifyToken();
           if (valid) {
             setIsAuthenticated(true);
-            
-            // Получаем данные из localStorage
-            const authDataStr = localStorage.getItem('kiosk_auth_token');
-            if (authDataStr) {
-              const authData = JSON.parse(authDataStr);
-              setOrganizationName(authData.organizationName || null);
-              setPlan(authData.plan || null);
-            }
+            // TODO: Получить данные организации из токена или API
           } else {
             setIsAuthenticated(false);
           }
@@ -99,9 +129,6 @@ export const Toolbar: React.FC = () => {
     setOrganizationName(orgName);
     setPlan(planType);
     console.log('[Toolbar] Login successful:', orgName, planType);
-    
-    // Оповещаем другие компоненты о входе
-    window.dispatchEvent(new CustomEvent('auth:login'));
   };
 
   const handleLogout = () => {
@@ -277,7 +304,7 @@ export const Toolbar: React.FC = () => {
       {/* Login Dialog */}
       {showLoginDialog && (
         <LoginDialog 
-          onClose={() => setShowLoginDialog(false)}
+          onClose={() => !isAuthenticated ? null : setShowLoginDialog(false)}
           onSuccess={handleLoginSuccess}
         />
       )}
@@ -286,3 +313,119 @@ export const Toolbar: React.FC = () => {
 };
 
 export default Toolbar;
+TOOLBAR_FIXED_EOF
+
+# Заменяем файл
+cp /tmp/Toolbar_FIXED.tsx "$TOOLBAR_PATH"
+echo -e "${GREEN}✅ Toolbar.tsx заменён на исправленную версию${NC}"
+echo ""
+
+echo "3️⃣ Проверяем что LoginDialog существует..."
+LOGIN_DIALOG_PATH="$EDITOR_PATH/src/components/LoginDialog.tsx"
+LOGIN_CSS_PATH="$EDITOR_PATH/src/components/LoginDialog.css"
+
+if [ -f "$LOGIN_DIALOG_PATH" ]; then
+    echo -e "${GREEN}✅ LoginDialog.tsx найден${NC}"
+else
+    echo -e "${RED}⚠️ LoginDialog.tsx НЕ НАЙДЕН${NC}"
+    echo "   Убедитесь что файл существует!"
+fi
+
+if [ -f "$LOGIN_CSS_PATH" ]; then
+    echo -e "${GREEN}✅ LoginDialog.css найден${NC}"
+else
+    echo -e "${YELLOW}⚠️ LoginDialog.css НЕ НАЙДЕН (может быть не критично)${NC}"
+fi
+
+echo ""
+
+echo "4️⃣ Build проекта..."
+cd "$EDITOR_PATH"
+
+# Удаляем старый build
+rm -rf dist
+
+# Запускаем build
+echo "   Запускаем: npm run build..."
+if npm run build; then
+    echo -e "${GREEN}✅ Build успешно завершён${NC}"
+else
+    echo -e "${RED}❌ Build завершился с ошибками${NC}"
+    echo "   Проверьте ошибки выше"
+    exit 1
+fi
+
+echo ""
+
+echo "5️⃣ Проверяем результат build..."
+if [ -d "dist" ] && [ -f "dist/index.html" ]; then
+    echo -e "${GREEN}✅ Dist директория создана${NC}"
+    echo "   Размеры файлов:"
+    du -sh dist/
+    ls -lh dist/assets/ | grep -E "\.(js|css)$" | awk '{print "   "$9" - "$5}'
+else
+    echo -e "${RED}❌ Dist директория не создана!${NC}"
+    exit 1
+fi
+
+echo ""
+
+echo "6️⃣ Deploy на production..."
+# Удаляем старые файлы
+rm -rf "$DEPLOY_PATH"/*
+
+# Копируем новые файлы
+cp -r dist/* "$DEPLOY_PATH/"
+
+# Устанавливаем права
+chown -R www-data:www-data "$DEPLOY_PATH"
+
+echo -e "${GREEN}✅ Файлы скопированы в $DEPLOY_PATH${NC}"
+echo ""
+
+echo "7️⃣ Перезагружаем Nginx..."
+if nginx -t; then
+    systemctl reload nginx
+    echo -e "${GREEN}✅ Nginx перезагружен${NC}"
+else
+    echo -e "${RED}❌ Ошибка конфигурации Nginx${NC}"
+    exit 1
+fi
+
+echo ""
+
+echo "8️⃣ Проверяем доступность..."
+sleep 2
+
+if curl -s -o /dev/null -w "%{http_code}" http://localhost:8080 | grep -q "200"; then
+    echo -e "${GREEN}✅ Editor доступен на http://localhost:8080${NC}"
+else
+    echo -e "${RED}⚠️ Editor недоступен (может потребоваться время)${NC}"
+fi
+
+echo ""
+echo "=========================================="
+echo -e "${GREEN}✅ ИСПРАВЛЕНИЕ ЗАВЕРШЕНО!${NC}"
+echo "=========================================="
+echo ""
+echo "📋 Что было сделано:"
+echo "   1. Создан backup: $BACKUP_PATH"
+echo "   2. Заменён Toolbar.tsx на исправленную версию"
+echo "   3. Выполнен build проекта"
+echo "   4. Задеплоено на production"
+echo "   5. Nginx перезагружен"
+echo ""
+echo "🌐 Проверьте работу:"
+echo "   URL: http://31.192.110.121:8080"
+echo ""
+echo "🔍 Что должно работать:"
+echo "   ✅ Диалог входа LoginDialog показывается"
+echo "   ✅ Кнопка 'Войти' в Toolbar"
+echo "   ✅ После входа показывается User info"
+echo "   ✅ AutoSaveIndicator работает"
+echo ""
+echo "💡 Если всё ещё не работает:"
+echo "   1. Откройте DevTools (F12)"
+echo "   2. Проверьте Console на ошибки"
+echo "   3. Проверьте вкладку Network"
+echo ""

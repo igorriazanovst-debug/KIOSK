@@ -5,10 +5,10 @@
 
 import React, { useState, useRef, useEffect } from 'react';
 import { useEditorStore } from '../stores/editorStore';
-import Toolbar from './Toolbar';
+import { Toolbar } from './Toolbar';
 import Canvas from './Canvas';
-import WidgetLibrary from './WidgetLibrary';
-import PropertiesPanel from './PropertiesPanel';
+import { WidgetLibrary } from './WidgetLibrary';
+import { PropertiesPanel } from './PropertiesPanel';
 import './Editor.css';
 
 const Editor: React.FC = () => {

@@ -45,7 +45,6 @@ interface LocalProject {
     author?: string;
   };
 }
-
 interface EditorState {
   // Проект
   project: LocalProject | null;
@@ -153,7 +152,20 @@ function stopAutoSave() {
 
 export const useEditorStore = create<EditorState>((set, get) => ({
   // Initial state
-  project: null,
+  project: {
+    version: '1.0.0',
+    name: 'Новый проект',
+    canvas: {
+      width: 1920,
+      height: 1080,
+      backgroundColor: '#1a1a1a'
+    },
+    widgets: [],
+    metadata: {
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString()
+    }
+  },
   projectId: null,
   isLoading: false,
   isSaving: false,
@@ -333,7 +345,20 @@ export const useEditorStore = create<EditorState>((set, get) => ({
       // Если удалили текущий проект - очистить state
       if (get().projectId === id) {
         set({
-          project: null,
+          project: {
+    version: '1.0.0',
+    name: 'Новый проект',
+    canvas: {
+      width: 1920,
+      height: 1080,
+      backgroundColor: '#1a1a1a'
+    },
+    widgets: [],
+    metadata: {
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString()
+    }
+  },
           projectId: null,
           selectedWidgetIds: [],
           history: { past: [], future: [] }

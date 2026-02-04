@@ -1,5 +1,5 @@
 /**
- * Toolbar Component - ВЕРСИЯ 2.0 ИСПРАВЛЕННАЯ
+ * Toolbar Component - ВЕРСИЯ 2.0
  * С интеграцией аутентификации и автосохранения
  */
 
@@ -55,14 +55,7 @@ export const Toolbar: React.FC = () => {
           const valid = await apiClient.verifyToken();
           if (valid) {
             setIsAuthenticated(true);
-            
-            // Получаем данные из localStorage
-            const authDataStr = localStorage.getItem('kiosk_auth_token');
-            if (authDataStr) {
-              const authData = JSON.parse(authDataStr);
-              setOrganizationName(authData.organizationName || null);
-              setPlan(authData.plan || null);
-            }
+            // TODO: Получить данные организации из токена или API
           } else {
             setIsAuthenticated(false);
           }
@@ -99,9 +92,6 @@ export const Toolbar: React.FC = () => {
     setOrganizationName(orgName);
     setPlan(planType);
     console.log('[Toolbar] Login successful:', orgName, planType);
-    
-    // Оповещаем другие компоненты о входе
-    window.dispatchEvent(new CustomEvent('auth:login'));
   };
 
   const handleLogout = () => {
@@ -277,7 +267,7 @@ export const Toolbar: React.FC = () => {
       {/* Login Dialog */}
       {showLoginDialog && (
         <LoginDialog 
-          onClose={() => setShowLoginDialog(false)}
+          onClose={() => !isAuthenticated ? null : setShowLoginDialog(false)}
           onSuccess={handleLoginSuccess}
         />
       )}

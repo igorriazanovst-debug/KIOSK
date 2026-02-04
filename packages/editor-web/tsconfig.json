@@ -6,7 +6,6 @@
     "module": "ESNext",
     "skipLibCheck": true,
     "moduleResolution": "bundler",
-    "allowImportingTsExtensions": true,
     "resolveJsonModule": true,
     "isolatedModules": true,
     "noEmit": true,
@@ -15,19 +14,8 @@
     "noUnusedLocals": false,
     "noUnusedParameters": false,
     "noFallthroughCasesInSwitch": false,
-    "types": ["node"]
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true
   },
-  "include": ["src"],
-  "exclude": [
-    "node_modules",
-    "src/components/DeviceManager.tsx",
-    "src/components/MediaLibrary.tsx",
-    "src/components/TemplatesLibrary.tsx",
-    "src/components/CanvasSettings.tsx",
-    "src/components/GridSettings.tsx",
-    "src/components/PropertiesPanel.tsx",
-    "src/App.alternative.tsx",
-    "src/services/LicenseService.ts",
-    "src/stores/serverStore.ts"
-  ]
+  "include": ["src"]
 }

@@ -43,15 +43,18 @@ export const LoginDialog: React.FC<LoginDialogProps> = ({ onClose, onSuccess }) 
     setError(null);
 
     try {
+      console.log('[LoginDialog] Attempting login, timestamp:', Date.now());
       const response = await apiClient.loginWithLicense(licenseKey);
       
       console.log('[Auth] Login successful:', response);
 
       // Успешный вход
+      console.log('[LoginDialog] Calling onSuccess, timestamp:', Date.now());
       onSuccess(
-        response.license.organization.name,
+        response.license.organizationName || 'Organization',
         response.license.plan
       );
+      onClose();
 
       onClose();
 

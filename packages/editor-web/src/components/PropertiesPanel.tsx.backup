@@ -113,8 +113,8 @@ const PropertiesPanel: React.FC = () => {
               <button
                 className="btn-secondary"
                 onClick={() => {
-                  // const { bringToFront } = useEditorStore.getState();
-// bringToFront(selectedWidget.id);
+                  const { bringToFront } = useEditorStore.getState();
+                  bringToFront(selectedWidget.id);
                 }}
                 style={{ flex: 1, fontSize: '11px', padding: '4px' }}
                 title="На передний план"
@@ -124,8 +124,8 @@ const PropertiesPanel: React.FC = () => {
               <button
                 className="btn-secondary"
                 onClick={() => {
-                  // const { sendToBack } = useEditorStore.getState();
-// sendToBack(selectedWidget.id);
+                  const { sendToBack } = useEditorStore.getState();
+                  sendToBack(selectedWidget.id);
                 }}
                 style={{ flex: 1, fontSize: '11px', padding: '4px' }}
                 title="На задний план"
@@ -139,8 +139,8 @@ const PropertiesPanel: React.FC = () => {
             <button
               className={selectedWidget.locked ? 'btn-danger' : 'btn-secondary'}
               onClick={() => {
-                // const { toggleLockWidget } = useEditorStore.getState();
-                // toggleLockWidget(selectedWidget.id);
+                const { toggleLockWidget } = useEditorStore.getState();
+                toggleLockWidget(selectedWidget.id);
               }}
               style={{ width: '100%' }}
             >

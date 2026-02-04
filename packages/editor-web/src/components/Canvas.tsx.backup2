@@ -73,7 +73,7 @@ const Canvas: React.FC = () => {
     transformerRef.current.getLayer().batchDraw();
   }, [selectedWidgetIds, project]);
 
-  // if (!project) return null; // Временно отключено
+  if (!project) return null;
 
   const handleStageClick = (e: any) => {
     // Если есть ожидающий виджет - добавляем его в точку клика
@@ -222,9 +222,29 @@ const Canvas: React.FC = () => {
                 const isLocked = widget.locked || false;
                 
                 // Для изображений используем ImageWidget
-                // Временно отключено: ImageWidget
                 if (widget.type === 'image') {
-                  return null; // ImageWidget disabled
+                  return (
+                    <React.Fragment key={widget.id}>
+                      <ImageWidget
+                        widget={widget}
+                        isSelected={selectedWidgetIds.includes(widget.id)}
+                        onSelect={(e) => handleWidgetClick(widget.id, e)}
+                        onDragEnd={(e) => handleDragEnd(widget.id, e)}
+                        onTransformEnd={(e) => handleTransformEnd(widget.id, e)}
+                        dragBoundFunc={snapToGrid ? dragBoundFunc : undefined}
+                      />
+                      {/* Иконка замка для заблокированных виджетов */}
+                      {isLocked && (
+                        <Text
+                          x={widget.x + 5}
+                          y={widget.y + 5}
+                          text="🔒"
+                          fontSize={16}
+                          listening={false}
+                        />
+                      )}
+                    </React.Fragment>
+                  );
                 }
 
                 // Для кнопок используем ButtonWidget

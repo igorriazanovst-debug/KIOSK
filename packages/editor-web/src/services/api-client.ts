@@ -16,10 +16,12 @@ export interface AuthResponse {
     licenseKey: string;
     plan: 'BASIC' | 'PRO' | 'MAX';
     storageLimit: number;
-    organization: {
-      id: string;
-      name: string;
-    };
+    organizationId: string;
+    organizationName: string;
+    validFrom?: string;
+    validUntil?: string;
+    seatsEditor?: number;
+    seatsPlayer?: number;
   };
   user?: any;
 }
@@ -141,8 +143,8 @@ class ApiClient {
     }
   }
 
-  private saveToken(token: string, expiresAt: string): void {
-    localStorage.setItem('kiosk_auth_token', JSON.stringify({ token, expiresAt }));
+  private saveToken(token: string, expiresAt: string, organizationName?: string, plan?: string): void {
+    localStorage.setItem('kiosk_auth_token', JSON.stringify({ token, expiresAt, organizationName, plan }));
     this.token = token;
   }
 
@@ -168,7 +170,7 @@ class ApiClient {
     if (response.token) {
       // ИСПРАВЛЕНО: Вычисляем expiresAt из expiresIn (секунды)
       const expiresAt = new Date(Date.now() + (response.expiresIn * 1000)).toISOString();
-      this.saveToken(response.token, expiresAt);
+      this.saveToken(response.token, expiresAt, response.license.organizationName, response.license.plan);
     }
 
     return response;
@@ -182,7 +184,7 @@ class ApiClient {
 
     if (response.token) {
       const expiresAt = new Date(Date.now() + (response.expiresIn * 1000)).toISOString();
-      this.saveToken(response.token, expiresAt);
+      this.saveToken(response.token, expiresAt, response.license.organizationName, response.license.plan);
     }
 
     return response;
