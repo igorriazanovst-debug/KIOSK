@@ -219,15 +219,15 @@ export const useEditorStore = create<EditorState>((set, get) => ({
       set({
         project: {
           ...localProject,
-          id: serverProject.id
+          id: serverProject.project.id
         },
-        projectId: serverProject.id,
+        projectId: serverProject.project.id,
         isLoading: false,
         lastSaved: new Date(),
         history: { past: [], future: [] }
       });
 
-      console.log('[Editor] Project created:', serverProject.id);
+      console.log('[Editor] Project created:', serverProject.project.id);
 
       // Запустить автосохранение
       startAutoSave(get().saveProject);
@@ -252,26 +252,26 @@ export const useEditorStore = create<EditorState>((set, get) => ({
       const serverProject = await apiClient.getProject(id);
 
       const localProject: LocalProject = {
-        id: serverProject.id,
+        id: serverProject.project.id,
         version: '1.0',
-        name: serverProject.name,
+        name: serverProject.project.name,
         canvas: {
-          width: serverProject.canvasWidth,
-          height: serverProject.canvasHeight,
-          backgroundColor: serverProject.canvasBackground
+          width: serverProject.project.canvasWidth,
+          height: serverProject.project.canvasHeight,
+          backgroundColor: serverProject.project.canvasBackground
         },
-        widgets: serverProject.projectData?.widgets || [],
+        widgets: serverProject.project.projectData?.widgets || [],
         metadata: {
-          createdAt: serverProject.createdAt,
-          updatedAt: serverProject.updatedAt
+          createdAt: serverProject.project.createdAt,
+          updatedAt: serverProject.project.updatedAt
         }
       };
 
       set({
         project: localProject,
-        projectId: serverProject.id,
+        projectId: serverProject.project.id,
         isLoading: false,
-        lastSaved: new Date(serverProject.updatedAt),
+        lastSaved: new Date(serverProject.project.updatedAt),
         history: { past: [], future: [] }
       });
 
