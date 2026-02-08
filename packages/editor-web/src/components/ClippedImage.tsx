@@ -59,10 +59,10 @@ const ClippedImage: React.FC<ClippedImageProps> = ({ widget, image }) => {
 
       case 'diamond':
         ctx.beginPath();
-        ctx.moveTo(centerX, centerY - radius);
-        ctx.lineTo(centerX + radius, centerY);
-        ctx.lineTo(centerX, centerY + radius);
-        ctx.lineTo(centerX - radius, centerY);
+        ctx.moveTo(centerX, 0);
+        ctx.lineTo(widget.width, centerY);
+        ctx.lineTo(centerX, widget.height);
+        ctx.lineTo(0, centerY);
         ctx.closePath();
         break;
 
@@ -78,11 +78,26 @@ const ClippedImage: React.FC<ClippedImageProps> = ({ widget, image }) => {
         drawPolygon(ctx, centerX, centerY, radius, 8);
         break;
 
-      case 'rounded-rectangle':
-        drawRoundedRect(ctx, 0, 0, widget.width, widget.height, cornerRadius || 20);
+      case 'star':
+        ctx.beginPath();
+        for (let i = 0; i < 10; i++) {
+          const angle = (i * Math.PI / 5) - Math.PI / 2;
+          const r = i % 2 === 0 ? radius : radius * 0.5;
+          const x = centerX + r * Math.cos(angle);
+          const y = centerY + r * Math.sin(angle);
+          if (i === 0) {
+            ctx.moveTo(x, y);
+          } else {
+            ctx.lineTo(x, y);
+          }
+        }
+        ctx.closePath();
         break;
 
-      case 'rectangle':
+      case 'rounded-rectangle':
+        drawRoundedRect(ctx, 0, 0, widget.width, widget.height, cornerRadius);
+        break;
+
       default:
         ctx.rect(0, 0, widget.width, widget.height);
         break;
@@ -90,30 +105,23 @@ const ClippedImage: React.FC<ClippedImageProps> = ({ widget, image }) => {
 
     ctx.clip();
 
-    // Рисуем изображение с сохранением пропорций
-    const imgAspect = image.width / image.height;
-    const widgetAspect = widget.width / widget.height;
-    
-    let drawWidth, drawHeight, drawX, drawY;
-    
-    if (imgAspect > widgetAspect) {
-      // Изображение шире
-      drawHeight = widget.height;
-      drawWidth = image.width * (widget.height / image.height);
-      drawX = (widget.width - drawWidth) / 2;
-      drawY = 0;
+    const imgRatio = image.width / image.height;
+    const widgetRatio = widget.width / widget.height;
+
+    let sx = 0, sy = 0, sw = image.width, sh = image.height;
+    let dx = 0, dy = 0, dw = widget.width, dh = widget.height;
+
+    if (imgRatio > widgetRatio) {
+      sw = image.height * widgetRatio;
+      sx = (image.width - sw) / 2;
     } else {
-      // Изображение выше
-      drawWidth = widget.width;
-      drawHeight = image.height * (widget.width / image.width);
-      drawX = 0;
-      drawY = (widget.height - drawHeight) / 2;
+      sh = image.width / widgetRatio;
+      sy = (image.height - sh) / 2;
     }
 
-    ctx.drawImage(image, drawX, drawY, drawWidth, drawHeight);
+    ctx.drawImage(image, sx, sy, sw, sh, dx, dy, dw, dh);
     ctx.restore();
 
-    // Применяем canvas как изображение
     const clippedImage = new window.Image();
     clippedImage.src = canvas.toDataURL();
     
@@ -133,6 +141,7 @@ const ClippedImage: React.FC<ClippedImageProps> = ({ widget, image }) => {
   return (
     <KonvaImage
       ref={imageRef}
+      image={undefined}
       width={widget.width}
       height={widget.height}
       opacity={opacity}
@@ -141,7 +150,6 @@ const ClippedImage: React.FC<ClippedImageProps> = ({ widget, image }) => {
   );
 };
 
-// Вспомогательные функции
 function drawPolygon(ctx: CanvasRenderingContext2D, x: number, y: number, radius: number, sides: number) {
   ctx.beginPath();
   for (let i = 0; i < sides; i++) {

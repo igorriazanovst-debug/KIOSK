@@ -2,11 +2,10 @@
  * Login Page - Страница авторизации
  */
 
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Key, AlertCircle, Loader } from 'lucide-react';
 import { apiClient } from '../services/api-client';
-import { logger } from '../utils/logger';
 import './LoginPage.css';
 
 export const LoginPage: React.FC = () => {
@@ -14,29 +13,6 @@ export const LoginPage: React.FC = () => {
   const [licenseKey, setLicenseKey] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-
-  useEffect(() => {
-    // Проверяем причину выхода
-    const reason = sessionStorage.getItem('kiosk_logout_reason');
-    
-    if (reason === 'inactivity') {
-      setLogoutMessage('Вы были автоматически выведены из системы из-за неактивности');
-      logger.info('Logout reason: inactivity');
-    } else if (reason === 'session_expired') {
-      setLogoutMessage('Ваша сессия истекла. Пожалуйста, войдите снова');
-      logger.info('Logout reason: session expired');
-    }
-    
-    // Очищаем причину после отображения
-    sessionStorage.removeItem('kiosk_logout_reason');
-    
-    // Автоматически скрываем сообщение через 5 секунд
-    if (reason) {
-      setTimeout(() => setLogoutMessage(null), 5000);
-    }
-  }, []);
-
-  const [logoutMessage, setLogoutMessage] = useState<string | null>(null);
 
   // Форматирование ключа лицензии (XXXX-XXXX-XXXX-XXXX)
   const formatLicenseKey = (value: string): string => {

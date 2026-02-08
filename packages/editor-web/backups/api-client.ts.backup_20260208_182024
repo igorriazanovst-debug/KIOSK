@@ -111,12 +111,6 @@ export interface StorageStats {
 // ==================== API CLIENT ====================
 
 class ApiClient {
-  // ==================== DEBUG CONFIGURATION ====================
-  // Для отладки: измените на true и укажите время в минутах
-  private readonly DEBUG_MODE = true;
-  private readonly DEBUG_INACTIVITY_MINUTES = 3; // Для отладки: 3 минуты
-  
-  // ==================== PRODUCTION CONFIGURATION ====================
   private baseUrl: string = '';
   private token: string | null = null;
   private organizationName: string | null = null;
@@ -126,8 +120,8 @@ class ApiClient {
   private inactivityTimer: NodeJS.Timeout | null = null;
   private warningTimer: NodeJS.Timeout | null = null;
   
-  private readonly INACTIVITY_TIMEOUT = this.DEBUG_MODE ? this.DEBUG_INACTIVITY_MINUTES * 60 * 1000 : 30 * 60 * 1000;
-  private readonly WARNING_TIME = this.DEBUG_MODE ? (this.DEBUG_INACTIVITY_MINUTES - 2) * 60 * 1000 : 28 * 60 * 1000;
+  private readonly INACTIVITY_TIMEOUT = 30 * 60 * 1000; // 30 минут
+  private readonly WARNING_TIME = 28 * 60 * 1000; // 28 минут (за 2 минуты до выхода)
 
   constructor() {
     this.loadToken();

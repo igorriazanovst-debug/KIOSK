@@ -1,0 +1,28 @@
+--- Toolbar.tsx
++++ Toolbar.tsx
+@@ -6,6 +6,7 @@
+ import { useEditorStore } from '../stores/editorStore';
+ import { apiClient } from '../services/api-client';
+ import LoginDialog from './LoginDialog';
++import ProjectsDialog from './ProjectsDialog';
+ import AutoSaveIndicator from './AutoSaveIndicator';
+ import './Toolbar.css';
+ 
+@@ -20,6 +21,7 @@
+   const [organizationName, setOrganizationName] = useState<string | null>(null);
+   const [plan, setPlan] = useState<string | null>(null);
+   const [showLoginDialog, setShowLoginDialog] = useState(false);
++  const [showProjectsDialog, setShowProjectsDialog] = useState(false);
+ 
+   // Проверка аутентификации при монтировании
+   useEffect(() => {
+@@ -98,7 +100,7 @@
+           <button 
+             className="toolbar-btn" 
+             disabled={!isAuthenticated}
+-            title="Открыть проект"
++            onClick={() => setShowProjectsDialog(true)}
++            title="Мои проекты"
+           >
+             <FolderOpen size={18} />
+-            <span>Открыть</span>

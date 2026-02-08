@@ -116,14 +116,16 @@ export class FileService {
   /**
    * Получить файл по ID
    */
-  static async getFileById(fileId: string, projectId: string, organizationId?: string) {
+  static async getFileById(fileId: string, projectId: string, organizationId: string) {
     const prisma = getPrismaClient();
 
     const file = await prisma.projectFile.findFirst({
       where: {
         id: fileId,
         projectId,
-        project: organizationId ? { organizationId } : {}
+        project: {
+          organizationId
+        }
       }
     });
 

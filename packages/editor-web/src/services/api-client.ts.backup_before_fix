@@ -1,0 +1,461 @@
+/**
+ * API Client - ВЕРСИЯ 3.0
+ * С использованием sessionStorage и улучшенной безопасностью
+ */
+
+import { logger } from '../utils/logger';
+
+// ==================== TYPES ====================
+
+export interface AuthResponse {
+  success: boolean;
+  token: string;
+  expiresIn: number; // в секундах
+  license: {
+    licenseKey: string;
+    organizationId: string;
+    organizationName: string;
+    plan: 'BASIC' | 'PRO' | 'MAX';
+    validFrom?: string;
+    validUntil?: string;
+    maxDevices: number;
+    features: string[];
+  };
+  user?: {
+    id: string;
+    email?: string;
+  };
+}
+
+export interface ProjectResponse {
+  success: boolean;
+  project: Project;
+}
+
+export interface ProjectsListResponse {
+  success: boolean;
+  projects: Project[];
+  total: number;
+  page: number;
+  limit: number;
+}
+
+export interface Project {
+  id: string;
+  name: string;
+  description?: string;
+  projectData: any;
+  canvasWidth: number;
+  canvasHeight: number;
+  canvasBackground?: string;
+  tags?: string[];
+  thumbnail?: string;
+  isPublished: boolean;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface ProjectFilters {
+  search?: string;
+  tags?: string[];
+  isPublished?: boolean;
+  page?: number;
+  limit?: number;
+}
+
+export interface CreateProjectData {
+  name: string;
+  description?: string;
+  projectData?: any;
+  canvasWidth?: number;
+  canvasHeight?: number;
+  canvasBackground?: string;
+  tags?: string[];
+  thumbnail?: string;
+}
+
+export interface UpdateProjectData {
+  name?: string;
+  description?: string;
+  projectData?: any;
+  canvasWidth?: number;
+  canvasHeight?: number;
+  canvasBackground?: string;
+  tags?: string[];
+  thumbnail?: string;
+  isPublished?: boolean;
+}
+
+// ==================== API CLIENT ====================
+
+class ApiClient {
+  private baseUrl: string = '';
+  private token: string | null = null;
+  private organizationName: string | null = null;
+  private plan: string | null = null;
+
+  constructor() {
+    this.loadToken();
+  }
+
+  // ==================== TOKEN MANAGEMENT ====================
+
+  /**
+   * Загрузить токен из sessionStorage
+   */
+  private loadToken(): void {
+    const stored = sessionStorage.getItem('kiosk_auth_token');
+    if (stored) {
+      try {
+        const data = JSON.parse(stored);
+        this.token = data.token;
+        this.organizationName = data.organizationName || null;
+        this.plan = data.plan || null;
+        
+        logger.info('Token loaded from sessionStorage', {
+          hasToken: !!this.token,
+          organization: this.organizationName,
+          plan: this.plan
+        });
+      } catch (error) {
+        logger.error('Failed to parse stored token', error);
+        this.clearToken();
+      }
+    }
+  }
+
+  /**
+   * Сохранить токен в sessionStorage
+   */
+  private saveToken(token: string, organizationName: string, plan: string): void {
+    const data = {
+      token,
+      organizationName,
+      plan,
+      savedAt: new Date().toISOString()
+    };
+    
+    sessionStorage.setItem('kiosk_auth_token', JSON.stringify(data));
+    this.token = token;
+    this.organizationName = organizationName;
+    this.plan = plan;
+    
+    logger.info('Token saved to sessionStorage', {
+      organization: organizationName,
+      plan: plan
+    });
+  }
+
+  /**
+   * Очистить токен
+   */
+  private clearToken(): void {
+    sessionStorage.removeItem('kiosk_auth_token');
+    this.token = null;
+    this.organizationName = null;
+    this.plan = null;
+    
+    logger.info('Token cleared from sessionStorage');
+  }
+
+  /**
+   * Проверка аутентификации
+   */
+  public isAuthenticated(): boolean {
+    return this.token !== null;
+  }
+
+  /**
+   * Получить текущий токен
+   */
+  public getToken(): string | null {
+    return this.token;
+  }
+
+  /**
+   * Получить данные организации
+   */
+  public getOrganizationData(): { name: string | null; plan: string | null } {
+    return {
+      name: this.organizationName,
+      plan: this.plan
+    };
+  }
+
+  // ==================== AUTHENTICATION ====================
+
+  /**
+   * POST /api/auth/license
+   * Вход по ключу лицензии
+   */
+  public async loginWithLicense(licenseKey: string): Promise<AuthResponse> {
+    logger.info('Attempting login with license key');
+    
+    try {
+      const response = await this.request<AuthResponse>('/api/auth/license', {
+        method: 'POST',
+        body: JSON.stringify({ licenseKey })
+      });
+
+      if (response.token && response.license) {
+        this.saveToken(
+          response.token,
+          response.license.organizationName,
+          response.license.plan
+        );
+        
+        logger.info('Login successful', {
+          organization: response.license.organizationName,
+          plan: response.license.plan
+        });
+      }
+
+      return response;
+    } catch (error) {
+      logger.error('Login failed', error);
+      throw error;
+    }
+  }
+
+  /**
+   * POST /api/auth/refresh
+   * Обновить токен
+   */
+  public async refreshToken(): Promise<AuthResponse> {
+    logger.info('Refreshing token');
+    
+    try {
+      const response = await this.request<AuthResponse>('/api/auth/refresh', {
+        method: 'POST',
+        authenticated: true
+      });
+
+      if (response.token && response.license) {
+        this.saveToken(
+          response.token,
+          response.license.organizationName,
+          response.license.plan
+        );
+        
+        logger.info('Token refreshed successfully');
+      }
+
+      return response;
+    } catch (error) {
+      logger.error('Token refresh failed', error);
+      throw error;
+    }
+  }
+
+  /**
+   * GET /api/auth/verify
+   * Проверить токен
+   */
+  public async verifyToken(): Promise<boolean> {
+    try {
+      await this.request('/api/auth/verify', {
+        method: 'GET',
+        authenticated: true
+      });
+      
+      logger.info('Token verified successfully');
+      return true;
+    } catch (error) {
+      logger.warn('Token verification failed', error);
+      this.clearToken();
+      return false;
+    }
+  }
+
+  /**
+   * Выход из системы
+   */
+  public logout(): void {
+    logger.info('User logout');
+    this.clearToken();
+    
+    // Отправить событие logout
+    window.dispatchEvent(new CustomEvent('auth:logout'));
+  }
+
+  // ==================== PROJECTS ====================
+
+  /**
+   * GET /api/projects
+   * Получить список проектов
+   */
+  public async getProjects(filters?: ProjectFilters): Promise<ProjectsListResponse> {
+    const params = new URLSearchParams();
+    
+    if (filters?.search) params.append('search', filters.search);
+    if (filters?.tags) params.append('tags', filters.tags.join(','));
+    if (filters?.isPublished !== undefined) params.append('isPublished', String(filters.isPublished));
+    if (filters?.page) params.append('page', String(filters.page));
+    if (filters?.limit) params.append('limit', String(filters.limit));
+
+    const query = params.toString();
+    const url = `/api/projects${query ? '?' + query : ''}`;
+
+    return await this.request<ProjectsListResponse>(url, {
+      method: 'GET',
+      authenticated: true
+    });
+  }
+
+  /**
+   * GET /api/projects/:id
+   * Получить проект по ID
+   */
+  public async getProject(id: string): Promise<ProjectResponse> {
+    return await this.request<ProjectResponse>(`/api/projects/${id}`, {
+      method: 'GET',
+      authenticated: true
+    });
+  }
+
+  /**
+   * POST /api/projects
+   * Создать новый проект
+   */
+  public async createProject(data: CreateProjectData): Promise<ProjectResponse> {
+    logger.info('Creating new project', { name: data.name });
+    
+    try {
+      const response = await this.request<ProjectResponse>('/api/projects', {
+        method: 'POST',
+        authenticated: true,
+        body: JSON.stringify(data)
+      });
+      
+      logger.info('Project created successfully', { id: response.project.id });
+      return response;
+    } catch (error) {
+      logger.error('Failed to create project', error);
+      throw error;
+    }
+  }
+
+  /**
+   * PUT /api/projects/:id
+   * Обновить проект
+   */
+  public async updateProject(id: string, data: UpdateProjectData): Promise<ProjectResponse> {
+    logger.info('Updating project', { id });
+    
+    try {
+      const response = await this.request<ProjectResponse>(`/api/projects/${id}`, {
+        method: 'PUT',
+        authenticated: true,
+        body: JSON.stringify(data)
+      });
+      
+      logger.info('Project updated successfully', { id });
+      return response;
+    } catch (error) {
+      logger.error('Failed to update project', { id, error });
+      throw error;
+    }
+  }
+
+  /**
+   * DELETE /api/projects/:id
+   * Удалить проект
+   */
+  public async deleteProject(id: string): Promise<{ success: boolean }> {
+    logger.info('Deleting project', { id });
+    
+    try {
+      const response = await this.request<{ success: boolean }>(`/api/projects/${id}`, {
+        method: 'DELETE',
+        authenticated: true
+      });
+      
+      logger.info('Project deleted successfully', { id });
+      return response;
+    } catch (error) {
+      logger.error('Failed to delete project', { id, error });
+      throw error;
+    }
+  }
+
+  // ==================== HTTP REQUEST ====================
+
+  private async request<T>(
+    endpoint: string,
+    options: {
+      method: string;
+      body?: string;
+      authenticated?: boolean;
+    }
+  ): Promise<T> {
+    const url = `${this.baseUrl}${endpoint}`;
+    
+    const headers: Record<string, string> = {
+      'Content-Type': 'application/json',
+    };
+
+    if (options.authenticated && this.token) {
+      headers['Authorization'] = `Bearer ${this.token}`;
+    }
+
+    try {
+      const response = await fetch(url, {
+        method: options.method,
+        headers,
+        body: options.body,
+      });
+
+      if (!response.ok) {
+        if (response.status === 401) {
+          logger.warn('Unauthorized - clearing token');
+          this.clearToken();
+          window.dispatchEvent(new CustomEvent('auth:unauthorized'));
+          throw new Error('Unauthorized');
+        }
+
+        const errorData = await response.json().catch(() => ({}));
+        throw new Error(errorData.message || `HTTP ${response.status}`);
+      }
+
+      return await response.json();
+    } catch (error) {
+      logger.error('Request failed', {
+        endpoint,
+        method: options.method,
+        error
+      });
+      throw error;
+    }
+  }
+}
+
+export const apiClient = new ApiClient();
+
+  // ==================== FILES ====================
+
+  /**
+   * Загрузить файл в проект
+   */
+  public async uploadFile(projectId: string, file: File): Promise<any> {
+    const formData = new FormData();
+    formData.append('file', file);
+
+    const response = await fetch(`/api/projects/${projectId}/files`, {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${this.token}`
+      },
+      body: formData
+    });
+
+    if (!response.ok) {
+      const error = await response.json();
+      throw new Error(error.message || 'Upload failed');
+    }
+
+    const result = await response.json();
+    return result.file;
+  }
+}
+
+// Экспорт существующего instance остается без изменений

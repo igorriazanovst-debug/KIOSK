@@ -145,14 +145,13 @@ export class FileController {
    */
   static async downloadFile(req: Request, res: Response) {
     try {
-      // Проверка req.client отключена для публичного доступа
-      // if (!req.client) {
-      //   return res.status(401).json({ error: \'Authentication required\' });
-      // }
+      if (!req.client) {
+        return res.status(401).json({ error: 'Authentication required' });
+      }
 
       const { projectId, fileId } = req.params;
 
-      const file = await FileService.getFileById(fileId, projectId);
+      const file = await FileService.getFileById(fileId, projectId, req.client.organizationId);
 
       if (!file) {
         return res.status(404).json({
@@ -178,11 +177,6 @@ export class FileController {
       FileService.incrementUsageCount(fileId).catch(console.error);
 
       // Отправляем файл
-      // CORS headers для <video> элементов
-      res.setHeader('Access-Control-Allow-Origin', '*');
-      res.setHeader('Access-Control-Allow-Methods', 'GET');
-      res.setHeader('Cache-Control', 'public, max-age=31536000');
-      res.setHeader('Accept-Ranges', 'bytes');
       res.setHeader('Content-Type', file.mimeType);
       res.setHeader('Content-Disposition', `inline; filename="${file.fileName}"`);
       res.setHeader('Content-Length', file.fileSize.toString());

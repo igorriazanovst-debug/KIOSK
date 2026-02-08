@@ -9,70 +9,32 @@ import multer from 'multer';
 const router = Router();
 const upload = multer({ 
   storage: multer.memoryStorage(),
-  limits: { fileSize: 100 * 1024 * 1024 } // 100 MB
+  limits: { fileSize: 600 * 1024 * 1024 } // 600 MB
 });
 
-// Все роуты требуют аутентификации
-router.use(authenticateClient);
+// Middleware добавлен индивидуально к каждому роуту
+// (вместо глобального router.use(authenticateClient))
 
-/**
- * GET /api/projects
- * Список проектов
- */
-router.get('/', ProjectController.listProjects);
+router.get('/', authenticateClient, ProjectController.listProjects);
+router.post('/', authenticateClient, ProjectController.createProject);
+router.get('/:id', authenticateClient, ProjectController.getProject);
+router.put('/:id', authenticateClient, ProjectController.updateProject);
+router.delete('/:id', authenticateClient, ProjectController.deleteProject);
 
-/**
- * POST /api/projects
- * Создать проект
- */
-router.post('/', ProjectController.createProject);
+router.get('/:projectId/files', authenticateClient, FileController.listFiles);
 
-/**
- * GET /api/projects/:id
- * Получить проект
- */
-router.get('/:id', ProjectController.getProject);
-
-/**
- * PUT /api/projects/:id
- * Обновить проект
- */
-router.put('/:id', ProjectController.updateProject);
-
-/**
- * DELETE /api/projects/:id
- * Удалить проект
- */
-router.delete('/:id', ProjectController.deleteProject);
-
-/**
- * GET /api/projects/:projectId/files
- * Список файлов проекта
- */
-router.get('/:projectId/files', FileController.listFiles);
-
-/**
- * POST /api/projects/:projectId/files
- * Загрузить файл
- */
 router.post(
   '/:projectId/files',
+  authenticateClient,
   upload.single('file'),
   checkStorageLimit,
   logStorageUsage,
   FileController.uploadFile
 );
 
-/**
- * GET /api/projects/:projectId/files/:fileId
- * Скачать файл
- */
+// ПУБЛИЧНЫЙ маршрут - БЕЗ authenticateClient для <video> элементов
 router.get('/:projectId/files/:fileId', FileController.downloadFile);
 
-/**
- * DELETE /api/projects/:projectId/files/:fileId
- * Удалить файл
- */
-router.delete('/:projectId/files/:fileId', FileController.deleteFile);
+router.delete('/:projectId/files/:fileId', authenticateClient, FileController.deleteFile);
 
 export default router;

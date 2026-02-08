@@ -78,7 +78,6 @@ interface EditorState {
   pendingWidget: { type: string; defaultProps: any } | null;
 
   // ========== PROJECT ACTIONS ==========
-  restoreProject: () => Promise<boolean>;
   createProject: (name: string, canvas: CanvasConfig) => Promise<void>;
   loadProject: (id: string) => Promise<void>;
   saveProject: () => Promise<void>;
@@ -151,33 +150,6 @@ function stopAutoSave() {
 
 // ==================== STORE ====================
 
-
-// ==================== PROJECT ID PERSISTENCE ====================
-
-/**
- * Сохранить ID текущего проекта в sessionStorage
- */
-function saveCurrentProjectId(projectId: string | null) {
-  if (projectId) {
-    sessionStorage.setItem('kiosk_current_project_id', projectId);
-    console.log('[Editor] Current project ID saved:', projectId);
-  } else {
-    sessionStorage.removeItem('kiosk_current_project_id');
-    console.log('[Editor] Current project ID cleared');
-  }
-}
-
-/**
- * Получить ID текущего проекта из sessionStorage
- */
-function getCurrentProjectId(): string | null {
-  const projectId = sessionStorage.getItem('kiosk_current_project_id');
-  if (projectId) {
-    console.log('[Editor] Restoring project ID:', projectId);
-  }
-  return projectId;
-}
-
 export const useEditorStore = create<EditorState>((set, get) => ({
   // Initial state
   project: {
@@ -218,26 +190,7 @@ export const useEditorStore = create<EditorState>((set, get) => ({
   /**
    * Создать новый проект
    */
-  /**
-   * Восстановить последний открытый проект
-   */
-  restoreProject: async () => {
-    const projectId = getCurrentProjectId();
-    if (projectId) {
-      try {
-        console.log('[Editor] Restoring last opened project:', projectId);
-        await get().loadProject(projectId);
-        return true;
-      } catch (error) {
-        console.error('[Editor] Failed to restore project:', error);
-        saveCurrentProjectId(null);
-        return false;
-      }
-    }
-    return false;
-  },
-
-    createProject: async (name: string, canvas: CanvasConfig) => {
+  createProject: async (name: string, canvas: CanvasConfig) => {
     set({ isLoading: true, saveError: null });
 
     try {
@@ -266,18 +219,15 @@ export const useEditorStore = create<EditorState>((set, get) => ({
       set({
         project: {
           ...localProject,
-          id: serverProject.id
+          id: serverProject.project.id
         },
-        projectId: serverProject.id,
+        projectId: serverProject.project.id,
         isLoading: false,
         lastSaved: new Date(),
         history: { past: [], future: [] }
       });
 
-      console.log('[Editor] Project created:', serverProject.id);
-      
-      // Сохраняем ID текущего проекта
-      saveCurrentProjectId(serverProject.id);
+      console.log('[Editor] Project created:', serverProject.project.id);
 
       // Запустить автосохранение
       startAutoSave(get().saveProject);
@@ -302,33 +252,30 @@ export const useEditorStore = create<EditorState>((set, get) => ({
       const serverProject = await apiClient.getProject(id);
 
       const localProject: LocalProject = {
-        id: serverProject.id,
+        id: serverProject.project.id,
         version: '1.0',
-        name: serverProject.name,
+        name: serverProject.project.name,
         canvas: {
-          width: serverProject.canvasWidth,
-          height: serverProject.canvasHeight,
-          backgroundColor: serverProject.canvasBackground
+          width: serverProject.project.canvasWidth,
+          height: serverProject.project.canvasHeight,
+          backgroundColor: serverProject.project.canvasBackground
         },
-        widgets: serverProject.projectData?.widgets || [],
+        widgets: serverProject.project.projectData?.widgets || [],
         metadata: {
-          createdAt: serverProject.createdAt,
-          updatedAt: serverProject.updatedAt
+          createdAt: serverProject.project.createdAt,
+          updatedAt: serverProject.project.updatedAt
         }
       };
 
       set({
         project: localProject,
-        projectId: serverProject.id,
+        projectId: serverProject.project.id,
         isLoading: false,
-        lastSaved: new Date(serverProject.updatedAt),
+        lastSaved: new Date(serverProject.project.updatedAt),
         history: { past: [], future: [] }
       });
 
       console.log('[Editor] Project loaded:', id);
-      
-      // Сохраняем ID текущего проекта
-      saveCurrentProjectId(id);
 
       // Запустить автосохранение
       startAutoSave(get().saveProject);

@@ -1,5 +1,4 @@
 import React from 'react';
-import { apiClient } from '../services/api-client';
 import { useEditorStore } from '../stores/editorStore';
 import ActionEditor from './ActionEditor';
 import './PropertiesPanel.css';
@@ -1169,46 +1168,27 @@ const PropertiesPanel: React.FC = () => {
                     <input
                       type="file"
                       accept="video/*"
-					  onChange={async (e) => {
-					    const file = e.target.files?.[0];
-					    if (file) {
-						  const maxSize = 500 * 1024 * 1024; // 500 MB
-						   if (file.size > maxSize) {
-						     alert('⚠️ Файл слишком большой! Максимум 500 MB');
-						     e.target.value = '';
-						    return;
-						   }
-						
-						   try {
-						     console.log(`⏳ Загрузка видео (${(file.size / (1024 * 1024)).toFixed(1)} MB)...`);
-						  
-						     if (!project?.id) {
-							   alert('❌ Сначала создайте или откройте проект');
-							   e.target.value = '';
-							   return;
-						     }
-						  
-						     const result = await apiClient.uploadFile(project.id, file);
-						  
-						     if (result) {
-							    updateWidget(selectedWidget.id, {
-							    properties: {
-								   ...selectedWidget.properties,
-								   src: result.url,
-								   isLocalFile: false,
-								   fileName: file.name
-							    }
-							   });
-							   alert('✅ Видео загружено на сервер!');
-						     }
-						   } catch (error: any) {
-						     console.error('Upload error:', error);
-						     alert('❌ Ошибка загрузки: ' + error.message);
-						   }
-						
-   						   e.target.value = '';
-					    }
-					}}
+                      onChange={(e) => {
+                        const file = e.target.files?.[0];
+                        if (file) {
+                          const reader = new FileReader();
+                          reader.onload = (event) => {
+                            const result = event.target?.result as string;
+                            if (result) {
+                              updateWidget(selectedWidget.id, {
+                                properties: {
+                                  ...selectedWidget.properties,
+                                  src: result,
+                                  isLocalFile: true,
+                                  fileName: file.name
+                                }
+                              });
+                            }
+                          };
+                          reader.readAsDataURL(file);
+                        }
+                        e.target.value = '';
+                      }}
                     />
                     {selectedWidget.properties.isLocalFile && selectedWidget.properties.fileName && (
                       <div style={{ fontSize: '11px', color: '#888', marginTop: '4px' }}>
