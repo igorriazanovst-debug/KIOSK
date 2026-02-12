@@ -27,6 +27,8 @@ import ProjectsDialog from './ProjectsDialog';
 import './Toolbar.css';
 
 export const Toolbar: React.FC = () => {
+  const { project, savePreviewSnapshot } = useEditorStore();
+  const [previewLoading, setPreviewLoading] = React.useState(false);
 
   const {
     project,
@@ -41,10 +43,6 @@ export const Toolbar: React.FC = () => {
     toggleSnapToGrid,
     saveProject
   } = useEditorStore();
-  // Preview functionality
-  const { project: projectForPreview, savePreviewSnapshot } = useEditorStore();
-  const [previewLoading, setPreviewLoading] = React.useState(false);
-
 
   // User info
   const [organizationName, setOrganizationName] = useState<string | null>(null);
@@ -73,9 +71,12 @@ export const Toolbar: React.FC = () => {
     }
   };
 
+  const canUndo = history.past.length > 0;
+  const canRedo = history.future.length > 0;
+
+
   const handlePreview = async () => {
-    const proj = projectForPreview || project;
-    if (!proj) {
+    if (!project) {
       alert('Нет открытого проекта для предпросмотра');
       return;
     }
@@ -84,20 +85,28 @@ export const Toolbar: React.FC = () => {
 
     try {
       console.log('[Toolbar] Starting preview...');
+      
       const snapshotId = await savePreviewSnapshot();
-      window.open(`/preview?projectId=${snapshotId}`, '_blank');
-      console.log('[Toolbar] Preview opened');
+      
+      const previewUrl = `/preview?projectId=${snapshotId}`;
+      const previewWindow = window.open(
+        previewUrl,
+        'KioskPreview',
+        'width=1280,height=800,menubar=no,toolbar=no,location=no,status=no'
+      );
+
+      if (!previewWindow) {
+        alert('Не удалось открыть окно предпросмотра. Проверьте настройки блокировки всплывающих окон.');
+      } else {
+        console.log('[Toolbar] Preview window opened');
+      }
     } catch (error: any) {
-      console.error('[Toolbar] Error:', error);
-      alert(`Ошибка: ${error.message}`);
+      console.error('[Toolbar] Preview error:', error);
+      alert(`Ошибка предпросмотра: ${error.message}`);
     } finally {
       setPreviewLoading(false);
     }
   };
-
-  const canUndo = history.past.length > 0;
-  const canRedo = history.future.length > 0;
-
   return (
     <>
       <div className="toolbar">
@@ -221,13 +230,16 @@ export const Toolbar: React.FC = () => {
 
           {/* Preview */}
           <button 
-            className="toolbar-btn preview-btn" 
+          <button
+            className="toolbar-btn preview-btn"
             disabled={!project || previewLoading}
             onClick={handlePreview}
             title="Предпросмотр"
           >
             <Play size={18} />
             <span>{previewLoading ? 'Загрузка...' : 'Предпросмотр'}</span>
+          </button>
+            <span>Предпросмотр</span>
           </button>
         </div>
       </div>

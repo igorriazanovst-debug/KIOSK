@@ -1,0 +1,766 @@
+/**
+ * PreviewPage.tsx
+ * Страница предпросмотра проекта в отдельном окне
+ * 
+ * Функции:
+ * - Загружает проект по ID из URL параметров
+ * - Масштабирует canvas (fit to screen) с сохранением пропорций
+ * - Отображает все виджеты интерактивно
+ * - Обрабатывает events виджетов (клики, hover)
+ * - Закрывается по ESC или кнопке
+ */
+
+import React, { useEffect, useState, useRef } from 'react';
+import { useSearchParams } from 'react-router-dom';
+import { apiClient, Project as ServerProject } from '../services/api-client';
+import { X } from 'lucide-react';
+import './PreviewPage.css';
+
+// Типы виджетов
+interface Widget {
+  id: string;
+  type: string;
+  x: number;
+  y: number;
+  width: number;
+  height: number;
+  rotation?: number;
+  zIndex?: number;
+  properties: Record<string, any>;
+}
+
+interface WidgetEvent {
+  trigger: 'click' | 'hover';
+  actions: WidgetAction[];
+}
+
+interface WidgetAction {
+  type: 'url' | 'page' | 'popup' | 'widget_show' | 'widget_hide' | 'video_play' | 'video_stop';
+  url?: string;
+  openInNewTab?: boolean;
+  pageId?: string;
+  popupTitle?: string;
+  popupContent?: string;
+  popupWidth?: number;
+  popupHeight?: number;
+  targetWidgetId?: string;
+}
+
+interface LocalProject {
+  id?: string;
+  version: string;
+  name: string;
+  canvas: {
+    width: number;
+    height: number;
+    backgroundColor?: string;
+  };
+  widgets: Widget[];
+}
+
+// ============================================
+// MENU WIDGET КОМПОНЕНТ
+// ============================================
+
+interface MenuItemType {
+  id: string;
+  label: string;
+  actions?: any[];
+  children?: MenuItemType[];
+}
+
+interface MenuWidgetProps {
+  widgetId: string;
+  commonStyle: React.CSSProperties;
+  items: MenuItemType[];
+  isHorizontal: boolean;
+  backgroundColor: string;
+  textColor: string;
+  hoverColor: string;
+  fontSize: number;
+  fontFamily: string;
+  itemPadding: number;
+  itemHeight: number;
+  submenuBackgroundColor: string;
+  submenuTextColor: string;
+  borderWidth: number;
+  borderColor: string;
+  executeActions: (actions: any[]) => void;
+}
+
+const MenuWidget: React.FC<MenuWidgetProps> = ({
+  widgetId, commonStyle, items, isHorizontal,
+  backgroundColor, textColor, hoverColor,
+  fontSize, fontFamily, itemPadding, itemHeight,
+  submenuBackgroundColor, submenuTextColor,
+  borderWidth, borderColor, executeActions,
+}) => {
+  const [hoveredItem, setHoveredItem] = useState<string | null>(null);
+  const [expandedItem, setExpandedItem] = useState<string | null>(null);
+
+  const containerStyle: React.CSSProperties = {
+    ...commonStyle,
+    backgroundColor,
+    display: 'flex',
+    flexDirection: isHorizontal ? 'row' : 'column',
+    border: borderWidth > 0 ? `${borderWidth}px solid ${borderColor}` : 'none',
+    overflow: 'visible',
+    position: 'absolute',
+  };
+
+  const itemStyle = (itemId: string): React.CSSProperties => ({
+    display: 'flex',
+    alignItems: 'center',
+    padding: isHorizontal ? `0 ${itemPadding}px` : `0 ${itemPadding}px`,
+    height: `${itemHeight}px`,
+    minWidth: isHorizontal ? 'auto' : '100%',
+    color: hoveredItem === itemId ? submenuTextColor : textColor,
+    backgroundColor: hoveredItem === itemId ? hoverColor : 'transparent',
+    fontSize: `${fontSize}px`,
+    fontFamily,
+    cursor: 'pointer',
+    userSelect: 'none' as const,
+    whiteSpace: 'nowrap' as const,
+    transition: 'background-color 0.15s',
+    position: 'relative' as const,
+    boxSizing: 'border-box' as const,
+  });
+
+  const submenuStyle = (parentId: string): React.CSSProperties => ({
+    display: expandedItem === parentId ? 'flex' : 'none',
+    flexDirection: 'column',
+    position: 'absolute',
+    top: isHorizontal ? `${itemHeight}px` : '0',
+    left: isHorizontal ? '0' : '100%',
+    backgroundColor: submenuBackgroundColor,
+    zIndex: 9999,
+    minWidth: '150px',
+    boxShadow: '2px 4px 12px rgba(0,0,0,0.4)',
+  });
+
+  return (
+    <div
+      data-widget-id={widgetId}
+      style={containerStyle}
+    >
+      {items.map((item) => {
+        const hasChildren = item.children && item.children.length > 0;
+
+        return (
+          <div
+            key={item.id}
+            style={{ position: 'relative' }}
+            onMouseEnter={() => {
+              setHoveredItem(item.id);
+              if (hasChildren) setExpandedItem(item.id);
+            }}
+            onMouseLeave={() => {
+              setHoveredItem(null);
+              if (hasChildren) setExpandedItem(null);
+            }}
+          >
+            <div
+              style={itemStyle(item.id)}
+              onClick={() => {
+                if (item.actions && item.actions.length > 0) {
+                  executeActions(item.actions);
+                }
+              }}
+            >
+              {item.label}
+              {hasChildren && (
+                <span style={{ marginLeft: '6px', fontSize: '10px', opacity: 0.7 }}>
+                  {isHorizontal ? '▼' : '▶'}
+                </span>
+              )}
+            </div>
+
+            {/* Подменю */}
+            {hasChildren && (
+              <div style={submenuStyle(item.id)}>
+                {item.children!.map((child) => (
+                  <div
+                    key={child.id}
+                    style={{
+                      padding: `0 ${itemPadding}px`,
+                      height: `${itemHeight}px`,
+                      display: 'flex',
+                      alignItems: 'center',
+                      color: hoveredItem === child.id ? textColor : submenuTextColor,
+                      backgroundColor: hoveredItem === child.id ? hoverColor : 'transparent',
+                      fontSize: `${fontSize - 2}px`,
+                      fontFamily,
+                      cursor: 'pointer',
+                      userSelect: 'none',
+                      whiteSpace: 'nowrap',
+                      transition: 'background-color 0.15s',
+                    }}
+                    onMouseEnter={() => setHoveredItem(child.id)}
+                    onMouseLeave={() => setHoveredItem(null)}
+                    onClick={() => {
+                      if (child.actions && child.actions.length > 0) {
+                        executeActions(child.actions);
+                      }
+                    }}
+                  >
+                    {child.label}
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        );
+      })}
+    </div>
+  );
+};
+
+// ============================================
+// ОСНОВНОЙ КОМПОНЕНТ
+// ============================================
+
+const PreviewPage: React.FC = () => {
+  const [searchParams] = useSearchParams();
+  const projectId = searchParams.get('projectId');
+
+  const [project, setProject] = useState<LocalProject | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [scale, setScale] = useState(1);
+  const [popupVisible, setPopupVisible] = useState(false);
+  const [popupData, setPopupData] = useState<any>(null);
+  const [hiddenWidgets, setHiddenWidgets] = useState<Set<string>>(new Set());
+
+  const containerRef = useRef<HTMLDivElement>(null);
+  const canvasRef = useRef<HTMLDivElement>(null);
+
+  // Загрузка проекта
+  useEffect(() => {
+    if (!projectId) {
+      setError('Project ID not provided');
+      setLoading(false);
+      return;
+    }
+
+    const loadProject = async () => {
+      try {
+        console.log('[PreviewPage] Loading project:', projectId);
+        const serverProject = await apiClient.getProject(projectId);
+
+        const localProject: LocalProject = {
+          id: serverProject.id,
+          version: '1.0',
+          name: serverProject.name,
+          canvas: {
+            width: serverProject.canvasWidth,
+            height: serverProject.canvasHeight,
+            backgroundColor: serverProject.canvasBackground,
+          },
+          widgets: serverProject.projectData?.widgets || [],
+        };
+
+        setProject(localProject);
+        console.log('[PreviewPage] Project loaded:', localProject);
+        console.log('[PreviewPage] All widgets:', localProject.widgets);
+        console.log('[PreviewPage] Widget types:', localProject.widgets.map((w: Widget) => ({ id: w.id, type: w.type, props: Object.keys(w.properties) })));
+        const menuWidgets = localProject.widgets.filter((w: Widget) => w.type === 'menu');
+        console.log('[PreviewPage] Menu widgets:', menuWidgets);
+      } catch (err: any) {
+        console.error('[PreviewPage] Failed to load project:', err);
+        setError(err.message || 'Failed to load project');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadProject();
+  }, [projectId]);
+
+  // Расчет масштаба (fit to screen)
+  useEffect(() => {
+    if (!project || !containerRef.current) return;
+
+    const calculateScale = () => {
+      const container = containerRef.current;
+      if (!container) return;
+
+      const containerWidth = container.clientWidth;
+      const containerHeight = container.clientHeight;
+
+      const scaleX = (containerWidth - 40) / project.canvas.width;
+      const scaleY = (containerHeight - 120) / project.canvas.height;
+
+      const newScale = Math.min(scaleX, scaleY, 1); // Не увеличиваем больше 1:1
+      setScale(newScale);
+
+      console.log('[PreviewPage] Scale calculated:', {
+        containerSize: { width: containerWidth, height: containerHeight },
+        canvasSize: { width: project.canvas.width, height: project.canvas.height },
+        scale: newScale,
+      });
+    };
+
+    calculateScale();
+    window.addEventListener('resize', calculateScale);
+
+    return () => window.removeEventListener('resize', calculateScale);
+  }, [project]);
+
+  // Закрытие по ESC
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        if (popupVisible) {
+          setPopupVisible(false);
+        } else {
+          window.close();
+        }
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [popupVisible]);
+
+  // Обработка действий виджетов
+  const executeActions = (actions: WidgetAction[]) => {
+    actions.forEach((action) => {
+      console.log('[PreviewPage] Executing action:', action);
+
+      switch (action.type) {
+        case 'url':
+          if (action.url) {
+            if (action.openInNewTab) {
+              window.open(action.url, '_blank');
+            } else {
+              window.location.href = action.url;
+            }
+          }
+          break;
+
+        case 'popup':
+          setPopupData({
+            title: action.popupTitle || 'Информация',
+            content: action.popupContent || '',
+            width: action.popupWidth || 400,
+            height: action.popupHeight || 300,
+          });
+          setPopupVisible(true);
+          break;
+
+        case 'widget_show':
+          if (action.targetWidgetId) {
+            setHiddenWidgets((prev) => {
+              const newSet = new Set(prev);
+              newSet.delete(action.targetWidgetId!);
+              return newSet;
+            });
+          }
+          break;
+
+        case 'widget_hide':
+          if (action.targetWidgetId) {
+            setHiddenWidgets((prev) => new Set(prev).add(action.targetWidgetId!));
+          }
+          break;
+
+        case 'video_play':
+          if (action.targetWidgetId) {
+            const videoElement = document.querySelector(
+              `[data-widget-id="${action.targetWidgetId}"] video`
+            ) as HTMLVideoElement;
+            if (videoElement) {
+              videoElement.play();
+            }
+          }
+          break;
+
+        case 'video_stop':
+          if (action.targetWidgetId) {
+            const videoElement = document.querySelector(
+              `[data-widget-id="${action.targetWidgetId}"] video`
+            ) as HTMLVideoElement;
+            if (videoElement) {
+              videoElement.pause();
+              videoElement.currentTime = 0;
+            }
+          }
+          break;
+
+        default:
+          console.warn('[PreviewPage] Unknown action type:', action.type);
+      }
+    });
+  };
+
+  // Рендер виджетов
+  const renderWidget = (widget: Widget) => {
+    if (hiddenWidgets.has(widget.id)) return null;
+
+    console.log('[PreviewPage] Rendering widget:', widget.type, widget.id, widget.properties);
+
+    const events = (widget as any).events as WidgetEvent[] | undefined;
+
+    const handleClick = () => {
+      if (events) {
+        const clickEvents = events.filter((e) => e.trigger === 'click');
+        clickEvents.forEach((event) => executeActions(event.actions));
+      }
+    };
+
+    const commonStyle: React.CSSProperties = {
+      position: 'absolute',
+      left: widget.x,
+      top: widget.y,
+      width: widget.width,
+      height: widget.height,
+      transform: widget.rotation ? `rotate(${widget.rotation}deg)` : undefined,
+      cursor: events && events.some((e) => e.trigger === 'click') ? 'pointer' : 'default',
+      zIndex: widget.zIndex || 0,
+    };
+
+    // Shape виджет
+    if (widget.type === 'shape') {
+      const {
+        shapeType = 'rectangle',
+        fillColor = '#4a90e2',
+        strokeColor = '#000000',
+        strokeWidth = 0,
+        cornerRadius = 0,
+        opacity = 1,
+      } = widget.properties;
+
+      const shapeStyle: React.CSSProperties = {
+        ...commonStyle,
+        backgroundColor: fillColor,
+        border: strokeWidth > 0 ? `${strokeWidth}px solid ${strokeColor}` : 'none',
+        borderRadius: shapeType === 'circle' ? '50%' : `${cornerRadius}px`,
+        opacity,
+      };
+
+      return (
+        <div
+          key={widget.id}
+          data-widget-id={widget.id}
+          style={shapeStyle}
+          onClick={handleClick}
+        />
+      );
+    }
+
+    // Text виджет
+    if (widget.type === 'text') {
+      const {
+        text = 'Text',
+        fontSize = 24,
+        color = '#000000',
+        fontFamily = 'Arial',
+        fontWeight = 'normal',
+        textAlign = 'left',
+        verticalAlign = 'top',
+      } = widget.properties;
+
+      const textStyle: React.CSSProperties = {
+        ...commonStyle,
+        fontSize: `${fontSize}px`,
+        color,
+        fontFamily,
+        fontWeight,
+        textAlign: textAlign as any,
+        display: 'flex',
+        alignItems: verticalAlign === 'middle' ? 'center' : verticalAlign === 'bottom' ? 'flex-end' : 'flex-start',
+        whiteSpace: 'pre-wrap',
+        wordWrap: 'break-word',
+      };
+
+      return (
+        <div
+          key={widget.id}
+          data-widget-id={widget.id}
+          style={textStyle}
+          onClick={handleClick}
+        >
+          {text}
+        </div>
+      );
+    }
+
+    // Image виджет
+    if (widget.type === 'image') {
+      const { src = '', objectFit = 'contain', opacity = 1, clipShape = 'rectangle', cornerRadius = 0 } = widget.properties;
+
+      if (!src) return null;
+
+      // Генерация clip-path для формы обрезки
+      const getClipPath = (shape: string): string | undefined => {
+        switch (shape) {
+          case 'circle':
+            return 'circle(50% at 50% 50%)';
+          case 'ellipse':
+            return 'ellipse(50% 50% at 50% 50%)';
+          case 'triangle':
+            return 'polygon(50% 0%, 93.3% 75%, 6.7% 75%)';
+          case 'diamond':
+            return 'polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%)';
+          case 'pentagon':
+            return 'polygon(50% 0%, 100% 38%, 81% 100%, 19% 100%, 0% 38%)';
+          case 'hexagon':
+            return 'polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%)';
+          case 'octagon':
+            return 'polygon(29.3% 0%, 70.7% 0%, 100% 29.3%, 100% 70.7%, 70.7% 100%, 29.3% 100%, 0% 70.7%, 0% 29.3%)';
+          case 'star':
+            return 'polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%)';
+          case 'rounded-rectangle':
+          case 'rectangle':
+          default:
+            return undefined;
+        }
+      };
+
+      const clipPath = getClipPath(clipShape);
+
+      const imgStyle: React.CSSProperties = {
+        ...commonStyle,
+        opacity,
+        borderRadius: (clipShape === 'rounded-rectangle' && cornerRadius) ? cornerRadius + 'px' : undefined,
+        overflow: 'hidden',
+      };
+
+      return (
+        <div key={widget.id} data-widget-id={widget.id} style={imgStyle} onClick={handleClick}>
+          <img
+            src={src}
+            alt="Image"
+            style={{
+              width: '100%',
+              height: '100%',
+              objectFit: objectFit as any,
+              clipPath: clipPath,
+              WebkitClipPath: clipPath,
+            } as React.CSSProperties}
+          />
+        </div>
+      );
+    }
+
+    // Video виджет
+    if (widget.type === 'video') {
+      const {
+        src = '',
+        autoplay = false,
+        loop = false,
+        muted = true,
+        objectFit = 'contain',
+      } = widget.properties;
+
+      if (!src) return null;
+
+      const videoStyle: React.CSSProperties = {
+        ...commonStyle,
+      };
+
+      return (
+        <div key={widget.id} data-widget-id={widget.id} style={videoStyle} onClick={handleClick}>
+          <video
+            src={src}
+            autoPlay={autoplay}
+            loop={loop}
+            muted={muted}
+            style={{
+              width: '100%',
+              height: '100%',
+              objectFit: objectFit as any,
+            }}
+          />
+        </div>
+      );
+    }
+
+    // Button виджет
+    if (widget.type === 'button') {
+      const {
+        text = 'Button',
+        backgroundColor = '#4a90e2',
+        textColor = '#ffffff',
+        fontSize = 16,
+        borderRadius = 4,
+      } = widget.properties;
+
+      const buttonStyle: React.CSSProperties = {
+        ...commonStyle,
+        backgroundColor,
+        color: textColor,
+        fontSize: `${fontSize}px`,
+        borderRadius: `${borderRadius}px`,
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        border: 'none',
+        cursor: 'pointer',
+        userSelect: 'none',
+      };
+
+      return (
+        <div
+          key={widget.id}
+          data-widget-id={widget.id}
+          style={buttonStyle}
+          onClick={handleClick}
+        >
+          {text}
+        </div>
+      );
+    }
+
+    // Menu виджет
+    if (widget.type === 'menu') {
+      const {
+        items = [],
+        orientation = 'horizontal',
+        backgroundColor = '#2c3e50',
+        textColor = '#ffffff',
+        hoverColor = '#34495e',
+        fontSize = 16,
+        fontFamily = 'Arial',
+        itemPadding = 16,
+        itemHeight = 40,
+        submenuBackgroundColor = '#34495e',
+        submenuTextColor = '#ffffff',
+        borderWidth = 0,
+        borderColor = '#000000',
+      } = widget.properties;
+
+      const isHorizontal = orientation === 'horizontal';
+
+      return (
+        <MenuWidget
+          key={widget.id}
+          widgetId={widget.id}
+          commonStyle={commonStyle}
+          items={items}
+          isHorizontal={isHorizontal}
+          backgroundColor={backgroundColor}
+          textColor={textColor}
+          hoverColor={hoverColor}
+          fontSize={fontSize}
+          fontFamily={fontFamily}
+          itemPadding={itemPadding}
+          itemHeight={itemHeight}
+          submenuBackgroundColor={submenuBackgroundColor}
+          submenuTextColor={submenuTextColor}
+          borderWidth={borderWidth}
+          borderColor={borderColor}
+          executeActions={executeActions}
+        />
+      );
+    }
+
+    // Fallback для неизвестных виджетов
+    return (
+      <div
+        key={widget.id}
+        data-widget-id={widget.id}
+        style={{
+          ...commonStyle,
+          border: '1px dashed red',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          fontSize: '12px',
+          color: 'red',
+        }}
+      >
+        Unknown: {widget.type}
+      </div>
+    );
+  };
+
+  // Loading состояние
+  if (loading) {
+    return (
+      <div className="preview-page loading">
+        <div className="loading-spinner"></div>
+        <p>Загрузка предпросмотра...</p>
+      </div>
+    );
+  }
+
+  // Error состояние
+  if (error || !project) {
+    return (
+      <div className="preview-page error">
+        <h2>Ошибка загрузки</h2>
+        <p>{error || 'Проект не найден'}</p>
+        <button onClick={() => window.close()}>Закрыть</button>
+      </div>
+    );
+  }
+
+  return (
+    <div className="preview-page" ref={containerRef}>
+      {/* Header */}
+      <div className="preview-header">
+        <div className="preview-title">
+          <span>Предпросмотр: {project.name}</span>
+          <span className="preview-resolution">
+            {project.canvas.width} × {project.canvas.height}
+          </span>
+        </div>
+        <button className="preview-close-btn" onClick={() => window.close()} title="Закрыть (ESC)">
+          <X size={20} />
+        </button>
+      </div>
+
+      {/* Canvas Container */}
+      <div className="preview-canvas-container">
+        <div
+          ref={canvasRef}
+          className="preview-canvas"
+          style={{
+            width: project.canvas.width,
+            height: project.canvas.height,
+            backgroundColor: project.canvas.backgroundColor || '#ffffff',
+            transform: `scale(${scale})`,
+            transformOrigin: 'top left',
+            position: 'relative',
+          }}
+        >
+          {project.widgets
+            .slice()
+            .sort((a, b) => (a.zIndex || 0) - (b.zIndex || 0))
+            .map((widget) => renderWidget(widget))}
+        </div>
+      </div>
+
+      {/* Footer */}
+      <div className="preview-footer">
+        <span>Масштаб: {Math.round(scale * 100)}%</span>
+        <span>ESC - закрыть</span>
+      </div>
+
+      {/* Popup */}
+      {popupVisible && popupData && (
+        <div className="preview-popup-overlay" onClick={() => setPopupVisible(false)}>
+          <div
+            className="preview-popup"
+            style={{
+              width: popupData.width,
+              maxHeight: popupData.height,
+            }}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="preview-popup-header">
+              <h3>{popupData.title}</h3>
+              <button onClick={() => setPopupVisible(false)}>
+                <X size={20} />
+              </button>
+            </div>
+            <div className="preview-popup-content">{popupData.content}</div>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+};
+
+export default PreviewPage;

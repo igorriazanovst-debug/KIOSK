@@ -83,7 +83,6 @@ interface EditorState {
   loadProject: (id: string) => Promise<void>;
   saveProject: () => Promise<void>;
   deleteProject: (id: string) => Promise<void>;
-  savePreviewSnapshot: () => Promise<string>;
   updateProjectMetadata: (updates: Partial<LocalProject>) => void;
 
   // ========== WIDGET ACTIONS ==========
@@ -427,38 +426,6 @@ export const useEditorStore = create<EditorState>((set, get) => ({
       throw error;
     }
   },
-
-  /**
-   * Сохранить snapshot проекта для preview
-   */
-  savePreviewSnapshot: async () => {
-    const { project } = get();
-
-    if (!project) {
-      throw new Error('No project to preview');
-    }
-
-    console.log('[Editor] Creating preview snapshot...');
-
-    try {
-      const snapshotName = `_preview_${project.name}_${Date.now()}`;
-
-      const snapshotProject = await apiClient.createProject({
-        name: snapshotName,
-        canvasWidth: project.canvas.width,
-        canvasHeight: project.canvas.height,
-        canvasBackground: project.canvas.backgroundColor || '#1a1a1a',
-        projectData: project,
-      });
-
-      console.log('[Editor] Preview snapshot created:', snapshotProject.id);
-      return snapshotProject.id;
-    } catch (error: any) {
-      console.error('[Editor] Failed to create preview snapshot:', error);
-      throw error;
-    }
-  },
-
 
   /**
    * Обновить метаданные проекта

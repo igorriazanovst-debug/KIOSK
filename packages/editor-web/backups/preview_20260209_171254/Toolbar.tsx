@@ -41,10 +41,6 @@ export const Toolbar: React.FC = () => {
     toggleSnapToGrid,
     saveProject
   } = useEditorStore();
-  // Preview functionality
-  const { project: projectForPreview, savePreviewSnapshot } = useEditorStore();
-  const [previewLoading, setPreviewLoading] = React.useState(false);
-
 
   // User info
   const [organizationName, setOrganizationName] = useState<string | null>(null);
@@ -70,28 +66,6 @@ export const Toolbar: React.FC = () => {
       logger.info('User initiated logout');
       apiClient.logout();
       window.location.href = "/login";
-    }
-  };
-
-  const handlePreview = async () => {
-    const proj = projectForPreview || project;
-    if (!proj) {
-      alert('Нет открытого проекта для предпросмотра');
-      return;
-    }
-
-    setPreviewLoading(true);
-
-    try {
-      console.log('[Toolbar] Starting preview...');
-      const snapshotId = await savePreviewSnapshot();
-      window.open(`/preview?projectId=${snapshotId}`, '_blank');
-      console.log('[Toolbar] Preview opened');
-    } catch (error: any) {
-      console.error('[Toolbar] Error:', error);
-      alert(`Ошибка: ${error.message}`);
-    } finally {
-      setPreviewLoading(false);
     }
   };
 
@@ -222,12 +196,11 @@ export const Toolbar: React.FC = () => {
           {/* Preview */}
           <button 
             className="toolbar-btn preview-btn" 
-            disabled={!project || previewLoading}
-            onClick={handlePreview}
+            disabled={!project}
             title="Предпросмотр"
           >
             <Play size={18} />
-            <span>{previewLoading ? 'Загрузка...' : 'Предпросмотр'}</span>
+            <span>Предпросмотр</span>
           </button>
         </div>
       </div>

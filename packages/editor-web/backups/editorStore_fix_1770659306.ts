@@ -413,23 +413,10 @@ export const useEditorStore = create<EditorState>((set, get) => ({
       updatedAt: new Date().toISOString()
     }
   },
-          projectId: null,
-          selectedWidgetIds: [],
-          history: { past: [], future: [] }
-        });
-        stopAutoSave();
-      }
-
-      console.log('[Editor] Project deleted:', id);
-
-    } catch (error: any) {
-      console.error('[Editor] Failed to delete project:', error);
-      throw error;
-    }
-  },
 
   /**
    * Сохранить snapshot проекта для preview
+   * Создаёт копию текущего проекта с префиксом _preview_
    */
   savePreviewSnapshot: async () => {
     const { project } = get();
@@ -441,6 +428,7 @@ export const useEditorStore = create<EditorState>((set, get) => ({
     console.log('[Editor] Creating preview snapshot...');
 
     try {
+      // Создаём копию проекта с префиксом _preview_
       const snapshotName = `_preview_${project.name}_${Date.now()}`;
 
       const snapshotProject = await apiClient.createProject({
@@ -458,7 +446,20 @@ export const useEditorStore = create<EditorState>((set, get) => ({
       throw error;
     }
   },
+          projectId: null,
+          selectedWidgetIds: [],
+          history: { past: [], future: [] }
+        });
+        stopAutoSave();
+      }
 
+      console.log('[Editor] Project deleted:', id);
+
+    } catch (error: any) {
+      console.error('[Editor] Failed to delete project:', error);
+      throw error;
+    }
+  },
 
   /**
    * Обновить метаданные проекта

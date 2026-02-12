@@ -5,7 +5,6 @@
 import React from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import LoginPage from './pages/LoginPage';
-import PreviewPage from './pages/PreviewPage';
 import Editor from './components/Editor';
 import ProtectedRoute from './components/auth/ProtectedRoute';
 
@@ -32,7 +31,6 @@ const App: React.FC = () => {
         
         {/* Все остальные маршруты -> редирект на логин */}
         <Route path="*" element={<Navigate to="/login" replace />} />
-        <Route path="/preview" element={<PreviewPage />} />
       </Routes>
     </BrowserRouter>
   );
