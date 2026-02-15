@@ -16,6 +16,7 @@ import {
   Grid, 
   Magnet,
   Play,
+  Package,
   User,
   LogOut
 } from 'lucide-react';
@@ -24,6 +25,7 @@ import { apiClient } from '../services/api-client';
 import { logger } from '../utils/logger';
 import AutoSaveIndicator from './AutoSaveIndicator';
 import ProjectsDialog from './ProjectsDialog';
+import BuildDialog from './BuildDialog';
 import './Toolbar.css';
 
 export const Toolbar: React.FC = () => {
@@ -50,6 +52,7 @@ export const Toolbar: React.FC = () => {
   const [organizationName, setOrganizationName] = useState<string | null>(null);
   const [plan, setPlan] = useState<string | null>(null);
   const [showProjectsDialog, setShowProjectsDialog] = useState(false);
+  const [showBuildDialog, setShowBuildDialog] = useState(false);
 
   useEffect(() => {
     const orgData = apiClient.getOrganizationData();
@@ -219,6 +222,16 @@ export const Toolbar: React.FC = () => {
 
           <div className="toolbar-divider" />
 
+          {/* Build Player */}
+          <button 
+            className="toolbar-btn"
+            disabled={!project}
+            onClick={() => setShowBuildDialog(true)}
+            title="Собрать плеер Windows"
+          >
+            <Package size={18} />
+          </button>
+
           {/* Preview */}
           <button 
             className="toolbar-btn preview-btn" 
@@ -236,6 +249,13 @@ export const Toolbar: React.FC = () => {
       {showProjectsDialog && (
         <ProjectsDialog
           onClose={() => setShowProjectsDialog(false)}
+        />
+      )}
+
+      {/* Build Dialog */}
+      {showBuildDialog && (
+        <BuildDialog
+          onClose={() => setShowBuildDialog(false)}
         />
       )}
     </>

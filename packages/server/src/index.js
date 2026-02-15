@@ -11,6 +11,7 @@ import db, { initDatabase } from './database/db.js';
 import templatesRouter from './routes/templates.js';
 import mediaRouter from './routes/media.js';
 import devicesRouter from './routes/devices.js';
+import buildsRouter from './routes/builds.js';
 
 config();
 
@@ -43,6 +44,7 @@ app.use('/media', express.static(MEDIA_PATH));
 app.use('/api/templates', templatesRouter);
 app.use('/api/media', mediaRouter);
 app.use('/api/devices', devicesRouter);
+app.use('/api/builds', buildsRouter);
 
 // Health check
 app.get('/api/health', (req, res) => {
@@ -88,6 +90,12 @@ API Endpoints:
   PUT    /api/devices/:id     - Update device
   DELETE /api/devices/:id     - Delete device
   POST   /api/devices/:id/deploy - Deploy project
+
+  POST   /api/builds             - Start build
+  GET    /api/builds             - List builds
+  GET    /api/builds/:id         - Build status
+  GET    /api/builds/download/:f - Download installer
+  DELETE /api/builds/:id         - Delete build
 
 WebSocket: ws://${HOST}:${PORT}
 

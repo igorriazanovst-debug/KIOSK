@@ -30,6 +30,70 @@ interface PlayerProps {
   embedded?: boolean;
 }
 
+
+// ============================================
+// CLIP-PATH ГЕНЕРАТОР (правильные полигоны)
+// ============================================
+function getClipPathForShape(shape: string, w: number, h: number, cornerRadius: number = 0): string | undefined {
+  const cx = w / 2;
+  const cy = h / 2;
+  const r = Math.min(w, h) / 2;
+
+  const polygon = (sides: number, startAngle: number = -Math.PI / 2): string => {
+    const points: string[] = [];
+    for (let i = 0; i < sides; i++) {
+      const angle = startAngle + (2 * Math.PI * i) / sides;
+      const px = cx + r * Math.cos(angle);
+      const py = cy + r * Math.sin(angle);
+      const pctX = ((px / w) * 100).toFixed(1);
+      const pctY = ((py / h) * 100).toFixed(1);
+      points.push(`${pctX}% ${pctY}%`);
+    }
+    return `polygon(${points.join(', ')})`;
+  };
+
+  switch (shape) {
+    case 'circle':
+      return `circle(${r}px at ${cx}px ${cy}px)`;
+    case 'ellipse':
+      return `ellipse(50% 50% at 50% 50%)`;
+    case 'triangle': {
+      const pts: string[] = [];
+      const angles = [-Math.PI / 2, Math.PI / 6, 5 * Math.PI / 6];
+      for (const angle of angles) {
+        const px = cx + r * Math.cos(angle);
+        const py = cy + r * Math.sin(angle);
+        pts.push(`${((px / w) * 100).toFixed(1)}% ${((py / h) * 100).toFixed(1)}%`);
+      }
+      return `polygon(${pts.join(', ')})`;
+    }
+    case 'diamond':
+      return `polygon(${cx / w * 100}% 0%, 100% ${cy / h * 100}%, ${cx / w * 100}% 100%, 0% ${cy / h * 100}%)`;
+    case 'pentagon':
+      return polygon(5);
+    case 'hexagon':
+      return polygon(6);
+    case 'octagon':
+      return polygon(8);
+    case 'star': {
+      const pts: string[] = [];
+      for (let i = 0; i < 10; i++) {
+        const angle = (i * Math.PI / 5) - Math.PI / 2;
+        const sr = i % 2 === 0 ? r : r * 0.5;
+        const px = cx + sr * Math.cos(angle);
+        const py = cy + sr * Math.sin(angle);
+        pts.push(`${((px / w) * 100).toFixed(1)}% ${((py / h) * 100).toFixed(1)}%`);
+      }
+      return `polygon(${pts.join(', ')})`;
+    }
+    case 'rounded-rectangle':
+      return undefined;
+    case 'rectangle':
+    default:
+      return undefined;
+  }
+}
+
 const Player: React.FC<PlayerProps> = ({ embedded = false }) => {
   const [project, setProject] = useState<Project | null>(null);
   const [isFullscreen, setIsFullscreen] = useState(false);
@@ -219,6 +283,7 @@ const Player: React.FC<PlayerProps> = ({ embedded = false }) => {
       width: widget.width,
       height: widget.height,
       transform: widget.rotation ? `rotate(${widget.rotation}deg)` : undefined,
+      transformOrigin: 'top left',
       zIndex: widget.zIndex || 0,
       boxSizing: 'border-box'
     };
@@ -242,23 +307,72 @@ const Player: React.FC<PlayerProps> = ({ embedded = false }) => {
     }
   };
 
-  // Методы рендера виджетов (копируем из Preview.tsx)
+  // Методы рендера виджетов
   const renderShape = (widget: Widget, baseStyle: React.CSSProperties) => {
-    const { shapeType = 'rectangle', fillColor = '#4a90e2', strokeColor = '#2c3e50', strokeWidth = 0, cornerRadius = 0, opacity = 1 } = widget.properties;
-    
-    const style: React.CSSProperties = {
-      ...baseStyle,
-      backgroundColor: fillColor,
-      opacity,
-      border: strokeWidth > 0 ? `${strokeWidth}px solid ${strokeColor}` : 'none',
-      borderRadius: shapeType === 'rectangle' && cornerRadius ? `${cornerRadius}px` : undefined
-    };
+    const {
+      shapeType = 'rectangle', fillColor = '#4a90e2',
+      strokeColor = '#000000', strokeWidth = 0,
+      cornerRadius = 0, opacity = 1,
+    } = widget.properties;
 
-    if (shapeType === 'circle' || shapeType === 'ellipse') {
-      style.borderRadius = '50%';
+    const shapeClip = getClipPathForShape(shapeType, widget.width, widget.height, cornerRadius);
+    const needsClip = shapeClip !== undefined;
+    const br = shapeType === 'circle' ? '50%' : (shapeType === 'rounded-rectangle' || shapeType === 'rectangle' ? `${cornerRadius}px` : undefined);
+
+    // Двухслойный подход для обводки clip-path фигур
+    if (needsClip && strokeWidth > 0) {
+      const scaleX = (widget.width - strokeWidth * 4) / widget.width;
+      const scaleY = (widget.height - strokeWidth * 4) / widget.height;
+      return (
+        <div key={widget.id} style={{
+          ...baseStyle,
+          opacity,
+        }}>
+          {/* Слой рамки — полная фигура цветом рамки */}
+          <div style={{
+            position: 'absolute', top: 0, left: 0,
+            width: '100%', height: '100%',
+            backgroundColor: strokeColor,
+            clipPath: shapeClip,
+            WebkitClipPath: shapeClip,
+          } as React.CSSProperties} />
+          {/* Слой заливки — та же фигура, уменьшена через scale */}
+          <div style={{
+            position: 'absolute', top: 0, left: 0,
+            width: '100%', height: '100%',
+            backgroundColor: fillColor,
+            clipPath: shapeClip,
+            WebkitClipPath: shapeClip,
+            transform: `scale(${scaleX}, ${scaleY})`,
+          } as React.CSSProperties} />
+        </div>
+      );
     }
 
-    return <div key={widget.id} style={style} />;
+    // Clip-path без обводки
+    if (needsClip) {
+      return (
+        <div key={widget.id} style={{
+          ...baseStyle,
+          backgroundColor: fillColor,
+          clipPath: shapeClip,
+          WebkitClipPath: shapeClip,
+          opacity,
+        } as React.CSSProperties} />
+      );
+    }
+
+    // Простые фигуры (rectangle, rounded-rectangle, circle) — CSS border работает
+    return (
+      <div key={widget.id} style={{
+        ...baseStyle,
+        backgroundColor: fillColor,
+        border: strokeWidth > 0 ? `${strokeWidth}px solid ${strokeColor}` : 'none',
+        borderRadius: br,
+        opacity,
+        overflow: 'hidden',
+      }} />
+    );
   };
 
   const renderText = (widget: Widget, baseStyle: React.CSSProperties) => {
@@ -412,88 +526,71 @@ const Player: React.FC<PlayerProps> = ({ embedded = false }) => {
     }
 
     // Одиночное изображение
-    // Получаем CSS clip-path для формы
-    const getClipPath = (): string => {
-      const w = widget.width;
-      const h = widget.height;
-      const cx = w / 2;
-      const cy = h / 2;
-      const r = Math.min(w, h) / 2;
-
-      switch (clipShape) {
-        case 'circle':
-          return 'circle(50% at 50% 50%)';
-        
-        case 'ellipse':
-          return 'ellipse(50% 50% at 50% 50%)';
-        
-        case 'triangle':
-          return 'polygon(50% 0%, 100% 100%, 0% 100%)';
-        
-        case 'diamond':
-          return 'polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%)';
-        
-        case 'pentagon': {
-          const points = [];
-          for (let i = 0; i < 5; i++) {
-            const angle = (i * 2 * Math.PI / 5) - Math.PI / 2;
-            const x = 50 + 50 * Math.cos(angle);
-            const y = 50 + 50 * Math.sin(angle);
-            points.push(`${x}% ${y}%`);
-          }
-          return `polygon(${points.join(', ')})`;
-        }
-        
-        case 'hexagon': {
-          const points = [];
-          for (let i = 0; i < 6; i++) {
-            const angle = (i * 2 * Math.PI / 6) - Math.PI / 2;
-            const x = 50 + 50 * Math.cos(angle);
-            const y = 50 + 50 * Math.sin(angle);
-            points.push(`${x}% ${y}%`);
-          }
-          return `polygon(${points.join(', ')})`;
-        }
-        
-        case 'octagon': {
-          const points = [];
-          for (let i = 0; i < 8; i++) {
-            const angle = (i * 2 * Math.PI / 8) - Math.PI / 2;
-            const x = 50 + 50 * Math.cos(angle);
-            const y = 50 + 50 * Math.sin(angle);
-            points.push(`${x}% ${y}%`);
-          }
-          return `polygon(${points.join(', ')})`;
-        }
-        
-        case 'rounded-rectangle':
-          return '';
-        
-        case 'rectangle':
-        default:
-          return '';
-      }
-    };
-
-    const clipPath = getClipPath();
-
-    const style: React.CSSProperties = {
-      ...baseStyle,
-      border: borderEnabled ? `${borderWidth}px solid ${borderColor}` : undefined,
-      overflow: 'hidden',
-      clipPath: clipPath || undefined,
-      WebkitClipPath: clipPath || undefined,
-      borderRadius: clipShape === 'rounded-rectangle' ? `${cornerRadius}px` : undefined
-    };
+    const hasClip = clipShape && clipShape !== 'rectangle' && clipShape !== 'rounded-rectangle';
+    const clipPath = hasClip ? getClipPathForShape(clipShape, widget.width, widget.height, cornerRadius) : undefined;
+    const effectiveObjectFit = hasClip ? 'cover' : (objectFit === 'adaptive' ? 'contain' : objectFit);
+    const br = (clipShape === 'rounded-rectangle' && cornerRadius) ? `${cornerRadius}px` : undefined;
 
     const imgStyle: React.CSSProperties = {
       width: '100%',
       height: '100%',
-      objectFit: objectFit === 'adaptive' ? 'contain' : objectFit as any
+      objectFit: effectiveObjectFit as any,
     };
 
+    // Двухслойная обводка для clip-path фигур
+    if (hasClip && borderEnabled && borderWidth > 0 && clipPath) {
+      const scaleX = (widget.width - borderWidth * 4) / widget.width;
+      const scaleY = (widget.height - borderWidth * 4) / widget.height;
+      return (
+        <div key={widget.id} style={{
+          ...baseStyle,
+          opacity: widget.properties.opacity || 1,
+        }}>
+          {/* Слой рамки */}
+          <div style={{
+            position: 'absolute', top: 0, left: 0,
+            width: '100%', height: '100%',
+            backgroundColor: borderColor,
+            clipPath: clipPath,
+            WebkitClipPath: clipPath,
+          } as React.CSSProperties} />
+          {/* Слой изображения — уменьшен через scale */}
+          <div style={{
+            position: 'absolute', top: 0, left: 0,
+            width: '100%', height: '100%',
+            overflow: 'hidden',
+            clipPath: clipPath,
+            WebkitClipPath: clipPath,
+            transform: `scale(${scaleX}, ${scaleY})`,
+          } as React.CSSProperties}>
+            {src && <img src={src} style={imgStyle} alt="" />}
+          </div>
+        </div>
+      );
+    }
+
+    // Clip-path без обводки
+    if (hasClip && clipPath) {
+      return (
+        <div key={widget.id} style={{
+          ...baseStyle,
+          overflow: 'hidden',
+          clipPath: clipPath,
+          WebkitClipPath: clipPath,
+        } as React.CSSProperties}>
+          {src && <img src={src} style={imgStyle} alt="" />}
+        </div>
+      );
+    }
+
+    // Обычный режим (rectangle, rounded-rectangle)
     return (
-      <div key={widget.id} style={style}>
+      <div key={widget.id} style={{
+        ...baseStyle,
+        border: borderEnabled ? `${borderWidth}px solid ${borderColor}` : undefined,
+        overflow: 'hidden',
+        borderRadius: br,
+      }}>
         {src && <img src={src} style={imgStyle} alt="" />}
       </div>
     );

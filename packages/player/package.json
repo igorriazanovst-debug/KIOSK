@@ -37,7 +37,7 @@
   },
   "build": {
     "appId": "com.kiosk.player",
-    "productName": "Kiosk Player",
+    "productName": "BorderTest",
     "directories": {
       "output": "dist-electron",
       "buildResources": "assets"

@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { Image as KonvaImage, Rect, Group } from 'react-konva';
+import { Image as KonvaImage, Rect, Group, Circle, Ellipse, RegularPolygon, Star, Line } from 'react-konva';
 import { Widget } from '../types';
 import { useEditorStore } from '../stores/editorStore';
 import ClippedImage from './ClippedImage';
@@ -175,6 +175,59 @@ const ImageWidget: React.FC<ImageWidgetProps> = ({
   };
 
   const isLocked = widget.locked || false;
+  // Рендер рамки по форме clipShape
+  const renderBorder = () => {
+    if (!borderEnabled) return null;
+
+    const strokeProps: any = {
+      stroke: borderColor,
+      strokeWidth: borderWidth,
+      dash: getStrokeDash(borderStyle),
+      fill: undefined,
+      listening: false,
+    };
+
+    const shape = clipShape || 'rectangle';
+    const w = widget.width;
+    const h = widget.height;
+    const r = Math.min(w, h) / 2;
+    const cx = w / 2;
+    const cy = h / 2;
+
+    switch (shape) {
+      case 'circle':
+        return <Circle x={cx} y={cy} radius={r} {...strokeProps} />;
+
+      case 'ellipse':
+        return <Ellipse x={cx} y={cy} radiusX={w / 2} radiusY={h / 2} {...strokeProps} />;
+
+      case 'triangle':
+        return <RegularPolygon x={cx} y={cy} sides={3} radius={r} {...strokeProps} />;
+
+      case 'diamond':
+        return <RegularPolygon x={cx} y={cy} sides={4} radius={r} rotation={45} {...strokeProps} />;
+
+      case 'pentagon':
+        return <RegularPolygon x={cx} y={cy} sides={5} radius={r} {...strokeProps} />;
+
+      case 'hexagon':
+        return <RegularPolygon x={cx} y={cy} sides={6} radius={r} {...strokeProps} />;
+
+      case 'octagon':
+        return <RegularPolygon x={cx} y={cy} sides={8} radius={r} {...strokeProps} />;
+
+      case 'star':
+        return <Star x={cx} y={cy} numPoints={5} innerRadius={r * 0.5} outerRadius={r} {...strokeProps} />;
+
+      case 'rounded-rectangle':
+        return <Rect width={w} height={h} cornerRadius={widget.properties.cornerRadius || 20} {...strokeProps} />;
+
+      case 'rectangle':
+      default:
+        return <Rect width={w} height={h} {...strokeProps} />;
+    }
+  };
+
 
   return (
     <Group
@@ -246,17 +299,8 @@ const ImageWidget: React.FC<ImageWidgetProps> = ({
         />
       )}
 
-      {/* Пользовательская рамка */}
-      {borderEnabled && (
-        <Rect
-          width={widget.width}
-          height={widget.height}
-          stroke={borderColor}
-          strokeWidth={borderWidth}
-          dash={getStrokeDash(borderStyle)}
-          listening={false}
-        />
-      )}
+      {/* Пользовательская рамка (по форме clipShape) */}
+      {renderBorder()}
     </Group>
   );
 };

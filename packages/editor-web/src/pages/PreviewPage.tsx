@@ -54,43 +54,39 @@ interface LocalProject {
 // CLIP-PATH ГЕНЕРАТОР (правильные полигоны)
 // ============================================
 
-function getClipPath(shape: string, w: number, h: number, cornerRadius: number = 0): string | undefined {
+function getClipPath(shape: string, w: number, h: number, cornerRadius: number = 0, usePx: boolean = false): string | undefined {
   const cx = w / 2;
   const cy = h / 2;
   const r = Math.min(w, h) / 2;
 
-  // Функция для генерации правильного полигона с учётом пропорций
+  const fmt = (px: number, py: number): string => {
+    if (usePx) return `${px.toFixed(1)}px ${py.toFixed(1)}px`;
+    return `${((px / w) * 100).toFixed(1)}% ${((py / h) * 100).toFixed(1)}%`;
+  };
+
   const polygon = (sides: number, startAngle: number = -Math.PI / 2): string => {
     const points: string[] = [];
     for (let i = 0; i < sides; i++) {
       const angle = startAngle + (2 * Math.PI * i) / sides;
-      const px = cx + r * Math.cos(angle);
-      const py = cy + r * Math.sin(angle);
-      // Конвертируем в проценты от ширины/высоты
-      const pctX = ((px / w) * 100).toFixed(1);
-      const pctY = ((py / h) * 100).toFixed(1);
-      points.push(`${pctX}% ${pctY}%`);
+      points.push(fmt(cx + r * Math.cos(angle), cy + r * Math.sin(angle)));
     }
     return `polygon(${points.join(', ')})`;
   };
 
   switch (shape) {
     case 'circle':
+      if (usePx) return `circle(${r.toFixed(1)}px at ${cx.toFixed(1)}px ${cy.toFixed(1)}px)`;
       return `circle(${r}px at ${cx}px ${cy}px)`;
     case 'ellipse':
+      if (usePx) return `ellipse(${(w/2).toFixed(1)}px ${(h/2).toFixed(1)}px at ${cx.toFixed(1)}px ${cy.toFixed(1)}px)`;
       return `ellipse(50% 50% at 50% 50%)`;
     case 'triangle': {
-      const pts: string[] = [];
       const angles = [-Math.PI / 2, Math.PI / 6, 5 * Math.PI / 6];
-      for (const angle of angles) {
-        const px = cx + r * Math.cos(angle);
-        const py = cy + r * Math.sin(angle);
-        pts.push(`${((px / w) * 100).toFixed(1)}% ${((py / h) * 100).toFixed(1)}%`);
-      }
+      const pts = angles.map(a => fmt(cx + r * Math.cos(a), cy + r * Math.sin(a)));
       return `polygon(${pts.join(', ')})`;
     }
     case 'diamond':
-      return `polygon(${cx / w * 100}% 0%, 100% ${cy / h * 100}%, ${cx / w * 100}% 100%, 0% ${cy / h * 100}%)`;
+      return `polygon(${fmt(cx, 0)}, ${fmt(w, cy)}, ${fmt(cx, h)}, ${fmt(0, cy)})`;
     case 'pentagon':
       return polygon(5);
     case 'hexagon':
@@ -102,9 +98,7 @@ function getClipPath(shape: string, w: number, h: number, cornerRadius: number =
       for (let i = 0; i < 10; i++) {
         const angle = (i * Math.PI / 5) - Math.PI / 2;
         const sr = i % 2 === 0 ? r : r * 0.5;
-        const px = cx + sr * Math.cos(angle);
-        const py = cy + sr * Math.sin(angle);
-        pts.push(`${((px / w) * 100).toFixed(1)}% ${((py / h) * 100).toFixed(1)}%`);
+        pts.push(fmt(cx + sr * Math.cos(angle), cy + sr * Math.sin(angle)));
       }
       return `polygon(${pts.join(', ')})`;
     }
@@ -400,6 +394,7 @@ const PreviewPage: React.FC = () => {
       width: widget.width,
       height: widget.height,
       transform: widget.rotation ? `rotate(${widget.rotation}deg)` : undefined,
+      transformOrigin: 'top left',
       cursor: events && events.some((e) => e.trigger === 'click') ? 'pointer' : 'default',
       zIndex: widget.zIndex || 0,
     };
@@ -416,23 +411,55 @@ const PreviewPage: React.FC = () => {
       const needsClip = shapeClip !== undefined;
       const br = shapeType === 'circle' ? '50%' : (shapeType === 'rounded-rectangle' || shapeType === 'rectangle' ? `${cornerRadius}px` : undefined);
 
+      if (needsClip && strokeWidth > 0) {
+        const scaleX = (widget.width - strokeWidth * 4) / widget.width;
+        const scaleY = (widget.height - strokeWidth * 4) / widget.height;
+        return (
+          <div key={widget.id} data-widget-id={widget.id} style={{
+            ...commonStyle,
+            opacity,
+          }} onClick={handleClick}>
+            {/* Слой рамки — полная фигура цветом рамки */}
+            <div style={{
+              position: 'absolute', top: 0, left: 0,
+              width: '100%', height: '100%',
+              backgroundColor: strokeColor,
+              clipPath: shapeClip,
+              WebkitClipPath: shapeClip,
+            } as React.CSSProperties} />
+            {/* Слой заливки — та же фигура, уменьшена через scale */}
+            <div style={{
+              position: 'absolute', top: 0, left: 0,
+              width: '100%', height: '100%',
+              backgroundColor: fillColor,
+              clipPath: shapeClip,
+              WebkitClipPath: shapeClip,
+              transform: `scale(${scaleX}, ${scaleY})`,
+            } as React.CSSProperties} />
+          </div>
+        );
+      }
+
+      if (needsClip) {
+        return (
+          <div key={widget.id} data-widget-id={widget.id} style={{
+            ...commonStyle,
+            backgroundColor: fillColor,
+            clipPath: shapeClip,
+            WebkitClipPath: shapeClip,
+            opacity,
+          } as React.CSSProperties} onClick={handleClick} />
+        );
+      }
+
       return (
         <div key={widget.id} data-widget-id={widget.id} style={{
           ...commonStyle,
+          backgroundColor: fillColor,
           border: strokeWidth > 0 ? `${strokeWidth}px solid ${strokeColor}` : 'none',
           borderRadius: br,
           opacity,
-          overflow: 'hidden',
-        }} onClick={handleClick}>
-          <div style={{
-            width: '100%',
-            height: '100%',
-            backgroundColor: fillColor,
-            borderRadius: br,
-            clipPath: needsClip ? shapeClip : undefined,
-            WebkitClipPath: needsClip ? shapeClip : undefined,
-          } as React.CSSProperties} />
-        </div>
+        } as React.CSSProperties} onClick={handleClick} />
       );
     }
 
@@ -462,23 +489,67 @@ const PreviewPage: React.FC = () => {
 
     // Image (с clipShape)
     if (widget.type === 'image') {
-      const { src = '', objectFit = 'contain', opacity = 1, clipShape = 'rectangle', cornerRadius = 0 } = widget.properties;
+      const {
+        src = '', objectFit = 'contain', opacity = 1,
+        clipShape = 'rectangle', cornerRadius = 0,
+        borderEnabled = false, borderWidth = 2, borderColor = '#000000',
+      } = widget.properties;
       if (!src) return null;
 
-      const clipPath = getClipPath(clipShape, widget.width, widget.height, cornerRadius);
+      const hasClip = clipShape && clipShape !== 'rectangle';
+      const clipPath = hasClip ? getClipPath(clipShape, widget.width, widget.height, cornerRadius) : undefined;
+      const effectiveObjectFit = hasClip ? 'cover' : objectFit;
+      const br = (clipShape === 'rounded-rectangle' && cornerRadius) ? `${cornerRadius}px` : undefined;
 
+      // Рамка по форме clip-path (двухслойный подход)
+      if (hasClip && borderEnabled && borderWidth > 0) {
+        const scaleX = (widget.width - borderWidth * 4) / widget.width;
+        const scaleY = (widget.height - borderWidth * 4) / widget.height;
+        return (
+          <div key={widget.id} data-widget-id={widget.id} style={{
+            ...commonStyle,
+            opacity,
+          }} onClick={handleClick}>
+            {/* Слой рамки */}
+            <div style={{
+              position: 'absolute', top: 0, left: 0,
+              width: '100%', height: '100%',
+              backgroundColor: borderColor,
+              clipPath: clipPath,
+              WebkitClipPath: clipPath,
+            } as React.CSSProperties} />
+            {/* Слой изображения — уменьшен через scale */}
+            <div style={{
+              position: 'absolute', top: 0, left: 0,
+              width: '100%', height: '100%',
+              overflow: 'hidden',
+              clipPath: clipPath,
+              WebkitClipPath: clipPath,
+              transform: `scale(${scaleX}, ${scaleY})`,
+            } as React.CSSProperties}>
+              <img src={src} alt="" style={{
+                width: '100%', height: '100%',
+                objectFit: effectiveObjectFit as any,
+              }} />
+            </div>
+          </div>
+        );
+      }
+
+      // Обычный рендер (без рамки по форме или прямоугольная)
       return (
         <div key={widget.id} data-widget-id={widget.id} style={{
           ...commonStyle,
           opacity,
-          borderRadius: (clipShape === 'rounded-rectangle' && cornerRadius) ? `${cornerRadius}px` : undefined,
+          borderRadius: br,
           overflow: 'hidden',
           clipPath: clipPath,
           WebkitClipPath: clipPath,
+          border: (borderEnabled && borderWidth > 0 && !hasClip) ? `${borderWidth}px solid ${borderColor}` : undefined,
         } as React.CSSProperties} onClick={handleClick}>
           <img src={src} alt="" style={{
             width: '100%', height: '100%',
-            objectFit: objectFit as any,
+            objectFit: effectiveObjectFit as any,
           }} />
         </div>
       );
@@ -502,16 +573,24 @@ const PreviewPage: React.FC = () => {
     if (widget.type === 'button') {
       const {
         text = 'Button', backgroundColor = '#4a90e2', textColor = '#ffffff',
-        fontSize = 16, borderRadius = 4,
+        fontSize = 16, fontFamily = 'Arial', fontWeight = 'normal',
+        textAlign = 'center', borderRadius = 4,
+        borderWidth = 0, borderColor = '#000000', borderStyle = 'solid',
+        paddingX = 16, paddingY = 8,
+        shadowEnabled = false, shadowColor = '#000000',
+        shadowBlur = 10, shadowOffsetX = 0, shadowOffsetY = 4, shadowOpacity = 0.3,
       } = widget.properties;
 
       return (
         <div key={widget.id} data-widget-id={widget.id} style={{
           ...commonStyle,
           backgroundColor, color: textColor,
-          fontSize: `${fontSize}px`, borderRadius: `${borderRadius}px`,
+          fontSize: `${fontSize}px`, fontFamily, fontWeight,
+          borderRadius: `${borderRadius}px`,
+          border: borderWidth > 0 ? `${borderWidth}px ${borderStyle} ${borderColor}` : 'none',
           display: 'flex', alignItems: 'center', justifyContent: 'center',
-          border: 'none', cursor: 'pointer', userSelect: 'none',
+          cursor: 'pointer', userSelect: 'none',
+          boxShadow: shadowEnabled ? `${shadowOffsetX}px ${shadowOffsetY}px ${shadowBlur}px ${shadowColor}${Math.round(shadowOpacity * 255).toString(16).padStart(2, '0')}` : undefined,
         }} onClick={handleClick}>
           {text}
         </div>

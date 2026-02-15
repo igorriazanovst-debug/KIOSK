@@ -10,8 +10,11 @@ function createWindow() {
   mainWindow = new BrowserWindow({
     width: 1920,
     height: 1080,
-    fullscreen: false,
+    fullscreen: true,
+    kiosk: true,
+    frame: false,
     autoHideMenuBar: true,
+    alwaysOnTop: true,
     webPreferences: {
       nodeIntegration: false,
       contextIsolation: true,
@@ -28,27 +31,56 @@ function createWindow() {
     mainWindow.loadFile(path.join(__dirname, '../dist/index.html'));
   }
 
-  // Загрузка встроенного проекта если есть
+  // Загрузка встроенного проекта
   loadEmbeddedProject();
+
+  // Когда renderer готов — отправляем проект
+  mainWindow.webContents.on('did-finish-load', () => {
+    if (currentProject && mainWindow) {
+      mainWindow.webContents.send('load-project', currentProject);
+    }
+  });
 }
 
-// Загрузка встроенного проекта
+// Загрузка встроенного проекта — ищем в нескольких местах
 function loadEmbeddedProject() {
-  const projectPath = path.join(__dirname, 'project.json');
-  
-  if (fs.existsSync(projectPath)) {
-    try {
-      const projectData = fs.readFileSync(projectPath, 'utf-8');
-      currentProject = JSON.parse(projectData);
-      
-      // Отправляем проект в renderer процесс
-      if (mainWindow && mainWindow.webContents) {
-        mainWindow.webContents.send('load-project', currentProject);
+  const searchPaths = [
+    // 1. extraResources — куда electron-builder кладёт файлы
+    path.join(process.resourcesPath || '', 'project.json'),
+    // 2. Рядом с electron/main.js (dev режим)
+    path.join(__dirname, 'project.json'),
+    // 3. В корне приложения
+    path.join(app.getAppPath(), 'project.json'),
+    // 4. В electron/ внутри app
+    path.join(app.getAppPath(), 'electron', 'project.json'),
+    // 5. Рядом с exe (portable)
+    path.join(path.dirname(app.getPath('exe')), 'project.json'),
+  ];
+
+  console.log('🔍 Searching for project.json...');
+
+  for (const projectPath of searchPaths) {
+    console.log(`  Checking: ${projectPath}`);
+    if (fs.existsSync(projectPath)) {
+      try {
+        const projectData = fs.readFileSync(projectPath, 'utf-8');
+        currentProject = JSON.parse(projectData);
+        console.log(`✅ Project loaded from: ${projectPath}`);
+        console.log(`   Name: ${currentProject.name || 'unnamed'}`);
+        console.log(`   Widgets: ${currentProject.widgets ? currentProject.widgets.length : 0}`);
+
+        // Отправляем проект в renderer процесс
+        if (mainWindow && mainWindow.webContents) {
+          mainWindow.webContents.send('load-project', currentProject);
+        }
+        return;
+      } catch (error) {
+        console.error(`❌ Failed to parse project from ${projectPath}:`, error.message);
       }
-    } catch (error) {
-      console.error('Failed to load embedded project:', error);
     }
   }
+
+  console.warn('⚠️ project.json not found in any location');
 }
 
 // Обработчики IPC
@@ -68,13 +100,16 @@ ipcMain.handle('open-project', async () => {
     try {
       const projectData = fs.readFileSync(result.filePaths[0], 'utf-8');
       currentProject = JSON.parse(projectData);
+      // Уведомляем renderer
+      if (mainWindow && mainWindow.webContents) {
+        mainWindow.webContents.send('load-project', currentProject);
+      }
       return currentProject;
     } catch (error) {
       console.error('Failed to load project:', error);
       return null;
     }
   }
-
   return null;
 });
 
