@@ -308,6 +308,46 @@ const PreviewPage: React.FC = () => {
     loadProject();
   }, [projectId]);
 
+  // Удаление preview-snapshot при закрытии окна
+  useEffect(() => {
+    if (!projectId) return;
+
+    const deleteSnapshot = () => {
+      const token = localStorage.getItem('kiosk_client_token') || sessionStorage.getItem('kiosk_client_token');
+      if (!token || !projectId) return;
+
+      const baseUrl = window.location.origin;
+      const url = `${baseUrl}/api/projects/${projectId}`;
+
+      // Способ 1: sendBeacon с Blob (надёжнее при закрытии вкладки)
+      try {
+        const blob = new Blob([JSON.stringify({ _method: 'DELETE' })], { type: 'application/json' });
+        // sendBeacon не поддерживает DELETE, поэтому используем XMLHttpRequest sync
+        const xhr = new XMLHttpRequest();
+        xhr.open('DELETE', url, false); // synchronous!
+        xhr.setRequestHeader('Authorization', `Bearer ${token}`);
+        xhr.send();
+      } catch (e) {
+        // Способ 2: fetch с keepalive
+        fetch(url, {
+          method: 'DELETE',
+          headers: { 'Authorization': `Bearer ${token}` },
+          keepalive: true
+        }).catch(() => {});
+      }
+    };
+
+    window.addEventListener('beforeunload', deleteSnapshot);
+    window.addEventListener('pagehide', deleteSnapshot);
+
+    return () => {
+      window.removeEventListener('beforeunload', deleteSnapshot);
+      window.removeEventListener('pagehide', deleteSnapshot);
+      deleteSnapshot();
+    };
+  }, [projectId]);
+
+
   // Закрытие по ESC
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {

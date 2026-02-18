@@ -102,9 +102,16 @@ const ProjectsDialog: React.FC<ProjectsDialogProps> = ({ onClose, onProjectLoade
           {/* Header */}
           <div className="dialog-header">
             <h2>Мои проекты</h2>
-            <button className="btn-icon" onClick={onClose} title="Закрыть">
-              <X size={24} />
-            </button>
+            <div className="header-actions">
+              {projectId && (
+                <button className="btn-back-to-project" onClick={onClose} title="Вернуться к текущему проекту">
+                  ← Вернуться к проекту
+                </button>
+              )}
+              <button className="btn-icon" onClick={onClose} title="Закрыть">
+                <X size={24} />
+              </button>
+            </div>
           </div>
 
           {/* Toolbar */}

@@ -176,6 +176,55 @@ const ImageWidget: React.FC<ImageWidgetProps> = ({
 
   const isLocked = widget.locked || false;
   // Рендер рамки по форме clipShape
+  // Вычисление точек полигона — совпадает с CSS clip-path из PreviewPage/Player
+  const getShapePoints = (shape: string, w: number, h: number): number[] | null => {
+    const cx = w / 2;
+    const cy = h / 2;
+    const r = Math.min(w, h) / 2;
+
+    const polygonPoints = (sides: number, startAngle: number = -Math.PI / 2): number[] => {
+      const pts: number[] = [];
+      for (let i = 0; i < sides; i++) {
+        const angle = startAngle + (2 * Math.PI * i) / sides;
+        pts.push(cx + r * Math.cos(angle));
+        pts.push(cy + r * Math.sin(angle));
+      }
+      return pts;
+    };
+
+    switch (shape) {
+      case 'triangle': {
+        const angles = [-Math.PI / 2, Math.PI / 6, 5 * Math.PI / 6];
+        const pts: number[] = [];
+        angles.forEach(a => {
+          pts.push(cx + r * Math.cos(a));
+          pts.push(cy + r * Math.sin(a));
+        });
+        return pts;
+      }
+      case 'diamond':
+        return [cx, 0, w, cy, cx, h, 0, cy];
+      case 'pentagon':
+        return polygonPoints(5);
+      case 'hexagon':
+        return polygonPoints(6);
+      case 'octagon':
+        return polygonPoints(8);
+      case 'star': {
+        const pts: number[] = [];
+        for (let i = 0; i < 10; i++) {
+          const angle = (i * Math.PI / 5) - Math.PI / 2;
+          const sr = i % 2 === 0 ? r : r * 0.5;
+          pts.push(cx + sr * Math.cos(angle));
+          pts.push(cy + sr * Math.sin(angle));
+        }
+        return pts;
+      }
+      default:
+        return null;
+    }
+  };
+
   const renderBorder = () => {
     if (!borderEnabled) return null;
 
@@ -194,30 +243,19 @@ const ImageWidget: React.FC<ImageWidgetProps> = ({
     const cx = w / 2;
     const cy = h / 2;
 
+    // Фигуры, которые рисуются через Line (точки совпадают с clip-path)
+    const points = getShapePoints(shape, w, h);
+    if (points) {
+      return <Line points={points} closed stroke={borderColor} strokeWidth={borderWidth} dash={getStrokeDash(borderStyle)} listening={false} />;
+    }
+
+    // Остальные фигуры — стандартные Konva-примитивы
     switch (shape) {
       case 'circle':
         return <Circle x={cx} y={cy} radius={r} {...strokeProps} />;
 
       case 'ellipse':
         return <Ellipse x={cx} y={cy} radiusX={w / 2} radiusY={h / 2} {...strokeProps} />;
-
-      case 'triangle':
-        return <RegularPolygon x={cx} y={cy} sides={3} radius={r} {...strokeProps} />;
-
-      case 'diamond':
-        return <RegularPolygon x={cx} y={cy} sides={4} radius={r} rotation={45} {...strokeProps} />;
-
-      case 'pentagon':
-        return <RegularPolygon x={cx} y={cy} sides={5} radius={r} {...strokeProps} />;
-
-      case 'hexagon':
-        return <RegularPolygon x={cx} y={cy} sides={6} radius={r} {...strokeProps} />;
-
-      case 'octagon':
-        return <RegularPolygon x={cx} y={cy} sides={8} radius={r} {...strokeProps} />;
-
-      case 'star':
-        return <Star x={cx} y={cy} numPoints={5} innerRadius={r * 0.5} outerRadius={r} {...strokeProps} />;
 
       case 'rounded-rectangle':
         return <Rect width={w} height={h} cornerRadius={widget.properties.cornerRadius || 20} {...strokeProps} />;

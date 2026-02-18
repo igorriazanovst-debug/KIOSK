@@ -441,6 +441,15 @@ export const useEditorStore = create<EditorState>((set, get) => ({
     console.log('[Editor] Creating preview snapshot...');
 
     try {
+      // Удаляем предыдущий snapshot если есть
+      const prevSnapshotId = (get() as any)._lastPreviewSnapshotId;
+      if (prevSnapshotId) {
+        console.log('[Editor] Deleting previous snapshot:', prevSnapshotId);
+        apiClient.deleteProject(prevSnapshotId).catch((err: any) => {
+          console.warn('[Editor] Failed to delete previous snapshot:', err.message);
+        });
+      }
+
       const snapshotName = `_preview_${project.name}_${Date.now()}`;
 
       const snapshotProject = await apiClient.createProject({
@@ -450,6 +459,9 @@ export const useEditorStore = create<EditorState>((set, get) => ({
         canvasBackground: project.canvas.backgroundColor || '#1a1a1a',
         projectData: project,
       });
+
+      // Сохраняем ID для удаления при следующем preview
+      set({ _lastPreviewSnapshotId: snapshotProject.id } as any);
 
       console.log('[Editor] Preview snapshot created:', snapshotProject.id);
       return snapshotProject.id;

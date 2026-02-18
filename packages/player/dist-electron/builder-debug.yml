@@ -94,8 +94,8 @@ nsis:
     !macroend
 
     !addplugindir /x86-unicode "/root/.cache/electron-builder/nsis/nsis-resources-3.4.1/plugins/x86-unicode"
-    !include "/tmp/t-MpkwF6/1-messages.nsh"
-    !include "/tmp/t-MpkwF6/0-messages.nsh"
+    !include "/tmp/t-p2rDXN/1-messages.nsh"
+    !include "/tmp/t-p2rDXN/0-messages.nsh"
 
     Var newStartMenuLink
     Var oldStartMenuLink
