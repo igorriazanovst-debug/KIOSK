@@ -6,6 +6,7 @@ interface TextWidgetProps {
   widget: Widget;
   isSelected: boolean;
   onSelect: (e: any) => void;
+  onDblClick?: (e: any) => void;
   onDragEnd: (e: any) => void;
   onTransformEnd: (e: any) => void;
   dragBoundFunc?: (pos: { x: number; y: number }) => { x: number; y: number };
@@ -15,6 +16,7 @@ const TextWidget: React.FC<TextWidgetProps> = ({
   widget,
   isSelected,
   onSelect,
+  onDblClick,
   onDragEnd,
   onTransformEnd,
   dragBoundFunc
@@ -56,9 +58,10 @@ const TextWidget: React.FC<TextWidgetProps> = ({
       rotation={widget.rotation || 0}
       draggable={!isLocked}
       dragBoundFunc={dragBoundFunc}
-      opacity={isLocked ? 0.6 : 1}
+      opacity={(widget.properties.opacity ?? 1) * (isLocked ? 0.6 : 1)}
       onClick={onSelect}
       onTap={onSelect}
+      onDblClick={onDblClick}
       onDragEnd={onDragEnd}
       onTransformEnd={onTransformEnd}
     >

@@ -10,6 +10,7 @@ export interface Widget {
   height: number;
   rotation?: number;
   locked?: boolean;
+  visible?: boolean;
   zIndex?: number;
   properties: Record<string, any>;
 }
@@ -36,7 +37,7 @@ export interface Project {
 
 // Интерактивные действия виджетов
 export interface WidgetAction {
-  type: 'url' | 'page' | 'popup' | 'widget_show' | 'widget_hide' | 'video_play' | 'video_stop';
+  type: 'url' | 'page' | 'popup' | 'widget_show' | 'widget_hide' | 'widget_toggle' | 'video_play' | 'video_stop';
   // Для URL
   url?: string;
   openInNewTab?: boolean;

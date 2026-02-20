@@ -56,11 +56,12 @@ const OutlinePanel: React.FC = () => {
           sortedWidgets.map((widget) => {
             const isSelected = selectedWidgetIds.includes(widget.id);
             const isLocked = widget.locked || false;
+            const isVisible = (widget as any).visible !== false;
 
             return (
               <div
                 key={widget.id}
-                className={`outline-item ${isSelected ? 'selected' : ''} ${isLocked ? 'locked' : ''}`}
+                className={`outline-item ${isSelected ? 'selected' : ''} ${isLocked ? 'locked' : ''} ${!isVisible ? 'invisible' : ''}`}
                 onClick={() => selectWidget(widget.id, false)}
               >
                 <div className="outline-item-main">
@@ -74,13 +75,14 @@ const OutlinePanel: React.FC = () => {
                 </div>
 
                 <div className="outline-actions" onClick={(e) => e.stopPropagation()}>
-                  {/* Видимость - пока не реализовано */}
-                  {/* <button
-                    className="outline-action-btn"
-                    title="Видимость"
+                  {/* Видимость */}
+                  <button
+                    className={`outline-action-btn ${!isVisible ? 'hidden-btn' : ''}`}
+                    onClick={() => updateWidget(widget.id, { visible: !isVisible } as any)}
+                    title={isVisible ? 'Скрыть' : 'Показать'}
                   >
-                    <Eye size={14} />
-                  </button> */}
+                    {isVisible ? <Eye size={14} /> : <EyeOff size={14} />}
+                  </button>
 
                   {/* Блокировка */}
                   <button

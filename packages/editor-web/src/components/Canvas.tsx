@@ -8,6 +8,7 @@ import VideoWidget from './VideoWidget';
 import ShapeWidget from './ShapeWidget';
 import MenuWidget from './MenuWidget';
 import './Canvas.css';
+import TextEditorOverlay from './TextEditorOverlay';
 
 // Цвета для fallback отображения (если специальный компонент не используется)
 const WIDGET_COLORS: Record<string, string> = {
@@ -39,6 +40,7 @@ const Canvas: React.FC = () => {
 
   const stageRef = useRef<any>(null);
   const transformerRef = useRef<any>(null);
+  const [editingWidget, setEditingWidget] = React.useState<{id: string; x: number; y: number; width: number; height: number; html: string} | null>(null);
 
   // Функция привязки к сетке
   const snapToGridValue = (value: number): number => {
@@ -100,6 +102,27 @@ const Canvas: React.FC = () => {
     e.cancelBubble = true;
     const isMultiSelect = e.evt.ctrlKey || e.evt.metaKey;
     selectWidget(id, isMultiSelect);
+  };
+
+  const handleTextDblClick = (widget: any, e: any) => {
+    e.cancelBubble = true;
+    // Use htmlContent if exists, otherwise wrap plain text in <p>
+    const html = widget.properties.htmlContent
+      || (widget.properties.text ? `<p>${widget.properties.text}</p>` : '<p></p>');
+    setEditingWidget({ id: widget.id, x: widget.x, y: widget.y, width: widget.width, height: widget.height, html });
+  };
+
+  const handleEditorClose = (html: string) => {
+    if (!editingWidget) return;
+    // strip empty paragraph
+    const clean = html === '<p></p>' ? '' : html;
+    const currentWidget = project?.widgets.find(w => w.id === editingWidget.id);
+    if (currentWidget) {
+      updateWidget(editingWidget.id, {
+        properties: { ...currentWidget.properties, htmlContent: clean }
+      });
+    }
+    setEditingWidget(null);
   };
 
   const handleDragEnd = (id: string, e: any) => {
@@ -220,6 +243,7 @@ const Canvas: React.FC = () => {
                 .sort((a, b) => (a.zIndex || 0) - (b.zIndex || 0))
                 .map(widget => {
                 const isLocked = widget.locked || false;
+                const isWidgetVisible = (widget as any).visible !== false;
                 
                 // Для изображений используем ImageWidget
                 if (widget.type === 'image') {
@@ -241,6 +265,17 @@ const Canvas: React.FC = () => {
                           text="🔒"
                           fontSize={16}
                           listening={false}
+                        />
+                      )}
+                      {/* Иконка скрытости */}
+                      {!isWidgetVisible && (
+                        <Text
+                          x={widget.x + widget.width - 24}
+                          y={widget.y + 5}
+                          text="👁️"
+                          fontSize={16}
+                          listening={false}
+                          opacity={0.5}
                         />
                       )}
                     </React.Fragment>
@@ -281,6 +316,7 @@ const Canvas: React.FC = () => {
                         widget={widget}
                         isSelected={selectedWidgetIds.includes(widget.id)}
                         onSelect={(e) => handleWidgetClick(widget.id, e)}
+                        onDblClick={(e) => handleTextDblClick(widget, e)}
                         onDragEnd={(e) => handleDragEnd(widget.id, e)}
                         onTransformEnd={(e) => handleTransformEnd(widget.id, e)}
                         dragBoundFunc={snapToGrid ? dragBoundFunc : undefined}
@@ -424,6 +460,20 @@ const Canvas: React.FC = () => {
               />
             </Layer>
           </Stage>
+
+          {/* Rich text overlay */}
+          {editingWidget && (
+            <TextEditorOverlay
+              widgetId={editingWidget.id}
+              x={editingWidget.x}
+              y={editingWidget.y}
+              width={editingWidget.width}
+              height={editingWidget.height}
+              zoom={zoom}
+              initialHtml={editingWidget.html}
+              onClose={handleEditorClose}
+            />
+          )}
         </div>
       </div>
 

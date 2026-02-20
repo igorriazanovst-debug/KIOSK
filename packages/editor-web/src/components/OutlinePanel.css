@@ -176,3 +176,11 @@
 .outline-list::-webkit-scrollbar-thumb:hover {
   background: #555;
 }
+
+.outline-action-btn.hidden-btn {
+  border-color: #888;
+  color: #888;
+}
+.outline-item.invisible {
+  opacity: 0.4;
+}

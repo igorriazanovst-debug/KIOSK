@@ -3,6 +3,7 @@ import { apiClient } from '../services/api-client';
 import { useEditorStore } from '../stores/editorStore';
 import ActionEditor from './ActionEditor';
 import './PropertiesPanel.css';
+import RichTextEditor from './RichTextEditor';
 
 const PropertiesPanel: React.FC = () => {
   const { project, selectedWidgetIds, updateWidget } = useEditorStore();
@@ -152,6 +153,39 @@ const PropertiesPanel: React.FC = () => {
                 Заблокированный виджет нельзя перемещать и изменять размер
               </div>
             )}
+          </div>
+        </div>
+
+
+
+        {/* Видимость — общее для всех виджетов */}
+        <div className="property-section">
+          <h4>Видимость</h4>
+          <div className="property-field">
+            <label>
+              <input
+                type="checkbox"
+                checked={(selectedWidget as any).visible !== false}
+                onChange={(e) => updateWidget(selectedWidget.id, { visible: e.target.checked } as any)}
+              />
+              Видимый по умолчанию
+            </label>
+          </div>
+        </div>
+
+        {/* Прозрачность — общее для всех виджетов */}
+        <div className="property-section">
+          <h4>Прозрачность</h4>
+          <div className="property-field">
+            <label>Прозрачность: {Math.round((selectedWidget.properties.opacity ?? 1) * 100)}%</label>
+            <input
+              type="range"
+              min={0}
+              max={100}
+              value={Math.round((selectedWidget.properties.opacity ?? 1) * 100)}
+              onChange={(e) => handlePropertiesChange('opacity', parseInt(e.target.value) / 100)}
+              style={{ width: '100%' }}
+            />
           </div>
         </div>
 

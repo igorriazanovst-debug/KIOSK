@@ -166,7 +166,7 @@ const MenuWidget: React.FC<MenuWidgetProps> = ({
     height: `${itemHeight}px`,
     minWidth: isHorizontal ? 'auto' : '100%',
     color: hoveredItem === itemId ? submenuTextColor : textColor,
-    backgroundColor: hoveredItem === itemId ? hoverColor : 'transparent',
+    backgroundColor: hoveredItem === itemId ? hoverColor : backgroundColor,
     fontSize: `${fontSize}px`,
     fontFamily,
     cursor: 'pointer',
@@ -274,6 +274,7 @@ const PreviewPage: React.FC = () => {
   const [popupVisible, setPopupVisible] = useState(false);
   const [popupData, setPopupData] = useState<any>(null);
   const [hiddenWidgets, setHiddenWidgets] = useState<Set<string>>(new Set());
+  const hiddenWidgetsInitialized = React.useRef(false);
 
   // Загрузка проекта
   useEffect(() => {
@@ -298,6 +299,13 @@ const PreviewPage: React.FC = () => {
           widgets: serverProject.projectData?.widgets || [],
         };
         setProject(localProject);
+        if (!hiddenWidgetsInitialized.current) {
+          const initialHidden = new Set<string>(
+            localProject.widgets.filter((w: any) => w.visible === false).map((w: any) => w.id)
+          );
+          setHiddenWidgets(initialHidden);
+          hiddenWidgetsInitialized.current = true;
+        }
       } catch (err: any) {
         setError(err.message || 'Failed to load project');
       } finally {
@@ -367,7 +375,7 @@ const PreviewPage: React.FC = () => {
   // Обработка действий виджетов
   const executeActions = (actions: WidgetAction[]) => {
     actions.forEach((action) => {
-      switch (action.type) {
+      switch (action.type as string) {
         case 'url':
           if (action.url) {
             if (action.openInNewTab) {
@@ -398,6 +406,19 @@ const PreviewPage: React.FC = () => {
         case 'widget_hide':
           if (action.targetWidgetId) {
             setHiddenWidgets((prev) => new Set(prev).add(action.targetWidgetId!));
+          }
+          break;
+        case 'widget_toggle':
+          if (action.targetWidgetId) {
+            setHiddenWidgets((prev) => {
+              const next = new Set(prev);
+              if (next.has(action.targetWidgetId!)) {
+                next.delete(action.targetWidgetId!);
+              } else {
+                next.add(action.targetWidgetId!);
+              }
+              return next;
+            });
           }
           break;
         case 'video_play':
@@ -437,6 +458,7 @@ const PreviewPage: React.FC = () => {
       transformOrigin: 'top left',
       cursor: events && events.some((e) => e.trigger === 'click') ? 'pointer' : 'default',
       zIndex: widget.zIndex || 0,
+      opacity: widget.properties.opacity ?? 1,
     };
 
     // Shape
@@ -512,17 +534,30 @@ const PreviewPage: React.FC = () => {
         backgroundColor = 'transparent',
       } = widget.properties;
 
+      const htmlContent = widget.properties.htmlContent;
+      const hAlign = textAlign === 'center' ? 'center' : textAlign === 'right' ? 'flex-end' : 'flex-start';
+      const vAlign = verticalAlign === 'middle' ? 'center' : verticalAlign === 'bottom' ? 'flex-end' : 'flex-start';
+      const containerStyle: React.CSSProperties = {
+        ...commonStyle,
+        backgroundColor,
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: htmlContent ? 'stretch' : hAlign,
+        justifyContent: vAlign,
+        overflow: 'hidden',
+        padding: `${widget.properties.padding ?? 8}px`,
+        boxSizing: 'border-box' as const,
+      };
+      if (htmlContent) {
+        return (
+          <div key={widget.id} data-widget-id={widget.id} style={containerStyle} onClick={handleClick}
+            dangerouslySetInnerHTML={{ __html: htmlContent }}
+          />
+        );
+      }
       return (
-        <div key={widget.id} data-widget-id={widget.id} style={{
-          ...commonStyle,
-          fontSize: `${fontSize}px`, color, fontFamily, fontWeight,
-          backgroundColor,
-          textAlign: textAlign as any,
-          display: 'flex',
-          alignItems: verticalAlign === 'middle' ? 'center' : verticalAlign === 'bottom' ? 'flex-end' : 'flex-start',
-          whiteSpace: 'pre-wrap', wordWrap: 'break-word',
-        }} onClick={handleClick}>
-          {text}
+        <div key={widget.id} data-widget-id={widget.id} style={containerStyle} onClick={handleClick}>
+          <span style={{ fontSize: `${fontSize}px`, color, fontFamily, fontWeight, textAlign: textAlign as any, width: '100%', whiteSpace: 'pre-wrap', wordWrap: 'break-word' }}>{text}</span>
         </div>
       );
     }

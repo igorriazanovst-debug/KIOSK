@@ -1,0 +1,132 @@
+@font-face {
+  font-family: 'Roboto';
+  font-weight: 400;
+  font-style: normal;
+  src: url('/fonts/Roboto_400.ttf') format('truetype');
+}
+@font-face {
+  font-family: 'Roboto';
+  font-weight: 700;
+  font-style: normal;
+  src: url('/fonts/Roboto_700.ttf') format('truetype');
+}
+@font-face {
+  font-family: 'Open Sans';
+  font-weight: 400;
+  font-style: normal;
+  src: url('/fonts/Open_Sans_400.ttf') format('truetype');
+}
+@font-face {
+  font-family: 'Open Sans';
+  font-weight: 700;
+  font-style: normal;
+  src: url('/fonts/Open_Sans_700.ttf') format('truetype');
+}
+@font-face {
+  font-family: 'Lato';
+  font-weight: 400;
+  font-style: normal;
+  src: url('/fonts/Lato_400.ttf') format('truetype');
+}
+@font-face {
+  font-family: 'Lato';
+  font-weight: 700;
+  font-style: normal;
+  src: url('/fonts/Lato_700.ttf') format('truetype');
+}
+@font-face {
+  font-family: 'Montserrat';
+  font-weight: 400;
+  font-style: normal;
+  src: url('/fonts/Montserrat_400.ttf') format('truetype');
+}
+@font-face {
+  font-family: 'Montserrat';
+  font-weight: 700;
+  font-style: normal;
+  src: url('/fonts/Montserrat_700.ttf') format('truetype');
+}
+@font-face {
+  font-family: 'PT Sans';
+  font-weight: 400;
+  font-style: normal;
+  src: url('/fonts/PT_Sans_400.ttf') format('truetype');
+}
+@font-face {
+  font-family: 'PT Sans';
+  font-weight: 700;
+  font-style: normal;
+  src: url('/fonts/PT_Sans_700.ttf') format('truetype');
+}
+@font-face {
+  font-family: 'PT Serif';
+  font-weight: 400;
+  font-style: normal;
+  src: url('/fonts/PT_Serif_400.ttf') format('truetype');
+}
+@font-face {
+  font-family: 'PT Serif';
+  font-weight: 700;
+  font-style: normal;
+  src: url('/fonts/PT_Serif_700.ttf') format('truetype');
+}
+@font-face {
+  font-family: 'Ubuntu';
+  font-weight: 400;
+  font-style: normal;
+  src: url('/fonts/Ubuntu_400.ttf') format('truetype');
+}
+@font-face {
+  font-family: 'Ubuntu';
+  font-weight: 700;
+  font-style: normal;
+  src: url('/fonts/Ubuntu_700.ttf') format('truetype');
+}
+@font-face {
+  font-family: 'Oswald';
+  font-weight: 400;
+  font-style: normal;
+  src: url('/fonts/Oswald_400.ttf') format('truetype');
+}
+@font-face {
+  font-family: 'Oswald';
+  font-weight: 700;
+  font-style: normal;
+  src: url('/fonts/Oswald_700.ttf') format('truetype');
+}
+@font-face {
+  font-family: 'Raleway';
+  font-weight: 400;
+  font-style: normal;
+  src: url('/fonts/Raleway_400.ttf') format('truetype');
+}
+@font-face {
+  font-family: 'Raleway';
+  font-weight: 700;
+  font-style: normal;
+  src: url('/fonts/Raleway_700.ttf') format('truetype');
+}
+@font-face {
+  font-family: 'Nunito';
+  font-weight: 400;
+  font-style: normal;
+  src: url('/fonts/Nunito_400.ttf') format('truetype');
+}
+@font-face {
+  font-family: 'Nunito';
+  font-weight: 700;
+  font-style: normal;
+  src: url('/fonts/Nunito_700.ttf') format('truetype');
+}
+@font-face {
+  font-family: 'Lobster';
+  font-weight: 400;
+  font-style: normal;
+  src: url('/fonts/Lobster_400.ttf') format('truetype');
+}
+@font-face {
+  font-family: 'Pacifico';
+  font-weight: 400;
+  font-style: normal;
+  src: url('/fonts/Pacifico_400.ttf') format('truetype');
+}

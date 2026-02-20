@@ -38,6 +38,7 @@ const ActionEditor: React.FC<ActionEditorProps> = ({ widget, onUpdate, allWidget
       popup: '💬 Показать popup',
       widget_show: '👁️ Показать виджет',
       widget_hide: '🙈 Скрыть виджет',
+      widget_toggle: '🔄 Переключить видимость',
       video_play: '▶️ Воспроизвести видео',
       video_stop: '⏸️ Остановить видео'
     };
@@ -183,7 +184,7 @@ const ActionEditor: React.FC<ActionEditorProps> = ({ widget, onUpdate, allWidget
             )}
 
             {/* Настройки показа/скрытия виджета */}
-            {(action.type === 'widget_show' || action.type === 'widget_hide') && (
+            {(action.type === 'widget_show' || action.type === 'widget_hide' || action.type === 'widget_toggle') && (
               <div className="property-field">
                 <label>Целевой виджет</label>
                 <select

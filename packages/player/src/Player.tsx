@@ -100,6 +100,7 @@ const Player: React.FC<PlayerProps> = ({ embedded = false }) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [hiddenWidgets, setHiddenWidgets] = useState<Set<string>>(new Set());
+  const hiddenWidgetsInitialized = React.useRef(false);
   const [hoveredMenuItem, setHoveredMenuItem] = useState<string | null>(null);
   const [expandedMenuItem, setExpandedMenuItem] = useState<string | null>(null);
   const [popupVisible, setPopupVisible] = useState(false);
@@ -116,6 +117,13 @@ const Player: React.FC<PlayerProps> = ({ embedded = false }) => {
     if (window.electronAPI) {
       window.electronAPI.onLoadProject((loadedProject: Project) => {
         setProject(loadedProject);
+        if (!hiddenWidgetsInitialized.current) {
+          const initialHidden = new Set<string>(
+            (loadedProject.widgets || []).filter((w: any) => w.visible === false).map((w: any) => w.id)
+          );
+          setHiddenWidgets(initialHidden);
+          hiddenWidgetsInitialized.current = true;
+        }
         setLoading(false);
       });
     }
@@ -255,6 +263,19 @@ const Player: React.FC<PlayerProps> = ({ embedded = false }) => {
             setHiddenWidgets(prev => new Set(prev).add(action.targetWidgetId));
           }
           break;
+        case 'widget_toggle':
+          if (action.targetWidgetId) {
+            setHiddenWidgets(prev => {
+              const next = new Set(prev);
+              if (next.has(action.targetWidgetId)) {
+                next.delete(action.targetWidgetId);
+              } else {
+                next.add(action.targetWidgetId);
+              }
+              return next;
+            });
+          }
+          break;
 
         case 'video_play':
           if (action.targetWidgetId) {
@@ -285,7 +306,8 @@ const Player: React.FC<PlayerProps> = ({ embedded = false }) => {
       transform: widget.rotation ? `rotate(${widget.rotation}deg)` : undefined,
       transformOrigin: 'top left',
       zIndex: widget.zIndex || 0,
-      boxSizing: 'border-box'
+      boxSizing: 'border-box',
+      opacity: widget.properties.opacity ?? 1,
     };
 
     switch (widget.type) {
@@ -391,28 +413,31 @@ const Player: React.FC<PlayerProps> = ({ embedded = false }) => {
       textDecoration = 'none'
     } = widget.properties;
 
+    const hAlign = textAlign === 'center' ? 'center' : textAlign === 'right' ? 'flex-end' : 'flex-start';
+    const vAlign = verticalAlign === 'middle' ? 'center' : verticalAlign === 'bottom' ? 'flex-end' : 'flex-start';
+
+    const htmlContent = widget.properties.htmlContent;
+
     const style: React.CSSProperties = {
       ...baseStyle,
       backgroundColor,
-      color: textColor,
-      fontSize,
-      fontFamily,
-      fontWeight,
-      fontStyle,
-      textAlign: textAlign as any,
-      lineHeight,
-      padding,
-      textDecoration,
       display: 'flex',
-      alignItems: verticalAlign === 'middle' ? 'center' : verticalAlign === 'bottom' ? 'flex-end' : 'flex-start',
-      overflow: 'auto',
-      whiteSpace: 'pre-wrap',
-      wordWrap: 'break-word'
+      flexDirection: 'column',
+      alignItems: htmlContent ? 'stretch' : hAlign,
+      justifyContent: vAlign,
+      padding,
+      overflow: 'hidden',
     };
+
+    if (htmlContent) {
+      return (
+        <div key={widget.id} style={style} dangerouslySetInnerHTML={{ __html: htmlContent }} />
+      );
+    }
 
     return (
       <div key={widget.id} style={style}>
-        {text}
+        <span style={{ color: textColor, fontSize, fontFamily, fontWeight, fontStyle, textDecoration, lineHeight, textAlign: textAlign as any, width: '100%', whiteSpace: 'pre-wrap', wordWrap: 'break-word' }}>{text}</span>
       </div>
     );
   };
@@ -716,7 +741,7 @@ const Player: React.FC<PlayerProps> = ({ embedded = false }) => {
                 alignItems: 'center',
                 justifyContent: 'space-between',
                 cursor: 'pointer',
-                backgroundColor: hoveredMenuItem === item.id ? hoverColor : 'transparent',
+                backgroundColor: hoveredMenuItem === item.id ? hoverColor : backgroundColor,
                 color: textColor,
                 fontSize,
                 fontFamily,
@@ -761,7 +786,7 @@ const Player: React.FC<PlayerProps> = ({ embedded = false }) => {
                       display: 'flex',
                       alignItems: 'center',
                       cursor: 'pointer',
-                      backgroundColor: hoveredMenuItem === child.id ? hoverColor : 'transparent',
+                      backgroundColor: hoveredMenuItem === child.id ? hoverColor : submenuBackgroundColor,
                       color: submenuTextColor,
                       fontSize,
                       fontFamily,

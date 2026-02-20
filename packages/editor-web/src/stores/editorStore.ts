@@ -579,7 +579,7 @@ export const useEditorStore = create<EditorState>((set, get) => ({
       project: {
         ...project,
         widgets: project.widgets.map(w =>
-          w.id === id ? { ...w, ...updates } : w
+          w.id === id ? { ...w, ...updates, properties: updates.properties ? { ...w.properties, ...updates.properties } : w.properties } : w
         ),
         metadata: {
           ...project.metadata,
