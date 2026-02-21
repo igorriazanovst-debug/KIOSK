@@ -17,7 +17,10 @@ const OutlinePanel: React.FC = () => {
       button: '🔘',
       image: '🖼️',
       video: '🎬',
-      menu: '🍔'
+      menu: '🍔',
+      browser: '🌐',
+      'browser-menu': '🌐',
+      'browser-content': '📄'
     };
     return icons[type] || '⬜';
   };

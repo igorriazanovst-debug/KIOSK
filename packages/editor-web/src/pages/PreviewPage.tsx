@@ -438,6 +438,289 @@ const PreviewPage: React.FC = () => {
   };
 
   // Рендер виджетов
+
+
+// ─── Browser Preview State (глобальный для связи меню↔контент) ────────────
+const browserActivePages: Record<string, string> = {};
+const browserListeners: Record<string, Set<() => void>> = {};
+
+function setBrowserActivePage(browserId: string, pageId: string) {
+  browserActivePages[browserId] = pageId;
+  (browserListeners[browserId] || new Set()).forEach(fn => fn());
+}
+
+function handleBrowserLink(href: string, allWidgets: any[], goToSlide?: (i: number) => void) {
+  if (href.startsWith('browser-page://')) {
+    const pageId = href.replace('browser-page://', '');
+    // Найти browserId для этой страницы
+    const menuWidget = allWidgets.find((w: any) =>
+      w.type === 'browser-menu' && (w.properties.pages || []).some((p: any) => p.id === pageId)
+    );
+    if (menuWidget) setBrowserActivePage(menuWidget.properties.browserId, pageId);
+  } else if (href.startsWith('slide://')) {
+    const idx = parseInt(href.replace('slide://', ''), 10);
+    if (goToSlide) goToSlide(idx);
+  }
+}
+
+function useBrowserActivePage(browserId: string): string | undefined {
+  const [pageId, setPageId] = React.useState<string | undefined>(browserActivePages[browserId]);
+  React.useEffect(() => {
+    if (!browserListeners[browserId]) browserListeners[browserId] = new Set();
+    const fn = () => setPageId(browserActivePages[browserId]);
+    browserListeners[browserId].add(fn);
+    return () => { browserListeners[browserId]?.delete(fn); };
+  }, [browserId]);
+  return pageId;
+}
+
+// ─── BrowserMenuPreview ────────────────────────────────────────────────────
+interface BrowserMenuPreviewProps {
+  widget: any;
+  allWidgets: any[];
+  commonStyle: React.CSSProperties;
+}
+
+const BrowserMenuPreview: React.FC<BrowserMenuPreviewProps> = ({ widget, allWidgets, commonStyle }) => {
+  const browserId: string = widget.properties.browserId || '';
+  const pages: any[] = widget.properties.pages || [];
+  const orientation: string = widget.properties.orientation || 'vertical';
+  const menuBg: string = widget.properties.menuBgColor || '#2c3e50';
+  const menuText: string = widget.properties.menuTextColor || '#ffffff';
+  const menuFs: number = widget.properties.menuFontSize || 14;
+  const isHoriz = orientation === 'horizontal';
+  const activePageId = useBrowserActivePage(browserId);
+  const topLevel = pages.filter((p: any) => !p.parentId);
+
+  const [expanded, setExpanded] = React.useState<string | null>(null);
+
+  return (
+    <div style={{
+      ...commonStyle,
+      background: menuBg,
+      display: 'flex',
+      flexDirection: isHoriz ? 'row' : 'column',
+      overflow: 'hidden',
+      position: 'absolute',
+    }}>
+      {topLevel.map((page: any) => {
+        const children = pages.filter((p: any) => p.parentId === page.id);
+        const isActive = activePageId === page.id;
+        const isExpanded = expanded === page.id;
+        return (
+          <div key={page.id} style={{ position: 'relative' }}>
+            <div
+              onClick={() => {
+                setBrowserActivePage(browserId, page.id);
+                setExpanded(isExpanded ? null : page.id);
+              }}
+              style={{
+                padding: isHoriz ? `0 ${menuFs}px` : `${Math.round(menuFs * 0.6)}px ${menuFs}px`,
+                color: menuText,
+                fontSize: `${menuFs}px`,
+                cursor: 'pointer',
+                background: isActive ? 'rgba(255,255,255,0.15)' : 'transparent',
+                fontWeight: isActive ? 'bold' : 'normal',
+                whiteSpace: 'nowrap',
+                display: 'flex',
+                alignItems: 'center',
+                minHeight: isHoriz ? '100%' : `${menuFs * 2.2}px`,
+              }}
+            >
+              {page.title}
+              {children.length > 0 && <span style={{ marginLeft: '6px', fontSize: '10px' }}>{isExpanded ? '▲' : '▼'}</span>}
+            </div>
+            {/* Подпункты */}
+            {children.length > 0 && isExpanded && (
+              <div style={{
+                position: isHoriz ? 'absolute' : 'relative',
+                top: isHoriz ? '100%' : undefined,
+                left: 0,
+                background: menuBg,
+                zIndex: 100,
+                minWidth: '140px',
+                boxShadow: isHoriz ? '0 4px 12px rgba(0,0,0,0.3)' : 'none',
+              }}>
+                {children.map((child: any) => (
+                  <div
+                    key={child.id}
+                    onClick={(e) => { e.stopPropagation(); setBrowserActivePage(browserId, child.id); setExpanded(null); }}
+                    style={{
+                      padding: `${Math.round(menuFs * 0.5)}px ${menuFs}px`,
+                      paddingLeft: isHoriz ? `${menuFs}px` : `${menuFs * 1.5}px`,
+                      color: menuText,
+                      fontSize: `${menuFs - 1}px`,
+                      cursor: 'pointer',
+                      opacity: 0.9,
+                    }}
+                  >
+                    {child.title}
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        );
+      })}
+    </div>
+  );
+};
+
+// ─── BrowserContentPreview ─────────────────────────────────────────────────
+interface BrowserContentPreviewProps {
+  widget: any;
+  allWidgets: any[];
+  commonStyle: React.CSSProperties;
+}
+
+const BrowserContentPreview: React.FC<BrowserContentPreviewProps> = ({ widget, allWidgets, commonStyle }) => {
+  const browserId: string = widget.properties.browserId || '';
+  const contentBg: string = widget.properties.contentBgColor || '#ffffff';
+  const activePageId = useBrowserActivePage(browserId);
+
+  const menuWidget = allWidgets.find(
+    (w: any) => w.type === 'browser-menu' && w.properties.browserId === browserId
+  );
+  const pages: any[] = menuWidget?.properties.pages || [];
+
+  const activePage = activePageId
+    ? pages.find((p: any) => p.id === activePageId)
+    : pages[0];
+
+  return (
+    <div style={{
+      ...commonStyle,
+      background: contentBg,
+      overflow: 'auto',
+      position: 'absolute',
+    }}>
+      {activePage?.htmlContent ? (
+        <div
+          style={{ padding: '16px', fontFamily: 'Arial, sans-serif', lineHeight: '1.6' }}
+          dangerouslySetInnerHTML={{ __html: activePage.htmlContent }}
+          onClick={(e) => {
+            const a = (e.target as HTMLElement).closest('a');
+            if (!a) return;
+            const href = a.getAttribute('href') || '';
+            if (href.startsWith('browser-page://') || href.startsWith('slide://')) {
+              e.preventDefault();
+              handleBrowserLink(href, allWidgets);
+            }
+          }}
+        />
+      ) : (
+        <div style={{ padding: '16px', color: '#aaa', fontSize: '14px' }}>
+          {pages.length === 0 ? 'Нет страниц' : 'Выберите страницу в меню'}
+        </div>
+      )}
+    </div>
+  );
+};
+// ──────────────────────────────────────────────────────────────────────────
+
+// ─── Browser Preview Widget (legacy) ──────────────────────────────────────
+interface BrowserPreviewWidgetProps {
+  widget: any;
+  pages: any[];
+  menuPosition: string;
+  menuBg: string;
+  menuText: string;
+  menuFs: number;
+  MENU_H: number;
+  MENU_W: number;
+  contentBg: string;
+  commonStyle: React.CSSProperties;
+}
+
+const BrowserPreviewWidget: React.FC<BrowserPreviewWidgetProps> = ({
+  widget, pages, menuPosition, menuBg, menuText, menuFs,
+  MENU_H, MENU_W, contentBg, commonStyle,
+}) => {
+  const [activePage, setActivePage] = React.useState<any>(pages[0] || null);
+
+  const isHoriz = menuPosition === 'top' || menuPosition === 'bottom';
+  const topLevel = pages.filter((p: any) => !p.parentId);
+  const children = activePage ? pages.filter((p: any) => p.parentId === activePage.id) : [];
+
+  const menuStyle: React.CSSProperties = {
+    position: 'absolute',
+    background: menuBg,
+    color: menuText,
+    fontSize: `${menuFs}px`,
+    display: 'flex',
+    flexDirection: isHoriz ? 'row' : 'column',
+    alignItems: isHoriz ? 'center' : 'flex-start',
+    overflowX: isHoriz ? 'auto' : 'hidden',
+    overflowY: isHoriz ? 'hidden' : 'auto',
+    zIndex: 2,
+    ...(menuPosition === 'top'    ? { top: 0, left: 0, right: 0, height: `${MENU_H}px` } : {}),
+    ...(menuPosition === 'bottom' ? { bottom: 0, left: 0, right: 0, height: `${MENU_H}px` } : {}),
+    ...(menuPosition === 'left'   ? { top: 0, left: 0, bottom: 0, width: `${MENU_W}px` } : {}),
+    ...(menuPosition === 'right'  ? { top: 0, right: 0, bottom: 0, width: `${MENU_W}px` } : {}),
+  };
+
+  const contentStyle: React.CSSProperties = {
+    position: 'absolute',
+    overflow: 'auto',
+    background: contentBg,
+    ...(menuPosition === 'top'    ? { top: `${MENU_H}px`, left: 0, right: 0, bottom: 0 } : {}),
+    ...(menuPosition === 'bottom' ? { top: 0, left: 0, right: 0, bottom: `${MENU_H}px` } : {}),
+    ...(menuPosition === 'left'   ? { top: 0, left: `${MENU_W}px`, right: 0, bottom: 0 } : {}),
+    ...(menuPosition === 'right'  ? { top: 0, left: 0, right: `${MENU_W}px`, bottom: 0 } : {}),
+    ...(MENU_H === 0 && MENU_W === 0 ? { inset: 0 } : {}),
+  };
+
+  return (
+    <div style={{ ...commonStyle, overflow: 'hidden', position: 'absolute' }}>
+      {/* Меню */}
+      <div style={menuStyle}>
+        {topLevel.map((page: any) => (
+          <div
+            key={page.id}
+            onClick={() => setActivePage(page)}
+            style={{
+              padding: isHoriz ? `0 ${menuFs}px` : `${menuFs / 2}px ${menuFs}px`,
+              cursor: 'pointer',
+              whiteSpace: 'nowrap',
+              background: activePage?.id === page.id ? 'rgba(255,255,255,0.15)' : 'transparent',
+              fontWeight: activePage?.id === page.id ? 'bold' : 'normal',
+              borderBottom: !isHoriz && activePage?.id === page.id ? '2px solid rgba(255,255,255,0.5)' : 'none',
+            }}
+          >
+            {page.title}
+            {/* Подпункты */}
+            {activePage?.id === page.id && children.length > 0 && !isHoriz && (
+              <div style={{ paddingLeft: '12px', marginTop: '4px' }}>
+                {children.map((child: any) => (
+                  <div
+                    key={child.id}
+                    onClick={(e) => { e.stopPropagation(); setActivePage(child); }}
+                    style={{ padding: '4px 0', fontSize: `${menuFs - 2}px`, opacity: 0.85, cursor: 'pointer' }}
+                  >
+                    › {child.title}
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        ))}
+      </div>
+
+      {/* Контент */}
+      <div style={contentStyle}>
+        {activePage?.htmlContent ? (
+          <div
+            style={{ padding: '16px', fontFamily: 'Arial, sans-serif', lineHeight: '1.6' }}
+            dangerouslySetInnerHTML={{ __html: activePage.htmlContent }}
+          />
+        ) : (
+          <div style={{ padding: '16px', color: '#aaa', fontSize: '14px' }}>Нет содержимого</div>
+        )}
+      </div>
+    </div>
+  );
+};
+// ──────────────────────────────────────────────────────────────────────────
   const renderWidget = (widget: Widget) => {
     if (hiddenWidgets.has(widget.id)) return null;
 
@@ -698,6 +981,59 @@ const PreviewPage: React.FC = () => {
       );
     }
 
+
+    // browser-menu
+    if (widget.type === 'browser-menu') {
+      return (
+        <BrowserMenuPreview
+          key={widget.id}
+          widget={widget}
+          allWidgets={project.widgets}
+          commonStyle={commonStyle}
+        />
+      );
+    }
+
+    // browser-content
+    if (widget.type === 'browser-content') {
+      return (
+        <BrowserContentPreview
+          key={widget.id}
+          widget={widget}
+          allWidgets={project.widgets}
+          commonStyle={commonStyle}
+        />
+      );
+    }
+
+    // Browser (legacy)
+    if (widget.type === 'browser') {
+      const pages: any[] = widget.properties.pages || [];
+      const menuPosition: string = widget.properties.menuPosition || 'top';
+      const menuBg: string = widget.properties.menuBgColor || '#2c3e50';
+      const contentBg: string = widget.properties.contentBgColor || '#ffffff';
+      const menuText: string = widget.properties.menuTextColor || '#ffffff';
+      const menuFs: number = widget.properties.menuFontSize || 14;
+
+      const MENU_H = (menuPosition === 'top' || menuPosition === 'bottom') ? 40 : 0;
+      const MENU_W = (menuPosition === 'left' || menuPosition === 'right') ? 160 : 0;
+
+      return (
+        <BrowserPreviewWidget
+          key={widget.id}
+          widget={widget}
+          pages={pages}
+          menuPosition={menuPosition}
+          menuBg={menuBg}
+          menuText={menuText}
+          menuFs={menuFs}
+          MENU_H={MENU_H}
+          MENU_W={MENU_W}
+          contentBg={contentBg}
+          commonStyle={commonStyle}
+        />
+      );
+    }
     return null;
   };
 

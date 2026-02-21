@@ -9,6 +9,121 @@ import ShapeWidget from './ShapeWidget';
 import MenuWidget from './MenuWidget';
 import './Canvas.css';
 import TextEditorOverlay from './TextEditorOverlay';
+import BrowserWidget from './BrowserWidget';
+import BrowserMenuWidget from './BrowserMenuWidget';
+import BrowserContentWidget from './BrowserContentWidget';
+import BrowserEditorModal, { BrowserPage } from './BrowserEditorModal';
+
+
+// ─── BrowserContentOverlay ──────────────────────────────────────────────────
+// iframe overlay поверх Konva-канваса для превью HTML-контента
+const BrowserContentOverlay: React.FC<{
+  widget: any;
+  zoom: number;
+  allWidgets: any[];
+}> = ({ widget, zoom, allWidgets }) => {
+  const browserId: string = widget.properties.browserId || '';
+  const contentBg: string = widget.properties.contentBgColor || '#ffffff';
+
+  const menuWidget = allWidgets.find(
+    (w: any) => w.type === 'browser-menu' && w.properties.browserId === browserId
+  );
+  const pages: any[] = menuWidget?.properties.pages || [];
+  const [activePageId, setActivePageId] = React.useState<string>(pages[0]?.id || '');
+
+  // Слушаем смену страницы (в редакторе не кликают, но на случай будущего)
+  React.useEffect(() => {
+    if (!activePageId && pages[0]) setActivePageId(pages[0].id);
+  }, [pages]);
+
+  const activePage = pages.find((p: any) => p.id === activePageId) || pages[0];
+
+  const left = widget.x * zoom;
+  const top = widget.y * zoom;
+  const width = widget.width * zoom;
+  const height = widget.height * zoom;
+
+  const FONT_FACES = [
+    ['Lato', 'Lato_400'], ['Lato', 'Lato_700', 'bold'],
+    ['Lobster', 'Lobster_400'], ['Montserrat', 'Montserrat_400'],
+    ['Montserrat', 'Montserrat_700', 'bold'], ['Nunito', 'Nunito_400'],
+    ['Nunito', 'Nunito_700', 'bold'], ['Open Sans', 'Open_Sans_400'],
+    ['Open Sans', 'Open_Sans_700', 'bold'], ['Oswald', 'Oswald_400'],
+    ['Pacifico', 'Pacifico_400'], ['PT Sans', 'PT_Sans_400'],
+    ['PT Sans', 'PT_Sans_700', 'bold'], ['PT Serif', 'PT_Serif_400'],
+    ['PT Serif', 'PT_Serif_700', 'bold'], ['Raleway', 'Raleway_400'],
+    ['Raleway', 'Raleway_700', 'bold'], ['Roboto', 'Roboto_400'],
+    ['Roboto', 'Roboto_700', 'bold'], ['Ubuntu', 'Ubuntu_400'],
+    ['Ubuntu', 'Ubuntu_700', 'bold'],
+  ].map(([family, file, weight]: any) =>
+    `@font-face { font-family: '${family}'; src: url('/fonts/${file}.ttf'); font-weight: ${weight || 'normal'}; }`
+  ).join('\n');
+
+  const linkScript = `<script>
+document.addEventListener('click', function(e) {
+  var a = e.target.closest('a');
+  if (!a) return;
+  var href = a.getAttribute('href') || '';
+  if (href.startsWith('browser-page://') || href.startsWith('slide://')) {
+    e.preventDefault();
+    window.parent.postMessage({ type: 'browser-link', href: href, browserId: '${browserId}' }, '*');
+  }
+});
+</script>`;
+
+  const html = `<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<style>
+  ${FONT_FACES}
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: ${contentBg === 'transparent' ? 'transparent' : contentBg};
+    font-family: Arial, sans-serif;
+    font-size: 14px;
+    line-height: 1.6;
+    overflow: auto;
+    padding: 16px;
+  }
+  h1,h2,h3 { margin-bottom: 0.5em; margin-top: 0.8em; }
+  p { margin-bottom: 0.6em; }
+  ul,ol { padding-left: 1.5em; margin-bottom: 0.6em; }
+</style>
+</head>
+<body>${activePage?.htmlContent || '<p style="color:#aaa">Нет содержимого</p>'}${linkScript}
+</body>
+</html>`;
+
+  return (
+    <div
+      style={{
+        position: 'absolute',
+        left: `${left}px`,
+        top: `${top}px`,
+        width: `${width}px`,
+        height: `${height}px`,
+        pointerEvents: 'none',
+        overflow: 'hidden',
+        zIndex: 1,
+      }}
+    >
+      <iframe
+        srcDoc={html}
+        style={{
+          width: '100%',
+          height: '100%',
+          border: 'none',
+          background: contentBg === 'transparent' ? 'transparent' : contentBg,
+          display: 'block',
+        }}
+        sandbox="allow-same-origin allow-scripts"
+        title="browser-content-preview"
+      />
+    </div>
+  );
+};
+// ────────────────────────────────────────────────────────────────────────────
 
 // Цвета для fallback отображения (если специальный компонент не используется)
 const WIDGET_COLORS: Record<string, string> = {
@@ -40,6 +155,25 @@ const Canvas: React.FC = () => {
 
   const stageRef = useRef<any>(null);
   const transformerRef = useRef<any>(null);
+
+  const [editingBrowserId, setEditingBrowserId] = React.useState<string | null>(null);
+
+  React.useEffect(() => {
+    const handler = (e: Event) => {
+      setEditingBrowserId((e as CustomEvent).detail.widgetId);
+    };
+    window.addEventListener('open-browser-editor', handler);
+    return () => window.removeEventListener('open-browser-editor', handler);
+  }, []);
+
+  React.useEffect(() => {
+    const msgHandler = (e: MessageEvent) => {
+      if (e.data?.type !== 'browser-link') return;
+      console.log('[Browser] Link clicked:', e.data.href);
+    };
+    window.addEventListener('message', msgHandler);
+    return () => window.removeEventListener('message', msgHandler);
+  }, []);
   const [editingWidget, setEditingWidget] = React.useState<{id: string; x: number; y: number; width: number; height: number; html: string} | null>(null);
 
   // Функция привязки к сетке
@@ -110,6 +244,11 @@ const Canvas: React.FC = () => {
     const html = widget.properties.htmlContent
       || (widget.properties.text ? `<p>${widget.properties.text}</p>` : '<p></p>');
     setEditingWidget({ id: widget.id, x: widget.x, y: widget.y, width: widget.width, height: widget.height, html });
+  };
+
+  const handleBrowserDblClick = (widgetId: string, e: any) => {
+    e.cancelBubble = true;
+    setEditingBrowserId(widgetId);
   };
 
   const handleEditorClose = (html: string) => {
@@ -413,6 +552,70 @@ const Canvas: React.FC = () => {
                   );
                 }
 
+                // Старый монолитный browser — отключён
+                if (widget.type === 'browser') {
+                  return null;
+                }
+
+                // browser-menu
+                if (widget.type === 'browser-menu') {
+                  return (
+                    <React.Fragment key={widget.id}>
+                      <BrowserMenuWidget
+                        widget={widget}
+                        isSelected={selectedWidgetIds.includes(widget.id)}
+                        onSelect={(e) => handleWidgetClick(widget.id, e)}
+                        onDblClick={(e) => handleBrowserDblClick(widget.id, e)}
+                        onDragEnd={(e) => handleDragEnd(widget.id, e)}
+                        onTransformEnd={(e) => handleTransformEnd(widget.id, e)}
+                        dragBoundFunc={snapToGrid ? dragBoundFunc : undefined}
+                      />
+                      {isLocked && (
+                        <Text x={widget.x + 5} y={widget.y + 5} text="🔒" fontSize={16} listening={false} />
+                      )}
+                    </React.Fragment>
+                  );
+                }
+
+                // browser-content
+                if (widget.type === 'browser-content') {
+                  return (
+                    <React.Fragment key={widget.id}>
+                      <BrowserContentWidget
+                        widget={widget}
+                        isSelected={selectedWidgetIds.includes(widget.id)}
+                        onSelect={(e) => handleWidgetClick(widget.id, e)}
+                        onDragEnd={(e) => handleDragEnd(widget.id, e)}
+                        onTransformEnd={(e) => handleTransformEnd(widget.id, e)}
+                        dragBoundFunc={snapToGrid ? dragBoundFunc : undefined}
+                      />
+                      {isLocked && (
+                        <Text x={widget.x + 5} y={widget.y + 5} text="🔒" fontSize={16} listening={false} />
+                      )}
+                    </React.Fragment>
+                  );
+                }
+
+                // Старый монолитный browser — отключён (заглушка ниже)
+                if (widget.type === 'browser_disabled') {
+                  return (
+                    <React.Fragment key={widget.id}>
+                      <BrowserWidget
+                        widget={widget}
+                        isSelected={selectedWidgetIds.includes(widget.id)}
+                        onSelect={(e) => handleWidgetClick(widget.id, e)}
+                        onDblClick={(e) => handleBrowserDblClick(widget.id, e)}
+                        onDragEnd={(e) => handleDragEnd(widget.id, e)}
+                        onTransformEnd={(e) => handleTransformEnd(widget.id, e)}
+                        dragBoundFunc={snapToGrid ? dragBoundFunc : undefined}
+                      />
+                      {isLocked && (
+                        <Text x={widget.x + 5} y={widget.y + 5} text="🔒" fontSize={16} listening={false} />
+                      )}
+                    </React.Fragment>
+                  );
+                }
+
                 // Для остальных типов - обычный Rect (fallback)
                 return (
                   <React.Fragment key={widget.id}>
@@ -460,6 +663,43 @@ const Canvas: React.FC = () => {
               />
             </Layer>
           </Stage>
+
+          {/* BrowserContent iframe overlays */}
+          {project?.widgets
+            .filter((w: any) => w.type === 'browser-content')
+            .map((w: any) => (
+              <BrowserContentOverlay
+                key={`overlay-${w.id}`}
+                widget={w}
+                zoom={zoom}
+                allWidgets={project.widgets}
+              />
+            ))
+          }
+
+          {/* Browser editor modal */}
+          {editingBrowserId && (() => {
+            const bw = project?.widgets.find(w => w.id === editingBrowserId && (w.type === 'browser' || w.type === 'browser-menu'));
+            if (!bw) return null;
+            return (
+              <BrowserEditorModal
+                pages={bw.properties.pages || []}
+                menuPosition={bw.properties.menuPosition || 'top'}
+                menuBgColor={bw.properties.menuBgColor || '#2c3e50'}
+                menuTextColor={bw.properties.menuTextColor || '#ffffff'}
+                menuFontSize={bw.properties.menuFontSize || 14}
+                contentBgColor={bw.properties.contentBgColor || '#ffffff'}
+                orientation={bw.properties.orientation || 'vertical'}
+                onSave={(pages: BrowserPage[], settings) => {
+                  updateWidget(editingBrowserId, {
+                    properties: { ...bw.properties, pages, ...settings, browserId: bw.properties.browserId }
+                  });
+                  setEditingBrowserId(null);
+                }}
+                onClose={() => setEditingBrowserId(null)}
+              />
+            );
+          })()}
 
           {/* Rich text overlay */}
           {editingWidget && (

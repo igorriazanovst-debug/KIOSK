@@ -1,0 +1,175 @@
+.bmodal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.6);
+  z-index: 10000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.bmodal {
+  background: #1e1e1e;
+  border-radius: 10px;
+  width: 90vw;
+  max-width: 1100px;
+  height: 80vh;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 8px 40px rgba(0,0,0,0.5);
+  overflow: hidden;
+}
+.bmodal-header {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 14px 20px;
+  background: #252525;
+  border-bottom: 1px solid #333;
+  flex-shrink: 0;
+}
+.bmodal-header h2 { font-size: 16px; color: #fff; margin: 0; }
+.bmodal-tabs { display: flex; gap: 4px; margin-left: 12px; }
+.bmodal-tabs button {
+  background: #333; border: none; color: #aaa;
+  padding: 5px 14px; border-radius: 6px; cursor: pointer; font-size: 13px;
+}
+.bmodal-tabs button.active { background: #007acc; color: #fff; }
+.bmodal-close {
+  margin-left: auto; background: none; border: none; color: #888;
+  font-size: 18px; cursor: pointer; padding: 4px 8px; border-radius: 4px;
+}
+.bmodal-close:hover { color: #fff; background: #333; }
+
+.bmodal-body { display: flex; flex: 1; overflow: hidden; }
+
+.bmodal-tree {
+  width: 220px; min-width: 220px;
+  background: #252525; border-right: 1px solid #333;
+  display: flex; flex-direction: column; overflow: hidden;
+}
+.btree-header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 10px 12px; font-size: 12px; color: #888; border-bottom: 1px solid #333;
+}
+.btree-header button {
+  background: #007acc; border: none; color: #fff;
+  padding: 3px 10px; border-radius: 4px; cursor: pointer; font-size: 12px;
+}
+.btree-list { flex: 1; overflow-y: auto; }
+.btree-item {
+  display: flex; align-items: center; gap: 6px;
+  padding: 7px 8px; cursor: pointer; font-size: 13px; color: #ccc;
+  border-radius: 4px; margin: 1px 4px;
+}
+.btree-item:hover { background: #2e2e2e; }
+.btree-item.selected { background: #1a3a52; color: #fff; }
+.btree-icon { font-size: 14px; flex-shrink: 0; }
+.btree-title { flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.btree-actions { display: none; gap: 4px; }
+.btree-item:hover .btree-actions { display: flex; }
+.btree-actions button {
+  background: none; border: none; color: #888;
+  cursor: pointer; font-size: 12px; padding: 2px 4px; border-radius: 3px;
+}
+.btree-actions button:hover { background: #444; color: #fff; }
+.btree-empty { padding: 20px; text-align: center; color: #555; font-size: 13px; }
+
+.bmodal-editor {
+  flex: 1; display: flex; flex-direction: column; overflow: hidden; background: #1e1e1e;
+}
+.bpage-title-row { padding: 10px 16px; border-bottom: 1px solid #333; flex-shrink: 0; }
+.bpage-title-input {
+  width: 100%; background: #2a2a2a; border: 1px solid #444;
+  border-radius: 6px; color: #fff; font-size: 15px; font-weight: 600;
+  padding: 7px 12px; outline: none;
+}
+.bpage-title-input:focus { border-color: #007acc; }
+.bpage-toolbar {
+  display: flex; align-items: center; gap: 3px;
+  padding: 6px 16px; background: #252525; border-bottom: 1px solid #333;
+  flex-wrap: wrap; flex-shrink: 0;
+}
+.bpage-toolbar button {
+  background: none; border: none; color: #ccc;
+  cursor: pointer; padding: 4px 8px; border-radius: 4px; font-size: 13px; font-weight: 600;
+}
+.bpage-toolbar button:hover { background: #333; color: #fff; }
+.bpage-toolbar button.active { background: #007acc; color: #fff; }
+.btoolbar-sep { width: 1px; height: 18px; background: #444; margin: 0 4px; }
+.bpage-content { flex: 1; overflow-y: auto; padding: 16px; background: #fff; color: #000; }
+.bpage-content .ProseMirror {
+  outline: none; min-height: 200px;
+  font-family: Arial, sans-serif; font-size: 14px; line-height: 1.6;
+}
+.bpage-empty {
+  flex: 1; display: flex; align-items: center; justify-content: center;
+  color: #555; font-size: 14px;
+}
+
+.bmodal-settings { padding: 24px; display: flex; flex-direction: column; gap: 16px; flex: 1; }
+.bsetting-row { display: flex; align-items: center; gap: 16px; }
+.bsetting-row label { width: 180px; color: #aaa; font-size: 13px; }
+.bsetting-row select,
+.bsetting-row input[type="number"] {
+  background: #2a2a2a; border: 1px solid #444; border-radius: 6px;
+  color: #fff; padding: 6px 10px; font-size: 13px; outline: none;
+}
+.bsetting-row input[type="color"] {
+  width: 40px; height: 32px; border: none; border-radius: 4px; cursor: pointer;
+}
+
+.bmodal-footer {
+  display: flex; justify-content: flex-end; gap: 10px;
+  padding: 12px 20px; border-top: 1px solid #333; background: #252525; flex-shrink: 0;
+}
+.bbtn-primary {
+  background: #007acc; color: #fff; border: none;
+  padding: 8px 20px; border-radius: 6px; cursor: pointer; font-size: 13px; font-weight: 600;
+}
+.bbtn-primary:hover { background: #0086e0; }
+.bbtn-secondary {
+  background: #333; color: #ccc; border: none;
+  padding: 8px 20px; border-radius: 6px; cursor: pointer; font-size: 13px;
+}
+.bbtn-secondary:hover { background: #444; color: #fff; }
+
+/* ─── Insert Dialogs ─────────────────────────────────────────────────────── */
+.binsert-dialog { padding: 0; }
+.binsert-header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 12px 16px; background: #252525; border-bottom: 1px solid #333;
+  font-size: 14px; color: #fff;
+}
+.binsert-header button {
+  background: none; border: none; color: #888; font-size: 16px; cursor: pointer;
+}
+.binsert-tabs {
+  display: flex; gap: 4px; padding: 8px 16px; border-bottom: 1px solid #333; background: #252525;
+}
+.binsert-tabs button {
+  background: #333; border: none; color: #aaa; padding: 4px 12px;
+  border-radius: 4px; cursor: pointer; font-size: 12px;
+}
+.binsert-tabs button.active { background: #007acc; color: #fff; }
+.binsert-body { padding: 16px; }
+.binsert-input {
+  width: 100%; background: #2a2a2a; border: 1px solid #444; border-radius: 6px;
+  color: #fff; padding: 7px 10px; font-size: 13px; outline: none; box-sizing: border-box;
+}
+.binsert-input:focus { border-color: #007acc; }
+.binsert-upload-btn {
+  background: #333; border: 1px solid #444; color: #ccc; padding: 8px 16px;
+  border-radius: 6px; cursor: pointer; font-size: 13px; width: 100%;
+}
+.binsert-upload-btn:hover { background: #444; }
+.binsert-options {
+  padding: 0 16px 12px; display: flex; flex-direction: column; gap: 8px;
+  font-size: 12px; color: #aaa;
+}
+.binsert-options select, .binsert-options input[type="text"] {
+  background: #2a2a2a; border: 1px solid #444; border-radius: 4px;
+  color: #fff; padding: 4px 8px; font-size: 12px; margin-left: 8px;
+}
+.binsert-footer {
+  padding: 12px 16px; border-top: 1px solid #333; display: flex; justify-content: flex-end;
+}

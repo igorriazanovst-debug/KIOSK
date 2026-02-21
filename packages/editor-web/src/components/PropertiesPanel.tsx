@@ -193,6 +193,172 @@ const PropertiesPanel: React.FC = () => {
         <div className="property-section">
           <h4>Параметры виджета</h4>
           
+
+          {selectedWidget.type === 'browser' && (
+            <>
+              <h4>Локальный браузер</h4>
+              <div className="property-field">
+                <span style={{ fontSize: '12px', color: '#888' }}>
+                  Страниц: {(selectedWidget.properties.pages || []).length}
+                </span>
+              </div>
+              <div className="property-field">
+                <label>Позиция меню</label>
+                <select
+                  value={selectedWidget.properties.menuPosition || 'top'}
+                  onChange={(e) => handlePropertiesChange('menuPosition', e.target.value)}
+                >
+                  <option value="top">Сверху</option>
+                  <option value="bottom">Снизу</option>
+                  <option value="left">Слева</option>
+                  <option value="right">Справа</option>
+                </select>
+              </div>
+              <div className="property-field">
+                <label>Цвет фона меню</label>
+                <input type="color"
+                  value={selectedWidget.properties.menuBgColor || '#2c3e50'}
+                  onChange={(e) => handlePropertiesChange('menuBgColor', e.target.value)}
+                />
+              </div>
+              <div className="property-field">
+                <label>Цвет текста меню</label>
+                <input type="color"
+                  value={selectedWidget.properties.menuTextColor || '#ffffff'}
+                  onChange={(e) => handlePropertiesChange('menuTextColor', e.target.value)}
+                />
+              </div>
+              <div className="property-field">
+                <label>Фон контента</label>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                  <input type="color"
+                    value={selectedWidget.properties.contentBgColor === 'transparent' ? '#ffffff' : (selectedWidget.properties.contentBgColor || '#ffffff')}
+                    disabled={selectedWidget.properties.contentBgColor === 'transparent'}
+                    onChange={(e) => handlePropertiesChange('contentBgColor', e.target.value)}
+                  />
+                  <label style={{ fontSize: '12px', color: '#aaa' }}>
+                    <input type="checkbox"
+                      checked={selectedWidget.properties.contentBgColor === 'transparent'}
+                      onChange={(e) => handlePropertiesChange('contentBgColor', e.target.checked ? 'transparent' : '#ffffff')}
+                    />{' '}Прозрачный
+                  </label>
+                </div>
+              </div>
+              <div className="property-field">
+                <label>Размер шрифта</label>
+                <input type="number" min={10} max={32}
+                  value={selectedWidget.properties.menuFontSize || 14}
+                  onChange={(e) => handlePropertiesChange('menuFontSize', Number(e.target.value))}
+                />
+              </div>
+              <div className="property-field" style={{ marginTop: '8px' }}>
+                <button
+                  style={{
+                    width: '100%', background: '#007acc', color: '#fff',
+                    border: 'none', padding: '8px', borderRadius: '6px',
+                    cursor: 'pointer', fontSize: '13px'
+                  }}
+                  onClick={() => {
+                    window.dispatchEvent(new CustomEvent('open-browser-editor', {
+                      detail: { widgetId: selectedWidget.id }
+                    }));
+                  }}
+                >
+                  ✏️ Редактировать страницы
+                </button>
+              </div>
+            </>
+          )}
+
+
+              {/* === BROWSER-MENU === */}
+              {selectedWidget.type === 'browser-menu' && (
+                <>
+                  <h4>Меню браузера</h4>
+                  <div className="property-field">
+                    <label>ID связи</label>
+                    <input type="text" readOnly
+                      value={selectedWidget.properties.browserId || ''}
+                      style={{ fontSize: '11px', color: '#888' }}
+                    />
+                  </div>
+                  <div className="property-field">
+                    <span style={{ fontSize: '12px', color: '#888' }}>
+                      Страниц: {(selectedWidget.properties.pages || []).length}
+                    </span>
+                  </div>
+                  <div className="property-field">
+                    <label>Ориентация</label>
+                    <select
+                      value={selectedWidget.properties.orientation || 'vertical'}
+                      onChange={(e) => handlePropertiesChange('orientation', e.target.value)}
+                    >
+                      <option value="vertical">Вертикальная</option>
+                      <option value="horizontal">Горизонтальная</option>
+                    </select>
+                  </div>
+                  <div className="property-field">
+                    <label>Цвет фона меню</label>
+                    <input type="color"
+                      value={selectedWidget.properties.menuBgColor || '#2c3e50'}
+                      onChange={(e) => handlePropertiesChange('menuBgColor', e.target.value)}
+                    />
+                  </div>
+                  <div className="property-field">
+                    <label>Цвет текста</label>
+                    <input type="color"
+                      value={selectedWidget.properties.menuTextColor || '#ffffff'}
+                      onChange={(e) => handlePropertiesChange('menuTextColor', e.target.value)}
+                    />
+                  </div>
+                  <div className="property-field">
+                    <label>Размер шрифта</label>
+                    <input type="number" min={10} max={32}
+                      value={selectedWidget.properties.menuFontSize || 14}
+                      onChange={(e) => handlePropertiesChange('menuFontSize', Number(e.target.value))}
+                    />
+                  </div>
+                  <div className="property-field" style={{ marginTop: '8px' }}>
+                    <button
+                      style={{ width: '100%', background: '#007acc', color: '#fff', border: 'none', padding: '8px', borderRadius: '6px', cursor: 'pointer', fontSize: '13px' }}
+                      onClick={() => window.dispatchEvent(new CustomEvent('open-browser-editor', { detail: { widgetId: selectedWidget.id } }))}
+                    >
+                      ✏️ Редактировать страницы
+                    </button>
+                  </div>
+                </>
+              )}
+
+              {/* === BROWSER-CONTENT === */}
+              {selectedWidget.type === 'browser-content' && (
+                <>
+                  <h4>Контент браузера</h4>
+                  <div className="property-field">
+                    <label>ID связи</label>
+                    <input type="text" readOnly
+                      value={selectedWidget.properties.browserId || ''}
+                      style={{ fontSize: '11px', color: '#888' }}
+                    />
+                  </div>
+                  <div className="property-field">
+                    <label>Фон контента</label>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                      <input type="color"
+                        value={selectedWidget.properties.contentBgColor === 'transparent' ? '#ffffff' : (selectedWidget.properties.contentBgColor || '#ffffff')}
+                        disabled={selectedWidget.properties.contentBgColor === 'transparent'}
+                        onChange={(e) => handlePropertiesChange('contentBgColor', e.target.value)}
+                      />
+                      <label style={{ fontSize: '12px', color: '#aaa' }}>
+                        <input type="checkbox"
+                          checked={selectedWidget.properties.contentBgColor === 'transparent'}
+                          onChange={(e) => handlePropertiesChange('contentBgColor', e.target.checked ? 'transparent' : '#ffffff')}
+                        />{' '}Прозрачный
+                      </label>
+                    </div>
+                  </div>
+                </>
+              )}
+
           {selectedWidget.type === 'shape' && (
             <>
               <div className="property-field">

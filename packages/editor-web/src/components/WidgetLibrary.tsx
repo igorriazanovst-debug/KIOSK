@@ -1,6 +1,6 @@
 import React from 'react';
 import { useEditorStore } from '../stores/editorStore';
-import { Square, Type, Image, Video, MousePointer, Menu } from 'lucide-react';
+import { Square, Type, Image, Video, MousePointer, Menu, Globe } from 'lucide-react';
 import OutlinePanel from './OutlinePanel';
 import './WidgetLibrary.css';
 
@@ -59,6 +59,7 @@ const WidgetLibrary: React.FC = () => {
         loop: false
       }
     },
+
     {
       type: 'menu',
       name: 'Меню',
@@ -118,6 +119,52 @@ const WidgetLibrary: React.FC = () => {
         })}
       </div>
       <div className="widget-library-footer">
+        <button
+          className="btn-secondary"
+          style={{ width: '100%', fontSize: '12px', marginBottom: '6px', background: '#1a3a52', color: '#7ec8e3', borderColor: '#2a5a72' }}
+          onClick={() => {
+            if (!project) return;
+            const { addWidget } = useEditorStore.getState();
+            const browserId = Math.random().toString(36).substr(2, 9);
+            const cx = Math.round(project.canvas.width / 2);
+            const cy = Math.round(project.canvas.height / 2);
+            const maxZ = project.widgets.reduce((m: number, w: any) => Math.max(m, w.zIndex || 0), 0);
+            addWidget({
+              id: `bm_${browserId}`,
+              type: 'browser-menu',
+              x: cx - 300,
+              y: cy - 200,
+              width: 200,
+              height: 400,
+              zIndex: maxZ + 1,
+              properties: {
+                browserId,
+                orientation: 'vertical',
+                menuBgColor: '#2c3e50',
+                menuTextColor: '#ffffff',
+                menuFontSize: 14,
+                pages: [],
+                contentBgColor: '#ffffff',
+                menuPosition: 'top',
+              }
+            });
+            addWidget({
+              id: `bc_${browserId}`,
+              type: 'browser-content',
+              x: cx - 80,
+              y: cy - 200,
+              width: 500,
+              height: 400,
+              zIndex: maxZ + 2,
+              properties: {
+                browserId,
+                contentBgColor: '#ffffff',
+              }
+            });
+          }}
+        >
+          🌐 + Браузер (меню + контент)
+        </button>
         <button className="btn-secondary" style={{ width: '100%', fontSize: '12px' }}>
           + Импорт виджета
         </button>
