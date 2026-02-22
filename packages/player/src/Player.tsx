@@ -105,6 +105,7 @@ const Player: React.FC<PlayerProps> = ({ embedded = false }) => {
   const [expandedMenuItem, setExpandedMenuItem] = useState<string | null>(null);
   const [popupVisible, setPopupVisible] = useState(false);
   const [popupData, setPopupData] = useState<any>(null);
+  const [browserActivePages, setBrowserActivePages] = useState<Record<string, string>>({});
   const videoRefs = useRef<Map<string, HTMLVideoElement>>(new Map());
 
   useEffect(() => {
@@ -294,6 +295,165 @@ const Player: React.FC<PlayerProps> = ({ embedded = false }) => {
     });
   };
 
+
+  const processGalleries = (html: string): string => {
+    if (!html || !html.includes('data-gallery-images')) return html;
+    const parts = html.split(/<div /);
+    const processed = parts.map((part, idx) => {
+      if (idx === 0) return part;
+      if (!part.includes('data-gallery-images')) return '<div ' + part;
+      const closeTag = part.indexOf('>');
+      if (closeTag === -1) return '<div ' + part;
+      const attrs = part.substring(0, closeTag);
+      const rest = part.substring(closeTag + 1);
+      const imagesMatch = attrs.match(/data-gallery-images=(?:"(.*?)(?:"\s|"$)|'(.*?)(?:'\s|'$))/s);
+      const colsMatch = attrs.match(/data-gallery-cols=(?:"([^"\s]*)"|'([^'\s]*)')/);
+      if (!imagesMatch) return '<div ' + part;
+      const rawImages = (imagesMatch[1] !== undefined ? imagesMatch[1] : imagesMatch[2] || '[]')
+        .replace(/&quot;/g, '"').replace(/&#39;/g, "'").replace(/&amp;/g, '&');
+      const rawCols = colsMatch ? (colsMatch[1] !== undefined ? colsMatch[1] : colsMatch[2] || '3') : '3';
+      let imgs: string[] = [];
+      try { imgs = JSON.parse(rawImages); } catch { return '<div ' + part; }
+      if (imgs.length === 0) return '<div ' + part;
+      const cols = parseInt(rawCols) || 3;
+      const total = imgs.length;
+      const id = 'g' + Math.random().toString(36).substr(2, 6);
+      const thumbItems = imgs.map((src: string, i: number) => {
+        const safeSrc = src.replace(/'/g, "\'");
+        const openFn = `(function(){var lb=document.getElementById('${id}_lb');lb.setAttribute('data-cur','${i}');lb.style.display='flex';document.getElementById('${id}_img').src='${safeSrc}';document.getElementById('${id}_cnt').textContent='${i+1} / ${total}';})()`;
+        return `<div style="width:min(calc(${100/cols}% - 8px), 100px);height:100px;overflow:hidden;border-radius:6px;cursor:pointer;display:inline-block;margin:4px;" onclick="${openFn}"><img src="${src}" style="width:100%;height:100%;object-fit:cover;" /></div>`;
+      }).join('');
+      const allSrcs = imgs.map((s: string) => s.replace(/'/g, "\'")).join("','");
+      const prevFn = `(function(){var lb=document.getElementById('${id}_lb');var srcs=['${allSrcs}'];var c=(parseInt(lb.getAttribute('data-cur'))-1+${total})%${total};lb.setAttribute('data-cur',c);document.getElementById('${id}_img').src=srcs[c];document.getElementById('${id}_cnt').textContent=(c+1)+' / ${total}';})()`;
+      const nextFn = `(function(){var lb=document.getElementById('${id}_lb');var srcs=['${allSrcs}'];var c=(parseInt(lb.getAttribute('data-cur'))+1)%${total};lb.setAttribute('data-cur',c);document.getElementById('${id}_img').src=srcs[c];document.getElementById('${id}_cnt').textContent=(c+1)+' / ${total}';})()`;
+      const closeFn = `document.getElementById('${id}_lb').style.display='none'`;
+      const closingDiv = rest.indexOf('</div>');
+      const afterGalleryDiv = closingDiv !== -1 ? rest.substring(closingDiv + 6) : rest;
+      return `<div style="margin:12px 0;"><div style="display:flex;flex-wrap:wrap;">${thumbItems}</div><div id="${id}_lb" data-cur="0" onclick="if(event.target===this){${closeFn}}" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.92);z-index:99999;align-items:center;justify-content:center;flex-direction:column;"><img id="${id}_img" src="" style="max-width:90vw;max-height:80vh;object-fit:contain;border-radius:8px;" /><div style="display:flex;align-items:center;gap:20px;margin-top:16px;"><button onclick="${prevFn}" style="background:rgba(255,255,255,0.15);color:#fff;border:none;border-radius:50%;width:44px;height:44px;font-size:20px;cursor:pointer;">◀</button><span id="${id}_cnt" style="color:#aaa;font-size:13px;"></span><button onclick="${nextFn}" style="background:rgba(255,255,255,0.15);color:#fff;border:none;border-radius:50%;width:44px;height:44px;font-size:20px;cursor:pointer;">▶</button></div><button onclick="${closeFn}" style="position:absolute;top:18px;right:24px;background:none;color:#fff;border:none;font-size:28px;cursor:pointer;">✕</button></div></div>${afterGalleryDiv}`;
+    });
+    return processed.join('');
+  };
+
+
+  const renderBrowserMenu = (widget: Widget, baseStyle: React.CSSProperties) => {
+    const browserId: string = widget.properties.browserId || '';
+    const pages: any[] = widget.properties.pages || [];
+    const orientation: string = widget.properties.orientation || 'vertical';
+    const menuBg: string = widget.properties.menuBgColor || '#2c3e50';
+    const menuText: string = widget.properties.menuTextColor || '#ffffff';
+    const menuFs: number = widget.properties.menuFontSize || 14;
+    const isHoriz = orientation === 'horizontal';
+    const activePageId = browserActivePages[browserId];
+    const topLevel = pages.filter((p: any) => !p.parentId);
+
+    return (
+      <div key={widget.id} style={{
+        ...baseStyle,
+        background: menuBg,
+        display: 'flex',
+        flexDirection: isHoriz ? 'row' : 'column',
+        overflow: 'hidden',
+      }}>
+        {topLevel.map((page: any) => {
+          const children = pages.filter((p: any) => p.parentId === page.id);
+          const isActive = activePageId === page.id || (!activePageId && pages[0]?.id === page.id);
+          return (
+            <div key={page.id} style={{ position: 'relative' }}>
+              <div
+                onClick={() => setBrowserActivePages(prev => ({ ...prev, [browserId]: page.id }))}
+                style={{
+                  padding: isHoriz ? `0 ${menuFs}px` : `${Math.round(menuFs * 0.6)}px ${menuFs}px`,
+                  color: menuText,
+                  fontSize: `${menuFs}px`,
+                  cursor: 'pointer',
+                  background: isActive ? 'rgba(255,255,255,0.15)' : 'transparent',
+                  fontWeight: isActive ? 'bold' : 'normal',
+                  whiteSpace: 'nowrap',
+                  display: 'flex',
+                  alignItems: 'center',
+                  minHeight: isHoriz ? '100%' : `${menuFs * 2.2}px`,
+                  userSelect: 'none',
+                }}
+              >
+                {page.title}
+              </div>
+              {children.length > 0 && (
+                <div style={{
+                  position: isHoriz ? 'absolute' : 'relative',
+                  top: isHoriz ? '100%' : undefined,
+                  left: 0,
+                  background: menuBg,
+                  zIndex: 100,
+                  minWidth: '140px',
+                }}>
+                  {children.map((child: any) => (
+                    <div
+                      key={child.id}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setBrowserActivePages(prev => ({ ...prev, [browserId]: child.id }));
+                      }}
+                      style={{
+                        padding: `${Math.round(menuFs * 0.5)}px ${menuFs * 1.5}px`,
+                        color: menuText,
+                        fontSize: `${menuFs - 1}px`,
+                        cursor: 'pointer',
+                        userSelect: 'none',
+                      }}
+                    >
+                      {child.title}
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          );
+        })}
+      </div>
+    );
+  };
+
+  const renderBrowserContent = (widget: Widget, baseStyle: React.CSSProperties) => {
+    const browserId: string = widget.properties.browserId || '';
+    const contentBg: string = widget.properties.contentBgColor || '#ffffff';
+    const activePageId = browserActivePages[browserId];
+
+    const menuWidget = project?.widgets.find(
+      (w: any) => w.type === 'browser-menu' && w.properties.browserId === browserId
+    );
+    const pages: any[] = menuWidget?.properties.pages || [];
+    const activePage = activePageId
+      ? pages.find((p: any) => p.id === activePageId)
+      : pages[0];
+
+    const handleClick = (e: React.MouseEvent<HTMLDivElement>) => {
+      const a = (e.target as HTMLElement).closest('a');
+      if (!a) return;
+      const href = a.getAttribute('href') || '';
+      if (href.startsWith('browser-page://')) {
+        e.preventDefault();
+        const pageId = href.replace('browser-page://', '');
+        setBrowserActivePages(prev => ({ ...prev, [browserId]: pageId }));
+      }
+    };
+
+    return (
+      <div key={widget.id} style={{ ...baseStyle, background: contentBg, overflow: 'auto' }}>
+        {activePage?.htmlContent ? (
+          <div
+            style={{ padding: '16px', fontFamily: 'Arial, sans-serif', lineHeight: '1.6' }}
+            dangerouslySetInnerHTML={{ __html: processGalleries(activePage.htmlContent) }}
+            onClick={handleClick}
+          />
+        ) : (
+          <div style={{ padding: '16px', color: '#aaa', fontSize: '14px' }}>
+            {pages.length === 0 ? 'Нет страниц' : 'Выберите страницу в меню'}
+          </div>
+        )}
+      </div>
+    );
+  };
+
   const renderWidget = (widget: Widget) => {
     if (hiddenWidgets.has(widget.id)) return null;
 
@@ -324,6 +484,10 @@ const Player: React.FC<PlayerProps> = ({ embedded = false }) => {
         return renderVideo(widget, commonStyle);
       case 'menu':
         return renderMenu(widget, commonStyle);
+      case 'browser-menu':
+        return renderBrowserMenu(widget, commonStyle);
+      case 'browser-content':
+        return renderBrowserContent(widget, commonStyle);
       default:
         return null;
     }

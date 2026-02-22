@@ -16,6 +16,9 @@ import adminRoutes from './routes/admin.routes';
 // Client API routes
 import authRoutes from './routes/auth.routes';
 import projectRoutes from './routes/project.routes';
+// Builds (player packaging)
+// @ts-ignore
+import buildsRoutes from './routes/builds.js';
 
 // NEW: Client API routes
 
@@ -107,6 +110,7 @@ app.use('/api/admin', adminRoutes);
 // Client API endpoints
 app.use('/api/auth', authRoutes);
 app.use('/api/projects', projectRoutes);
+app.use('/api/builds', buildsRoutes);
 
 // Storage stats endpoint (requires authentication)
 app.get('/api/storage/stats', async (req, res) => {

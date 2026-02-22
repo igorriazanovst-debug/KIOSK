@@ -589,7 +589,8 @@ const PdfInsertDialog: React.FC<PdfInsertDialogProps> = ({ onInsert, onClose, pr
       const uploaded = await apiClient.uploadFile(projectId, file);
 
       // 2. Конвертируем в страницы
-      const token = sessionStorage.getItem('auth_token') || localStorage.getItem('auth_token') || '';
+      const storedAuth = sessionStorage.getItem('kiosk_auth_token');
+      const token = storedAuth ? (JSON.parse(storedAuth).token || '') : '';
       const baseUrl = apiClient.getBaseUrl();
       const resp = await fetch(`${baseUrl}/api/projects/${projectId}/pdf-pages`, {
         method: 'POST',

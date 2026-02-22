@@ -51,6 +51,21 @@ async function initFolders() {
 
 initFolders();
 
+
+// Заменяет относительные /api/... URL на абсолютные в данных проекта
+function resolveProjectUrls(projectData, baseUrl) {
+  let json = JSON.stringify(projectData);
+  // Заменяем обычные /api/ пути
+  const before = (json.match(/\/api\//g) || []).length;
+  json = json.replace(/\/api\//g, `${baseUrl}/api/`);
+  // Заменяем HTML-encoded варианты (&quot;/api/ и %22/api/)
+  json = json.replace(/&quot;\/api\//g, `&quot;${baseUrl}/api/`);
+  json = json.replace(/%22\/api\//g, `%22${baseUrl}/api/`);
+  const after = (json.match(/\/api\//g) || []).length;
+  console.log(`resolveProjectUrls: baseUrl=${baseUrl}, replaced=${before - after} occurrences, remaining=${after}`);
+  return JSON.parse(json);
+}
+
 // Утилита: запуск команды
 function runCommand(command, args, cwd) {
   return new Promise((resolve, reject) => {
@@ -88,7 +103,7 @@ function runCommand(command, args, cwd) {
 }
 
 // Функция сборки дистрибутива
-async function buildDistribution(buildId, projectData, appName, appId, iconPath) {
+async function buildDistribution(buildId, projectData, appName, appId, iconPath, serverBaseUrl = 'http://localhost:3002') {
   const updateStatus = (status, progress, message) => {
     builds.set(buildId, {
       ...builds.get(buildId),
@@ -103,8 +118,10 @@ async function buildDistribution(buildId, projectData, appName, appId, iconPath)
     updateStatus('preparing', 10, 'Подготовка файлов');
 
     // 1. Копируем проект в player/electron/project.json
+    // Заменяем относительные URL на абсолютные чтобы Electron мог загрузить файлы
+    const resolvedProjectData = resolveProjectUrls(projectData, serverBaseUrl);
     const projectJsonPath = path.join(PLAYER_PATH, 'electron', 'project.json');
-    await fs.writeFile(projectJsonPath, JSON.stringify(projectData, null, 2));
+    await fs.writeFile(projectJsonPath, JSON.stringify(resolvedProjectData, null, 2));
     console.log(`✅ Проект сохранен: ${projectJsonPath}`);
 
     // 2. Обновляем package.json
@@ -251,7 +268,8 @@ router.post('/', upload.single('icon'), async (req, res) => {
     });
 
     // Запускаем сборку асинхронно
-    buildDistribution(buildId, projectData, appName, appId, req.file?.path).catch(err => {
+    const serverBaseUrl = `${req.protocol}://${req.get('host')}`;
+    buildDistribution(buildId, projectData, appName, appId, req.file?.path, serverBaseUrl).catch(err => {
       console.error(`Build ${buildId} failed:`, err);
     });
 

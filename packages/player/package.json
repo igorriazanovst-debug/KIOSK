@@ -37,7 +37,7 @@
   },
   "build": {
     "appId": "com.kiosk.player",
-    "productName": "МБОУ Раздолинской СОШ",
+    "productName": "МБОУ РАЗДОЛИНСКАЯ СОШ Музей",
     "directories": {
       "output": "dist-electron",
       "buildResources": "assets"
