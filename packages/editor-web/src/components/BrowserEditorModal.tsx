@@ -2,7 +2,7 @@ import React, { useState, useCallback, useRef } from 'react';
 import { apiClient } from '../services/api-client';
 import { useEditorStore } from '../stores/editorStore';
 import { useEditor, EditorContent } from '@tiptap/react';
-import { Extension } from '@tiptap/core';
+import { Extension, Node } from '@tiptap/core';
 import StarterKit from '@tiptap/starter-kit';
 import FontFamily from '@tiptap/extension-font-family';
 import Underline from '@tiptap/extension-underline';
@@ -10,8 +10,72 @@ import TextAlign from '@tiptap/extension-text-align';
 import { TextStyle } from '@tiptap/extension-text-style';
 import Color from '@tiptap/extension-color';
 import Highlight from '@tiptap/extension-highlight';
+import Link from '@tiptap/extension-link';
 import './BrowserEditorModal.css';
 
+
+
+// Кастомное расширение Iframe
+const IframeExtension = Node.create({
+  name: 'iframe',
+  group: 'block',
+  atom: true,
+  addAttributes() {
+    return {
+      src: { default: null },
+      width: { default: '100%' },
+      height: { default: '405px' },
+      frameborder: { default: '0' },
+      allow: { default: null },
+      allowfullscreen: { default: true },
+      style: { default: null },
+    };
+  },
+  parseHTML() {
+    return [{ tag: 'iframe' }];
+  },
+  renderHTML({ HTMLAttributes }) {
+    return ['iframe', HTMLAttributes];
+  },
+});
+
+// Расширение для div-обёртки вокруг iframe
+const IframeWrapperExtension = Node.create({
+  name: 'iframeWrapper',
+  group: 'block',
+  content: 'block*',
+  addAttributes() {
+    return {
+      style: { default: null },
+    };
+  },
+  parseHTML() {
+    return [{ tag: 'div[style*="position:relative"]' }];
+  },
+  renderHTML({ HTMLAttributes }) {
+    return ['div', HTMLAttributes, 0];
+  },
+});
+
+// Кастомное расширение Image (без внешней зависимости)
+const ImageExtension = Node.create({
+  name: 'image',
+  group: 'block',
+  atom: true,
+  addAttributes() {
+    return {
+      src: { default: null },
+      alt: { default: null },
+      style: { default: null },
+    };
+  },
+  parseHTML() {
+    return [{ tag: 'img[src]' }];
+  },
+  renderHTML({ HTMLAttributes }) {
+    return ['img', HTMLAttributes];
+  },
+});
 
 const FontSize = Extension.create({
   name: 'fontSize',
@@ -98,6 +162,59 @@ const PageTreeItem: React.FC<PageTreeItemProps> = ({
   );
 };
 
+
+
+// Кастомное расширение Gallery — хранит список фото как data-атрибут
+const GalleryExtension = Node.create({
+  name: 'gallery',
+  group: 'block',
+  atom: true,
+  selectable: true,
+  addKeyboardShortcuts() {
+    return {
+      Enter: () => {
+        const { state, dispatch } = this.editor.view;
+        const { selection } = state;
+        // If gallery node is selected, insert paragraph after it
+        if (selection.$anchor.parent.type.name === 'gallery' ||
+            (state.doc.nodeAt(selection.from) && state.doc.nodeAt(selection.from)!.type.name === 'gallery')) {
+          const pos = selection.to;
+          const tr = state.tr.insert(pos, state.schema.nodes.paragraph.create());
+          tr.setSelection((state.selection as any).constructor.near(tr.doc.resolve(pos + 1)));
+          dispatch(tr);
+          return true;
+        }
+        return false;
+      },
+    };
+  },
+  addAttributes() {
+    return {
+      images: {
+        default: '[]',
+        parseHTML: (el: HTMLElement) => el.getAttribute('data-gallery-images') || '[]',
+        renderHTML: (attrs: any) => ({ 'data-gallery-images': attrs.images }),
+      },
+      cols: {
+        default: '3',
+        parseHTML: (el: HTMLElement) => el.getAttribute('data-gallery-cols') || '3',
+        renderHTML: (attrs: any) => ({ 'data-gallery-cols': attrs.cols }),
+      },
+    };
+  },
+  parseHTML() {
+    return [{ tag: 'div[data-gallery-images]' }];
+  },
+  renderHTML({ HTMLAttributes }) {
+    const imgs: string[] = (() => { try { return JSON.parse(HTMLAttributes['data-gallery-images'] || '[]'); } catch { return []; } })();
+    const label = `🖼 Галерея: ${imgs.length} фото`;
+    return ['div', {
+      ...HTMLAttributes,
+      style: 'border:2px dashed #555;border-radius:8px;padding:12px;margin:8px 0;background:#2a2a2a;cursor:default;text-align:center;color:#aaa;font-size:13px;',
+      contenteditable: 'false',
+    }, label];
+  },
+});
 
 // ─── Диалог вставки изображения ─────────────────────────────────────────────
 interface ImageInsertDialogProps {
@@ -186,7 +303,7 @@ const ImageInsertDialog: React.FC<ImageInsertDialogProps> = ({ onInsert, onClose
 
 // ─── Диалог вставки галереи ──────────────────────────────────────────────────
 interface GalleryInsertDialogProps {
-  onInsert: (html: string) => void;
+  onInsert: (images: string[], cols: number) => void;
   onClose: () => void;
   projectId: string | null;
 }
@@ -222,25 +339,9 @@ const GalleryInsertDialog: React.FC<GalleryInsertDialogProps> = ({ onInsert, onC
   };
 
   const buildHtml = () => {
-    if (images.length === 0) return;
-    const imgs = images.map(src => `<img src="${src}" style="width:100%;height:100%;object-fit:cover;" />`);
-    if (type === 'grid') {
-      const items = imgs.map(img => `<div style="overflow:hidden;border-radius:4px;">${img}</div>`).join('');
-      onInsert(`<div style="display:grid;grid-template-columns:repeat(${cols},1fr);gap:8px;margin:12px 0;">${items}</div>`);
-    } else {
-      // Слайдер через CSS + JS
-      const id = `slider_${Math.random().toString(36).substr(2,6)}`;
-      const slides = imgs.map((img, i) =>
-        `<div class="${id}-slide" style="display:${i===0?'block':'none'};width:100%;">${img}</div>`
-      ).join('');
-      onInsert(`<div id="${id}" style="position:relative;margin:12px 0;overflow:hidden;">
-${slides}
-<div style="display:flex;justify-content:center;gap:8px;margin-top:6px;">
-  <button onclick="(function(){var s=document.querySelectorAll('.${id}-slide'),i=Array.from(s).findIndex(e=>e.style.display!=='none');s[i].style.display='none';s[(i-1+s.length)%s.length].style.display='block'})()">◀</button>
-  <button onclick="(function(){var s=document.querySelectorAll('.${id}-slide'),i=Array.from(s).findIndex(e=>e.style.display!=='none');s[i].style.display='none';s[(i+1)%s.length].style.display='block'})()">▶</button>
-</div>
-</div>`);
-    }
+    console.log("[buildHtml->onInsert] images:", images.length, "cols:", cols);
+    onInsert(images, cols);
+    onInsert(images, cols);
   };
 
   return (
@@ -288,6 +389,100 @@ ${slides}
         <button className="bbtn-primary" onClick={buildHtml} disabled={images.length === 0}>
           Вставить галерею ({images.length} фото)
         </button>
+      </div>
+    </div>
+  );
+};
+
+
+// ─── Диалог вставки видео ────────────────────────────────────────────────────
+interface VideoInsertDialogProps {
+  onInsert: (html: string) => void;
+  onClose: () => void;
+}
+
+const VideoInsertDialog: React.FC<VideoInsertDialogProps> = ({ onInsert, onClose }) => {
+  const [url, setUrl] = useState('');
+  const [width, setWidth] = useState('100%');
+  const [height, setHeight] = useState('405');
+  const [error, setError] = useState('');
+
+  const parseVideoUrl = (rawUrl: string): { embedUrl: string; provider: string } | null => {
+    try {
+      // Rutube: https://rutube.ru/video/HASH/ или https://rutube.ru/play/embed/HASH
+      const rutubeMatch = rawUrl.match(/rutube\.ru\/(?:video|play\/embed)\/([a-zA-Z0-9]+)/);
+      if (rutubeMatch) {
+        return { embedUrl: `https://rutube.ru/play/embed/${rutubeMatch[1]}`, provider: 'Rutube' };
+      }
+      // YouTube: youtu.be/ID или youtube.com/watch?v=ID или youtube.com/embed/ID
+      const ytMatch = rawUrl.match(/(?:youtu\.be\/|youtube\.com\/(?:watch\?v=|embed\/))([a-zA-Z0-9_-]{11})/);
+      if (ytMatch) {
+        return { embedUrl: `https://www.youtube.com/embed/${ytMatch[1]}`, provider: 'YouTube' };
+      }
+      // Vimeo: vimeo.com/ID
+      const vimeoMatch = rawUrl.match(/vimeo\.com\/([0-9]+)/);
+      if (vimeoMatch) {
+        return { embedUrl: `https://player.vimeo.com/video/${vimeoMatch[1]}`, provider: 'Vimeo' };
+      }
+      return null;
+    } catch {
+      return null;
+    }
+  };
+
+  const parsed = url ? parseVideoUrl(url) : null;
+
+  const insert = () => {
+    if (!parsed) { setError('Не удалось распознать ссылку'); return; }
+    const h = isNaN(Number(height)) ? height : `${height}px`;
+    const w = width.includes('%') ? width : `${width}px`;
+    onInsert(
+      `<div style="position:relative;width:${w};margin:12px 0;">` +
+      `<iframe src="${parsed.embedUrl}" width="100%" height="${h}" ` +
+      `frameborder="0" allow="clipboard-write; autoplay; fullscreen" ` +
+      `allowfullscreen style="display:block;"></iframe></div>`
+    );
+  };
+
+  return (
+    <div className="binsert-dialog" onClick={(e) => e.stopPropagation()}>
+      <div className="binsert-header">
+        <span>🎬 Вставить видео</span>
+        <button onClick={onClose}>✕</button>
+      </div>
+      <div className="binsert-body" style={{ padding: '16px' }}>
+        <div style={{ marginBottom: '8px', color: '#aaa', fontSize: '12px' }}>
+          Поддерживается: Rutube, YouTube, Vimeo
+        </div>
+        <input
+          className="binsert-input"
+          placeholder="https://rutube.ru/video/..."
+          value={url}
+          onChange={(e) => { setUrl(e.target.value); setError(''); }}
+          style={{ width: '100%', marginBottom: '8px' }}
+        />
+        {parsed && (
+          <div style={{ color: '#4caf50', fontSize: '12px', marginBottom: '8px' }}>
+            ✓ {parsed.provider}: {parsed.embedUrl}
+          </div>
+        )}
+        {error && <div style={{ color: '#f44336', fontSize: '12px', marginBottom: '8px' }}>{error}</div>}
+        <div style={{ display: 'flex', gap: '16px' }}>
+          <label style={{ color: '#aaa', fontSize: '12px' }}>
+            Ширина:&nbsp;
+            <input type="text" value={width} onChange={(e) => setWidth(e.target.value)}
+              style={{ width: '70px' }} />
+          </label>
+          <label style={{ color: '#aaa', fontSize: '12px' }}>
+            Высота (px):&nbsp;
+            <input type="text" value={height} onChange={(e) => setHeight(e.target.value)}
+              style={{ width: '70px' }} />
+          </label>
+        </div>
+      </div>
+      <div className="binsert-footer">
+        <button className="bbtn-secondary" onClick={onClose}>Отмена</button>
+        <button className="bbtn-primary" onClick={insert} disabled={!parsed}>Вставить</button>
       </div>
     </div>
   );
@@ -367,6 +562,145 @@ const LinkInsertDialog: React.FC<LinkInsertDialogProps> = ({ pages, onInsert, on
   );
 };
 
+
+// ─── Диалог вставки PDF ──────────────────────────────────────────────────────
+interface PdfInsertDialogProps {
+  onInsert: (html: string) => void;
+  onClose: () => void;
+  projectId: string | null;
+}
+
+const PdfInsertDialog: React.FC<PdfInsertDialogProps> = ({ onInsert, onClose, projectId }) => {
+  const [stage, setStage] = useState<'upload' | 'converting' | 'done' | 'error'>('upload');
+  const [error, setError] = useState('');
+  const [pages, setPages] = useState<Array<{ id: string; url: string; fileName: string }>>([]);
+  const [cols, setCols] = useState(1);
+  const fileRef = useRef<HTMLInputElement>(null);
+
+  const handleFile = async (file: File) => {
+    if (!projectId) { setError('Проект не сохранён'); return; }
+    if (!file.name.toLowerCase().endsWith('.pdf')) { setError('Только PDF файлы'); return; }
+
+    setStage('converting');
+    setError('');
+
+    try {
+      // 1. Загружаем PDF
+      const uploaded = await apiClient.uploadFile(projectId, file);
+
+      // 2. Конвертируем в страницы
+      const token = sessionStorage.getItem('auth_token') || localStorage.getItem('auth_token') || '';
+      const baseUrl = apiClient.getBaseUrl();
+      const resp = await fetch(`${baseUrl}/api/projects/${projectId}/pdf-pages`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
+        },
+        body: JSON.stringify({ fileId: uploaded.id, dpi: 150 }),
+      });
+
+      if (!resp.ok) {
+        const err = await resp.json();
+        throw new Error(err.message || 'Ошибка конвертации');
+      }
+
+      const data = await resp.json();
+      setPages(data.pages);
+      setStage('done');
+    } catch (e: any) {
+      setError(e.message || 'Ошибка');
+      setStage('error');
+    }
+  };
+
+  const buildHtml = () => {
+    if (pages.length === 0) return;
+    const baseUrl = apiClient.getBaseUrl();
+    const srcs = pages.map(p => {
+      const url = p.url.startsWith('http') ? p.url : `${baseUrl}${p.url}`;
+      return url;
+    });
+
+    // Используем GalleryExtension-совместимый формат
+    const safeSrcs = JSON.stringify(srcs).replace(/"/g, '&quot;');
+    const html = `<div data-gallery-images="${safeSrcs}" data-gallery-cols="${cols}"></div>`;
+    onInsert(html);
+  };
+
+  return (
+    <div className="binsert-dialog" onClick={(e) => e.stopPropagation()}>
+      <div className="binsert-header">
+        <span>📄 Вставить PDF как галерею</span>
+        <button onClick={onClose}>✕</button>
+      </div>
+
+      {stage === 'upload' && (
+        <>
+          <div className="binsert-body">
+            <input ref={fileRef} type="file" accept=".pdf" style={{ display: 'none' }}
+              onChange={(e) => { const f = e.target.files?.[0]; if (f) handleFile(f); }} />
+            <button className="binsert-upload-btn" onClick={() => fileRef.current?.click()}>
+              📁 Выбрать PDF файл
+            </button>
+            <p style={{ color: '#888', fontSize: '12px', marginTop: '8px' }}>
+              Каждая страница PDF станет изображением в галерее
+            </p>
+          </div>
+        </>
+      )}
+
+      {stage === 'converting' && (
+        <div className="binsert-body" style={{ textAlign: 'center', padding: '24px' }}>
+          <div style={{ fontSize: '24px', marginBottom: '12px' }}>⏳</div>
+          <p style={{ color: '#aaa' }}>Конвертация PDF в изображения...</p>
+        </div>
+      )}
+
+      {stage === 'error' && (
+        <div className="binsert-body">
+          <p style={{ color: '#e74c3c' }}>❌ {error}</p>
+          <button className="bbtn-primary" onClick={() => setStage('upload')} style={{ marginTop: '8px' }}>
+            Попробовать снова
+          </button>
+        </div>
+      )}
+
+      {stage === 'done' && (
+        <>
+          <div className="binsert-body">
+            <p style={{ color: '#4caf50', marginBottom: '8px' }}>
+              ✅ Конвертировано страниц: {pages.length}
+            </p>
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '4px', marginBottom: '12px', maxHeight: '160px', overflowY: 'auto' }}>
+              {pages.map((p, i) => {
+                const baseUrl = apiClient.getBaseUrl();
+                const src = p.url.startsWith('http') ? p.url : `${baseUrl}${p.url}`;
+                return (
+                  <img key={i} src={src}
+                    style={{ width: '60px', height: '80px', objectFit: 'cover', borderRadius: '4px', border: '1px solid #444' }}
+                  />
+                );
+              })}
+            </div>
+            <label style={{ color: '#aaa', fontSize: '12px' }}>
+              Колонок в галерее:{' '}
+              <input type="number" min={1} max={6} value={cols}
+                onChange={(e) => setCols(Number(e.target.value))}
+                style={{ width: '50px', marginLeft: '6px' }} />
+            </label>
+          </div>
+          <div className="binsert-footer">
+            <button className="bbtn-primary" onClick={buildHtml}>
+              Вставить галерею ({pages.length} стр.)
+            </button>
+          </div>
+        </>
+      )}
+    </div>
+  );
+};
+
 const BrowserEditorModal: React.FC<BrowserEditorModalProps> = ({
   pages: initialPages,
   menuPosition: initMenuPos,
@@ -393,10 +727,15 @@ const BrowserEditorModal: React.FC<BrowserEditorModalProps> = ({
   const [contentBgColor, setContentBgColor] = useState(initContentBg || '#ffffff');
   const [orientation, setOrientation] = useState(initOrientation || 'vertical');
   const [activeTab, setActiveTab] = useState<'content' | 'settings'>('content');
-  const [insertDialog, setInsertDialog] = useState<'image' | 'gallery' | 'link' | null>(null);
+  const [insertDialog, setInsertDialog] = useState<'image' | 'gallery' | 'link' | 'video' | 'pdf' | null>(null);
   const { projectId } = useEditorStore();
 
   const [pagesRef, setPagesRef] = useState(pages);
+
+  const selectedIdRef = React.useRef(selectedId);
+  selectedIdRef.current = selectedId;
+  const suppressUpdateRef = React.useRef(false);
+  const editorRef = React.useRef<any>(null);
 
   const editor = useEditor({
     extensions: [
@@ -408,14 +747,29 @@ const BrowserEditorModal: React.FC<BrowserEditorModalProps> = ({
       FontSize,
       Color,
       Highlight.configure({ multicolor: true }),
+    Link.configure({
+      openOnClick: false,
+      HTMLAttributes: {
+        rel: null,
+        target: null,
+      },
+    }),
+      ImageExtension,
+      IframeExtension,
+      IframeWrapperExtension,
+      GalleryExtension,
     ],
     content: pages.find(p => p.id === selectedId)?.htmlContent || '',
     onUpdate: ({ editor }) => {
-      if (!selectedId) return;
+      if (suppressUpdateRef.current) return;
+      const sid = selectedIdRef.current;
+      if (!sid) return;
       const html = editor.getHTML();
-      setPages(prev => prev.map(p => p.id === selectedId ? { ...p, htmlContent: html } : p));
+      setPages(prev => prev.map(p => p.id === sid ? { ...p, htmlContent: html } : p));
     },
   });
+
+  React.useEffect(() => { editorRef.current = editor; }, [editor]);
 
   const saveCurrentAndSelect = useCallback((newId: string) => {
     if (editor && selectedId) {
@@ -595,7 +949,9 @@ const BrowserEditorModal: React.FC<BrowserEditorModalProps> = ({
                     <span className="btoolbar-sep" />
                     <button onClick={() => setInsertDialog('image')} title="Вставить изображение">🖼</button>
                     <button onClick={() => setInsertDialog('gallery')} title="Вставить галерею">🖼🖼</button>
+                    <button onClick={() => setInsertDialog('pdf')} title="Вставить PDF как галерею">📄</button>
                     <button onClick={() => setInsertDialog('link')} title="Вставить ссылку на страницу">🔗</button>
+                    <button onClick={() => setInsertDialog('video')} title="Вставить видео (Rutube/YouTube/Vimeo)">🎬</button>
                   </div>
                   {insertDialog && (
                     <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', zIndex: 1000, minWidth: '360px', maxWidth: '480px', background: '#1e1e1e', borderRadius: '8px', boxShadow: '0 8px 32px rgba(0,0,0,0.6)' }}>
@@ -610,6 +966,32 @@ const BrowserEditorModal: React.FC<BrowserEditorModalProps> = ({
                       {insertDialog === 'gallery' && (
                         <GalleryInsertDialog
                           projectId={projectId}
+                          onInsert={(images, cols) => {
+                            const ed = editorRef.current;
+                            if (!ed) { setInsertDialog(null); return; }
+                            suppressUpdateRef.current = true;
+                            ed.commands.focus();
+                            const ok = ed.commands.insertContent({ type: 'gallery', attrs: { images: JSON.stringify(images), cols: String(cols) } });
+                            // Вставляем параграф через ProseMirror напрямую
+                            const { state, dispatch } = ed.view;
+                            const { tr } = state;
+                            const endPos = state.doc.content.size;
+                            tr.insert(endPos, state.schema.nodes.paragraph.create());
+                            dispatch(tr);
+                            const html = ed.getHTML();
+                            console.log('[onInsert cb] final hasGallery:', html.includes('data-gallery'));
+                            suppressUpdateRef.current = false;
+                            if (selectedIdRef.current) {
+                              setPages(prev => prev.map(p => p.id === selectedIdRef.current ? { ...p, htmlContent: html } : p));
+                            }
+                            setInsertDialog(null);
+                          }}
+                          onClose={() => setInsertDialog(null)}
+                        />
+                      )}
+                      {insertDialog === 'pdf' && (
+                        <PdfInsertDialog
+                          projectId={projectId}
                           onInsert={(html) => { editor?.chain().focus().insertContent(html).run(); setInsertDialog(null); }}
                           onClose={() => setInsertDialog(null)}
                         />
@@ -617,6 +999,12 @@ const BrowserEditorModal: React.FC<BrowserEditorModalProps> = ({
                       {insertDialog === 'link' && (
                         <LinkInsertDialog
                           pages={pages}
+                          onInsert={(html) => { editor?.chain().focus().insertContent(html).run(); setInsertDialog(null); }}
+                          onClose={() => setInsertDialog(null)}
+                        />
+                      )}
+                      {insertDialog === 'video' && (
+                        <VideoInsertDialog
                           onInsert={(html) => { editor?.chain().focus().insertContent(html).run(); setInsertDialog(null); }}
                           onClose={() => setInsertDialog(null)}
                         />

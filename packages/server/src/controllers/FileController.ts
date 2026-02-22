@@ -281,4 +281,43 @@ export class FileController {
       });
     }
   }
+  /**
+   * POST /api/projects/:projectId/pdf-pages
+   * Конвертировать PDF файл в страницы-изображения
+   */
+  static async convertPdfPages(req: Request, res: Response) {
+    try {
+      if (!req.client) {
+        return res.status(401).json({ error: 'Authentication required' });
+      }
+
+      const { projectId } = req.params;
+      const { fileId, dpi } = req.body;
+
+      if (!fileId) {
+        return res.status(400).json({ error: 'fileId is required' });
+      }
+
+      const pages = await FileService.convertPdfToImages({
+        projectId,
+        organizationId: req.client.organizationId,
+        pdfFileId: fileId,
+        dpi: dpi ? parseInt(dpi) : 150,
+      });
+
+      // Обновляем статистику
+      const { ProjectService } = await import('../services/ProjectService');
+      await ProjectService.updateProjectStats(projectId);
+
+      return res.json({ success: true, pages });
+
+    } catch (error) {
+      console.error('Convert PDF error:', error);
+      return res.status(500).json({
+        error: 'Failed to convert PDF',
+        message: error instanceof Error ? error.message : 'Unknown error'
+      });
+    }
+  }
+
 }

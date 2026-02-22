@@ -1,0 +1,821 @@
+import React, { useRef, useEffect } from 'react';
+import { Stage, Layer, Rect, Transformer, Image as KonvaImage, Text, Group } from 'react-konva';
+import { useEditorStore } from '../stores/editorStore';
+import ImageWidget from './ImageWidget';
+import ButtonWidget from './ButtonWidget';
+import TextWidget from './TextWidget';
+import VideoWidget from './VideoWidget';
+import ShapeWidget from './ShapeWidget';
+import MenuWidget from './MenuWidget';
+import './Canvas.css';
+import TextEditorOverlay from './TextEditorOverlay';
+import BrowserWidget from './BrowserWidget';
+import BrowserMenuWidget from './BrowserMenuWidget';
+import BrowserContentWidget from './BrowserContentWidget';
+import BrowserEditorModal, { BrowserPage } from './BrowserEditorModal';
+
+
+// ─── BrowserContentOverlay ──────────────────────────────────────────────────
+// iframe overlay поверх Konva-канваса для превью HTML-контента
+const BrowserContentOverlay: React.FC<{
+  widget: any;
+  zoom: number;
+  allWidgets: any[];
+}> = ({ widget, zoom, allWidgets }) => {
+  const browserId: string = widget.properties.browserId || '';
+  const contentBg: string = widget.properties.contentBgColor || '#ffffff';
+
+  const menuWidget = allWidgets.find(
+    (w: any) => w.type === 'browser-menu' && w.properties.browserId === browserId
+  );
+  const pages: any[] = menuWidget?.properties.pages || [];
+  React.useEffect(() => {
+    if (pages.length > 0) {
+      pages.forEach((p: any) => {
+        if (p.htmlContent?.includes('data-gallery')) {
+          console.log('[PAGES] page', p.id, 'htmlContent gallery:', p.htmlContent.substring(p.htmlContent.indexOf('data-gallery')-5, p.htmlContent.indexOf('data-gallery')+200));
+        } else {
+          console.log('[PAGES] page', p.id, 'htmlContent preview:', (p.htmlContent||'').substring(0,80));
+        }
+      });
+    }
+  }, [JSON.stringify(pages)]);
+  const [activePageId, setActivePageId] = React.useState<string>(pages[0]?.id || '');
+
+  // Слушаем смену страницы (в редакторе не кликают, но на случай будущего)
+  React.useEffect(() => {
+    if (!activePageId && pages[0]) setActivePageId(pages[0].id);
+  }, [pages]);
+
+  const activePage = pages.find((p: any) => p.id === activePageId) || pages[0];
+
+  // Разворачиваем data-gallery-images в полноценный лайтбокс HTML
+  const processGalleries = (html: string): string => {
+    if (!html || !html.includes('data-gallery-images')) return html;
+    const galleryIdx = html.indexOf('data-gallery-images');
+    console.log('[PG] raw around gallery:', JSON.stringify(html.substring(galleryIdx - 5, galleryIdx + 150)));
+    return html.replace(
+      /<div[^>]*data-gallery-images=["']([^"']*)["'][^>]*data-gallery-cols=["']([^"']*)["'][^>]*>.*?<\/div>/gs,
+      (_, imagesJson, colsStr) => {
+        let imgs: string[] = [];
+        try { imgs = JSON.parse(imagesJson); } catch { return _; }
+        const cols = parseInt(colsStr) || 3;
+        const total = imgs.length;
+        const id = 'g' + Math.random().toString(36).substr(2, 6);
+        const thumbItems = imgs.map((src, i) => {
+          const openFn = `(function(){var lb=document.getElementById('${id}_lb');lb.setAttribute('data-cur','${i}');lb.style.display='flex';document.getElementById('${id}_img').src='${src.replace(/'/g, "\'")}';document.getElementById('${id}_cnt').textContent='${i+1} / ${total}';})()`;
+          return `<div style="width:calc(${100/cols}% - 8px);aspect-ratio:1;overflow:hidden;border-radius:6px;cursor:pointer;display:inline-block;margin:4px;" onclick="${openFn}"><img src="${src}" style="width:100%;height:100%;object-fit:cover;" /></div>`;
+        }).join('');
+        const allSrcs = imgs.map(s => s.replace(/'/g, "\'")).join("','");
+        const prevFn = `(function(){var lb=document.getElementById('${id}_lb');var srcs=['${allSrcs}'];var c=(parseInt(lb.getAttribute('data-cur'))-1+${total})%${total};lb.setAttribute('data-cur',c);document.getElementById('${id}_img').src=srcs[c];document.getElementById('${id}_cnt').textContent=(c+1)+' / ${total}';})()`;
+        const nextFn = `(function(){var lb=document.getElementById('${id}_lb');var srcs=['${allSrcs}'];var c=(parseInt(lb.getAttribute('data-cur'))+1)%${total};lb.setAttribute('data-cur',c);document.getElementById('${id}_img').src=srcs[c];document.getElementById('${id}_cnt').textContent=(c+1)+' / ${total}';})()`;
+        const closeFn = `document.getElementById('${id}_lb').style.display='none'`;
+        return `<div style="margin:12px 0;"><div style="display:flex;flex-wrap:wrap;">${thumbItems}</div>` +
+          `<div id="${id}_lb" data-cur="0" onclick="if(event.target===this){${closeFn}}" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.92);z-index:99999;align-items:center;justify-content:center;flex-direction:column;">` +
+          `<img id="${id}_img" src="" style="max-width:90vw;max-height:80vh;object-fit:contain;border-radius:8px;" />` +
+          `<div style="display:flex;align-items:center;gap:20px;margin-top:16px;">` +
+          `<button onclick="${prevFn}" style="background:rgba(255,255,255,0.15);color:#fff;border:none;border-radius:50%;width:44px;height:44px;font-size:20px;cursor:pointer;">◀</button>` +
+          `<span id="${id}_cnt" style="color:#aaa;font-size:13px;"></span>` +
+          `<button onclick="${nextFn}" style="background:rgba(255,255,255,0.15);color:#fff;border:none;border-radius:50%;width:44px;height:44px;font-size:20px;cursor:pointer;">▶</button>` +
+          `</div><button onclick="${closeFn}" style="position:absolute;top:18px;right:24px;background:none;color:#fff;border:none;font-size:28px;cursor:pointer;">✕</button></div></div>`;
+      }
+    );
+  };
+
+
+  const left = widget.x * zoom;
+  const top = widget.y * zoom;
+  const width = widget.width * zoom;
+  const height = widget.height * zoom;
+
+  const FONT_FACES = [
+    ['Lato', 'Lato_400'], ['Lato', 'Lato_700', 'bold'],
+    ['Lobster', 'Lobster_400'], ['Montserrat', 'Montserrat_400'],
+    ['Montserrat', 'Montserrat_700', 'bold'], ['Nunito', 'Nunito_400'],
+    ['Nunito', 'Nunito_700', 'bold'], ['Open Sans', 'Open_Sans_400'],
+    ['Open Sans', 'Open_Sans_700', 'bold'], ['Oswald', 'Oswald_400'],
+    ['Pacifico', 'Pacifico_400'], ['PT Sans', 'PT_Sans_400'],
+    ['PT Sans', 'PT_Sans_700', 'bold'], ['PT Serif', 'PT_Serif_400'],
+    ['PT Serif', 'PT_Serif_700', 'bold'], ['Raleway', 'Raleway_400'],
+    ['Raleway', 'Raleway_700', 'bold'], ['Roboto', 'Roboto_400'],
+    ['Roboto', 'Roboto_700', 'bold'], ['Ubuntu', 'Ubuntu_400'],
+    ['Ubuntu', 'Ubuntu_700', 'bold'],
+  ].map(([family, file, weight]: any) =>
+    `@font-face { font-family: '${family}'; src: url('/fonts/${file}.ttf'); font-weight: ${weight || 'normal'}; }`
+  ).join('\n');
+
+  const linkScript = `<script>
+document.addEventListener('click', function(e) {
+  var a = e.target.closest('a');
+  if (!a) return;
+  var href = a.getAttribute('href') || '';
+  if (href.startsWith('browser-page://') || href.startsWith('slide://')) {
+    e.preventDefault();
+    window.parent.postMessage({ type: 'browser-link', href: href, browserId: '${browserId}' }, '*');
+  }
+});
+</script>`;
+
+  const html = `<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<style>
+  ${FONT_FACES}
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: ${contentBg === 'transparent' ? 'transparent' : contentBg};
+    font-family: Arial, sans-serif;
+    font-size: 14px;
+    line-height: 1.6;
+    overflow: auto;
+    padding: 16px;
+  }
+  h1,h2,h3 { margin-bottom: 0.5em; margin-top: 0.8em; }
+  p { margin-bottom: 0.6em; }
+  ul,ol { padding-left: 1.5em; margin-bottom: 0.6em; }
+</style>
+</head>
+<body>${activePage?.htmlContent || '<p style="color:#aaa">Нет содержимого</p>'}${linkScript}
+</body>
+</html>`;
+
+  return (
+    <div
+      style={{
+        position: 'absolute',
+        left: `${left}px`,
+        top: `${top}px`,
+        width: `${width}px`,
+        height: `${height}px`,
+        pointerEvents: 'none',
+        overflow: 'hidden',
+        zIndex: 1,
+      }}
+    >
+      <iframe
+        srcDoc={(() => { if(activePage?.htmlContent?.includes('data-gallery')) console.log('[SRCDOC] htmlContent:', activePage.htmlContent.substring(activePage.htmlContent.indexOf('data-gallery')-5, activePage.htmlContent.indexOf('data-gallery')+200)); return processGalleries(html); })()}
+        style={{
+          width: '100%',
+          height: '100%',
+          border: 'none',
+          background: contentBg === 'transparent' ? 'transparent' : contentBg,
+          display: 'block',
+        }}
+        sandbox="allow-same-origin allow-scripts"
+        title="browser-content-preview"
+      />
+    </div>
+  );
+};
+// ────────────────────────────────────────────────────────────────────────────
+
+// Цвета для fallback отображения (если специальный компонент не используется)
+const WIDGET_COLORS: Record<string, string> = {
+  shape: '#4a90e2',
+  rectangle: '#4a90e2',  // Для обратной совместимости
+  button: '#2ecc71',
+  text: '#e74c3c',
+  image: '#9b59b6',
+  video: '#f39c12'
+};
+
+
+// ─── TextHtmlOverlay ────────────────────────────────────────────────────────
+const TextHtmlOverlay: React.FC<{ widget: any; zoom: number }> = ({ widget, zoom }) => {
+  const htmlContent: string = widget.properties.htmlContent || '';
+  if (!htmlContent || htmlContent === '<p></p>') return null;
+  const { backgroundColor = 'transparent', padding = 8, opacity = 1 } = widget.properties;
+  const rotation = widget.rotation || 0;
+  return (
+    <div
+      style={{
+        position: 'absolute',
+        left: widget.x * zoom,
+        top: widget.y * zoom,
+        width: widget.width * zoom,
+        height: widget.height * zoom,
+        transform: rotation ? `rotate(${rotation}deg)` : undefined,
+        transformOrigin: 'top left',
+        pointerEvents: 'none',
+        overflow: 'hidden',
+        opacity,
+        background: backgroundColor !== 'transparent' ? backgroundColor : undefined,
+        boxSizing: 'border-box',
+        padding: `${padding * zoom}px`,
+      }}
+      dangerouslySetInnerHTML={{ __html: htmlContent }}
+    />
+  );
+};
+
+const Canvas: React.FC = () => {
+  const { 
+    project, 
+    selectedWidgetIds, 
+    selectWidget, 
+    clearSelection,
+    updateWidget,
+    zoom,
+    gridEnabled,
+    snapToGrid,
+    gridSize,
+    gridLineWidth,
+    gridColor,
+    pendingWidget,
+    addWidgetAtPosition,
+    clearPendingWidget
+  } = useEditorStore();
+
+  const stageRef = useRef<any>(null);
+  const transformerRef = useRef<any>(null);
+  const wrapperRef = useRef<HTMLDivElement>(null);
+
+  const [editingBrowserId, setEditingBrowserId] = React.useState<string | null>(null);
+
+  React.useEffect(() => {
+    const handler = (e: Event) => {
+      setEditingBrowserId((e as CustomEvent).detail.widgetId);
+    };
+    window.addEventListener('open-browser-editor', handler);
+    return () => window.removeEventListener('open-browser-editor', handler);
+  }, []);
+
+  React.useEffect(() => {
+    const msgHandler = (e: MessageEvent) => {
+      if (e.data?.type !== 'browser-link') return;
+      console.log('[Browser] Link clicked:', e.data.href);
+    };
+    window.addEventListener('message', msgHandler);
+    return () => window.removeEventListener('message', msgHandler);
+  }, []);
+  const [editingWidget, setEditingWidget] = React.useState<{id: string; x: number; y: number; width: number; height: number; html: string} | null>(null);
+
+  // Функция привязки к сетке
+  const snapToGridValue = (value: number): number => {
+    if (!snapToGrid) return value;
+    return Math.round(value / gridSize) * gridSize;
+  };
+
+  // Функция для привязки во время перетаскивания
+  const dragBoundFunc = (pos: { x: number; y: number }) => {
+    return {
+      x: snapToGridValue(pos.x),
+      y: snapToGridValue(pos.y)
+    };
+  };
+
+  useEffect(() => {
+    if (!transformerRef.current || !project) return;
+
+    const stage = stageRef.current;
+    
+    // Находим выбранные виджеты и фильтруем заблокированные
+    const selectedNodes = selectedWidgetIds
+      .map(id => {
+        const widget = project.widgets.find(w => w.id === id);
+        // Игнорируем заблокированные виджеты
+        if (widget?.locked) return null;
+        return stage.findOne(`#${id}`);
+      })
+      .filter(Boolean);
+
+    transformerRef.current.nodes(selectedNodes);
+    transformerRef.current.getLayer().batchDraw();
+  }, [selectedWidgetIds, project]);
+
+  if (!project) return null;
+
+  const handleStageClick = (e: any) => {
+    // pendingWidget обрабатывается в onClickCapture на canvas-wrapper
+    if (pendingWidget) {
+      return;
+    }
+
+    // Если клик по Stage или по фоновому прямоугольнику - снять выделение
+    const clickedOnEmpty = e.target === e.target.getStage() || 
+                          e.target.attrs.id === 'canvas-background';
+    
+    if (clickedOnEmpty) {
+      clearSelection();
+    }
+  };
+
+  const handleWidgetClick = (id: string, e: any) => {
+    e.cancelBubble = true;
+    const isMultiSelect = e.evt.ctrlKey || e.evt.metaKey;
+    selectWidget(id, isMultiSelect);
+  };
+
+  const handleTextDblClick = (widget: any, e: any) => {
+    e.cancelBubble = true;
+    // Use htmlContent if exists, otherwise wrap plain text in <p>
+    const html = widget.properties.htmlContent
+      || (widget.properties.text ? `<p>${widget.properties.text}</p>` : '<p></p>');
+    setEditingWidget({ id: widget.id, x: widget.x, y: widget.y, width: widget.width, height: widget.height, html });
+  };
+
+  const handleBrowserDblClick = (widgetId: string, e: any) => {
+    e.cancelBubble = true;
+    setEditingBrowserId(widgetId);
+  };
+
+  const handleEditorClose = (html: string) => {
+    if (!editingWidget) return;
+    // strip empty paragraph
+    const clean = html === '<p></p>' ? '' : html;
+    const currentWidget = project?.widgets.find(w => w.id === editingWidget.id);
+    if (currentWidget) {
+      updateWidget(editingWidget.id, {
+        properties: { ...currentWidget.properties, htmlContent: clean }
+      });
+    }
+    setEditingWidget(null);
+  };
+
+  const handleDragEnd = (id: string, e: any) => {
+    const x = snapToGridValue(e.target.x());
+    const y = snapToGridValue(e.target.y());
+
+    updateWidget(id, { x, y });
+  };
+
+  const handleTransformEnd = (id: string, e: any) => {
+    const node = e.target;
+    const scaleX = node.scaleX();
+    const scaleY = node.scaleY();
+
+    // Сбрасываем scale и применяем его к размерам
+    node.scaleX(1);
+    node.scaleY(1);
+
+    // Для Group нужно получить width/height из attrs
+    const nodeWidth = node.width ? node.width() : node.attrs.width || 100;
+    const nodeHeight = node.height ? node.height() : node.attrs.height || 100;
+
+    let width = Math.max(10, nodeWidth * scaleX);
+    let height = Math.max(10, nodeHeight * scaleY);
+    let x = node.x();
+    let y = node.y();
+
+    // Привязка к сетке
+    if (snapToGrid) {
+      width = snapToGridValue(width);
+      height = snapToGridValue(height);
+      x = snapToGridValue(x);
+      y = snapToGridValue(y);
+    }
+
+    updateWidget(id, {
+      x,
+      y,
+      width,
+      height,
+      rotation: node.rotation()
+    });
+  };
+
+  // Рендерим сетку
+  const renderGrid = () => {
+    if (!gridEnabled) return null;
+
+    const lines = [];
+    const { width, height } = project.canvas;
+
+    // Вертикальные линии
+    for (let i = 0; i <= width / gridSize; i++) {
+      lines.push(
+        <Rect
+          key={`v-${i}`}
+          x={i * gridSize}
+          y={0}
+          width={gridLineWidth}
+          height={height}
+          fill={gridColor}
+        />
+      );
+    }
+
+    // Горизонтальные линии
+    for (let i = 0; i <= height / gridSize; i++) {
+      lines.push(
+        <Rect
+          key={`h-${i}`}
+          x={0}
+          y={i * gridSize}
+          width={width}
+          height={gridLineWidth}
+          fill={gridColor}
+        />
+      );
+    }
+
+    return lines;
+  };
+
+  return (
+    <div className="canvas-container">
+      <div className="canvas-scroll">
+        <div 
+          ref={wrapperRef}
+          className="canvas-wrapper"
+          onClickCapture={(e: React.MouseEvent<HTMLDivElement>) => {
+            if (!pendingWidget) return;
+            const rect = wrapperRef.current?.getBoundingClientRect();
+            if (!rect) return;
+            const x = Math.round((e.clientX - rect.left) / zoom);
+            const y = Math.round((e.clientY - rect.top) / zoom);
+            addWidgetAtPosition(x, y);
+            e.stopPropagation();
+          }}
+          style={{
+            transform: `scale(${zoom})`,
+            transformOrigin: 'top left',
+            cursor: pendingWidget ? 'crosshair' : 'default'
+          }}
+        >
+          <Stage
+            ref={stageRef}
+            width={project.canvas.width}
+            height={project.canvas.height}
+            onClick={handleStageClick}
+            onTap={handleStageClick}
+          >
+            <Layer>
+              {/* Фон холста */}
+              <Rect
+                id="canvas-background"
+                x={0}
+                y={0}
+                width={project.canvas.width}
+                height={project.canvas.height}
+                fill={project.canvas.backgroundColor || '#ffffff'}
+              />
+              
+              {/* Сетка */}
+              {renderGrid()}
+
+              {/* Виджеты */}
+              {project.widgets
+                .slice()
+                .sort((a, b) => (a.zIndex || 0) - (b.zIndex || 0))
+                .map(widget => {
+                const isLocked = widget.locked || false;
+                const isWidgetVisible = (widget as any).visible !== false;
+                
+                // Для изображений используем ImageWidget
+                if (widget.type === 'image') {
+                  return (
+                    <React.Fragment key={widget.id}>
+                      <ImageWidget
+                        widget={widget}
+                        isSelected={selectedWidgetIds.includes(widget.id)}
+                        onSelect={(e) => handleWidgetClick(widget.id, e)}
+                        onDragEnd={(e) => handleDragEnd(widget.id, e)}
+                        onTransformEnd={(e) => handleTransformEnd(widget.id, e)}
+                        dragBoundFunc={snapToGrid ? dragBoundFunc : undefined}
+                      />
+                      {/* Иконка замка */}
+                      {isLocked && (
+                        <Text
+                          x={widget.x + 5}
+                          y={widget.y + 5}
+                          text="🔒"
+                          fontSize={16}
+                          listening={false}
+                        />
+                      )}
+                      {/* Иконка скрытости */}
+                      {!isWidgetVisible && (
+                        <Text
+                          x={widget.x + widget.width - 24}
+                          y={widget.y + 5}
+                          text="👁️"
+                          fontSize={16}
+                          listening={false}
+                          opacity={0.5}
+                        />
+                      )}
+                    </React.Fragment>
+                  );
+                }
+
+                // Для кнопок используем ButtonWidget
+                if (widget.type === 'button') {
+                  return (
+                    <React.Fragment key={widget.id}>
+                      <ButtonWidget
+                        widget={widget}
+                        isSelected={selectedWidgetIds.includes(widget.id)}
+                        onSelect={(e) => handleWidgetClick(widget.id, e)}
+                        onDragEnd={(e) => handleDragEnd(widget.id, e)}
+                        onTransformEnd={(e) => handleTransformEnd(widget.id, e)}
+                        dragBoundFunc={snapToGrid ? dragBoundFunc : undefined}
+                      />
+                      {/* Иконка замка */}
+                      {isLocked && (
+                        <Text
+                          x={widget.x + 5}
+                          y={widget.y + 5}
+                          text="🔒"
+                          fontSize={16}
+                          listening={false}
+                        />
+                      )}
+                    </React.Fragment>
+                  );
+                }
+
+                // Для текста используем TextWidget
+                if (widget.type === 'text') {
+                  return (
+                    <React.Fragment key={widget.id}>
+                      <TextWidget
+                        widget={widget}
+                        isSelected={selectedWidgetIds.includes(widget.id)}
+                        onSelect={(e) => handleWidgetClick(widget.id, e)}
+                        onDblClick={(e) => handleTextDblClick(widget, e)}
+                        onDragEnd={(e) => handleDragEnd(widget.id, e)}
+                        onTransformEnd={(e) => handleTransformEnd(widget.id, e)}
+                        dragBoundFunc={snapToGrid ? dragBoundFunc : undefined}
+                      />
+                      {/* Иконка замка */}
+                      {isLocked && (
+                        <Text
+                          x={widget.x + 5}
+                          y={widget.y + 5}
+                          text="🔒"
+                          fontSize={16}
+                          listening={false}
+                        />
+                      )}
+                    </React.Fragment>
+                  );
+                }
+
+                // Для видео используем VideoWidget
+                if (widget.type === 'video') {
+                  return (
+                    <React.Fragment key={widget.id}>
+                      <VideoWidget
+                        widget={widget}
+                        isSelected={selectedWidgetIds.includes(widget.id)}
+                        onSelect={(e) => handleWidgetClick(widget.id, e)}
+                        onDragEnd={(e) => handleDragEnd(widget.id, e)}
+                        onTransformEnd={(e) => handleTransformEnd(widget.id, e)}
+                        dragBoundFunc={snapToGrid ? dragBoundFunc : undefined}
+                      />
+                      {/* Иконка замка */}
+                      {isLocked && (
+                        <Text
+                          x={widget.x + 5}
+                          y={widget.y + 5}
+                          text="🔒"
+                          fontSize={16}
+                          listening={false}
+                        />
+                      )}
+                    </React.Fragment>
+                  );
+                }
+
+                // Для фигур используем ShapeWidget
+                if (widget.type === 'shape' || widget.type === 'rectangle') {
+                  return (
+                    <React.Fragment key={widget.id}>
+                      <ShapeWidget
+                        widget={widget}
+                        isSelected={selectedWidgetIds.includes(widget.id)}
+                        onSelect={(e) => handleWidgetClick(widget.id, e)}
+                        onDragEnd={(e) => handleDragEnd(widget.id, e)}
+                        onTransformEnd={(e) => handleTransformEnd(widget.id, e)}
+                        dragBoundFunc={snapToGrid ? dragBoundFunc : undefined}
+                      />
+                      {/* Иконка замка */}
+                      {isLocked && (
+                        <Text
+                          x={widget.x + 5}
+                          y={widget.y + 5}
+                          text="🔒"
+                          fontSize={16}
+                          listening={false}
+                        />
+                      )}
+                    </React.Fragment>
+                  );
+                }
+
+                // Для меню используем MenuWidget
+                if (widget.type === 'menu') {
+                  return (
+                    <React.Fragment key={widget.id}>
+                      <MenuWidget
+                        widget={widget}
+                        isSelected={selectedWidgetIds.includes(widget.id)}
+                        onSelect={(e) => handleWidgetClick(widget.id, e)}
+                        onDragEnd={(e) => handleDragEnd(widget.id, e)}
+                        onTransformEnd={(e) => handleTransformEnd(widget.id, e)}
+                        dragBoundFunc={snapToGrid ? dragBoundFunc : undefined}
+                      />
+                      {/* Иконка замка */}
+                      {isLocked && (
+                        <Text
+                          x={widget.x + 5}
+                          y={widget.y + 5}
+                          text="🔒"
+                          fontSize={16}
+                          listening={false}
+                        />
+                      )}
+                    </React.Fragment>
+                  );
+                }
+
+                // Старый монолитный browser — отключён
+                if (widget.type === 'browser') {
+                  return null;
+                }
+
+                // browser-menu
+                if (widget.type === 'browser-menu') {
+                  return (
+                    <React.Fragment key={widget.id}>
+                      <BrowserMenuWidget
+                        widget={widget}
+                        isSelected={selectedWidgetIds.includes(widget.id)}
+                        onSelect={(e) => handleWidgetClick(widget.id, e)}
+                        onDblClick={(e) => handleBrowserDblClick(widget.id, e)}
+                        onDragEnd={(e) => handleDragEnd(widget.id, e)}
+                        onTransformEnd={(e) => handleTransformEnd(widget.id, e)}
+                        dragBoundFunc={snapToGrid ? dragBoundFunc : undefined}
+                      />
+                      {isLocked && (
+                        <Text x={widget.x + 5} y={widget.y + 5} text="🔒" fontSize={16} listening={false} />
+                      )}
+                    </React.Fragment>
+                  );
+                }
+
+                // browser-content
+                if (widget.type === 'browser-content') {
+                  return (
+                    <React.Fragment key={widget.id}>
+                      <BrowserContentWidget
+                        widget={widget}
+                        isSelected={selectedWidgetIds.includes(widget.id)}
+                        onSelect={(e) => handleWidgetClick(widget.id, e)}
+                        onDragEnd={(e) => handleDragEnd(widget.id, e)}
+                        onTransformEnd={(e) => handleTransformEnd(widget.id, e)}
+                        dragBoundFunc={snapToGrid ? dragBoundFunc : undefined}
+                      />
+                      {isLocked && (
+                        <Text x={widget.x + 5} y={widget.y + 5} text="🔒" fontSize={16} listening={false} />
+                      )}
+                    </React.Fragment>
+                  );
+                }
+
+                // Старый монолитный browser — отключён (заглушка ниже)
+                if (widget.type === 'browser_disabled') {
+                  return (
+                    <React.Fragment key={widget.id}>
+                      <BrowserWidget
+                        widget={widget}
+                        isSelected={selectedWidgetIds.includes(widget.id)}
+                        onSelect={(e) => handleWidgetClick(widget.id, e)}
+                        onDblClick={(e) => handleBrowserDblClick(widget.id, e)}
+                        onDragEnd={(e) => handleDragEnd(widget.id, e)}
+                        onTransformEnd={(e) => handleTransformEnd(widget.id, e)}
+                        dragBoundFunc={snapToGrid ? dragBoundFunc : undefined}
+                      />
+                      {isLocked && (
+                        <Text x={widget.x + 5} y={widget.y + 5} text="🔒" fontSize={16} listening={false} />
+                      )}
+                    </React.Fragment>
+                  );
+                }
+
+                // Для остальных типов - обычный Rect (fallback)
+                return (
+                  <React.Fragment key={widget.id}>
+                    <Rect
+                      id={widget.id}
+                      x={widget.x}
+                      y={widget.y}
+                      width={widget.width}
+                      height={widget.height}
+                      rotation={widget.rotation || 0}
+                      fill={WIDGET_COLORS[widget.type] || '#4a90e2'}
+                      stroke={selectedWidgetIds.includes(widget.id) ? '#007acc' : undefined}
+                      strokeWidth={selectedWidgetIds.includes(widget.id) ? 2 : 0}
+                      opacity={isLocked ? 0.6 : 1}
+                      draggable={!isLocked}
+                      onClick={(e) => handleWidgetClick(widget.id, e)}
+                      onTap={(e) => handleWidgetClick(widget.id, e)}
+                      onDragEnd={(e) => handleDragEnd(widget.id, e)}
+                      onTransformEnd={(e) => handleTransformEnd(widget.id, e)}
+                    />
+                    {/* Иконка замка для заблокированных виджетов */}
+                    {isLocked && (
+                      <Text
+                        x={widget.x + 5}
+                        y={widget.y + 5}
+                        text="🔒"
+                        fontSize={16}
+                        listening={false}
+                      />
+                    )}
+                  </React.Fragment>
+                );
+              })}
+
+              {/* Transformer для трансформации выделенных виджетов */}
+              <Transformer
+                ref={transformerRef}
+                boundBoxFunc={(oldBox, newBox) => {
+                  // Минимальный размер 10x10
+                  if (newBox.width < 10 || newBox.height < 10) {
+                    return oldBox;
+                  }
+                  return newBox;
+                }}
+              />
+            </Layer>
+          </Stage>
+
+          {/* Text HTML overlays */}
+          {project?.widgets
+            .filter((w: any) => w.type === 'text' && w.properties.htmlContent)
+            .map((w: any) => (
+              <TextHtmlOverlay key={`text-overlay-${w.id}`} widget={w} zoom={zoom} />
+            ))
+          }
+
+          {/* BrowserContent iframe overlays */}
+          {project?.widgets
+            .filter((w: any) => w.type === 'browser-content')
+            .map((w: any) => (
+              <BrowserContentOverlay
+                key={`overlay-${w.id}`}
+                widget={w}
+                zoom={zoom}
+                allWidgets={project.widgets}
+              />
+            ))
+          }
+
+          {/* Browser editor modal */}
+          {editingBrowserId && (() => {
+            const bw = project?.widgets.find(w => w.id === editingBrowserId && (w.type === 'browser' || w.type === 'browser-menu'));
+            if (!bw) return null;
+            return (
+              <BrowserEditorModal
+                pages={bw.properties.pages || []}
+                menuPosition={bw.properties.menuPosition || 'top'}
+                menuBgColor={bw.properties.menuBgColor || '#2c3e50'}
+                menuTextColor={bw.properties.menuTextColor || '#ffffff'}
+                menuFontSize={bw.properties.menuFontSize || 14}
+                contentBgColor={bw.properties.contentBgColor || '#ffffff'}
+                orientation={bw.properties.orientation || 'vertical'}
+                onSave={(pages: BrowserPage[], settings) => {
+                  updateWidget(editingBrowserId, {
+                    properties: { ...bw.properties, pages, ...settings, browserId: bw.properties.browserId }
+                  });
+                  setEditingBrowserId(null);
+                }}
+                onClose={() => setEditingBrowserId(null)}
+              />
+            );
+          })()}
+
+          {/* Rich text overlay */}
+          {editingWidget && (
+            <TextEditorOverlay
+              widgetId={editingWidget.id}
+              x={editingWidget.x}
+              y={editingWidget.y}
+              width={editingWidget.width}
+              height={editingWidget.height}
+              zoom={zoom}
+              initialHtml={editingWidget.html}
+              onClose={handleEditorClose}
+            />
+          )}
+        </div>
+      </div>
+
+      <div className="canvas-info">
+        <span>
+          {project.canvas.width} × {project.canvas.height} px
+        </span>
+        {selectedWidgetIds.length > 0 && (
+          <span>
+            Выбрано: {selectedWidgetIds.length}
+          </span>
+        )}
+      </div>
+    </div>
+  );
+};
+
+export default Canvas;

@@ -3,6 +3,11 @@ import { getPrismaClient } from '../config/database';
 import fs from 'fs/promises';
 import path from 'path';
 import crypto from 'crypto';
+import { exec } from 'child_process';
+import { promisify } from 'util';
+import os from 'os';
+
+const execAsync = promisify(exec);
 
 export class FileService {
   private static UPLOAD_DIR = process.env.UPLOAD_DIR || '/opt/kiosk/uploads';
@@ -256,4 +261,68 @@ export class FileService {
       }))
     };
   }
+  /**
+   * Конвертировать PDF в изображения (одно изображение на страницу)
+   */
+  static async convertPdfToImages(params: {
+    projectId: string;
+    organizationId: string;
+    pdfFileId: string;
+    dpi?: number;
+  }): Promise<Array<{ id: string; url: string; fileName: string }>> {
+    const { projectId, organizationId, pdfFileId, dpi = 150 } = params;
+
+    // Получаем PDF файл
+    const pdfFile = await this.getFileById(pdfFileId, projectId, organizationId);
+    if (!pdfFile) throw new Error('PDF file not found');
+
+    const pdfPath = this.getFilePath(pdfFile.storagePath);
+
+    // Временная директория для PNG
+    const tmpDir = await fs.mkdtemp(path.join(os.tmpdir(), 'pdf-pages-'));
+
+    try {
+      const outputPrefix = path.join(tmpDir, 'page');
+
+      // Конвертируем PDF → PNG
+      await execAsync(`pdftoppm -r ${dpi} -png "${pdfPath}" "${outputPrefix}"`);
+
+      // Собираем все сгенерированные файлы
+      const tmpFiles = (await fs.readdir(tmpDir))
+        .filter(f => f.endsWith('.png'))
+        .sort();
+
+      if (tmpFiles.length === 0) {
+        throw new Error('No pages generated from PDF');
+      }
+
+      const results: Array<{ id: string; url: string; fileName: string }> = [];
+
+      // Загружаем каждую страницу как файл проекта
+      for (let i = 0; i < tmpFiles.length; i++) {
+        const tmpFile = tmpFiles[i];
+        const pageNum = i + 1;
+        const baseName = path.basename(pdfFile.fileName, path.extname(pdfFile.fileName));
+        const fileName = `${baseName}_page${pageNum}.png`;
+
+        const buffer = await fs.readFile(path.join(tmpDir, tmpFile));
+
+        const saved = await this.uploadFile({
+          projectId,
+          organizationId,
+          fileName,
+          mimeType: 'image/png',
+          fileBuffer: buffer,
+        });
+
+        results.push({ id: saved.id, url: saved.url, fileName: saved.fileName });
+      }
+
+      return results;
+    } finally {
+      // Чистим временные файлы
+      await fs.rm(tmpDir, { recursive: true, force: true }).catch(() => {});
+    }
+  }
+
 }

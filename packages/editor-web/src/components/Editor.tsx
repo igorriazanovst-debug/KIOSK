@@ -81,35 +81,40 @@ const Editor: React.FC = () => {
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
+      // Не перехватываем горячие клавиши если фокус в текстовом поле / редакторе
+      const tag = (document.activeElement as HTMLElement)?.tagName?.toLowerCase();
+      const isEditable = tag === 'input' || tag === 'textarea' || tag === 'select' ||
+        (document.activeElement as HTMLElement)?.isContentEditable;
+
       // Ctrl/Cmd + Z - Undo
       if ((e.ctrlKey || e.metaKey) && e.key === 'z' && !e.shiftKey) {
-        e.preventDefault();
-        undo();
+        if (!isEditable) { e.preventDefault(); undo(); }
       }
       // Ctrl/Cmd + Shift + Z - Redo
       if ((e.ctrlKey || e.metaKey) && e.key === 'z' && e.shiftKey) {
-        e.preventDefault();
-        redo();
+        if (!isEditable) { e.preventDefault(); redo(); }
       }
       // Ctrl/Cmd + C - Copy
       if ((e.ctrlKey || e.metaKey) && e.key === 'c') {
-        e.preventDefault();
-        copy();
+        if (!isEditable) { e.preventDefault(); copy(); }
       }
       // Ctrl/Cmd + V - Paste
       if ((e.ctrlKey || e.metaKey) && e.key === 'v') {
-        e.preventDefault();
-        paste();
+        if (!isEditable) { e.preventDefault(); paste(); }
       }
       // Ctrl/Cmd + X - Cut
       if ((e.ctrlKey || e.metaKey) && e.key === 'x') {
-        e.preventDefault();
-        cut();
+        if (!isEditable) { e.preventDefault(); cut(); }
       }
-      // Delete - удалить выделенные виджеты
+      // Delete - удалить выделенные виджеты (не срабатывать если фокус в текстовом поле)
       if (e.key === 'Delete') {
-        e.preventDefault();
-        selectedWidgetIds.forEach(id => deleteWidget(id));
+        const tag = (document.activeElement as HTMLElement)?.tagName?.toLowerCase();
+        const isEditable = tag === 'input' || tag === 'textarea' || tag === 'select' ||
+          (document.activeElement as HTMLElement)?.isContentEditable;
+        if (!isEditable) {
+          e.preventDefault();
+          selectedWidgetIds.forEach(id => deleteWidget(id));
+        }
       }
     };
 

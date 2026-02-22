@@ -450,12 +450,14 @@ function setBrowserActivePage(browserId: string, pageId: string) {
 }
 
 function handleBrowserLink(href: string, allWidgets: any[], goToSlide?: (i: number) => void) {
+  console.log('[BrowserLink] href:', href, 'allWidgets count:', allWidgets.length);
   if (href.startsWith('browser-page://')) {
     const pageId = href.replace('browser-page://', '');
     // Найти browserId для этой страницы
     const menuWidget = allWidgets.find((w: any) =>
       w.type === 'browser-menu' && (w.properties.pages || []).some((p: any) => p.id === pageId)
     );
+    console.log('[BrowserLink] pageId:', pageId, 'menuWidget:', menuWidget?.id, 'browserId:', menuWidget?.properties?.browserId);
     if (menuWidget) setBrowserActivePage(menuWidget.properties.browserId, pageId);
   } else if (href.startsWith('slide://')) {
     const idx = parseInt(href.replace('slide://', ''), 10);
@@ -573,6 +575,52 @@ interface BrowserContentPreviewProps {
   commonStyle: React.CSSProperties;
 }
 
+const processGalleries = (html: string): string => {
+  if (!html || !html.includes('data-gallery-images')) return html;
+  const parts = html.split(/<div /);
+  const processed = parts.map((part, idx) => {
+    if (idx === 0) return part;
+    if (!part.includes('data-gallery-images')) return '<div ' + part;
+    const closeTag = part.indexOf('>');
+    if (closeTag === -1) return '<div ' + part;
+    const attrs = part.substring(0, closeTag);
+    const rest = part.substring(closeTag + 1);
+    const imgAttrStart = attrs.indexOf('data-gallery-images=');
+    if (imgAttrStart === -1) return '<div ' + part;
+    const imgValStart = imgAttrStart + 'data-gallery-images='.length;
+    const imgQuote = attrs[imgValStart];
+    const imgValEnd = attrs.indexOf(imgQuote, imgValStart + 1);
+    const rawImages = attrs.substring(imgValStart + 1, imgValEnd)
+      .replace(/&quot;/g, '"').replace(/&#39;/g, "'").replace(/&amp;/g, '&');
+    const colsAttrStart = attrs.indexOf('data-gallery-cols=');
+    const rawCols = colsAttrStart !== -1 ? (() => {
+      const s = colsAttrStart + 'data-gallery-cols='.length;
+      const q = attrs[s];
+      return attrs.substring(s + 1, attrs.indexOf(q, s + 1));
+    })() : '3';
+    if (!rawImages) return '<div ' + part;
+    let imgs: string[] = [];
+    try { imgs = JSON.parse(rawImages); } catch { return '<div ' + part; }
+    if (imgs.length === 0) return '<div ' + part;
+    const cols = parseInt(rawCols) || 3;
+    const total = imgs.length;
+    const id = 'g' + Math.random().toString(36).substr(2, 6);
+    const thumbItems = imgs.map((src: string, i: number) => {
+      const safeSrc = src.replace(/'/g, "\'");
+      const openFn = `(function(){var lb=document.getElementById('${id}_lb');lb.setAttribute('data-cur','${i}');lb.style.display='flex';document.getElementById('${id}_img').src='${safeSrc}';document.getElementById('${id}_cnt').textContent='${i+1} / ${total}';})()`;
+      return `<div style="width:min(calc(${100/cols}% - 8px), 100px);height:100px;overflow:hidden;border-radius:6px;cursor:pointer;display:inline-block;margin:4px;" onclick="${openFn}"><img src="${src}" style="width:100%;height:100%;object-fit:cover;" /></div>`;
+    }).join('');
+    const allSrcs = imgs.map((s: string) => s.replace(/'/g, "\'")).join("','");
+    const prevFn = `(function(){var lb=document.getElementById('${id}_lb');var srcs=['${allSrcs}'];var c=(parseInt(lb.getAttribute('data-cur'))-1+${total})%${total};lb.setAttribute('data-cur',c);document.getElementById('${id}_img').src=srcs[c];document.getElementById('${id}_cnt').textContent=(c+1)+' / ${total}';})()`;
+    const nextFn = `(function(){var lb=document.getElementById('${id}_lb');var srcs=['${allSrcs}'];var c=(parseInt(lb.getAttribute('data-cur'))+1)%${total};lb.setAttribute('data-cur',c);document.getElementById('${id}_img').src=srcs[c];document.getElementById('${id}_cnt').textContent=(c+1)+' / ${total}';})()`;
+    const closeFn = `document.getElementById('${id}_lb').style.display='none'`;
+    const closingDiv = rest.indexOf('</div>');
+    const afterGalleryDiv = closingDiv !== -1 ? rest.substring(closingDiv + 6) : rest;
+    return `<div style="margin:12px 0;"><div style="display:flex;flex-wrap:wrap;">${thumbItems}</div><div id="${id}_lb" data-cur="0" onclick="if(event.target===this){${closeFn}}" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.92);z-index:99999;align-items:center;justify-content:center;flex-direction:column;"><img id="${id}_img" src="" style="max-width:90vw;max-height:80vh;object-fit:contain;border-radius:8px;" /><div style="display:flex;align-items:center;gap:20px;margin-top:16px;"><button onclick="${prevFn}" style="background:rgba(255,255,255,0.15);color:#fff;border:none;border-radius:50%;width:44px;height:44px;font-size:20px;cursor:pointer;">◀</button><span id="${id}_cnt" style="color:#aaa;font-size:13px;"></span><button onclick="${nextFn}" style="background:rgba(255,255,255,0.15);color:#fff;border:none;border-radius:50%;width:44px;height:44px;font-size:20px;cursor:pointer;">▶</button></div><button onclick="${closeFn}" style="position:absolute;top:18px;right:24px;background:none;color:#fff;border:none;font-size:28px;cursor:pointer;">✕</button></div></div>${afterGalleryDiv}`;
+  });
+  return processed.join('');
+};
+
 const BrowserContentPreview: React.FC<BrowserContentPreviewProps> = ({ widget, allWidgets, commonStyle }) => {
   const browserId: string = widget.properties.browserId || '';
   const contentBg: string = widget.properties.contentBgColor || '#ffffff';
@@ -587,6 +635,8 @@ const BrowserContentPreview: React.FC<BrowserContentPreviewProps> = ({ widget, a
     ? pages.find((p: any) => p.id === activePageId)
     : pages[0];
 
+  console.log('[BrowserContent] FULL htmlContent:', activePage?.htmlContent);
+
   return (
     <div style={{
       ...commonStyle,
@@ -597,9 +647,11 @@ const BrowserContentPreview: React.FC<BrowserContentPreviewProps> = ({ widget, a
       {activePage?.htmlContent ? (
         <div
           style={{ padding: '16px', fontFamily: 'Arial, sans-serif', lineHeight: '1.6' }}
-          dangerouslySetInnerHTML={{ __html: activePage.htmlContent }}
+          dangerouslySetInnerHTML={{ __html: processGalleries(activePage.htmlContent) }}
           onClick={(e) => {
+            console.log('[BrowserContent] click target:', (e.target as HTMLElement).tagName, (e.target as HTMLElement).getAttribute('href'));
             const a = (e.target as HTMLElement).closest('a');
+            console.log('[BrowserContent] closest a:', a?.getAttribute('href'));
             if (!a) return;
             const href = a.getAttribute('href') || '';
             if (href.startsWith('browser-page://') || href.startsWith('slide://')) {

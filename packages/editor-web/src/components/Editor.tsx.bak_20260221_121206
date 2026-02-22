@@ -1,0 +1,148 @@
+/**
+ * Editor Component - ИСПРАВЛЕНО
+ * НЕ создаёт проект пока нет авторизации
+ */
+
+import React, { useState, useRef, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { InactivityWarning } from './InactivityWarning';
+import { useEditorStore } from '../stores/editorStore';
+import Toolbar from './Toolbar';
+import Canvas from './Canvas';
+import WidgetLibrary from './WidgetLibrary';
+import PropertiesPanel from './PropertiesPanel';
+import './Editor.css';
+
+const Editor: React.FC = () => {
+  const navigate = useNavigate();
+  const [authRefresh, setAuthRefresh] = useState(0);
+  
+  const {
+    project,
+    restoreProject,
+    selectedWidgetIds,
+    copy,
+    paste,
+    cut,
+    deleteWidget,
+    undo,
+    redo
+  } = useEditorStore();
+
+  // Keyboard shortcuts
+
+  // Восстановление последнего открытого проекта при монтировании
+  useEffect(() => {
+    const restoreLastProject = async () => {
+      console.log('[Editor] Checking for project to restore...');
+      const restored = await restoreProject();
+      if (restored) {
+        console.log('[Editor] Project restored successfully');
+      } else {
+        console.log('[Editor] No project to restore');
+      }
+    };
+
+    restoreLastProject();
+  }, []); // Выполняется только при монтировании
+
+  // Слушатель событий выхода из системы
+  useEffect(() => {
+    const handleLogout = (event: Event) => {
+      const customEvent = event as CustomEvent;
+      const reason = customEvent.detail?.reason || 'unknown';
+      
+      console.log('[Editor] Logout event received, reason:', reason);
+      
+      // Сохраняем причину выхода для отображения на странице логина
+      if (reason === 'inactivity') {
+        sessionStorage.setItem('kiosk_logout_reason', 'inactivity');
+      }
+      
+      // Редирект на страницу логина
+      navigate('/login', { replace: true });
+    };
+
+    const handleUnauthorized = () => {
+      console.log('[Editor] Unauthorized event received');
+      sessionStorage.setItem('kiosk_logout_reason', 'session_expired');
+      navigate('/login', { replace: true });
+    };
+
+    window.addEventListener('auth:logout', handleLogout);
+    window.addEventListener('auth:unauthorized', handleUnauthorized);
+
+    return () => {
+      window.removeEventListener('auth:logout', handleLogout);
+      window.removeEventListener('auth:unauthorized', handleUnauthorized);
+    };
+  }, [navigate]);
+
+
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      // Ctrl/Cmd + Z - Undo
+      if ((e.ctrlKey || e.metaKey) && e.key === 'z' && !e.shiftKey) {
+        e.preventDefault();
+        undo();
+      }
+      // Ctrl/Cmd + Shift + Z - Redo
+      if ((e.ctrlKey || e.metaKey) && e.key === 'z' && e.shiftKey) {
+        e.preventDefault();
+        redo();
+      }
+      // Ctrl/Cmd + C - Copy
+      if ((e.ctrlKey || e.metaKey) && e.key === 'c') {
+        e.preventDefault();
+        copy();
+      }
+      // Ctrl/Cmd + V - Paste
+      if ((e.ctrlKey || e.metaKey) && e.key === 'v') {
+        e.preventDefault();
+        paste();
+      }
+      // Ctrl/Cmd + X - Cut
+      if ((e.ctrlKey || e.metaKey) && e.key === 'x') {
+        e.preventDefault();
+        cut();
+      }
+      // Delete - удалить выделенные виджеты (не срабатывать если фокус в текстовом поле)
+      if (e.key === 'Delete') {
+        const tag = (document.activeElement as HTMLElement)?.tagName?.toLowerCase();
+        const isEditable = tag === 'input' || tag === 'textarea' || tag === 'select' ||
+          (document.activeElement as HTMLElement)?.isContentEditable;
+        if (!isEditable) {
+          e.preventDefault();
+          selectedWidgetIds.forEach(id => deleteWidget(id));
+        }
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, []);
+
+  // Слушаем события входа для обновления UI
+  useEffect(() => {
+    const handleLogin = () => {
+      setAuthRefresh(prev => prev + 1);
+    };
+    
+    window.addEventListener('auth:login', handleLogin);
+    return () => window.removeEventListener('auth:login', handleLogin);
+  }, []);
+
+  return (
+    <div className="editor">
+      <InactivityWarning />
+      <Toolbar />
+      <div className="editor-main">
+        <WidgetLibrary />
+        <Canvas />
+        <PropertiesPanel />
+      </div>
+    </div>
+  );
+};
+
+export default Editor;

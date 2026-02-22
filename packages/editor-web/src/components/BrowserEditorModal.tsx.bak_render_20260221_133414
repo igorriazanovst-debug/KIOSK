@@ -1,0 +1,901 @@
+import React, { useState, useCallback, useRef } from 'react';
+import { apiClient } from '../services/api-client';
+import { useEditorStore } from '../stores/editorStore';
+import { useEditor, EditorContent } from '@tiptap/react';
+import { Extension, Node } from '@tiptap/core';
+import StarterKit from '@tiptap/starter-kit';
+import FontFamily from '@tiptap/extension-font-family';
+import Underline from '@tiptap/extension-underline';
+import TextAlign from '@tiptap/extension-text-align';
+import { TextStyle } from '@tiptap/extension-text-style';
+import Color from '@tiptap/extension-color';
+import Highlight from '@tiptap/extension-highlight';
+import './BrowserEditorModal.css';
+
+
+
+// Кастомное расширение Iframe
+const IframeExtension = Node.create({
+  name: 'iframe',
+  group: 'block',
+  atom: true,
+  addAttributes() {
+    return {
+      src: { default: null },
+      width: { default: '100%' },
+      height: { default: '405px' },
+      frameborder: { default: '0' },
+      allow: { default: null },
+      allowfullscreen: { default: true },
+      style: { default: null },
+    };
+  },
+  parseHTML() {
+    return [{ tag: 'iframe' }];
+  },
+  renderHTML({ HTMLAttributes }) {
+    return ['iframe', HTMLAttributes];
+  },
+});
+
+// Расширение для div-обёртки вокруг iframe
+const IframeWrapperExtension = Node.create({
+  name: 'iframeWrapper',
+  group: 'block',
+  content: 'block*',
+  addAttributes() {
+    return {
+      style: { default: null },
+    };
+  },
+  parseHTML() {
+    return [{ tag: 'div[style*="position:relative"]' }];
+  },
+  renderHTML({ HTMLAttributes }) {
+    return ['div', HTMLAttributes, 0];
+  },
+});
+
+// Кастомное расширение Image (без внешней зависимости)
+const ImageExtension = Node.create({
+  name: 'image',
+  group: 'block',
+  atom: true,
+  addAttributes() {
+    return {
+      src: { default: null },
+      alt: { default: null },
+      style: { default: null },
+    };
+  },
+  parseHTML() {
+    return [{ tag: 'img[src]' }];
+  },
+  renderHTML({ HTMLAttributes }) {
+    return ['img', HTMLAttributes];
+  },
+});
+
+const FontSize = Extension.create({
+  name: 'fontSize',
+  addGlobalAttributes() {
+    return [{ types: ['textStyle'], attributes: { fontSize: {
+      default: null,
+      parseHTML: (el: HTMLElement) => el.style.fontSize?.replace('px', '') || null,
+      renderHTML: (attrs: any) => attrs.fontSize ? { style: `font-size: ${attrs.fontSize}px` } : {},
+    }}}];
+  },
+  addCommands(): any {
+    return {
+      setFontSize: (size: string) => ({ chain }: any) => chain().setMark('textStyle', { fontSize: size }).run(),
+    };
+  },
+});
+
+export interface BrowserPage {
+  id: string;
+  title: string;
+  htmlContent: string;
+  parentId?: string;
+}
+
+interface BrowserEditorModalProps {
+  pages: BrowserPage[];
+  menuPosition: string;
+  menuBgColor: string;
+  menuTextColor: string;
+  menuFontSize: number;
+  contentBgColor: string;
+  orientation: string;
+  onSave: (pages: BrowserPage[], settings: {
+    menuPosition: string;
+    menuBgColor: string;
+    menuTextColor: string;
+    menuFontSize: number;
+    contentBgColor: string;
+    orientation: string;
+  }) => void;
+  onClose: () => void;
+}
+
+function generateId(): string {
+  return Math.random().toString(36).substr(2, 9);
+}
+
+interface PageTreeItemProps {
+  page: BrowserPage;
+  depth: number;
+  selectedId: string | null;
+  onSelect: (id: string) => void;
+  onAddChild: (parentId: string) => void;
+  onDelete: (id: string) => void;
+  allPages: BrowserPage[];
+}
+
+const PageTreeItem: React.FC<PageTreeItemProps> = ({
+  page, depth, selectedId, onSelect, onAddChild, onDelete, allPages
+}) => {
+  const children = allPages.filter(p => p.parentId === page.id);
+  return (
+    <div>
+      <div
+        className={`btree-item${selectedId === page.id ? ' selected' : ''}`}
+        style={{ paddingLeft: `${8 + depth * 16}px` }}
+        onClick={() => onSelect(page.id)}
+      >
+        <span className="btree-icon">{children.length > 0 ? '📁' : '📄'}</span>
+        <span className="btree-title">{page.title || 'Без названия'}</span>
+        <div className="btree-actions">
+          <button title="Добавить подстраницу" onClick={(e) => { e.stopPropagation(); onAddChild(page.id); }}>+</button>
+          <button title="Удалить" onClick={(e) => { e.stopPropagation(); onDelete(page.id); }}>🗑</button>
+        </div>
+      </div>
+      {children.map(child => (
+        <PageTreeItem
+          key={child.id} page={child} depth={depth + 1}
+          selectedId={selectedId} onSelect={onSelect}
+          onAddChild={onAddChild} onDelete={onDelete} allPages={allPages}
+        />
+      ))}
+    </div>
+  );
+};
+
+
+
+// Кастомное расширение Gallery — хранит список фото как data-атрибут
+const GalleryExtension = Node.create({
+  name: 'gallery',
+  group: 'block',
+  atom: true,
+  addAttributes() {
+    return {
+      images: {
+        default: '[]',
+        parseHTML: (el: HTMLElement) => el.getAttribute('data-gallery-images') || '[]',
+        renderHTML: (attrs: any) => ({ 'data-gallery-images': attrs.images }),
+      },
+      cols: {
+        default: '3',
+        parseHTML: (el: HTMLElement) => el.getAttribute('data-gallery-cols') || '3',
+        renderHTML: (attrs: any) => ({ 'data-gallery-cols': attrs.cols }),
+      },
+    };
+  },
+  parseHTML() {
+    return [{ tag: 'div[data-gallery-images]' }];
+  },
+  renderHTML({ HTMLAttributes }) {
+    return ['div', {
+      ...HTMLAttributes,
+      style: 'border:2px dashed #555;border-radius:8px;padding:12px;margin:8px 0;background:#2a2a2a;cursor:default;text-align:center;color:#aaa;font-size:13px;',
+      contenteditable: 'false',
+      'data-gallery-placeholder': 'true',
+    }];
+  },
+});
+
+// ─── Диалог вставки изображения ─────────────────────────────────────────────
+interface ImageInsertDialogProps {
+  pages: BrowserPage[];
+  onInsert: (html: string) => void;
+  onClose: () => void;
+  projectId: string | null;
+}
+
+const ImageInsertDialog: React.FC<ImageInsertDialogProps> = ({ onInsert, onClose, projectId }) => {
+  const [tab, setTab] = useState<'url' | 'upload'>('url');
+  const [url, setUrl] = useState('');
+  const [uploading, setUploading] = useState(false);
+  const [width, setWidth] = useState('100%');
+  const [align, setAlign] = useState<'left' | 'center' | 'right'>('center');
+  const fileRef = useRef<HTMLInputElement>(null);
+
+  const alignStyle = (a: string) =>
+    a === 'center' ? 'display:block;margin:0 auto;' :
+    a === 'right'  ? 'display:block;margin-left:auto;' : '';
+
+  const insertUrl = () => {
+    if (!url) return;
+    onInsert(`<img src="${url}" style="max-width:${width};${alignStyle(align)}" />`);
+  };
+
+  const handleUpload = async (file: File) => {
+    if (!projectId) { alert('Проект не сохранён'); return; }
+    setUploading(true);
+    try {
+      const result = await apiClient.uploadFile(projectId, file);
+      const src = result.url.startsWith('http') ? result.url : `${apiClient.getBaseUrl()}${result.url}`;
+      onInsert(`<img src="${src}" style="max-width:${width};${alignStyle(align)}" />`);
+    } catch (e: any) {
+      alert('Ошибка загрузки: ' + e.message);
+    } finally {
+      setUploading(false);
+    }
+  };
+
+  return (
+    <div className="binsert-dialog" onClick={(e) => e.stopPropagation()}>
+      <div className="binsert-header">
+        <span>🖼 Вставить изображение</span>
+        <button onClick={onClose}>✕</button>
+      </div>
+      <div className="binsert-tabs">
+        <button className={tab === 'url' ? 'active' : ''} onClick={() => setTab('url')}>URL</button>
+        <button className={tab === 'upload' ? 'active' : ''} onClick={() => setTab('upload')}>Загрузить</button>
+      </div>
+      {tab === 'url' && (
+        <div className="binsert-body">
+          <input placeholder="https://example.com/image.jpg" value={url}
+            onChange={(e) => setUrl(e.target.value)} className="binsert-input" />
+          {url && <img src={url} style={{ maxWidth: '100%', maxHeight: '120px', margin: '8px 0' }} />}
+        </div>
+      )}
+      {tab === 'upload' && (
+        <div className="binsert-body">
+          <input ref={fileRef} type="file" accept="image/*" style={{ display: 'none' }}
+            onChange={(e) => { const f = e.target.files?.[0]; if (f) handleUpload(f); }} />
+          <button className="binsert-upload-btn" onClick={() => fileRef.current?.click()} disabled={uploading}>
+            {uploading ? '⏳ Загрузка...' : '📁 Выбрать файл'}
+          </button>
+        </div>
+      )}
+      <div className="binsert-options">
+        <label>Ширина: <input type="text" value={width} onChange={(e) => setWidth(e.target.value)}
+          style={{ width: '80px' }} /></label>
+        <label>Выравнивание:
+          <select value={align} onChange={(e) => setAlign(e.target.value as any)}>
+            <option value="left">По левому краю</option>
+            <option value="center">По центру</option>
+            <option value="right">По правому краю</option>
+          </select>
+        </label>
+      </div>
+      {tab === 'url' && (
+        <div className="binsert-footer">
+          <button className="bbtn-primary" onClick={insertUrl} disabled={!url}>Вставить</button>
+        </div>
+      )}
+    </div>
+  );
+};
+
+// ─── Диалог вставки галереи ──────────────────────────────────────────────────
+interface GalleryInsertDialogProps {
+  onInsert: (images: string[], cols: number) => void;
+  onClose: () => void;
+  projectId: string | null;
+}
+
+const GalleryInsertDialog: React.FC<GalleryInsertDialogProps> = ({ onInsert, onClose, projectId }) => {
+  const [images, setImages] = useState<string[]>([]);
+  const [urlInput, setUrlInput] = useState('');
+  const [type, setType] = useState<'grid' | 'slider'>('grid');
+  const [cols, setCols] = useState(3);
+  const [uploading, setUploading] = useState(false);
+  const fileRef = useRef<HTMLInputElement>(null);
+
+  const addUrl = () => {
+    if (urlInput) { setImages(prev => [...prev, urlInput]); setUrlInput(''); }
+  };
+
+  const handleUpload = async (files: FileList) => {
+    if (!projectId) { alert('Проект не сохранён'); return; }
+    setUploading(true);
+    try {
+      const urls: string[] = [];
+      for (const file of Array.from(files)) {
+        const result = await apiClient.uploadFile(projectId, file);
+        const src = result.url.startsWith('http') ? result.url : `${apiClient.getBaseUrl()}${result.url}`;
+        urls.push(src);
+      }
+      setImages(prev => [...prev, ...urls]);
+    } catch (e: any) {
+      alert('Ошибка: ' + e.message);
+    } finally {
+      setUploading(false);
+    }
+  };
+
+  const buildHtml = () => {
+    if (images.length === 0) return;
+    const id = `album_${Math.random().toString(36).substr(2, 6)}`;
+
+    if (type === 'slider') {
+      const slides = images.map((src, i) =>
+        `<div class="${id}-slide" style="display:${i === 0 ? 'block' : 'none'};width:100%;text-align:center;"><img src="${src}" style="max-width:100%;max-height:500px;object-fit:contain;border-radius:6px;" /></div>`
+      ).join('');
+            onInsert(images, cols);
+      return;
+    }
+
+    // Фотоальбом — передаём массив URL и cols напрямую в TipTap node
+    onInsert(images, cols);
+  };
+
+  return (
+    <div className="binsert-dialog" onClick={(e) => e.stopPropagation()}>
+      <div className="binsert-header">
+        <span>🖼 Галерея изображений</span>
+        <button onClick={onClose}>✕</button>
+      </div>
+      <div className="binsert-tabs">
+        <button className={type === 'grid' ? 'active' : ''} onClick={() => setType('grid')}>Сетка</button>
+        <button className={type === 'slider' ? 'active' : ''} onClick={() => setType('slider')}>Слайдер</button>
+      </div>
+      <div className="binsert-body">
+        <div style={{ display: 'flex', gap: '6px', marginBottom: '8px' }}>
+          <input placeholder="URL изображения" value={urlInput}
+            onChange={(e) => setUrlInput(e.target.value)}
+            onKeyDown={(e) => e.key === 'Enter' && addUrl()}
+            className="binsert-input" style={{ flex: 1 }} />
+          <button className="bbtn-primary" onClick={addUrl}>+</button>
+        </div>
+        <input ref={fileRef} type="file" accept="image/*" multiple style={{ display: 'none' }}
+          onChange={(e) => { if (e.target.files) handleUpload(e.target.files); }} />
+        <button className="binsert-upload-btn" onClick={() => fileRef.current?.click()} disabled={uploading}>
+          {uploading ? '⏳ Загрузка...' : '📁 Загрузить файлы'}
+        </button>
+        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '4px', marginTop: '8px' }}>
+          {images.map((src, i) => (
+            <div key={i} style={{ position: 'relative' }}>
+              <img src={src} style={{ width: '60px', height: '60px', objectFit: 'cover', borderRadius: '4px' }} />
+              <button onClick={() => setImages(prev => prev.filter((_, j) => j !== i))}
+                style={{ position: 'absolute', top: 0, right: 0, background: 'rgba(0,0,0,0.6)', color: '#fff', border: 'none', borderRadius: '50%', width: '16px', height: '16px', cursor: 'pointer', fontSize: '10px', padding: 0 }}>✕</button>
+            </div>
+          ))}
+        </div>
+        {type === 'grid' && (
+          <div style={{ marginTop: '8px' }}>
+            <label style={{ color: '#aaa', fontSize: '12px' }}>Колонок: </label>
+            <input type="number" min={1} max={6} value={cols}
+              onChange={(e) => setCols(Number(e.target.value))}
+              style={{ width: '50px', marginLeft: '6px' }} />
+          </div>
+        )}
+      </div>
+      <div className="binsert-footer">
+        <button className="bbtn-primary" onClick={buildHtml} disabled={images.length === 0}>
+          Вставить галерею ({images.length} фото)
+        </button>
+      </div>
+    </div>
+  );
+};
+
+
+// ─── Диалог вставки видео ────────────────────────────────────────────────────
+interface VideoInsertDialogProps {
+  onInsert: (html: string) => void;
+  onClose: () => void;
+}
+
+const VideoInsertDialog: React.FC<VideoInsertDialogProps> = ({ onInsert, onClose }) => {
+  const [url, setUrl] = useState('');
+  const [width, setWidth] = useState('100%');
+  const [height, setHeight] = useState('405');
+  const [error, setError] = useState('');
+
+  const parseVideoUrl = (rawUrl: string): { embedUrl: string; provider: string } | null => {
+    try {
+      // Rutube: https://rutube.ru/video/HASH/ или https://rutube.ru/play/embed/HASH
+      const rutubeMatch = rawUrl.match(/rutube\.ru\/(?:video|play\/embed)\/([a-zA-Z0-9]+)/);
+      if (rutubeMatch) {
+        return { embedUrl: `https://rutube.ru/play/embed/${rutubeMatch[1]}`, provider: 'Rutube' };
+      }
+      // YouTube: youtu.be/ID или youtube.com/watch?v=ID или youtube.com/embed/ID
+      const ytMatch = rawUrl.match(/(?:youtu\.be\/|youtube\.com\/(?:watch\?v=|embed\/))([a-zA-Z0-9_-]{11})/);
+      if (ytMatch) {
+        return { embedUrl: `https://www.youtube.com/embed/${ytMatch[1]}`, provider: 'YouTube' };
+      }
+      // Vimeo: vimeo.com/ID
+      const vimeoMatch = rawUrl.match(/vimeo\.com\/([0-9]+)/);
+      if (vimeoMatch) {
+        return { embedUrl: `https://player.vimeo.com/video/${vimeoMatch[1]}`, provider: 'Vimeo' };
+      }
+      return null;
+    } catch {
+      return null;
+    }
+  };
+
+  const parsed = url ? parseVideoUrl(url) : null;
+
+  const insert = () => {
+    if (!parsed) { setError('Не удалось распознать ссылку'); return; }
+    const h = isNaN(Number(height)) ? height : `${height}px`;
+    const w = width.includes('%') ? width : `${width}px`;
+    onInsert(
+      `<div style="position:relative;width:${w};margin:12px 0;">` +
+      `<iframe src="${parsed.embedUrl}" width="100%" height="${h}" ` +
+      `frameborder="0" allow="clipboard-write; autoplay; fullscreen" ` +
+      `allowfullscreen style="display:block;"></iframe></div>`
+    );
+  };
+
+  return (
+    <div className="binsert-dialog" onClick={(e) => e.stopPropagation()}>
+      <div className="binsert-header">
+        <span>🎬 Вставить видео</span>
+        <button onClick={onClose}>✕</button>
+      </div>
+      <div className="binsert-body" style={{ padding: '16px' }}>
+        <div style={{ marginBottom: '8px', color: '#aaa', fontSize: '12px' }}>
+          Поддерживается: Rutube, YouTube, Vimeo
+        </div>
+        <input
+          className="binsert-input"
+          placeholder="https://rutube.ru/video/..."
+          value={url}
+          onChange={(e) => { setUrl(e.target.value); setError(''); }}
+          style={{ width: '100%', marginBottom: '8px' }}
+        />
+        {parsed && (
+          <div style={{ color: '#4caf50', fontSize: '12px', marginBottom: '8px' }}>
+            ✓ {parsed.provider}: {parsed.embedUrl}
+          </div>
+        )}
+        {error && <div style={{ color: '#f44336', fontSize: '12px', marginBottom: '8px' }}>{error}</div>}
+        <div style={{ display: 'flex', gap: '16px' }}>
+          <label style={{ color: '#aaa', fontSize: '12px' }}>
+            Ширина:&nbsp;
+            <input type="text" value={width} onChange={(e) => setWidth(e.target.value)}
+              style={{ width: '70px' }} />
+          </label>
+          <label style={{ color: '#aaa', fontSize: '12px' }}>
+            Высота (px):&nbsp;
+            <input type="text" value={height} onChange={(e) => setHeight(e.target.value)}
+              style={{ width: '70px' }} />
+          </label>
+        </div>
+      </div>
+      <div className="binsert-footer">
+        <button className="bbtn-secondary" onClick={onClose}>Отмена</button>
+        <button className="bbtn-primary" onClick={insert} disabled={!parsed}>Вставить</button>
+      </div>
+    </div>
+  );
+};
+
+// ─── Диалог вставки ссылки ───────────────────────────────────────────────────
+interface LinkInsertDialogProps {
+  pages: BrowserPage[];
+  onInsert: (html: string) => void;
+  onClose: () => void;
+}
+
+const LinkInsertDialog: React.FC<LinkInsertDialogProps> = ({ pages, onInsert, onClose }) => {
+  const [tab, setTab] = useState<'page' | 'slide'>('page');
+  const [label, setLabel] = useState('Нажмите здесь');
+  const [selectedPageId, setSelectedPageId] = useState('');
+  const [slideIndex, setSlideIndex] = useState(0);
+  const { project } = useEditorStore();
+
+  const insert = () => {
+    if (tab === 'page' && selectedPageId) {
+      onInsert(`<a href="browser-page://${selectedPageId}" style="color:#007acc;text-decoration:underline;cursor:pointer;">${label}</a>`);
+    } else if (tab === 'slide') {
+      onInsert(`<a href="slide://${slideIndex}" style="color:#007acc;text-decoration:underline;cursor:pointer;">${label}</a>`);
+    }
+  };
+
+  const rootPages = pages.filter(p => !p.parentId);
+
+  return (
+    <div className="binsert-dialog" onClick={(e) => e.stopPropagation()}>
+      <div className="binsert-header">
+        <span>🔗 Вставить ссылку</span>
+        <button onClick={onClose}>✕</button>
+      </div>
+      <div className="binsert-tabs">
+        <button className={tab === 'page' ? 'active' : ''} onClick={() => setTab('page')}>Страница браузера</button>
+        <button className={tab === 'slide' ? 'active' : ''} onClick={() => setTab('slide')}>Слайд проекта</button>
+      </div>
+      <div className="binsert-body">
+        <div style={{ marginBottom: '10px' }}>
+          <label style={{ color: '#aaa', fontSize: '12px', display: 'block', marginBottom: '4px' }}>Текст ссылки</label>
+          <input className="binsert-input" value={label} onChange={(e) => setLabel(e.target.value)} />
+        </div>
+        {tab === 'page' && (
+          <div>
+            <label style={{ color: '#aaa', fontSize: '12px', display: 'block', marginBottom: '4px' }}>Страница</label>
+            <select className="binsert-input" value={selectedPageId} onChange={(e) => setSelectedPageId(e.target.value)}>
+              <option value="">— выберите страницу —</option>
+              {pages.map(p => (
+                <option key={p.id} value={p.id}>
+                  {p.parentId ? '  › ' : ''}{p.title}
+                </option>
+              ))}
+            </select>
+          </div>
+        )}
+        {tab === 'slide' && (
+          <div>
+            <label style={{ color: '#aaa', fontSize: '12px', display: 'block', marginBottom: '4px' }}>Слайд</label>
+            <input type="number" min={1} className="binsert-input" value={slideIndex + 1}
+              onChange={(e) => setSlideIndex(Math.max(0, Number(e.target.value) - 1))}
+              style={{ width: '80px' }} />
+            <div style={{ fontSize: '11px', color: '#666', marginTop: '4px' }}>
+              * Навигация по слайдам работает только в Player
+            </div>
+          </div>
+        )}
+      </div>
+      <div className="binsert-footer">
+        <button className="bbtn-primary" onClick={insert}
+          disabled={tab === 'page' ? !selectedPageId : false}>
+          Вставить
+        </button>
+      </div>
+    </div>
+  );
+};
+
+const BrowserEditorModal: React.FC<BrowserEditorModalProps> = ({
+  pages: initialPages,
+  menuPosition: initMenuPos,
+  menuBgColor: initMenuBg,
+  menuTextColor: initMenuText,
+  menuFontSize: initMenuFs,
+  contentBgColor: initContentBg,
+  orientation: initOrientation,
+  onSave,
+  onClose,
+}) => {
+  const [pages, setPages] = useState<BrowserPage[]>(
+    initialPages.length > 0
+      ? initialPages
+      : [{ id: generateId(), title: 'Главная', htmlContent: '' }]
+  );
+  const [selectedId, setSelectedId] = useState<string | null>(
+    initialPages.length > 0 ? initialPages[0].id : null
+  );
+  const [menuPosition, setMenuPosition] = useState(initMenuPos);
+  const [menuBgColor, setMenuBgColor] = useState(initMenuBg);
+  const [menuTextColor, setMenuTextColor] = useState(initMenuText);
+  const [menuFontSize, setMenuFontSize] = useState(initMenuFs);
+  const [contentBgColor, setContentBgColor] = useState(initContentBg || '#ffffff');
+  const [orientation, setOrientation] = useState(initOrientation || 'vertical');
+  const [activeTab, setActiveTab] = useState<'content' | 'settings'>('content');
+  const [insertDialog, setInsertDialog] = useState<'image' | 'gallery' | 'link' | 'video' | null>(null);
+  const { projectId } = useEditorStore();
+
+  const [pagesRef, setPagesRef] = useState(pages);
+
+  const editor = useEditor({
+    extensions: [
+      StarterKit,
+      Underline,
+      TextAlign.configure({ types: ['heading', 'paragraph'] }),
+      TextStyle,
+      FontFamily,
+      FontSize,
+      Color,
+      Highlight.configure({ multicolor: true }),
+      ImageExtension,
+      IframeExtension,
+      IframeWrapperExtension,
+      GalleryExtension,
+    ],
+    content: pages.find(p => p.id === selectedId)?.htmlContent || '',
+    onUpdate: ({ editor }) => {
+      if (!selectedId) return;
+      const html = editor.getHTML();
+      setPages(prev => prev.map(p => p.id === selectedId ? { ...p, htmlContent: html } : p));
+    },
+  });
+
+  const saveCurrentAndSelect = useCallback((newId: string) => {
+    if (editor && selectedId) {
+      const html = editor.getHTML();
+      setPages(prev => {
+        const updated = prev.map(p => p.id === selectedId ? { ...p, htmlContent: html } : p);
+        const target = updated.find(p => p.id === newId);
+        if (target) editor.commands.setContent(target.htmlContent || '');
+        return updated;
+      });
+    } else {
+      const target = pages.find(p => p.id === newId);
+      if (target && editor) editor.commands.setContent(target.htmlContent || '');
+    }
+    setSelectedId(newId);
+  }, [editor, selectedId, pages]);
+
+  const addPage = () => {
+    const np: BrowserPage = { id: generateId(), title: 'Новая страница', htmlContent: '' };
+    setPages(prev => [...prev, np]);
+    saveCurrentAndSelect(np.id);
+  };
+
+  const addChildPage = (parentId: string) => {
+    const np: BrowserPage = { id: generateId(), title: 'Подстраница', htmlContent: '', parentId };
+    setPages(prev => [...prev, np]);
+    saveCurrentAndSelect(np.id);
+  };
+
+  const deletePage = (id: string) => {
+    const getAllDesc = (pid: string): string[] => {
+      const ch = pages.filter(p => p.parentId === pid);
+      return [pid, ...ch.flatMap(c => getAllDesc(c.id))];
+    };
+    const toDelete = new Set(getAllDesc(id));
+    const newPages = pages.filter(p => !toDelete.has(p.id));
+    setPages(newPages);
+    if (toDelete.has(selectedId || '')) {
+      const first = newPages[0];
+      setSelectedId(first?.id || null);
+      if (editor && first) editor.commands.setContent(first.htmlContent || '');
+      else if (editor) editor.commands.setContent('');
+    }
+  };
+
+  const updateTitle = (title: string) => {
+    if (!selectedId) return;
+    setPages(prev => prev.map(p => p.id === selectedId ? { ...p, title } : p));
+  };
+
+  const handleSave = () => {
+    let finalPages = pages;
+    if (selectedId && editor) {
+      const html = editor.getHTML();
+      finalPages = pages.map(p => p.id === selectedId ? { ...p, htmlContent: html } : p);
+    }
+    onSave(finalPages, { menuPosition, menuBgColor, menuTextColor, menuFontSize, contentBgColor, orientation });
+  };
+
+  const selectedPage = pages.find(p => p.id === selectedId) || null;
+  const rootPages = pages.filter(p => !p.parentId);
+
+  return (
+    <div
+      className="bmodal-overlay"
+      onClick={(e) => { if ((e.target as HTMLElement).classList.contains('bmodal-overlay')) onClose(); }}
+    >
+      <div className="bmodal">
+        <div className="bmodal-header">
+          <h2>🌐 Локальный браузер</h2>
+          <div className="bmodal-tabs">
+            <button className={activeTab === 'content' ? 'active' : ''} onClick={() => setActiveTab('content')}>
+              Страницы
+            </button>
+            <button className={activeTab === 'settings' ? 'active' : ''} onClick={() => setActiveTab('settings')}>
+              Настройки меню
+            </button>
+          </div>
+          <button className="bmodal-close" onClick={onClose}>✕</button>
+        </div>
+
+        {activeTab === 'content' && (
+          <div className="bmodal-body">
+            <div className="bmodal-tree">
+              <div className="btree-header">
+                <span>Страницы</span>
+                <button onClick={addPage}>+ Добавить</button>
+              </div>
+              <div className="btree-list">
+                {rootPages.map(page => (
+                  <PageTreeItem
+                    key={page.id} page={page} depth={0}
+                    selectedId={selectedId} onSelect={saveCurrentAndSelect}
+                    onAddChild={addChildPage} onDelete={deletePage}
+                    allPages={pages}
+                  />
+                ))}
+                {pages.length === 0 && (
+                  <div className="btree-empty">Нет страниц. Нажмите «+ Добавить»</div>
+                )}
+              </div>
+            </div>
+
+            <div className="bmodal-editor">
+              {selectedPage ? (
+                <>
+                  <div className="bpage-title-row">
+                    <input
+                      className="bpage-title-input"
+                      value={selectedPage.title}
+                      onChange={(e) => updateTitle(e.target.value)}
+                      placeholder="Название страницы"
+                    />
+                  </div>
+                  <div className="bpage-toolbar">
+                    <button onClick={() => editor?.chain().focus().toggleBold().run()} className={editor?.isActive('bold') ? 'active' : ''}>B</button>
+                    <button onClick={() => editor?.chain().focus().toggleItalic().run()} className={editor?.isActive('italic') ? 'active' : ''}><i>I</i></button>
+                    <button onClick={() => editor?.chain().focus().toggleUnderline().run()} className={editor?.isActive('underline') ? 'active' : ''}><u>U</u></button>
+                    <span className="btoolbar-sep" />
+                    <button onClick={() => editor?.chain().focus().setTextAlign('left').run()}>⬛L</button>
+                    <button onClick={() => editor?.chain().focus().setTextAlign('center').run()}>⬛C</button>
+                    <button onClick={() => editor?.chain().focus().setTextAlign('right').run()}>⬛R</button>
+                    <span className="btoolbar-sep" />
+                    <label title="Цвет текста" style={{ display: 'flex', alignItems: 'center', gap: '2px', cursor: 'pointer' }}>
+                      <span style={{ fontSize: '12px', color: '#ccc' }}>A</span>
+                      <input
+                        type="color"
+                        defaultValue="#000000"
+                        onInput={(e) => (editor?.chain().focus() as any).setColor((e.target as HTMLInputElement).value).run()}
+                        style={{ width: '24px', height: '20px', border: 'none', background: 'none', cursor: 'pointer', padding: 0 }}
+                        title="Цвет текста"
+                      />
+                    </label>
+                    <label title="Цвет подсветки" style={{ display: 'flex', alignItems: 'center', gap: '2px', cursor: 'pointer' }}>
+                      <span style={{ fontSize: '12px', color: '#ccc' }}>H</span>
+                      <input
+                        type="color"
+                        defaultValue="#ffff00"
+                        onChange={(e) => editor?.chain().focus().toggleHighlight({ color: e.target.value }).run()}
+                        style={{ width: '24px', height: '20px', border: 'none', background: 'none', cursor: 'pointer', padding: 0 }}
+                        title="Цвет подсветки"
+                      />
+                    </label>
+                    <span className="btoolbar-sep" />
+                    <select
+                      onChange={(e) => editor?.chain().focus().setFontFamily(e.target.value).run()}
+                      defaultValue=""
+                      style={{ background: '#2a2a2a', color: '#ccc', border: '1px solid #444', borderRadius: '4px', padding: '3px 6px', fontSize: '12px' }}
+                    >
+                      <option value="" disabled>Шрифт</option>
+                      {['Arial','Helvetica','Georgia','Times New Roman','Courier New','Verdana',
+                        'Lato','Lobster','Montserrat','Nunito','Open Sans','Oswald',
+                        'PT Sans','PT Serif','Pacifico','Raleway','Roboto','Ubuntu'].map(f => (
+                        <option key={f} value={f} style={{ fontFamily: f }}>{f}</option>
+                      ))}
+                    </select>
+                    <select
+                      onChange={(e) => {
+                        const size = e.target.value;
+                        if (size) (editor?.chain().focus() as any).setFontSize(size).run();
+                      }}
+                      defaultValue=""
+                      style={{ background: '#2a2a2a', color: '#ccc', border: '1px solid #444', borderRadius: '4px', padding: '3px 6px', fontSize: '12px' }}
+                    >
+                      <option value="" disabled>Размер</option>
+                      {[10,12,14,16,18,20,24,28,32,36,48,64,72].map(s => (
+                        <option key={s} value={s}>{s}</option>
+                      ))}
+                    </select>
+                    <span className="btoolbar-sep" />
+                    <button onClick={() => editor?.chain().focus().toggleHeading({ level: 1 }).run()}>H1</button>
+                    <button onClick={() => editor?.chain().focus().toggleHeading({ level: 2 }).run()}>H2</button>
+                    <button onClick={() => editor?.chain().focus().toggleHeading({ level: 3 }).run()}>H3</button>
+                    <span className="btoolbar-sep" />
+                    <button onClick={() => editor?.chain().focus().toggleBulletList().run()}>• Список</button>
+                    <button onClick={() => editor?.chain().focus().toggleOrderedList().run()}>1. Список</button>
+                    <span className="btoolbar-sep" />
+                    <button onClick={() => setInsertDialog('image')} title="Вставить изображение">🖼</button>
+                    <button onClick={() => setInsertDialog('gallery')} title="Вставить галерею">🖼🖼</button>
+                    <button onClick={() => setInsertDialog('link')} title="Вставить ссылку на страницу">🔗</button>
+                    <button onClick={() => setInsertDialog('video')} title="Вставить видео (Rutube/YouTube/Vimeo)">🎬</button>
+                  </div>
+                  {insertDialog && (
+                    <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', zIndex: 1000, minWidth: '360px', maxWidth: '480px', background: '#1e1e1e', borderRadius: '8px', boxShadow: '0 8px 32px rgba(0,0,0,0.6)' }}>
+                      {insertDialog === 'image' && (
+                        <ImageInsertDialog
+                          pages={pages}
+                          projectId={projectId}
+                          onInsert={(html) => { editor?.chain().focus().insertContent(html).run(); setInsertDialog(null); }}
+                          onClose={() => setInsertDialog(null)}
+                        />
+                      )}
+                      {insertDialog === 'gallery' && (
+                        <GalleryInsertDialog
+                          projectId={projectId}
+                          onInsert={(images, cols) => {
+                            editor?.chain().focus().insertContent({
+                              type: 'gallery',
+                              attrs: { images: JSON.stringify(images), cols: String(cols) }
+                            }).run();
+                            setInsertDialog(null);
+                          }}
+                          onClose={() => setInsertDialog(null)}
+                        />
+                      )}
+                      {insertDialog === 'link' && (
+                        <LinkInsertDialog
+                          pages={pages}
+                          onInsert={(html) => { editor?.chain().focus().insertContent(html).run(); setInsertDialog(null); }}
+                          onClose={() => setInsertDialog(null)}
+                        />
+                      )}
+                      {insertDialog === 'video' && (
+                        <VideoInsertDialog
+                          onInsert={(html) => { editor?.chain().focus().insertContent(html).run(); setInsertDialog(null); }}
+                          onClose={() => setInsertDialog(null)}
+                        />
+                      )}
+                    </div>
+                  )}
+                  <div className="bpage-content">
+                    <EditorContent editor={editor} />
+                  </div>
+                </>
+              ) : (
+                <div className="bpage-empty">Выберите страницу слева</div>
+              )}
+            </div>
+          </div>
+        )}
+
+        {activeTab === 'settings' && (
+          <div className="bmodal-settings">
+            <div className="bsetting-row">
+              <label>Ориентация меню</label>
+              <select value={orientation} onChange={(e) => setOrientation(e.target.value)}>
+                <option value="vertical">Вертикальное</option>
+                <option value="horizontal">Горизонтальное</option>
+              </select>
+            </div>
+            <div className="bsetting-row">
+              <label>Фон контента</label>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <input
+                  type="color"
+                  value={contentBgColor === 'transparent' ? '#ffffff' : contentBgColor}
+                  onChange={(e) => setContentBgColor(e.target.value)}
+                  disabled={contentBgColor === 'transparent'}
+                />
+                <label style={{ display: 'flex', alignItems: 'center', gap: '4px', fontSize: '12px', color: '#aaa' }}>
+                  <input
+                    type="checkbox"
+                    checked={contentBgColor === 'transparent'}
+                    onChange={(e) => setContentBgColor(e.target.checked ? 'transparent' : '#ffffff')}
+                  />
+                  Прозрачный
+                </label>
+              </div>
+            </div>
+            {/* Позиция меню — не используется в режиме связанной пары */}
+            {false && <div className="bsetting-row">
+              <label>Позиция меню</label>
+              <select value={menuPosition} onChange={(e) => setMenuPosition(e.target.value)}>
+                <option value="top">Сверху</option>
+                <option value="bottom">Снизу</option>
+                <option value="left">Слева</option>
+                <option value="right">Справа</option>
+              </select>
+            </div>}
+            <div className="bsetting-row">
+              <label>Цвет фона меню</label>
+              <input type="color" value={menuBgColor} onChange={(e) => setMenuBgColor(e.target.value)} />
+            </div>
+            <div className="bsetting-row">
+              <label>Цвет текста меню</label>
+              <input type="color" value={menuTextColor} onChange={(e) => setMenuTextColor(e.target.value)} />
+            </div>
+            <div className="bsetting-row">
+              <label>Размер шрифта меню</label>
+              <input type="number" value={menuFontSize} min={10} max={32}
+                onChange={(e) => setMenuFontSize(Number(e.target.value))} />
+            </div>
+          </div>
+        )}
+
+        <div className="bmodal-footer">
+          <button className="bbtn-secondary" onClick={onClose}>Отмена</button>
+          <button className="bbtn-primary" onClick={handleSave}>Сохранить</button>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default BrowserEditorModal;

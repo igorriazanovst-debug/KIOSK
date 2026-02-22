@@ -37,4 +37,7 @@ router.get('/:projectId/files/:fileId', FileController.downloadFile);
 
 router.delete('/:projectId/files/:fileId', authenticateClient, FileController.deleteFile);
 
+// Конвертация PDF в изображения
+router.post('/:projectId/pdf-pages', authenticateClient, FileController.convertPdfPages);
+
 export default router;

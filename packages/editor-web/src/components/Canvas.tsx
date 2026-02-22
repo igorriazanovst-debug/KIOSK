@@ -1,4 +1,5 @@
 import React, { useRef, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { Stage, Layer, Rect, Transformer, Image as KonvaImage, Text, Group } from 'react-konva';
 import { useEditorStore } from '../stores/editorStore';
 import ImageWidget from './ImageWidget';
@@ -31,12 +32,68 @@ const BrowserContentOverlay: React.FC<{
   const pages: any[] = menuWidget?.properties.pages || [];
   const [activePageId, setActivePageId] = React.useState<string>(pages[0]?.id || '');
 
-  // Слушаем смену страницы (в редакторе не кликают, но на случай будущего)
+  // Инициализация активной страницы
   React.useEffect(() => {
     if (!activePageId && pages[0]) setActivePageId(pages[0].id);
   }, [pages]);
 
+  // Слушаем переключение страницы по browser-page:// ссылке
+  React.useEffect(() => {
+    const handler = (e: Event) => {
+      const { browserId: bid, pageId } = (e as CustomEvent).detail;
+      if (bid === browserId) {
+        setActivePageId(pageId);
+      }
+    };
+    window.addEventListener('browser-page-change', handler);
+    return () => window.removeEventListener('browser-page-change', handler);
+  }, [browserId]);
+
   const activePage = pages.find((p: any) => p.id === activePageId) || pages[0];
+
+  // Разворачиваем data-gallery-images в полноценный лайтбокс HTML
+  const processGalleries = (html: string): string => {
+    if (!html || !html.includes('data-gallery-images')) return html;
+    // Use split approach to handle HTML-encoded attributes
+    const parts = html.split(/<div /);
+    const processed = parts.map((part, idx) => {
+      if (idx === 0) return part;
+      if (!part.includes('data-gallery-images')) return '<div ' + part;
+      // Extract attrs and content
+      const closeTag = part.indexOf('>');
+      if (closeTag === -1) return '<div ' + part;
+      const attrs = part.substring(0, closeTag);
+      const rest = part.substring(closeTag + 1);
+      // data-gallery-images value may contain &quot; so we can't use [^"] - use greedy match to next attribute
+      const imagesMatch = attrs.match(/data-gallery-images=(?:"(.*?)(?:"\s|"$)|'(.*?)(?:'\s|'$))/s);
+      const colsMatch = attrs.match(/data-gallery-cols=(?:"([^"\s]*)"|'([^'\s]*)')/);
+      if (!imagesMatch) return '<div ' + part;
+      const rawImages = (imagesMatch[1] !== undefined ? imagesMatch[1] : imagesMatch[2] || '[]')
+        .replace(/&quot;/g, '"').replace(/&#39;/g, "'").replace(/&amp;/g, '&');
+      const rawCols = colsMatch ? (colsMatch[1] !== undefined ? colsMatch[1] : colsMatch[2] || '3') : '3';
+      let imgs: string[] = [];
+      try { imgs = JSON.parse(rawImages); } catch { return '<div ' + part; }
+      if (imgs.length === 0) return '<div ' + part;
+      const cols = parseInt(rawCols) || 3;
+      const total = imgs.length;
+      const id = 'g' + Math.random().toString(36).substr(2, 6);
+      const thumbItems = imgs.map((src: string, i: number) => {
+        const safeSrc = src.replace(/'/g, "\\'");
+        const openFn = `(function(){var lb=document.getElementById('${id}_lb');lb.setAttribute('data-cur','${i}');lb.style.display='flex';document.getElementById('${id}_img').src='${safeSrc}';document.getElementById('${id}_cnt').textContent='${i+1} / ${total}';})()`;
+        return `<div style="width:min(calc(${100/cols}% - 8px), 100px);height:100px;overflow:hidden;border-radius:6px;cursor:pointer;display:inline-block;margin:4px;" onclick="${openFn}"><img src="${src}" style="width:100%;height:100%;object-fit:cover;" /></div>`;
+      }).join('');
+      const allSrcs = imgs.map((s: string) => s.replace(/'/g, "\\'")).join("','");
+      const prevFn = `(function(){var lb=document.getElementById('${id}_lb');var srcs=['${allSrcs}'];var c=(parseInt(lb.getAttribute('data-cur'))-1+${total})%${total};lb.setAttribute('data-cur',c);document.getElementById('${id}_img').src=srcs[c];document.getElementById('${id}_cnt').textContent=(c+1)+' / ${total}';})()`;
+      const nextFn = `(function(){var lb=document.getElementById('${id}_lb');var srcs=['${allSrcs}'];var c=(parseInt(lb.getAttribute('data-cur'))+1)%${total};lb.setAttribute('data-cur',c);document.getElementById('${id}_img').src=srcs[c];document.getElementById('${id}_cnt').textContent=(c+1)+' / ${total}';})()`;
+      const closeFn = `document.getElementById('${id}_lb').style.display='none'`;
+      // Skip original div content - find closing </div> and drop it
+      const closingDiv = rest.indexOf('</div>');
+      const afterGalleryDiv = closingDiv !== -1 ? rest.substring(closingDiv + 6) : rest;
+      return `<div style="margin:12px 0;"><div style="display:flex;flex-wrap:wrap;">${thumbItems}</div><div id="${id}_lb" data-cur="0" onclick="if(event.target===this){${closeFn}}" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.92);z-index:99999;align-items:center;justify-content:center;flex-direction:column;"><img id="${id}_img" src="" style="max-width:90vw;max-height:80vh;object-fit:contain;border-radius:8px;" /><div style="display:flex;align-items:center;gap:20px;margin-top:16px;"><button onclick="${prevFn}" style="background:rgba(255,255,255,0.15);color:#fff;border:none;border-radius:50%;width:44px;height:44px;font-size:20px;cursor:pointer;">◀</button><span id="${id}_cnt" style="color:#aaa;font-size:13px;"></span><button onclick="${nextFn}" style="background:rgba(255,255,255,0.15);color:#fff;border:none;border-radius:50%;width:44px;height:44px;font-size:20px;cursor:pointer;">▶</button></div><button onclick="${closeFn}" style="position:absolute;top:18px;right:24px;background:none;color:#fff;border:none;font-size:28px;cursor:pointer;">✕</button></div></div>${afterGalleryDiv}`;
+    });
+    return processed.join('');
+  };
+
 
   const left = widget.x * zoom;
   const top = widget.y * zoom;
@@ -103,13 +160,13 @@ document.addEventListener('click', function(e) {
         top: `${top}px`,
         width: `${width}px`,
         height: `${height}px`,
-        pointerEvents: 'none',
+        pointerEvents: 'auto',
         overflow: 'hidden',
         zIndex: 1,
       }}
     >
       <iframe
-        srcDoc={html}
+        srcDoc={processGalleries(html)}
         style={{
           width: '100%',
           height: '100%',
@@ -135,6 +192,35 @@ const WIDGET_COLORS: Record<string, string> = {
   video: '#f39c12'
 };
 
+
+// ─── TextHtmlOverlay ────────────────────────────────────────────────────────
+const TextHtmlOverlay: React.FC<{ widget: any; zoom: number }> = ({ widget, zoom }) => {
+  const htmlContent: string = widget.properties.htmlContent || '';
+  if (!htmlContent || htmlContent === '<p></p>') return null;
+  const { backgroundColor = 'transparent', padding = 8, opacity = 1 } = widget.properties;
+  const rotation = widget.rotation || 0;
+  return (
+    <div
+      style={{
+        position: 'absolute',
+        left: widget.x * zoom,
+        top: widget.y * zoom,
+        width: widget.width * zoom,
+        height: widget.height * zoom,
+        transform: rotation ? `rotate(${rotation}deg)` : undefined,
+        transformOrigin: 'top left',
+        pointerEvents: 'none',
+        overflow: 'hidden',
+        opacity,
+        background: backgroundColor !== 'transparent' ? backgroundColor : undefined,
+        boxSizing: 'border-box',
+        padding: `${padding * zoom}px`,
+      }}
+      dangerouslySetInnerHTML={{ __html: htmlContent }}
+    />
+  );
+};
+
 const Canvas: React.FC = () => {
   const { 
     project, 
@@ -155,6 +241,7 @@ const Canvas: React.FC = () => {
 
   const stageRef = useRef<any>(null);
   const transformerRef = useRef<any>(null);
+  const wrapperRef = useRef<HTMLDivElement>(null);
 
   const [editingBrowserId, setEditingBrowserId] = React.useState<string | null>(null);
 
@@ -169,7 +256,14 @@ const Canvas: React.FC = () => {
   React.useEffect(() => {
     const msgHandler = (e: MessageEvent) => {
       if (e.data?.type !== 'browser-link') return;
-      console.log('[Browser] Link clicked:', e.data.href);
+      const { href, browserId } = e.data;
+      console.log('[Browser] Link clicked:', href, 'browserId:', browserId);
+      if (href && href.startsWith('browser-page://')) {
+        const pageId = href.replace('browser-page://', '');
+        window.dispatchEvent(new CustomEvent('browser-page-change', {
+          detail: { browserId, pageId }
+        }));
+      }
     };
     window.addEventListener('message', msgHandler);
     return () => window.removeEventListener('message', msgHandler);
@@ -212,14 +306,8 @@ const Canvas: React.FC = () => {
   if (!project) return null;
 
   const handleStageClick = (e: any) => {
-    // Если есть ожидающий виджет - добавляем его в точку клика
+    // pendingWidget обрабатывается в onClickCapture на canvas-wrapper
     if (pendingWidget) {
-      const stage = e.target.getStage();
-      const pointerPosition = stage.getPointerPosition();
-      
-      if (pointerPosition) {
-        addWidgetAtPosition(pointerPosition.x, pointerPosition.y);
-      }
       return;
     }
 
@@ -348,7 +436,17 @@ const Canvas: React.FC = () => {
     <div className="canvas-container">
       <div className="canvas-scroll">
         <div 
+          ref={wrapperRef}
           className="canvas-wrapper"
+          onClickCapture={(e: React.MouseEvent<HTMLDivElement>) => {
+            if (!pendingWidget) return;
+            const rect = wrapperRef.current?.getBoundingClientRect();
+            if (!rect) return;
+            const x = Math.round((e.clientX - rect.left) / zoom);
+            const y = Math.round((e.clientY - rect.top) / zoom);
+            addWidgetAtPosition(x, y);
+            e.stopPropagation();
+          }}
           style={{
             transform: `scale(${zoom})`,
             transformOrigin: 'top left',
@@ -664,6 +762,14 @@ const Canvas: React.FC = () => {
             </Layer>
           </Stage>
 
+          {/* Text HTML overlays */}
+          {project?.widgets
+            .filter((w: any) => w.type === 'text' && w.properties.htmlContent)
+            .map((w: any) => (
+              <TextHtmlOverlay key={`text-overlay-${w.id}`} widget={w} zoom={zoom} />
+            ))
+          }
+
           {/* BrowserContent iframe overlays */}
           {project?.widgets
             .filter((w: any) => w.type === 'browser-content')
@@ -681,7 +787,7 @@ const Canvas: React.FC = () => {
           {editingBrowserId && (() => {
             const bw = project?.widgets.find(w => w.id === editingBrowserId && (w.type === 'browser' || w.type === 'browser-menu'));
             if (!bw) return null;
-            return (
+            const modal = (
               <BrowserEditorModal
                 pages={bw.properties.pages || []}
                 menuPosition={bw.properties.menuPosition || 'top'}
@@ -699,6 +805,7 @@ const Canvas: React.FC = () => {
                 onClose={() => setEditingBrowserId(null)}
               />
             );
+            return createPortal(modal, document.body);
           })()}
 
           {/* Rich text overlay */}
