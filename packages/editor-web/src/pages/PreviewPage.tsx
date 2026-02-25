@@ -502,7 +502,7 @@ const BrowserMenuPreview: React.FC<BrowserMenuPreviewProps> = ({ widget, allWidg
       background: menuBg,
       display: 'flex',
       flexDirection: isHoriz ? 'row' : 'column',
-      overflow: 'hidden',
+      overflow: isHoriz ? 'visible' : 'hidden',
       position: 'absolute',
     }}>
       {topLevel.map((page: any) => {

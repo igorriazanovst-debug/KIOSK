@@ -1,0 +1,52 @@
+{
+  "id": "902b2685-1b14-454d-b794-53cf61997f73",
+  "version": "1.0",
+  "name": "Школьный информаторий",
+  "canvas": {
+    "width": 1920,
+    "height": 1080,
+    "backgroundColor": "#ffffff"
+  },
+  "widgets": [
+    {
+      "x": 60,
+      "y": 460,
+      "id": "widget-1771867456329-0.470459722216802",
+      "type": "video",
+      "width": 640,
+      "height": 360,
+      "zIndex": 0,
+      "rotation": -30.63311519507922,
+      "properties": {
+        "src": "http://31.192.110.121:8080/api/projects/902b2685-1b14-454d-b794-53cf61997f73/files/1892ef06-3662-4e2d-ab7b-6c95b93f26f5",
+        "loop": false,
+        "autoplay": true,
+        "fileName": "4331900-hd_1920_1080_24fps.mp4",
+        "isLocalFile": false
+      }
+    },
+    {
+      "x": 420,
+      "y": 200,
+      "id": "widget-1771867761390-0.4535291624055252",
+      "type": "text",
+      "width": 420,
+      "height": 40,
+      "zIndex": 0,
+      "rotation": 23.19858919471504,
+      "properties": {
+        "text": "Котики - это наши питомцы",
+        "color": "#000000",
+        "fontSize": 24,
+        "textAlign": "center",
+        "backgroundColor": "#c5ff9e"
+      }
+    }
+  ],
+  "metadata": {
+    "createdAt": "2026-02-23T17:23:32.147Z",
+    "updatedAt": "2026-02-24T17:31:58.181Z"
+  },
+  "deviceId": "4dcd3e69-0e16-4ef1-b4f6-e3887a95926c",
+  "serverUrl": "http://31.192.110.121:8080"
+}

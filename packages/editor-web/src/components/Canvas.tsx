@@ -22,7 +22,8 @@ const BrowserContentOverlay: React.FC<{
   widget: any;
   zoom: number;
   allWidgets: any[];
-}> = ({ widget, zoom, allWidgets }) => {
+  isSelected: boolean;
+}> = ({ widget, zoom, allWidgets, isSelected }) => {
   const browserId: string = widget.properties.browserId || '';
   const contentBg: string = widget.properties.contentBgColor || '#ffffff';
 
@@ -152,6 +153,8 @@ document.addEventListener('click', function(e) {
 </body>
 </html>`;
 
+  const { selectWidget } = useEditorStore();
+
   return (
     <div
       style={{
@@ -160,7 +163,7 @@ document.addEventListener('click', function(e) {
         top: `${top}px`,
         width: `${width}px`,
         height: `${height}px`,
-        pointerEvents: 'auto',
+        pointerEvents: 'none',
         overflow: 'hidden',
         zIndex: 1,
       }}
@@ -177,6 +180,22 @@ document.addEventListener('click', function(e) {
         sandbox="allow-same-origin allow-scripts"
         title="browser-content-preview"
       />
+      {!isSelected && (
+        <div
+          style={{
+            position: 'absolute',
+            top: 0, left: 0,
+            width: '100%', height: '100%',
+            pointerEvents: 'auto',
+            cursor: 'move',
+            zIndex: 2,
+          }}
+          onClick={(e) => {
+            e.stopPropagation();
+            selectWidget(widget.id, e.ctrlKey || e.metaKey);
+          }}
+        />
+      )}
     </div>
   );
 };
@@ -779,6 +798,7 @@ const Canvas: React.FC = () => {
                 widget={w}
                 zoom={zoom}
                 allWidgets={project.widgets}
+                isSelected={selectedWidgetIds.includes(w.id)}
               />
             ))
           }

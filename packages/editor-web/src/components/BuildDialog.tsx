@@ -73,6 +73,9 @@ const BuildDialog: React.FC<BuildDialogProps> = ({ onClose }) => {
       const API_BASE = apiClient.getBaseUrl();
       const response = await fetch(`${API_BASE}/api/builds`, {
         method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${apiClient.getToken() || ''}`
+        },
         body: formData,
       });
 

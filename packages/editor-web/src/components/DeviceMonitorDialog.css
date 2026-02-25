@@ -1,0 +1,83 @@
+.dm-overlay {
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,0.5);
+  z-index: 9999;
+  display: flex; align-items: center; justify-content: center;
+}
+.dm-dialog {
+  background: #1e1e2e;
+  border: 1px solid #333;
+  border-radius: 10px;
+  width: 700px; max-width: 95vw;
+  max-height: 80vh;
+  display: flex; flex-direction: column;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+  color: #e0e0e0;
+}
+.dm-header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 14px 16px;
+  border-bottom: 1px solid #333;
+  flex-shrink: 0;
+}
+.dm-title {
+  display: flex; align-items: center; gap: 8px;
+  font-weight: 600; font-size: 15px;
+}
+.dm-count {
+  font-size: 11px; font-weight: 600;
+  padding: 2px 8px; border-radius: 20px;
+}
+.dm-count.online { background: #1a3a2a; color: #4caf50; }
+.dm-count.offline { background: #3a1a1a; color: #f44336; }
+.dm-header-actions {
+  display: flex; align-items: center; gap: 8px;
+}
+.dm-last-update { font-size: 11px; color: #666; }
+.dm-icon-btn {
+  background: none; border: 1px solid #444;
+  border-radius: 5px; padding: 4px 7px;
+  color: #aaa; cursor: pointer;
+  display: flex; align-items: center;
+}
+.dm-icon-btn:hover { background: #333; color: #fff; }
+.dm-body {
+  overflow-y: auto; flex: 1; padding: 8px 0;
+  min-height: 200px;
+}
+.dm-loading, .dm-error { padding: 40px; text-align: center; color: #888; }
+.dm-error { color: #f44336; }
+.dm-empty {
+  padding: 40px; text-align: center; color: #555;
+  display: flex; flex-direction: column; align-items: center; gap: 8px;
+}
+.dm-empty p { margin: 0; font-size: 14px; }
+.dm-empty small { font-size: 12px; color: #444; }
+.dm-table {
+  width: 100%; border-collapse: collapse; font-size: 13px;
+}
+.dm-table th {
+  padding: 8px 14px; text-align: left;
+  font-size: 11px; font-weight: 600;
+  color: #666; text-transform: uppercase; letter-spacing: 0.5px;
+  border-bottom: 1px solid #2a2a3a;
+}
+.dm-table td { padding: 10px 14px; border-bottom: 1px solid #1a1a2a; }
+.row-online td { background: rgba(76,175,80,0.04); }
+.row-offline td { opacity: 0.5; }
+.status-badge {
+  display: inline-flex; align-items: center; gap: 4px;
+  font-size: 11px; font-weight: 600;
+  padding: 3px 8px; border-radius: 20px;
+}
+.status-badge.online { background: #1a3a2a; color: #4caf50; }
+.status-badge.offline { background: #2a2a2a; color: #888; }
+.cell-name { font-weight: 500; color: #ddd; }
+.cell-mono { font-family: monospace; color: #aaa; font-size: 12px; }
+.cell-time { color: #888; font-size: 12px; }
+.dm-footer {
+  padding: 8px 16px;
+  border-top: 1px solid #333;
+  font-size: 11px; color: #555;
+  text-align: center; flex-shrink: 0;
+}

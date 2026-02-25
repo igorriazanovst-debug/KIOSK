@@ -16,6 +16,7 @@ import {
   Grid, 
   Magnet,
   Play,
+  Monitor,
   Package,
   User,
   LogOut
@@ -26,6 +27,7 @@ import { logger } from '../utils/logger';
 import AutoSaveIndicator from './AutoSaveIndicator';
 import ProjectsDialog from './ProjectsDialog';
 import BuildDialog from './BuildDialog';
+import DeviceMonitorDialog from './DeviceMonitorDialog';
 import './Toolbar.css';
 
 export const Toolbar: React.FC = () => {
@@ -53,6 +55,7 @@ export const Toolbar: React.FC = () => {
   const [plan, setPlan] = useState<string | null>(null);
   const [showProjectsDialog, setShowProjectsDialog] = useState(false);
   const [showBuildDialog, setShowBuildDialog] = useState(false);
+  const [showDeviceMonitor, setShowDeviceMonitor] = useState(false);
 
   useEffect(() => {
     const orgData = apiClient.getOrganizationData();
@@ -222,6 +225,15 @@ export const Toolbar: React.FC = () => {
 
           <div className="toolbar-divider" />
 
+          {/* Device Monitor */}
+          <button
+            className="toolbar-btn"
+            onClick={() => setShowDeviceMonitor(true)}
+            title="Подключённые устройства"
+          >
+            <Monitor size={18} />
+          </button>
+
           {/* Build Player */}
           <button 
             className="toolbar-btn"
@@ -250,6 +262,11 @@ export const Toolbar: React.FC = () => {
         <ProjectsDialog
           onClose={() => setShowProjectsDialog(false)}
         />
+      )}
+
+      {/* Device Monitor Dialog */}
+      {showDeviceMonitor && (
+        <DeviceMonitorDialog onClose={() => setShowDeviceMonitor(false)} />
       )}
 
       {/* Build Dialog */}

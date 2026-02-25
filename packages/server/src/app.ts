@@ -20,6 +20,9 @@ import projectRoutes from './routes/project.routes';
 // @ts-ignore
 import buildsRoutes from './routes/builds.js';
 
+import http from 'http';
+import { WebSocketServer, WebSocket } from 'ws';
+
 // NEW: Client API routes
 
 
@@ -124,6 +127,9 @@ app.use(notFoundHandler);
 // Error handler (должен быть последним)
 app.use(errorHandler);
 
+// WebSocket: deviceId -> WebSocket connection map
+const deviceSockets = new Map<string, WebSocket>();
+
 // Start server
 async function startServer() {
   try {
@@ -131,8 +137,81 @@ async function startServer() {
     await connectDatabase();
     console.log('✅ Database connected');
 
+    // HTTP server
+    const httpServer = http.createServer(app);
+
+    // WebSocket server
+    const wss = new WebSocketServer({ server: httpServer, path: '/ws' });
+
+    wss.on('connection', (ws: WebSocket) => {
+      let connectedDeviceId: string | null = null;
+
+      ws.on('message', async (data: Buffer) => {
+        try {
+          const msg = JSON.parse(data.toString());
+
+          if (msg.type === 'device:register') {
+            const incomingDeviceId = msg.deviceId;
+            if (incomingDeviceId) {
+              // Проверяем что deviceId существует в БД
+              try {
+                const { getPrismaClient } = await import('./config/database');
+                const prisma = getPrismaClient();
+                const device = await prisma.device.findUnique({
+                  where: { deviceId: incomingDeviceId }
+                });
+                if (!device) {
+                  console.warn('[WS] Unknown deviceId, closing:', incomingDeviceId);
+                  ws.send(JSON.stringify({ type: 'error', message: 'Unknown device' }));
+                  ws.close();
+                  return;
+                }
+                connectedDeviceId = incomingDeviceId;
+                deviceSockets.set(incomingDeviceId, ws);
+                await prisma.device.update({
+                  where: { deviceId: incomingDeviceId },
+                  data: { lastSeenAt: new Date() }
+                });
+                console.log('[WS] Device registered:', connectedDeviceId);
+                ws.send(JSON.stringify({ type: 'registered', deviceId: connectedDeviceId }));
+              } catch (err: any) {
+                console.error('[WS] DB error:', err.message);
+              }
+            }
+          } else if (msg.type === 'device:heartbeat') {
+            const hbDeviceId = msg.deviceId || connectedDeviceId;
+            if (hbDeviceId) {
+              try {
+                const { getPrismaClient } = await import('./config/database');
+                const prisma = getPrismaClient();
+                await prisma.device.updateMany({
+                  where: { deviceId: hbDeviceId },
+                  data: { lastSeenAt: new Date() }
+                });
+              } catch (err: any) {
+                console.error('[WS] Heartbeat DB error:', err.message);
+              }
+            }
+          }
+        } catch (err: any) {
+          console.error('[WS] Message parse error:', err.message);
+        }
+      });
+
+      ws.on('close', () => {
+        if (connectedDeviceId) {
+          deviceSockets.delete(connectedDeviceId);
+          console.log('[WS] Device disconnected:', connectedDeviceId);
+        }
+      });
+
+      ws.on('error', (err: Error) => {
+        console.error('[WS] Error:', err.message);
+      });
+    });
+
     // Start listening
-    app.listen(PORT, () => {
+    httpServer.listen(PORT, () => {
       console.log('');
       console.log('╔════════════════════════════════════════════════╗');
       console.log('║   Kiosk License Server - Iteration 2          ║');

@@ -11,6 +11,13 @@ import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import { getJWTConfig } from '../config/jwt';
 
+// BigInt serialization helper
+function replaceBigInt(_key: string, value: any) {
+  return typeof value === 'bigint' ? Number(value) : value;
+}
+
+
+
 /**
  * Generate a random license key in format: XXXX-XXXX-XXXX-XXXX
  * Uses uppercase letters and numbers (A-Z, 0-9)
@@ -355,7 +362,7 @@ export class AdminController {
       prisma.device.count({ where })
     ]);
     
-    res.json({
+    res.json(JSON.parse(JSON.stringify({
       success: true,
       data: devices,
       pagination: {
@@ -364,7 +371,7 @@ export class AdminController {
         total,
         pages: Math.ceil(total / Number(limit))
       }
-    });
+    }, replaceBigInt)));
   }
   
   
