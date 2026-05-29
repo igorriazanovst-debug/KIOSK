@@ -24,3 +24,9 @@ router.post('/refresh', authenticateClient, AuthController.refreshToken);
 router.get('/verify', authenticateClient, AuthController.verifyToken);
 
 export default router;
+
+/**
+ * POST /api/auth/editor-login
+ * Вход в редактор по email + password
+ */
+router.post('/editor-login', AuthController.loginWithEmailPassword);

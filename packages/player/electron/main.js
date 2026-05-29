@@ -7,15 +7,15 @@ let currentProject = null;
 
 // Создание главного окна
 function createWindow() {
-  // DEV_MODE: временно отключён kiosk/fullscreen для отладки
+  
   mainWindow = new BrowserWindow({
     width: 1280,
     height: 800,
-    fullscreen: false,
-    kiosk: false,
-    frame: true,
-    autoHideMenuBar: false,
-    alwaysOnTop: false,
+    fullscreen: true,
+    kiosk: true,
+    frame: false,
+    autoHideMenuBar: true,
+    alwaysOnTop: true,
     webPreferences: {
       nodeIntegration: false,
       contextIsolation: true,
@@ -28,7 +28,7 @@ function createWindow() {
   // Загрузка проекта
   if (process.env.NODE_ENV === 'development') {
     mainWindow.loadURL('http://localhost:5173');
-    mainWindow.webContents.openDevTools();
+    
   } else {
     mainWindow.loadFile(path.join(__dirname, '../dist/index.html'));
   }
@@ -204,6 +204,11 @@ function startHeartbeat(serverUrl, projectName) {
               mainWindow.webContents.send('load-project', currentProject);
             }
             console.log('[Device] New project deployed:', msg.projectData.name);
+          } else if (msg.type === 'device:shutdown') {
+            console.log('[Device] Received device:shutdown, quitting...');
+            if (heartbeatTimer) { clearInterval(heartbeatTimer); heartbeatTimer = null; }
+            try { wsConnection.close(); } catch {}
+            app.quit();
           }
         } catch {}
       });

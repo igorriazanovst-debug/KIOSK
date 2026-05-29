@@ -42,6 +42,11 @@ enum UserRole {
   USER
 }
 
+enum LicenseUserRole {
+  OWNER
+  MEMBER
+}
+
 // Организации (компании-клиенты)
 model Organization {
   id          String    @id @default(uuid())
@@ -76,6 +81,7 @@ model License {
   
   organization   Organization   @relation(fields: [organizationId], references: [id])
   devices        Device[]
+  licenseUsers   LicenseUser[]
   auditLogs      AuditLog[]
   
   // NEW: Online Editor relations
@@ -306,4 +312,21 @@ enum FileType {
   AUDIO
   DOCUMENT
   OTHER
+}
+
+// Пользователи лицензии (OWNER + MEMBER для входа в редактор)
+model LicenseUser {
+  id           String          @id @default(uuid())
+  licenseId    String
+  email        String          @unique
+  passwordHash String
+  role         LicenseUserRole @default(MEMBER)
+  createdAt    DateTime        @default(now())
+  updatedAt    DateTime        @updatedAt
+
+  license      License         @relation(fields: [licenseId], references: [id])
+
+  @@index([email])
+  @@index([licenseId])
+  @@map("license_users")
 }

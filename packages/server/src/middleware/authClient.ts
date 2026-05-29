@@ -10,10 +10,9 @@ interface ClientJWTPayload {
   licenseId: string;
   organizationId: string;
   userId?: string;
-  type: 'client';
+  type: 'client' | 'license_user';
 }
 
-// Расширяем Request для TypeScript
 declare global {
   namespace Express {
     interface Request {
@@ -22,9 +21,6 @@ declare global {
   }
 }
 
-/**
- * Middleware для проверки JWT токена клиента
- */
 export const authenticateClient = (req: Request, res: Response, next: NextFunction) => {
   try {
     const authHeader = req.headers.authorization;
@@ -41,18 +37,24 @@ export const authenticateClient = (req: Request, res: Response, next: NextFuncti
     try {
       const payload = jwt.verify(token, publicKey, {
         algorithms: ['RS256']
-      }) as ClientJWTPayload;
+      }) as any;
 
-      // Проверяем что это токен клиента (не админа)
-      if (payload.type !== 'client') {
+      // Принимаем токены типа 'client' (лицензионный ключ) и 'license_user' (email+password)
+      if (payload.type !== 'client' && payload.type !== 'license_user') {
         return res.status(403).json({
           error: 'Invalid token type',
-          message: 'This endpoint requires a client token'
+          message: 'This endpoint requires a client or license_user token'
         });
       }
 
-      // Добавляем payload в request
-      req.client = payload;
+      // Нормализуем payload в единый формат req.client
+      req.client = {
+        licenseId: payload.licenseId,
+        organizationId: payload.organizationId,
+        userId: payload.userId || payload.licenseUserId,
+        type: payload.type,
+      };
+
       next();
     } catch (jwtError: any) {
       if (jwtError.name === 'TokenExpiredError') {
@@ -76,15 +78,11 @@ export const authenticateClient = (req: Request, res: Response, next: NextFuncti
   }
 };
 
-/**
- * Опциональная аутентификация (не требует токен, но если есть - проверяет)
- */
 export const optionalAuth = (req: Request, res: Response, next: NextFunction) => {
   try {
     const authHeader = req.headers.authorization;
 
     if (!authHeader || !authHeader.startsWith('Bearer ')) {
-      // Токена нет - продолжаем без аутентификации
       return next();
     }
 
@@ -93,13 +91,17 @@ export const optionalAuth = (req: Request, res: Response, next: NextFunction) =>
     try {
       const payload = jwt.verify(token, publicKey, {
         algorithms: ['RS256']
-      }) as ClientJWTPayload;
+      }) as any;
 
-      if (payload.type === 'client') {
-        req.client = payload;
+      if (payload.type === 'client' || payload.type === 'license_user') {
+        req.client = {
+          licenseId: payload.licenseId,
+          organizationId: payload.organizationId,
+          userId: payload.userId || payload.licenseUserId,
+          type: payload.type,
+        };
       }
     } catch (jwtError) {
-      // Токен невалидный - игнорируем и продолжаем
       console.warn('Invalid token in optional auth:', jwtError);
     }
 

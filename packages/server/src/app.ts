@@ -19,6 +19,7 @@ import projectRoutes from './routes/project.routes';
 // Builds (player packaging)
 // @ts-ignore
 import buildsRoutes from './routes/builds.js';
+import clientRoutes from './routes/client.routes';
 
 import http from 'http';
 import { WebSocketServer, WebSocket } from 'ws';
@@ -114,6 +115,7 @@ app.use('/api/admin', adminRoutes);
 app.use('/api/auth', authRoutes);
 app.use('/api/projects', projectRoutes);
 app.use('/api/builds', buildsRoutes);
+app.use('/api/client', clientRoutes);
 
 // Storage stats endpoint (requires authentication)
 app.get('/api/storage/stats', async (req, res) => {
@@ -128,7 +130,7 @@ app.use(notFoundHandler);
 app.use(errorHandler);
 
 // WebSocket: deviceId -> WebSocket connection map
-const deviceSockets = new Map<string, WebSocket>();
+export const deviceSockets = new Map<string, WebSocket>();
 
 // Start server
 async function startServer() {

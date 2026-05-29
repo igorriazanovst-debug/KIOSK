@@ -1,52 +1,90 @@
 {
-  "id": "902b2685-1b14-454d-b794-53cf61997f73",
+  "id": "f8373c8f-2051-40fb-acdf-03731daa3b31",
   "version": "1.0",
-  "name": "Школьный информаторий",
+  "name": "Музей СВО",
   "canvas": {
     "width": 1920,
     "height": 1080,
-    "backgroundColor": "#ffffff"
+    "backgroundColor": "#0a1929"
   },
   "widgets": [
     {
-      "x": 60,
-      "y": 460,
-      "id": "widget-1771867456329-0.470459722216802",
-      "type": "video",
-      "width": 640,
-      "height": 360,
-      "zIndex": 0,
-      "rotation": -30.63311519507922,
+      "x": 0,
+      "y": 0,
+      "id": "bm_645i2z8ry",
+      "type": "browser-menu",
+      "width": 1920,
+      "height": 60,
+      "zIndex": 2,
+      "rotation": 0,
       "properties": {
-        "src": "http://31.192.110.121:8080/api/projects/902b2685-1b14-454d-b794-53cf61997f73/files/1892ef06-3662-4e2d-ab7b-6c95b93f26f5",
-        "loop": false,
-        "autoplay": true,
-        "fileName": "4331900-hd_1920_1080_24fps.mp4",
-        "isLocalFile": false
+        "pages": [
+          {
+            "id": "0j1py7onv",
+            "title": "Главная",
+            "htmlContent": "<div style=\"width:100%;background:#000;line-height:0;font-size:0;\"><img src=\"http://31.192.110.121:8080/api/projects/f8373c8f-2051-40fb-acdf-03731daa3b31/files/f6a6c556-7163-4874-85bc-529f57a27d82\" style=\"display:block;width:100%;height:auto;border:0;\"/></div>"
+          },
+          {
+            "id": "av8md5pmr",
+            "title": "Указ Президента",
+            "htmlContent": "<div style=\"width:100%;background:#000;line-height:0;font-size:0;\"><img src=\"http://31.192.110.121:8080/api/projects/f8373c8f-2051-40fb-acdf-03731daa3b31/files/79dfbeb4-5dd1-42ef-aa60-49c64cd612c3\" style=\"display:block;width:100%;height:auto;border:0;\"/></div>"
+          },
+          {
+            "id": "kffuzm1aa",
+            "title": "Места силы",
+            "htmlContent": "<div style=\"width:100%;background:#000;line-height:0;font-size:0;\"><img src=\"http://31.192.110.121:8080/api/projects/f8373c8f-2051-40fb-acdf-03731daa3b31/files/e387c72b-8354-4377-8704-873d7e5a4f59\" style=\"display:block;width:100%;height:auto;border:0;\"/></div>"
+          },
+          {
+            "id": "eoim37r0b",
+            "title": "Оснащение",
+            "htmlContent": "<div style=\"width:100%;background:#000;line-height:0;font-size:0;\"><img src=\"http://31.192.110.121:8080/api/projects/f8373c8f-2051-40fb-acdf-03731daa3b31/files/98b594e2-49b3-4401-ad01-34dd1cbd368a\" style=\"display:block;width:100%;height:auto;border:0;\"/></div>"
+          },
+          {
+            "id": "233c5pwbj",
+            "title": "Экспозиция и преимущества",
+            "htmlContent": "<div style=\"width:100%;background:#000;line-height:0;font-size:0;\"><img src=\"http://31.192.110.121:8080/api/projects/f8373c8f-2051-40fb-acdf-03731daa3b31/files/0f2fb1cb-83af-46c4-bdb3-4334343d709e\" style=\"display:block;width:100%;height:auto;border:0;\"/></div>"
+          },
+          {
+            "id": "nsldvbgav",
+            "title": "Память",
+            "htmlContent": "<div style=\"width:100%;background:#000;line-height:0;font-size:0;\"><img src=\"http://31.192.110.121:8080/api/projects/f8373c8f-2051-40fb-acdf-03731daa3b31/files/7f054d26-f9d5-44d6-97bc-c6aae91e488e\" style=\"display:block;width:100%;height:auto;border:0;\"/></div>"
+          },
+          {
+            "id": "c1wpugngz",
+            "title": "Команда музея",
+            "htmlContent": "<div style=\"width:100%;background:#000;line-height:0;font-size:0;\"><img src=\"http://31.192.110.121:8080/api/projects/f8373c8f-2051-40fb-acdf-03731daa3b31/files/9425ff27-a6c7-4f5b-a4e1-d5f154cdee7a\" style=\"display:block;width:100%;height:auto;border:0;\"/></div>"
+          }
+        ],
+        "opacity": 1,
+        "browserId": "645i2z8ry",
+        "menuBgColor": "#000",
+        "orientation": "horizontal",
+        "menuFontSize": 15,
+        "menuPosition": "top",
+        "menuTextColor": "#fff",
+        "contentBgColor": "#fff",
+        "activeMenuItemColor": "#ef6013"
       }
     },
     {
-      "x": 420,
-      "y": 200,
-      "id": "widget-1771867761390-0.4535291624055252",
-      "type": "text",
-      "width": 420,
-      "height": 40,
-      "zIndex": 0,
-      "rotation": 23.19858919471504,
+      "x": 0,
+      "y": 60,
+      "id": "bc_645i2z8ry",
+      "type": "browser-content",
+      "width": 1920,
+      "height": 1020,
+      "zIndex": 3,
+      "rotation": 0,
       "properties": {
-        "text": "Котики - это наши питомцы",
-        "color": "#000000",
-        "fontSize": 24,
-        "textAlign": "center",
-        "backgroundColor": "#c5ff9e"
+        "browserId": "645i2z8ry",
+        "contentBgColor": "#fff"
       }
     }
   ],
   "metadata": {
-    "createdAt": "2026-02-23T17:23:32.147Z",
-    "updatedAt": "2026-02-24T17:31:58.181Z"
+    "createdAt": "2026-05-27T12:55:37.297Z",
+    "updatedAt": "2026-05-28T12:27:14.762Z"
   },
-  "deviceId": "4dcd3e69-0e16-4ef1-b4f6-e3887a95926c",
+  "deviceId": "0ab12401-3439-44ca-8e2b-7abd264812b3",
   "serverUrl": "http://31.192.110.121:8080"
 }

@@ -10,7 +10,7 @@ export class ProjectService {
     description?: string;
     licenseId: string;
     organizationId: string;
-    createdByUserId: string;
+    createdByUserId?: string;
     projectData: any;
     canvasWidth?: number;
     canvasHeight?: number;

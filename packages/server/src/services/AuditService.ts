@@ -4,8 +4,8 @@ import { getPrismaClient } from '../config/database';
 
 export interface AuditLogData {
   action: string;
-  userId?: string;
-  deviceId?: string;
+  userId?: string | null;
+  deviceId?: string | null;
   licenseId?: string;
   details?: any;
   ipAddress?: string;
@@ -72,7 +72,7 @@ export class AuditService {
       action: 'device_deactivate',
       deviceId: params.deviceId,
       licenseId: params.licenseId,
-      userId: params.userId,
+      userId: params.userId ?? undefined,
       ipAddress: params.ipAddress
     });
   }
@@ -98,14 +98,14 @@ export class AuditService {
    */
   static async logLicenseCreated(params: {
     licenseId: string;
-    userId: string;
+    userId?: string | null;
     details: any;
     ipAddress?: string;
   }): Promise<void> {
     await this.log({
       action: 'license_create',
       licenseId: params.licenseId,
-      userId: params.userId,
+      userId: params.userId ?? undefined,
       details: params.details,
       ipAddress: params.ipAddress
     });
@@ -116,14 +116,14 @@ export class AuditService {
    */
   static async logLicenseUpdated(params: {
     licenseId: string;
-    userId: string;
+    userId?: string | null;
     changes: any;
     ipAddress?: string;
   }): Promise<void> {
     await this.log({
       action: 'license_update',
       licenseId: params.licenseId,
-      userId: params.userId,
+      userId: params.userId ?? undefined,
       details: { changes: params.changes },
       ipAddress: params.ipAddress
     });
@@ -133,7 +133,7 @@ export class AuditService {
    * Логировать вход админа
    */
   static async logAdminLogin(params: {
-    userId: string;
+    userId?: string | null;
     email: string;
     success: boolean;
     ipAddress?: string;
@@ -141,7 +141,7 @@ export class AuditService {
   }): Promise<void> {
     await this.log({
       action: params.success ? 'admin_login_success' : 'admin_login_failed',
-      userId: params.userId,
+      userId: params.userId ?? undefined,
       details: { email: params.email },
       ipAddress: params.ipAddress,
       userAgent: params.userAgent
@@ -231,8 +231,8 @@ export class AuditService {
  */
 export async function createAuditLog(params: {
   action: string;
-  userId?: string;
-  deviceId?: string;
+  userId?: string | null;
+  deviceId?: string | null;
   licenseId?: string;
   details?: any;
   ipAddress?: string;

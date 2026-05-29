@@ -246,4 +246,94 @@ export class AuthController {
       });
     }
   }
+  /**
+   * POST /api/auth/editor-login
+   * Вход в редактор по email + password (LicenseUser)
+   */
+  static async loginWithEmailPassword(req: Request, res: Response) {
+    try {
+      const { email, password } = req.body;
+
+      if (!email || !password) {
+        return res.status(400).json({
+          error: 'Validation error',
+          message: 'email and password are required'
+        });
+      }
+
+      const prisma = getPrismaClient();
+      const user = await prisma.licenseUser.findUnique({
+        where: { email },
+        include: {
+          license: {
+            include: {
+              organization: true,
+            },
+          },
+        },
+      });
+
+      if (!user) {
+        return res.status(401).json({ error: 'Invalid credentials', message: 'User not found' });
+      }
+
+      const bcrypt = require('bcrypt');
+      const valid = await bcrypt.compare(password, user.passwordHash);
+      if (!valid) {
+        return res.status(401).json({ error: 'Invalid credentials', message: 'Wrong password' });
+      }
+
+      const license = user.license;
+
+      if (license.status !== 'ACTIVE') {
+        return res.status(403).json({ error: 'License inactive', message: `License is ${license.status.toLowerCase()}` });
+      }
+
+      const now = new Date();
+      if (now < license.validFrom || now > license.validUntil) {
+        return res.status(403).json({ error: 'License expired', message: 'License is not currently valid' });
+      }
+
+      const token = jwt.sign(
+        {
+          licenseUserId: user.id,
+          licenseId: license.id,
+          organizationId: license.organizationId,
+          userId: user.id,
+          email: user.email,
+          role: user.role,
+          type: 'license_user',
+          plan: license.plan,
+        },
+        privateKey,
+        { algorithm: 'RS256', expiresIn: '7d', issuer: 'kiosk-license-server' }
+      );
+
+      return res.json({
+        success: true,
+        token,
+        expiresIn: 604800,
+        license: {
+          id: license.id,
+          plan: license.plan,
+          organizationId: license.organizationId,
+          organizationName: license.organization.name,
+          validFrom: license.validFrom,
+          validUntil: license.validUntil,
+          storageLimit: Number(license.storageLimit),
+          seatsEditor: license.seatsEditor,
+          seatsPlayer: license.seatsPlayer,
+        },
+        user: {
+          id: user.id,
+          email: user.email,
+          role: user.role,
+        },
+      });
+    } catch (error) {
+      console.error('Editor login error:', error);
+      return res.status(500).json({ error: 'Internal server error' });
+    }
+  }
+
 }

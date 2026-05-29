@@ -89,4 +89,11 @@ router.get(
   asyncHandler(AdminController.getAuditLogs)
 );
 
+router.post('/licenses/:id/users', asyncHandler(AdminController.addLicenseUser));
 export default router;
+
+// Создание клиента с временным паролем
+router.post(
+  '/invite',
+  asyncHandler(AdminController.invite)
+);

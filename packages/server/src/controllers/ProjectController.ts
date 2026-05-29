@@ -108,7 +108,7 @@ export class ProjectController {
         description,
         licenseId: req.client.licenseId,
         organizationId: req.client.organizationId,
-        createdByUserId: req.client.userId || '',
+        createdByUserId: req.client.type === 'client' ? (req.client.userId || undefined) : undefined,
         projectData,
         canvasWidth,
         canvasHeight,
@@ -118,7 +118,7 @@ export class ProjectController {
 
       await createAuditLog({
         action: 'project_created',
-        userId: req.client.userId,
+        userId: req.client.type === 'client' ? (req.client.userId || undefined) : undefined,
         licenseId: req.client.licenseId,
         details: {
           projectId: project.id,
@@ -244,7 +244,7 @@ export class ProjectController {
 
       await createAuditLog({
         action: 'project_updated',
-        userId: req.client.userId,
+        userId: req.client.type === 'client' ? (req.client.userId || undefined) : undefined,
         licenseId: req.client.licenseId,
         details: {
           projectId: id,
@@ -304,7 +304,7 @@ export class ProjectController {
 
       await createAuditLog({
         action: 'project_deleted',
-        userId: req.client.userId,
+        userId: req.client.type === 'client' ? (req.client.userId || undefined) : undefined,
         licenseId: req.client.licenseId,
         details: {
           projectId: id

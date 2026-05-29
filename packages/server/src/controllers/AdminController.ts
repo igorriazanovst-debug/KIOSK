@@ -10,6 +10,7 @@ import { ApiError } from '../middleware/errorHandler';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import { getJWTConfig } from '../config/jwt';
+import { deviceSockets } from '../app';
 
 // BigInt serialization helper
 function replaceBigInt(_key: string, value: any) {
@@ -489,6 +490,166 @@ export class AdminController {
         total,
         pages: Math.ceil(total / Number(limit))
       }
+    });
+  }
+  /**
+   * POST /api/admin/invite
+   * Создать клиента: Organization + License + LicenseUser(OWNER)
+   * Возвращает временный пароль
+   */
+  static async invite(req: Request, res: Response) {
+    const { email, plan, organizationName, validUntil } = req.body;
+
+    if (!email || !plan || !organizationName) {
+      throw ApiError.badRequest('email, plan, organizationName required');
+    }
+
+    const prisma = getPrismaClient();
+    const bcrypt = await import('bcrypt');
+
+    // Проверяем уникальность email
+    const existing = await prisma.licenseUser.findUnique({ where: { email } });
+    if (existing) throw ApiError.conflict('Email already registered');
+
+    // Лимиты seats по плану
+    const SEATS: Record<string, { editor: number; player: number; storage: bigint }> = {
+      BASIC: { editor: 2, player: 1,  storage: BigInt(524288000) },
+      PRO:   { editor: 4, player: 10, storage: BigInt(2147483648) },
+      MAX:   { editor: 8, player: 25, storage: BigInt(10737418240) },
+    };
+    const planUpper = plan.toUpperCase() as 'BASIC' | 'PRO' | 'MAX';
+    const seats = SEATS[planUpper] || SEATS.BASIC;
+
+    // Генерируем licenseKey
+    const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+    const licenseKey = Array.from({ length: 4 }, () =>
+      Array.from({ length: 4 }, () => chars[Math.floor(Math.random() * chars.length)]).join('')
+    ).join('-');
+
+    // Генерируем временный пароль
+    const tempPassword = Array.from({ length: 12 }, () =>
+      'ABCDEFGHJKLMNPQRSTUVWXYZabcdefghjkmnpqrstuvwxyz23456789!@#'
+        .charAt(Math.floor(Math.random() * 58))
+    ).join('');
+
+    const passwordHash = await bcrypt.hash(tempPassword, 10);
+
+    const validUntilDate = validUntil ? new Date(validUntil) : new Date(Date.now() + 365 * 24 * 60 * 60 * 1000);
+
+    // Создаём Organization + License + LicenseUser в транзакции
+    const result = await prisma.$transaction(async (tx) => {
+      // Создаём временного User-владельца организации
+      const orgOwnerId = require('crypto').randomUUID();
+      const orgId = require('crypto').randomUUID();
+
+      await tx.$executeRaw`
+        INSERT INTO users (id, email, "passwordHash", role, "organizationId", "createdAt", "updatedAt")
+        VALUES (${orgOwnerId}, ${email + '_org'}, ${'placeholder'}, 'USER', NULL, NOW(), NOW())
+      `;
+
+      await tx.$executeRaw`
+        INSERT INTO organizations (id, name, "ownerUserId", "createdAt", "updatedAt")
+        VALUES (${orgId}, ${organizationName}, ${orgOwnerId}, NOW(), NOW())
+      `;
+
+      await tx.$executeRaw`
+        UPDATE users SET "organizationId" = ${orgId} WHERE id = ${orgOwnerId}
+      `;
+
+      const license = await tx.license.create({
+        data: {
+          licenseKey,
+          organizationId: orgId,
+          plan: planUpper,
+          status: 'ACTIVE',
+          seatsEditor: seats.editor,
+          seatsPlayer: seats.player,
+          storageLimit: seats.storage,
+          validFrom: new Date(),
+          validUntil: validUntilDate,
+        },
+      });
+
+      const licenseUser = await tx.licenseUser.create({
+        data: {
+          licenseId: license.id,
+          email,
+          passwordHash,
+          role: 'OWNER',
+        },
+      });
+
+      return { license, licenseUser, orgId };
+    });
+
+    return res.status(201).json({
+      success: true,
+      data: {
+        email,
+        tempPassword,
+        organizationName,
+        plan: planUpper,
+        licenseKey: result.license.licenseKey,
+        licenseId: result.license.id,
+        organizationId: result.orgId,
+        validUntil: validUntilDate,
+      },
+    });
+  }
+
+  /**
+   * POST /api/admin/licenses/:id/users
+   * Добавить пользователя в лицензию
+   */
+  static async addLicenseUser(req: Request, res: Response) {
+    const { id: licenseId } = req.params;
+    const { email, role = 'MEMBER' } = req.body;
+
+    if (!email) {
+      return res.status(400).json({ success: false, error: 'email is required' });
+    }
+
+    const prisma = getPrismaClient();
+
+    const license = await prisma.license.findUnique({
+      where: { id: licenseId },
+      include: { organization: true },
+    });
+
+    if (!license) {
+      return res.status(404).json({ success: false, error: 'License not found' });
+    }
+
+    const existing = await prisma.licenseUser.findUnique({ where: { email } });
+    if (existing) {
+      return res.status(409).json({ success: false, error: 'User with this email already exists' });
+    }
+
+    const bcrypt = require('bcrypt');
+    const crypto = require('crypto');
+    const tempPassword = crypto.randomBytes(8).toString('base64').replace(/[^a-zA-Z0-9]/g, '').substring(0, 10)
+      + Math.floor(Math.random() * 90 + 10) + '!';
+    const passwordHash = await bcrypt.hash(tempPassword, 10);
+
+    const user = await prisma.licenseUser.create({
+      data: {
+        licenseId,
+        email,
+        passwordHash,
+        role: role as any,
+      },
+    });
+
+    res.status(201).json({
+      success: true,
+      data: {
+        id: user.id,
+        email: user.email,
+        role: user.role,
+        licenseId,
+        tempPassword,
+        organizationName: license.organization?.name || '',
+      },
     });
   }
 }
