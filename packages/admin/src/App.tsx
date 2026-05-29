@@ -6,6 +6,7 @@ import { Dashboard } from './pages/Dashboard';
 import { Licenses } from './pages/Licenses';
 import { Devices } from './pages/Devices';
 import { AuditLogs } from './pages/AuditLogs';
+import { Clients } from './pages/Clients';
 import { Layout } from './components/Layout';
 import './styles/global.css';
 
@@ -37,6 +38,7 @@ export default function App() {
           <Route path="licenses" element={<Licenses />} />
           <Route path="devices" element={<Devices />} />
           <Route path="audit" element={<AuditLogs />} />
+          <Route path="clients" element={<Clients />} />
         </Route>
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>

@@ -177,3 +177,26 @@ export const adminApi = {
     return { logs: res.logs || res.data || [], total: res.total ?? (res.logs || res.data || []).length };
   },
 };
+
+// ─── Client Invite ────────────────────────────────────────────────────────────
+
+export interface InviteResult {
+  email: string;
+  tempPassword: string;
+  organizationName: string;
+  plan: string;
+  licenseKey: string;
+  licenseId: string;
+  organizationId: string;
+  validUntil: string;
+}
+
+export const clientApi = {
+  async inviteClient(
+    token: string,
+    data: { email: string; plan: string; organizationName: string; validUntil?: string }
+  ): Promise<InviteResult> {
+    const res = await request<any>('POST', '/api/admin/invite', token, data);
+    return res.data || res;
+  },
+};

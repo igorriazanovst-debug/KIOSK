@@ -8,6 +8,7 @@ const navItems = [
   { to: '/licenses', label: 'Licenses', icon: '🔐' },
   { to: '/devices', label: 'Devices', icon: '🖥️' },
   { to: '/audit', label: 'Audit Logs', icon: '📋' },
+  { to: '/clients', label: 'Clients', icon: '👥' },
 ];
 
 export function Layout() {
