@@ -5,6 +5,7 @@ import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { routeMultiFloor, findFloorByTerminal } from '../utils/navigation/multiFloor';
 import type { NavigationData, FloorData, Room, RouteResult, Point } from '../utils/navigation/types';
 import type { NavigationWidgetProperties } from '../utils/navigation/widgetType';
+import { apiClient } from '../services/api-client';
 
 interface Props {
   properties: NavigationWidgetProperties;
@@ -36,25 +37,14 @@ const NavigationRuntime: React.FC<Props> = ({ properties, width, height }) => {
   const [terminalId, setTerminalId] = useState<string | null>(null);
 
   useEffect(() => {
-    // Пытаемся определить терминал по deviceId через API
-    const tryDetect = async () => {
-      try {
-        const r = await fetch('/api/admin/devices/current');
-        if (r.ok) {
-          const d = await r.json();
-          const deviceId: string = d?.id || d?.deviceId || '';
-          if (deviceId) {
-            for (const f of navData.floors) {
-              const t = f.terminals.find((t) => t.deviceId === deviceId);
-              if (t) { setTerminalId(t.id); return; }
-            }
-          }
-        }
-      } catch {}
-      // Fallback: currentTerminalId из свойств
+    // Если явно задан currentTerminalId — используем его сразу
+    if (currentTerminalId) {
       setTerminalId(currentTerminalId);
-    };
-    tryDetect();
+      return;
+    }
+    // API-автоопределение отключено (endpoint не существует)
+    // Используем только currentTerminalId из свойств
+    setTerminalId(null);
   }, [currentTerminalId, navData]);
 
   // ── Активный этаж ───────────────────────────────────────────────────
@@ -93,7 +83,10 @@ const NavigationRuntime: React.FC<Props> = ({ properties, width, height }) => {
   const [routeState, setRouteState] = useState<RouteState>({ result: null, targetRoomId: null });
 
   function buildRoute(roomId: string) {
-    if (!terminalId) { alert('Терминал «Вы здесь» не определён.'); return; }
+    if (!terminalId) {
+      setRouteState({ result: null, targetRoomId: roomId });
+      return;
+    }
     const outcome = routeMultiFloor(navData, terminalId, roomId, { snap: graphSnap });
     setRouteState({ result: outcome, targetRoomId: roomId });
     // Переключаемся на этаж начала маршрута (этаж терминала)
@@ -154,6 +147,18 @@ const NavigationRuntime: React.FC<Props> = ({ properties, width, height }) => {
 
   return (
     <div style={{ width, height, display: 'flex', flexDirection: 'row', background: '#0d1b2a', overflow: 'hidden', userSelect: 'none' }}>
+
+      {/* ── Сообщение если терминал не определён ── */}
+      {!terminalId && (
+        <div style={{
+          position: 'absolute', top: 8, left: '50%', transform: 'translateX(-50%)',
+          background: 'rgba(231,76,60,0.85)', color: '#fff', fontSize: 12,
+          padding: '6px 14px', borderRadius: 6, zIndex: 10, pointerEvents: 'none',
+          whiteSpace: 'nowrap',
+        }}>
+          Терминал «Вы здесь» не задан — маршрут строится от выбранного помещения
+        </div>
+      )}
 
       {/* ── Левая панель ── */}
       {showRoomList && (

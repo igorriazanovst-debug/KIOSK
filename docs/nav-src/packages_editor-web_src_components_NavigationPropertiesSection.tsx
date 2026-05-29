@@ -34,8 +34,14 @@ const NavigationPropertiesSection: React.FC<Props> = ({
   const [devices, setDevices] = useState<Device[]>([]);
 
   useEffect(() => {
-    fetch('/api/admin/devices?limit=200')
-      .then((r) => r.json())
+    const token = sessionStorage.getItem('kiosk_auth_token');
+    const parsed = token ? (() => { try { return JSON.parse(token); } catch { return null; } })() : null;
+    const bearer = parsed?.token || '';
+    if (!bearer) return;
+    fetch('/api/admin/devices?limit=200', {
+      headers: { 'Authorization': `Bearer ${bearer}` }
+    })
+      .then((r) => r.ok ? r.json() : Promise.reject(r.status))
       .then((json) => {
         const list: Device[] = json?.data ?? json ?? [];
         setDevices(Array.isArray(list) ? list : []);

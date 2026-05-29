@@ -93,8 +93,8 @@ const NavigationEditorModal: React.FC<NavigationEditorModalProps> = ({
   useEffect(() => {
     setPlanError('');
     if (!activeFloor?.svgContent || !svgHostRef.current) return;
-    // Дождёмся рендера
-    requestAnimationFrame(() => {
+    // Двойной rAF: первый — DOM вставлен, второй — layout завершён (stage имеет размеры)
+    const parseSvgAndFit = () => {
       const svg = svgHostRef.current?.querySelector('svg');
       if (!svg) { setPlanError('SVG не распознан'); return; }
       const vb = svg.getAttribute('viewBox');
@@ -112,8 +112,16 @@ const NavigationEditorModal: React.FC<NavigationEditorModalProps> = ({
       if (width !== activeFloor.viewBox.width || height !== activeFloor.viewBox.height) {
         patchFloor(activeFloor.id, { viewBox: { width, height } });
       }
-      fitToStage(width, height);
-    });
+      // Проверяем, что stage уже имеет реальный размер
+      const rect = stageRef.current?.getBoundingClientRect();
+      if (!rect || rect.width < 10 || rect.height < 10) {
+        // Stage ещё не смонтирован с размерами — повторяем через 50ms
+        setTimeout(() => fitToStage(width, height), 50);
+      } else {
+        fitToStage(width, height);
+      }
+    };
+    requestAnimationFrame(() => requestAnimationFrame(parseSvgAndFit));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [activeFloor?.svgContent]);
 
@@ -126,6 +134,21 @@ const NavigationEditorModal: React.FC<NavigationEditorModalProps> = ({
     rectStartRef.current = null;
     setSelectedCorridorId(null);
   }, [tool, activeFloorId]);
+
+  // Fit при монтировании (если SVG уже загружен при открытии редактора)
+  useEffect(() => {
+    if (!activeFloor?.svgContent || !stageRef.current) return;
+    const doFit = () => {
+      const rect = stageRef.current?.getBoundingClientRect();
+      if (!rect || rect.width < 10 || rect.height < 10) {
+        setTimeout(doFit, 50);
+        return;
+      }
+      fitToStage(activeFloor.viewBox.width, activeFloor.viewBox.height);
+    };
+    requestAnimationFrame(() => requestAnimationFrame(doFit));
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [activeFloorId]);
 
   // Клавиатура
   useEffect(() => {
@@ -408,8 +431,10 @@ const NavigationEditorModal: React.FC<NavigationEditorModalProps> = ({
 
   function fitToStage(vbWidth: number, vbHeight: number) {
     const rect = stageRef.current?.getBoundingClientRect();
+    console.log('[NAV FIT] stageRef:', stageRef.current, 'rect:', rect, 'vb:', vbWidth, vbHeight);
     if (!rect || vbWidth === 0 || vbHeight === 0) return;
     const z = Math.min(rect.width / vbWidth, rect.height / vbHeight) * 0.9;
+    console.log('[NAV FIT] zoom:', z, 'stageW:', rect.width, 'stageH:', rect.height);
     const newPan = { x: (rect.width - vbWidth * z) / 2, y: (rect.height - vbHeight * z) / 2 };
     zoomRef.current = z; panRef.current = newPan;
     setZoom(z); setPan(newPan);
@@ -468,7 +493,22 @@ const NavigationEditorModal: React.FC<NavigationEditorModalProps> = ({
     reader.onload = (ev) => {
       const text = ev.target?.result as string;
       if (!text || !text.includes('<svg')) { alert('Файл не содержит SVG-разметки'); return; }
-      patchFloor(activeFloor.id, { svgContent: text });
+      // Нормализуем SVG:
+      // 1. Извлекаем viewBox
+      // 2. Заменяем width/height физических единиц на пиксельные значения из viewBox
+      // чтобы SVG точно занимал нужный размер и масштабировался через CSS transform
+      let normalized = text;
+      const vbMatch = text.match(/viewBox=["'][\s]*[\d.]+[\s]+[\d.]+[\s]+([\d.]+)[\s]+([\d.]+)["']/i);
+      if (vbMatch) {
+        const vbW = vbMatch[1];
+        const vbH = vbMatch[2];
+        // Убираем старые width/height (любые единицы)
+        normalized = normalized.replace(/(<svg[^>]*)\s+width="[^"]*"/gi, '$1');
+        normalized = normalized.replace(/(<svg[^>]*)\s+height="[^"]*"/gi, '$1');
+        // Вставляем width/height в пикселях равные viewBox
+        normalized = normalized.replace(/(<svg)(\s)/i, `$1 width="${vbW}" height="${vbH}"$2`);
+      }
+      patchFloor(activeFloor.id, { svgContent: normalized });
     };
     reader.onerror = () => alert('Ошибка чтения файла');
     reader.readAsText(file);
