@@ -81,6 +81,8 @@ const NavigationEditorModal: React.FC<NavigationEditorModalProps> = ({
   const didPanRef = useRef(false);
 
   const [selectedCorridorId, setSelectedCorridorId] = useState<string | null>(null);
+  const [gridEnabled, setGridEnabled] = useState(false);
+  const [gridStep, setGridStep] = useState(50);
 
   const zoomRef = useRef(zoom);
   useEffect(() => { zoomRef.current = zoom; }, [zoom]);
@@ -135,20 +137,7 @@ const NavigationEditorModal: React.FC<NavigationEditorModalProps> = ({
     setSelectedCorridorId(null);
   }, [tool, activeFloorId]);
 
-  // Fit при монтировании (если SVG уже загружен при открытии редактора)
-  useEffect(() => {
-    if (!activeFloor?.svgContent || !stageRef.current) return;
-    const doFit = () => {
-      const rect = stageRef.current?.getBoundingClientRect();
-      if (!rect || rect.width < 10 || rect.height < 10) {
-        setTimeout(doFit, 50);
-        return;
-      }
-      fitToStage(activeFloor.viewBox.width, activeFloor.viewBox.height);
-    };
-    requestAnimationFrame(() => requestAnimationFrame(doFit));
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [activeFloorId]);
+
 
   // Клавиатура
   useEffect(() => {
@@ -175,6 +164,31 @@ const NavigationEditorModal: React.FC<NavigationEditorModalProps> = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [tool, selectedCorridorId]);
 
+  // Wheel через document с passive:false и проверкой что target внутри stage
+  useEffect(() => {
+    const handler = (e: WheelEvent) => {
+      const el = stageRef.current;
+      if (!el) return;
+      if (!el.contains(e.target as Node)) return;
+      e.preventDefault();
+      e.stopPropagation();
+      const factor = e.deltaY > 0 ? 1.1 : 0.9;
+      const newZoom = Math.max(0.005, Math.min(20, zoomRef.current * factor));
+      const rect = el.getBoundingClientRect();
+      const mx = e.clientX - rect.left;
+      const my = e.clientY - rect.top;
+      const sx = (mx - panRef.current.x) / zoomRef.current;
+      const sy = (my - panRef.current.y) / zoomRef.current;
+      const newPan = { x: mx - sx * newZoom, y: my - sy * newZoom };
+      zoomRef.current = newZoom;
+      panRef.current = newPan;
+      setZoom(newZoom);
+      setPan(newPan);
+    };
+    document.addEventListener('wheel', handler, { passive: false });
+    return () => document.removeEventListener('wheel', handler);
+  }, []);
+
   // ── Helpers ──────────────────────────────────────────────────────────
   function patchNav(patch: Partial<NavigationData>) {
     setNavData((prev) => ({ ...prev, ...patch }));
@@ -194,6 +208,13 @@ const NavigationEditorModal: React.FC<NavigationEditorModalProps> = ({
       x: (clientX - rect.left - p.x) / z,
       y: (clientY - rect.top - p.y) / z,
     };
+  }
+
+  function snapToGrid(pt: {x:number;y:number}): {x:number;y:number} {
+    if (!gridEnabled) return pt;
+    const stepVB = gridStep / zoomRef.current;
+    if (stepVB <= 0) return pt;
+    return { x: Math.round(pt.x / stepVB) * stepVB, y: Math.round(pt.y / stepVB) * stepVB };
   }
 
   // ── Commit ───────────────────────────────────────────────────────────
@@ -339,7 +360,8 @@ const NavigationEditorModal: React.FC<NavigationEditorModalProps> = ({
 
     if (tool === 'corridor') {
       const prev = drawPointsRef.current;
-      const snapped = prev.length > 0 && e.shiftKey ? snapAngle(prev[prev.length - 1], pt) : pt;
+      const gpt = snapToGrid(pt);
+      const snapped = prev.length > 0 && e.shiftKey ? snapAngle(prev[prev.length - 1], gpt) : gpt;
       const next = [...prev, snapped];
       drawPointsRef.current = next;
       setDrawPoints(next);
@@ -347,7 +369,7 @@ const NavigationEditorModal: React.FC<NavigationEditorModalProps> = ({
     }
 
     if (tool === 'room') {
-      const next = [...drawPointsRef.current, pt];
+      const next = [...drawPointsRef.current, snapToGrid(pt)];
       drawPointsRef.current = next;
       setDrawPoints(next);
       return;
@@ -415,8 +437,8 @@ const NavigationEditorModal: React.FC<NavigationEditorModalProps> = ({
 
   function onStageWheel(e: React.WheelEvent) {
     e.preventDefault();
-    const factor = e.deltaY > 0 ? 0.9 : 1.1;
-    const newZoom = Math.max(0.05, Math.min(20, zoomRef.current * factor));
+    const factor = e.deltaY > 0 ? 1.1 : 0.9;
+    const newZoom = Math.max(0.005, Math.min(20, zoomRef.current * factor));
     const rect = stageRef.current?.getBoundingClientRect();
     if (!rect) { setZoom(newZoom); zoomRef.current = newZoom; return; }
     const mx = e.clientX - rect.left; const my = e.clientY - rect.top;
@@ -431,17 +453,15 @@ const NavigationEditorModal: React.FC<NavigationEditorModalProps> = ({
 
   function fitToStage(vbWidth: number, vbHeight: number) {
     const rect = stageRef.current?.getBoundingClientRect();
-    console.log('[NAV FIT] stageRef:', stageRef.current, 'rect:', rect, 'vb:', vbWidth, vbHeight);
     if (!rect || vbWidth === 0 || vbHeight === 0) return;
     const z = Math.min(rect.width / vbWidth, rect.height / vbHeight) * 0.9;
-    console.log('[NAV FIT] zoom:', z, 'stageW:', rect.width, 'stageH:', rect.height);
     const newPan = { x: (rect.width - vbWidth * z) / 2, y: (rect.height - vbHeight * z) / 2 };
     zoomRef.current = z; panRef.current = newPan;
     setZoom(z); setPan(newPan);
   }
   function handleFit() { if (activeFloor) fitToStage(activeFloor.viewBox.width, activeFloor.viewBox.height); }
   function handleZoomIn() { const z = Math.min(20, zoomRef.current * 1.2); zoomRef.current = z; setZoom(z); }
-  function handleZoomOut() { const z = Math.max(0.05, zoomRef.current / 1.2); zoomRef.current = z; setZoom(z); }
+  function handleZoomOut() { const z = Math.max(0.005, zoomRef.current / 1.2); zoomRef.current = z; setZoom(z); }
 
   function nearestRoom(floor: FloorData, pt: Point): Room | null {
     if (floor.rooms.length === 0) return null;
@@ -493,21 +513,15 @@ const NavigationEditorModal: React.FC<NavigationEditorModalProps> = ({
     reader.onload = (ev) => {
       const text = ev.target?.result as string;
       if (!text || !text.includes('<svg')) { alert('Файл не содержит SVG-разметки'); return; }
-      // Нормализуем SVG:
-      // 1. Извлекаем viewBox
-      // 2. Заменяем width/height физических единиц на пиксельные значения из viewBox
-      // чтобы SVG точно занимал нужный размер и масштабировался через CSS transform
-      let normalized = text;
-      const vbMatch = text.match(/viewBox=["'][\s]*[\d.]+[\s]+[\d.]+[\s]+([\d.]+)[\s]+([\d.]+)["']/i);
-      if (vbMatch) {
-        const vbW = vbMatch[1];
-        const vbH = vbMatch[2];
-        // Убираем старые width/height (любые единицы)
-        normalized = normalized.replace(/(<svg[^>]*)\s+width="[^"]*"/gi, '$1');
-        normalized = normalized.replace(/(<svg[^>]*)\s+height="[^"]*"/gi, '$1');
-        // Вставляем width/height в пикселях равные viewBox
-        normalized = normalized.replace(/(<svg)(\s)/i, `$1 width="${vbW}" height="${vbH}"$2`);
-      }
+      // Нормализуем SVG: убираем width/height в физических единицах (mm, cm, in, pt, px с явным числом)
+      // чтобы SVG масштабировался через CSS transform по viewBox
+      const normalized = text.replace(
+        /(<svg[^>]*)\s+width="[^"]*(?:mm|cm|in|pt|em|rem|%|px)[^"]*"/gi,
+        '$1'
+      ).replace(
+        /(<svg[^>]*)\s+height="[^"]*(?:mm|cm|in|pt|em|rem|%|px)[^"]*"/gi,
+        '$1'
+      );
       patchFloor(activeFloor.id, { svgContent: normalized });
     };
     reader.onerror = () => alert('Ошибка чтения файла');
@@ -604,6 +618,25 @@ const NavigationEditorModal: React.FC<NavigationEditorModalProps> = ({
         }}
         viewBox={`0 0 ${vbW} ${vbH}`}
       >
+        {/* Сетка */}
+        {(() => {
+          if (!gridEnabled) return null;
+          const currentStep = gridStep;
+          const stepVB = currentStep / zoom;
+          if (stepVB <= 0 || vbW / stepVB > 300 || vbH / stepVB > 300) return null;
+          const sw = 1.5 / zoom;
+          const lines: React.ReactNode[] = [];
+          for (let i = 0; i * stepVB <= vbW + stepVB; i++) {
+            const x = i * stepVB;
+            lines.push(<line key={`v${i}`} x1={x} y1={0} x2={x} y2={vbH} stroke="rgba(255,255,255,0.6)" strokeWidth={sw} />);
+          }
+          for (let i = 0; i * stepVB <= vbH + stepVB; i++) {
+            const y = i * stepVB;
+            lines.push(<line key={`h${i}`} x1={0} y1={y} x2={vbW} y2={y} stroke="rgba(255,255,255,0.6)" strokeWidth={sw} />);
+          }
+          return <>{lines}</>;
+        })()}
+
         {/* Хит-области для коридоров — только в pan-режиме */}
         {tool === 'pan' && activeFloor.corridors.map((cor) => {
           const pts = cor.points.map((p) => `${p.x},${p.y}`).join(' ');
@@ -989,7 +1022,6 @@ const NavigationEditorModal: React.FC<NavigationEditorModalProps> = ({
               panStart.current = null;
               if (tool === 'rect') { rectStartRef.current = null; setRectEnd(null); }
             }}
-            onWheel={onStageWheel}
             onContextMenu={(e) => e.preventDefault()}
             style={{ cursor: isPanningRef.current ? 'grabbing' : tool === 'pan' ? 'grab' : 'crosshair', userSelect: 'none' }}
           >
@@ -1016,6 +1048,20 @@ const NavigationEditorModal: React.FC<NavigationEditorModalProps> = ({
                   <button className="sec" onClick={handleZoomOut}>&#xFF0D;</button>
                   <button className="sec" onClick={handleZoomIn}>&#xFF0B;</button>
                   <button className="sec" onClick={handleFit}>&#x2922; Fit</button>
+                  <button
+                    className="sec"
+                    onClick={() => setGridEnabled(v => !v)}
+                    style={{ background: gridEnabled ? '#3a6bc4' : undefined, color: gridEnabled ? '#fff' : undefined }}
+                  >&#x229E; Grid</button>
+                  {gridEnabled && (
+                    <input
+                      type="number" min={5} max={500} step={5}
+                      value={gridStep}
+                      onChange={e => setGridStep(Math.max(5, Number(e.target.value)))}
+                      style={{ width:52, fontSize:11, padding:'2px 4px', background:'#2a2a2a', color:'#ccc', border:'1px solid #555', borderRadius:3 }}
+                      title="Шаг сетки (пикселей)"
+                    />
+                  )}
                 </div>
               </>
             )}
