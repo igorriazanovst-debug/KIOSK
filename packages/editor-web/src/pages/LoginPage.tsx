@@ -1,117 +1,102 @@
 /**
- * Login Page - Страница авторизации
+ * Login Page - Вход по email + password
  */
-
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Key, AlertCircle, Loader } from 'lucide-react';
+import { Mail, Lock, AlertCircle, Loader } from 'lucide-react';
 import { apiClient } from '../services/api-client';
 import { logger } from '../utils/logger';
 import './LoginPage.css';
 
 export const LoginPage: React.FC = () => {
   const navigate = useNavigate();
-  const [licenseKey, setLicenseKey] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-
-  useEffect(() => {
-    // Проверяем причину выхода
-    const reason = sessionStorage.getItem('kiosk_logout_reason');
-    
-    if (reason === 'inactivity') {
-      setLogoutMessage('Вы были автоматически выведены из системы из-за неактивности');
-      logger.info('Logout reason: inactivity');
-    } else if (reason === 'session_expired') {
-      setLogoutMessage('Ваша сессия истекла. Пожалуйста, войдите снова');
-      logger.info('Logout reason: session expired');
-    }
-    
-    // Очищаем причину после отображения
-    sessionStorage.removeItem('kiosk_logout_reason');
-    
-    // Автоматически скрываем сообщение через 5 секунд
-    if (reason) {
-      setTimeout(() => setLogoutMessage(null), 5000);
-    }
-  }, []);
-
   const [logoutMessage, setLogoutMessage] = useState<string | null>(null);
 
-  // Форматирование ключа лицензии (XXXX-XXXX-XXXX-XXXX)
-  const formatLicenseKey = (value: string): string => {
-    const cleaned = value.replace(/[^A-Z0-9]/gi, '').toUpperCase();
-    const groups = cleaned.match(/.{1,4}/g) || [];
-    return groups.join('-').substring(0, 19);
-  };
-
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const formatted = formatLicenseKey(e.target.value);
-    setLicenseKey(formatted);
-    setError(null);
-  };
+  useEffect(() => {
+    const reason = sessionStorage.getItem('kiosk_logout_reason');
+    if (reason === 'inactivity') {
+      setLogoutMessage('Вы были автоматически выведены из системы из-за неактивности');
+    } else if (reason === 'session_expired') {
+      setLogoutMessage('Ваша сессия истекла. Пожалуйста, войдите снова');
+    } else if (reason === 'shutdown') {
+      setLogoutMessage('Устройство деактивировано администратором');
+    }
+    sessionStorage.removeItem('kiosk_logout_reason');
+    if (reason) setTimeout(() => setLogoutMessage(null), 6000);
+  }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-
-    if (licenseKey.length < 19) {
-      setError('Введите полный ключ лицензии (16 символов)');
+    if (!email.trim() || !password.trim()) {
+      setError('Введите email и пароль');
       return;
     }
-
     setIsLoading(true);
     setError(null);
-
     try {
-      console.log('[LoginPage] Attempting login');
-      const response = await apiClient.loginWithLicense(licenseKey);
-      
-      console.log('[LoginPage] Login successful, redirecting to /editor');
-      
-      // Успешный вход - редирект на редактор
+      logger.info('[LoginPage] Attempting email login');
+      await apiClient.loginWithEmail(email.trim(), password);
       navigate('/editor', { replace: true });
-      
     } catch (err: any) {
-      console.error('[LoginPage] Login failed:', err);
-      setError(err.message || 'Не удалось выполнить вход. Проверьте ключ лицензии.');
+      logger.error('[LoginPage] Login failed:', err);
+      setError(err.message || 'Неверный email или пароль');
+    } finally {
       setIsLoading(false);
     }
-  };
-
-  const handlePaste = (e: React.ClipboardEvent) => {
-    e.preventDefault();
-    const pasted = e.clipboardData.getData('text');
-    const formatted = formatLicenseKey(pasted);
-    setLicenseKey(formatted);
   };
 
   return (
     <div className="login-page">
       <div className="login-container">
         <div className="login-header">
-          <Key size={48} className="login-icon" />
+          <Mail size={48} className="login-icon" />
           <h1>Kiosk Editor</h1>
           <p>Вход в систему</p>
         </div>
 
+        {logoutMessage && (
+          <div className="logout-message" style={{
+            background:'#fff3cd', border:'1px solid #ffc107',
+            borderRadius:'6px', padding:'10px 14px', marginBottom:'16px',
+            display:'flex', alignItems:'center', gap:'8px', color:'#856404'
+          }}>
+            <AlertCircle size={16} />
+            <span>{logoutMessage}</span>
+          </div>
+        )}
+
         <form onSubmit={handleSubmit} className="login-form">
           <div className="form-group">
-            <label htmlFor="licenseKey">Ключ лицензии</label>
+            <label htmlFor="email">Email</label>
             <input
-              type="text"
-              id="licenseKey"
-              placeholder="XXXX-XXXX-XXXX-XXXX"
-              value={licenseKey}
-              onChange={handleInputChange}
-              onPaste={handlePaste}
+              type="email"
+              id="email"
+              placeholder="user@example.com"
+              value={email}
+              onChange={(e) => { setEmail(e.target.value); setError(null); }}
               disabled={isLoading}
               autoFocus
-              maxLength={19}
+              autoComplete="email"
               className={error ? 'error' : ''}
             />
-            <span className="input-hint">
-              Формат: 4 группы по 4 символа
-            </span>
+          </div>
+
+          <div className="form-group">
+            <label htmlFor="password">Пароль</label>
+            <input
+              type="password"
+              id="password"
+              placeholder="••••••••"
+              value={password}
+              onChange={(e) => { setPassword(e.target.value); setError(null); }}
+              disabled={isLoading}
+              autoComplete="current-password"
+              className={error ? 'error' : ''}
+            />
           </div>
 
           {error && (
@@ -124,36 +109,15 @@ export const LoginPage: React.FC = () => {
           <button
             type="submit"
             className="login-button"
-            disabled={isLoading || licenseKey.length < 19}
+            disabled={isLoading || !email.trim() || !password.trim()}
           >
             {isLoading ? (
-              <>
-                <Loader size={20} className="spinner" />
-                <span>Вход...</span>
-              </>
+              <><Loader size={20} className="spinner" /><span>Вход...</span></>
             ) : (
-              <>
-                <Key size={20} />
-                <span>Войти</span>
-              </>
+              <><Lock size={20} /><span>Войти</span></>
             )}
           </button>
         </form>
-
-        <div className="test-keys">
-          <p>Тестовые ключи:</p>
-          <ul>
-            <li>
-              <strong>BASIC:</strong> <code>EWZA-E5LJ-Z558-9LUQ</code>
-            </li>
-            <li>
-              <strong>PRO:</strong> <code>3VBN-8ZQ9-1MKO-AK0R</code>
-            </li>
-            <li>
-              <strong>MAX:</strong> <code>T8MH-FJE3-ETAC-YOZF</code>
-            </li>
-          </ul>
-        </div>
       </div>
     </div>
   );

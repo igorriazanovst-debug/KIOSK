@@ -268,6 +268,32 @@ class ApiClient {
    * POST /api/auth/license
    * Вход по ключу лицензии
    */
+
+  /**
+   * POST /api/auth/editor-login
+   * Вход по email + password
+   */
+  public async loginWithEmail(email: string, password: string): Promise<any> {
+    logger.info('Attempting login with email');
+    try {
+      const response = await this.request<any>('/api/auth/editor-login', {
+        method: 'POST',
+        body: JSON.stringify({ email, password })
+      });
+      if (response.token && response.license) {
+        this.saveToken(
+          response.token,
+          response.license.organizationName,
+          response.license.plan
+        );
+      }
+      return response;
+    } catch (error) {
+      logger.error('Email login failed', error);
+      throw error;
+    }
+  }
+
   public async loginWithLicense(licenseKey: string): Promise<AuthResponse> {
     logger.info('Attempting login with license key');
     

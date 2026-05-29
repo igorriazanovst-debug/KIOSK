@@ -74,6 +74,41 @@ export const EditorPage: React.FC = () => {
     };
   }, [navigate]);
 
+
+  // WS monitoring for device:shutdown
+  useEffect(() => {
+    const wsUrl = (() => {
+      const base = (import.meta as any).env?.VITE_SERVER_URL || window.location.origin;
+      return base.replace(/^http/, 'ws') + '/ws';
+    })();
+    let ws: WebSocket | null = null;
+    let retryTimer: ReturnType<typeof setTimeout> | null = null;
+    const connect = () => {
+      try {
+        ws = new WebSocket(wsUrl);
+        ws.onopen = () => { logger.info('[EditorPage] WS shutdown monitor connected'); };
+        ws.onmessage = (event) => {
+          try {
+            const msg = JSON.parse(event.data);
+            if (msg.type === 'device:shutdown') {
+              logger.warn('[EditorPage] device:shutdown received');
+              sessionStorage.setItem('kiosk_logout_reason', 'shutdown');
+              apiClient.logout();
+              navigate('/login', { replace: true });
+            }
+          } catch {}
+        };
+        ws.onclose = () => { retryTimer = setTimeout(connect, 5000); };
+        ws.onerror = () => { ws?.close(); };
+      } catch { retryTimer = setTimeout(connect, 5000); }
+    };
+    connect();
+    return () => {
+      if (retryTimer) clearTimeout(retryTimer);
+      if (ws) { ws.onclose = null; ws.close(); }
+    };
+  }, [navigate]);
+
   return (
     <div className="editor-page">
       {isSaving && (
