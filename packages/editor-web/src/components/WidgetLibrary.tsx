@@ -1,7 +1,8 @@
 import React from 'react';
 import { useEditorStore } from '../stores/editorStore';
-import { Square, Type, Image, Video, MousePointer, Menu, Globe } from 'lucide-react';
+import { Square, Type, Image, Video, MousePointer, Menu, Globe, Compass } from 'lucide-react';
 import OutlinePanel from './OutlinePanel';
+import { NAVIGATION_WIDGET_TYPE, NAVIGATION_DEFAULT_PROPS, NAVIGATION_DEFAULT_SIZE } from '../utils/navigation/widgetType';
 import './WidgetLibrary.css';
 
 const WidgetLibrary: React.FC = () => {
@@ -87,6 +88,13 @@ const WidgetLibrary: React.FC = () => {
         borderColor: '#000000',
         itemHeight: 40
       }
+    },
+    {
+      type: NAVIGATION_WIDGET_TYPE,
+      name: 'Навигация',
+      icon: Compass,
+      defaultProps: NAVIGATION_DEFAULT_PROPS,
+      defaultSize: NAVIGATION_DEFAULT_SIZE
     }
   ];
 

@@ -1008,6 +1008,33 @@ const BrowserPreviewWidget: React.FC<BrowserPreviewWidgetProps> = ({
     }
 
     // Menu
+    
+    // Navigation виджет (заглушка на шаге 2; полный runtime будет на шаге 5)
+    if (widget.type === 'navigation') {
+      const navStyle: React.CSSProperties = {
+        ...commonStyle,
+        background: '#1a3a52',
+        border: '2px dashed #2a5a72',
+        borderRadius: 6,
+        color: '#7ec8e3',
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+        textAlign: 'center',
+        padding: 16,
+        boxSizing: 'border-box',
+      };
+      const title = (widget.properties && widget.properties.title) || 'Навигация по зданию';
+      return (
+        <div key={widget.id} data-widget-id={widget.id} style={navStyle}>
+          <div style={{ fontSize: 48 }}>🧭</div>
+          <div style={{ fontSize: 18, fontWeight: 600, marginTop: 8 }}>{title}</div>
+          <div style={{ fontSize: 12, color: '#888', marginTop: 4 }}>Runtime будет реализован на шаге 5</div>
+        </div>
+      );
+    }
+
     if (widget.type === 'menu') {
       const {
         items = [], orientation = 'horizontal',

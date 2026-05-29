@@ -2,6 +2,7 @@ import React from 'react';
 import { apiClient } from '../services/api-client';
 import { useEditorStore } from '../stores/editorStore';
 import ActionEditor from './ActionEditor';
+import NavigationPropertiesSection from './NavigationPropertiesSection';
 import './PropertiesPanel.css';
 import RichTextEditor from './RichTextEditor';
 
@@ -50,6 +51,13 @@ const PropertiesPanel: React.FC = () => {
       </div>
 
       <div className="properties-content">
+        {/* Секция виджета навигации */}
+        <NavigationPropertiesSection
+          widget={selectedWidget}
+          onPropertiesChange={handlePropertiesChange}
+          onUpdateWidget={(updates) => updateWidget(selectedWidget.id, updates)}
+        />
+
         {/* Основные свойства */}
         <div className="property-section">
           <h4>Позиция и размер</h4>

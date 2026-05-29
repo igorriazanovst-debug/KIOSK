@@ -11,6 +11,7 @@ const OutlinePanel: React.FC = () => {
   // Получаем иконку для типа виджета
   const getWidgetIcon = (type: string): string => {
     const icons: Record<string, string> = {
+      navigation: '🧭',
       shape: '🔷',
       rectangle: '🔷',
       text: '📝',
