@@ -1,7 +1,7 @@
 // packages/editor-web/src/components/NavigationPropertiesSection.tsx
-// Секция свойств для виджета типа "navigation" в PropertiesPanel.
+// Шаг 4: привязка терминалов к устройствам + управление transitions
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import type { Widget } from '../types';
 import type { NavigationData } from '../utils/navigation/types';
 import {
@@ -10,6 +10,12 @@ import {
   NavigationWidgetProperties,
 } from '../utils/navigation/widgetType';
 import NavigationEditorModal from './NavigationEditorModal';
+
+interface Device {
+  id: string;
+  name: string;
+  deviceId?: string;
+}
 
 interface Props {
   widget: Widget;
@@ -25,8 +31,24 @@ const NavigationPropertiesSection: React.FC<Props> = ({
   if (widget.type !== NAVIGATION_WIDGET_TYPE) return null;
 
   const [showEditor, setShowEditor] = useState(false);
+  const [devices, setDevices] = useState<Device[]>([]);
 
-  // Гарантируем дефолты на случай старых сохранений
+  useEffect(() => {
+    const token = sessionStorage.getItem('kiosk_auth_token');
+    const parsed = token ? (() => { try { return JSON.parse(token); } catch { return null; } })() : null;
+    const bearer = parsed?.token || '';
+    if (!bearer) return;
+    fetch('/api/admin/devices?limit=200', {
+      headers: { 'Authorization': `Bearer ${bearer}` }
+    })
+      .then((r) => r.ok ? r.json() : Promise.reject(r.status))
+      .then((json) => {
+        const list: Device[] = json?.data ?? json ?? [];
+        setDevices(Array.isArray(list) ? list : []);
+      })
+      .catch(() => setDevices([]));
+  }, []);
+
   const props = widget.properties as Partial<NavigationWidgetProperties>;
   const navData: NavigationData =
     (props.navData as NavigationData) || NAVIGATION_DEFAULT_PROPS.navData;
@@ -35,7 +57,9 @@ const NavigationPropertiesSection: React.FC<Props> = ({
   const activeFloor =
     navData.floors.find((f) => f.id === activeFloorId) || navData.floors[0] || null;
 
-  const terminalsOfActiveFloor = activeFloor?.terminals || [];
+  const allTerminals = navData.floors.flatMap((f) =>
+    f.terminals.map((t) => ({ ...t, floorId: f.id, floorName: f.name })),
+  );
 
   function handleSaveEditor(newData: NavigationData, newActiveFloorId: string | null) {
     onUpdateWidget({
@@ -47,10 +71,24 @@ const NavigationPropertiesSection: React.FC<Props> = ({
     });
   }
 
+  /** Обновить deviceId терминала в navData */
+  function setTerminalDevice(terminalId: string, deviceId: string) {
+    const newData: NavigationData = {
+      ...navData,
+      floors: navData.floors.map((f) => ({
+        ...f,
+        terminals: f.terminals.map((t) =>
+          t.id === terminalId ? { ...t, deviceId: deviceId || undefined } : t,
+        ),
+      })),
+    };
+    onUpdateWidget({ properties: { ...widget.properties, navData: newData } });
+  }
+
   return (
     <>
       <div className="property-section">
-        <h4>🧭 Навигация</h4>
+        <h4>&#x1F9ED; Навигация</h4>
 
         <div className="property-field">
           <label>Заголовок виджета</label>
@@ -84,7 +122,7 @@ const NavigationPropertiesSection: React.FC<Props> = ({
           style={{ width: '100%', padding: '8px', marginBottom: 8 }}
           onClick={() => setShowEditor(true)}
         >
-          📐 Открыть редактор плана
+          &#x1F4D0; Открыть редактор плана
         </button>
 
         {activeFloor && (
@@ -99,7 +137,7 @@ const NavigationPropertiesSection: React.FC<Props> = ({
               marginBottom: 8,
             }}
           >
-            План: {activeFloor.svgFileId ? '✓ загружен' : '✗ не загружен'}
+            План: {activeFloor.svgContent ? '&#x2713; загружен' : '&#x2717; не загружен'}
             <br />
             Помещений: {activeFloor.rooms.length}
             <br />
@@ -107,21 +145,84 @@ const NavigationPropertiesSection: React.FC<Props> = ({
           </div>
         )}
 
+        {/* Терминал «Вы здесь» */}
         <div className="property-field">
-          <label>«Вы здесь» — терминал по умолчанию</label>
+          <label>«Вы здесь» — терминал</label>
           <select
             value={props.currentTerminalId || ''}
             onChange={(e) => onPropertiesChange('currentTerminalId', e.target.value || null)}
-            disabled={terminalsOfActiveFloor.length === 0}
+            disabled={allTerminals.length === 0}
           >
             <option value="">— не выбран —</option>
-            {terminalsOfActiveFloor.map((t) => (
-              <option key={t.id} value={t.id}>
-                {t.label || t.id}
-              </option>
-            ))}
+            {navData.floors.map((f) =>
+              f.terminals.length > 0 ? (
+                <optgroup key={f.id} label={f.name}>
+                  {f.terminals.map((t) => (
+                    <option key={t.id} value={t.id}>
+                      {t.label || t.id}
+                      {t.deviceId ? ` [${devices.find((d) => d.id === t.deviceId)?.name || t.deviceId}]` : ''}
+                    </option>
+                  ))}
+                </optgroup>
+              ) : null,
+            )}
           </select>
         </div>
+
+        {/* Привязка терминалов к устройствам */}
+        {allTerminals.length > 0 && (
+          <>
+            <h4 style={{ marginTop: 16, fontSize: 12 }}>Привязка терминалов к устройствам</h4>
+            <div
+              style={{
+                fontSize: 11,
+                color: '#888',
+                marginBottom: 6,
+              }}
+            >
+              Устройство определяет, какой терминал считается «текущим» при автоопределении.
+            </div>
+            {allTerminals.map((t) => (
+              <div
+                key={t.id}
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: 6,
+                  marginBottom: 4,
+                  fontSize: 12,
+                }}
+              >
+                <span
+                  style={{
+                    flex: '0 0 auto',
+                    minWidth: 80,
+                    color: '#ccc',
+                    overflow: 'hidden',
+                    textOverflow: 'ellipsis',
+                    whiteSpace: 'nowrap',
+                  }}
+                  title={`${t.floorName} / ${t.label || t.id}`}
+                >
+                  {t.label || t.id}
+                  <span style={{ color: '#666', fontSize: 10 }}> ({t.floorName})</span>
+                </span>
+                <select
+                  value={t.deviceId || ''}
+                  onChange={(e) => setTerminalDevice(t.id, e.target.value)}
+                  style={{ flex: 1, fontSize: 11, padding: '2px 4px' }}
+                >
+                  <option value="">— не привязан —</option>
+                  {devices.map((d) => (
+                    <option key={d.id} value={d.id}>
+                      {d.name}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            ))}
+          </>
+        )}
 
         <h4 style={{ marginTop: 16, fontSize: 12 }}>Внешний вид маршрута</h4>
 
@@ -192,6 +293,60 @@ const NavigationPropertiesSection: React.FC<Props> = ({
             />
             Показывать строку поиска
           </label>
+        </div>
+
+        <h4 style={{ marginTop: 16, fontSize: 12 }}>&#x25B6; Анимация маршрута</h4>
+        {/* NAV_ANIM_PROPS_SECTION_INSTALLED */}
+
+        <div className="property-field">
+          <label>Длительность на этаже (мс)</label>
+          <input
+            type="number"
+            min={500}
+            max={15000}
+            step={500}
+            value={props.animFloorDuration ?? 3000}
+            onChange={(e) => onPropertiesChange('animFloorDuration', Number(e.target.value) || 3000)}
+          />
+        </div>
+
+        <div className="property-field">
+          <label>Пауза между этажами / повтор (мс)</label>
+          <input
+            type="number"
+            min={200}
+            max={10000}
+            step={200}
+            value={props.animPauseDuration ?? 1000}
+            onChange={(e) => onPropertiesChange('animPauseDuration', Number(e.target.value) || 1000)}
+          />
+        </div>
+
+        <h4 style={{ marginTop: 16, fontSize: 12 }}>&#x25B6; Анимация маршрута</h4>
+        {/* NAV_ANIM_PROPS_SECTION_INSTALLED */}
+
+        <div className="property-field">
+          <label>Длительность на этаже (мс)</label>
+          <input
+            type="number"
+            min={500}
+            max={15000}
+            step={500}
+            value={props.animFloorDuration ?? 3000}
+            onChange={(e) => onPropertiesChange('animFloorDuration', Number(e.target.value) || 3000)}
+          />
+        </div>
+
+        <div className="property-field">
+          <label>Пауза между этажами / повтор (мс)</label>
+          <input
+            type="number"
+            min={200}
+            max={10000}
+            step={200}
+            value={props.animPauseDuration ?? 1000}
+            onChange={(e) => onPropertiesChange('animPauseDuration', Number(e.target.value) || 1000)}
+          />
         </div>
       </div>
 

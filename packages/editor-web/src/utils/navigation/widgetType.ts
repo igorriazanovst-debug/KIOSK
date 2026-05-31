@@ -29,6 +29,11 @@ export interface NavigationWidgetProperties {
   showRoomList: boolean;
   /** Показывать строку поиска в рантайме */
   showSearch: boolean;
+  /** Длительность анимации маршрута на одном этаже (мс) */
+  animFloorDuration: number;
+  /** Пауза между этажами / перед повтором (мс) */
+  animPauseDuration: number;
+  // NAV_ANIM_PROPS_INSTALLED
   /** Заголовок виджета (опционально) */
   title?: string;
 }
@@ -52,6 +57,8 @@ export const NAVIGATION_DEFAULT_PROPS: NavigationWidgetProperties = {
   youAreHereColor: '#2ecc71',
   showRoomList: true,
   showSearch: true,
+  animFloorDuration: 3000,
+  animPauseDuration: 1000,
   title: '',
 };
 
