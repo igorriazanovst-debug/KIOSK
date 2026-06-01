@@ -3,6 +3,7 @@ import './Player.css';
 import GalleryRenderer from './components/GalleryRenderer';
 import PlaylistRenderer from './components/PlaylistRenderer';
 import { serverConnection } from './services/server-connection';
+import NavigationRuntime from './NavigationRuntime';
 
 interface Project {
   name: string;
@@ -486,6 +487,16 @@ const Player: React.FC<PlayerProps> = ({ embedded = false }) => {
         return renderMenu(widget, commonStyle);
       case 'browser-menu':
         return renderBrowserMenu(widget, commonStyle);
+      case 'navigation':
+        return (
+          <div key={widget.id} style={{ ...commonStyle, overflow: 'hidden' }}>
+            <NavigationRuntime
+              properties={widget.properties as any}
+              width={widget.width}
+              height={widget.height}
+            />
+          </div>
+        );
       case 'browser-content':
         return renderBrowserContent(widget, commonStyle);
       default:
