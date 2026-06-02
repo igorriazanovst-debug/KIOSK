@@ -394,6 +394,19 @@ export class AdminController {
     
     await DeviceService.deactivateDevice(device.deviceId);
     
+    // Если устройство онлайн — отправить device:shutdown по WS
+    try {
+      const { getDeviceSockets } = await import('../app');
+      const sockets = getDeviceSockets();
+      const ws = sockets.get(device.deviceId);
+      if (ws && ws.readyState === 1 /* OPEN */) {
+        ws.send(JSON.stringify({ type: 'device:shutdown', reason: 'Deactivated by admin' }));
+        console.log('[Admin] Sent device:shutdown to', device.deviceId);
+      }
+    } catch (err: any) {
+      console.warn('[Admin] Could not send WS shutdown:', err.message);
+    }
+    
     await AuditService.logDeactivation({
       deviceId: device.deviceId,
       licenseId: device.licenseId,
@@ -652,4 +665,72 @@ export class AdminController {
       },
     });
   }
+  /**
+   * GET /api/admin/devices/online
+   * Устройства онлайн прямо сейчас (WS подключены или lastSeenAt < 3 мин)
+   */
+  static async getOnlineDevices(req: Request, res: Response) {
+    const prisma = getPrismaClient();
+    const since3min = new Date(Date.now() - 3 * 60 * 1000);
+
+    const devices = await prisma.device.findMany({
+      where: {
+        status: 'ACTIVE',
+        lastSeenAt: { gte: since3min }
+      },
+      include: {
+        license: {
+          include: { organization: true }
+        }
+      },
+      orderBy: { lastSeenAt: 'desc' }
+    });
+
+    // Добавляем IP из WS map и флаг ws-онлайн
+    let sockets: Map<string, any> | null = null;
+    let ipMap: Map<string, string> | null = null;
+    try {
+      const appModule = await import('../app');
+      sockets = appModule.getDeviceSockets();
+      ipMap = appModule.getDeviceIpMap();
+    } catch {}
+
+    const mapped = devices.map(d => ({
+      ...JSON.parse(JSON.stringify(d, (_, v) => typeof v === 'bigint' ? v.toString() : v)),
+      wsOnline: sockets ? sockets.has(d.deviceId) : false,
+      ipAddress: (() => {
+        // Сначала из WS map
+        const wsIp = ipMap ? ipMap.get(d.deviceId) : null;
+        if (wsIp) return wsIp;
+        // Fallback: читаем из osInfo
+        try {
+          const os = typeof d.osInfo === 'string' ? JSON.parse(d.osInfo) : d.osInfo;
+          if (os?.ipAddress && os.ipAddress !== 'unknown') return os.ipAddress;
+        } catch {}
+        return null;
+      })(),
+    }));
+
+    // Для редакторов: дедупликация по licenseId+ipAddress — оставляем только свежайший
+    const result: typeof mapped = [];
+    const editorSeen = new Map<string, boolean>();
+    for (const d of mapped) {
+      if (d.appType === 'EDITOR') {
+        const key = `${d.licenseId}::${d.ipAddress || d.deviceId}`;
+        if (!editorSeen.has(key)) {
+          editorSeen.set(key, true);
+          result.push(d);
+        }
+      } else {
+        result.push(d);
+      }
+    }
+
+    res.json({
+      success: true,
+      data: result,
+      total: result.length
+    });
+  }
+
 }

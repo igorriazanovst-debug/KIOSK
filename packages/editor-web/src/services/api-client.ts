@@ -597,6 +597,13 @@ class ApiClient {
 
   // ==================== STORAGE ====================
 
+  /**
+   * Публичный GET с авторизацией — для использования в компонентах
+   */
+  public async apiGet<T = any>(endpoint: string): Promise<T> {
+    return this.request<T>(endpoint, { method: 'GET', authenticated: true });
+  }
+
   public async getStorageStats(): Promise<StorageStats> {
     return this.request<StorageStats>('/api/storage/stats', {
       method: 'GET',

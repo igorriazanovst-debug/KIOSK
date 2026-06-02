@@ -1,3 +1,4 @@
+import crypto from 'crypto';
 // packages/server/src/controllers/AuthController.ts
 import { Request, Response } from 'express';
 import jwt from 'jsonwebtoken';
@@ -68,6 +69,39 @@ export class AuthController {
           validFrom: license.validFrom,
           validUntil: license.validUntil
         });
+      }
+
+      // Создаём/обновляем запись редактора в devices
+      const editorDeviceId = crypto
+        .createHash('sha256')
+        .update(licenseKey + ((req.headers['x-real-ip'] as string) || req.ip || '') + (req.get('user-agent') || ''))
+        .digest('hex')
+        .slice(0, 36);
+      try {
+        const existingDevice = await prisma.device.findUnique({ where: { deviceId: editorDeviceId } });
+        if (existingDevice) {
+          await prisma.device.update({
+            where: { deviceId: editorDeviceId },
+            data: { 
+              lastSeenAt: new Date(),
+              osInfo: JSON.stringify({ userAgent: req.get('user-agent') || 'unknown', ipAddress: (req.headers['x-real-ip'] as string) || req.ip || 'unknown' })
+            }
+          });
+        } else {
+          await prisma.device.create({
+            data: {
+              deviceId: editorDeviceId,
+              licenseId: license.id,
+              appType: 'EDITOR',
+              deviceName: `Editor: ${licenseKey}`,
+              osInfo: JSON.stringify({ userAgent: req.get('user-agent') || 'unknown', ipAddress: (req.headers['x-real-ip'] as string) || req.ip || 'unknown' }),
+              status: 'ACTIVE',
+              lastSeenAt: new Date()
+            }
+          });
+        }
+      } catch (devErr: any) {
+        console.warn('[Auth] Device upsert failed:', devErr.message);
       }
 
       // Генерируем JWT токен для клиента
@@ -292,6 +326,39 @@ export class AuthController {
       const now = new Date();
       if (now < license.validFrom || now > license.validUntil) {
         return res.status(403).json({ error: 'License expired', message: 'License is not currently valid' });
+      }
+
+      // Создаём/обновляем запись редактора в devices
+      const editorDeviceId = crypto
+        .createHash('sha256')
+        .update(user.email + ((req.headers['x-real-ip'] as string) || req.ip || '') + (req.get('user-agent') || ''))
+        .digest('hex')
+        .slice(0, 36);
+      try {
+        const existingDevice = await prisma.device.findUnique({ where: { deviceId: editorDeviceId } });
+        if (existingDevice) {
+          await prisma.device.update({
+            where: { deviceId: editorDeviceId },
+            data: { 
+              lastSeenAt: new Date(),
+              osInfo: JSON.stringify({ userAgent: req.get('user-agent') || 'unknown', ipAddress: (req.headers['x-real-ip'] as string) || req.ip || 'unknown' })
+            }
+          });
+        } else {
+          await prisma.device.create({
+            data: {
+              deviceId: editorDeviceId,
+              licenseId: license.id,
+              appType: 'EDITOR',
+              deviceName: `Editor: ${user.email}`,
+              osInfo: JSON.stringify({ userAgent: req.get('user-agent') || 'unknown', ipAddress: (req.headers['x-real-ip'] as string) || req.ip || 'unknown' }),
+              status: 'ACTIVE',
+              lastSeenAt: new Date()
+            }
+          });
+        }
+      } catch (devErr: any) {
+        console.warn('[Auth] Editor device upsert failed:', devErr.message);
       }
 
       const token = jwt.sign(

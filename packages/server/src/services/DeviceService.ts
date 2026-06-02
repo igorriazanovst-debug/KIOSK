@@ -101,12 +101,17 @@ export class DeviceService {
       throw new Error('License not found');
     }
     
-    // Считаем активные устройства
+    // Считаем активными: ACTIVE + те, кто был онлайн за последние 24 часа
+    const since24h = new Date(Date.now() - 24 * 60 * 60 * 1000);
     const activeCount = await prisma.device.count({
       where: {
         licenseId,
         appType: appType === AppType.Editor ? 'EDITOR' : 'PLAYER',
-        status: 'ACTIVE'
+        status: 'ACTIVE',
+        OR: [
+          { lastSeenAt: { gte: since24h } },
+          // WS подключён прямо сейчас — обновится через heartbeat
+        ]
       }
     });
     

@@ -61,6 +61,16 @@ router.patch(
  * Devices
  */
 router.get(
+  '/devices/online',
+  asyncHandler(AdminController.getOnlineDevices)
+);
+
+router.get(
+  '/devices/online',
+  asyncHandler(AdminController.getOnlineDevices)
+);
+
+router.get(
   '/devices',
   validateWith(getDevicesValidators),
   asyncHandler(AdminController.getDevices)

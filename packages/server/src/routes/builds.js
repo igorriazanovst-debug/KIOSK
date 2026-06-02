@@ -268,7 +268,7 @@ router.post('/', upload.single('icon'), async (req, res) => {
     });
 
     // Запускаем сборку асинхронно
-    const serverBaseUrl = `${req.protocol}://${req.get('host')}`;
+    const serverBaseUrl = process.env.PLAYER_SERVER_URL || `${req.protocol}://${req.get('host')}`;
     buildDistribution(buildId, projectData, appName, appId, req.file?.path, serverBaseUrl).catch(err => {
       console.error(`Build ${buildId} failed:`, err);
     });

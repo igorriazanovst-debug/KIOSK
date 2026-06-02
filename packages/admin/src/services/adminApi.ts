@@ -47,12 +47,13 @@ export interface AuditLog {
 export interface Stats {
   totalLicenses: number;
   activeLicenses: number;
+  expiredLicenses?: number;
   totalDevices: number;
   activeDevices: number;
   editorDevices: number;
   playerDevices: number;
-  recentActivations: number;
-  recentDeactivations: number;
+  recentActivations?: number;
+  recentDeactivations?: number;
 }
 
 export interface PaginationParams {
@@ -118,7 +119,20 @@ export const adminApi = {
   // Stats
   async getStats(token: string): Promise<Stats> {
     const res = await request<any>('GET', '/api/admin/stats', token);
-    return res.stats || res.data || res;
+    const d = res.stats || res.data || res;
+    // Нормализуем структуру { licenses:{}, devices:{} } -> плоский Stats
+    if (d && d.devices && d.licenses) {
+      return {
+        totalLicenses:  d.licenses.total  ?? 0,
+        activeLicenses: d.licenses.active ?? 0,
+        expiredLicenses:d.licenses.expired ?? 0,
+        totalDevices:   d.devices.total   ?? 0,
+        activeDevices:  d.devices.active  ?? 0,
+        editorDevices:  d.devices.editor  ?? 0,
+        playerDevices:  d.devices.player  ?? 0,
+      };
+    }
+    return d;
   },
 
   // Licenses
@@ -165,6 +179,16 @@ export const adminApi = {
   async getDevices(token: string, params?: PaginationParams): Promise<{ devices: Device[]; total: number }> {
     const res = await request<any>('GET', '/api/admin/devices', token, undefined, params);
     return { devices: res.devices || res.data || [], total: res.total ?? (res.devices || res.data || []).length };
+  },
+
+  async getOnlineDevices(token: string): Promise<{ data: any[]; total: number }> {
+    const res = await request<any>('GET', '/api/admin/devices/online', token);
+    return { data: res.data || [], total: res.total ?? 0 };
+  },
+
+  async getOnlineDevices(token: string): Promise<{ data: any[]; total: number }> {
+    const res = await request<any>('GET', '/api/admin/devices/online', token);
+    return { data: res.data || [], total: res.total ?? 0 };
   },
 
   async deleteDevice(token: string, id: string): Promise<void> {

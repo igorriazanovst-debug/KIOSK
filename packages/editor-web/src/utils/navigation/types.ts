@@ -78,12 +78,13 @@ export interface FloorTransition {
   fromServiceId: string;
   toFloorId: string;
   toServiceId: string;
-  type: ServiceKind;
+  type?: ServiceKind;
   weight?: number | null;     // null/undefined → используется penalty из edgeCosts
 }
 
 /** Полные данные навигации виджета (мульти-этаж) */
 export interface NavigationData {
+  title?: string;
   version: string;
   floors: FloorData[];
   transitions: FloorTransition[];

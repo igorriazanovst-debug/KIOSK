@@ -7,6 +7,8 @@ import { Licenses } from './pages/Licenses';
 import { Devices } from './pages/Devices';
 import { AuditLogs } from './pages/AuditLogs';
 import { Clients } from './pages/Clients';
+import { Online } from './pages/Online';
+import { Online } from './pages/Online';
 import { Layout } from './components/Layout';
 import './styles/global.css';
 
@@ -39,6 +41,8 @@ export default function App() {
           <Route path="devices" element={<Devices />} />
           <Route path="audit" element={<AuditLogs />} />
           <Route path="clients" element={<Clients />} />
+          <Route path="online" element={<Online />} />
+          <Route path="online" element={<Online />} />
         </Route>
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>

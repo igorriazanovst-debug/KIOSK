@@ -131,6 +131,9 @@ app.use(errorHandler);
 
 // WebSocket: deviceId -> WebSocket connection map
 export const deviceSockets = new Map<string, WebSocket>();
+const deviceIpMap = new Map<string, string>();
+export function getDeviceSockets() { return deviceSockets; }
+export function getDeviceIpMap() { return deviceIpMap; }
 
 // Start server
 async function startServer() {
@@ -145,7 +148,13 @@ async function startServer() {
     // WebSocket server
     const wss = new WebSocketServer({ server: httpServer, path: '/ws' });
 
-    wss.on('connection', (ws: WebSocket) => {
+    wss.on('connection', (ws: WebSocket, req: any) => {
+      const _dbg = req.headers['x-real-ip']; console.log('[WS-IP] x-real-ip=', _dbg, 'x-forwarded-for=', req.headers['x-forwarded-for']);
+      const rawIp = (req.headers['x-real-ip'] as string)
+        || (req.headers['x-forwarded-for'] as string)?.split(',')[0]?.trim()
+        || req.socket?.remoteAddress
+        || 'unknown';
+      const wsClientIp = rawIp.replace(/^::ffff:/, '');
       let connectedDeviceId: string | null = null;
 
       ws.on('message', async (data: Buffer) => {
@@ -163,19 +172,23 @@ async function startServer() {
                   where: { deviceId: incomingDeviceId }
                 });
                 if (!device) {
-                  console.warn('[WS] Unknown deviceId, closing:', incomingDeviceId);
-                  ws.send(JSON.stringify({ type: 'error', message: 'Unknown device' }));
-                  ws.close();
-                  return;
-                }
-                connectedDeviceId = incomingDeviceId;
-                deviceSockets.set(incomingDeviceId, ws);
-                await prisma.device.update({
-                  where: { deviceId: incomingDeviceId },
-                  data: { lastSeenAt: new Date() }
-                });
-                console.log('[WS] Device registered:', connectedDeviceId);
+                  // Устройство не в БД — принять соединение без обновления lastSeenAt
+                  console.warn('[WS] Unregistered device connected:', incomingDeviceId);
+                  connectedDeviceId = incomingDeviceId;
+                  deviceSockets.set(incomingDeviceId, ws);
+                  deviceIpMap.set(incomingDeviceId, wsClientIp);
+                  ws.send(JSON.stringify({ type: 'registered', deviceId: incomingDeviceId, status: 'unregistered' }));
+                } else {
+                  connectedDeviceId = incomingDeviceId;
+                  deviceSockets.set(incomingDeviceId, ws);
+                  deviceIpMap.set(incomingDeviceId, wsClientIp);
+                  await prisma.device.update({
+                    where: { deviceId: incomingDeviceId },
+                    data: { lastSeenAt: new Date() }
+                  });
+                  console.log('[WS] Device registered:', connectedDeviceId);
                 ws.send(JSON.stringify({ type: 'registered', deviceId: connectedDeviceId }));
+                }
               } catch (err: any) {
                 console.error('[WS] DB error:', err.message);
               }
@@ -203,6 +216,7 @@ async function startServer() {
       ws.on('close', () => {
         if (connectedDeviceId) {
           deviceSockets.delete(connectedDeviceId);
+          deviceIpMap.delete(connectedDeviceId);
           console.log('[WS] Device disconnected:', connectedDeviceId);
         }
       });
