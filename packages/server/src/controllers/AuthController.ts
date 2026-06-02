@@ -84,7 +84,7 @@ export class AuthController {
             where: { deviceId: editorDeviceId },
             data: { 
               lastSeenAt: new Date(),
-              osInfo: JSON.stringify({ userAgent: req.get('user-agent') || 'unknown', ipAddress: (req.headers['x-real-ip'] as string) || req.ip || 'unknown' })
+              osInfo: JSON.stringify({ userAgent: req.get('user-agent') || 'unknown', ipAddress: (req.headers['x-real-ip'] as string) || '' })
             }
           });
         } else {
@@ -94,7 +94,7 @@ export class AuthController {
               licenseId: license.id,
               appType: 'EDITOR',
               deviceName: `Editor: ${licenseKey}`,
-              osInfo: JSON.stringify({ userAgent: req.get('user-agent') || 'unknown', ipAddress: (req.headers['x-real-ip'] as string) || req.ip || 'unknown' }),
+              osInfo: JSON.stringify({ userAgent: req.get('user-agent') || 'unknown', ipAddress: (req.headers['x-real-ip'] as string) || '' }),
               status: 'ACTIVE',
               lastSeenAt: new Date()
             }
@@ -331,7 +331,7 @@ export class AuthController {
       // Создаём/обновляем запись редактора в devices
       const editorDeviceId = crypto
         .createHash('sha256')
-        .update(user.email + ((req.headers['x-real-ip'] as string) || req.ip || '') + (req.get('user-agent') || ''))
+        .update(user.email + license.id)
         .digest('hex')
         .slice(0, 36);
       try {
@@ -341,7 +341,7 @@ export class AuthController {
             where: { deviceId: editorDeviceId },
             data: { 
               lastSeenAt: new Date(),
-              osInfo: JSON.stringify({ userAgent: req.get('user-agent') || 'unknown', ipAddress: (req.headers['x-real-ip'] as string) || req.ip || 'unknown' })
+              osInfo: JSON.stringify({ userAgent: req.get('user-agent') || 'unknown', ipAddress: (req.headers['x-real-ip'] as string) || '' })
             }
           });
         } else {
@@ -351,7 +351,7 @@ export class AuthController {
               licenseId: license.id,
               appType: 'EDITOR',
               deviceName: `Editor: ${user.email}`,
-              osInfo: JSON.stringify({ userAgent: req.get('user-agent') || 'unknown', ipAddress: (req.headers['x-real-ip'] as string) || req.ip || 'unknown' }),
+              osInfo: JSON.stringify({ userAgent: req.get('user-agent') || 'unknown', ipAddress: (req.headers['x-real-ip'] as string) || '' }),
               status: 'ACTIVE',
               lastSeenAt: new Date()
             }
@@ -371,6 +371,7 @@ export class AuthController {
           role: user.role,
           type: 'license_user',
           plan: license.plan,
+          editorDeviceId: editorDeviceId,
         },
         privateKey,
         { algorithm: 'RS256', expiresIn: '7d', issuer: 'kiosk-license-server' }
@@ -400,6 +401,47 @@ export class AuthController {
     } catch (error) {
       console.error('Editor login error:', error);
       return res.status(500).json({ error: 'Internal server error' });
+    }
+  }
+
+  /**
+   * POST /api/auth/heartbeat
+   * Обновить lastSeenAt для текущего устройства
+   */
+  static async heartbeat(req: Request, res: Response) {
+    try {
+      if (!req.client) {
+        return res.status(401).json({ error: 'Authentication required' });
+      }
+
+      const prisma = getPrismaClient();
+
+      // Ищем устройство по userId (для редакторов deviceId = hash от email+ip)
+      // Обновляем все EDITOR-устройства этого пользователя/лицензии
+      // editorDeviceId добавлен в токен при loginWithEmailPassword
+      const editorDeviceId = (req.client as any).editorDeviceId;
+      if (editorDeviceId) {
+        await prisma.device.updateMany({
+          where: { deviceId: editorDeviceId },
+          data: { lastSeenAt: new Date() }
+        });
+      } else {
+        // fallback для старых токенов без editorDeviceId
+        await prisma.device.updateMany({
+          where: {
+            licenseId: req.client.licenseId,
+            appType: 'EDITOR',
+            status: 'ACTIVE',
+            deviceName: { not: { contains: '::ffff:' } }
+          },
+          data: { lastSeenAt: new Date() }
+        });
+      }
+
+      return res.json({ success: true });
+    } catch (error) {
+      console.error('Heartbeat error:', error);
+      return res.status(500).json({ error: 'Heartbeat failed' });
     }
   }
 

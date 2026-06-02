@@ -23,6 +23,8 @@ router.post('/refresh', authenticateClient, AuthController.refreshToken);
  */
 router.get('/verify', authenticateClient, AuthController.verifyToken);
 
+router.post('/heartbeat', authenticateClient, AuthController.heartbeat);
+
 export default router;
 
 /**

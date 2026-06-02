@@ -160,6 +160,7 @@ class ApiClient {
           this.lastActivity = Date.now(); // Обновляем время активности при загрузке
           
           this.updateActivityTime(); // Сохраняем в sessionStorage
+          this.startHeartbeat();
           
           logger.info('Token loaded from sessionStorage', {
             hasToken: !!this.token,
@@ -286,6 +287,7 @@ class ApiClient {
           response.license.organizationName,
           response.license.plan
         );
+        this.startHeartbeat();
       }
       return response;
     } catch (error) {
@@ -309,6 +311,7 @@ class ApiClient {
           response.license.organizationName,
           response.license.plan
         );
+        this.startHeartbeat();
         
         logger.info('Login successful', {
           organization: response.license.organizationName,
@@ -379,10 +382,32 @@ class ApiClient {
   public logout(): void {
     logger.info('User logout');
     this.clearToken();
+    this.stopHeartbeat();
     this.stopActivityMonitoring();
     
     // Отправить событие logout
     window.dispatchEvent(new CustomEvent('auth:logout'));
+  }
+
+  private heartbeatInterval: NodeJS.Timeout | null = null;
+
+  public startHeartbeat(): void {
+    if (this.heartbeatInterval) return;
+    this.heartbeatInterval = setInterval(async () => {
+      if (!this.token) return;
+      try {
+        await this.request('/api/auth/heartbeat', { method: 'POST', authenticated: true });
+      } catch {
+        // silent
+      }
+    }, 2 * 60 * 1000); // каждые 2 минуты
+  }
+
+  public stopHeartbeat(): void {
+    if (this.heartbeatInterval) {
+      clearInterval(this.heartbeatInterval);
+      this.heartbeatInterval = null;
+    }
   }
 
   // ==================== ACTIVITY MONITORING ====================
