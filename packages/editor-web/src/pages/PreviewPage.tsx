@@ -971,6 +971,24 @@ const BrowserPreviewWidget: React.FC<BrowserPreviewWidgetProps> = ({
       const { src = '', autoplay = false, loop = false, muted = true, objectFit = 'contain' } = widget.properties;
       if (!src) return null;
 
+      // embed: YouTube / Rutube / Vimeo
+      const sourceType_v = (widget.properties.sourceType || 'url');
+      if (sourceType_v === 'embed') {
+        const embedSrc = (widget.properties.embedUrl || (widget.properties.src || '')).trim();
+        if (!embedSrc) return null;
+        return (
+          <div key={widget.id} data-widget-id={widget.id} style={{...commonStyle, overflow: 'hidden'}} onClick={handleClick}>
+            <iframe
+            key={embedSrc}
+              src={embedSrc}
+              style={{ width: '100%', height: '100%', border: 'none' }}
+              allow="autoplay; fullscreen; clipboard-write"
+              allowFullScreen
+            />
+          </div>
+        );
+      }
+
       return (
         <div key={widget.id} data-widget-id={widget.id} style={commonStyle} onClick={handleClick}>
           <video src={src} autoPlay={autoplay} loop={loop} muted={muted} style={{

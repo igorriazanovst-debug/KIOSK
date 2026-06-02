@@ -491,6 +491,23 @@ const Preview: React.FC<PreviewProps> = ({ project, onClose }) => {
 
     const videoSrc = sourceType === 'rtsp' ? rtspUrl : src;
 
+    // embed: YouTube / Rutube / Vimeo
+    if (sourceType === 'embed') {
+      const embedSrc = (widget.properties.embedUrl || src || '').trim();
+      if (!embedSrc) return <div key={widget.id} style={style} />;
+      return (
+        <div key={widget.id} style={style}>
+          <iframe
+            key={embedSrc}
+            src={embedSrc}
+            style={{ width: '100%', height: '100%', border: 'none' }}
+            allow="autoplay; fullscreen; clipboard-write"
+            allowFullScreen
+          />
+        </div>
+      );
+    }
+
     return (
       <div key={widget.id} style={style}>
         {videoSrc && (

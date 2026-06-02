@@ -237,18 +237,22 @@ export async function createAuditLog(params: {
   details?: any;
   ipAddress?: string;
   userAgent?: string;
-}) {
+}): Promise<void> {
   const prisma = getPrismaClient();
-  
-  return prisma.auditLog.create({
-    data: {
-      action: params.action,
-      userId: params.userId || null,
-      deviceId: params.deviceId || null,
-      licenseId: params.licenseId || null,
-      details: params.details || null,
-      ipAddress: params.ipAddress || null,
-      userAgent: params.userAgent || null
-    }
-  });
+
+  try {
+    await prisma.auditLog.create({
+      data: {
+        action: params.action,
+        userId: params.userId || null,
+        deviceId: params.deviceId || null,
+        licenseId: params.licenseId || null,
+        details: params.details || null,
+        ipAddress: params.ipAddress || null,
+        userAgent: params.userAgent || null
+      }
+    });
+  } catch (err) {
+    console.error('[AuditLog] Failed to create audit log:', err);
+  }
 }

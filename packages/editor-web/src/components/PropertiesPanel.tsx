@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import { apiClient } from '../services/api-client';
 import { useEditorStore } from '../stores/editorStore';
 import ActionEditor from './ActionEditor';
@@ -1341,11 +1341,63 @@ const PropertiesPanel: React.FC = () => {
                   onChange={(e) => handlePropertiesChange('sourceType', e.target.value)}
                 >
                   <option value="url">URL / Файл</option>
+                  <option value="embed">YouTube / Rutube / Vimeo</option>
                   <option value="rtsp">RTSP поток</option>
                 </select>
               </div>
 
-              {selectedWidget.properties.sourceType === 'rtsp' ? (
+              {selectedWidget.properties.sourceType === 'embed' && (
+                <>
+                  <div className="property-field">
+                    <label>Ссылка YouTube / Rutube / Vimeo</label>
+                    <input
+                      key={selectedWidget.id + '_embed'}
+                      type="text"
+                      defaultValue={selectedWidget.properties.embedRawUrl || ''}
+                      onBlur={(e) => {
+                        const raw = e.target.value;
+                        handlePropertiesChange('embedRawUrl', raw);
+                        if (!raw.trim()) {
+                          handlePropertiesChange('embedUrl', '');
+                          handlePropertiesChange('src', '');
+                          return;
+                        }
+                        let embed = '';
+                        const rtM = raw.match(/rutube\.ru\/(?:video|play\/embed)\/([a-zA-Z0-9]+)/);
+                        if (rtM) embed = `https://rutube.ru/play/embed/${rtM[1]}`;
+                        const ytM = raw.match(/(?:youtu\.be\/|youtube\.com\/(?:watch\?v=|embed\/))([a-zA-Z0-9_-]{11})/);
+                        if (ytM) embed = `https://www.youtube.com/embed/${ytM[1]}`;
+                        const vmM = raw.match(/vimeo\.com\/([0-9]+)/);
+                        if (vmM) embed = `https://player.vimeo.com/video/${vmM[1]}`;
+                        if (embed) {
+                          handlePropertiesChange('embedUrl', embed);
+                          handlePropertiesChange('src', embed);
+                        }
+                      }}
+                      placeholder="https://rutube.ru/video/... или https://youtube.com/watch?v=..."
+                    />
+                    {selectedWidget.properties.embedUrl && (
+                      <div style={{ fontSize: '11px', color: '#4caf50', marginTop: '4px', wordBreak: 'break-all' }}>
+                        ✓ {selectedWidget.properties.embedUrl}
+                      </div>
+                    )}
+                    <button
+                      style={{ marginTop: '6px', fontSize: '11px', padding: '4px 8px', cursor: 'pointer' }}
+                      onClick={(e) => {
+                        handlePropertiesChange('embedRawUrl', '');
+                        handlePropertiesChange('embedUrl', '');
+                        handlePropertiesChange('src', '');
+                        // Очищаем DOM-значение uncontrolled input
+                        const inp = (e.target as HTMLElement).closest('.property-field')?.querySelector('input') as HTMLInputElement | null;
+                        if (inp) inp.value = '';
+                      }}
+                    >
+                      Очистить
+                    </button>
+                  </div>
+                </>
+              )}
+                            {selectedWidget.properties.sourceType === 'rtsp' ? (
                 <>
                   <div className="property-field">
                     <label>RTSP URL</label>
