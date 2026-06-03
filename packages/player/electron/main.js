@@ -16,12 +16,169 @@ console.log = (...a) => { fileLog('LOG', ...a); _origLog(...a); };
 console.error = (...a) => { fileLog('ERR', ...a); _origErr(...a); };
 fileLog('=== Player started, execPath:', process.execPath, '===');
 process.on('uncaughtException', (e) => fileLog('UNCAUGHT:', e.message, e.stack));
+// Протокол kioskcache:// должен быть privileged ДО app.ready (для <video>, range, fetch)
+try {
+  const { protocol: _protocol } = require('electron');
+  _protocol.registerSchemesAsPrivileged([
+    { scheme: 'kioskcache', privileges: { standard: true, secure: true, supportFetchAPI: true, stream: true, bypassCSP: true } }
+  ]);
+} catch (e) { fileLog('protocol register error', e.message); }
 // ─────────────────────────────────────────────────────────────────────────────
 
 let mainWindow = null;
 let activationWindow = null;
 let allowActivationClose = false;
 let currentProject = null;
+
+// ═══ OFFLINE-CACHE-MODULE-V1 — Офлайн-кэш медиафайлов ═══════════════════════════
+const { protocol, net } = require('electron');
+
+// Папка кэша: userData/media-cache/<projectId8>/
+function getCacheDir(projectId) {
+  const pid = (projectId || 'noproj').slice(0, 8);
+  const dir = path.join(app.getPath('userData'), 'media-cache', pid);
+  try { fs.mkdirSync(dir, { recursive: true }); } catch {}
+  return dir;
+}
+
+// Извлекает fileId из URL вида .../api/projects/<pid>/files/<fileId>
+function extractFileId(url) {
+  if (typeof url !== 'string') return null;
+  const m = url.match(/\/files\/([0-9a-fA-F-]{36})/);
+  return m ? m[1] : null;
+}
+
+// Путь локального файла в кэше
+function cachedFilePath(projectId, fileId) {
+  return path.join(getCacheDir(projectId), fileId);
+}
+
+// Скачивает один файл с сервера в кэш (если ещё не скачан). Возвращает true при наличии в кэше.
+function downloadToCache(absoluteUrl, projectId, fileId, token) {
+  return new Promise((resolve) => {
+    const dest = cachedFilePath(projectId, fileId);
+    try {
+      if (fs.existsSync(dest) && fs.statSync(dest).size > 0) {
+        return resolve(true); // уже в кэше
+      }
+    } catch {}
+    try {
+      const parsed = new URL(absoluteUrl);
+      const lib = parsed.protocol === 'https:' ? https : http;
+      const options = {
+        hostname: parsed.hostname,
+        port: parsed.port || (parsed.protocol === 'https:' ? 443 : 80),
+        path: parsed.pathname + parsed.search,
+        method: 'GET',
+        headers: token ? { 'Authorization': `Bearer ${token}` } : {}
+      };
+      const tmp = dest + '.tmp';
+      const ws = fs.createWriteStream(tmp);
+      const req = lib.request(options, (res) => {
+        if (res.statusCode !== 200) {
+          console.error('[cache] download failed', res.statusCode, fileId);
+          res.resume();
+          try { ws.close(); fs.unlinkSync(tmp); } catch {}
+          return resolve(false);
+        }
+        res.pipe(ws);
+        ws.on('finish', () => {
+          ws.close(() => {
+            try { fs.renameSync(tmp, dest); } catch {}
+            console.log('[cache] downloaded', fileId);
+            resolve(true);
+          });
+        });
+      });
+      req.setTimeout(8000, () => { // CACHE-OFFLINE-FIX — не висим в офлайне
+        console.error('[cache] download timeout', fileId);
+        try { req.destroy(); } catch {}
+        try { ws.close(); fs.unlinkSync(tmp); } catch {}
+        resolve(false);
+      });
+      req.on('error', (e) => {
+        console.error('[cache] download error', fileId, e.message);
+        try { ws.close(); fs.unlinkSync(tmp); } catch {}
+        resolve(false);
+      });
+      req.end();
+    } catch (e) {
+      console.error('[cache] download exception', fileId, e.message);
+      resolve(false);
+    }
+  });
+}
+
+// Готовит проект к отрисовке: скачивает медиа в кэш, подменяет URL на kioskcache://<projectId8>/<fileId>
+// best-effort: при ошибке сети оставляет исходный (серверный) URL — онлайн-режим как fallback.
+async function prepareProjectForRender(project) {
+  if (!project) return project;
+  const projectId = project.id;
+  const serverUrl = (project.serverUrl || '').replace(/\/+$/, '');
+  const json = JSON.stringify(project);
+
+  // Находим все абсолютные и относительные URL на /files/<fileId>
+  const fileIds = new Set();
+  let m;
+  const re = /(https?:\/\/[^"\\]*?)?\/api\/projects\/[0-9a-fA-F-]{36}\/files\/([0-9a-fA-F-]{36})/g;
+  while ((m = re.exec(json)) !== null) {
+    fileIds.add(m[2]);
+  }
+
+  if (fileIds.size === 0) return project;
+  console.log('[cache] project has', fileIds.size, 'media files');
+
+  // CACHE-OFFLINE-FIX — скачиваем только отсутствующие в кэше (офлайн: пропускаем сеть)
+  const toDownload = [...fileIds].filter(fid => {
+    const local = cachedFilePath(projectId, fid);
+    try { return !(fs.existsSync(local) && fs.statSync(local).size > 0); } catch { return true; }
+  });
+  if (toDownload.length > 0 && playerToken) {
+    console.log('[cache] need to download', toDownload.length, 'files');
+    await Promise.all(toDownload.map(fid => {
+      const abs = serverUrl + '/api/projects/' + projectId + '/files/' + fid;
+      return downloadToCache(abs, projectId, fid, playerToken);
+    }));
+  } else if (toDownload.length > 0) {
+    console.log('[cache] offline/no-token, using cached files only, missing:', toDownload.length);
+  }
+
+  // Подменяем URL: только те fileId, которые реально есть в кэше → kioskcache
+  const pid8 = (projectId || 'noproj').slice(0, 8);
+  let cachedCount = 0;
+  let replaced = json.replace(re, (full, _proto, fid) => {
+    const local = cachedFilePath(projectId, fid);
+    try {
+      if (fs.existsSync(local) && fs.statSync(local).size > 0) {
+        cachedCount++;
+        return 'kioskcache://' + pid8 + '/' + fid;
+      }
+    } catch {}
+    return full; // нет в кэше — оставляем серверный URL
+  });
+  console.log('[cache] replaced', cachedCount, 'of', fileIds.size, 'URLs with kioskcache://');
+
+  try {
+    return JSON.parse(replaced);
+  } catch (e) {
+    console.error('[cache] reparse failed, returning original', e.message);
+    return project;
+  }
+}
+
+// Централизованная отправка проекта в renderer (с кэшированием)
+async function sendLoadProject() {
+  if (!currentProject || !mainWindow || !mainWindow.webContents) return;
+  let toSend = currentProject;
+  try {
+    toSend = await prepareProjectForRender(currentProject);
+  } catch (e) {
+    console.error('[cache] prepare failed, sending raw', e.message);
+  }
+  mainWindow.webContents.send('load-project', toSend);
+}
+// ═══ конец модуля офлайн-кэша ════════════════════════════════════════════════
+
 
 // Создание главного окна
 function createWindow() {
@@ -75,7 +232,7 @@ function createWindow() {
       startHeartbeat(currentProject.serverUrl, currentProject.name);
     }
     if (currentProject && mainWindow) {
-      mainWindow.webContents.send('load-project', currentProject);
+      sendLoadProject(); // OFFLINE-CACHE-SENDPOINTS-V1
     }
 
   });
@@ -110,7 +267,7 @@ function loadEmbeddedProject() {
 
         // Отправляем проект в renderer процесс
         if (mainWindow && mainWindow.webContents) {
-          mainWindow.webContents.send('load-project', currentProject);
+          // FIX-DOUBLE-CACHE-CALL — отправка через did-finish-load, здесь не нужна
         }
         // Запускаем аутентификацию плеера
         initPlayerAuth();
@@ -143,7 +300,7 @@ ipcMain.handle('open-project', async () => {
       currentProject = JSON.parse(projectData);
       // Уведомляем renderer
       if (mainWindow && mainWindow.webContents) {
-        mainWindow.webContents.send('load-project', currentProject);
+        sendLoadProject(); // OFFLINE-CACHE-SENDPOINTS-V1
       }
       return currentProject;
     } catch (error) {
@@ -418,14 +575,18 @@ ipcMain.handle('activation-submit', async (event, email, password) => {
   if (ok) {
     needsActivation = false;
     startVersionPolling(currentProject.serverUrl, currentProject.id);
+    // POST-ACTIVATION-CACHE — токен получен, докачиваем медиа и пересылаем проект с локальными URL
+    sendLoadProject();
   }
   return ok ? { success: true } : { success: false, error: 'Неверный email или пароль' };
 });
 
 ipcMain.handle('activation-close', async () => {
+  // FIX-ACTIVATION-CLOSE-DESTROY — окно создано с closable:false, close() игнорируется → destroy()
   allowActivationClose = true;
   if (activationWindow && !activationWindow.isDestroyed()) {
-    activationWindow.close();
+    try { activationWindow.setClosable(true); } catch (_e) {}
+    activationWindow.destroy();
   }
 });
 
@@ -443,6 +604,7 @@ ipcMain.handle('activate-with-credentials', async (event, email, password) => {
   if (ok) {
     needsActivation = false;
     startVersionPolling(currentProject.serverUrl, currentProject.id);
+    sendLoadProject(); // POST-ACTIVATION-CACHE
     return { success: true };
   }
   return { success: false, error: 'Activation failed on server' };
@@ -513,7 +675,7 @@ ipcMain.handle('apply-update', async () => {
     knownVersion = updated.version;
     console.log('[apply-update] applied version', knownVersion, 'widgets:', pd.widgets.length);
     if (mainWindow && mainWindow.webContents) {
-      mainWindow.webContents.send('load-project', currentProject);
+      sendLoadProject(); // OFFLINE-CACHE-SENDPOINTS-V1
       mainWindow.webContents.send('update-applied', { version: knownVersion });
     }
     return { success: true };
@@ -609,7 +771,7 @@ function startHeartbeat(serverUrl, projectName) {
           if (msg.type === 'deployment:start' && msg.projectData) {
             currentProject = msg.projectData;
             if (mainWindow && mainWindow.webContents) {
-              mainWindow.webContents.send('load-project', currentProject);
+              sendLoadProject(); // OFFLINE-CACHE-SENDPOINTS-V1
             }
             console.log('[Device] New project deployed:', msg.projectData.name);
           } else if (msg.type === 'device:shutdown') {
@@ -647,6 +809,52 @@ function startHeartbeat(serverUrl, projectName) {
 }
 // ─────────────────────────────────────────────────────────────────────────────
 // Lifecycle события
+// KIOSKCACHE-RANGE-SUPPORT — хелперы для отдачи файлов из кэша
+function guessMime(fileId, filePath) {
+  // расширение могло не сохраниться в имени (имя = fileId). Пробуем по сигнатуре + дефолты.
+  const ext = path.extname(filePath).toLowerCase();
+  const map = {
+    '.mp4': 'video/mp4', '.mov': 'video/quicktime', '.webm': 'video/webm',
+    '.m4v': 'video/mp4', '.mkv': 'video/x-matroska',
+    '.jpg': 'image/jpeg', '.jpeg': 'image/jpeg', '.png': 'image/png',
+    '.gif': 'image/gif', '.svg': 'image/svg+xml', '.webp': 'image/webp',
+    '.mp3': 'audio/mpeg', '.wav': 'audio/wav', '.ogg': 'audio/ogg',
+    '.pdf': 'application/pdf'
+  };
+  if (map[ext]) return map[ext];
+  // имя без расширения — читаем магические байты
+  try {
+    const fd = fs.openSync(filePath, 'r');
+    const buf = Buffer.alloc(16);
+    fs.readSync(fd, buf, 0, 16, 0);
+    fs.closeSync(fd);
+    const hex = buf.toString('hex');
+    if (buf.slice(4, 8).toString() === 'ftyp') return 'video/mp4'; // mp4/mov
+    if (hex.startsWith('89504e47')) return 'image/png';
+    if (hex.startsWith('ffd8ff')) return 'image/jpeg';
+    if (hex.startsWith('47494638')) return 'image/gif';
+    if (buf.slice(0, 4).toString() === 'RIFF') return 'video/webm';
+    if (buf.slice(0, 5).toString().includes('<?xml') || buf.slice(0, 4).toString() === '<svg') return 'image/svg+xml';
+  } catch {}
+  return 'application/octet-stream';
+}
+
+function nodeStreamToWeb(nodeStream) {
+  const { Readable } = require('stream');
+  if (Readable.toWeb) {
+    return Readable.toWeb(nodeStream);
+  }
+  // fallback
+  return new ReadableStream({
+    start(controller) {
+      nodeStream.on('data', (chunk) => controller.enqueue(new Uint8Array(chunk)));
+      nodeStream.on('end', () => controller.close());
+      nodeStream.on('error', (err) => controller.error(err));
+    },
+    cancel() { nodeStream.destroy(); }
+  });
+}
+
 app.whenReady().then(() => {
   const { session } = require('electron');
   session.defaultSession.webRequest.onHeadersReceived((details, callback) => {
@@ -656,6 +864,59 @@ app.whenReady().then(() => {
         'Content-Security-Policy': ["default-src 'self' 'unsafe-inline' 'unsafe-eval' data: file: blob: http: https: ws: wss:"]
       }
     });
+  });
+
+  // Обработчик протокола kioskcache://<projectId8>/<fileId> → локальный файл из кэша
+  protocol.handle('kioskcache', async (request) => {
+    // KIOSKCACHE-RANGE-SUPPORT — отдаём локальный файл с поддержкой HTTP Range (для <video> seeking)
+    try {
+      const u = new URL(request.url);
+      const pid8 = u.hostname;
+      const fileId = u.pathname.replace(/^\/+/, '');
+      const filePath = path.join(app.getPath('userData'), 'media-cache', pid8, fileId);
+      if (!fs.existsSync(filePath)) {
+        return new Response('Not found', { status: 404 });
+      }
+      const stat = fs.statSync(filePath);
+      const total = stat.size;
+      const mime = guessMime(fileId, filePath);
+      const rangeHeader = request.headers.get('range') || request.headers.get('Range');
+
+      if (rangeHeader) {
+        const m = /bytes=(\d*)-(\d*)/.exec(rangeHeader);
+        let start = m && m[1] ? parseInt(m[1], 10) : 0;
+        let end = m && m[2] ? parseInt(m[2], 10) : total - 1;
+        if (isNaN(start) || start < 0) start = 0;
+        if (isNaN(end) || end >= total) end = total - 1;
+        if (start > end) start = 0;
+        const chunkSize = end - start + 1;
+        const stream = fs.createReadStream(filePath, { start, end });
+        const webStream = nodeStreamToWeb(stream);
+        return new Response(webStream, {
+          status: 206,
+          headers: {
+            'Content-Type': mime,
+            'Content-Length': String(chunkSize),
+            'Content-Range': `bytes ${start}-${end}/${total}`,
+            'Accept-Ranges': 'bytes'
+          }
+        });
+      }
+
+      // Без Range — отдаём целиком, но с Accept-Ranges чтобы браузер мог seeking
+      const stream = fs.createReadStream(filePath);
+      const webStream = nodeStreamToWeb(stream);
+      return new Response(webStream, {
+        status: 200,
+        headers: {
+          'Content-Type': mime,
+          'Content-Length': String(total),
+          'Accept-Ranges': 'bytes'
+        }
+      });
+    } catch (e) {
+      return new Response('Error: ' + e.message, { status: 500 });
+    }
   });
 
   createWindow();

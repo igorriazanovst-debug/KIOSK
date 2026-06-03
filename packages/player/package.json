@@ -38,7 +38,7 @@
   },
   "build": {
     "appId": "com.kiosk.player",
-    "productName": "main",
+    "productName": "2Video-3",
     "directories": {
       "output": "dist-electron",
       "buildResources": "assets"
