@@ -34,6 +34,10 @@ export class ProjectController {
           updatedAt: true,
           lastEditedAt: true,
           name: true,
+          projectData: true, // VERSION-PROJECTDATA-APPLIED
+          canvasWidth: true,
+          canvasHeight: true,
+          canvasBackground: true,
           files: {
             select: {
               id: true,
@@ -59,6 +63,10 @@ export class ProjectController {
         version: project.version,
         updatedAt: project.updatedAt,
         lastEditedAt: project.lastEditedAt,
+        projectData: project.projectData,
+        canvasWidth: project.canvasWidth,
+        canvasHeight: project.canvasHeight,
+        canvasBackground: project.canvasBackground,
         files: project.files.map(f => ({
           id: f.id,
           fileName: f.fileName,

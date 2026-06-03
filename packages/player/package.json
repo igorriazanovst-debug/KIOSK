@@ -38,7 +38,7 @@
   },
   "build": {
     "appId": "com.kiosk.player",
-    "productName": "navigation",
+    "productName": "main",
     "directories": {
       "output": "dist-electron",
       "buildResources": "assets"

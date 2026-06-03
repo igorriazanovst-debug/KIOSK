@@ -494,25 +494,29 @@ ipcMain.handle('apply-update', async () => {
     return { success: false, error: 'Not authenticated' };
   }
   try {
+    // APPLY-UPDATE-PROJECTDATA-V2
     const url = currentProject.serverUrl.replace(/\/+$/, '') + '/api/projects/' + currentProject.id + '/version';
     const resp = await httpGet(url, playerToken);
     if (resp.status !== 200) return { success: false, error: 'Failed to fetch update' };
 
-    // Обновляем project данные (widgets и canvas берём с сервера)
     const updated = resp.body;
-    // Получаем полный проект через обычный API
-    const projUrl = currentProject.serverUrl.replace(/\/+$/, '') + '/api/projects/' + currentProject.id;
-    const projResp = await httpGet(projUrl, playerToken);
-    if (projResp.status === 200 && projResp.body) {
-      currentProject = { ...projResp.body, serverUrl: currentProject.serverUrl, licenseKeyHash: currentProject.licenseKeyHash };
-      knownVersion = updated.version;
-      if (mainWindow && mainWindow.webContents) {
-        mainWindow.webContents.send('load-project', currentProject);
-        mainWindow.webContents.send('update-applied', { version: knownVersion });
-      }
-      return { success: true };
+    // projectData = { id, name, canvas, version, widgets, metadata } — разворачиваем в корень currentProject
+    const pd = updated.projectData;
+    if (!pd || !pd.widgets) {
+      return { success: false, error: 'Server returned no projectData' };
     }
-    return { success: false, error: 'Failed to fetch full project' };
+    currentProject = {
+      ...pd,
+      serverUrl: currentProject.serverUrl,
+      licenseKeyHash: currentProject.licenseKeyHash
+    };
+    knownVersion = updated.version;
+    console.log('[apply-update] applied version', knownVersion, 'widgets:', pd.widgets.length);
+    if (mainWindow && mainWindow.webContents) {
+      mainWindow.webContents.send('load-project', currentProject);
+      mainWindow.webContents.send('update-applied', { version: knownVersion });
+    }
+    return { success: true };
   } catch (e) {
     return { success: false, error: e.message };
   }

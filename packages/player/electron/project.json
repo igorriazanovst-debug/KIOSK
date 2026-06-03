@@ -21,11 +21,25 @@
         "textColor": "#ffffff",
         "backgroundColor": "#4a90e2"
       }
+    },
+    {
+      "x": 560,
+      "y": 140,
+      "id": "widget-1780496047621-0.40184415429633924",
+      "type": "button",
+      "width": 200,
+      "height": 60,
+      "zIndex": 0,
+      "properties": {
+        "text": "Главный начало",
+        "textColor": "#ffffff",
+        "backgroundColor": "#4a90e2"
+      }
     }
   ],
   "metadata": {
     "createdAt": "2026-05-28T18:36:10.869Z",
-    "updatedAt": "2026-06-03T10:10:22.209Z"
+    "updatedAt": "2026-06-03T14:14:21.981Z"
   },
   "serverUrl": "http://31.192.110.121:8080",
   "licenseKeyHash": "2ac09e0814ad6db263015670f20700728b5f2c4c4c390b1de34f3cdc3da3d39a"
