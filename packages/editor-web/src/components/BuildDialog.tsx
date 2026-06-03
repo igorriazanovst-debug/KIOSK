@@ -64,6 +64,7 @@ const BuildDialog: React.FC<BuildDialogProps> = ({ onClose }) => {
       formData.append('project', JSON.stringify(project));
       formData.append('appName', appName);
       formData.append('appId', 'com.kiosk.player');
+
       
       if (iconFile) {
         formData.append('icon', iconFile);

@@ -43,6 +43,59 @@ const upload = multer({
   }
 });
 
+// Загрузить актуальный projectData из БД по projectId
+async function loadProjectFromDB(projectId) {
+  if (!projectId) return null;
+  try {
+    const { getPrismaClient } = await import('../config/database.js');
+    const prisma = getPrismaClient();
+    const project = await prisma.project.findUnique({ where: { id: projectId } });
+    if (!project) {
+      console.error('[builds] project not found in DB:', projectId);
+      return null;
+    }
+    console.log('[builds] loaded project from DB:', project.name, 'version', project.version);
+    // projectData уже содержит {id, name, canvas, version, widgets, metadata}
+    return project.projectData;
+  } catch (e) {
+    console.error('[builds] loadProjectFromDB error:', e.message);
+    return null;
+  }
+}
+
+// Получить licenseKey из JWT токена редактора (тип client / license_user)
+async function resolveKeyFromToken(authHeader) {
+  if (!authHeader || !authHeader.startsWith('Bearer ')) return null;
+  const token = authHeader.slice(7);
+  try {
+    const jwt = (await import('jsonwebtoken')).default;
+    const fs = await import('fs');
+    const pathMod = await import('path');
+    const { fileURLToPath } = await import('url');
+    const __dir = pathMod.dirname(fileURLToPath(import.meta.url));
+    const publicKey = fs.readFileSync(pathMod.join(__dir, '..', '..', 'keys', 'public.key'), 'utf8');
+
+    const payload = jwt.verify(token, publicKey, { algorithms: ['RS256'] });
+    if (!payload || !payload.licenseId) {
+      console.error('[builds] token has no licenseId');
+      return null;
+    }
+
+    const { getPrismaClient } = await import('../config/database.js');
+    const prisma = getPrismaClient();
+    const license = await prisma.license.findUnique({ where: { id: payload.licenseId } });
+    if (!license) {
+      console.error('[builds] license not found for id', payload.licenseId);
+      return null;
+    }
+    console.log('[builds] resolved licenseKey for license', license.id);
+    return license.licenseKey;
+  } catch (e) {
+    console.error('[builds] resolveKeyFromToken error:', e.message);
+    return null;
+  }
+}
+
 // Инициализация папок
 async function initFolders() {
   await fs.mkdir(TEMP_DIR, { recursive: true });
@@ -103,7 +156,7 @@ function runCommand(command, args, cwd) {
 }
 
 // Функция сборки дистрибутива
-async function buildDistribution(buildId, projectData, appName, appId, iconPath, serverBaseUrl = 'http://localhost:3002') {
+async function buildDistribution(buildId, projectData, appName, appId, iconPath, serverBaseUrl = 'http://localhost:3002', licenseKey = null) {
   const updateStatus = (status, progress, message) => {
     builds.set(buildId, {
       ...builds.get(buildId),
@@ -120,6 +173,13 @@ async function buildDistribution(buildId, projectData, appName, appId, iconPath,
     // 1. Копируем проект в player/electron/project.json
     // Заменяем относительные URL на абсолютные чтобы Electron мог загрузить файлы
     const resolvedProjectData = resolveProjectUrls(projectData, serverBaseUrl);
+
+    // Добавляем serverUrl и licenseKeyHash для аутентификации плеера
+    resolvedProjectData.serverUrl = serverBaseUrl;
+    if (licenseKey) {
+      resolvedProjectData.licenseKeyHash = crypto.createHash('sha256').update(licenseKey).digest('hex');
+    }
+
     const projectJsonPath = path.join(PLAYER_PATH, 'electron', 'project.json');
     await fs.writeFile(projectJsonPath, JSON.stringify(resolvedProjectData, null, 2));
     console.log(`✅ Проект сохранен: ${projectJsonPath}`);
@@ -169,20 +229,32 @@ async function buildDistribution(buildId, projectData, appName, appId, iconPath,
     // 6. Сборка Electron дистрибутива
     updateStatus('packaging', 70, 'Создание установщика');
     console.log('📦 Создание установщика Windows...');
+    // Очищаем старые .exe ДО сборки чтобы не копировать чужой
+    const _distPath = path.join(PLAYER_PATH, 'dist-electron');
+    try {
+      const _oldExe = await fs.readdir(_distPath);
+      for (const _f of _oldExe) {
+        if (_f.endsWith('.exe') && _f.includes('Setup')) {
+          await fs.unlink(path.join(_distPath, _f));
+          console.log('[build] removed old exe:', _f);
+        }
+      }
+    } catch (_e) { /* dist-electron может не существовать */ }
     await runCommand('npm', ['run', 'electron:build:win'], PLAYER_PATH);
     console.log('✅ Установщик создан');
 
     // 7. Копирование установщика в output
     updateStatus('finalizing', 90, 'Финализация');
     
+    // FIX-EXE-SELECTION-V2
     const distElectronPath = path.join(PLAYER_PATH, 'dist-electron');
     const files = await fs.readdir(distElectronPath);
-    const setupFile = files.find(f => f.endsWith('.exe') && f.includes('Setup'));
-    
-    if (!setupFile) {
+    const exeFiles = files.filter(f => f.endsWith('.exe') && f.includes('Setup'));
+    if (exeFiles.length === 0) {
       throw new Error('Установщик не найден в dist-electron');
     }
-
+    const _exeStats = await Promise.all(exeFiles.map(f => fs.stat(path.join(distElectronPath, f))));
+    const setupFile = exeFiles.reduce((best, f, idx) => _exeStats[idx].mtimeMs > _exeStats[best.idx].mtimeMs ? {f, idx} : best, {f: exeFiles[0], idx: 0}).f;
     const sourcePath = path.join(distElectronPath, setupFile);
     const outputFileName = `${appName.replace(/[^a-zA-Z0-9]/g, '_')}_Setup_${Date.now()}.exe`;
     const outputPath = path.join(OUTPUT_DIR, outputFileName);
@@ -269,7 +341,20 @@ router.post('/', upload.single('icon'), async (req, res) => {
 
     // Запускаем сборку асинхронно
     const serverBaseUrl = process.env.PLAYER_SERVER_URL || `${req.protocol}://${req.get('host')}`;
-    buildDistribution(buildId, projectData, appName, appId, req.file?.path, serverBaseUrl).catch(err => {
+    const licenseKey = await resolveKeyFromToken(req.headers.authorization);
+
+    // Берём АКТУАЛЬНЫЙ projectData из БД (по id из присланного проекта),
+    // чтобы сборка не зависела от состояния редактора (store).
+    const projectId = projectData && projectData.id ? projectData.id : null;
+    const dbProjectData = await loadProjectFromDB(projectId);
+    const finalProjectData = dbProjectData || projectData;
+    if (dbProjectData) {
+      console.log('[builds] using fresh projectData from DB');
+    } else {
+      console.log('[builds] DB load failed, falling back to posted projectData');
+    }
+
+    buildDistribution(buildId, finalProjectData, appName, appId, req.file?.path, serverBaseUrl, licenseKey).catch(err => {
       console.error(`Build ${buildId} failed:`, err);
     });
 

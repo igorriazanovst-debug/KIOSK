@@ -10,6 +10,165 @@ import { ApiError } from '../middleware/errorHandler';
 
 export class LicenseController {
   /**
+   * POST /api/license/activate-player
+   * Активация плеера по SHA256-хэшу licenseKey.
+   * project.json содержит licenseKeyHash = SHA256(licenseKey).
+   * Плеер запрашивает у пользователя licenseKey, вычисляет хэш,
+   * сравнивает с хранимым в project.json и отправляет хэш на сервер.
+   */
+  /**
+   * POST /api/license/activate-player
+   * Активация плеера по email + password (LicenseUser credentials).
+   * project.json содержит licenseKeyHash = SHA256(licenseKey) для валидации
+   * что плеер и пользователь принадлежат одной лицензии.
+   */
+  static async activateByCredentials(req: Request, res: Response) {
+    const bcrypt = await import('bcrypt');
+    const { email, password, deviceId, deviceName, osInfo, projectId } = req.body;
+
+    if (!email || !password || !deviceId) {
+      return res.status(400).json({ error: 'email, password and deviceId are required' });
+    }
+
+    const { getPrismaClient } = await import('../config/database');
+    const prisma = getPrismaClient();
+
+    // Находим пользователя лицензии
+    const licenseUser = await prisma.licenseUser.findUnique({
+      where: { email },
+      include: { license: true }
+    });
+
+    if (!licenseUser) {
+      return res.status(401).json({ error: 'Invalid credentials' });
+    }
+
+    // Проверяем пароль
+    const passwordValid = await bcrypt.compare(password, licenseUser.passwordHash);
+    if (!passwordValid) {
+      return res.status(401).json({ error: 'Invalid credentials' });
+    }
+
+    const license = licenseUser.license;
+
+    // Проверяем статус и срок лицензии
+    if (license.status !== 'ACTIVE') {
+      return res.status(403).json({ error: `License is ${license.status.toLowerCase()}` });
+    }
+    if (new Date() > license.validUntil) {
+      return res.status(403).json({ error: 'License expired' });
+    }
+
+    // Если projectId передан — проверяем что проект принадлежит лицензии
+    if (projectId) {
+      const project = await prisma.project.findFirst({
+        where: { id: projectId, licenseId: license.id }
+      });
+      if (!project) {
+        return res.status(403).json({ error: 'Project does not belong to this license' });
+      }
+    }
+
+    // Проверяем существующее устройство
+    const existingDevice = await DeviceService.findByDeviceId(deviceId);
+
+    if (existingDevice) {
+      if (existingDevice.status === 'DEACTIVATED') {
+        return res.status(403).json({ error: 'Device was deactivated' });
+      }
+
+      const { token, expiresAt } = await TokenService.createToken({
+        licenseId: existingDevice.licenseId,
+        organizationId: license.organizationId,
+        deviceId: existingDevice.deviceId,
+        plan: license.plan.toLowerCase() as any,
+        appType: AppType.Player
+      });
+
+      await DeviceService.updateLastSeen(deviceId);
+
+      return res.json({ success: true, token, expiresAt });
+    }
+
+    // Проверяем лимиты
+    const limitsCheck = await DeviceService.checkDeviceLimits(license.id, AppType.Player);
+    if (!limitsCheck.canActivate) {
+      return res.status(403).json({
+        error: `Player seat limit reached: ${limitsCheck.activeCount}/${limitsCheck.limit}`
+      });
+    }
+
+    // Создаём устройство
+    const device = await DeviceService.createDevice({
+      deviceId,
+      licenseId: license.id,
+      appType: AppType.Player,
+      deviceName: deviceName || `Player-${deviceId.slice(0, 8)}`,
+      osInfo: osInfo || '{}'
+    });
+
+    const { token, expiresAt } = await TokenService.createToken({
+      licenseId: license.id,
+      organizationId: license.organizationId,
+      deviceId: device.deviceId,
+      plan: license.plan.toLowerCase() as any,
+      appType: AppType.Player
+    });
+
+    await AuditService.logActivation({
+      deviceId: device.deviceId,
+      licenseId: license.id,
+      appType: 'PLAYER',
+      ipAddress: req.ip,
+      userAgent: req.get('user-agent')
+    });
+
+    return res.status(201).json({
+      success: true,
+      token,
+      expiresAt,
+      device: {
+        id: device.id,
+        deviceId: device.deviceId,
+        deviceName: device.deviceName
+      },
+      license: {
+        plan: license.plan,
+        validUntil: license.validUntil
+      }
+    });
+  }
+
+
+  static async verifyUpdatePassword(req: Request, res: Response) {
+    const crypto = await import('crypto');
+    const { password } = req.body;
+
+    if (!req.player) {
+      return res.status(401).json({ error: 'Authentication required' });
+    }
+
+    const { getPrismaClient } = await import('../config/database');
+    const prisma = getPrismaClient();
+
+    const users = await prisma.licenseUser.findMany({
+      where: { licenseId: req.player.licenseId }
+    });
+
+    const bcrypt = await import('bcrypt');
+    const matched = await Promise.all(
+      users.map(u => bcrypt.compare(password, u.passwordHash))
+    );
+
+    if (!matched.some(Boolean)) {
+      return res.status(403).json({ error: 'Invalid password' });
+    }
+
+    return res.json({ success: true });
+  }
+
+
+  /**
    * POST /api/license/activate
    * Активировать устройство с license key
    */

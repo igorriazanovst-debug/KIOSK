@@ -2,7 +2,7 @@
 import { Router } from 'express';
 import { ProjectController } from '../controllers/ProjectController';
 import { FileController } from '../controllers/FileController';
-import { authenticateClient } from '../middleware/authClient';
+import { authenticateClient, authenticatePlayer } from '../middleware/authClient';
 import { checkStorageLimit, logStorageUsage } from '../middleware/storageLimit';
 import multer from 'multer';
 
@@ -17,6 +17,8 @@ const upload = multer({
 
 router.get('/', authenticateClient, ProjectController.listProjects);
 router.post('/', authenticateClient, ProjectController.createProject);
+// Плеер проверяет версию — требует Bearer токен плеера
+router.get('/:id/version', authenticatePlayer, ProjectController.getProjectVersion);
 router.get('/:id', authenticateClient, ProjectController.getProject);
 router.put('/:id', authenticateClient, ProjectController.updateProject);
 router.delete('/:id', authenticateClient, ProjectController.deleteProject);

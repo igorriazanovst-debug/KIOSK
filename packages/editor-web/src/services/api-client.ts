@@ -124,6 +124,7 @@ class ApiClient {
   }
 
   private token: string | null = null;
+  private licenseKey: string | null = null;
   private organizationName: string | null = null;
   private plan: string | null = null;
 
@@ -253,6 +254,10 @@ class ApiClient {
     return this.token;
   }
 
+  public getLicenseKey(): string | null {
+    return this.licenseKey || localStorage.getItem('kiosk_license_key');
+  }
+
   /**
    * Получить данные организации
    */
@@ -306,6 +311,8 @@ class ApiClient {
       });
 
       if (response.token && response.license) {
+        this.licenseKey = licenseKey;
+        localStorage.setItem('kiosk_license_key', licenseKey);
         this.saveToken(
           response.token,
           response.license.organizationName,

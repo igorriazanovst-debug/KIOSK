@@ -3,6 +3,8 @@ import './Player.css';
 import GalleryRenderer from './components/GalleryRenderer';
 import PlaylistRenderer from './components/PlaylistRenderer';
 import { serverConnection } from './services/server-connection';
+import ActivationScreen from './components/ActivationScreen';
+import UpdateBanner from './components/UpdateBanner';
 import NavigationRuntime from './NavigationRuntime';
 
 interface Project {
@@ -101,6 +103,8 @@ const Player: React.FC<PlayerProps> = ({ embedded = false }) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [hiddenWidgets, setHiddenWidgets] = useState<Set<string>>(new Set());
+  const [showActivation, setShowActivation] = useState(false);
+  const [updateInfo, setUpdateInfo] = useState<{ currentVersion: number; newVersion: number } | null>(null);
   const hiddenWidgetsInitialized = React.useRef(false);
   const [hoveredMenuItem, setHoveredMenuItem] = useState<string | null>(null);
   const [expandedMenuItem, setExpandedMenuItem] = useState<string | null>(null);
@@ -114,6 +118,18 @@ const Player: React.FC<PlayerProps> = ({ embedded = false }) => {
 
     // Initialize server connection
     initServerConnection();
+
+    // Активация теперь в отдельном нативном окне (main process), React не показывает экран
+
+    // Слушаем уведомление о доступном обновлении
+    if (window.electronAPI?.onUpdateAvailable) {
+      window.electronAPI.onUpdateAvailable((data) => setUpdateInfo(data));
+    }
+
+    // Слушаем применение обновления
+    if (window.electronAPI?.onUpdateApplied) {
+      window.electronAPI.onUpdateApplied(() => setUpdateInfo(null));
+    }
 
     // Слушаем загрузку проекта из main процесса
     if (window.electronAPI) {
@@ -1023,6 +1039,11 @@ const Player: React.FC<PlayerProps> = ({ embedded = false }) => {
     );
   }
 
+  // Экран активации перекрывает всё
+  if (showActivation) {
+    return <ActivationScreen onActivated={() => setShowActivation(false)} />;
+  }
+
   return (
     <div className="player-container">
       <div
@@ -1050,6 +1071,15 @@ const Player: React.FC<PlayerProps> = ({ embedded = false }) => {
             <div className="popup-body">{popupData.content}</div>
           </div>
         </div>
+      )}
+      {/* Плашка обновления */}
+      {updateInfo && (
+        <UpdateBanner
+          currentVersion={updateInfo.currentVersion}
+          newVersion={updateInfo.newVersion}
+          onDismiss={() => setUpdateInfo(null)}
+          onUpdated={() => setUpdateInfo(null)}
+        />
       )}
     </div>
   );

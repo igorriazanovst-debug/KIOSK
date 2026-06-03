@@ -16,6 +16,69 @@ const upload = multer({
 
 export class ProjectController {
   /**
+   * GET /api/projects/:id/version
+   * Публичный endpoint для плеера — проверка версии и список файлов
+   * Аутентификация НЕ требуется (плеер может не иметь токена редактора)
+   */
+  static async getProjectVersion(req: Request, res: Response) {
+    try {
+      const { id } = req.params;
+      const { getPrismaClient } = await import('../config/database');
+      const prisma = getPrismaClient();
+
+      const project = await prisma.project.findUnique({
+        where: { id },
+        select: {
+          id: true,
+          version: true,
+          updatedAt: true,
+          lastEditedAt: true,
+          name: true,
+          files: {
+            select: {
+              id: true,
+              fileName: true,
+              fileType: true,
+              mimeType: true,
+              fileSize: true,
+              url: true,
+              storagePath: true
+            }
+          }
+        }
+      });
+
+      if (!project) {
+        return res.status(404).json({ error: 'Project not found' });
+      }
+
+      return res.json({
+        success: true,
+        projectId: project.id,
+        name: project.name,
+        version: project.version,
+        updatedAt: project.updatedAt,
+        lastEditedAt: project.lastEditedAt,
+        files: project.files.map(f => ({
+          id: f.id,
+          fileName: f.fileName,
+          fileType: f.fileType,
+          mimeType: f.mimeType,
+          fileSize: Number(f.fileSize),
+          url: f.url
+        }))
+      });
+    } catch (error) {
+      console.error('Get project version error:', error);
+      return res.status(500).json({
+        error: 'Failed to get project version',
+        message: error instanceof Error ? error.message : 'Unknown error'
+      });
+    }
+  }
+
+
+  /**
    * GET /api/projects
    * Получить список проектов организации
    */

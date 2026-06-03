@@ -162,6 +162,7 @@ export class ProjectService {
       where: { id: projectId },
       data: {
         ...updates,
+        version: { increment: 1 },
         lastEditedAt: new Date(),
         publishedAt: updates.isPublished && !existing.isPublished ? new Date() : existing.publishedAt
       },

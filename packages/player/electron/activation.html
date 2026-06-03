@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Активация</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: Arial, sans-serif;
+      background: #0f172a;
+      display: flex; align-items: center; justify-content: center;
+      height: 100vh; color: #f1f5f9;
+    }
+    .card {
+      background: #1e293b;
+      border-radius: 12px;
+      padding: 36px 40px;
+      width: 380px;
+      box-shadow: 0 25px 50px rgba(0,0,0,0.5);
+    }
+    .icon { font-size: 44px; text-align: center; margin-bottom: 12px; }
+    h2 { font-size: 20px; text-align: center; margin-bottom: 6px; }
+    .sub { color: #94a3b8; font-size: 13px; text-align: center; margin-bottom: 24px; }
+    input {
+      width: 100%; padding: 11px 14px;
+      background: #0f172a;
+      border: 2px solid #334155;
+      border-radius: 8px;
+      color: #f1f5f9;
+      font-size: 15px;
+      outline: none;
+      margin-bottom: 12px;
+      transition: border-color 0.2s;
+    }
+    input:focus { border-color: #3b82f6; }
+    input.error { border-color: #ef4444; }
+    .err { color: #ef4444; font-size: 13px; margin: -6px 0 12px; min-height: 18px; }
+    button {
+      width: 100%; padding: 12px;
+      background: #3b82f6;
+      color: #fff; border: none; border-radius: 8px;
+      font-size: 15px; font-weight: bold; cursor: pointer;
+      transition: background 0.2s;
+    }
+    button:disabled { background: #334155; cursor: not-allowed; }
+    button:hover:not(:disabled) { background: #2563eb; }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <div class="icon">🔐</div>
+    <h2>Активация плеера</h2>
+    <p class="sub">Введите учётные данные для запуска</p>
+
+    <input type="email" id="email" placeholder="Email" autocomplete="username" />
+    <input type="password" id="password" placeholder="Пароль" autocomplete="current-password" />
+    <div class="err" id="err"></div>
+    <button id="btn" onclick="activate()">Войти</button>
+    <button id="quitBtn" onclick="window.activationAPI.quit()" style="display:none;margin-top:10px;background:#475569;">Закрыть приложение</button>
+  </div>
+
+  <script>
+    document.getElementById('email').focus();
+
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Enter') activate();
+    });
+
+    async function activate() {
+      const email = document.getElementById('email').value.trim();
+      const password = document.getElementById('password').value;
+      const btn = document.getElementById('btn');
+      const errEl = document.getElementById('err');
+
+      if (!email || !password) return;
+
+      btn.disabled = true;
+      btn.textContent = 'Проверка...';
+      errEl.textContent = '';
+
+      document.getElementById('email').classList.remove('error');
+      document.getElementById('password').classList.remove('error');
+
+      try {
+        const result = await window.activationAPI.activate(email, password);
+        if (result && result.success) {
+          btn.textContent = 'Успешно!';
+          setTimeout(() => window.activationAPI.close(), 300);
+        } else {
+          errEl.textContent = (result && result.error) ? result.error : 'Неверный email или пароль';
+          document.getElementById('email').classList.add('error');
+          document.getElementById('password').classList.add('error');
+          document.getElementById('quitBtn').style.display = 'block';
+          btn.disabled = false;
+          btn.textContent = 'Войти';
+        }
+      } catch (e) {
+        errEl.textContent = (e && e.message) ? e.message : 'Ошибка соединения с сервером';
+        btn.disabled = false;
+        btn.textContent = 'Войти';
+      }
+    }
+  </script>
+</body>
+</html>

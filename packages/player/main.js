@@ -20,7 +20,6 @@ process.on('uncaughtException', (e) => fileLog('UNCAUGHT:', e.message, e.stack))
 
 let mainWindow = null;
 let activationWindow = null;
-let allowActivationClose = false;
 let currentProject = null;
 
 // Создание главного окна
@@ -77,7 +76,14 @@ function createWindow() {
     if (currentProject && mainWindow) {
       mainWindow.webContents.send('load-project', currentProject);
     }
-
+    // Если активация ещё нужна — отправляем снова (renderer мог не получить первый раз)
+    if (needsActivation && mainWindow) {
+      setTimeout(() => {
+        if (needsActivation && mainWindow && mainWindow.webContents) {
+          mainWindow.webContents.send('show-activation', {});
+        }
+      }, 500);
+    }
   });
 }
 
@@ -186,11 +192,7 @@ let versionPollTimer = null;
 const VERSION_POLL_INTERVAL = 5 * 60 * 1000; // 5 минут
 
 function getTokenFilePath() {
-  // Токен хранится рядом с exe (удаляется при деинсталляции программы)
-  // и привязан к projectId — смена проекта = новая активация.
-  const dir = path.dirname(process.execPath);
-  const pid = (currentProject && currentProject.id) ? currentProject.id.slice(0, 8) : 'noproj';
-  return path.join(dir, `player-token-${pid}.json`);
+  return path.join(app.getPath('userData'), 'player-token.json');
 }
 
 function loadStoredToken() {
@@ -200,16 +202,11 @@ function loadStoredToken() {
       const data = JSON.parse(fs.readFileSync(tokenFile, 'utf-8'));
       const now = new Date();
       const expires = new Date(data.expiresAt);
-      // Проверяем: токен валиден по сроку И для текущего проекта
-      const sameProject = !data.projectId || (currentProject && data.projectId === currentProject.id);
-      if (expires > now && sameProject) {
+      if (expires > now) {
         playerToken = data.token;
         playerTokenExpiresAt = data.expiresAt;
         console.log('[Auth] Loaded stored token, expires:', data.expiresAt);
         return true;
-      }
-      if (!sameProject) {
-        console.log('[Auth] Stored token is for different project, ignoring');
       }
     }
   } catch (e) {
@@ -220,8 +217,7 @@ function loadStoredToken() {
 
 function saveToken(token, expiresAt) {
   try {
-    const pid = currentProject ? currentProject.id : null;
-    fs.writeFileSync(getTokenFilePath(), JSON.stringify({ token, expiresAt, projectId: pid }));
+    fs.writeFileSync(getTokenFilePath(), JSON.stringify({ token, expiresAt }));
   } catch (e) {
     console.error('[Auth] Failed to save token:', e.message);
   }
@@ -367,10 +363,6 @@ function showActivationScreen() {
     resizable: false,
     alwaysOnTop: true,
     center: true,
-    parent: mainWindow,
-    modal: true,
-    closable: false,
-    minimizable: false,
     title: 'Активация плеера',
     webPreferences: {
       nodeIntegration: false,
@@ -388,15 +380,6 @@ function showActivationScreen() {
   });
   activationWindow.setMenuBarVisibility(false);
 
-  // Блокируем закрытие окна пока нет токена (защита от Alt+F4)
-  activationWindow.on('close', (e) => {
-    // Разрешаем закрытие только программно (после успешной активации
-    // или по кнопке "Закрыть приложение"). Alt+F4 блокируется.
-    if (!allowActivationClose) {
-      console.log('[activation] close blocked — use buttons only');
-      e.preventDefault();
-    }
-  });
   activationWindow.on('closed', () => {
     activationWindow = null;
   });
@@ -408,33 +391,6 @@ ipcMain.handle('check-activation-needed', async () => {
 });
 
 // IPC: renderer отправляет email + password для активации
-// Нативное окно активации отправляет credentials
-ipcMain.handle('activation-submit', async (event, email, password) => {
-  console.log('[activation-submit] received');
-  if (!currentProject || !currentProject.serverUrl) {
-    return { success: false, error: 'No project config' };
-  }
-  const ok = await activatePlayer(email, password, currentProject.serverUrl, currentProject.id);
-  if (ok) {
-    needsActivation = false;
-    startVersionPolling(currentProject.serverUrl, currentProject.id);
-  }
-  return ok ? { success: true } : { success: false, error: 'Неверный email или пароль' };
-});
-
-ipcMain.handle('activation-close', async () => {
-  allowActivationClose = true;
-  if (activationWindow && !activationWindow.isDestroyed()) {
-    activationWindow.close();
-  }
-});
-
-// IPC: закрыть всё приложение (кнопка при ошибке)
-ipcMain.handle('activation-quit', async () => {
-  allowActivationClose = true;
-  app.quit();
-});
-
 ipcMain.handle('activate-with-credentials', async (event, email, password) => {
   if (!currentProject || !currentProject.serverUrl) {
     return { success: false, error: 'No project config' };

@@ -92,3 +92,50 @@ export const deactivateValidators = [
     .notEmpty()
     .withMessage('License key is required')
 ];
+
+/**
+ * Валидаторы для активации плеера по хэшу
+ */
+export const activatePlayerValidators = [
+  body('email')
+    .isString()
+    .trim()
+    .notEmpty()
+    .isEmail()
+    .withMessage('Valid email is required'),
+
+  body('password')
+    .isString()
+    .notEmpty()
+    .withMessage('Password is required'),
+
+  body('deviceId')
+    .isString()
+    .trim()
+    .notEmpty()
+    .withMessage('Device ID is required')
+    .isLength({ min: 1, max: 255 }),
+
+  body('deviceName')
+    .optional()
+    .isString()
+    .trim()
+    .isLength({ max: 255 }),
+
+  body('projectId')
+    .optional()
+    .isString()
+    .trim()
+    .isUUID()
+    .withMessage('projectId must be a valid UUID')
+];
+
+/**
+ * Валидаторы для проверки пароля обновления
+ */
+export const verifyUpdatePasswordValidators = [
+  body('password')
+    .isString()
+    .notEmpty()
+    .withMessage('Password is required')
+];

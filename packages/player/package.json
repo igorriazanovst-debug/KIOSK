@@ -29,7 +29,7 @@
     "app-builder-bin": "^4.2.0",
     "concurrently": "^8.2.2",
     "dmg-builder": "^24.13.3",
-    "electron": "^39.2.7",
+    "electron": "^39.8.10",
     "electron-builder": "^24.9.1",
     "rimraf": "^5.0.0",
     "typescript": "^5.0.0",
@@ -38,7 +38,7 @@
   },
   "build": {
     "appId": "com.kiosk.player",
-    "productName": "Navigation",
+    "productName": "navigation",
     "directories": {
       "output": "dist-electron",
       "buildResources": "assets"
@@ -46,7 +46,10 @@
     "files": [
       "dist/**/*",
       "electron/**/*",
-      "package.json"
+      "package.json",
+      "!electron/*.bak*",
+      "!electron/*.backup*",
+      "!**/*.bak*"
     ],
     "extraResources": [
       {

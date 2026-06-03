@@ -18,5 +18,32 @@ contextBridge.exposeInMainWorld('electronAPI', {
   // Слушать события из main процесса
   onLoadProject: (callback) => {
     ipcRenderer.on('load-project', (event, project) => callback(project));
-  }
+  },
+
+  // Проверить нужна ли активация (при монтировании компонента)
+  checkActivationNeeded: () => ipcRenderer.invoke('check-activation-needed'),
+
+  // Активация плеера по email + password
+  activateWithCredentials: (email, password) => ipcRenderer.invoke('activate-with-credentials', email, password),
+
+  // Показ экрана активации (слушатель)
+  onShowActivation: (callback) => {
+    ipcRenderer.on('show-activation', (event, data) => callback(data));
+  },
+
+  // Доступно обновление (слушатель)
+  onUpdateAvailable: (callback) => {
+    ipcRenderer.on('update-available', (event, data) => callback(data));
+  },
+
+  // Обновление применено (слушатель)
+  onUpdateApplied: (callback) => {
+    ipcRenderer.on('update-applied', (event, data) => callback(data));
+  },
+
+  // Проверка пароля для подтверждения обновления
+  verifyUpdatePassword: (password) => ipcRenderer.invoke('verify-update-password', password),
+
+  // Применить обновление
+  applyUpdate: () => ipcRenderer.invoke('apply-update')
 });
