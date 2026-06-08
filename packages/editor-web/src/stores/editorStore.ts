@@ -76,11 +76,16 @@ interface EditorState {
   
   // Pending widget (для добавления)
   pendingWidget: { type: string; defaultProps: any } | null;
+  loadingStage: string | null;
+  loadingProgress: number;
+  loadAbortController: AbortController | null;
 
   // ========== PROJECT ACTIONS ==========
   restoreProject: () => Promise<boolean>;
   createProject: (name: string, canvas: CanvasConfig) => Promise<void>;
   loadProject: (id: string) => Promise<void>;
+  cancelLoadProject: () => void;
+  dismissLoading: () => void;
   saveProject: () => Promise<void>;
   deleteProject: (id: string) => Promise<void>;
   savePreviewSnapshot: () => Promise<string>;
@@ -213,6 +218,9 @@ export const useEditorStore = create<EditorState>((set, get) => ({
   gridLineWidth: 1,
   gridColor: '#e0e0e0',
   pendingWidget: null,
+  loadingStage: null,
+  loadingProgress: 0,
+  loadAbortController: null,
 
   // ========== PROJECT ACTIONS ==========
 
@@ -297,11 +305,17 @@ export const useEditorStore = create<EditorState>((set, get) => ({
    * Загрузить проект с сервера
    */
   loadProject: async (id: string) => {
-    set({ isLoading: true, saveError: null });
+    // Прервать предыдущий контроллер, если был
+    const prev = (get() as any).loadAbortController as AbortController | null;
+    if (prev) prev.abort();
+    const ctrl = new AbortController();
+    set({ loadAbortController: ctrl, isLoading: true, saveError: null } as any);
 
     try {
       const serverProject = await apiClient.getProject(id);
+      if (ctrl.signal.aborted) return;
 
+      const widgets = serverProject.projectData?.widgets || [];
       const localProject: LocalProject = {
         id: serverProject.id,
         version: '1.0',
@@ -311,37 +325,76 @@ export const useEditorStore = create<EditorState>((set, get) => ({
           height: serverProject.canvasHeight,
           backgroundColor: serverProject.canvasBackground
         },
-        widgets: serverProject.projectData?.widgets || [],
+        widgets,
         metadata: {
           createdAt: serverProject.createdAt,
           updatedAt: serverProject.updatedAt
         }
       };
 
+      // Определяем «тяжесть» по суммарному размеру htmlContent в browser-menu pages
+      let heavyBytes = 0;
+      for (const w of widgets) {
+        if ((w as any)?.type === 'browser-menu') {
+          const pages = ((w as any).properties)?.pages || [];
+          for (const pg of pages) heavyBytes += (pg?.htmlContent || '').length;
+        }
+      }
+      const HEAVY_LIMIT = 250 * 1024;
+      const isHeavy = heavyBytes > HEAVY_LIMIT;
+
+      // Только для ТЯЖЁЛЫХ показываем предупреждение + окно на прерывание (2.5 сек).
+      if (isHeavy) {
+        set({
+          loadingStage:
+            '⚠ Тяжёлый проект (' + Math.round(heavyBytes / 1024) + ' КБ HTML-снапшота). ' +
+            'Открытие может подвесить редактор. У тебя 2.5 секунды нажать «Прервать» — иначе откроется автоматически.',
+          loadingProgress: 100,
+        } as any);
+        await new Promise(r => setTimeout(r, 2500));
+        if (ctrl.signal.aborted) return;
+      }
+
       set({
         project: localProject,
         projectId: serverProject.id,
         isLoading: false,
         lastSaved: new Date(serverProject.updatedAt),
-        history: { past: [], future: [] }
-      });
+        history: { past: [], future: [] },
+        loadingStage: null,
+        loadingProgress: 0,
+        loadAbortController: null,
+      } as any);
 
       console.log('[Editor] Project loaded:', id);
-      
-      // Сохраняем ID текущего проекта
       saveCurrentProjectId(id);
-
-      // Запустить автосохранение
       startAutoSave(get().saveProject);
 
     } catch (error: any) {
+      if (ctrl.signal.aborted) return;
       console.error('[Editor] Failed to load project:', error);
-      set({ 
-        isLoading: false, 
-        saveError: error.message || 'Failed to load project' 
-      });
+      set({
+        isLoading: false,
+        saveError: error.message || 'Failed to load project',
+        loadingStage: null,
+        loadingProgress: 0,
+        loadAbortController: null,
+      } as any);
       throw error;
     }
+  },
+
+  cancelLoadProject: () => {
+    try {
+      const ctrl = (get() as any).loadAbortController as AbortController | null;
+      if (ctrl) ctrl.abort();
+    } catch {}
+    try { saveCurrentProjectId(null); } catch {}
+    try { window.location.reload(); } catch {}
+  },
+
+  dismissLoading: () => {
+    set({ loadingStage: null, loadingProgress: 0, loadAbortController: null } as any);
   },
 
   /**

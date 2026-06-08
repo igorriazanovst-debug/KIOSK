@@ -8,6 +8,7 @@ import { useNavigate } from 'react-router-dom';
 import { InactivityWarning } from './InactivityWarning';
 import { useEditorStore } from '../stores/editorStore';
 import Toolbar from './Toolbar';
+import ProjectLoadingOverlay from './ProjectLoadingOverlay'; // LOAD-PROGRESS-V1
 import Canvas from './Canvas';
 import WidgetLibrary from './WidgetLibrary';
 import PropertiesPanel from './PropertiesPanel';
@@ -135,6 +136,7 @@ const Editor: React.FC = () => {
   return (
     <div className="editor">
       <InactivityWarning />
+      <ProjectLoadingOverlay />
       <Toolbar />
       <div className="editor-main">
         <WidgetLibrary />

@@ -19,6 +19,8 @@ import projectRoutes from './routes/project.routes';
 // Builds (player packaging)
 // @ts-ignore
 import buildsRoutes from './routes/builds.js';
+// @ts-ignore  // IMPORT-PAGE-ROUTE-IMPORT
+import importRouter from './routes/import.js';
 import clientRoutes from './routes/client.routes';
 
 import http from 'http';
@@ -115,6 +117,7 @@ app.use('/api/admin', adminRoutes);
 app.use('/api/auth', authRoutes);
 app.use('/api/projects', projectRoutes);
 app.use('/api/builds', buildsRoutes);
+app.use('/api/import', importRouter);  // IMPORT-PAGE-ROUTE-USE
 app.use('/api/client', clientRoutes);
 
 // Storage stats endpoint (requires authentication)

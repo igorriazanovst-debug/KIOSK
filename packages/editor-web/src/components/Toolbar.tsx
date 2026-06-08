@@ -101,6 +101,33 @@ export const Toolbar: React.FC = () => {
     }
   };
 
+  // IMPORT-JSON-BTN
+  const importInputRef = React.useRef<HTMLInputElement>(null);
+  const handleImportJson = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (e.target) e.target.value = '';
+    if (!file) return;
+    try {
+      const proj = JSON.parse(await file.text());
+      if (!proj || !proj.version || !proj.canvas || !Array.isArray(proj.widgets)) {
+        alert('Неверный формат проекта (нужны version, canvas, widgets).');
+        return;
+      }
+      const created = await apiClient.createProject({
+        name: proj.name || 'Импортированный проект',
+        canvasWidth: proj.canvas.width,
+        canvasHeight: proj.canvas.height,
+        canvasBackground: proj.canvas.backgroundColor || '#ffffff',
+        projectData: proj,
+      });
+      await useEditorStore.getState().loadProject(created.id);
+      alert('Проект импортирован: ' + (created.name || created.id));
+    } catch (err: any) {
+      console.error('[Toolbar] Import JSON failed:', err);
+      alert('Ошибка импорта: ' + (err?.message || String(err)));
+    }
+  };
+
   const canUndo = history.past.length > 0;
   const canRedo = history.future.length > 0;
 
@@ -133,6 +160,21 @@ export const Toolbar: React.FC = () => {
           >
             <FolderOpen size={18} />
           </button>
+          {/* IMPORT-JSON-BTN */}
+          <button
+            className="toolbar-btn"
+            onClick={() => importInputRef.current?.click()}
+            title="Импорт проекта из JSON"
+          >
+            Импорт
+          </button>
+          <input
+            ref={importInputRef}
+            type="file"
+            accept=".json,.kiosk.json,application/json"
+            style={{ display: 'none' }}
+            onChange={handleImportJson}
+          />
 
           <div className="toolbar-divider" />
 
