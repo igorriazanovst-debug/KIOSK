@@ -193,7 +193,11 @@ async function buildDistribution(buildId, projectData, appName, appId, iconPath,
     packageJson.build = packageJson.build || {};
     packageJson.build.appId = appId;
     packageJson.build.productName = appName;
-    
+    // SHORTCUT-NAME-FROM-APPNAME: имя ярлыка (рабочий стол / меню Пуск) = имя приложения из редактора,
+    // иначе оставался жёстко зашитый nsis.shortcutName и установленное приложение называлось иначе.
+    packageJson.build.nsis = packageJson.build.nsis || {};
+    packageJson.build.nsis.shortcutName = appName;
+
     // 3. Настройка иконки
     if (iconPath) {
       const iconDestPath = path.join(PLAYER_PATH, 'assets', 'icon.ico');
