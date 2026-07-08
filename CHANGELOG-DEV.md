@@ -5,6 +5,21 @@
 
 ---
 
+## 2026-07-08
+
+### REVERT — откат прогресс-оверлея «тяжёлого проекта» при загрузке
+- **Симптом:** оверлей-предупреждение об открытии «тяжёлого» проекта (>250 КБ HTML в browser-menu pages) с окном 2.5 сек на «Прервать» работал плохо — мешал открытию проектов.
+- **Что откачено (из коммита `e6d74de8`):**
+  - Удалён компонент `packages/editor-web/src/components/ProjectLoadingOverlay.tsx`.
+  - `Editor.tsx` — убраны импорт `ProjectLoadingOverlay` и его рендер `<ProjectLoadingOverlay />` (восстановлена версия `e6d74de8~1`).
+  - `editorStore.ts` — возвращён простой `loadProject`; убраны поля `loadingStage`/`loadingProgress`/`loadAbortController` и методы `cancelLoadProject`/`dismissLoading` (из interface и implementation) — восстановлена версия `e6d74de8~1`.
+- **Оставлено из того же коммита (НЕ откатывалось):** серверный `/api/import` (`packages/server/src/routes/import.js`, регистрация в `app.ts`), nginx-правило, кнопка «Импорт» в `Toolbar.tsx` (`IMPORT-JSON-BTN`).
+- **Способ:** `git checkout e6d74de8~1 -- Editor.tsx editorStore.ts` + `git rm ProjectLoadingOverlay.tsx`. Полная обратимость: исходное состояние сохранено меткой `pre-revert-heavy-overlay-backup` (→ `e6d74de8`).
+- **Файлы:** `packages/editor-web/src/components/Editor.tsx`, `packages/editor-web/src/components/ProjectLoadingOverlay.tsx` (удалён), `packages/editor-web/src/stores/editorStore.ts`.
+- **Проверка:** `git grep` не находит следов оверлея в изменённых файлах; кнопка «Импорт» и серверный импорт на месте. Требуется rebuild+deploy editor-web (`npm run build` → `cp -r dist/* /opt/kiosk/editor-web/`).
+
+---
+
 ## 2026-06-03
 
 ### FIX — копировался не тот .exe при сборке плеера
