@@ -186,10 +186,6 @@ export const adminApi = {
     return { data: res.data || [], total: res.total ?? 0 };
   },
 
-  async getOnlineDevices(token: string): Promise<{ data: any[]; total: number }> {
-    const res = await request<any>('GET', '/api/admin/devices/online', token);
-    return { data: res.data || [], total: res.total ?? 0 };
-  },
 
   async deleteDevice(token: string, id: string): Promise<void> {
     await request<any>('DELETE', `/api/admin/devices/${id}`, token);

@@ -10,7 +10,6 @@ const navItems = [
   { to: '/audit', label: 'Audit Logs', icon: '📋' },
   { to: '/clients', label: 'Clients', icon: '👥' },
   { to: '/online', label: 'Online Now', icon: '🟢' },
-  { to: '/online', label: 'Online Now', icon: '🟢' },
 ];
 
 export function Layout() {

@@ -100,6 +100,9 @@ router.get(
 );
 
 router.post('/licenses/:id/users', asyncHandler(AdminController.addLicenseUser));
+router.post('/users/reset-password', asyncHandler(AdminController.resetUserPassword));
+router.get('/organizations', asyncHandler(AdminController.listOrganizations));
+router.get('/organizations/:id/users', asyncHandler(AdminController.listOrganizationUsers));
 export default router;
 
 // Создание клиента с временным паролем

@@ -8,7 +8,6 @@ import { Devices } from './pages/Devices';
 import { AuditLogs } from './pages/AuditLogs';
 import { Clients } from './pages/Clients';
 import { Online } from './pages/Online';
-import { Online } from './pages/Online';
 import { Layout } from './components/Layout';
 import './styles/global.css';
 

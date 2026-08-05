@@ -38,7 +38,7 @@
   },
   "build": {
     "appId": "com.kiosk.player",
-    "productName": "2Video-3",
+    "productName": "Музей СВО",
     "directories": {
       "output": "dist-electron",
       "buildResources": "assets"
@@ -78,7 +78,7 @@
       "createDesktopShortcut": true,
       "createStartMenuShortcut": true,
       "runAfterFinish": false,
-      "shortcutName": "Kiosk Player",
+      "shortcutName": "Музей СВО",
       "artifactName": "${productName}-Setup-${version}.${ext}"
     },
     "portable": {
