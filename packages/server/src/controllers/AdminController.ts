@@ -267,44 +267,68 @@ export class AdminController {
         organization: true,
         devices: {
           orderBy: { lastSeenAt: 'desc' }
+        },
+        projects: {
+          select: { id: true, name: true, updatedAt: true, licenseId: true }
+        },
+        projectGrants: {
+          where: { revokedAt: null },
+          include: {
+            project: {
+              select: { id: true, name: true, updatedAt: true, licenseId: true }
+            }
+          }
         }
       }
     });
-    
+
     if (!license) {
       throw ApiError.notFound('License not found');
     }
-    
+
+    const ownProjects = license.projects.map(p => ({ ...p, accessType: 'own' as const }));
+    const grantedProjects = license.projectGrants.map(g => ({
+      ...g.project,
+      accessType: 'granted' as const,
+      grantId: g.id,
+      grantedAt: g.grantedAt
+    }));
+
     res.json({
       success: true,
-      data: license
+      data: {
+        ...license,
+        availableProjects: [...ownProjects, ...grantedProjects]
+      }
     });
   }
-  
+
   /**
    * PATCH /api/admin/licenses/:id
    * Обновить лицензию
    */
   static async updateLicense(req: Request, res: Response) {
     const { id } = req.params;
-    const { status, validUntil, plan } = req.body;
-    
+    const { status, validUntil, plan, seatsEditor, seatsPlayer } = req.body;
+
     const prisma = getPrismaClient();
-    
+
     // Проверить что лицензия существует
     const existingLicense = await prisma.license.findUnique({
       where: { id }
     });
-    
+
     if (!existingLicense) {
       throw ApiError.notFound('License not found');
     }
-    
+
     const updateData: any = {};
     if (status) updateData.status = status;
     if (validUntil) updateData.validUntil = new Date(validUntil);
     if (plan) updateData.plan = plan;
-    
+    if (seatsEditor !== undefined) updateData.seatsEditor = seatsEditor;
+    if (seatsPlayer !== undefined) updateData.seatsPlayer = seatsPlayer;
+
     const license = await prisma.license.update({
       where: { id },
       data: updateData
@@ -681,6 +705,9 @@ export class AdminController {
       include: {
         license: {
           include: { organization: true }
+        },
+        project: {
+          select: { id: true, name: true }
         }
       },
       orderBy: { lastSeenAt: 'desc' }

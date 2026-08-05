@@ -60,9 +60,16 @@ export class LicenseController {
     }
 
     // Если projectId передан — проверяем что проект принадлежит лицензии
+    // ИЛИ у лицензии есть активный (не отозванный) грант на этот проект
     if (projectId) {
       const project = await prisma.project.findFirst({
-        where: { id: projectId, licenseId: license.id }
+        where: {
+          id: projectId,
+          OR: [
+            { licenseId: license.id },
+            { grants: { some: { licenseId: license.id, revokedAt: null } } }
+          ]
+        }
       });
       if (!project) {
         return res.status(403).json({ error: 'Project does not belong to this license' });
@@ -85,7 +92,7 @@ export class LicenseController {
         appType: AppType.Player
       });
 
-      await DeviceService.updateLastSeen(deviceId);
+      await DeviceService.updateLastSeen(deviceId, projectId);
 
       return res.json({ success: true, token, expiresAt });
     }
@@ -104,7 +111,8 @@ export class LicenseController {
       licenseId: license.id,
       appType: AppType.Player,
       deviceName: deviceName || `Player-${deviceId.slice(0, 8)}`,
-      osInfo: osInfo || '{}'
+      osInfo: osInfo || '{}',
+      projectId: projectId || undefined
     });
 
     const { token, expiresAt } = await TokenService.createToken({

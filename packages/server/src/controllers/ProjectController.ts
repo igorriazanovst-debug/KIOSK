@@ -17,8 +17,11 @@ const upload = multer({
 export class ProjectController {
   /**
    * GET /api/projects/:id/version
-   * Публичный endpoint для плеера — проверка версии и список файлов
-   * Аутентификация НЕ требуется (плеер может не иметь токена редактора)
+   * Endpoint для плеера — проверка версии и список файлов.
+   * Требует Bearer-токен активированного плеера (authenticatePlayer,
+   * см. project.routes.ts) — доступ разрешён только если проект
+   * принадлежит лицензии плеера, либо у лицензии есть активный грант
+   * на этот проект (security-фикс: раньше владение не проверялось вовсе).
    */
   static async getProjectVersion(req: Request, res: Response) {
     try {
@@ -30,6 +33,7 @@ export class ProjectController {
         where: { id },
         select: {
           id: true,
+          licenseId: true,
           version: true,
           updatedAt: true,
           lastEditedAt: true,
@@ -54,6 +58,20 @@ export class ProjectController {
 
       if (!project) {
         return res.status(404).json({ error: 'Project not found' });
+      }
+
+      const playerLicenseId = req.player?.licenseId;
+      if (!playerLicenseId) {
+        return res.status(401).json({ error: 'Player authentication required' });
+      }
+
+      if (project.licenseId !== playerLicenseId) {
+        const activeGrant = await prisma.projectGrant.findFirst({
+          where: { projectId: project.id, licenseId: playerLicenseId, revokedAt: null }
+        });
+        if (!activeGrant) {
+          return res.status(403).json({ error: 'Project does not belong to this license' });
+        }
       }
 
       return res.json({

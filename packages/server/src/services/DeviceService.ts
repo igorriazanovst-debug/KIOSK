@@ -30,9 +30,10 @@ export class DeviceService {
     appType: AppType;
     deviceName: string;
     osInfo?: any;
+    projectId?: string;
   }) {
     const prisma = getPrismaClient();
-    
+
     return prisma.device.create({
       data: {
         deviceId: params.deviceId,
@@ -41,7 +42,8 @@ export class DeviceService {
         deviceName: params.deviceName,
         osInfo: params.osInfo ? JSON.stringify(params.osInfo) : JSON.stringify({ platform: "unknown" }),
         status: 'ACTIVE',
-        lastSeenAt: new Date()
+        lastSeenAt: new Date(),
+        projectId: params.projectId
       },
       include: {
         license: {
@@ -56,13 +58,14 @@ export class DeviceService {
   /**
    * Обновить lastSeenAt для устройства
    */
-  static async updateLastSeen(deviceId: string): Promise<void> {
+  static async updateLastSeen(deviceId: string, projectId?: string): Promise<void> {
     const prisma = getPrismaClient();
-    
+
     await prisma.device.update({
       where: { deviceId },
       data: {
-        lastSeenAt: new Date()
+        lastSeenAt: new Date(),
+        ...(projectId ? { projectId } : {})
       }
     });
   }

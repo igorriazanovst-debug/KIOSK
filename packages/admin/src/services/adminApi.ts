@@ -63,6 +63,38 @@ export interface PaginationParams {
   [key: string]: string | number | undefined;
 }
 
+export interface AvailableProject {
+  id: string;
+  name: string;
+  updatedAt: string;
+  licenseId: string;
+  accessType: 'own' | 'granted';
+  grantId?: string;
+  grantedAt?: string;
+}
+
+export interface AdminProjectListItem {
+  id: string;
+  name: string;
+  licenseId: string;
+  updatedAt: string;
+  license?: { organization?: { name: string } };
+}
+
+export interface LicenseDetails extends License {
+  availableProjects: AvailableProject[];
+  devices: Device[];
+}
+
+export interface BuildStatus {
+  id: string;
+  status: 'queued' | 'building' | 'completed' | 'failed';
+  progress: number;
+  message?: string;
+  download_url?: string;
+  error?: string;
+}
+
 // ─── Helper ──────────────────────────────────────────────────────────────────
 
 async function request<T>(
@@ -141,9 +173,42 @@ export const adminApi = {
     return { licenses: res.licenses || res.data || [], total: res.total ?? (res.licenses || res.data || []).length };
   },
 
-  async getLicenseById(token: string, id: string): Promise<License> {
+  async getLicenseById(token: string, id: string): Promise<LicenseDetails> {
     const res = await request<any>('GET', `/api/admin/licenses/${id}`, token);
     return res.license || res.data || res;
+  },
+
+  // Projects / ProjectGrant
+  async listProjects(token: string, search?: string): Promise<AdminProjectListItem[]> {
+    const res = await request<any>('GET', '/api/admin/projects', token, undefined, search ? { search } : undefined);
+    return res.data || [];
+  },
+
+  async grantProject(token: string, projectId: string, licenseId: string): Promise<void> {
+    await request<any>('POST', `/api/admin/projects/${projectId}/grants`, token, { licenseId });
+  },
+
+  async revokeGrant(token: string, projectId: string, licenseId: string): Promise<void> {
+    await request<any>('DELETE', `/api/admin/projects/${projectId}/grants/${licenseId}`, token);
+  },
+
+  // Build exe for a specific license (без входа под клиентом)
+  async buildForLicense(
+    token: string,
+    licenseId: string,
+    projectId: string,
+    appName?: string
+  ): Promise<{ build_id: string; status_url: string }> {
+    const res = await request<any>('POST', `/api/builds/for-license/${licenseId}`, token, {
+      projectId,
+      appName
+    });
+    return res.data;
+  },
+
+  async getBuildStatus(token: string, buildId: string): Promise<BuildStatus> {
+    const res = await request<any>('GET', `/api/builds/${buildId}`, token);
+    return res.data;
   },
 
   async createLicense(
@@ -179,11 +244,6 @@ export const adminApi = {
   async getDevices(token: string, params?: PaginationParams): Promise<{ devices: Device[]; total: number }> {
     const res = await request<any>('GET', '/api/admin/devices', token, undefined, params);
     return { devices: res.devices || res.data || [], total: res.total ?? (res.devices || res.data || []).length };
-  },
-
-  async getOnlineDevices(token: string): Promise<{ data: any[]; total: number }> {
-    const res = await request<any>('GET', '/api/admin/devices/online', token);
-    return { data: res.data || [], total: res.total ?? 0 };
   },
 
   async getOnlineDevices(token: string): Promise<{ data: any[]; total: number }> {

@@ -2,6 +2,7 @@ import React, { useEffect, useState, useCallback } from 'react';
 import { useAuthStore } from '../stores/authStore';
 import { adminApi, License } from '../services/adminApi';
 import { CreateLicenseModal } from '../components/CreateLicenseModal';
+import { LicenseDetailModal } from '../components/LicenseDetailModal';
 import { Badge } from '../components/Badge';
 import './Licenses.css';
 
@@ -15,6 +16,7 @@ export function Licenses() {
   const [loading, setLoading] = useState(true);
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [updatingId, setUpdatingId] = useState<string | null>(null);
+  const [detailLicenseId, setDetailLicenseId] = useState<string | null>(null);
 
   const LIMIT = 15;
 
@@ -160,6 +162,9 @@ export function Licenses() {
                       <option value="EXPIRED">Expire</option>
                       <option value="CANCELLED">Cancel</option>
                     </select>
+                    <button className="btn-secondary" onClick={() => setDetailLicenseId(lic.id)}>
+                      Manage
+                    </button>
                   </td>
                 </tr>
               ))
@@ -182,6 +187,18 @@ export function Licenses() {
       {/* Create Modal */}
       {showCreateModal && (
         <CreateLicenseModal onSubmit={handleCreate} onClose={() => setShowCreateModal(false)} />
+      )}
+
+      {/* Detail / Manage Modal */}
+      {detailLicenseId && token && (
+        <LicenseDetailModal
+          token={token}
+          licenseId={detailLicenseId}
+          onClose={() => {
+            setDetailLicenseId(null);
+            fetchLicenses();
+          }}
+        />
       )}
     </div>
   );

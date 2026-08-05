@@ -2,6 +2,7 @@
 
 import { Router } from 'express';
 import { AdminController } from '../controllers/AdminController';
+import { ProjectGrantController } from '../controllers/ProjectGrantController';
 import { asyncHandler } from '../middleware/errorHandler';
 import { authenticateAdmin } from '../middleware/auth';
 import { validateWith } from '../middleware/validateRequest';
@@ -12,7 +13,9 @@ import {
   getLicensesValidators,
   getDevicesValidators,
   uuidParamValidators,
-  getAuditLogsValidators
+  getAuditLogsValidators,
+  createGrantValidators,
+  revokeGrantValidators
 } from '../validators/admin.validators';
 
 const router = Router();
@@ -100,10 +103,31 @@ router.get(
 );
 
 router.post('/licenses/:id/users', asyncHandler(AdminController.addLicenseUser));
-export default router;
+
+/**
+ * Projects / ProjectGrant (шаринг проекта между лицензиями без копирования)
+ */
+router.get(
+  '/projects',
+  asyncHandler(ProjectGrantController.listProjects)
+);
+
+router.post(
+  '/projects/:projectId/grants',
+  validateWith(createGrantValidators),
+  asyncHandler(ProjectGrantController.createGrant)
+);
+
+router.delete(
+  '/projects/:projectId/grants/:licenseId',
+  validateWith(revokeGrantValidators),
+  asyncHandler(ProjectGrantController.revokeGrant)
+);
 
 // Создание клиента с временным паролем
 router.post(
   '/invite',
   asyncHandler(AdminController.invite)
 );
+
+export default router;

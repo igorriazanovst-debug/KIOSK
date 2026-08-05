@@ -443,26 +443,36 @@ function httpGet(url, token) {
   });
 }
 
-// Активация плеера по email + password
+// Активация плеера по email + password.
+// Возвращает { success, error } — error содержит реальную причину отказа
+// сервера (несовпадение проекта, лимит устройств, статус лицензии и т.д.),
+// а не общий "неверный логин/пароль" для любой ошибки.
 async function activatePlayer(email, password, serverUrl, projectId) {
   const url = serverUrl.replace(/\/+$/, '') + '/api/license/activate-player';
   console.log('[Auth] Activating player...');
-  const resp = await httpPost(url, {
-    email,
-    password,
-    deviceId: getDeviceId(),
-    deviceName: os.hostname(),
-    projectId
-  });
+  let resp;
+  try {
+    resp = await httpPost(url, {
+      email,
+      password,
+      deviceId: getDeviceId(),
+      deviceName: os.hostname(),
+      projectId
+    });
+  } catch (e) {
+    console.error('[Auth] Activation request failed:', e.message);
+    return { success: false, error: 'Не удалось связаться с сервером: ' + e.message };
+  }
   if (resp.status === 200 || resp.status === 201) {
     playerToken = resp.body.token;
     playerTokenExpiresAt = resp.body.expiresAt;
     saveToken(playerToken, playerTokenExpiresAt);
     console.log('[Auth] Activated, token expires:', playerTokenExpiresAt);
-    return true;
+    return { success: true };
   }
   console.error('[Auth] Activation failed:', resp.body);
-  return false;
+  const serverError = resp.body && resp.body.error;
+  return { success: false, error: serverError || `Ошибка активации (код ${resp.status})` };
 }
 
 // Проверка версии проекта
@@ -571,14 +581,14 @@ ipcMain.handle('activation-submit', async (event, email, password) => {
   if (!currentProject || !currentProject.serverUrl) {
     return { success: false, error: 'No project config' };
   }
-  const ok = await activatePlayer(email, password, currentProject.serverUrl, currentProject.id);
-  if (ok) {
+  const result = await activatePlayer(email, password, currentProject.serverUrl, currentProject.id);
+  if (result.success) {
     needsActivation = false;
     startVersionPolling(currentProject.serverUrl, currentProject.id);
     // POST-ACTIVATION-CACHE — токен получен, докачиваем медиа и пересылаем проект с локальными URL
     sendLoadProject();
   }
-  return ok ? { success: true } : { success: false, error: 'Неверный email или пароль' };
+  return result;
 });
 
 ipcMain.handle('activation-close', async () => {
@@ -600,14 +610,13 @@ ipcMain.handle('activate-with-credentials', async (event, email, password) => {
   if (!currentProject || !currentProject.serverUrl) {
     return { success: false, error: 'No project config' };
   }
-  const ok = await activatePlayer(email, password, currentProject.serverUrl, currentProject.id);
-  if (ok) {
+  const result = await activatePlayer(email, password, currentProject.serverUrl, currentProject.id);
+  if (result.success) {
     needsActivation = false;
     startVersionPolling(currentProject.serverUrl, currentProject.id);
     sendLoadProject(); // POST-ACTIVATION-CACHE
-    return { success: true };
   }
-  return { success: false, error: 'Activation failed on server' };
+  return result;
 });
 
 // IPC: renderer запрашивает проверку пароля для обновления

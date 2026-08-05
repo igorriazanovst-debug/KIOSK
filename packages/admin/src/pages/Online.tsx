@@ -18,6 +18,7 @@ interface OnlineDevice {
     plan: string;
     organization?: { name: string };
   };
+  project?: { id: string; name: string } | null;
 }
 
 function secsAgo(iso: string) {
@@ -50,6 +51,7 @@ function DeviceTable({ devices, title, icon }: { devices: OnlineDevice[]; title:
               <th>IP Address</th>
               <th>License</th>
               <th>Organization</th>
+              <th>Project</th>
               <th>Plan</th>
               <th>Last Seen</th>
             </tr>
@@ -63,6 +65,7 @@ function DeviceTable({ devices, title, icon }: { devices: OnlineDevice[]; title:
                   <td className="dev-ip">{d.ipAddress ? <code>{d.ipAddress}</code> : <span className="no-ip">—</span>}</td>
                   <td><code className="lic-key">{d.license?.licenseKey ?? '—'}</code></td>
                   <td>{d.license?.organization?.name ?? '—'}</td>
+                  <td>{d.project?.name ?? '—'}</td>
                   <td><span className={`plan-badge plan-${d.license?.plan?.toLowerCase() ?? 'unknown'}`}>{d.license?.plan ?? '—'}</span></td>
                   <td><span className={`ls-badge ls-${ls.cls}`}>{ls.label}</span></td>
                 </tr>

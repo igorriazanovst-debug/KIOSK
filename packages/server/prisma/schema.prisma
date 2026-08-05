@@ -29,7 +29,8 @@ model User {
   // NEW: Online Editor relations
   userProfile    UserProfile?
   projects       Project[]
-  
+  grantedProjectGrants ProjectGrant[]
+
   createdAt      DateTime      @default(now())
   updatedAt      DateTime      @updatedAt
   
@@ -87,10 +88,13 @@ model License {
   // NEW: Online Editor relations
   projects       Project[]
   storageLimit   BigInt         @default(524288000) // 500 MB для BASIC
-  
+
+  // NEW: доступ к чужим проектам по гранту (без копирования данных)
+  projectGrants  ProjectGrant[]
+
   createdAt      DateTime       @default(now())
   updatedAt      DateTime       @updatedAt
-  
+
   @@index([licenseKey])
   @@index([organizationId])
   @@index([status])
@@ -122,17 +126,23 @@ model Device {
   activatedAt   DateTime     @default(now())
   deactivatedAt DateTime?
   lastSeenAt    DateTime     @default(now())
-  
+
+  // NEW: какой проект открыт на этом плеере (для "кто подключился" при
+  // доступе к нескольким проектам под одной лицензией через ProjectGrant)
+  projectId     String?
+
   license       License      @relation(fields: [licenseId], references: [id])
+  project       Project?     @relation(fields: [projectId], references: [id])
   tokens        Token[]
   auditLogs     AuditLog[]
-  
+
   createdAt     DateTime     @default(now())
   updatedAt     DateTime     @updatedAt
-  
+
   @@index([deviceId])
   @@index([licenseId])
   @@index([status])
+  @@index([projectId])
   @@map("devices")
 }
 
@@ -256,11 +266,15 @@ model Project {
   organization          Organization   @relation(fields: [organizationId], references: [id], onDelete: Cascade)
   createdByUser         User?          @relation(fields: [createdByUserId], references: [id], onDelete: SetNull)
   files                 ProjectFile[]
-  
+
+  // NEW: доступ клиентских лицензий к этому проекту по гранту (без копирования)
+  grants                ProjectGrant[]
+  devices               Device[]
+
   createdAt             DateTime       @default(now())
   updatedAt             DateTime       @updatedAt
   lastEditedAt          DateTime       @default(now())
-  
+
   @@index([licenseId])
   @@index([organizationId])
   @@index([createdByUserId])
@@ -268,6 +282,26 @@ model Project {
   @@index([isPublished])
   @@index([createdAt])
   @@map("projects")
+}
+
+// Доступ лицензии к чужому проекту без копирования данных
+// (владелец проекта не меняется — Project.licenseId остаётся как есть)
+model ProjectGrant {
+  id              String    @id @default(uuid())
+  projectId       String
+  licenseId       String
+  grantedByUserId String?   // администратор, выдавший доступ (nullable: SetNull при удалении User)
+  grantedAt       DateTime  @default(now())
+  revokedAt       DateTime? // soft-revoke: история сохраняется
+
+  project         Project   @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  license         License   @relation(fields: [licenseId], references: [id], onDelete: Cascade)
+  grantedByUser   User?     @relation(fields: [grantedByUserId], references: [id], onDelete: SetNull)
+
+  @@unique([projectId, licenseId])
+  @@index([licenseId])
+  @@index([projectId])
+  @@map("project_grants")
 }
 
 // Файлы проектов (медиа-ресурсы)
