@@ -136,6 +136,26 @@ router.delete(
   asyncHandler(LicenseUserController.remove)
 );
 
+// Сброс пароля LicenseUser или платформенного User по email (прод-хотфикс
+// 2026-07-21, см. коммит f7c5c13) — отдельная, более старая ручка, не
+// связанная с LicenseUserController.update({resetPassword:true}) выше:
+// та требует уже известный licenseUserId и всегда генерирует пароль сама,
+// эта принимает произвольный email и (пока) допускает ввод пароля руками.
+router.post(
+  '/users/reset-password',
+  asyncHandler(AdminController.resetUserPassword)
+);
+
+router.get(
+  '/organizations',
+  asyncHandler(AdminController.listOrganizations)
+);
+
+router.get(
+  '/organizations/:id/users',
+  asyncHandler(AdminController.listOrganizationUsers)
+);
+
 /**
  * Projects / ProjectGrant (шаринг проекта между лицензиями без копирования)
  */

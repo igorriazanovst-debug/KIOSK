@@ -178,79 +178,86 @@ export class AdminController {
    * FIXED: Added automatic licenseKey generation
    */
   static async createLicense(req: Request, res: Response) {
-    const { 
+    const {
       organizationId,
-      plan, 
-      seatsEditor, 
-      seatsPlayer, 
+      organizationName,
+      plan,
+      seatsEditor,
+      seatsPlayer,
       validUntil,
     } = req.body;
-    
+
     const prisma = getPrismaClient();
-    
-    // Проверить что организация существует
-    const organization = await prisma.organization.findUnique({
-      where: { id: organizationId }
-    });
-    
-    if (!organization) {
-      throw ApiError.notFound('Organization not found');
+
+    // Определяем существующую оргу или создаём новую по имени
+    let orgId: string | undefined = organizationId;
+
+    if (orgId) {
+      const organization = await prisma.organization.findUnique({ where: { id: orgId } });
+      if (!organization) {
+        throw ApiError.notFound('Organization not found');
+      }
+    } else if (organizationName && String(organizationName).trim()) {
+      const orgName = String(organizationName).trim();
+      const existing = await prisma.organization.findFirst({
+        where: { name: { equals: orgName, mode: 'insensitive' } },
+      });
+      if (existing) {
+        orgId = existing.id;
+      } else {
+        const crypto = require('crypto');
+        const orgOwnerId = crypto.randomUUID();
+        const newOrgId = crypto.randomUUID();
+        const placeholderEmail = `org_${newOrgId}@placeholder.local`;
+        await prisma.$transaction(async (tx: any) => {
+          await tx.$executeRaw`INSERT INTO users (id, email, "passwordHash", role, "organizationId", "createdAt", "updatedAt") VALUES (${orgOwnerId}, ${placeholderEmail}, ${'placeholder'}, 'USER', NULL, NOW(), NOW())`;
+          await tx.$executeRaw`INSERT INTO organizations (id, name, "ownerUserId", "createdAt", "updatedAt") VALUES (${newOrgId}, ${orgName}, ${orgOwnerId}, NOW(), NOW())`;
+          await tx.$executeRaw`UPDATE users SET "organizationId" = ${newOrgId} WHERE id = ${orgOwnerId}`;
+        });
+        orgId = newOrgId;
+      }
+    } else {
+      res.status(400).json({ success: false, error: 'organizationId or organizationName is required' });
+      return;
     }
-    
-    // 🆕 GENERATE LICENSE KEY AUTOMATICALLY
+
     const licenseKey = generateLicenseKey();
-    
-    // Получить дефолтные значения seats из константы плана если не указаны
+
     const { getPlanConfig, Plan } = await import('@kiosk/shared');
-    
-    // Конвертируем строку плана в enum
     let planEnum: any;
-    switch(plan.toUpperCase()) {
-      case 'BASIC':
-        planEnum = Plan.Basic;
-        break;
-      case 'PRO':
-        planEnum = Plan.Pro;
-        break;
-      case 'MAX':
-        planEnum = Plan.Max;
-        break;
-      default:
-        planEnum = Plan.Basic;
+    switch (String(plan).toUpperCase()) {
+      case 'BASIC': planEnum = Plan.Basic; break;
+      case 'PRO': planEnum = Plan.Pro; break;
+      case 'MAX': planEnum = Plan.Max; break;
+      default: planEnum = Plan.Basic;
     }
-    
     const planConfig = getPlanConfig(planEnum);
-    
-    // Создать лицензию с сгенерированным ключом
+
     const license = await LicenseService.createLicense({
-      organizationId,
+      organizationId: orgId!,
       plan,
-      licenseKey, // 🆕 Pass the generated key
+      licenseKey,
       seatsEditor: seatsEditor || planConfig.seatsEditor,
       seatsPlayer: seatsPlayer || planConfig.seatsPlayer,
       validFrom: new Date(),
       validUntil: new Date(validUntil),
     });
-    
-    // Audit log
+
     await AuditService.logLicenseCreated({
       licenseId: license.id,
       userId: req.user!.id,
       details: {
-        organizationId,
+        organizationId: orgId!,
         plan,
-        licenseKey, // Log the generated key
+        licenseKey,
         seatsEditor: license.seatsEditor,
         seatsPlayer: license.seatsPlayer,
-        validUntil
+        validUntil,
       },
-      ipAddress: req.ip
+      ipAddress: req.ip,
     });
-    
-    res.status(201).json({
-      success: true,
-      data: license
-    });
+
+    res.status(201).json({ success: true, data: license });
   }
   
   /**
@@ -596,7 +603,7 @@ export class AdminController {
       const license = await tx.license.create({
         data: {
           licenseKey,
-          organizationId: orgId,
+          organizationId: orgId!,
           plan: planUpper,
           status: 'ACTIVE',
           seatsEditor: seats.editor,
@@ -632,6 +639,103 @@ export class AdminController {
         validUntil: validUntilDate,
       },
     });
+  }
+
+  /**
+   * POST /api/admin/users/reset-password
+   * Сброс пароля пользователю по email (licenseUser или user).
+   * TODO(security): newPassword сейчас принимается от админа как есть при
+   * длине >= 6 без проверки сложности — известный риск, решение отложено
+   * (см. STATUS.md), пока не трогаем.
+   */
+  static async resetUserPassword(req: Request, res: Response) {
+    const { email, newPassword } = req.body;
+    if (!email || !String(email).trim()) {
+      return res.status(400).json({ success: false, error: 'email is required' });
+    }
+    const targetEmail = String(email).trim();
+
+    const tempPassword = (newPassword && String(newPassword).length >= 6)
+      ? String(newPassword)
+      : Array.from({ length: 12 }, () =>
+          'ABCDEFGHJKLMNPQRSTUVWXYZabcdefghjkmnpqrstuvwxyz23456789!@#'
+            .charAt(Math.floor(Math.random() * 58))
+        ).join('');
+
+    const passwordHash = await bcrypt.hash(tempPassword, 10);
+    const prisma = getPrismaClient();
+
+    const lu = await prisma.licenseUser.findUnique({ where: { email: targetEmail } });
+    if (lu) {
+      await prisma.licenseUser.update({ where: { email: targetEmail }, data: { passwordHash } });
+      return res.json({ success: true, data: { email: targetEmail, tempPassword, account: 'licenseUser', role: lu.role } });
+    }
+
+    const u = await prisma.user.findUnique({ where: { email: targetEmail } });
+    if (u) {
+      await prisma.user.update({ where: { email: targetEmail }, data: { passwordHash } });
+      return res.json({ success: true, data: { email: targetEmail, tempPassword, account: 'user', role: u.role } });
+    }
+
+    return res.status(404).json({ success: false, error: 'User not found' });
+  }
+
+  /**
+   * GET /api/admin/organizations
+   * Список организаций
+   */
+  static async listOrganizations(req: Request, res: Response) {
+    const prisma = getPrismaClient();
+    const orgs = await prisma.organization.findMany({
+      select: { id: true, name: true },
+      orderBy: { name: 'asc' },
+    });
+    return res.json({ success: true, data: orgs });
+  }
+
+  /**
+   * GET /api/admin/organizations/:id/users
+   * Пользователи организации (licenseUser + user, без placeholder-владельцев)
+   */
+  static async listOrganizationUsers(req: Request, res: Response) {
+    const { id } = req.params;
+    const prisma = getPrismaClient();
+
+    const licenses = await prisma.license.findMany({
+      where: { organizationId: id },
+      select: { id: true, licenseKey: true },
+    });
+    const licenseIds = licenses.map((l) => l.id);
+    const keyById: Record<string, string> = {};
+    licenses.forEach((l) => { keyById[l.id] = l.licenseKey; });
+
+    const licenseUsers = licenseIds.length
+      ? await prisma.licenseUser.findMany({
+          where: { licenseId: { in: licenseIds } },
+          select: { email: true, role: true, licenseId: true },
+        })
+      : [];
+
+    const orgUsers = await prisma.user.findMany({
+      where: { organizationId: id, passwordHash: { not: 'placeholder' } },
+      select: { email: true, role: true },
+    });
+
+    const seen = new Set<string>();
+    const users: any[] = [];
+    licenseUsers.forEach((u) => {
+      if (seen.has(u.email)) return;
+      seen.add(u.email);
+      users.push({ email: u.email, role: u.role, type: 'licenseUser', licenseKey: keyById[u.licenseId] || null });
+    });
+    orgUsers.forEach((u) => {
+      if (seen.has(u.email)) return;
+      seen.add(u.email);
+      users.push({ email: u.email, role: u.role, type: 'user', licenseKey: null });
+    });
+
+    users.sort((a, b) => a.email.localeCompare(b.email));
+    return res.json({ success: true, data: users });
   }
 
   /**

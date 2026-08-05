@@ -4,7 +4,86 @@ import { adminApi, License } from '../services/adminApi';
 import { CreateLicenseModal } from '../components/CreateLicenseModal';
 import { LicenseDetailModal } from '../components/LicenseDetailModal';
 import { Badge } from '../components/Badge';
+import '../components/CreateLicenseModal.css';
 import './Licenses.css';
+
+const BASE = import.meta.env.VITE_LICENSE_SERVER_URL || '';
+
+interface AddUserResult { email: string; role: string; tempPassword: string; }
+
+function AddUserModal({ license, token, onClose }: { license: License; token: string; onClose: () => void; }) {
+  const [email, setEmail] = useState('');
+  const [role, setRole] = useState('MEMBER');
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [added, setAdded] = useState<AddUserResult[]>([]);
+
+  const submit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!email.trim()) return;
+    setLoading(true); setError(null);
+    try {
+      const res = await fetch(`${BASE}/api/admin/licenses/${license.id}/users`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+        body: JSON.stringify({ email: email.trim(), role }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || 'Failed to add user');
+      const r = data.data || data;
+      setAdded((p) => [...p, { email: r.email, role: r.role, tempPassword: r.tempPassword }]);
+      setEmail('');
+    } catch (err: any) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <div className="modal-overlay" onClick={onClose}>
+      <div className="modal" onClick={(e) => e.stopPropagation()} style={{ maxWidth: 460 }}>
+        <div className="modal-header">
+          <h2>Пользователи лицензии</h2>
+          <button className="modal-close" onClick={onClose}>&times;</button>
+        </div>
+        <div className="modal-body">
+          <div style={{ fontSize: 13, color: 'var(--text-secondary, #aaa)', marginBottom: 8 }}>
+            {license.organization?.name || '—'} · {license.plan} · <code>{license.licenseKey}</code>
+          </div>
+          <form className="form-row" onSubmit={submit}>
+            <div className="form-group" style={{ flex: 2 }}>
+              <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="user@example.com" autoFocus />
+            </div>
+            <div className="form-group">
+              <select value={role} onChange={(e) => setRole(e.target.value)}>
+                <option value="MEMBER">Member</option>
+                <option value="OWNER">Owner</option>
+              </select>
+            </div>
+            <div className="form-group" style={{ display: 'flex', alignItems: 'flex-end' }}>
+              <button type="submit" className="btn-primary" disabled={loading || !email.trim()}>{loading ? '…' : 'Добавить'}</button>
+            </div>
+          </form>
+          {error && <div className="form-error">{error}</div>}
+          {added.length > 0 && (
+            <div style={{ marginTop: 8 }}>
+              {added.map((u, i) => (
+                <div key={i} style={{ fontSize: 13, padding: '6px 0', borderBottom: '1px solid var(--border, #2a2a2a)' }}>
+                  {u.email} · <b>{u.role}</b> · пароль: <code style={{ color: '#fbbf24' }}>{u.tempPassword}</code>
+                </div>
+              ))}
+              <div style={{ fontSize: 11, color: 'var(--text-muted, #888)', marginTop: 4 }}>Пароли показываются один раз — сохраните.</div>
+            </div>
+          )}
+          <div className="modal-footer">
+            <button type="button" className="btn-primary" onClick={onClose}>Готово</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
 
 export function Licenses() {
   const { token } = useAuthStore();
@@ -15,6 +94,7 @@ export function Licenses() {
   const [statusFilter, setStatusFilter] = useState('');
   const [loading, setLoading] = useState(true);
   const [showCreateModal, setShowCreateModal] = useState(false);
+  const [addUserLicense, setAddUserLicense] = useState<License | null>(null);
   const [updatingId, setUpdatingId] = useState<string | null>(null);
   const [detailLicenseId, setDetailLicenseId] = useState<string | null>(null);
 
@@ -37,30 +117,8 @@ export function Licenses() {
     }
   }, [token, page, search, statusFilter]);
 
-  useEffect(() => {
-    fetchLicenses();
-  }, [fetchLicenses]);
-
-  // Reset page when filters change
-  useEffect(() => {
-    setPage(1);
-  }, [search, statusFilter]);
-
-  const handleCreate = async (data: {
-    organizationId: string;
-    plan: string;
-    seatsEditor: number;
-    seatsPlayer: number;
-    validUntil: string;
-  }) => {
-    try {
-      await adminApi.createLicense(token!, data);
-      setShowCreateModal(false);
-      fetchLicenses();
-    } catch (err: any) {
-      alert('Create failed: ' + (err.message || 'Unknown error'));
-    }
-  };
+  useEffect(() => { fetchLicenses(); }, [fetchLicenses]);
+  useEffect(() => { setPage(1); }, [search, statusFilter]);
 
   const handleStatusChange = async (id: string, newStatus: string) => {
     setUpdatingId(id);
@@ -75,7 +133,6 @@ export function Licenses() {
   };
 
   const totalPages = Math.ceil(total / LIMIT);
-
   const formatDate = (iso: string) => {
     if (!iso) return '—';
     return new Date(iso).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
@@ -83,21 +140,10 @@ export function Licenses() {
 
   return (
     <div className="licenses-page">
-      {/* Toolbar */}
       <div className="page-toolbar">
         <div className="toolbar-left">
-          <input
-            type="text"
-            className="search-input"
-            placeholder="Search licenses..."
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-          />
-          <select
-            className="filter-select"
-            value={statusFilter}
-            onChange={(e) => setStatusFilter(e.target.value)}
-          >
+          <input type="text" className="search-input" placeholder="Search licenses..." value={search} onChange={(e) => setSearch(e.target.value)} />
+          <select className="filter-select" value={statusFilter} onChange={(e) => setStatusFilter(e.target.value)}>
             <option value="">All statuses</option>
             <option value="ACTIVE">Active</option>
             <option value="SUSPENDED">Suspended</option>
@@ -105,16 +151,14 @@ export function Licenses() {
             <option value="CANCELLED">Cancelled</option>
           </select>
         </div>
-        <button className="btn-primary" onClick={() => setShowCreateModal(true)}>
-          + Create License
-        </button>
+        <button className="btn-primary" onClick={() => setShowCreateModal(true)}>+ Create License</button>
       </div>
 
-      {/* Table */}
       <div className="table-wrapper">
         <table className="licenses-table">
           <thead>
             <tr>
+              <th>Organization</th>
               <th>License Key</th>
               <th>Plan</th>
               <th>Status</th>
@@ -126,45 +170,30 @@ export function Licenses() {
           </thead>
           <tbody>
             {loading ? (
-              <tr>
-                <td colSpan={7} className="loading-cell">Loading...</td>
-              </tr>
+              <tr><td colSpan={8} className="loading-cell">Loading...</td></tr>
             ) : licenses.length === 0 ? (
-              <tr>
-                <td colSpan={7} className="empty-cell">No licenses found</td>
-              </tr>
+              <tr><td colSpan={8} className="empty-cell">No licenses found</td></tr>
             ) : (
               licenses.map((lic) => (
                 <tr key={lic.id}>
-                  <td className="key-cell">
-                    <code>{lic.licenseKey}</code>
-                  </td>
-                  <td>
-                    <Badge type="plan" value={lic.plan} />
-                  </td>
-                  <td>
-                    <Badge type="status" value={lic.status} />
-                  </td>
-                  <td className="seats-cell">
-                    {lic.seatsEditor} / {lic.seatsPlayer}
-                  </td>
+                  <td>{lic.organization?.name || '—'}</td>
+                  <td className="key-cell"><code>{lic.licenseKey}</code></td>
+                  <td><Badge type="plan" value={lic.plan} /></td>
+                  <td><Badge type="status" value={lic.status} /></td>
+                  <td className="seats-cell">{lic.seatsEditor} / {lic.seatsPlayer}</td>
                   <td>{formatDate(lic.validUntil)}</td>
                   <td>{formatDate(lic.createdAt)}</td>
                   <td className="actions-cell">
-                    <select
-                      className="status-select"
-                      value={lic.status}
-                      disabled={updatingId === lic.id}
-                      onChange={(e) => handleStatusChange(lic.id, e.target.value)}
-                    >
-                      <option value="ACTIVE">Active</option>
-                      <option value="SUSPENDED">Suspend</option>
-                      <option value="EXPIRED">Expire</option>
-                      <option value="CANCELLED">Cancel</option>
-                    </select>
-                    <button className="btn-secondary" onClick={() => setDetailLicenseId(lic.id)}>
-                      Manage
-                    </button>
+                    <div style={{ display: 'flex', gap: 6, alignItems: 'center' }}>
+                      <select className="status-select" value={lic.status} disabled={updatingId === lic.id} onChange={(e) => handleStatusChange(lic.id, e.target.value)}>
+                        <option value="ACTIVE">Active</option>
+                        <option value="SUSPENDED">Suspend</option>
+                        <option value="EXPIRED">Expire</option>
+                        <option value="CANCELLED">Cancel</option>
+                      </select>
+                      <button className="btn-secondary" style={{ fontSize: 12, padding: '4px 10px' }} onClick={() => setAddUserLicense(lic)}>+ User</button>
+                      <button className="btn-secondary" style={{ fontSize: 12, padding: '4px 10px' }} onClick={() => setDetailLicenseId(lic.id)}>Manage</button>
+                    </div>
                   </td>
                 </tr>
               ))
@@ -173,20 +202,20 @@ export function Licenses() {
         </table>
       </div>
 
-      {/* Pagination */}
       {totalPages > 1 && (
         <div className="pagination">
           <button disabled={page <= 1} onClick={() => setPage((p) => p - 1)}>← Prev</button>
-          <span className="page-info">
-            Page {page} of {totalPages} ({total} total)
-          </span>
+          <span className="page-info">Page {page} of {totalPages} ({total} total)</span>
           <button disabled={page >= totalPages} onClick={() => setPage((p) => p + 1)}>Next →</button>
         </div>
       )}
 
-      {/* Create Modal */}
-      {showCreateModal && (
-        <CreateLicenseModal onSubmit={handleCreate} onClose={() => setShowCreateModal(false)} />
+      {showCreateModal && token && (
+        <CreateLicenseModal token={token} onClose={() => setShowCreateModal(false)} onCreated={fetchLicenses} />
+      )}
+
+      {addUserLicense && token && (
+        <AddUserModal license={addUserLicense} token={token} onClose={() => setAddUserLicense(null)} />
       )}
 
       {/* Detail / Manage Modal */}

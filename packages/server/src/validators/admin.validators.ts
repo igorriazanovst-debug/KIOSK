@@ -24,12 +24,18 @@ export const loginValidators = [
  */
 export const createLicenseValidators = [
   body('organizationId')
+    .optional()
     .isString()
     .trim()
-    .notEmpty()
-    .withMessage('Organization ID is required')
     .isUUID()
     .withMessage('Organization ID must be a valid UUID'),
+
+  body('organizationName')
+    .optional()
+    .isString()
+    .trim()
+    .isLength({ min: 1, max: 200 })
+    .withMessage('Organization name must be 1-200 chars'),
   
   body('plan')
     .isString()

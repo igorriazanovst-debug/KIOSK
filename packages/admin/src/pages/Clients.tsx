@@ -3,6 +3,7 @@ import { useAuthStore } from '../stores/authStore';
 import { adminApi } from '../services/adminApi';
 import { clientApi, InviteResult } from '../services/adminApi';
 import { InviteClientModal } from '../components/InviteClientModal';
+import { ResetPasswordModal } from '../components/ResetPasswordModal';
 import { Badge } from '../components/Badge';
 import './Licenses.css';
 
@@ -116,6 +117,7 @@ export function Clients() {
   const [licenses, setLicenses] = useState<ClientLicense[]>([]);
   const [loading, setLoading] = useState(true);
   const [showInvite, setShowInvite] = useState(false);
+  const [showReset, setShowReset] = useState(false);
   const [inviteResult, setInviteResult] = useState<InviteResult | null>(null);
   const [addUserLicense, setAddUserLicense] = useState<ClientLicense | null>(null);
   const [addUserResult, setAddUserResult] = useState<AddUserResult | null>(null);
@@ -160,6 +162,9 @@ export function Clients() {
             {licenses.length} client{licenses.length !== 1 ? 's' : ''}
           </span>
         </div>
+        <button className="btn-secondary" onClick={() => setShowReset(true)} style={{ marginRight: 8 }}>
+          🔑 Reset Password
+        </button>
         <button className="btn-primary" onClick={() => setShowInvite(true)}>
           + Invite Client
         </button>
@@ -244,30 +249,58 @@ export function Clients() {
             ) : licenses.length === 0 ? (
               <tr><td colSpan={8} className="empty-cell">No clients yet. Click "Invite Client" to create one.</td></tr>
             ) : (
-              licenses.map((lic) => (
-                <tr key={lic.id}>
-                  <td>{lic.organization?.name || '—'}</td>
-                  <td className="key-cell"><code>{lic.licenseKey}</code></td>
-                  <td><Badge type="plan" value={lic.plan} /></td>
-                  <td><Badge type="status" value={lic.status} /></td>
-                  <td className="seats-cell">{lic.seatsEditor} / {lic.seatsPlayer}</td>
-                  <td>{formatDate(lic.validUntil)}</td>
-                  <td>{formatDate(lic.createdAt)}</td>
-                  <td>
-                    <button
-                      className="btn-secondary"
-                      style={{ fontSize: '12px', padding: '4px 10px' }}
-                      onClick={() => setAddUserLicense(lic)}
-                    >
-                      + Add User
-                    </button>
-                  </td>
-                </tr>
-              ))
+              (() => {
+                const groups: Record<string, { name: string; items: ClientLicense[] }> = {};
+                const order: string[] = [];
+                licenses.forEach((lic) => {
+                  const key = lic.organization?.id || lic.organization?.name || lic.id;
+                  if (!groups[key]) { groups[key] = { name: lic.organization?.name || '—', items: [] }; order.push(key); }
+                  groups[key].items.push(lic);
+                });
+                return order.map((key) => {
+                  const g = groups[key];
+                  return (
+                    <React.Fragment key={key}>
+                      <tr className="group-row">
+                        <td colSpan={8} style={{ background: 'rgba(255,255,255,0.03)', fontWeight: 700 }}>
+                          {g.name}{' '}
+                          <span style={{ color: 'var(--text-muted)', fontWeight: 400, fontSize: 12 }}>
+                            · {g.items.length} лиценз.
+                          </span>
+                        </td>
+                      </tr>
+                      {g.items.map((lic) => (
+                        <tr key={lic.id}>
+                          <td></td>
+                          <td className="key-cell"><code>{lic.licenseKey}</code></td>
+                          <td><Badge type="plan" value={lic.plan} /></td>
+                          <td><Badge type="status" value={lic.status} /></td>
+                          <td className="seats-cell">{lic.seatsEditor} / {lic.seatsPlayer}</td>
+                          <td>{formatDate(lic.validUntil)}</td>
+                          <td>{formatDate(lic.createdAt)}</td>
+                          <td>
+                            <button
+                              className="btn-secondary"
+                              style={{ fontSize: '12px', padding: '4px 10px' }}
+                              onClick={() => setAddUserLicense(lic)}
+                            >
+                              + Add User
+                            </button>
+                          </td>
+                        </tr>
+                      ))}
+                    </React.Fragment>
+                  );
+                });
+              })()
             )}
           </tbody>
         </table>
       </div>
+
+      {showReset && token && (
+        <ResetPasswordModal token={token} onClose={() => setShowReset(false)} />
+      )}
 
       {showInvite && (
         <InviteClientModal onSubmit={handleInvite} onClose={() => setShowInvite(false)} />
