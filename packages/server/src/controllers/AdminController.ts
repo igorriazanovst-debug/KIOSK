@@ -257,9 +257,10 @@ export class AdminController {
       ipAddress: req.ip,
     });
 
-    res.status(201).json({ success: true, data: license });
+    // license.storageLimit — BigInt, см. replaceBigInt ниже по файлу.
+    res.status(201).json(JSON.parse(JSON.stringify({ success: true, data: license }, replaceBigInt)));
   }
-  
+
   /**
    * GET /api/admin/licenses/:id
    * Получить детали лицензии
@@ -301,13 +302,16 @@ export class AdminController {
       grantedAt: g.grantedAt
     }));
 
-    res.json({
+    // license.storageLimit — BigInt (см. schema.prisma), JSON.stringify не
+    // умеет его сериализовать напрямую — тот же replaceBigInt, что и в
+    // getDevices выше.
+    res.json(JSON.parse(JSON.stringify({
       success: true,
       data: {
         ...license,
         availableProjects: [...ownProjects, ...grantedProjects]
       }
-    });
+    }, replaceBigInt)));
   }
 
   /**
@@ -349,12 +353,13 @@ export class AdminController {
       ipAddress: req.ip
     });
     
-    res.json({
+    // license.storageLimit — BigInt, см. replaceBigInt ниже по файлу.
+    res.json(JSON.parse(JSON.stringify({
       success: true,
       data: license
-    });
+    }, replaceBigInt)));
   }
-  
+
   /**
    * GET /api/admin/devices
    * Получить список всех устройств
@@ -439,7 +444,7 @@ export class AdminController {
     }
     
     await AuditService.logDeactivation({
-      deviceId: device.deviceId,
+      deviceId: device.id,
       licenseId: device.licenseId,
       userId: req.user!.id,
       ipAddress: req.ip
