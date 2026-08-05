@@ -125,6 +125,28 @@ export const revokeGrantValidators = [
 ];
 
 /**
+ * Валидаторы для удалённого переподключения устройства к другой лицензии
+ */
+export const reassignDeviceValidators = [
+  param('id')
+    .isUUID()
+    .withMessage('Device ID must be a valid UUID'),
+
+  body('licenseId')
+    .isString()
+    .trim()
+    .notEmpty()
+    .withMessage('licenseId is required')
+    .isUUID()
+    .withMessage('licenseId must be a valid UUID'),
+
+  body('projectId')
+    .optional()
+    .isUUID()
+    .withMessage('projectId must be a valid UUID')
+];
+
+/**
  * Валидаторы для управления клиентскими аккаунтами (LicenseUser)
  */
 export const createLicenseUserValidators = [

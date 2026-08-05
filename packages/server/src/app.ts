@@ -135,8 +135,25 @@ app.use(errorHandler);
 // WebSocket: deviceId -> WebSocket connection map
 export const deviceSockets = new Map<string, WebSocket>();
 const deviceIpMap = new Map<string, string>();
+// WS-соединение -> deviceId, который ОНО САМО доказало Bearer-токеном при
+// регистрации (подпись, срок, отзыв, deviceId и app в payload — всё сошлось).
+// Привязано к конкретному объекту сокета (WeakMap), а НЕ к глобальной карте
+// по строке deviceId — иначе отдельное неаутентифицированное соединение,
+// зарегистрировавшееся под тем же (не секретным) deviceId без токена, могло
+// бы одной строкой "device:register" сбросить verified-статус чужого, уже
+// проверенного и всё ещё живого соединения (self-DoS на device:reassign без
+// единого валидного токена). WeakMap гарантирует, что верификация одного
+// сокета не зависит от того, что творят другие соединения с тем же deviceId.
+const verifiedConnections = new WeakMap<WebSocket, string>();
 export function getDeviceSockets() { return deviceSockets; }
 export function getDeviceIpMap() { return deviceIpMap; }
+// true, только если ТЕКУЩЕЕ (актуальное в deviceSockets) соединение для этого
+// deviceId — то самое, что подтвердило владение токеном именно этого устройства.
+export function isDeviceSocketVerified(deviceId: string): boolean {
+  const ws = deviceSockets.get(deviceId);
+  if (!ws) return false;
+  return verifiedConnections.get(ws) === deviceId;
+}
 
 // Start server
 async function startServer() {
@@ -185,11 +202,39 @@ async function startServer() {
                   connectedDeviceId = incomingDeviceId;
                   deviceSockets.set(incomingDeviceId, ws);
                   deviceIpMap.set(incomingDeviceId, wsClientIp);
+
+                  // Верификация: устройство прислало собственный Bearer-токен
+                  // (плеер уже владеет им после активации) — проверяем подпись,
+                  // срок действия, отзыв, и что токен реально выписан для ЭТОГО
+                  // deviceId и типа player. Старые уже установленные сборки
+                  // плеера токен в device:register не шлют — их соединение
+                  // остаётся неверифицированным (как и раньше, для базового
+                  // online-статуса и device:shutdown этого достаточно), но
+                  // приватные push вроде device:reassign им недоступны.
+                  let verified = false;
+                  if (typeof msg.token === 'string' && msg.token) {
+                    try {
+                      const { TokenService } = await import('./services/TokenService');
+                      const payload = await TokenService.verifyToken(msg.token);
+                      verified = !!payload && payload.deviceId === incomingDeviceId && payload.app === 'player';
+                    } catch {
+                      verified = false;
+                    }
+                  }
+                  // Помечаем ТОЛЬКО этот объект сокета — не трогаем состояние
+                  // никакого другого соединения, даже если оно зарегистрировано
+                  // под тем же deviceId.
+                  if (verified) {
+                    verifiedConnections.set(ws, incomingDeviceId);
+                  } else {
+                    verifiedConnections.delete(ws);
+                  }
+
                   await prisma.device.update({
                     where: { deviceId: incomingDeviceId },
                     data: { lastSeenAt: new Date() }
                   });
-                  console.log('[WS] Device registered:', connectedDeviceId);
+                  console.log('[WS] Device registered:', connectedDeviceId, verified ? '(verified)' : '(unverified)');
                 ws.send(JSON.stringify({ type: 'registered', deviceId: connectedDeviceId }));
                 }
               } catch (err: any) {
@@ -218,8 +263,13 @@ async function startServer() {
 
       ws.on('close', () => {
         if (connectedDeviceId) {
-          deviceSockets.delete(connectedDeviceId);
-          deviceIpMap.delete(connectedDeviceId);
+          // Удаляем из deviceSockets только если это соединение всё ещё там
+          // числится (не затираем запись, которую уже перезаписало другое,
+          // более новое соединение с тем же deviceId).
+          if (deviceSockets.get(connectedDeviceId) === ws) {
+            deviceSockets.delete(connectedDeviceId);
+            deviceIpMap.delete(connectedDeviceId);
+          }
           console.log('[WS] Device disconnected:', connectedDeviceId);
         }
       });

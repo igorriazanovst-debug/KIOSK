@@ -3,6 +3,7 @@ import { Request, Response } from 'express';
 import { ProjectService } from '../services/ProjectService';
 import { FileService } from '../services/FileService';
 import { createAuditLog } from '../services/AuditService';
+import { ProjectAccessService } from '../services/ProjectAccessService';
 import multer from 'multer';
 import path from 'path';
 
@@ -66,10 +67,8 @@ export class ProjectController {
       }
 
       if (project.licenseId !== playerLicenseId) {
-        const activeGrant = await prisma.projectGrant.findFirst({
-          where: { projectId: project.id, licenseId: playerLicenseId, revokedAt: null }
-        });
-        if (!activeGrant) {
+        const hasAccess = await ProjectAccessService.licenseHasAccess(playerLicenseId, project.id);
+        if (!hasAccess) {
           return res.status(403).json({ error: 'Project does not belong to this license' });
         }
       }

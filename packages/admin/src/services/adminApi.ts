@@ -292,6 +292,19 @@ export const adminApi = {
     await request<any>('DELETE', `/api/admin/devices/${id}`, token);
   },
 
+  // Remote reassign — moves an already-activated device to a different
+  // license (and optionally project) without re-entering credentials on the
+  // device itself. Requires the device to be online right now.
+  async reassignDevice(
+    token: string,
+    deviceId: string,
+    licenseId: string,
+    projectId?: string
+  ): Promise<{ licenseId: string; projectId: string }> {
+    const res = await request<any>('POST', `/api/admin/devices/${deviceId}/reassign`, token, { licenseId, projectId });
+    return res.data;
+  },
+
   // Audit Logs
   async getAuditLogs(token: string, params?: PaginationParams): Promise<{ logs: AuditLog[]; total: number }> {
     const res = await request<any>('GET', '/api/admin/audit', token, undefined, params);

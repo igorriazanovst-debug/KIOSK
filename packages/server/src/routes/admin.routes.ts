@@ -4,6 +4,7 @@ import { Router } from 'express';
 import { AdminController } from '../controllers/AdminController';
 import { ProjectGrantController } from '../controllers/ProjectGrantController';
 import { LicenseUserController } from '../controllers/LicenseUserController';
+import { DeviceReassignController } from '../controllers/DeviceReassignController';
 import { asyncHandler } from '../middleware/errorHandler';
 import { authenticateAdmin } from '../middleware/auth';
 import { validateWith } from '../middleware/validateRequest';
@@ -19,7 +20,8 @@ import {
   revokeGrantValidators,
   createLicenseUserValidators,
   updateLicenseUserValidators,
-  licenseUserIdParamValidators
+  licenseUserIdParamValidators,
+  reassignDeviceValidators
 } from '../validators/admin.validators';
 
 const router = Router();
@@ -82,6 +84,12 @@ router.delete(
   '/devices/:id',
   validateWith(uuidParamValidators),
   asyncHandler(AdminController.deleteDevice)
+);
+
+router.post(
+  '/devices/:id/reassign',
+  validateWith(reassignDeviceValidators),
+  asyncHandler(DeviceReassignController.reassign)
 );
 
 /**
