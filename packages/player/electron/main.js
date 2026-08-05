@@ -443,26 +443,36 @@ function httpGet(url, token) {
   });
 }
 
-// Активация плеера по email + password
+// Активация плеера по email + password.
+// Возвращает { success, error } — error содержит реальную причину отказа
+// сервера (несовпадение проекта, лимит устройств, статус лицензии и т.д.),
+// а не общий "неверный логин/пароль" для любой ошибки.
 async function activatePlayer(email, password, serverUrl, projectId) {
   const url = serverUrl.replace(/\/+$/, '') + '/api/license/activate-player';
   console.log('[Auth] Activating player...');
-  const resp = await httpPost(url, {
-    email,
-    password,
-    deviceId: getDeviceId(),
-    deviceName: os.hostname(),
-    projectId
-  });
+  let resp;
+  try {
+    resp = await httpPost(url, {
+      email,
+      password,
+      deviceId: getDeviceId(),
+      deviceName: os.hostname(),
+      projectId
+    });
+  } catch (e) {
+    console.error('[Auth] Activation request failed:', e.message);
+    return { success: false, error: 'Не удалось связаться с сервером: ' + e.message };
+  }
   if (resp.status === 200 || resp.status === 201) {
     playerToken = resp.body.token;
     playerTokenExpiresAt = resp.body.expiresAt;
     saveToken(playerToken, playerTokenExpiresAt);
     console.log('[Auth] Activated, token expires:', playerTokenExpiresAt);
-    return true;
+    return { success: true };
   }
   console.error('[Auth] Activation failed:', resp.body);
-  return false;
+  const serverError = resp.body && resp.body.error;
+  return { success: false, error: serverError || `Ошибка активации (код ${resp.status})` };
 }
 
 // Проверка версии проекта
@@ -571,14 +581,15 @@ ipcMain.handle('activation-submit', async (event, email, password) => {
   if (!currentProject || !currentProject.serverUrl) {
     return { success: false, error: 'No project config' };
   }
-  const ok = await activatePlayer(email, password, currentProject.serverUrl, currentProject.id);
-  if (ok) {
+  const result = await activatePlayer(email, password, currentProject.serverUrl, currentProject.id);
+  if (result.success) {
     needsActivation = false;
     startVersionPolling(currentProject.serverUrl, currentProject.id);
+    reRegisterOverWs(); // сервер узнаёт свежий токен без переподключения по WS
     // POST-ACTIVATION-CACHE — токен получен, докачиваем медиа и пересылаем проект с локальными URL
     sendLoadProject();
   }
-  return ok ? { success: true } : { success: false, error: 'Неверный email или пароль' };
+  return result;
 });
 
 ipcMain.handle('activation-close', async () => {
@@ -600,14 +611,14 @@ ipcMain.handle('activate-with-credentials', async (event, email, password) => {
   if (!currentProject || !currentProject.serverUrl) {
     return { success: false, error: 'No project config' };
   }
-  const ok = await activatePlayer(email, password, currentProject.serverUrl, currentProject.id);
-  if (ok) {
+  const result = await activatePlayer(email, password, currentProject.serverUrl, currentProject.id);
+  if (result.success) {
     needsActivation = false;
     startVersionPolling(currentProject.serverUrl, currentProject.id);
+    reRegisterOverWs(); // сервер узнаёт свежий токен без переподключения по WS
     sendLoadProject(); // POST-ACTIVATION-CACHE
-    return { success: true };
   }
-  return { success: false, error: 'Activation failed on server' };
+  return result;
 });
 
 // IPC: renderer запрашивает проверку пароля для обновления
@@ -650,38 +661,44 @@ ipcMain.handle('verify-update-password', async (event, password) => {
   }
 });
 
+// Забирает projectData под указанным projectId с сервера и применяет его как
+// currentProject (используется и обычным «применить обновление» из UI, и
+// удалённым переподключением устройства к другой лицензии/проекту).
+async function fetchAndApplyProject(projectId, token, serverUrl) {
+  const url = serverUrl.replace(/\/+$/, '') + '/api/projects/' + projectId + '/version';
+  const resp = await httpGet(url, token);
+  if (resp.status !== 200) {
+    return { success: false, error: 'Failed to fetch project (status ' + resp.status + ')' };
+  }
+  const updated = resp.body;
+  // projectData = { id, name, canvas, version, widgets, metadata } — разворачиваем в корень currentProject
+  const pd = updated.projectData;
+  if (!pd || !pd.widgets) {
+    return { success: false, error: 'Server returned no projectData' };
+  }
+  currentProject = {
+    ...pd,
+    serverUrl,
+    licenseKeyHash: currentProject ? currentProject.licenseKeyHash : undefined
+  };
+  knownVersion = updated.version;
+  console.log('[project] applied version', knownVersion, 'widgets:', pd.widgets.length, 'projectId:', projectId);
+  if (mainWindow && mainWindow.webContents) {
+    sendLoadProject(); // OFFLINE-CACHE-SENDPOINTS-V1
+  }
+  return { success: true };
+}
+
 // IPC: renderer подтверждает обновление — загружаем новый project.json
 ipcMain.handle('apply-update', async () => {
   if (!currentProject || !currentProject.serverUrl || !playerToken) {
     return { success: false, error: 'Not authenticated' };
   }
-  try {
-    // APPLY-UPDATE-PROJECTDATA-V2
-    const url = currentProject.serverUrl.replace(/\/+$/, '') + '/api/projects/' + currentProject.id + '/version';
-    const resp = await httpGet(url, playerToken);
-    if (resp.status !== 200) return { success: false, error: 'Failed to fetch update' };
-
-    const updated = resp.body;
-    // projectData = { id, name, canvas, version, widgets, metadata } — разворачиваем в корень currentProject
-    const pd = updated.projectData;
-    if (!pd || !pd.widgets) {
-      return { success: false, error: 'Server returned no projectData' };
-    }
-    currentProject = {
-      ...pd,
-      serverUrl: currentProject.serverUrl,
-      licenseKeyHash: currentProject.licenseKeyHash
-    };
-    knownVersion = updated.version;
-    console.log('[apply-update] applied version', knownVersion, 'widgets:', pd.widgets.length);
-    if (mainWindow && mainWindow.webContents) {
-      sendLoadProject(); // OFFLINE-CACHE-SENDPOINTS-V1
-      mainWindow.webContents.send('update-applied', { version: knownVersion });
-    }
-    return { success: true };
-  } catch (e) {
-    return { success: false, error: e.message };
+  const result = await fetchAndApplyProject(currentProject.id, playerToken, currentProject.serverUrl);
+  if (result.success && mainWindow && mainWindow.webContents) {
+    mainWindow.webContents.send('update-applied', { version: knownVersion });
   }
+  return result;
 });
 
 async function initPlayerAuth() {
@@ -710,6 +727,7 @@ async function initPlayerAuth() {
 let wsConnection = null;
 let heartbeatTimer = null;
 let deviceId = null;
+let reassignInFlight = false;
 
 function getDeviceId() {
   const configDir = app.getPath('userData');
@@ -737,6 +755,35 @@ function getLocalIp() {
   return '127.0.0.1';
 }
 
+// Отправляет device:register по уже открытому (или только что открытому) WS.
+// Включает playerToken, если он на этот момент уже есть — сервер проверяет
+// его подпись и то, что он реально выписан для этого deviceId, и только тогда
+// помечает соединение "verified" (годным для приёма приватных push вроде
+// device:reassign). Если токена ещё нет (активация не завершена) — соединение
+// остаётся неверифицированным, как раньше.
+function sendDeviceRegister(ws, projectName) {
+  if (!ws || ws.readyState !== WebSocket.OPEN) return;
+  ws.send(JSON.stringify({
+    type: 'device:register',
+    deviceId,
+    token: playerToken || undefined,
+    name: os.hostname(),
+    os: `${os.platform()} ${os.release()}`,
+    version: app.getVersion ? app.getVersion() : '1.0.0',
+    ipAddress: getLocalIp(),
+    projectName: projectName || 'unknown'
+  }));
+}
+
+// Вызывается сразу после успешной активации, чтобы сервер узнал свежий
+// playerToken и пометил уже открытое WS-соединение как verified — без
+// необходимости его переоткрывать.
+function reRegisterOverWs() {
+  if (wsConnection && wsConnection.readyState === WebSocket.OPEN) {
+    sendDeviceRegister(wsConnection, currentProject ? currentProject.name : undefined);
+  }
+}
+
 function startHeartbeat(serverUrl, projectName) {
   if (wsConnection) {
     try { wsConnection.close(); } catch {}
@@ -754,15 +801,7 @@ function startHeartbeat(serverUrl, projectName) {
 
       ws.on('open', () => {
         console.log('[Device] Connected to server:', wsUrl);
-        ws.send(JSON.stringify({
-          type: 'device:register',
-          deviceId,
-          name: os.hostname(),
-          os: `${os.platform()} ${os.release()}`,
-          version: app.getVersion ? app.getVersion() : '1.0.0',
-          ipAddress: getLocalIp(),
-          projectName: projectName || 'unknown'
-        }));
+        sendDeviceRegister(ws, projectName);
       });
 
       ws.on('message', (data) => {
@@ -776,9 +815,54 @@ function startHeartbeat(serverUrl, projectName) {
             console.log('[Device] New project deployed:', msg.projectData.name);
           } else if (msg.type === 'device:shutdown') {
             console.log('[Device] Received device:shutdown, quitting...');
+            // Стёртый локальный токен — чтобы при следующем запуске плеер не
+            // пытался молча переиспользовать уже отозванный сервером токен
+            // (раньше приходилось перезапускать приложение дважды, чтобы
+            // экран активации вообще появился).
+            clearToken();
             if (heartbeatTimer) { clearInterval(heartbeatTimer); heartbeatTimer = null; }
             try { wsConnection.close(); } catch {}
             app.quit();
+          } else if (msg.type === 'device:reassign' && msg.token) {
+            if (reassignInFlight) {
+              console.warn('[Device] Ignoring device:reassign — one is already being applied');
+              return;
+            }
+            reassignInFlight = true;
+            console.log('[Device] Received device:reassign');
+            (async () => {
+              try {
+                // Токен применяем и сохраняем СРАЗУ и безусловно: сервер к
+                // этому моменту уже отозвал старый токен (см.
+                // DeviceReassignController — отзывает только после
+                // подтверждённой доставки этого сообщения), откатываться на
+                // него нельзя. Если ниже не получится сразу подтянуть контент
+                // нового проекта — это не страшно, следующий цикл опроса
+                // версии подтянет его сам; но БЕЗ сохранения токена устройство
+                // осталось бы вообще без рабочего токена.
+                playerToken = msg.token;
+                playerTokenExpiresAt = msg.expiresAt;
+                saveToken(playerToken, playerTokenExpiresAt);
+
+                const serverUrl = currentProject ? currentProject.serverUrl : null;
+                const targetProjectId = msg.projectId;
+                if (targetProjectId && serverUrl && (!currentProject || currentProject.id !== targetProjectId)) {
+                  const result = await fetchAndApplyProject(targetProjectId, msg.token, serverUrl);
+                  if (!result.success) {
+                    console.error('[Device] Reassign: token applied, but failed to load new project content (will retry on next version poll):', result.error);
+                  }
+                }
+                if (currentProject && currentProject.serverUrl) {
+                  startVersionPolling(currentProject.serverUrl, currentProject.id);
+                }
+                reRegisterOverWs(); // сервер должен узнать новый токен как можно скорее
+                console.log('[Device] Reassigned successfully, project:', currentProject ? currentProject.id : '(unchanged)');
+              } catch (e) {
+                console.error('[Device] Reassign failed:', e.message);
+              } finally {
+                reassignInFlight = false;
+              }
+            })();
           }
         } catch {}
       });

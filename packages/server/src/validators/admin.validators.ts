@@ -90,7 +90,117 @@ export const updateLicenseValidators = [
     .isString()
     .toUpperCase()
     .isIn(['BASIC', 'PRO', 'MAX'])
-    .withMessage('Plan must be BASIC, PRO, or MAX')
+    .withMessage('Plan must be BASIC, PRO, or MAX'),
+
+  body('seatsEditor')
+    .optional()
+    .isInt({ min: 1 })
+    .withMessage('Seats editor must be a positive integer'),
+
+  body('seatsPlayer')
+    .optional()
+    .isInt({ min: 1 })
+    .withMessage('Seats player must be a positive integer')
+];
+
+/**
+ * Валидаторы для управления доступом к проекту (ProjectGrant)
+ */
+export const createGrantValidators = [
+  param('projectId')
+    .isUUID()
+    .withMessage('Project ID must be a valid UUID'),
+
+  body('licenseId')
+    .isString()
+    .trim()
+    .notEmpty()
+    .withMessage('licenseId is required')
+    .isUUID()
+    .withMessage('licenseId must be a valid UUID')
+];
+
+export const revokeGrantValidators = [
+  param('projectId')
+    .isUUID()
+    .withMessage('Project ID must be a valid UUID'),
+
+  param('licenseId')
+    .isUUID()
+    .withMessage('License ID must be a valid UUID')
+];
+
+/**
+ * Валидаторы для удалённого переподключения устройства к другой лицензии
+ */
+export const reassignDeviceValidators = [
+  param('id')
+    .isUUID()
+    .withMessage('Device ID must be a valid UUID'),
+
+  body('licenseId')
+    .isString()
+    .trim()
+    .notEmpty()
+    .withMessage('licenseId is required')
+    .isUUID()
+    .withMessage('licenseId must be a valid UUID'),
+
+  body('projectId')
+    .optional()
+    .isUUID()
+    .withMessage('projectId must be a valid UUID')
+];
+
+/**
+ * Валидаторы для управления клиентскими аккаунтами (LicenseUser)
+ */
+export const createLicenseUserValidators = [
+  param('id')
+    .isUUID()
+    .withMessage('License ID must be a valid UUID'),
+
+  body('email')
+    .isEmail()
+    .normalizeEmail()
+    .withMessage('Valid email is required'),
+
+  body('role')
+    .optional()
+    .isString()
+    .toUpperCase()
+    .isIn(['OWNER', 'MEMBER'])
+    .withMessage('Role must be OWNER or MEMBER')
+];
+
+export const updateLicenseUserValidators = [
+  param('id')
+    .isUUID()
+    .withMessage('License user ID must be a valid UUID'),
+
+  body('email')
+    .optional()
+    .isEmail()
+    .normalizeEmail()
+    .withMessage('Email must be valid'),
+
+  body('role')
+    .optional()
+    .isString()
+    .toUpperCase()
+    .isIn(['OWNER', 'MEMBER'])
+    .withMessage('Role must be OWNER or MEMBER'),
+
+  body('resetPassword')
+    .optional()
+    .isBoolean()
+    .withMessage('resetPassword must be a boolean')
+];
+
+export const licenseUserIdParamValidators = [
+  param('id')
+    .isUUID()
+    .withMessage('License user ID must be a valid UUID')
 ];
 
 /**

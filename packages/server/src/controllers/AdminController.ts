@@ -274,44 +274,68 @@ export class AdminController {
         organization: true,
         devices: {
           orderBy: { lastSeenAt: 'desc' }
+        },
+        projects: {
+          select: { id: true, name: true, updatedAt: true, licenseId: true }
+        },
+        projectGrants: {
+          where: { revokedAt: null },
+          include: {
+            project: {
+              select: { id: true, name: true, updatedAt: true, licenseId: true }
+            }
+          }
         }
       }
     });
-    
+
     if (!license) {
       throw ApiError.notFound('License not found');
     }
-    
+
+    const ownProjects = license.projects.map(p => ({ ...p, accessType: 'own' as const }));
+    const grantedProjects = license.projectGrants.map(g => ({
+      ...g.project,
+      accessType: 'granted' as const,
+      grantId: g.id,
+      grantedAt: g.grantedAt
+    }));
+
     res.json({
       success: true,
-      data: license
+      data: {
+        ...license,
+        availableProjects: [...ownProjects, ...grantedProjects]
+      }
     });
   }
-  
+
   /**
    * PATCH /api/admin/licenses/:id
    * Обновить лицензию
    */
   static async updateLicense(req: Request, res: Response) {
     const { id } = req.params;
-    const { status, validUntil, plan } = req.body;
-    
+    const { status, validUntil, plan, seatsEditor, seatsPlayer } = req.body;
+
     const prisma = getPrismaClient();
-    
+
     // Проверить что лицензия существует
     const existingLicense = await prisma.license.findUnique({
       where: { id }
     });
-    
+
     if (!existingLicense) {
       throw ApiError.notFound('License not found');
     }
-    
+
     const updateData: any = {};
     if (status) updateData.status = status;
     if (validUntil) updateData.validUntil = new Date(validUntil);
     if (plan) updateData.plan = plan;
-    
+    if (seatsEditor !== undefined) updateData.seatsEditor = seatsEditor;
+    if (seatsPlayer !== undefined) updateData.seatsPlayer = seatsPlayer;
+
     const license = await prisma.license.update({
       where: { id },
       data: updateData
@@ -618,12 +642,11 @@ export class AdminController {
   }
 
   /**
-   * POST /api/admin/licenses/:id/users
-   * Добавить пользователя в лицензию
-   */
-  /**
    * POST /api/admin/users/reset-password
-   * Сброс пароля пользователю по email (licenseUser или user)
+   * Сброс пароля пользователю по email (licenseUser или user).
+   * TODO(security): newPassword сейчас принимается от админа как есть при
+   * длине >= 6 без проверки сложности — известный риск, решение отложено
+   * (см. STATUS.md), пока не трогаем.
    */
   static async resetUserPassword(req: Request, res: Response) {
     const { email, newPassword } = req.body;
@@ -715,57 +738,6 @@ export class AdminController {
     return res.json({ success: true, data: users });
   }
 
-  static async addLicenseUser(req: Request, res: Response) {
-    const { id: licenseId } = req.params;
-    const { email, role = 'MEMBER' } = req.body;
-
-    if (!email) {
-      return res.status(400).json({ success: false, error: 'email is required' });
-    }
-
-    const prisma = getPrismaClient();
-
-    const license = await prisma.license.findUnique({
-      where: { id: licenseId },
-      include: { organization: true },
-    });
-
-    if (!license) {
-      return res.status(404).json({ success: false, error: 'License not found' });
-    }
-
-    const existing = await prisma.licenseUser.findUnique({ where: { email } });
-    if (existing) {
-      return res.status(409).json({ success: false, error: 'User with this email already exists' });
-    }
-
-    const bcrypt = require('bcrypt');
-    const crypto = require('crypto');
-    const tempPassword = crypto.randomBytes(8).toString('base64').replace(/[^a-zA-Z0-9]/g, '').substring(0, 10)
-      + Math.floor(Math.random() * 90 + 10) + '!';
-    const passwordHash = await bcrypt.hash(tempPassword, 10);
-
-    const user = await prisma.licenseUser.create({
-      data: {
-        licenseId,
-        email,
-        passwordHash,
-        role: role as any,
-      },
-    });
-
-    res.status(201).json({
-      success: true,
-      data: {
-        id: user.id,
-        email: user.email,
-        role: user.role,
-        licenseId,
-        tempPassword,
-        organizationName: license.organization?.name || '',
-      },
-    });
-  }
   /**
    * GET /api/admin/devices/online
    * Устройства онлайн прямо сейчас (WS подключены или lastSeenAt < 3 мин)
@@ -782,6 +754,9 @@ export class AdminController {
       include: {
         license: {
           include: { organization: true }
+        },
+        project: {
+          select: { id: true, name: true }
         }
       },
       orderBy: { lastSeenAt: 'desc' }

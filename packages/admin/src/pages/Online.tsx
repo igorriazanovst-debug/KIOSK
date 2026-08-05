@@ -3,6 +3,35 @@ import { useAuthStore } from '../stores/authStore';
 import { adminApi } from '../services/adminApi';
 import './Online.css';
 
+async function handleReassign(
+  token: string,
+  device: OnlineDevice,
+  onDone: () => void,
+  setBusy: (deviceId: string, busy: boolean) => void
+) {
+  const licenseId = window.prompt(
+    `Reassign "${device.deviceName}" to a different license.\n\nPaste the target license ID (find it on the Licenses page):`
+  );
+  if (!licenseId || !licenseId.trim()) return;
+
+  const projectId = window.prompt(
+    'Project ID to use on the target license (leave empty to keep the current project — it must already be owned by or granted to the target license):',
+    device.project?.id || ''
+  );
+  if (projectId === null) return; // cancelled
+
+  setBusy(device.id, true);
+  try {
+    await adminApi.reassignDevice(token, device.id, licenseId.trim(), projectId.trim() || undefined);
+    alert('Reassigned. The device will pick up the new license within a few seconds.');
+    onDone();
+  } catch (err: any) {
+    alert('Reassign failed: ' + (err.message || 'Unknown error'));
+  } finally {
+    setBusy(device.id, false);
+  }
+}
+
 interface OnlineDevice {
   id: string;
   deviceId: string;
@@ -18,6 +47,7 @@ interface OnlineDevice {
     plan: string;
     organization?: { name: string };
   };
+  project?: { id: string; name: string } | null;
 }
 
 function secsAgo(iso: string) {
@@ -32,7 +62,12 @@ function lastSeenLabel(iso: string, wsOnline: boolean) {
   return { label: `${Math.floor(s/60)}m ago`, cls: 'stale' };
 }
 
-function DeviceTable({ devices, title, icon }: { devices: OnlineDevice[]; title: string; icon: string }) {
+function DeviceTable({
+  devices, title, icon, token, onReassigned, reassigningIds, setBusy
+}: {
+  devices: OnlineDevice[]; title: string; icon: string; token: string; onReassigned: () => void;
+  reassigningIds: Set<string>; setBusy: (deviceId: string, busy: boolean) => void;
+}) {
   if (devices.length === 0) return (
     <div className="online-section">
       <h2 className="online-section-title">{icon} {title} <span className="online-count">0</span></h2>
@@ -50,8 +85,10 @@ function DeviceTable({ devices, title, icon }: { devices: OnlineDevice[]; title:
               <th>IP Address</th>
               <th>License</th>
               <th>Organization</th>
+              <th>Project</th>
               <th>Plan</th>
               <th>Last Seen</th>
+              <th></th>
             </tr>
           </thead>
           <tbody>
@@ -63,8 +100,20 @@ function DeviceTable({ devices, title, icon }: { devices: OnlineDevice[]; title:
                   <td className="dev-ip">{d.ipAddress ? <code>{d.ipAddress}</code> : <span className="no-ip">—</span>}</td>
                   <td><code className="lic-key">{d.license?.licenseKey ?? '—'}</code></td>
                   <td>{d.license?.organization?.name ?? '—'}</td>
+                  <td>{d.project?.name ?? '—'}</td>
                   <td><span className={`plan-badge plan-${d.license?.plan?.toLowerCase() ?? 'unknown'}`}>{d.license?.plan ?? '—'}</span></td>
                   <td><span className={`ls-badge ls-${ls.cls}`}>{ls.label}</span></td>
+                  <td>
+                    {d.appType === 'PLAYER' && (
+                      <button
+                        className="btn-secondary btn-small"
+                        disabled={reassigningIds.has(d.id)}
+                        onClick={() => handleReassign(token, d, onReassigned, setBusy)}
+                      >
+                        {reassigningIds.has(d.id) ? 'Reassigning...' : 'Reassign'}
+                      </button>
+                    )}
+                  </td>
                 </tr>
               );
             })}
@@ -80,6 +129,15 @@ export function Online() {
   const [devices, setDevices] = useState<OnlineDevice[]>([]);
   const [loading, setLoading] = useState(true);
   const [lastRefresh, setLastRefresh] = useState<Date>(new Date());
+  const [reassigningIds, setReassigningIds] = useState<Set<string>>(new Set());
+
+  const setBusy = useCallback((deviceId: string, busy: boolean) => {
+    setReassigningIds((prev) => {
+      const next = new Set(prev);
+      if (busy) next.add(deviceId); else next.delete(deviceId);
+      return next;
+    });
+  }, []);
 
   const fetch = useCallback(async () => {
     if (!token) return;
@@ -123,9 +181,9 @@ export function Online() {
         <div className="online-loading">Loading...</div>
       ) : (
         <>
-          <DeviceTable devices={players} title="Player Devices" icon="▶️" />
-          <DeviceTable devices={editors} title="Editor Devices"  icon="✏️" />
-          <DeviceTable devices={devices} title="All Online"       icon="🖥️" />
+          <DeviceTable devices={players} title="Player Devices" icon="▶️" token={token || ''} onReassigned={fetch} reassigningIds={reassigningIds} setBusy={setBusy} />
+          <DeviceTable devices={editors} title="Editor Devices"  icon="✏️" token={token || ''} onReassigned={fetch} reassigningIds={reassigningIds} setBusy={setBusy} />
+          <DeviceTable devices={devices} title="All Online"       icon="🖥️" token={token || ''} onReassigned={fetch} reassigningIds={reassigningIds} setBusy={setBusy} />
         </>
       )}
     </div>

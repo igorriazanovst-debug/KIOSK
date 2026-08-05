@@ -2,7 +2,7 @@
 
 .key-cell code { font-size: 12px; letter-spacing: 1px; }
 .seats-cell { font-variant-numeric: tabular-nums; }
-.actions-cell { width: 140px; }
+.actions-cell { width: 220px; display: flex; gap: 8px; align-items: center; }
 
 .status-select {
   background: var(--bg-elevated);

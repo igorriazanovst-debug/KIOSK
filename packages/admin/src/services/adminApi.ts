@@ -63,6 +63,46 @@ export interface PaginationParams {
   [key: string]: string | number | undefined;
 }
 
+export interface AvailableProject {
+  id: string;
+  name: string;
+  updatedAt: string;
+  licenseId: string;
+  accessType: 'own' | 'granted';
+  grantId?: string;
+  grantedAt?: string;
+}
+
+export interface AdminProjectListItem {
+  id: string;
+  name: string;
+  licenseId: string;
+  updatedAt: string;
+  license?: { organization?: { name: string } };
+}
+
+export interface LicenseDetails extends License {
+  availableProjects: AvailableProject[];
+  devices: Device[];
+}
+
+export interface BuildStatus {
+  id: string;
+  status: 'queued' | 'building' | 'completed' | 'failed';
+  progress: number;
+  message?: string;
+  download_url?: string;
+  error?: string;
+}
+
+export interface LicenseUserAccount {
+  id: string;
+  email: string;
+  role: 'OWNER' | 'MEMBER';
+  createdAt: string;
+  updatedAt: string;
+}
+
 // ─── Helper ──────────────────────────────────────────────────────────────────
 
 async function request<T>(
@@ -141,9 +181,71 @@ export const adminApi = {
     return { licenses: res.licenses || res.data || [], total: res.total ?? (res.licenses || res.data || []).length };
   },
 
-  async getLicenseById(token: string, id: string): Promise<License> {
+  async getLicenseById(token: string, id: string): Promise<LicenseDetails> {
     const res = await request<any>('GET', `/api/admin/licenses/${id}`, token);
     return res.license || res.data || res;
+  },
+
+  // Projects / ProjectGrant
+  async listProjects(token: string, search?: string): Promise<AdminProjectListItem[]> {
+    const res = await request<any>('GET', '/api/admin/projects', token, undefined, search ? { search } : undefined);
+    return res.data || [];
+  },
+
+  async grantProject(token: string, projectId: string, licenseId: string): Promise<void> {
+    await request<any>('POST', `/api/admin/projects/${projectId}/grants`, token, { licenseId });
+  },
+
+  async revokeGrant(token: string, projectId: string, licenseId: string): Promise<void> {
+    await request<any>('DELETE', `/api/admin/projects/${projectId}/grants/${licenseId}`, token);
+  },
+
+  // Build exe for a specific license (без входа под клиентом)
+  async buildForLicense(
+    token: string,
+    licenseId: string,
+    projectId: string,
+    appName?: string
+  ): Promise<{ build_id: string; status_url: string }> {
+    const res = await request<any>('POST', `/api/builds/for-license/${licenseId}`, token, {
+      projectId,
+      appName
+    });
+    return res.data;
+  },
+
+  async getBuildStatus(token: string, buildId: string): Promise<BuildStatus> {
+    const res = await request<any>('GET', `/api/builds/${buildId}`, token);
+    return res.data;
+  },
+
+  // License user accounts (client login: email/password/role)
+  async listLicenseUsers(token: string, licenseId: string): Promise<LicenseUserAccount[]> {
+    const res = await request<any>('GET', `/api/admin/licenses/${licenseId}/users`, token);
+    return res.data || [];
+  },
+
+  async createLicenseUser(
+    token: string,
+    licenseId: string,
+    email: string,
+    role: 'OWNER' | 'MEMBER' = 'MEMBER'
+  ): Promise<{ id: string; email: string; role: string; tempPassword: string }> {
+    const res = await request<any>('POST', `/api/admin/licenses/${licenseId}/users`, token, { email, role });
+    return res.data;
+  },
+
+  async updateLicenseUser(
+    token: string,
+    id: string,
+    data: { email?: string; role?: 'OWNER' | 'MEMBER'; resetPassword?: boolean }
+  ): Promise<{ id: string; email: string; role: string; tempPassword: string | null }> {
+    const res = await request<any>('PATCH', `/api/admin/license-users/${id}`, token, data);
+    return res.data;
+  },
+
+  async deleteLicenseUser(token: string, id: string): Promise<void> {
+    await request<any>('DELETE', `/api/admin/license-users/${id}`, token);
   },
 
   async createLicense(
@@ -186,9 +288,21 @@ export const adminApi = {
     return { data: res.data || [], total: res.total ?? 0 };
   },
 
-
   async deleteDevice(token: string, id: string): Promise<void> {
     await request<any>('DELETE', `/api/admin/devices/${id}`, token);
+  },
+
+  // Remote reassign — moves an already-activated device to a different
+  // license (and optionally project) without re-entering credentials on the
+  // device itself. Requires the device to be online right now.
+  async reassignDevice(
+    token: string,
+    deviceId: string,
+    licenseId: string,
+    projectId?: string
+  ): Promise<{ licenseId: string; projectId: string }> {
+    const res = await request<any>('POST', `/api/admin/devices/${deviceId}/reassign`, token, { licenseId, projectId });
+    return res.data;
   },
 
   // Audit Logs

@@ -364,9 +364,138 @@ router.post('/', upload.single('icon'), async (req, res) => {
 
   } catch (error) {
     console.error('Build error:', error);
-    res.status(500).json({ 
-      success: false, 
-      error: error.message 
+    res.status(500).json({
+      success: false,
+      error: error.message
+    });
+  }
+});
+
+// Проверить, что запрос пришёл от аутентифицированного платформенного админа.
+// Не переиспользует middleware/auth.ts напрямую (этот файл — ESM, копируется в
+// dist как есть, минуя tsc), а повторяет ту же проверку, что и
+// authenticateAdmin: валидный RS256-токен + role === 'ADMIN' в БД.
+async function requireAdmin(req) {
+  const authHeader = req.headers.authorization;
+  if (!authHeader || !authHeader.startsWith('Bearer ')) return null;
+  const token = authHeader.slice(7);
+  try {
+    const jwt = (await import('jsonwebtoken')).default;
+    const fs = await import('fs');
+    const pathMod = await import('path');
+    const { fileURLToPath } = await import('url');
+    const __dir = pathMod.dirname(fileURLToPath(import.meta.url));
+    const publicKey = fs.readFileSync(pathMod.join(__dir, '..', '..', 'keys', 'public.key'), 'utf8');
+
+    const payload = jwt.verify(token, publicKey, { algorithms: ['RS256'] });
+    if (!payload || !payload.userId) return null;
+
+    const { getPrismaClient } = await import('../config/database.js');
+    const prisma = getPrismaClient();
+    const user = await prisma.user.findUnique({
+      where: { id: payload.userId },
+      select: { id: true, email: true, role: true }
+    });
+    if (!user || user.role !== 'ADMIN') return null;
+    return user;
+  } catch (e) {
+    console.error('[builds] requireAdmin error:', e.message);
+    return null;
+  }
+}
+
+// Проект принадлежит лицензии напрямую, либо у лицензии есть активный
+// (не отозванный) ProjectGrant на этот проект.
+async function licenseOwnsOrIsGrantedProject(prisma, licenseId, projectId) {
+  const project = await prisma.project.findFirst({
+    where: {
+      id: projectId,
+      OR: [
+        { licenseId },
+        { grants: { some: { licenseId, revokedAt: null } } }
+      ]
+    }
+  });
+  return !!project;
+}
+
+/**
+ * POST /api/builds/for-license/:licenseId
+ * Админский запуск сборки exe под ПРОИЗВОЛЬНУЮ лицензию (не под лицензию
+ * вызывающего, как в POST /api/builds/). licenseKey берётся из БД по
+ * licenseId, а не из токена запроса — так администратор может собрать exe
+ * для клиента, не логинясь под его учёткой.
+ */
+router.post('/for-license/:licenseId', async (req, res, next) => {
+  // Проверяем админа ДО multer — иначе неаутентифицированный запрос уже
+  // успевает записать файл иконки на диск до того, как получит 401.
+  const admin = await requireAdmin(req);
+  if (!admin) {
+    return res.status(401).json({ success: false, error: 'Admin authentication required' });
+  }
+  next();
+}, upload.single('icon'), async (req, res) => {
+  try {
+    const { licenseId } = req.params;
+    const { projectId, appName = 'Kiosk App', appId = 'com.kiosk.app' } = req.body;
+
+    if (!projectId) {
+      return res.status(400).json({ success: false, error: 'projectId is required' });
+    }
+
+    const { getPrismaClient } = await import('../config/database.js');
+    const prisma = getPrismaClient();
+
+    const license = await prisma.license.findUnique({ where: { id: licenseId } });
+    if (!license) {
+      return res.status(404).json({ success: false, error: 'License not found' });
+    }
+
+    const hasAccess = await licenseOwnsOrIsGrantedProject(prisma, licenseId, projectId);
+    if (!hasAccess) {
+      return res.status(403).json({ success: false, error: 'License does not have access to this project' });
+    }
+
+    const buildId = crypto.randomUUID();
+    builds.set(buildId, {
+      id: buildId,
+      status: 'queued',
+      progress: 0,
+      message: 'В очереди',
+      app_name: appName,
+      app_id: appId,
+      created_at: new Date().toISOString()
+    });
+
+    res.json({
+      success: true,
+      data: {
+        build_id: buildId,
+        message: 'Сборка запущена',
+        status_url: `/api/builds/${buildId}`
+      }
+    });
+
+    const serverBaseUrl = process.env.PLAYER_SERVER_URL || `${req.protocol}://${req.get('host')}`;
+    const projectData = await loadProjectFromDB(projectId);
+    if (!projectData) {
+      builds.set(buildId, {
+        ...builds.get(buildId),
+        status: 'failed',
+        error: 'Project not found in DB',
+        failed_at: new Date().toISOString()
+      });
+      return;
+    }
+
+    buildDistribution(buildId, projectData, appName, appId, req.file?.path, serverBaseUrl, license.licenseKey).catch(err => {
+      console.error(`Build ${buildId} failed:`, err);
+    });
+  } catch (error) {
+    console.error('Admin build error:', error);
+    res.status(500).json({
+      success: false,
+      error: error.message
     });
   }
 });
@@ -394,16 +523,24 @@ router.get('/:buildId', (req, res) => {
 
 /**
  * GET /api/builds
- * Список всех сборок
+ * Список всех сборок (кому и какая лицензия что собирала) — только админ.
+ * Security-фикс: раньше был доступен без аутентификации вообще, что позволяло
+ * перечислить все сборки на сервере (включая собранные для чужих лицензий
+ * через новый /for-license/:licenseId) и найти их download_url.
  */
-router.get('/', (req, res) => {
-  const buildsList = Array.from(builds.values()).sort((a, b) => 
+router.get('/', async (req, res) => {
+  const admin = await requireAdmin(req);
+  if (!admin) {
+    return res.status(401).json({ success: false, error: 'Admin authentication required' });
+  }
+
+  const buildsList = Array.from(builds.values()).sort((a, b) =>
     new Date(b.created_at) - new Date(a.created_at)
   );
-  
-  res.json({ 
-    success: true, 
-    data: buildsList 
+
+  res.json({
+    success: true,
+    data: buildsList
   });
 });
 
@@ -428,9 +565,15 @@ router.get('/download/:fileName', async (req, res) => {
 
 /**
  * DELETE /api/builds/:buildId
- * Удалить сборку
+ * Удалить сборку — только админ (security-фикс: раньше был доступен без
+ * аутентификации, любой, кто знает buildId, мог удалить чужую сборку).
  */
 router.delete('/:buildId', async (req, res) => {
+  const admin = await requireAdmin(req);
+  if (!admin) {
+    return res.status(401).json({ success: false, error: 'Admin authentication required' });
+  }
+
   const { buildId } = req.params;
   const build = builds.get(buildId);
 
