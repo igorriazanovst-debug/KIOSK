@@ -3,6 +3,7 @@
 import { Router } from 'express';
 import { AdminController } from '../controllers/AdminController';
 import { ProjectGrantController } from '../controllers/ProjectGrantController';
+import { LicenseUserController } from '../controllers/LicenseUserController';
 import { asyncHandler } from '../middleware/errorHandler';
 import { authenticateAdmin } from '../middleware/auth';
 import { validateWith } from '../middleware/validateRequest';
@@ -15,7 +16,10 @@ import {
   uuidParamValidators,
   getAuditLogsValidators,
   createGrantValidators,
-  revokeGrantValidators
+  revokeGrantValidators,
+  createLicenseUserValidators,
+  updateLicenseUserValidators,
+  licenseUserIdParamValidators
 } from '../validators/admin.validators';
 
 const router = Router();
@@ -69,11 +73,6 @@ router.get(
 );
 
 router.get(
-  '/devices/online',
-  asyncHandler(AdminController.getOnlineDevices)
-);
-
-router.get(
   '/devices',
   validateWith(getDevicesValidators),
   asyncHandler(AdminController.getDevices)
@@ -102,7 +101,32 @@ router.get(
   asyncHandler(AdminController.getAuditLogs)
 );
 
-router.post('/licenses/:id/users', asyncHandler(AdminController.addLicenseUser));
+/**
+ * License users (клиентские аккаунты — email/пароль/роль)
+ */
+router.get(
+  '/licenses/:id/users',
+  validateWith(uuidParamValidators),
+  asyncHandler(LicenseUserController.listForLicense)
+);
+
+router.post(
+  '/licenses/:id/users',
+  validateWith(createLicenseUserValidators),
+  asyncHandler(LicenseUserController.create)
+);
+
+router.patch(
+  '/license-users/:id',
+  validateWith(updateLicenseUserValidators),
+  asyncHandler(LicenseUserController.update)
+);
+
+router.delete(
+  '/license-users/:id',
+  validateWith(licenseUserIdParamValidators),
+  asyncHandler(LicenseUserController.remove)
+);
 
 /**
  * Projects / ProjectGrant (шаринг проекта между лицензиями без копирования)

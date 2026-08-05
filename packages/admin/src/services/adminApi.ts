@@ -95,6 +95,14 @@ export interface BuildStatus {
   error?: string;
 }
 
+export interface LicenseUserAccount {
+  id: string;
+  email: string;
+  role: 'OWNER' | 'MEMBER';
+  createdAt: string;
+  updatedAt: string;
+}
+
 // ─── Helper ──────────────────────────────────────────────────────────────────
 
 async function request<T>(
@@ -209,6 +217,35 @@ export const adminApi = {
   async getBuildStatus(token: string, buildId: string): Promise<BuildStatus> {
     const res = await request<any>('GET', `/api/builds/${buildId}`, token);
     return res.data;
+  },
+
+  // License user accounts (client login: email/password/role)
+  async listLicenseUsers(token: string, licenseId: string): Promise<LicenseUserAccount[]> {
+    const res = await request<any>('GET', `/api/admin/licenses/${licenseId}/users`, token);
+    return res.data || [];
+  },
+
+  async createLicenseUser(
+    token: string,
+    licenseId: string,
+    email: string,
+    role: 'OWNER' | 'MEMBER' = 'MEMBER'
+  ): Promise<{ id: string; email: string; role: string; tempPassword: string }> {
+    const res = await request<any>('POST', `/api/admin/licenses/${licenseId}/users`, token, { email, role });
+    return res.data;
+  },
+
+  async updateLicenseUser(
+    token: string,
+    id: string,
+    data: { email?: string; role?: 'OWNER' | 'MEMBER'; resetPassword?: boolean }
+  ): Promise<{ id: string; email: string; role: string; tempPassword: string | null }> {
+    const res = await request<any>('PATCH', `/api/admin/license-users/${id}`, token, data);
+    return res.data;
+  },
+
+  async deleteLicenseUser(token: string, id: string): Promise<void> {
+    await request<any>('DELETE', `/api/admin/license-users/${id}`, token);
   },
 
   async createLicense(

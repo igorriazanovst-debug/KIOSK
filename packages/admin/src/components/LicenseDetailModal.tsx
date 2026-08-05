@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useCallback, useRef } from 'react';
 import { adminApi, AdminProjectListItem, LicenseDetails } from '../services/adminApi';
+import { LicenseUserAccounts } from './LicenseUserAccounts';
 import './LicenseDetailModal.css';
 
 interface LicenseDetailModalProps {
@@ -172,6 +173,11 @@ export function LicenseDetailModal({ token, licenseId, onClose }: LicenseDetailM
               <div className="license-summary">
                 <code>{license.licenseKey}</code>
                 <span className="license-org">{license.organization?.name}</span>
+              </div>
+
+              <div className="detail-section">
+                <h3>Client accounts</h3>
+                <LicenseUserAccounts token={token} licenseId={licenseId} />
               </div>
 
               <div className="detail-section">

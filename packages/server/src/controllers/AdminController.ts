@@ -635,61 +635,6 @@ export class AdminController {
   }
 
   /**
-   * POST /api/admin/licenses/:id/users
-   * Добавить пользователя в лицензию
-   */
-  static async addLicenseUser(req: Request, res: Response) {
-    const { id: licenseId } = req.params;
-    const { email, role = 'MEMBER' } = req.body;
-
-    if (!email) {
-      return res.status(400).json({ success: false, error: 'email is required' });
-    }
-
-    const prisma = getPrismaClient();
-
-    const license = await prisma.license.findUnique({
-      where: { id: licenseId },
-      include: { organization: true },
-    });
-
-    if (!license) {
-      return res.status(404).json({ success: false, error: 'License not found' });
-    }
-
-    const existing = await prisma.licenseUser.findUnique({ where: { email } });
-    if (existing) {
-      return res.status(409).json({ success: false, error: 'User with this email already exists' });
-    }
-
-    const bcrypt = require('bcrypt');
-    const crypto = require('crypto');
-    const tempPassword = crypto.randomBytes(8).toString('base64').replace(/[^a-zA-Z0-9]/g, '').substring(0, 10)
-      + Math.floor(Math.random() * 90 + 10) + '!';
-    const passwordHash = await bcrypt.hash(tempPassword, 10);
-
-    const user = await prisma.licenseUser.create({
-      data: {
-        licenseId,
-        email,
-        passwordHash,
-        role: role as any,
-      },
-    });
-
-    res.status(201).json({
-      success: true,
-      data: {
-        id: user.id,
-        email: user.email,
-        role: user.role,
-        licenseId,
-        tempPassword,
-        organizationName: license.organization?.name || '',
-      },
-    });
-  }
-  /**
    * GET /api/admin/devices/online
    * Устройства онлайн прямо сейчас (WS подключены или lastSeenAt < 3 мин)
    */
