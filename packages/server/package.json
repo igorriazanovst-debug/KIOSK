@@ -5,7 +5,7 @@
   "main": "dist/app.js",
   "scripts": {
     "dev": "nodemon --exec ts-node src/app.ts",
-    "build": "tsc && tsc-alias && cp src/routes/*.js dist/routes/ 2>/dev/null || true",
+    "build": "tsc && tsc-alias && cp src/routes/*.js dist/routes/ 2>/dev/null && mkdir -p dist/utils && cp src/utils/*.js dist/utils/ 2>/dev/null || true",
     "start": "node dist/app.js",
     "generate-keys": "node scripts/generate-keys.js",
     "prisma:generate": "prisma generate",
