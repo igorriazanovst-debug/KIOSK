@@ -1,5 +1,5 @@
 /**
- * BuildDialog — диалог сборки плеера (Windows .exe или Linux .deb/.rpm)
+ * BuildDialog — диалог сборки плеера (.exe / .deb / .rpm — отдельные кнопки)
  */
 import React, { useState, useRef, useEffect } from 'react';
 import { useEditorStore } from '../stores/editorStore';
@@ -18,7 +18,13 @@ interface BuildArtifact {
   label: string;
 }
 
-type BuildPlatform = 'win' | 'linux';
+type BuildPlatform = 'win' | 'deb' | 'rpm';
+
+const PLATFORM_LABEL: Record<BuildPlatform, string> = {
+  win: '.exe',
+  deb: '.deb',
+  rpm: '.rpm',
+};
 
 interface BuildStatus {
   id: string;
@@ -36,7 +42,6 @@ const BuildDialog: React.FC<BuildDialogProps> = ({ onClose }) => {
   const { project } = useEditorStore();
   
   const [appName, setAppName] = useState(project?.name || 'Kiosk Player');
-  const [platform, setPlatform] = useState<BuildPlatform>('win');
   const [iconFile, setIconFile] = useState<File | null>(null);
   const [iconPreview, setIconPreview] = useState<string | null>(null);
   
@@ -65,7 +70,7 @@ const BuildDialog: React.FC<BuildDialogProps> = ({ onClose }) => {
     }
   };
 
-  const handleBuild = async () => {
+  const handleBuild = async (platform: BuildPlatform) => {
     setBuilding(true);
     setBuildStatus(null);
 
@@ -188,30 +193,6 @@ const BuildDialog: React.FC<BuildDialogProps> = ({ onClose }) => {
               </div>
 
               <div className="build-form-group">
-                <label>Платформа</label>
-                <div className="build-platform-select">
-                  <label>
-                    <input
-                      type="radio"
-                      name="build-platform"
-                      checked={platform === 'win'}
-                      onChange={() => setPlatform('win')}
-                    />
-                    Windows (.exe)
-                  </label>
-                  <label>
-                    <input
-                      type="radio"
-                      name="build-platform"
-                      checked={platform === 'linux'}
-                      onChange={() => setPlatform('linux')}
-                    />
-                    Linux (.deb / .rpm)
-                  </label>
-                </div>
-              </div>
-
-              <div className="build-form-group">
                 <label>Иконка приложения (.ico)</label>
                 <div className="build-icon-upload">
                   <button 
@@ -301,13 +282,16 @@ const BuildDialog: React.FC<BuildDialogProps> = ({ onClose }) => {
               <button className="build-btn build-btn-secondary" onClick={onClose}>
                 Отмена
               </button>
-              <button
-                className="build-btn build-btn-primary"
-                onClick={handleBuild}
-                disabled={!appName.trim()}
-              >
-                <Package size={16} /> {platform === 'win' ? 'Собрать .exe' : 'Собрать .deb/.rpm'}
-              </button>
+              {(['win', 'deb', 'rpm'] as const).map((p) => (
+                <button
+                  key={p}
+                  className="build-btn build-btn-primary"
+                  onClick={() => handleBuild(p)}
+                  disabled={!appName.trim()}
+                >
+                  <Package size={16} /> Собрать {PLATFORM_LABEL[p]}
+                </button>
+              ))}
             </>
           )}
 

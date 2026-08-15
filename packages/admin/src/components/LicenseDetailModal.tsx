@@ -29,7 +29,6 @@ export function LicenseDetailModal({ token, licenseId, onClose }: LicenseDetailM
   const [buildingProjectId, setBuildingProjectId] = useState<string | null>(null);
   const [buildStatus, setBuildStatus] = useState<string | null>(null);
   const [buildFiles, setBuildFiles] = useState<BuildArtifact[] | null>(null);
-  const [buildPlatform, setBuildPlatform] = useState<BuildPlatform>('win');
 
   const isMountedRef = useRef(true);
   useEffect(() => {
@@ -141,12 +140,12 @@ export function LicenseDetailModal({ token, licenseId, onClose }: LicenseDetailM
     poll();
   }, [token]);
 
-  const handleBuild = async (projectId: string) => {
+  const handleBuild = async (projectId: string, platform: BuildPlatform) => {
     setBuildingProjectId(projectId);
     setBuildStatus('Starting build...');
     setBuildFiles(null);
     try {
-      const { build_id } = await adminApi.buildForLicense(token, licenseId, projectId, undefined, buildPlatform);
+      const { build_id } = await adminApi.buildForLicense(token, licenseId, projectId, undefined, platform);
       pollBuildStatus(build_id);
     } catch (err: any) {
       setBuildStatus('Failed: ' + (err.message || 'Unknown error'));
@@ -210,26 +209,6 @@ export function LicenseDetailModal({ token, licenseId, onClose }: LicenseDetailM
 
               <div className="detail-section">
                 <h3>Available projects</h3>
-                <div className="build-platform-select">
-                  <label>
-                    <input
-                      type="radio"
-                      name="build-platform"
-                      checked={buildPlatform === 'win'}
-                      onChange={() => setBuildPlatform('win')}
-                    />
-                    Windows (.exe)
-                  </label>
-                  <label>
-                    <input
-                      type="radio"
-                      name="build-platform"
-                      checked={buildPlatform === 'linux'}
-                      onChange={() => setBuildPlatform('linux')}
-                    />
-                    Linux (.deb / .rpm, x64 + arm64)
-                  </label>
-                </div>
                 <ul className="project-list">
                   {license.availableProjects.length === 0 && (
                     <li className="empty-cell">No projects yet</li>
@@ -240,13 +219,29 @@ export function LicenseDetailModal({ token, licenseId, onClose }: LicenseDetailM
                       <span className={`access-badge access-${p.accessType}`}>
                         {p.accessType === 'own' ? 'Own' : 'Granted'}
                       </span>
-                      <button
-                        className="btn-secondary btn-small"
-                        disabled={buildingProjectId === p.id}
-                        onClick={() => handleBuild(p.id)}
-                      >
-                        {buildingProjectId === p.id ? 'Building...' : `Build ${buildPlatform === 'win' ? 'exe' : 'deb/rpm'}`}
-                      </button>
+                      <div className="build-buttons">
+                        <button
+                          className="btn-secondary btn-small"
+                          disabled={buildingProjectId === p.id}
+                          onClick={() => handleBuild(p.id, 'win')}
+                        >
+                          {buildingProjectId === p.id ? 'Building...' : 'Build .exe'}
+                        </button>
+                        <button
+                          className="btn-secondary btn-small"
+                          disabled={buildingProjectId === p.id}
+                          onClick={() => handleBuild(p.id, 'deb')}
+                        >
+                          {buildingProjectId === p.id ? 'Building...' : 'Build .deb'}
+                        </button>
+                        <button
+                          className="btn-secondary btn-small"
+                          disabled={buildingProjectId === p.id}
+                          onClick={() => handleBuild(p.id, 'rpm')}
+                        >
+                          {buildingProjectId === p.id ? 'Building...' : 'Build .rpm'}
+                        </button>
+                      </div>
                       {p.accessType === 'granted' && (
                         <button
                           className="btn-danger btn-small"
