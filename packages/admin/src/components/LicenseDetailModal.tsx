@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useCallback, useRef } from 'react';
-import { adminApi, AdminProjectListItem, LicenseDetails } from '../services/adminApi';
+import { adminApi, AdminProjectListItem, BuildArtifact, BuildPlatform, getApiBaseUrl, LicenseDetails } from '../services/adminApi';
 import { LicenseUserAccounts } from './LicenseUserAccounts';
 import './LicenseDetailModal.css';
 
@@ -28,7 +28,8 @@ export function LicenseDetailModal({ token, licenseId, onClose }: LicenseDetailM
 
   const [buildingProjectId, setBuildingProjectId] = useState<string | null>(null);
   const [buildStatus, setBuildStatus] = useState<string | null>(null);
-  const [buildDownloadUrl, setBuildDownloadUrl] = useState<string | null>(null);
+  const [buildFiles, setBuildFiles] = useState<BuildArtifact[] | null>(null);
+  const [buildPlatform, setBuildPlatform] = useState<BuildPlatform>('win');
 
   const isMountedRef = useRef(true);
   useEffect(() => {
@@ -122,7 +123,7 @@ export function LicenseDetailModal({ token, licenseId, onClose }: LicenseDetailM
         if (!isMountedRef.current) return;
         setBuildStatus(status.status === 'failed' ? `Failed: ${status.error || 'unknown error'}` : status.message || status.status);
         if (status.status === 'completed') {
-          setBuildDownloadUrl(status.download_url || null);
+          setBuildFiles(status.files && status.files.length > 0 ? status.files : null);
           setBuildingProjectId(null);
           return;
         }
@@ -143,9 +144,9 @@ export function LicenseDetailModal({ token, licenseId, onClose }: LicenseDetailM
   const handleBuild = async (projectId: string) => {
     setBuildingProjectId(projectId);
     setBuildStatus('Starting build...');
-    setBuildDownloadUrl(null);
+    setBuildFiles(null);
     try {
-      const { build_id } = await adminApi.buildForLicense(token, licenseId, projectId);
+      const { build_id } = await adminApi.buildForLicense(token, licenseId, projectId, undefined, buildPlatform);
       pollBuildStatus(build_id);
     } catch (err: any) {
       setBuildStatus('Failed: ' + (err.message || 'Unknown error'));
@@ -209,6 +210,26 @@ export function LicenseDetailModal({ token, licenseId, onClose }: LicenseDetailM
 
               <div className="detail-section">
                 <h3>Available projects</h3>
+                <div className="build-platform-select">
+                  <label>
+                    <input
+                      type="radio"
+                      name="build-platform"
+                      checked={buildPlatform === 'win'}
+                      onChange={() => setBuildPlatform('win')}
+                    />
+                    Windows (.exe)
+                  </label>
+                  <label>
+                    <input
+                      type="radio"
+                      name="build-platform"
+                      checked={buildPlatform === 'linux'}
+                      onChange={() => setBuildPlatform('linux')}
+                    />
+                    Linux (.deb / .rpm, x64 + arm64)
+                  </label>
+                </div>
                 <ul className="project-list">
                   {license.availableProjects.length === 0 && (
                     <li className="empty-cell">No projects yet</li>
@@ -224,7 +245,7 @@ export function LicenseDetailModal({ token, licenseId, onClose }: LicenseDetailM
                         disabled={buildingProjectId === p.id}
                         onClick={() => handleBuild(p.id)}
                       >
-                        {buildingProjectId === p.id ? 'Building...' : 'Build exe'}
+                        {buildingProjectId === p.id ? 'Building...' : `Build ${buildPlatform === 'win' ? 'exe' : 'deb/rpm'}`}
                       </button>
                       {p.accessType === 'granted' && (
                         <button
@@ -242,11 +263,17 @@ export function LicenseDetailModal({ token, licenseId, onClose }: LicenseDetailM
                 {(buildingProjectId || buildStatus) && (
                   <div className="build-status">
                     {buildStatus}
-                    {buildDownloadUrl && (
-                      <a href={buildDownloadUrl} target="_blank" rel="noreferrer" className="build-download-link">
-                        Download
+                    {buildFiles && buildFiles.map((f) => (
+                      <a
+                        key={f.download_url}
+                        href={`${getApiBaseUrl()}${f.download_url}`}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="build-download-link"
+                      >
+                        Download {f.label} ({f.file_size})
                       </a>
-                    )}
+                    ))}
                   </div>
                 )}
 

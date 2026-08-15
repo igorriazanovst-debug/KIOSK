@@ -1,5 +1,5 @@
 /**
- * BuildDialog — диалог сборки плеера Windows
+ * BuildDialog — диалог сборки плеера (Windows .exe или Linux .deb/.rpm)
  */
 import React, { useState, useRef, useEffect } from 'react';
 import { useEditorStore } from '../stores/editorStore';
@@ -11,11 +11,21 @@ interface BuildDialogProps {
   onClose: () => void;
 }
 
+interface BuildArtifact {
+  file_name: string;
+  download_url: string;
+  file_size: string;
+  label: string;
+}
+
+type BuildPlatform = 'win' | 'linux';
+
 interface BuildStatus {
   id: string;
   status: string;
   progress: number;
   message: string;
+  files?: BuildArtifact[];
   download_url?: string;
   file_name?: string;
   file_size?: string;
@@ -26,6 +36,7 @@ const BuildDialog: React.FC<BuildDialogProps> = ({ onClose }) => {
   const { project } = useEditorStore();
   
   const [appName, setAppName] = useState(project?.name || 'Kiosk Player');
+  const [platform, setPlatform] = useState<BuildPlatform>('win');
   const [iconFile, setIconFile] = useState<File | null>(null);
   const [iconPreview, setIconPreview] = useState<string | null>(null);
   
@@ -64,8 +75,9 @@ const BuildDialog: React.FC<BuildDialogProps> = ({ onClose }) => {
       formData.append('project', JSON.stringify(project));
       formData.append('appName', appName);
       formData.append('appId', 'com.kiosk.player');
+      formData.append('platform', platform);
 
-      
+
       if (iconFile) {
         formData.append('icon', iconFile);
       }
@@ -130,11 +142,9 @@ const BuildDialog: React.FC<BuildDialogProps> = ({ onClose }) => {
     }
   };
 
-  const handleDownload = () => {
-    if (buildStatus?.download_url) {
-      const API_BASE = apiClient.getBaseUrl();
-      window.open(`${API_BASE}${buildStatus.download_url}`, '_blank');
-    }
+  const handleDownload = (downloadUrl: string) => {
+    const API_BASE = apiClient.getBaseUrl();
+    window.open(`${API_BASE}${downloadUrl}`, '_blank');
   };
 
   const isCompleted = buildStatus?.status === 'completed';
@@ -146,7 +156,7 @@ const BuildDialog: React.FC<BuildDialogProps> = ({ onClose }) => {
       <div className="build-dialog" onClick={(e) => e.stopPropagation()}>
         {/* Header */}
         <div className="build-dialog-header">
-          <h2><Package size={20} /> Сборка плеера Windows</h2>
+          <h2><Package size={20} /> Сборка плеера</h2>
           {!isBuilding && (
             <button className="build-dialog-close" onClick={onClose}>×</button>
           )}
@@ -175,6 +185,30 @@ const BuildDialog: React.FC<BuildDialogProps> = ({ onClose }) => {
                   onChange={(e) => setAppName(e.target.value)}
                   placeholder="Kiosk Player"
                 />
+              </div>
+
+              <div className="build-form-group">
+                <label>Платформа</label>
+                <div className="build-platform-select">
+                  <label>
+                    <input
+                      type="radio"
+                      name="build-platform"
+                      checked={platform === 'win'}
+                      onChange={() => setPlatform('win')}
+                    />
+                    Windows (.exe)
+                  </label>
+                  <label>
+                    <input
+                      type="radio"
+                      name="build-platform"
+                      checked={platform === 'linux'}
+                      onChange={() => setPlatform('linux')}
+                    />
+                    Linux (.deb / .rpm)
+                  </label>
+                </div>
               </div>
 
               <div className="build-form-group">
@@ -227,12 +261,24 @@ const BuildDialog: React.FC<BuildDialogProps> = ({ onClose }) => {
 
               {isCompleted && (
                 <div className="build-result">
-                  <CheckCircle size={48} color="#48bb78" />
-                  <div className="build-result-success">Установщик готов!</div>
-                  <div className="build-result-info">
-                    {buildStatus.file_name}<br />
-                    Размер: {buildStatus.file_size}
-                  </div>
+                  {(buildStatus.files?.length ?? 0) > 0 ? (
+                    <>
+                      <CheckCircle size={48} color="#48bb78" />
+                      <div className="build-result-success">
+                        {(buildStatus.files?.length ?? 0) > 1 ? 'Установщики готовы!' : 'Установщик готов!'}
+                      </div>
+                      <div className="build-result-info">
+                        {(buildStatus.files ?? []).map((f) => (
+                          <div key={f.download_url}>{f.label}: {f.file_name} ({f.file_size})</div>
+                        ))}
+                      </div>
+                    </>
+                  ) : (
+                    <>
+                      <AlertCircle size={48} color="#f56565" />
+                      <div className="build-result-error">Сборка завершена, но файлы не найдены</div>
+                    </>
+                  )}
                 </div>
               )}
 
@@ -255,12 +301,12 @@ const BuildDialog: React.FC<BuildDialogProps> = ({ onClose }) => {
               <button className="build-btn build-btn-secondary" onClick={onClose}>
                 Отмена
               </button>
-              <button 
+              <button
                 className="build-btn build-btn-primary"
                 onClick={handleBuild}
                 disabled={!appName.trim()}
               >
-                <Package size={16} /> Собрать .exe
+                <Package size={16} /> {platform === 'win' ? 'Собрать .exe' : 'Собрать .deb/.rpm'}
               </button>
             </>
           )}
@@ -276,9 +322,15 @@ const BuildDialog: React.FC<BuildDialogProps> = ({ onClose }) => {
               <button className="build-btn build-btn-secondary" onClick={onClose}>
                 Закрыть
               </button>
-              <button className="build-btn build-btn-success" onClick={handleDownload}>
-                <Download size={16} /> Скачать .exe
-              </button>
+              {(buildStatus.files ?? []).map((f) => (
+                <button
+                  key={f.download_url}
+                  className="build-btn build-btn-success"
+                  onClick={() => handleDownload(f.download_url)}
+                >
+                  <Download size={16} /> Скачать {f.label}
+                </button>
+              ))}
             </>
           )}
 

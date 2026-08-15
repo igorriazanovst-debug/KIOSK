@@ -6,6 +6,9 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
 import crypto from 'crypto';
+import { convertIcoToPng } from '../utils/iconConvert.js';
+import { sanitizePackageName } from '../utils/packageName.js';
+import { getBuildScript, selectBuildArtifacts } from '../utils/buildArtifacts.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -156,7 +159,7 @@ function runCommand(command, args, cwd) {
 }
 
 // Функция сборки дистрибутива
-async function buildDistribution(buildId, projectData, appName, appId, iconPath, serverBaseUrl = 'http://localhost:3002', licenseKey = null) {
+async function buildDistribution(buildId, projectData, appName, appId, iconPath, serverBaseUrl = 'http://localhost:3002', licenseKey = null, platform = 'win') {
   const updateStatus = (status, progress, message) => {
     builds.set(buildId, {
       ...builds.get(buildId),
@@ -189,25 +192,51 @@ async function buildDistribution(buildId, projectData, appName, appId, iconPath,
     
     const packageJsonPath = path.join(PLAYER_PATH, 'package.json');
     const packageJson = JSON.parse(await fs.readFile(packageJsonPath, 'utf-8'));
-    
+
+    // Строка попадает в package.json, NSIS-скрипт и (для Linux) .desktop-файл —
+    // убираем управляющие символы/переводы строк, чтобы кривой appName не
+    // ломал синтаксис этих файлов. Кириллица и остальной текст не трогаются.
+    const safeDisplayName = appName.replace(/[\x00-\x1f\x7f]/g, '').trim() || 'Kiosk App';
+
     packageJson.build = packageJson.build || {};
     packageJson.build.appId = appId;
-    packageJson.build.productName = appName;
+    packageJson.build.productName = safeDisplayName;
     // SHORTCUT-NAME-FROM-APPNAME: имя ярлыка (рабочий стол / меню Пуск) = имя приложения из редактора,
     // иначе оставался жёстко зашитый nsis.shortcutName и установленное приложение называлось иначе.
     packageJson.build.nsis = packageJson.build.nsis || {};
-    packageJson.build.nsis.shortcutName = appName;
+    packageJson.build.nsis.shortcutName = safeDisplayName;
+
+    // productName часто кириллический — Debian/RPM package name обязан быть ASCII
+    // ([a-z0-9][a-z0-9+.-]*), иначе electron-builder получит пустое/битое имя пакета.
+    // executableName берём из appId (уже ASCII), отдельно от отображаемого productName.
+    packageJson.build.linux = packageJson.build.linux || {};
+    packageJson.build.linux.executableName = sanitizePackageName(appId);
 
     // 3. Настройка иконки
     if (iconPath) {
-      const iconDestPath = path.join(PLAYER_PATH, 'assets', 'icon.ico');
       await fs.mkdir(path.join(PLAYER_PATH, 'assets'), { recursive: true });
-      await fs.copyFile(iconPath, iconDestPath);
-      packageJson.build.win = packageJson.build.win || {};
-      packageJson.build.win.icon = 'assets/icon.ico';
-      console.log(`✅ Иконка установлена: ${iconDestPath}`);
+      if (platform === 'linux') {
+        // Linux-пакеты (deb/rpm/AppImage) хотят PNG, а не .ico — конвертируем
+        // крупнейший кадр загруженной иконки. Если подходящего кадра нет,
+        // просто оставляем дефолтную assets/icon.png (сборка не должна падать).
+        const icoBuffer = await fs.readFile(iconPath);
+        const pngBuffer = await convertIcoToPng(icoBuffer);
+        if (pngBuffer) {
+          const iconDestPath = path.join(PLAYER_PATH, 'assets', 'icon.png');
+          await fs.writeFile(iconDestPath, pngBuffer);
+          console.log(`✅ Иконка (PNG) установлена: ${iconDestPath}`);
+        } else {
+          console.log('⚠️ В .ico нет кадра ≥256px — используется иконка по умолчанию для Linux');
+        }
+      } else {
+        const iconDestPath = path.join(PLAYER_PATH, 'assets', 'icon.ico');
+        await fs.copyFile(iconPath, iconDestPath);
+        packageJson.build.win = packageJson.build.win || {};
+        packageJson.build.win.icon = 'assets/icon.ico';
+        console.log(`✅ Иконка установлена: ${iconDestPath}`);
+      }
     }
-    
+
     await fs.writeFile(packageJsonPath, JSON.stringify(packageJson, null, 2));
     console.log(`✅ package.json обновлен`);
 
@@ -231,44 +260,54 @@ async function buildDistribution(buildId, projectData, appName, appId, iconPath,
     console.log('✅ React приложение собрано');
 
     // 6. Сборка Electron дистрибутива
-    updateStatus('packaging', 70, 'Создание установщика');
-    console.log('📦 Создание установщика Windows...');
-    // Очищаем старые .exe ДО сборки чтобы не копировать чужой
+    const buildScript = getBuildScript(platform);
+    if (!buildScript) {
+      throw new Error(`Unsupported platform: ${platform}`);
+    }
+    updateStatus('packaging', 70, platform === 'linux' ? 'Создание пакетов Linux' : 'Создание установщика');
+    console.log(`📦 Создание дистрибутива (${platform})...`);
+    // Очищаем старые артефакты ДО сборки чтобы не подхватить чужие
     const _distPath = path.join(PLAYER_PATH, 'dist-electron');
     try {
-      const _oldExe = await fs.readdir(_distPath);
-      for (const _f of _oldExe) {
-        if (_f.endsWith('.exe') && _f.includes('Setup')) {
-          await fs.unlink(path.join(_distPath, _f));
-          console.log('[build] removed old exe:', _f);
-        }
+      const _oldFiles = await fs.readdir(_distPath);
+      for (const _stale of selectBuildArtifacts(_oldFiles, platform)) {
+        await fs.unlink(path.join(_distPath, _stale.fileName));
+        console.log('[build] removed stale artifact:', _stale.fileName);
       }
     } catch (_e) { /* dist-electron может не существовать */ }
-    await runCommand('npm', ['run', 'electron:build:win'], PLAYER_PATH);
-    console.log('✅ Установщик создан');
+    await runCommand('npm', ['run', buildScript], PLAYER_PATH);
+    console.log('✅ Дистрибутив создан');
 
-    // 7. Копирование установщика в output
+    // 7. Копирование артефактов в output (для Linux — несколько: deb/rpm × x64/arm64)
     updateStatus('finalizing', 90, 'Финализация');
-    
-    // FIX-EXE-SELECTION-V2
+
     const distElectronPath = path.join(PLAYER_PATH, 'dist-electron');
-    const files = await fs.readdir(distElectronPath);
-    const exeFiles = files.filter(f => f.endsWith('.exe') && f.includes('Setup'));
-    if (exeFiles.length === 0) {
+    const producedFiles = await fs.readdir(distElectronPath);
+    const artifacts = selectBuildArtifacts(producedFiles, platform);
+    if (artifacts.length === 0) {
       throw new Error('Установщик не найден в dist-electron');
     }
-    const _exeStats = await Promise.all(exeFiles.map(f => fs.stat(path.join(distElectronPath, f))));
-    const setupFile = exeFiles.reduce((best, f, idx) => _exeStats[idx].mtimeMs > _exeStats[best.idx].mtimeMs ? {f, idx} : best, {f: exeFiles[0], idx: 0}).f;
-    const sourcePath = path.join(distElectronPath, setupFile);
-    const outputFileName = `${appName.replace(/[^a-zA-Z0-9]/g, '_')}_Setup_${Date.now()}.exe`;
-    const outputPath = path.join(OUTPUT_DIR, outputFileName);
-    
-    await fs.copyFile(sourcePath, outputPath);
-    console.log(`✅ Установщик скопирован: ${outputPath}`);
 
-    // Получаем размер файла
-    const stats = await fs.stat(outputPath);
-    const fileSizeMB = (stats.size / (1024 * 1024)).toFixed(2);
+    const safeAppName = appName.replace(/[^a-zA-Z0-9]/g, '_');
+    const timestamp = Date.now();
+    const outFiles = [];
+    for (const artifact of artifacts) {
+      const ext = path.extname(artifact.fileName);
+      const safeLabel = artifact.label.replace(/[^a-zA-Z0-9]/g, '_');
+      const outputFileName = `${safeAppName}_${safeLabel}_${timestamp}${ext}`;
+      const sourcePath = path.join(distElectronPath, artifact.fileName);
+      const outputPath = path.join(OUTPUT_DIR, outputFileName);
+
+      await fs.copyFile(sourcePath, outputPath);
+      const stats = await fs.stat(outputPath);
+      outFiles.push({
+        file_name: outputFileName,
+        download_url: `/api/builds/download/${outputFileName}`,
+        file_size: `${(stats.size / (1024 * 1024)).toFixed(2)} MB`,
+        label: artifact.label
+      });
+      console.log(`✅ Артефакт скопирован: ${outputPath}`);
+    }
 
     // 8. Завершение
     updateStatus('completed', 100, 'Готово!');
@@ -277,9 +316,11 @@ async function buildDistribution(buildId, projectData, appName, appId, iconPath,
       status: 'completed',
       progress: 100,
       message: 'Установщик готов',
-      download_url: `/api/builds/download/${outputFileName}`,
-      file_name: outputFileName,
-      file_size: `${fileSizeMB} MB`,
+      files: outFiles,
+      // back-compat: клиенты до multi-format сборок читают только эти поля
+      download_url: outFiles[0].download_url,
+      file_name: outFiles[0].file_name,
+      file_size: outFiles[0].file_size,
       completed_at: new Date().toISOString()
     });
 
@@ -300,12 +341,19 @@ async function buildDistribution(buildId, projectData, appName, appId, iconPath,
  */
 router.post('/', upload.single('icon'), async (req, res) => {
   try {
-    const { project, appName = 'Kiosk App', appId = 'com.kiosk.app' } = req.body;
-    
+    const { project, appName = 'Kiosk App', appId = 'com.kiosk.app', platform = 'win' } = req.body;
+
     if (!project) {
-      return res.status(400).json({ 
-        success: false, 
-        error: 'Project data is required' 
+      return res.status(400).json({
+        success: false,
+        error: 'Project data is required'
+      });
+    }
+
+    if (!getBuildScript(platform)) {
+      return res.status(400).json({
+        success: false,
+        error: `Unsupported platform: ${platform}`
       });
     }
 
@@ -358,7 +406,7 @@ router.post('/', upload.single('icon'), async (req, res) => {
       console.log('[builds] DB load failed, falling back to posted projectData');
     }
 
-    buildDistribution(buildId, finalProjectData, appName, appId, req.file?.path, serverBaseUrl, licenseKey).catch(err => {
+    buildDistribution(buildId, finalProjectData, appName, appId, req.file?.path, serverBaseUrl, licenseKey, platform).catch(err => {
       console.error(`Build ${buildId} failed:`, err);
     });
 
@@ -437,10 +485,14 @@ router.post('/for-license/:licenseId', async (req, res, next) => {
 }, upload.single('icon'), async (req, res) => {
   try {
     const { licenseId } = req.params;
-    const { projectId, appName = 'Kiosk App', appId = 'com.kiosk.app' } = req.body;
+    const { projectId, appName = 'Kiosk App', appId = 'com.kiosk.app', platform = 'win' } = req.body;
 
     if (!projectId) {
       return res.status(400).json({ success: false, error: 'projectId is required' });
+    }
+
+    if (!getBuildScript(platform)) {
+      return res.status(400).json({ success: false, error: `Unsupported platform: ${platform}` });
     }
 
     const { getPrismaClient } = await import('../config/database.js');
@@ -488,7 +540,7 @@ router.post('/for-license/:licenseId', async (req, res, next) => {
       return;
     }
 
-    buildDistribution(buildId, projectData, appName, appId, req.file?.path, serverBaseUrl, license.licenseKey).catch(err => {
+    buildDistribution(buildId, projectData, appName, appId, req.file?.path, serverBaseUrl, license.licenseKey, platform).catch(err => {
       console.error(`Build ${buildId} failed:`, err);
     });
   } catch (error) {
@@ -584,13 +636,19 @@ router.delete('/:buildId', async (req, res) => {
     });
   }
 
-  // Удаляем файл если он есть
-  if (build.file_name) {
-    const filePath = path.join(OUTPUT_DIR, build.file_name);
+  // Удаляем ВСЕ артефакты сборки (Linux-сборка может дать до 4 файлов —
+  // deb/rpm × x64/arm64), а не только legacy-поле file_name (иначе
+  // остальные молча остаются на диске и продолжают быть скачиваемыми).
+  const filesToDelete = build.files && build.files.length > 0
+    ? build.files.map(f => f.file_name)
+    : (build.file_name ? [build.file_name] : []);
+
+  for (const fileName of filesToDelete) {
+    const filePath = path.join(OUTPUT_DIR, fileName);
     try {
       await fs.unlink(filePath);
     } catch (e) {
-      console.error('Failed to delete file:', e);
+      console.error('Failed to delete file:', fileName, e);
     }
   }
 

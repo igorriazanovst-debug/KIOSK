@@ -1,6 +1,6 @@
 # 🎮 Kiosk Player
 
-Standalone приложение для воспроизведения киоск-проектов на Windows.
+Standalone приложение для воспроизведения киоск-проектов на Windows и Linux (deb/rpm, x64 + arm64).
 
 ## 📦 Быстрый старт
 
@@ -22,9 +22,14 @@ npm run electron:dev
 ```bash
 # Полная сборка для Windows
 npm run electron:build:win
+
+# Полная сборка для Linux (deb + rpm, x64 + arm64)
+npm run electron:build:linux
 ```
 
-Результат: `dist-electron/Kiosk Player Setup.exe`
+Результат: `dist-electron/Kiosk Player Setup.exe` (Windows) или `dist-electron/*.deb` / `*.rpm` (Linux, по одному файлу на архитектуру).
+
+Требования для сборки Linux-пакетов: `rpmbuild` должен быть установлен на машине, где запускается сборка (на Debian/Ubuntu — `apt-get install rpm`), иначе electron-builder не сможет собрать `.rpm`.
 
 ## 📝 Встраивание проекта
 
@@ -53,6 +58,7 @@ npm run electron:build:win
 | `npm run build` | Сборка React приложения |
 | `npm run electron:dev` | Запуск Electron в dev режиме |
 | `npm run electron:build:win` | Сборка установщика Windows |
+| `npm run electron:build:linux` | Сборка deb/rpm пакетов (x64 + arm64) |
 | `npm run package` | Создание распакованной версии |
 
 ## 🔧 Горячие клавиши в Player

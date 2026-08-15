@@ -91,11 +91,25 @@
   margin-bottom: 16px;
   display: flex;
   align-items: center;
+  flex-wrap: wrap;
   gap: 10px;
 }
 .build-download-link {
   color: var(--text-primary);
   text-decoration: underline;
+}
+.build-platform-select {
+  display: flex;
+  gap: 16px;
+  font-size: 13px;
+  color: var(--text-secondary);
+  margin-bottom: 10px;
+}
+.build-platform-select label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
 }
 
 .project-search-input {
