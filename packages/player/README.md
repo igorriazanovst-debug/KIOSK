@@ -25,6 +25,11 @@ npm run electron:build:win
 
 # Полная сборка для Linux (deb + rpm, x64 + arm64)
 npm run electron:build:linux
+
+# Или по отдельности — на бэкенде (POST /api/builds) deb и rpm запускаются
+# именно так, отдельными запросами, не вместе
+npm run electron:build:deb
+npm run electron:build:rpm
 ```
 
 Результат: `dist-electron/Kiosk Player Setup.exe` (Windows) или `dist-electron/*.deb` / `*.rpm` (Linux, по одному файлу на архитектуру).
@@ -58,7 +63,9 @@ npm run electron:build:win
 | `npm run build` | Сборка React приложения |
 | `npm run electron:dev` | Запуск Electron в dev режиме |
 | `npm run electron:build:win` | Сборка установщика Windows |
-| `npm run electron:build:linux` | Сборка deb/rpm пакетов (x64 + arm64) |
+| `npm run electron:build:linux` | Сборка deb+rpm пакетов вместе (x64 + arm64) |
+| `npm run electron:build:deb` | Сборка только .deb (x64 + arm64) |
+| `npm run electron:build:rpm` | Сборка только .rpm (x64 + arm64) |
 | `npm run package` | Создание распакованной версии |
 
 ## 🔧 Горячие клавиши в Player

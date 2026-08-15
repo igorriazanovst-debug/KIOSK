@@ -99,7 +99,7 @@ export interface BuildArtifact {
   label: string;
 }
 
-export type BuildPlatform = 'win' | 'linux';
+export type BuildPlatform = 'win' | 'deb' | 'rpm';
 
 export interface BuildStatus {
   id: string;

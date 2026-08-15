@@ -224,7 +224,7 @@ async function buildDistribution(buildId, projectData, appName, appId, iconPath,
     // 3. Настройка иконки
     if (iconPath) {
       await fs.mkdir(path.join(PLAYER_PATH, 'assets'), { recursive: true });
-      if (platform === 'linux') {
+      if (platform === 'deb' || platform === 'rpm') {
         // Linux-пакеты (deb/rpm/AppImage) хотят PNG, а не .ico — конвертируем
         // крупнейший кадр загруженной иконки. Если подходящего кадра нет,
         // просто оставляем дефолтную assets/icon.png (сборка не должна падать).
@@ -273,7 +273,8 @@ async function buildDistribution(buildId, projectData, appName, appId, iconPath,
     if (!buildScript) {
       throw new Error(`Unsupported platform: ${platform}`);
     }
-    updateStatus('packaging', 70, platform === 'linux' ? 'Создание пакетов Linux' : 'Создание установщика');
+    const packagingMessage = platform === 'deb' ? 'Создание .deb пакета' : platform === 'rpm' ? 'Создание .rpm пакета' : 'Создание установщика';
+    updateStatus('packaging', 70, packagingMessage);
     console.log(`📦 Создание дистрибутива (${platform})...`);
     // Очищаем старые артефакты ДО сборки чтобы не подхватить чужие
     const _distPath = path.join(PLAYER_PATH, 'dist-electron');
