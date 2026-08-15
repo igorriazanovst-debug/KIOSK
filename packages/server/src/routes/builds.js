@@ -208,9 +208,18 @@ async function buildDistribution(buildId, projectData, appName, appId, iconPath,
 
     // productName часто кириллический — Debian/RPM package name обязан быть ASCII
     // ([a-z0-9][a-z0-9+.-]*), иначе electron-builder получит пустое/битое имя пакета.
-    // executableName берём из appId (уже ASCII), отдельно от отображаемого productName.
+    // Из appId (уже ASCII) берём: executableName (бинарник/.desktop) и ОТДЕЛЬНО
+    // deb.packageName/rpm.packageName — поле "Package:"/"Name:" в самом
+    // пакете НЕ наследуется от executableName, а по умолчанию берётся из
+    // productName (только пробелы→дефисы, кириллица остаётся) — подтверждено
+    // реальной сборкой .deb с "Package: Музей-СВО".
+    const safePackageName = sanitizePackageName(appId);
     packageJson.build.linux = packageJson.build.linux || {};
-    packageJson.build.linux.executableName = sanitizePackageName(appId);
+    packageJson.build.linux.executableName = safePackageName;
+    packageJson.build.deb = packageJson.build.deb || {};
+    packageJson.build.deb.packageName = safePackageName;
+    packageJson.build.rpm = packageJson.build.rpm || {};
+    packageJson.build.rpm.packageName = safePackageName;
 
     // 3. Настройка иконки
     if (iconPath) {
