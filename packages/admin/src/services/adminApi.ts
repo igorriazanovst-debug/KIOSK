@@ -1,5 +1,11 @@
 const BASE_URL = import.meta.env.VITE_LICENSE_SERVER_URL || 'http://localhost:3001';
 
+// download_url / etc. from the server are origin-relative — callers rendering
+// them as links (e.g. build artifact downloads) must prefix with this.
+export function getApiBaseUrl(): string {
+  return BASE_URL;
+}
+
 // ─── Types ───────────────────────────────────────────────────────────────────
 
 export interface License {
@@ -86,11 +92,21 @@ export interface LicenseDetails extends License {
   devices: Device[];
 }
 
+export interface BuildArtifact {
+  file_name: string;
+  download_url: string;
+  file_size: string;
+  label: string;
+}
+
+export type BuildPlatform = 'win' | 'linux';
+
 export interface BuildStatus {
   id: string;
   status: 'queued' | 'building' | 'completed' | 'failed';
   progress: number;
   message?: string;
+  files?: BuildArtifact[];
   download_url?: string;
   error?: string;
 }
@@ -200,16 +216,18 @@ export const adminApi = {
     await request<any>('DELETE', `/api/admin/projects/${projectId}/grants/${licenseId}`, token);
   },
 
-  // Build exe for a specific license (без входа под клиентом)
+  // Build a distributable for a specific license (без входа под клиентом)
   async buildForLicense(
     token: string,
     licenseId: string,
     projectId: string,
-    appName?: string
+    appName?: string,
+    platform: BuildPlatform = 'win'
   ): Promise<{ build_id: string; status_url: string }> {
     const res = await request<any>('POST', `/api/builds/for-license/${licenseId}`, token, {
       projectId,
-      appName
+      appName,
+      platform
     });
     return res.data;
   },

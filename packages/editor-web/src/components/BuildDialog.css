@@ -92,6 +92,19 @@
   border-color: #4a90e2;
 }
 
+.build-platform-select {
+  display: flex;
+  gap: 16px;
+}
+
+.build-platform-select label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 0;
+  cursor: pointer;
+}
+
 .build-icon-upload {
   display: flex;
   align-items: center;
