@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "Kiosk Content Player - Runtime player for kiosk projects",
   "author": "Kiosk Platform Team",
+  "homepage": "http://31.192.110.121",
   "main": "electron/main.js",
   "scripts": {
     "dev": "vite",
@@ -91,7 +92,9 @@
         { "target": "rpm", "arch": ["x64", "arm64"] }
       ],
       "category": "Utility",
-      "icon": "assets/icon.png"
+      "icon": "assets/icon.png",
+      "maintainer": "Kiosk Platform Team <admin@kiosk.local>",
+      "vendor": "Kiosk Platform Team"
     },
     "electronVersion": "28.0.0",
     "compression": "maximum",
