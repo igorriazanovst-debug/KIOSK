@@ -319,12 +319,17 @@ async function buildDistribution(buildId, projectData, appName, appId, iconPath,
     }
 
     // 8. Завершение
+    // Сообщение — не жёсткая "Установщик готов" (единственное число, из эпохи
+    // до Linux) — для Linux-сборки outFiles может содержать до 4 файлов
+    // (deb/rpm × x64/arm64), и это должно быть видно в UI, который просто
+    // показывает message как есть (например, админка).
+    const completionMessage = outFiles.length > 1 ? `Готово: ${outFiles.length} файла(ов)` : 'Установщик готов';
     updateStatus('completed', 100, 'Готово!');
     builds.set(buildId, {
       ...builds.get(buildId),
       status: 'completed',
       progress: 100,
-      message: 'Установщик готов',
+      message: completionMessage,
       files: outFiles,
       // back-compat: клиенты до multi-format сборок читают только эти поля
       download_url: outFiles[0].download_url,

@@ -281,7 +281,7 @@ export const Toolbar: React.FC = () => {
             className="toolbar-btn"
             disabled={!project}
             onClick={() => setShowBuildDialog(true)}
-            title="Собрать плеер Windows"
+            title="Собрать плеер (Windows / Linux)"
           >
             <Package size={18} />
           </button>
