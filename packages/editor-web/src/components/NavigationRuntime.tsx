@@ -85,78 +85,14 @@ const NavigationRuntime: React.FC<Props> = ({ properties, width, height }) => {
   // ── Маршрут ─────────────────────────────────────────────────────────
   const [routeState, setRouteState] = useState<RouteState>({ result: null, targetRoomId: null });
 
-  // ── MULTIFLOOR DEBUG ────────────────────────────────────────────────
-  // NAV_MULTIFLOOR_DEBUG_INSTALLED
-  const [mfDebug, setMfDebug] = useState<string>('');
-
-
   function buildRoute(roomId: string) {
     if (!terminalId) {
       setRouteState({ result: null, targetRoomId: roomId });
-      const msg = '[DEBUG] terminalId не задан — маршрут не строится';
-      setMfDebug(msg);
-      console.warn(msg);
+      console.warn('[Navigation] terminalId не задан — маршрут не строится');
       return;
     }
     const outcome = routeMultiFloor(navData, terminalId, roomId, { snap: graphSnap });
     setRouteState({ result: outcome, targetRoomId: roomId });
-
-    // ── DEBUG дамп ───────────────────────────────────────────────────
-    const g = outcome.graph;
-    const lines: string[] = [];
-    lines.push('=== MULTIFLOOR DEBUG ===');
-    lines.push(`terminalId: ${terminalId}`);
-    lines.push(`roomId: ${roomId}`);
-    lines.push(`floors: ${navData.floors.map(f => f.id + '(' + f.name + ')').join(', ')}`);
-    lines.push('');
-    lines.push('--- graph nodes by floor ---');
-    const byFloor: Record<string, number> = {};
-    for (const n of g.nodes) {
-      const fid = n.meta.floorId || 'unknown';
-      byFloor[fid] = (byFloor[fid] || 0) + 1;
-    }
-    for (const [fid, cnt] of Object.entries(byFloor)) {
-      lines.push(`  ${fid}: ${cnt} nodes`);
-    }
-    lines.push('');
-    lines.push('--- terminalNode map ---');
-    for (const [tid, nid] of Object.entries(g.terminalNode)) {
-      lines.push(`  ${tid} => ${nid}`);
-    }
-    lines.push('');
-    lines.push('--- roomPoiNode map (first 10) ---');
-    const poiEntries = Object.entries(g.roomPoiNode).slice(0, 10);
-    for (const [rid, nid] of poiEntries) {
-      lines.push(`  ${rid} => ${nid}`);
-    }
-    lines.push('');
-    lines.push('--- serviceNode map ---');
-    for (const [sid, nid] of Object.entries(g.serviceNode)) {
-      lines.push(`  ${sid} => ${nid}`);
-    }
-    lines.push('');
-    lines.push('--- transitions ---');
-    for (const tr of navData.transitions || []) {
-      const aGid = g.serviceNode[tr.fromServiceId];
-      const bGid = g.serviceNode[tr.toServiceId];
-      lines.push(`  tr[${tr.id}] type=${tr.type} from=${tr.fromServiceId}(${aGid || 'NOT FOUND'}) to=${tr.toServiceId}(${bGid || 'NOT FOUND'})`);
-    }
-    lines.push('');
-    lines.push('--- route result ---');
-    const s = g.terminalNode[terminalId];
-    const t = g.roomPoiNode[roomId];
-    lines.push(`  start node: ${s || 'NOT FOUND'}`);
-    lines.push(`  end node:   ${t || 'NOT FOUND'}`);
-    lines.push(`  result: ${outcome.result ? 'OK total=' + Math.round(outcome.result.total) + ' path.len=' + outcome.result.path.length : 'NULL (no path)'}`);
-    lines.push('');
-    lines.push('--- segmentsByFloor ---');
-    for (const seg of outcome.segmentsByFloor || []) {
-      lines.push(`  floor=${seg.floorId} coords=${seg.coords.length}`);
-    }
-    const dbg = lines.join('\n');
-    setMfDebug(dbg);
-    console.log(dbg);
-    // ── END DEBUG ────────────────────────────────────────────────────
 
     if (outcome.segmentsByFloor && outcome.segmentsByFloor.length > 0) {
       // setActiveFloorId управляет runAnimation через useEffect
@@ -537,21 +473,6 @@ const NavigationRuntime: React.FC<Props> = ({ properties, width, height }) => {
                       {f.name}
                     </button>
                   ))}
-              </div>
-            )}
-
-            {/* DEBUG панель */}
-            {mfDebug && (
-              <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, zIndex: 999, background: 'rgba(0,0,0,0.92)', padding: 8 }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 4 }}>
-                  <span style={{ color: '#f39c12', fontSize: 11, fontWeight: 'bold' }}>MULTIFLOOR DEBUG</span>
-                  <button onClick={() => setMfDebug('')} style={{ fontSize: 10, background: '#333', color: '#fff', border: 'none', cursor: 'pointer', padding: '2px 6px' }}>✕</button>
-                </div>
-                <textarea
-                  readOnly
-                  value={mfDebug}
-                  style={{ width: '100%', height: 180, fontSize: 10, fontFamily: 'monospace', background: '#111', color: '#0f0', border: '1px solid #333', resize: 'vertical', boxSizing: 'border-box' }}
-                />
               </div>
             )}
 
