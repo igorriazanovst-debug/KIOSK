@@ -10,6 +10,12 @@ interface LicenseDetailModalProps {
 }
 
 const BUILD_POLL_INTERVAL_MS = 2000;
+// Сборка реально идёт на сервере несколько минут (electron-builder) — один
+// оборвавшийся запрос статуса (сетевой blip, "socket hang up" и т.п.) не
+// должен показывать "Failed", пока сама сборка спокойно продолжается и
+// завершается успешно. Сдаёмся только после нескольких подряд неудачных
+// попыток опроса, а не после первой же.
+const MAX_CONSECUTIVE_POLL_FAILURES = 5;
 
 export function LicenseDetailModal({ token, licenseId, onClose }: LicenseDetailModalProps) {
   const [license, setLicense] = useState<LicenseDetails | null>(null);
@@ -115,11 +121,13 @@ export function LicenseDetailModal({ token, licenseId, onClose }: LicenseDetailM
   };
 
   const pollBuildStatus = useCallback((buildId: string) => {
+    let consecutiveFailures = 0;
     const poll = async () => {
       if (!isMountedRef.current) return;
       try {
         const status = await adminApi.getBuildStatus(token, buildId);
         if (!isMountedRef.current) return;
+        consecutiveFailures = 0;
         setBuildStatus(status.status === 'failed' ? `Failed: ${status.error || 'unknown error'}` : status.message || status.status);
         if (status.status === 'completed') {
           setBuildFiles(status.files && status.files.length > 0 ? status.files : null);
@@ -133,8 +141,14 @@ export function LicenseDetailModal({ token, licenseId, onClose }: LicenseDetailM
         setTimeout(poll, BUILD_POLL_INTERVAL_MS);
       } catch (err: any) {
         if (!isMountedRef.current) return;
-        setBuildStatus('Failed: ' + (err.message || 'unknown error'));
-        setBuildingProjectId(null);
+        consecutiveFailures += 1;
+        if (consecutiveFailures >= MAX_CONSECUTIVE_POLL_FAILURES) {
+          setBuildStatus('Failed: ' + (err.message || 'unknown error'));
+          setBuildingProjectId(null);
+          return;
+        }
+        // Разовый сетевой сбой опроса — сборка на сервере продолжается, просто пробуем снова
+        setTimeout(poll, BUILD_POLL_INTERVAL_MS);
       }
     };
     poll();
