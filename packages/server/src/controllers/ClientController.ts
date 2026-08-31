@@ -54,6 +54,7 @@ export class ClientController {
       {
         licenseUserId: user.id,
         licenseId: user.licenseId,
+        organizationId: user.license.organizationId,
         email: user.email,
         role: user.role,
         type: 'license_user',
