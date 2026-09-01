@@ -4,11 +4,14 @@
 //
 // В отличие от навигации, контент (хронолинии/события) НЕ приходит из
 // widget.properties — он живёт локально на устройстве (см.
-// widgetProperties.ts). Здесь MVP-упрощение: один активный проект на
-// устройство — самый недавно изменённый (listProjects уже сортирует
-// "свежий сверху"), при первом запуске создаётся автоматически. Полноценный
-// переключатель нескольких локальных проектов — отдельная UI-задача более
-// поздней фазы, не блокирует показ содержимого.
+// widgetProperties.ts). При первом запуске на устройстве автоматически
+// открывается самый недавно изменённый проект (listProjects уже сортирует
+// "свежий сверху") либо создаётся новый, если ни одного ещё нет; переключение
+// между несколькими локальными проектами, их создание/переименование/
+// удаление - через выпадающий список в тулбаре (доступно только при
+// localEditingEnabled, как и остальное редактирование - просмотровое
+// устройство не должно давать посетителю музея случайно переключиться на
+// чужой/пустой проект).
 //
 // Линии/события можно добавлять, перетаскивать, удалять - и теперь
 // отменять/повторять (history.ts). Каждое изменение сохраняется на диск
@@ -37,11 +40,19 @@ interface Props {
   height: number;
 }
 
+interface ProjectManifest {
+  schemaVersion: number;
+  id: string;
+  name: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
 type LoadState =
   | { status: 'loading' }
   | { status: 'unavailable' }
   | { status: 'error'; message: string }
-  | { status: 'ready'; history: History<ChronoProject> };
+  | { status: 'ready'; history: History<ChronoProject>; projectList: ProjectManifest[] };
 
 type SaveStatus =
   | { kind: 'idle' }
@@ -52,10 +63,15 @@ type SaveStatus =
 const TOOLBAR_HEIGHT = 36;
 const SAVED_INDICATOR_FADE_MS = 2000;
 
-async function loadOrCreateProject(defaultName: string): Promise<ChronoProject> {
+async function loadOrCreateProject(defaultName: string): Promise<{ project: ChronoProject; list: ProjectManifest[] }> {
   const existing = await window.chronoAPI!.listProjects();
-  const projectId = existing.length > 0 ? existing[0].id : (await window.chronoAPI!.createProject(defaultName)).id;
-  return window.chronoAPI!.loadProjectData(projectId);
+  if (existing.length > 0) {
+    const project = await window.chronoAPI!.loadProjectData(existing[0].id);
+    return { project, list: existing };
+  }
+  const created = await window.chronoAPI!.createProject(defaultName);
+  const project = await window.chronoAPI!.loadProjectData(created.id);
+  return { project, list: [created] };
 }
 
 const ChronolineRuntime: React.FC<Props> = ({ properties, width, height }) => {
@@ -79,9 +95,9 @@ const ChronolineRuntime: React.FC<Props> = ({ properties, width, height }) => {
 
     let cancelled = false;
     loadOrCreateProject(properties.title || 'Хронолиния')
-      .then((project) => {
+      .then(({ project, list }) => {
         if (cancelled) return;
-        setState({ status: 'ready', history: initHistory(project) });
+        setState({ status: 'ready', history: initHistory(project), projectList: list });
         setViewport(computeInitialViewport(project, width));
       })
       .catch((err: unknown) => {
@@ -126,7 +142,7 @@ const ChronolineRuntime: React.FC<Props> = ({ properties, width, height }) => {
   const editingEnabled = properties.localEditingEnabled;
 
   const persistHistory = (nextHistory: History<ChronoProject>) => {
-    setState({ status: 'ready', history: nextHistory });
+    setState({ status: 'ready', history: nextHistory, projectList: state.projectList });
     setSaveStatus({ kind: 'saving' });
     window.chronoAPI
       ?.saveProjectData(nextHistory.present.id, nextHistory.present)
@@ -144,6 +160,74 @@ const ChronolineRuntime: React.FC<Props> = ({ properties, width, height }) => {
   // Повтор не трогает undo-стек - это не новая правка, а попытка ещё раз
   // сохранить уже применённое present, которое не доехало до диска.
   const handleRetrySave = () => persistHistory(history);
+
+  // Открытие другого локального проекта - своя, отдельная от истории
+  // undo/redo правки текущего проекта, точка входа: новый проект получает
+  // СВОЮ историю с чистого листа, а не продолжение старой.
+  const openProject = (next: ChronoProject, list: ProjectManifest[]) => {
+    setState({ status: 'ready', history: initHistory(next), projectList: list });
+    setViewport(computeInitialViewport(next, width));
+    setSelectedEventId(null);
+    setAddEventTimelineId(null);
+    setSaveStatus({ kind: 'idle' });
+  };
+
+  const handleSwitchProject = (projectId: string) => {
+    if (projectId === project.id) return;
+    window.chronoAPI
+      ?.loadProjectData(projectId)
+      .then((next) => openProject(next, state.projectList))
+      .catch((err: unknown) => {
+        console.error('[Хронолиния] Не удалось открыть проект:', err);
+        window.alert('Не удалось открыть выбранный проект');
+      });
+  };
+
+  const handleCreateProject = () => {
+    const name = window.prompt('Название нового проекта', '')?.trim();
+    if (!name) return;
+    window.chronoAPI
+      ?.createProject(name)
+      .then((created) => Promise.all([window.chronoAPI!.loadProjectData(created.id), window.chronoAPI!.listProjects()]))
+      .then(([next, list]) => openProject(next, list))
+      .catch((err: unknown) => {
+        console.error('[Хронолиния] Не удалось создать проект:', err);
+        window.alert('Не удалось создать проект');
+      });
+  };
+
+  const handleRenameProject = () => {
+    const name = window.prompt('Новое название проекта', project.name)?.trim();
+    if (!name || name === project.name) return;
+    // Название проекта хранится в двух местах - манифест каталога
+    // (project.json, используется в списке переключения) и content.json
+    // (собственное поле модели ChronoProject). Держим оба в синхроне, а не
+    // только один - иначе список проектов и заголовок на самой доске
+    // молча разойдутся.
+    window.chronoAPI
+      ?.renameProject(project.id, name)
+      .then((manifest) => {
+        setState((prev) =>
+          prev.status === 'ready'
+            ? { ...prev, projectList: prev.projectList.map((p) => (p.id === manifest.id ? manifest : p)) }
+            : prev
+        );
+      })
+      .catch((err: unknown) => console.error('[Хронолиния] Не удалось переименовать проект в каталоге:', err));
+    applyMutation({ ...project, name });
+  };
+
+  const handleDeleteProject = () => {
+    if (!window.confirm(`Удалить проект «${project.name}» целиком, со всеми линиями и событиями? Это необратимо.`)) return;
+    window.chronoAPI
+      ?.deleteProject(project.id)
+      .then(() => loadOrCreateProject(properties.title || 'Хронолиния'))
+      .then(({ project: next, list }) => openProject(next, list))
+      .catch((err: unknown) => {
+        console.error('[Хронолиния] Не удалось удалить проект:', err);
+        window.alert('Не удалось удалить проект');
+      });
+  };
 
   const handleAddTimeline = () => {
     const name = window.prompt('Название линии', '')?.trim();
@@ -185,6 +269,28 @@ const ChronolineRuntime: React.FC<Props> = ({ properties, width, height }) => {
     <div className={`chronoline-runtime chronoline-runtime--theme-${properties.theme}`} style={{ width, height }}>
       {editingEnabled && (
         <div className="chronoline-runtime__toolbar" style={{ height: TOOLBAR_HEIGHT }}>
+          <select
+            className="chronoline-runtime__project-select"
+            value={project.id}
+            onChange={(e) => handleSwitchProject(e.target.value)}
+            title="Локальный проект"
+          >
+            {state.projectList.map((p) => (
+              <option key={p.id} value={p.id}>
+                {p.name}
+              </option>
+            ))}
+          </select>
+          <button type="button" onClick={handleCreateProject} title="Новый проект">
+            + Проект
+          </button>
+          <button type="button" onClick={handleRenameProject} title="Переименовать проект">
+            ✎
+          </button>
+          <button type="button" onClick={handleDeleteProject} title="Удалить проект">
+            🗑
+          </button>
+          <span className="chronoline-runtime__toolbar-separator" />
           <button type="button" onClick={handleUndo} disabled={!canUndo(history)} title="Отменить">
             ↶ Отменить
           </button>
