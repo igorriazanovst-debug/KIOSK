@@ -1,0 +1,146 @@
+.chrono-timeline-settings__overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.55);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 20;
+}
+
+.chrono-timeline-settings {
+  width: min(420px, 90%);
+  max-height: 85%;
+  overflow-y: auto;
+  background: #1e2028;
+  border-radius: 8px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5);
+  font-family: Arial, sans-serif;
+  color: #eee;
+}
+
+.chrono-timeline-settings__title {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.chrono-timeline-settings__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.chrono-timeline-settings__item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 8px;
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.chrono-timeline-settings__item-name {
+  cursor: text;
+  flex-shrink: 0;
+}
+
+.chrono-timeline-settings__item-name:hover {
+  text-decoration: underline dotted;
+}
+
+.chrono-timeline-settings__item input {
+  flex-shrink: 0;
+  width: 120px;
+  padding: 2px 6px;
+  border-radius: 3px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: #14161c;
+  color: #fff;
+}
+
+.chrono-timeline-settings__item-type {
+  flex: 1;
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.5);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.chrono-timeline-settings__item-delete {
+  border: none;
+  background: transparent;
+  color: rgba(255, 255, 255, 0.4);
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.chrono-timeline-settings__item-delete:hover {
+  color: #ff6b6b;
+}
+
+.chrono-timeline-settings__empty {
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.4);
+  padding: 6px 0;
+}
+
+.chrono-timeline-settings__add-form {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding-top: 10px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.chrono-timeline-settings__add-form input,
+.chrono-timeline-settings__add-form select,
+.chrono-timeline-settings__add-form textarea {
+  padding: 8px 10px;
+  border-radius: 4px;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  background: #14161c;
+  color: #fff;
+  font-size: 14px;
+  font-family: inherit;
+}
+
+.chrono-timeline-settings__add-form button {
+  padding: 8px 16px;
+  border-radius: 4px;
+  border: none;
+  cursor: pointer;
+  font-size: 14px;
+  background: #4a90e2;
+  color: #fff;
+  align-self: flex-start;
+}
+
+.chrono-timeline-settings__add-form button:disabled {
+  background: #3a3d47;
+  color: rgba(255, 255, 255, 0.4);
+  cursor: not-allowed;
+}
+
+.chrono-timeline-settings__actions {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.chrono-timeline-settings__actions button {
+  padding: 8px 16px;
+  border-radius: 4px;
+  border: none;
+  background: transparent;
+  color: rgba(255, 255, 255, 0.7);
+  cursor: pointer;
+  font-size: 14px;
+}

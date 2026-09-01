@@ -32,7 +32,8 @@
   text-overflow: ellipsis;
 }
 
-.chrono-board__timeline-delete {
+.chrono-board__timeline-delete,
+.chrono-board__timeline-settings {
   flex-shrink: 0;
   border: none;
   background: transparent;
@@ -41,6 +42,14 @@
   font-size: 16px;
   line-height: 1;
   padding: 2px 4px;
+}
+
+.chrono-board__timeline-settings {
+  font-size: 13px;
+}
+
+.chrono-board__timeline-settings:hover {
+  color: #fff;
 }
 
 .chrono-board__timeline-delete:hover {

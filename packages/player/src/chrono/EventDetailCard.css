@@ -83,6 +83,26 @@
   gap: 20px;
 }
 
+.chrono-event-detail__checkbox {
+  width: 18px;
+  height: 18px;
+  align-self: flex-start;
+}
+
+.chrono-event-detail__checkbox-set {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.chrono-event-detail__checkbox-set-item {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 13px;
+  color: #fff;
+}
+
 .chrono-event-detail__media-grid {
   display: flex;
   flex-wrap: wrap;

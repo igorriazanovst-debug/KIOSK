@@ -1,7 +1,22 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { addTimeline, renameTimeline, deleteTimeline, addEvent, updateEvent, deleteEvent, addMedia } from './mutations';
-import type { ChronoProject, TimelineEvent, ChronoMedia } from './schema';
+import {
+  addTimeline,
+  renameTimeline,
+  deleteTimeline,
+  addEvent,
+  updateEvent,
+  deleteEvent,
+  addMedia,
+  addAttributeDef,
+  renameAttributeDef,
+  deleteAttributeDef,
+} from './mutations';
+import type { ChronoProject, TimelineEvent, ChronoMedia, AttributeDef } from './schema';
+
+function sampleAttributeDef(overrides: Partial<AttributeDef> = {}): AttributeDef {
+  return { id: 'attr-1', name: 'Категория', type: 'string', ...overrides };
+}
 
 function sampleMedia(overrides: Partial<ChronoMedia> = {}): ChronoMedia {
   return { id: 'm1', fileName: 'photo.jpg', mimeType: 'image/jpeg', fileSize: 100, sha256: 'a'.repeat(64), ...overrides };
@@ -143,4 +158,52 @@ test('addMedia with a different sha256 adds a second, independent entry', () => 
 
   assert.equal(result.project.media.length, 2);
   assert.equal(result.media.id, 'm2');
+});
+
+// ─── addAttributeDef / renameAttributeDef / deleteAttributeDef ───────────
+
+test('addAttributeDef appends a definition to the matching timeline only', () => {
+  let project = addTimeline(emptyProject(), 'tl-1', 'A');
+  project = addTimeline(project, 'tl-2', 'B');
+
+  const result = addAttributeDef(project, 'tl-1', sampleAttributeDef());
+
+  assert.equal(result.timelines.find((t) => t.id === 'tl-1')!.attributes.length, 1);
+  assert.equal(result.timelines.find((t) => t.id === 'tl-2')!.attributes.length, 0);
+});
+
+test('renameAttributeDef updates only the matching definition, leaves type/enumValues untouched', () => {
+  let project = addTimeline(emptyProject(), 'tl-1', 'A');
+  project = addAttributeDef(project, 'tl-1', sampleAttributeDef({ id: 'attr-1', name: 'Старое', type: 'enum', enumValues: ['x', 'y'] }));
+
+  const result = renameAttributeDef(project, 'tl-1', 'attr-1', 'Новое');
+  const attr = result.timelines[0].attributes[0];
+
+  assert.equal(attr.name, 'Новое');
+  assert.equal(attr.type, 'enum');
+  assert.deepEqual(attr.enumValues, ['x', 'y']);
+});
+
+test('deleteAttributeDef removes the definition and strips its value from every event on that timeline', () => {
+  let project = addTimeline(emptyProject(), 'tl-1', 'A');
+  project = addAttributeDef(project, 'tl-1', sampleAttributeDef({ id: 'attr-1' }));
+  project = addEvent(project, 'tl-1', {
+    ...sampleEvent('ev-1'),
+    attributeValues: { 'attr-1': 'значение', 'attr-2': 'другое' },
+  });
+
+  const result = deleteAttributeDef(project, 'tl-1', 'attr-1');
+
+  assert.equal(result.timelines[0].attributes.length, 0);
+  assert.deepEqual(result.timelines[0].events[0].attributeValues, { 'attr-2': 'другое' }, 'must strip only attr-1, keep unrelated values');
+});
+
+test('deleteAttributeDef on an event with no value for that attribute leaves attributeValues untouched (no-op, not an error)', () => {
+  let project = addTimeline(emptyProject(), 'tl-1', 'A');
+  project = addAttributeDef(project, 'tl-1', sampleAttributeDef({ id: 'attr-1' }));
+  project = addEvent(project, 'tl-1', { ...sampleEvent('ev-1'), attributeValues: { 'attr-2': 'x' } });
+
+  const result = deleteAttributeDef(project, 'tl-1', 'attr-1');
+
+  assert.deepEqual(result.timelines[0].events[0].attributeValues, { 'attr-2': 'x' });
 });

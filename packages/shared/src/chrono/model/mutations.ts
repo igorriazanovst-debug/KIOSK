@@ -5,7 +5,7 @@
 // Пригодится и editor-web в Фазе 7 (тот же принцип "один источник в
 // packages/shared", что и у остального домена chrono).
 
-import type { ChronoProject, ChronoTimeline, TimelineEvent, ChronoMedia } from './schema';
+import type { ChronoProject, ChronoTimeline, TimelineEvent, ChronoMedia, AttributeDef } from './schema';
 
 /** @param id Присваивается вызывающим кодом (например crypto.randomUUID()), не здесь */
 export function addTimeline(project: ChronoProject, id: string, name: string): ChronoProject {
@@ -74,4 +74,46 @@ export function addMedia(project: ChronoProject, media: ChronoMedia): { project:
   const existing = project.media.find((m) => m.sha256 === media.sha256);
   if (existing) return { project, media: existing };
   return { project: { ...project, media: [...project.media, media] }, media };
+}
+
+/** @param attr Собран целиком вызывающим кодом (id, тип, enumValues при необходимости) */
+export function addAttributeDef(project: ChronoProject, timelineId: string, attr: AttributeDef): ChronoProject {
+  return {
+    ...project,
+    timelines: project.timelines.map((t) => (t.id === timelineId ? { ...t, attributes: [...t.attributes, attr] } : t)),
+  };
+}
+
+export function renameAttributeDef(project: ChronoProject, timelineId: string, attrId: string, name: string): ChronoProject {
+  return {
+    ...project,
+    timelines: project.timelines.map((t) =>
+      t.id !== timelineId ? t : { ...t, attributes: t.attributes.map((a) => (a.id === attrId ? { ...a, name } : a)) }
+    ),
+  };
+}
+
+/**
+ * Удаляет определение атрибута И его значения из ВСЕХ событий линии -
+ * без второй части осталась бы висячая ссылка: attributeValues событий
+ * продолжал бы содержать ключ, для которого больше нет определения (тот
+ * же принцип целостности, что и у addMedia - не оставлять данные,
+ * указывающие в никуда).
+ */
+export function deleteAttributeDef(project: ChronoProject, timelineId: string, attrId: string): ChronoProject {
+  return {
+    ...project,
+    timelines: project.timelines.map((t) => {
+      if (t.id !== timelineId) return t;
+      return {
+        ...t,
+        attributes: t.attributes.filter((a) => a.id !== attrId),
+        events: t.events.map((e) => {
+          if (!(attrId in e.attributeValues)) return e;
+          const { [attrId]: _removed, ...rest } = e.attributeValues;
+          return { ...e, attributeValues: rest };
+        }),
+      };
+    }),
+  };
 }

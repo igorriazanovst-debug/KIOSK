@@ -16,10 +16,12 @@
 // здесь мимоходом. Текущее ограничение задокументировано, не тихо
 // проигнорировано.
 //
-// Атрибуты (6 типов, строка 15 ТЗ) НЕ отображаются в этой карточке -
-// ни у одной линии пока нет определений атрибутов (нет UI для их
-// создания), поэтому список всегда был бы пуст. Добавится вместе с
-// управлением атрибутами линии.
+// Атрибуты (6 типов, строка 15 ТЗ) - значения редактируются здесь, ОПРЕДЕЛЕНИЯ
+// (имя/тип/enumValues) - в TimelineSettings.tsx (линия, не событие). Тип
+// eventLink показан только для чтения (список id через запятую) -
+// полноценный выбор события (модалка-пикер по всем линиям проекта) вынесен
+// за рамки этого прохода, тот же принцип "явно отложено", что и у
+// RichTextEditor ниже.
 //
 // Редактирование даты - НЕ инлайн-парсинг текущего значения (formatInterval
 // не гарантированно распознаётся собственным parseChronoInput обратно для
@@ -28,7 +30,17 @@
 // превью, что и в AddEventForm.tsx.
 
 import React, { useMemo, useState } from 'react';
-import { parseChronoInput, formatInterval, type ChronoMedia, type EventView, type ParseResult, type TimelineEvent } from '@kiosk/shared';
+import {
+  parseChronoInput,
+  formatInterval,
+  type AttributeDef,
+  type AttributeValue,
+  type ChronoMedia,
+  type ChronoTimeline,
+  type EventView,
+  type ParseResult,
+  type TimelineEvent,
+} from '@kiosk/shared';
 import { formatMomentPreview } from './formatMomentPreview.ts';
 import './EventDetailCard.css';
 
@@ -43,11 +55,12 @@ export interface EventDetailPatch {
   interval?: TimelineEvent['interval'];
   mediaIds: string[];
   defaultMediaId: string | null;
+  attributeValues: Record<string, AttributeValue>;
 }
 
 export interface EventDetailCardProps {
   event: TimelineEvent;
-  timelineName: string;
+  timeline: ChronoTimeline;
   canEdit: boolean;
   /** Каталог медиа проекта (project.media) - для отрисовки уже прикреплённых превью по id */
   mediaCatalog: ChronoMedia[];
@@ -71,9 +84,81 @@ function referenceDateNow() {
   return { year: now.getFullYear(), month: now.getMonth() + 1, day: now.getDate() };
 }
 
+/** Один инпут на все 6 типов атрибутов (строка 15 ТЗ) - выбор конкретного элемента управления по attr.type */
+function renderAttributeInput(
+  attr: AttributeDef,
+  value: AttributeValue | undefined,
+  onChange: (value: AttributeValue) => void,
+  readOnly: boolean
+) {
+  switch (attr.type) {
+    case 'string':
+      return <input value={typeof value === 'string' ? value : ''} onChange={(e) => onChange(e.target.value)} readOnly={readOnly} />;
+
+    case 'number':
+      return (
+        <input
+          type="number"
+          value={typeof value === 'number' ? value : ''}
+          onChange={(e) => onChange(e.target.value === '' ? 0 : Number(e.target.value))}
+          readOnly={readOnly}
+        />
+      );
+
+    case 'boolean':
+      return (
+        <input
+          type="checkbox"
+          checked={value === true}
+          onChange={(e) => onChange(e.target.checked)}
+          disabled={readOnly}
+          className="chrono-event-detail__checkbox"
+        />
+      );
+
+    case 'enum':
+      return (
+        <select value={typeof value === 'string' ? value : ''} onChange={(e) => onChange(e.target.value)} disabled={readOnly}>
+          <option value="">—</option>
+          {(attr.enumValues ?? []).map((v) => (
+            <option key={v} value={v}>
+              {v}
+            </option>
+          ))}
+        </select>
+      );
+
+    case 'set': {
+      const selected = Array.isArray(value) ? value : [];
+      return (
+        <div className="chrono-event-detail__checkbox-set">
+          {(attr.enumValues ?? []).map((v) => (
+            <label key={v} className="chrono-event-detail__checkbox-set-item">
+              <input
+                type="checkbox"
+                checked={selected.includes(v)}
+                disabled={readOnly}
+                onChange={(e) => onChange(e.target.checked ? [...selected, v] : selected.filter((s) => s !== v))}
+              />
+              {v}
+            </label>
+          ))}
+        </div>
+      );
+    }
+
+    case 'eventLink': {
+      // Полноценный выбор события (пикер по всем линиям проекта) отложен -
+      // см. заголовок файла. Здесь только просмотр уже проставленных ссылок.
+      const ids = Array.isArray(value) ? value : [];
+      return <div className="chrono-event-detail__current-date">{ids.length > 0 ? ids.join(', ') : '—'}</div>;
+    }
+  }
+}
+
 const EventDetailCard: React.FC<EventDetailCardProps> = ({
   event,
-  timelineName,
+  timeline,
   canEdit,
   mediaCatalog,
   getMediaUrl,
@@ -93,6 +178,10 @@ const EventDetailCard: React.FC<EventDetailCardProps> = ({
   const [mediaIds, setMediaIds] = useState<string[]>(event.mediaIds);
   const [defaultMediaId, setDefaultMediaId] = useState<string | null>(event.defaultMediaId ?? null);
   const [mediaImporting, setMediaImporting] = useState(false);
+  const [attributeValues, setAttributeValues] = useState<Record<string, AttributeValue>>(event.attributeValues);
+
+  const setAttributeValue = (attrId: string, value: AttributeValue) =>
+    setAttributeValues((prev) => ({ ...prev, [attrId]: value }));
 
   const attachedMedia = mediaIds
     .map((id) => mediaCatalog.find((m) => m.id === id))
@@ -140,6 +229,7 @@ const EventDetailCard: React.FC<EventDetailCardProps> = ({
       fontColor,
       mediaIds,
       defaultMediaId,
+      attributeValues,
     };
 
     if (newDateText.trim() && parsedNewDate.type !== 'none') {
@@ -156,7 +246,7 @@ const EventDetailCard: React.FC<EventDetailCardProps> = ({
     <div className="chrono-event-detail__overlay" onClick={onClose}>
       <form className="chrono-event-detail" onClick={(e) => e.stopPropagation()} onSubmit={handleSave}>
         <h3 className="chrono-event-detail__title">
-          {canEdit ? 'Событие' : event.name} — «{timelineName}»
+          {canEdit ? 'Событие' : event.name} — «{timeline.name}»
         </h3>
 
         <label className="chrono-event-detail__field">
@@ -235,6 +325,13 @@ const EventDetailCard: React.FC<EventDetailCardProps> = ({
             </div>
           </div>
         )}
+
+        {timeline.attributes.map((attr) => (
+          <div key={attr.id} className="chrono-event-detail__field">
+            <span>{attr.name}</span>
+            {renderAttributeInput(attr, attributeValues[attr.id], (v) => setAttributeValue(attr.id, v), !canEdit)}
+          </div>
+        ))}
 
         <label className="chrono-event-detail__field">
           <span>Вид</span>

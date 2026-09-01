@@ -43,11 +43,23 @@
 
 import React, { useEffect, useState } from 'react';
 import type { ChronoProject, ChronolineWidgetProperties, Viewport } from '@kiosk/shared';
-import { addTimeline, deleteTimeline, addEvent, updateEvent, deleteEvent, addMedia } from '@kiosk/shared';
+import {
+  addTimeline,
+  deleteTimeline,
+  addEvent,
+  updateEvent,
+  deleteEvent,
+  addMedia,
+  addAttributeDef,
+  renameAttributeDef,
+  deleteAttributeDef,
+  type AttributeDef,
+} from '@kiosk/shared';
 import BoardView, { type BoardViewProps } from './board/BoardView.tsx';
 import { computeInitialViewport } from './board/initialViewport.ts';
 import AddEventForm, { type AddEventFormResult } from './AddEventForm.tsx';
 import EventDetailCard, { type EventDetailPatch } from './EventDetailCard.tsx';
+import TimelineSettings from './TimelineSettings.tsx';
 import { mediaUrl } from './media.ts';
 import PasswordPrompt, { type PasswordPromptMode, type PasswordSubmitValues, type PasswordPromptResult } from './PasswordPrompt.tsx';
 import { initHistory, pushHistory, undo, redo, canUndo, canRedo, type History } from './history.ts';
@@ -104,6 +116,7 @@ const ChronolineRuntime: React.FC<Props> = ({ properties, width, height }) => {
   const [viewport, setViewport] = useState<Viewport | null>(null);
   const [selectedEventId, setSelectedEventId] = useState<string | null>(null);
   const [addEventTimelineId, setAddEventTimelineId] = useState<string | null>(null);
+  const [attributeSettingsTimelineId, setAttributeSettingsTimelineId] = useState<string | null>(null);
   const [saveStatus, setSaveStatus] = useState<SaveStatus>({ kind: 'idle' });
   const [isPasswordSet, setIsPasswordSet] = useState(false);
   const [unlocked, setUnlocked] = useState(false);
@@ -346,6 +359,25 @@ const ChronolineRuntime: React.FC<Props> = ({ properties, width, height }) => {
     window.chronoAPI?.lockEditing().finally(() => setUnlocked(false));
   };
 
+  const attributeSettingsTimeline = attributeSettingsTimelineId
+    ? project.timelines.find((t) => t.id === attributeSettingsTimelineId)
+    : null;
+
+  const handleAddAttribute = (attr: AttributeDef) => {
+    if (!attributeSettingsTimelineId) return;
+    applyMutation(addAttributeDef(project, attributeSettingsTimelineId, attr));
+  };
+
+  const handleRenameAttribute = (attrId: string, name: string) => {
+    if (!attributeSettingsTimelineId) return;
+    applyMutation(renameAttributeDef(project, attributeSettingsTimelineId, attrId, name));
+  };
+
+  const handleDeleteAttribute = (attrId: string) => {
+    if (!attributeSettingsTimelineId) return;
+    applyMutation(deleteAttributeDef(project, attributeSettingsTimelineId, attrId));
+  };
+
   const addEventTimeline = addEventTimelineId ? project.timelines.find((t) => t.id === addEventTimelineId) : null;
 
   const selectedEventInfo = (() => {
@@ -478,6 +510,7 @@ const ChronolineRuntime: React.FC<Props> = ({ properties, width, height }) => {
           onSelectEvent={setSelectedEventId}
           onAddTimeline={canEdit ? handleAddTimeline : undefined}
           onDeleteTimeline={canEdit ? handleDeleteTimeline : undefined}
+          onOpenTimelineSettings={canEdit ? setAttributeSettingsTimelineId : undefined}
           onEventMoved={canEdit ? handleEventMoved : undefined}
           onAddEventRequested={canEdit ? setAddEventTimelineId : undefined}
           mediaCatalog={project.media}
@@ -493,7 +526,7 @@ const ChronolineRuntime: React.FC<Props> = ({ properties, width, height }) => {
         {selectedEventInfo && (
           <EventDetailCard
             event={selectedEventInfo.event}
-            timelineName={selectedEventInfo.timeline.name}
+            timeline={selectedEventInfo.timeline}
             canEdit={canEdit}
             mediaCatalog={project.media}
             getMediaUrl={(media) => mediaUrl(project.id, media)}
@@ -501,6 +534,15 @@ const ChronolineRuntime: React.FC<Props> = ({ properties, width, height }) => {
             onSave={handleEventDetailSave}
             onDelete={handleEventDetailDelete}
             onClose={() => setSelectedEventId(null)}
+          />
+        )}
+        {attributeSettingsTimeline && (
+          <TimelineSettings
+            timeline={attributeSettingsTimeline}
+            onAddAttribute={handleAddAttribute}
+            onRenameAttribute={handleRenameAttribute}
+            onDeleteAttribute={handleDeleteAttribute}
+            onClose={() => setAttributeSettingsTimelineId(null)}
           />
         )}
         {passwordPromptMode && (

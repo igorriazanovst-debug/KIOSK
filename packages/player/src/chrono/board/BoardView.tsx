@@ -34,6 +34,8 @@ export interface BoardViewProps {
   /** Кнопка добавления линии в сайдбаре не рендерится, если не передан (только просмотр) */
   onAddTimeline?: () => void;
   onDeleteTimeline?: (timelineId: string) => void;
+  /** Кнопка «⚙» (управление атрибутами линии) не рендерится, если не передан */
+  onOpenTimelineSettings?: (timelineId: string) => void;
   /** Перетаскивание/растягивание событий включено, только если передан (только просмотр иначе) */
   onEventMoved?: (timelineId: string, eventId: string, newInterval: ChronoInterval) => void;
   /** Кнопка «+ событие» на дорожке не рендерится, если не передан */
@@ -56,6 +58,7 @@ const BoardView: React.FC<BoardViewProps> = ({
   onSelectEvent,
   onAddTimeline,
   onDeleteTimeline,
+  onOpenTimelineSettings,
   onEventMoved,
   onAddEventRequested,
   mediaCatalog,
@@ -94,6 +97,16 @@ const BoardView: React.FC<BoardViewProps> = ({
         {timelines.map((timeline) => (
           <div key={timeline.id} className="chrono-board__timeline-name" style={{ height: TIMELINE_ROW_HEIGHT }}>
             <span className="chrono-board__timeline-name-text">{timeline.name}</span>
+            {onOpenTimelineSettings && (
+              <button
+                type="button"
+                className="chrono-board__timeline-settings"
+                title="Атрибуты линии"
+                onClick={() => onOpenTimelineSettings(timeline.id)}
+              >
+                ⚙
+              </button>
+            )}
             {onDeleteTimeline && (
               <button
                 type="button"
