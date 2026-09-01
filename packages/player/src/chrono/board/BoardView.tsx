@@ -16,7 +16,7 @@
 
 import React, { useRef, useState } from 'react';
 import { useGesture } from '@use-gesture/react';
-import type { ChronoInterval, ChronoMedia, ChronoTimeline, Viewport } from '@kiosk/shared';
+import { durationBetween, formatDuration, type ChronoInterval, type ChronoMedia, type ChronoTimeline, type Viewport } from '@kiosk/shared';
 import ScaleRuler from './ScaleRuler.tsx';
 import OverviewScale from './OverviewScale.tsx';
 import EventNode from './EventNode.tsx';
@@ -72,6 +72,53 @@ const BoardView: React.FC<BoardViewProps> = ({
   // Эфемерное состояние взаимодействия, как и сам viewport - не часть
   // ChronoProject, не сохраняется (см. CompareStrip.tsx).
   const [compareStripAxisYears, setCompareStripAxisYears] = useState<number | null>(null);
+
+  // Измерение промежутка между двумя событиями, В ТОМ ЧИСЛЕ с разных линий
+  // (строка 35 ТЗ - именно на этом эталон спотыкался, см. chronoDuration.ts).
+  // anchor/target - id событий, не привязаны к конкретной линии - поиск при
+  // отрисовке идёт по ВСЕМ timelines, не по одной активной.
+  const [measuring, setMeasuring] = useState(false);
+  const [measureAnchorId, setMeasureAnchorId] = useState<string | null>(null);
+  const [measureTargetId, setMeasureTargetId] = useState<string | null>(null);
+
+  const toggleMeasuring = () => {
+    setMeasuring((m) => !m);
+    setMeasureAnchorId(null);
+    setMeasureTargetId(null);
+  };
+
+  const handleEventClick = (eventId: string) => {
+    if (!measuring) {
+      onSelectEvent(eventId);
+      return;
+    }
+    // Третий клик после того, как обе стороны уже выбраны - начинаем
+    // измерение заново с этого события как нового якоря, а не добавляем
+    // третью точку (измерение всегда между ровно двумя событиями).
+    if (measureAnchorId === null || measureTargetId !== null) {
+      setMeasureAnchorId(eventId);
+      setMeasureTargetId(null);
+      return;
+    }
+    if (eventId === measureAnchorId) return;
+    setMeasureTargetId(eventId);
+  };
+
+  const findEventById = (id: string | null) => {
+    if (!id) return undefined;
+    for (const t of timelines) {
+      const event = t.events.find((e) => e.id === id);
+      if (event) return { event, timeline: t };
+    }
+    return undefined;
+  };
+
+  const measureAnchor = findEventById(measureAnchorId);
+  const measureTarget = findEventById(measureTargetId);
+  const measureResult =
+    measureAnchor && measureTarget
+      ? formatDuration(durationBetween(measureAnchor.event.interval.start, measureTarget.event.interval.start))
+      : null;
 
   useGesture(
     {
@@ -147,6 +194,28 @@ const BoardView: React.FC<BoardViewProps> = ({
           >
             📏
           </button>
+          <button
+            type="button"
+            className={`chrono-board__measure-toggle${measuring ? ' chrono-board__measure-toggle--active' : ''}`}
+            title="Измерить промежуток между двумя событиями"
+            onClick={(e) => {
+              e.stopPropagation();
+              toggleMeasuring();
+            }}
+          >
+            📐
+          </button>
+          {measuring && (
+            <div className="chrono-board__measure-panel" onClick={(e) => e.stopPropagation()}>
+              {!measureAnchor && 'Выберите первое событие'}
+              {measureAnchor && !measureTarget && `«${measureAnchor.event.name}» — выберите второе событие`}
+              {measureAnchor && measureTarget && (
+                <>
+                  «{measureAnchor.event.name}» — «{measureTarget.event.name}»: <strong>{measureResult}</strong>
+                </>
+              )}
+            </div>
+          )}
           {compareStripAxisYears !== null && (
             <CompareStrip
               axisYears={compareStripAxisYears}
@@ -190,9 +259,9 @@ const BoardView: React.FC<BoardViewProps> = ({
                     key={event.id}
                     event={event}
                     bounds={eventPixelBounds(event.interval, viewport)}
-                    selected={event.id === selectedEventId}
-                    onSelect={(id) => onSelectEvent(id)}
-                    draggable={!!onEventMoved}
+                    selected={measuring ? event.id === measureAnchorId || event.id === measureTargetId : event.id === selectedEventId}
+                    onSelect={handleEventClick}
+                    draggable={!!onEventMoved && !measuring}
                     onDragEnd={(eventId, deltaPx) => {
                       const newInterval = previewDraggedInterval(event.interval, deltaPx, viewport);
                       onEventMoved?.(timeline.id, eventId, newInterval);

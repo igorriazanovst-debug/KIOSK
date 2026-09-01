@@ -1,9 +1,10 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { toRoman, formatCalendarMoment, formatEpochMoment, formatMoment, formatInterval } from './formatRu';
+import { toRoman, formatCalendarMoment, formatEpochMoment, formatMoment, formatInterval, formatDuration } from './formatRu';
 import { calendarDateTimeToCivilDay } from '../calendar/civilDay';
 import type { CalendarMoment, EpochMoment } from '../chronoMoment';
 import type { ChronoInterval } from '../chronoInterval';
+import type { ChronoDuration } from '../chronoDuration';
 
 function calMoment(
   precision: CalendarMoment['precision'],
@@ -145,4 +146,36 @@ test('formatInterval with a closed end: "с X по Y"', () => {
 test('formatInterval with a symbolic open end: "X — по настоящее время", never a materialized date', () => {
   const interval: ChronoInterval = { start: calMoment('year', 2020), end: null };
   assert.equal(formatInterval(interval), '2020 — по настоящее время');
+});
+
+// ─── formatDuration ────────────────────────────────────────────────────
+
+test('formatDuration shows short calendar durations in days, with correct Russian pluralization', () => {
+  assert.equal(formatDuration({ kind: 'calendar', days: 1 }), '1 день');
+  assert.equal(formatDuration({ kind: 'calendar', days: 3 }), '3 дня');
+  assert.equal(formatDuration({ kind: 'calendar', days: 11 }), '11 дней');
+  assert.equal(formatDuration({ kind: 'calendar', days: 21 }), '21 день');
+});
+
+test('formatDuration switches from days to years once a calendar duration reaches a year', () => {
+  const oneYear: ChronoDuration = { kind: 'calendar', days: 365 };
+  assert.equal(formatDuration(oneYear), '1 год');
+});
+
+test('formatDuration pluralizes years correctly (1 год / 2-4 года / 5+ лет, with the 11-14 exception)', () => {
+  assert.equal(formatDuration({ kind: 'epoch', years: 1 }), '1 год');
+  assert.equal(formatDuration({ kind: 'epoch', years: 3 }), '3 года');
+  assert.equal(formatDuration({ kind: 'epoch', years: 5 }), '5 лет');
+  assert.equal(formatDuration({ kind: 'epoch', years: 11 }), '11 лет');
+  assert.equal(formatDuration({ kind: 'epoch', years: 21 }), '21 год');
+});
+
+test('formatDuration scales to тыс./млн/млрд лет for large durations, matching EPOCH_UNIT_WORD terminology', () => {
+  assert.equal(formatDuration({ kind: 'epoch', years: 5_000 }), '5 тыс. лет');
+  assert.equal(formatDuration({ kind: 'epoch', years: 65_000_000 }), '65 млн лет');
+  assert.equal(formatDuration({ kind: 'epoch', years: 4_500_000_000 }), '4.5 млрд лет');
+});
+
+test('formatDuration on a degraded axisYears duration (cross-branch measurement) uses the same year-based formatting', () => {
+  assert.equal(formatDuration({ kind: 'axisYears', years: 65_000_100 }), '65 млн лет');
 });

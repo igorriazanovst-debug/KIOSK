@@ -136,6 +136,49 @@
   color: #ffd54a;
 }
 
+.chrono-board__measure-toggle {
+  position: absolute;
+  left: 34px;
+  top: 6px;
+  z-index: 6;
+  width: 24px;
+  height: 24px;
+  padding: 0;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 4px;
+  background: rgba(0, 0, 0, 0.35);
+  color: rgba(255, 255, 255, 0.6);
+  cursor: pointer;
+  font-size: 13px;
+}
+
+.chrono-board__measure-toggle:hover {
+  color: #fff;
+  background: rgba(0, 0, 0, 0.6);
+}
+
+.chrono-board__measure-toggle--active {
+  border-color: #6bcf6b;
+  color: #6bcf6b;
+}
+
+.chrono-board__measure-panel {
+  position: absolute;
+  left: 64px;
+  top: 6px;
+  z-index: 6;
+  padding: 4px 10px;
+  border-radius: 4px;
+  background: rgba(0, 0, 0, 0.55);
+  border: 1px solid rgba(107, 207, 107, 0.4);
+  color: #fff;
+  font-size: 12px;
+  white-space: nowrap;
+  max-width: calc(100% - 70px);
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
 .chrono-board__paste-event {
   position: absolute;
   right: 32px;

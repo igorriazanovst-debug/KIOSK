@@ -18,6 +18,7 @@ import { civilDayToCalendarDateTime } from '../calendar/civilDay';
 import type { ChronoMoment, CalendarMoment, EpochMoment } from '../chronoMoment';
 import type { ChronoInterval } from '../chronoInterval';
 import { APPROX_YEARS_PER_UNIT, type EpochPrecision } from '../precision';
+import { durationToYears, type ChronoDuration } from '../chronoDuration';
 
 const MONTH_NOMINATIVE = [
   'январь', 'февраль', 'март', 'апрель', 'май', 'июнь',
@@ -152,4 +153,47 @@ export function formatInterval(interval: ChronoInterval): string {
     return `${startStr} — по настоящее время`;
   }
   return `с ${startStr} по ${formatMoment(interval.end)}`;
+}
+
+/**
+ * Согласование числительного с русским существительным (1 день/2 дня/5
+ * дней) — три формы по стандартному правилу (искл. 11-14 → форма "many"
+ * независимо от последней цифры).
+ */
+function ruPlural(n: number, one: string, few: string, many: string): string {
+  const mod10 = n % 10;
+  const mod100 = n % 100;
+  if (mod100 >= 11 && mod100 <= 14) return many;
+  if (mod10 === 1) return one;
+  if (mod10 >= 2 && mod10 <= 4) return few;
+  return many;
+}
+
+function round1(n: number): number {
+  return Math.round(n * 10) / 10;
+}
+
+/**
+ * Отображение длительности (durationBetween/sumDurations/averageDuration,
+ * chronoDuration.ts) — строка 35 ТЗ, измерение промежутка между событиями,
+ * в т.ч. с разных линий. Короткие календарные промежутки (< года) — в
+ * днях, не в дробных годах ("0.1 года" читается хуже, чем "37 дней").
+ * Крупные геологические — та же терминология тыс./млн/млрд лет, что и у
+ * formatEpochMoment/EPOCH_UNIT_WORD, не отдельный словарь.
+ */
+export function formatDuration(d: ChronoDuration): string {
+  if (d.kind === 'calendar' && d.days < 365) {
+    const days = Math.round(d.days);
+    return `${days} ${ruPlural(days, 'день', 'дня', 'дней')}`;
+  }
+
+  const years = durationToYears(d);
+  const absYears = Math.abs(years);
+
+  if (absYears >= 1_000_000_000) return `${round1(years / 1_000_000_000)} млрд лет`;
+  if (absYears >= 1_000_000) return `${round1(years / 1_000_000)} млн лет`;
+  if (absYears >= 1_000) return `${round1(years / 1_000)} тыс. лет`;
+
+  const rounded = Math.round(years);
+  return `${rounded} ${ruPlural(Math.abs(rounded), 'год', 'года', 'лет')}`;
 }
