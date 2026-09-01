@@ -20,6 +20,7 @@
   },
   "dependencies": {
     "@kiosk/shared": "file:../shared",
+    "@use-gesture/react": "^10.3.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "uuid": "^9.0.0",
@@ -91,8 +92,20 @@
     },
     "linux": {
       "target": [
-        { "target": "deb", "arch": ["x64", "arm64"] },
-        { "target": "rpm", "arch": ["x64", "arm64"] }
+        {
+          "target": "deb",
+          "arch": [
+            "x64",
+            "arm64"
+          ]
+        },
+        {
+          "target": "rpm",
+          "arch": [
+            "x64",
+            "arm64"
+          ]
+        }
       ],
       "category": "Utility",
       "icon": "assets/icon.png",
