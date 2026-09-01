@@ -10,10 +10,11 @@
 // переключатель нескольких локальных проектов — отдельная UI-задача более
 // поздней фазы, не блокирует показ содержимого.
 //
-// Линии/события можно добавлять, перетаскивать и удалять линии; чего пока
-// нет — истории отмены (undo/redo) и автосохранения с debounce (каждое
-// изменение сохраняется немедленно, что для MVP ок, но не масштабируется
-// на частые правки — следующее приращение Фазы 3).
+// Линии/события можно добавлять, перетаскивать, удалять - и теперь
+// отменять/повторять (history.ts). Каждое изменение сохраняется на диск
+// немедленно (без debounce) - для дискретных действий пользователя (клик
+// "добавить", отпускание драга) это ок; debounce понадобится, когда
+// появится редактирование текстом "вживую" (описание события, Фаза 5).
 
 import React, { useEffect, useState } from 'react';
 import type { ChronoProject, ChronolineWidgetProperties, Viewport } from '@kiosk/shared';
@@ -21,6 +22,7 @@ import { addTimeline, deleteTimeline, addEvent, updateEvent } from '@kiosk/share
 import BoardView, { type BoardViewProps } from './board/BoardView.tsx';
 import { computeInitialViewport } from './board/initialViewport.ts';
 import AddEventForm, { type AddEventFormResult } from './AddEventForm.tsx';
+import { initHistory, pushHistory, undo, redo, canUndo, canRedo, type History } from './history.ts';
 import './ChronolineRuntime.css';
 
 interface Props {
@@ -33,7 +35,9 @@ type LoadState =
   | { status: 'loading' }
   | { status: 'unavailable' }
   | { status: 'error'; message: string }
-  | { status: 'ready'; project: ChronoProject };
+  | { status: 'ready'; history: History<ChronoProject> };
+
+const TOOLBAR_HEIGHT = 36;
 
 async function loadOrCreateProject(defaultName: string): Promise<ChronoProject> {
   const existing = await window.chronoAPI!.listProjects();
@@ -57,7 +61,7 @@ const ChronolineRuntime: React.FC<Props> = ({ properties, width, height }) => {
     loadOrCreateProject(properties.title || 'Хронолиния')
       .then((project) => {
         if (cancelled) return;
-        setState({ status: 'ready', project });
+        setState({ status: 'ready', history: initHistory(project) });
         setViewport(computeInitialViewport(project, width));
       })
       .catch((err: unknown) => {
@@ -97,11 +101,13 @@ const ChronolineRuntime: React.FC<Props> = ({ properties, width, height }) => {
 
   if (!viewport) return null;
 
-  const project = state.project;
+  const history = state.history;
+  const project = history.present;
+  const editingEnabled = properties.localEditingEnabled;
 
-  const persist = (updated: ChronoProject) => {
-    setState({ status: 'ready', project: updated });
-    window.chronoAPI?.saveProjectData(updated.id, updated).catch((err: unknown) => {
+  const persistHistory = (nextHistory: History<ChronoProject>) => {
+    setState({ status: 'ready', history: nextHistory });
+    window.chronoAPI?.saveProjectData(nextHistory.present.id, nextHistory.present).catch((err: unknown) => {
       // Показ содержимого не должен падать из-за сбоя сохранения - ошибка
       // просто остаётся в консоли; полноценная обработка (баннер, повтор)
       // придёт вместе с автосохранением.
@@ -109,26 +115,30 @@ const ChronolineRuntime: React.FC<Props> = ({ properties, width, height }) => {
     });
   };
 
+  const applyMutation = (updated: ChronoProject) => persistHistory(pushHistory(history, updated));
+  const handleUndo = () => persistHistory(undo(history));
+  const handleRedo = () => persistHistory(redo(history));
+
   const handleAddTimeline = () => {
     const name = window.prompt('Название линии', '')?.trim();
     if (!name) return;
-    persist(addTimeline(project, crypto.randomUUID(), name));
+    applyMutation(addTimeline(project, crypto.randomUUID(), name));
   };
 
   const handleDeleteTimeline = (timelineId: string) => {
     const timeline = project.timelines.find((t) => t.id === timelineId);
     if (!timeline) return;
     if (!window.confirm(`Удалить линию «${timeline.name}» со всеми событиями?`)) return;
-    persist(deleteTimeline(project, timelineId));
+    applyMutation(deleteTimeline(project, timelineId));
   };
 
   const handleEventMoved: BoardViewProps['onEventMoved'] = (timelineId, eventId, newInterval) => {
-    persist(updateEvent(project, timelineId, eventId, { interval: newInterval }));
+    applyMutation(updateEvent(project, timelineId, eventId, { interval: newInterval }));
   };
 
   const handleAddEventSubmit = (result: AddEventFormResult) => {
     if (!addEventTimelineId) return;
-    persist(
+    applyMutation(
       addEvent(project, addEventTimelineId, {
         id: crypto.randomUUID(),
         interval: result.interval,
@@ -143,27 +153,40 @@ const ChronolineRuntime: React.FC<Props> = ({ properties, width, height }) => {
   };
 
   const addEventTimeline = addEventTimelineId ? project.timelines.find((t) => t.id === addEventTimelineId) : null;
+  const boardHeight = editingEnabled ? height - TOOLBAR_HEIGHT : height;
 
   return (
     <div className={`chronoline-runtime chronoline-runtime--theme-${properties.theme}`} style={{ width, height }}>
-      <BoardView
-        timelines={project.timelines}
-        viewport={viewport}
-        onViewportChange={setViewport}
-        selectedEventId={selectedEventId}
-        onSelectEvent={setSelectedEventId}
-        onAddTimeline={properties.localEditingEnabled ? handleAddTimeline : undefined}
-        onDeleteTimeline={properties.localEditingEnabled ? handleDeleteTimeline : undefined}
-        onEventMoved={properties.localEditingEnabled ? handleEventMoved : undefined}
-        onAddEventRequested={properties.localEditingEnabled ? setAddEventTimelineId : undefined}
-      />
-      {addEventTimeline && (
-        <AddEventForm
-          timelineName={addEventTimeline.name}
-          onSubmit={handleAddEventSubmit}
-          onCancel={() => setAddEventTimelineId(null)}
-        />
+      {editingEnabled && (
+        <div className="chronoline-runtime__toolbar" style={{ height: TOOLBAR_HEIGHT }}>
+          <button type="button" onClick={handleUndo} disabled={!canUndo(history)} title="Отменить">
+            ↶ Отменить
+          </button>
+          <button type="button" onClick={handleRedo} disabled={!canRedo(history)} title="Повторить">
+            ↷ Повторить
+          </button>
+        </div>
       )}
+      <div className="chronoline-runtime__board" style={{ height: boardHeight }}>
+        <BoardView
+          timelines={project.timelines}
+          viewport={viewport}
+          onViewportChange={setViewport}
+          selectedEventId={selectedEventId}
+          onSelectEvent={setSelectedEventId}
+          onAddTimeline={editingEnabled ? handleAddTimeline : undefined}
+          onDeleteTimeline={editingEnabled ? handleDeleteTimeline : undefined}
+          onEventMoved={editingEnabled ? handleEventMoved : undefined}
+          onAddEventRequested={editingEnabled ? setAddEventTimelineId : undefined}
+        />
+        {addEventTimeline && (
+          <AddEventForm
+            timelineName={addEventTimeline.name}
+            onSubmit={handleAddEventSubmit}
+            onCancel={() => setAddEventTimelineId(null)}
+          />
+        )}
+      </div>
     </div>
   );
 };
