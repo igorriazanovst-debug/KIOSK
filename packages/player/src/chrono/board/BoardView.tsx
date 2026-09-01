@@ -35,6 +35,8 @@ export interface BoardViewProps {
   onDeleteTimeline?: (timelineId: string) => void;
   /** Перетаскивание событий включено, только если передан (только просмотр иначе) */
   onEventMoved?: (timelineId: string, eventId: string, newInterval: ChronoInterval) => void;
+  /** Кнопка «+ событие» на дорожке не рендерится, если не передан */
+  onAddEventRequested?: (timelineId: string) => void;
 }
 
 const TIMELINE_ROW_HEIGHT = 60;
@@ -50,6 +52,7 @@ const BoardView: React.FC<BoardViewProps> = ({
   onAddTimeline,
   onDeleteTimeline,
   onEventMoved,
+  onAddEventRequested,
 }) => {
   const trackAreaRef = useRef<HTMLDivElement>(null);
 
@@ -108,6 +111,19 @@ const BoardView: React.FC<BoardViewProps> = ({
         <div className="chrono-board__track-area" ref={trackAreaRef} onClick={() => onSelectEvent(null)}>
           {timelines.map((timeline) => (
             <div key={timeline.id} className="chrono-board__timeline-track" style={{ height: TIMELINE_ROW_HEIGHT }}>
+              {onAddEventRequested && (
+                <button
+                  type="button"
+                  className="chrono-board__add-event"
+                  title="Добавить событие"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    onAddEventRequested(timeline.id);
+                  }}
+                >
+                  +
+                </button>
+              )}
               {timeline.events
                 .filter((event) => isEventVisible(event.interval, viewport))
                 .map((event) => (

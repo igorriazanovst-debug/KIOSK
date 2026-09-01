@@ -10,15 +10,17 @@
 // переключатель нескольких локальных проектов — отдельная UI-задача более
 // поздней фазы, не блокирует показ содержимого.
 //
-// Это ТОЛЬКО чтение и отображение (пан/зум интерактивны, содержимое — нет):
-// создание/редактирование событий (useEventDrag, история, автосохранение)
-// ещё не реализовано, будет отдельным приращением Фазы 3.
+// Линии/события можно добавлять, перетаскивать и удалять линии; чего пока
+// нет — истории отмены (undo/redo) и автосохранения с debounce (каждое
+// изменение сохраняется немедленно, что для MVP ок, но не масштабируется
+// на частые правки — следующее приращение Фазы 3).
 
 import React, { useEffect, useState } from 'react';
 import type { ChronoProject, ChronolineWidgetProperties, Viewport } from '@kiosk/shared';
-import { addTimeline, deleteTimeline, updateEvent } from '@kiosk/shared';
+import { addTimeline, deleteTimeline, addEvent, updateEvent } from '@kiosk/shared';
 import BoardView, { type BoardViewProps } from './board/BoardView.tsx';
 import { computeInitialViewport } from './board/initialViewport.ts';
+import AddEventForm, { type AddEventFormResult } from './AddEventForm.tsx';
 import './ChronolineRuntime.css';
 
 interface Props {
@@ -43,6 +45,7 @@ const ChronolineRuntime: React.FC<Props> = ({ properties, width, height }) => {
   const [state, setState] = useState<LoadState>({ status: 'loading' });
   const [viewport, setViewport] = useState<Viewport | null>(null);
   const [selectedEventId, setSelectedEventId] = useState<string | null>(null);
+  const [addEventTimelineId, setAddEventTimelineId] = useState<string | null>(null);
 
   useEffect(() => {
     if (!window.chronoAPI) {
@@ -123,6 +126,24 @@ const ChronolineRuntime: React.FC<Props> = ({ properties, width, height }) => {
     persist(updateEvent(project, timelineId, eventId, { interval: newInterval }));
   };
 
+  const handleAddEventSubmit = (result: AddEventFormResult) => {
+    if (!addEventTimelineId) return;
+    persist(
+      addEvent(project, addEventTimelineId, {
+        id: crypto.randomUUID(),
+        interval: result.interval,
+        name: result.name,
+        mediaIds: [],
+        attributeValues: {},
+        view: result.view,
+        verticalPriority: 1000,
+      })
+    );
+    setAddEventTimelineId(null);
+  };
+
+  const addEventTimeline = addEventTimelineId ? project.timelines.find((t) => t.id === addEventTimelineId) : null;
+
   return (
     <div className={`chronoline-runtime chronoline-runtime--theme-${properties.theme}`} style={{ width, height }}>
       <BoardView
@@ -134,7 +155,15 @@ const ChronolineRuntime: React.FC<Props> = ({ properties, width, height }) => {
         onAddTimeline={properties.localEditingEnabled ? handleAddTimeline : undefined}
         onDeleteTimeline={properties.localEditingEnabled ? handleDeleteTimeline : undefined}
         onEventMoved={properties.localEditingEnabled ? handleEventMoved : undefined}
+        onAddEventRequested={properties.localEditingEnabled ? setAddEventTimelineId : undefined}
       />
+      {addEventTimeline && (
+        <AddEventForm
+          timelineName={addEventTimeline.name}
+          onSubmit={handleAddEventSubmit}
+          onCancel={() => setAddEventTimelineId(null)}
+        />
+      )}
     </div>
   );
 };

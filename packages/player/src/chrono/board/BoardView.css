@@ -83,3 +83,25 @@
   position: relative;
   border-bottom: 1px solid rgba(255, 255, 255, 0.06);
 }
+
+.chrono-board__add-event {
+  position: absolute;
+  right: 6px;
+  top: 6px;
+  z-index: 5;
+  width: 22px;
+  height: 22px;
+  line-height: 20px;
+  padding: 0;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.35);
+  color: rgba(255, 255, 255, 0.6);
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.chrono-board__add-event:hover {
+  color: #fff;
+  background: rgba(0, 0, 0, 0.6);
+}
