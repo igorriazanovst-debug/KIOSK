@@ -56,5 +56,10 @@ contextBridge.exposeInMainWorld('chronoAPI', {
   renameProject: (projectId, newName) => ipcRenderer.invoke('chrono:rename-project', projectId, newName),
   deleteProject: (projectId) => ipcRenderer.invoke('chrono:delete-project', projectId),
   loadProjectData: (projectId) => ipcRenderer.invoke('chrono:load-project-data', projectId),
-  saveProjectData: (projectId, data) => ipcRenderer.invoke('chrono:save-project-data', projectId, data)
+  saveProjectData: (projectId, data) => ipcRenderer.invoke('chrono:save-project-data', projectId, data),
+  getAuthStatus: () => ipcRenderer.invoke('chrono:auth-status'),
+  verifyPassword: (password) => ipcRenderer.invoke('chrono:auth-verify-password', password),
+  changePassword: (newPassword, currentPassword) =>
+    ipcRenderer.invoke('chrono:auth-change-password', newPassword, currentPassword),
+  lockEditing: () => ipcRenderer.invoke('chrono:auth-lock')
 });

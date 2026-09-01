@@ -24,6 +24,22 @@
 // в частоте сохранений, а в их видимости: сбой saveProjectData раньше
 // тихо оседал только в консоли - ниже это исправлено индикатором и
 // повтором.
+//
+// Локальная авторизация (Фаза 4, auth.js): один пароль на устройство,
+// защищает РЕДАКТИРОВАНИЕ, не просмотр - доска остаётся видимой всем,
+// пока не задан пароль или пока сессия не разблокирована. canEdit ниже -
+// это localEditingEnabled (свойство виджета) И (пароль не задан ИЛИ уже
+// разблокировано в этой сессии), тот же флаг, что раньше просто был
+// editingEnabled, теперь с дополнительным условием.
+//
+// ВАЖНО (правка по итогам security-review): canEdit - это UX-решение, не
+// граница авторизации. Настоящая проверка живёт в main-процессе
+// (ipc.js/sessionLock.js) и срабатывает на каждый мутирующий IPC-вызов
+// независимо от того, что решил рендерер - React-состояние `unlocked`
+// здесь только ЗЕРКАЛИТ серверную сессию (инициализируется из
+// getAuthStatus, синхронизируется опросом раз в минуту, откатывается
+// назад при ошибке "LOCKED:" от main-процесса), а не является
+// источником истины.
 
 import React, { useEffect, useState } from 'react';
 import type { ChronoProject, ChronolineWidgetProperties, Viewport } from '@kiosk/shared';
@@ -31,6 +47,7 @@ import { addTimeline, deleteTimeline, addEvent, updateEvent } from '@kiosk/share
 import BoardView, { type BoardViewProps } from './board/BoardView.tsx';
 import { computeInitialViewport } from './board/initialViewport.ts';
 import AddEventForm, { type AddEventFormResult } from './AddEventForm.tsx';
+import PasswordPrompt, { type PasswordPromptMode, type PasswordSubmitValues, type PasswordPromptResult } from './PasswordPrompt.tsx';
 import { initHistory, pushHistory, undo, redo, canUndo, canRedo, type History } from './history.ts';
 import './ChronolineRuntime.css';
 
@@ -62,6 +79,12 @@ type SaveStatus =
 
 const TOOLBAR_HEIGHT = 36;
 const SAVED_INDICATOR_FADE_MS = 2000;
+const AUTH_STATUS_POLL_MS = 60_000;
+const LOCKED_ERROR_MARKER = 'LOCKED:';
+
+function isLockedError(err: unknown): boolean {
+  return err instanceof Error && err.message.includes(LOCKED_ERROR_MARKER);
+}
 
 async function loadOrCreateProject(defaultName: string): Promise<{ project: ChronoProject; list: ProjectManifest[] }> {
   const existing = await window.chronoAPI!.listProjects();
@@ -80,6 +103,9 @@ const ChronolineRuntime: React.FC<Props> = ({ properties, width, height }) => {
   const [selectedEventId, setSelectedEventId] = useState<string | null>(null);
   const [addEventTimelineId, setAddEventTimelineId] = useState<string | null>(null);
   const [saveStatus, setSaveStatus] = useState<SaveStatus>({ kind: 'idle' });
+  const [isPasswordSet, setIsPasswordSet] = useState(false);
+  const [unlocked, setUnlocked] = useState(false);
+  const [passwordPromptMode, setPasswordPromptMode] = useState<PasswordPromptMode | null>(null);
 
   useEffect(() => {
     if (saveStatus.kind !== 'saved') return;
@@ -94,11 +120,19 @@ const ChronolineRuntime: React.FC<Props> = ({ properties, width, height }) => {
     }
 
     let cancelled = false;
-    loadOrCreateProject(properties.title || 'Хронолиния')
-      .then(({ project, list }) => {
+    Promise.all([loadOrCreateProject(properties.title || 'Хронолиния'), window.chronoAPI.getAuthStatus()])
+      .then(([{ project, list }, authStatus]) => {
         if (cancelled) return;
         setState({ status: 'ready', history: initHistory(project), projectList: list });
         setViewport(computeInitialViewport(project, width));
+        setIsPasswordSet(authStatus.isPasswordSet);
+        // Отражаем РЕАЛЬНОЕ состояние сессии в main-процессе, а не всегда
+        // стартуем с false: если виджет размонтировался/смонтировался
+        // заново (скрыть/показать), не перезапуская всё приложение,
+        // сессия в main-процессе могла остаться разблокированной в
+        // пределах таймаута бездействия (sessionLock.js) - незачем
+        // заново показывать экран блокировки в этом случае.
+        setUnlocked(authStatus.unlocked);
       })
       .catch((err: unknown) => {
         if (cancelled) return;
@@ -110,6 +144,19 @@ const ChronolineRuntime: React.FC<Props> = ({ properties, width, height }) => {
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  // Синхронизация с сессией main-процесса, пока сессия разблокирована -
+  // ловит автоблокировку по таймауту бездействия (sessionLock.js), не
+  // только явные ошибки от следующего мутирующего вызова.
+  useEffect(() => {
+    if (!unlocked || !window.chronoAPI) return;
+    const timer = setInterval(() => {
+      window.chronoAPI?.getAuthStatus().then((status) => {
+        if (!status.unlocked) setUnlocked(false);
+      });
+    }, AUTH_STATUS_POLL_MS);
+    return () => clearInterval(timer);
+  }, [unlocked]);
 
   if (state.status === 'loading') {
     return (
@@ -140,6 +187,7 @@ const ChronolineRuntime: React.FC<Props> = ({ properties, width, height }) => {
   const history = state.history;
   const project = history.present;
   const editingEnabled = properties.localEditingEnabled;
+  const canEdit = editingEnabled && (!isPasswordSet || unlocked);
 
   const persistHistory = (nextHistory: History<ChronoProject>) => {
     setState({ status: 'ready', history: nextHistory, projectList: state.projectList });
@@ -148,9 +196,17 @@ const ChronolineRuntime: React.FC<Props> = ({ properties, width, height }) => {
       ?.saveProjectData(nextHistory.present.id, nextHistory.present)
       .then(() => setSaveStatus({ kind: 'saved' }))
       .catch((err: unknown) => {
-        const message = err instanceof Error ? err.message : String(err);
         console.error('[Хронолиния] Не удалось сохранить проект:', err);
-        setSaveStatus({ kind: 'error', message });
+        // Сессия истекла в main-процессе (таймаут бездействия) между тем,
+        // как отрисовался тулбар редактирования, и этим сохранением -
+        // возвращаем UI в заблокированное состояние вместо того, чтобы
+        // просто показать общую ошибку сохранения.
+        if (isLockedError(err)) {
+          setUnlocked(false);
+          setSaveStatus({ kind: 'error', message: 'Сессия истекла - потребуется разблокировать снова' });
+          return;
+        }
+        setSaveStatus({ kind: 'error', message: err instanceof Error ? err.message : String(err) });
       });
   };
 
@@ -183,6 +239,16 @@ const ChronolineRuntime: React.FC<Props> = ({ properties, width, height }) => {
       });
   };
 
+  const handleMutatingIpcError = (err: unknown, fallbackMessage: string) => {
+    console.error('[Хронолиния]', fallbackMessage, err);
+    if (isLockedError(err)) {
+      setUnlocked(false);
+      window.alert('Сессия истекла - разблокируйте редактирование снова');
+      return;
+    }
+    window.alert(fallbackMessage);
+  };
+
   const handleCreateProject = () => {
     const name = window.prompt('Название нового проекта', '')?.trim();
     if (!name) return;
@@ -190,10 +256,7 @@ const ChronolineRuntime: React.FC<Props> = ({ properties, width, height }) => {
       ?.createProject(name)
       .then((created) => Promise.all([window.chronoAPI!.loadProjectData(created.id), window.chronoAPI!.listProjects()]))
       .then(([next, list]) => openProject(next, list))
-      .catch((err: unknown) => {
-        console.error('[Хронолиния] Не удалось создать проект:', err);
-        window.alert('Не удалось создать проект');
-      });
+      .catch((err: unknown) => handleMutatingIpcError(err, 'Не удалось создать проект'));
   };
 
   const handleRenameProject = () => {
@@ -213,7 +276,7 @@ const ChronolineRuntime: React.FC<Props> = ({ properties, width, height }) => {
             : prev
         );
       })
-      .catch((err: unknown) => console.error('[Хронолиния] Не удалось переименовать проект в каталоге:', err));
+      .catch((err: unknown) => handleMutatingIpcError(err, 'Не удалось переименовать проект в каталоге'));
     applyMutation({ ...project, name });
   };
 
@@ -223,10 +286,7 @@ const ChronolineRuntime: React.FC<Props> = ({ properties, width, height }) => {
       ?.deleteProject(project.id)
       .then(() => loadOrCreateProject(properties.title || 'Хронолиния'))
       .then(({ project: next, list }) => openProject(next, list))
-      .catch((err: unknown) => {
-        console.error('[Хронолиния] Не удалось удалить проект:', err);
-        window.alert('Не удалось удалить проект');
-      });
+      .catch((err: unknown) => handleMutatingIpcError(err, 'Не удалось удалить проект'));
   };
 
   const handleAddTimeline = () => {
@@ -262,6 +322,28 @@ const ChronolineRuntime: React.FC<Props> = ({ properties, width, height }) => {
     setAddEventTimelineId(null);
   };
 
+  const handlePasswordSubmit = async (values: PasswordSubmitValues): Promise<PasswordPromptResult> => {
+    if (passwordPromptMode === 'unlock') {
+      return window.chronoAPI!.verifyPassword(values.password || '');
+    }
+    if (passwordPromptMode === 'setup') {
+      return window.chronoAPI!.changePassword(values.newPassword || '');
+    }
+    return window.chronoAPI!.changePassword(values.newPassword || '', values.currentPassword);
+  };
+
+  const handlePasswordSuccess = () => {
+    if (passwordPromptMode === 'unlock' || passwordPromptMode === 'setup') {
+      setUnlocked(true);
+      setIsPasswordSet(true);
+    }
+    setPasswordPromptMode(null);
+  };
+
+  const handleLockEditing = () => {
+    window.chronoAPI?.lockEditing().finally(() => setUnlocked(false));
+  };
+
   const addEventTimeline = addEventTimelineId ? project.timelines.find((t) => t.id === addEventTimelineId) : null;
   const boardHeight = editingEnabled ? height - TOOLBAR_HEIGHT : height;
 
@@ -269,42 +351,74 @@ const ChronolineRuntime: React.FC<Props> = ({ properties, width, height }) => {
     <div className={`chronoline-runtime chronoline-runtime--theme-${properties.theme}`} style={{ width, height }}>
       {editingEnabled && (
         <div className="chronoline-runtime__toolbar" style={{ height: TOOLBAR_HEIGHT }}>
-          <select
-            className="chronoline-runtime__project-select"
-            value={project.id}
-            onChange={(e) => handleSwitchProject(e.target.value)}
-            title="Локальный проект"
-          >
-            {state.projectList.map((p) => (
-              <option key={p.id} value={p.id}>
-                {p.name}
-              </option>
-            ))}
-          </select>
-          <button type="button" onClick={handleCreateProject} title="Новый проект">
-            + Проект
-          </button>
-          <button type="button" onClick={handleRenameProject} title="Переименовать проект">
-            ✎
-          </button>
-          <button type="button" onClick={handleDeleteProject} title="Удалить проект">
-            🗑
-          </button>
-          <span className="chronoline-runtime__toolbar-separator" />
-          <button type="button" onClick={handleUndo} disabled={!canUndo(history)} title="Отменить">
-            ↶ Отменить
-          </button>
-          <button type="button" onClick={handleRedo} disabled={!canRedo(history)} title="Повторить">
-            ↷ Повторить
-          </button>
-          <span className={`chronoline-runtime__save-status chronoline-runtime__save-status--${saveStatus.kind}`}>
-            {saveStatus.kind === 'saving' && 'Сохранение…'}
-            {saveStatus.kind === 'saved' && '✓ Сохранено'}
-            {saveStatus.kind === 'error' && `⚠ Не сохранено: ${saveStatus.message}`}
-          </span>
-          {saveStatus.kind === 'error' && (
-            <button type="button" onClick={handleRetrySave} className="chronoline-runtime__retry-save">
-              Повторить сохранение
+          {canEdit ? (
+            <>
+              <select
+                className="chronoline-runtime__project-select"
+                value={project.id}
+                onChange={(e) => handleSwitchProject(e.target.value)}
+                title="Локальный проект"
+              >
+                {state.projectList.map((p) => (
+                  <option key={p.id} value={p.id}>
+                    {p.name}
+                  </option>
+                ))}
+              </select>
+              <button type="button" onClick={handleCreateProject} title="Новый проект">
+                + Проект
+              </button>
+              <button type="button" onClick={handleRenameProject} title="Переименовать проект">
+                ✎
+              </button>
+              <button type="button" onClick={handleDeleteProject} title="Удалить проект">
+                🗑
+              </button>
+              <span className="chronoline-runtime__toolbar-separator" />
+              <button type="button" onClick={handleUndo} disabled={!canUndo(history)} title="Отменить">
+                ↶ Отменить
+              </button>
+              <button type="button" onClick={handleRedo} disabled={!canRedo(history)} title="Повторить">
+                ↷ Повторить
+              </button>
+              <span className={`chronoline-runtime__save-status chronoline-runtime__save-status--${saveStatus.kind}`}>
+                {saveStatus.kind === 'saving' && 'Сохранение…'}
+                {saveStatus.kind === 'saved' && '✓ Сохранено'}
+                {saveStatus.kind === 'error' && `⚠ Не сохранено: ${saveStatus.message}`}
+              </span>
+              {saveStatus.kind === 'error' && (
+                <button type="button" onClick={handleRetrySave} className="chronoline-runtime__retry-save">
+                  Повторить сохранение
+                </button>
+              )}
+              {isPasswordSet && (
+                <>
+                  <button
+                    type="button"
+                    className="chronoline-runtime__auth-button"
+                    onClick={() => setPasswordPromptMode('change')}
+                    title="Сменить пароль"
+                  >
+                    🔒 Сменить пароль
+                  </button>
+                  <button
+                    type="button"
+                    className="chronoline-runtime__auth-button"
+                    onClick={handleLockEditing}
+                    title="Заблокировать редактирование сейчас"
+                  >
+                    🔒 Заблокировать
+                  </button>
+                </>
+              )}
+            </>
+          ) : (
+            <button
+              type="button"
+              className="chronoline-runtime__auth-button"
+              onClick={() => setPasswordPromptMode(isPasswordSet ? 'unlock' : 'setup')}
+            >
+              {isPasswordSet ? '🔒 Разблокировать редактирование' : '🔓 Установить пароль'}
             </button>
           )}
         </div>
@@ -316,16 +430,24 @@ const ChronolineRuntime: React.FC<Props> = ({ properties, width, height }) => {
           onViewportChange={setViewport}
           selectedEventId={selectedEventId}
           onSelectEvent={setSelectedEventId}
-          onAddTimeline={editingEnabled ? handleAddTimeline : undefined}
-          onDeleteTimeline={editingEnabled ? handleDeleteTimeline : undefined}
-          onEventMoved={editingEnabled ? handleEventMoved : undefined}
-          onAddEventRequested={editingEnabled ? setAddEventTimelineId : undefined}
+          onAddTimeline={canEdit ? handleAddTimeline : undefined}
+          onDeleteTimeline={canEdit ? handleDeleteTimeline : undefined}
+          onEventMoved={canEdit ? handleEventMoved : undefined}
+          onAddEventRequested={canEdit ? setAddEventTimelineId : undefined}
         />
         {addEventTimeline && (
           <AddEventForm
             timelineName={addEventTimeline.name}
             onSubmit={handleAddEventSubmit}
             onCancel={() => setAddEventTimelineId(null)}
+          />
+        )}
+        {passwordPromptMode && (
+          <PasswordPrompt
+            mode={passwordPromptMode}
+            onSubmit={handlePasswordSubmit}
+            onSuccess={handlePasswordSuccess}
+            onCancel={() => setPasswordPromptMode(null)}
           />
         )}
       </div>

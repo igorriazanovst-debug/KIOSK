@@ -17,6 +17,7 @@ const fs = require('fs');
 const path = require('path');
 const crypto = require('crypto');
 const { resolveWithinRoot } = require('./pathGuard');
+const { atomicWriteJson } = require('./atomicJson');
 const { parseChronoProject, assertProjectSerializable, CHRONO_PROJECT_SCHEMA_VERSION } = require('@kiosk/shared');
 
 const MANIFEST_FILE = 'project.json';
@@ -26,12 +27,6 @@ const MAX_NAME_LENGTH = 200;
 
 function projectsRoot(baseDir) {
   return path.join(baseDir, 'projects');
-}
-
-function atomicWriteJson(filePath, data) {
-  const tmpPath = `${filePath}.tmp-${process.pid}-${Date.now()}-${Math.random().toString(36).slice(2)}`;
-  fs.writeFileSync(tmpPath, JSON.stringify(data, null, 2), 'utf8');
-  fs.renameSync(tmpPath, filePath);
 }
 
 function sanitizeName(name, fallback) {

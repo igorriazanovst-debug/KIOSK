@@ -38,6 +38,13 @@ declare global {
       deleteProject: (projectId: string) => Promise<{ success: boolean }>;
       loadProjectData: (projectId: string) => Promise<ChronoProject>;
       saveProjectData: (projectId: string, data: ChronoProject) => Promise<ChronoProject>;
+      getAuthStatus: () => Promise<{ isPasswordSet: boolean; unlocked: boolean; locked: boolean; retryAfterMs: number }>;
+      verifyPassword: (password: string) => Promise<{ success: boolean; locked: boolean; retryAfterMs: number }>;
+      changePassword: (
+        newPassword: string,
+        currentPassword?: string
+      ) => Promise<{ success: boolean; locked: boolean; retryAfterMs: number }>;
+      lockEditing: () => Promise<{ success: boolean }>;
     };
   }
 }
