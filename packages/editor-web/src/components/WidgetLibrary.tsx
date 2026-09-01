@@ -3,7 +3,7 @@ import { useEditorStore } from '../stores/editorStore';
 import { Square, Type, Image, Video, MousePointer, Menu, Globe, Compass, History } from 'lucide-react';
 import OutlinePanel from './OutlinePanel';
 import { NAVIGATION_WIDGET_TYPE, NAVIGATION_DEFAULT_PROPS, NAVIGATION_DEFAULT_SIZE } from '../utils/navigation/widgetType';
-import { CHRONOLINE_WIDGET_TYPE, CHRONOLINE_DEFAULT_PROPS, CHRONOLINE_DEFAULT_SIZE } from '../utils/chronoline/widgetType';
+import { CHRONOLINE_WIDGET_TYPE, CHRONOLINE_DEFAULT_PROPS, CHRONOLINE_DEFAULT_SIZE } from '@kiosk/shared';
 import './WidgetLibrary.css';
 
 const WidgetLibrary: React.FC = () => {

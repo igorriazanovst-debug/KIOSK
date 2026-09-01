@@ -54,5 +54,7 @@ contextBridge.exposeInMainWorld('chronoAPI', {
   listProjects: () => ipcRenderer.invoke('chrono:list-projects'),
   createProject: (name) => ipcRenderer.invoke('chrono:create-project', name),
   renameProject: (projectId, newName) => ipcRenderer.invoke('chrono:rename-project', projectId, newName),
-  deleteProject: (projectId) => ipcRenderer.invoke('chrono:delete-project', projectId)
+  deleteProject: (projectId) => ipcRenderer.invoke('chrono:delete-project', projectId),
+  loadProjectData: (projectId) => ipcRenderer.invoke('chrono:load-project-data', projectId),
+  saveProjectData: (projectId, data) => ipcRenderer.invoke('chrono:save-project-data', projectId, data)
 });

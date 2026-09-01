@@ -24,3 +24,4 @@ export * from './chrono/model/schema';
 export * from './chrono/model/project';
 export * from './chrono/scale/ticks';
 export * from './chrono/scale/projection';
+export * from './chrono/widgetProperties';

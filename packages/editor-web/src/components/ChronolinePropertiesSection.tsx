@@ -17,7 +17,7 @@ import type { Widget } from '../types';
 import {
   CHRONOLINE_WIDGET_TYPE,
   ChronolineWidgetProperties,
-} from '../utils/chronoline/widgetType';
+} from '@kiosk/shared';
 
 interface Props {
   widget: Widget;

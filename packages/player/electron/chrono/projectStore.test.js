@@ -9,6 +9,8 @@ import {
   renameProject,
   deleteProject,
   readManifest,
+  loadProjectData,
+  saveProjectData,
   projectsRoot,
   MAX_NAME_LENGTH,
 } from './projectStore.js';
@@ -138,4 +140,113 @@ test('projectId path traversal is rejected by every operation that takes one', (
   assert.throws(() => readManifest(baseDir, evil), PathGuardError);
   assert.throws(() => renameProject(baseDir, evil, 'x'), PathGuardError);
   assert.throws(() => deleteProject(baseDir, evil), PathGuardError);
+  assert.throws(() => loadProjectData(baseDir, evil), PathGuardError);
+  assert.throws(() => saveProjectData(baseDir, evil, {}), PathGuardError);
+});
+
+test('createProject seeds content.json with an empty, schema-valid project matching the manifest', () => {
+  const baseDir = tmpBaseDir();
+  const created = createProject(baseDir, 'Музей СВО');
+
+  const data = loadProjectData(baseDir, created.id);
+  assert.equal(data.id, created.id);
+  assert.equal(data.name, created.name);
+  assert.equal(data.schemaVersion, 1);
+  assert.deepEqual(data.timelines, []);
+  assert.deepEqual(data.media, []);
+  assert.equal(data.createdAt, created.createdAt);
+});
+
+test('saveProjectData persists a timeline and is visible on the next loadProjectData', () => {
+  const baseDir = tmpBaseDir();
+  const created = createProject(baseDir, 'Проект');
+  const data = loadProjectData(baseDir, created.id);
+
+  const withTimeline = {
+    ...data,
+    timelines: [
+      {
+        id: 'tl-1',
+        name: 'Основная линия',
+        events: [],
+        attributes: [],
+        collapsed: false,
+      },
+    ],
+  };
+  saveProjectData(baseDir, created.id, withTimeline);
+
+  const reloaded = loadProjectData(baseDir, created.id);
+  assert.equal(reloaded.timelines.length, 1);
+  assert.equal(reloaded.timelines[0].name, 'Основная линия');
+});
+
+test('saveProjectData bumps the manifest updatedAt', async () => {
+  const baseDir = tmpBaseDir();
+  const created = createProject(baseDir, 'Проект');
+  const data = loadProjectData(baseDir, created.id);
+  await new Promise((r) => setTimeout(r, 5));
+
+  saveProjectData(baseDir, created.id, data);
+
+  assert.notEqual(readManifest(baseDir, created.id).updatedAt, created.updatedAt);
+});
+
+test('saveProjectData rejects a document that fails schema validation and does not touch the file on disk', () => {
+  const baseDir = tmpBaseDir();
+  const created = createProject(baseDir, 'Проект');
+  const before = loadProjectData(baseDir, created.id);
+
+  assert.throws(() => saveProjectData(baseDir, created.id, { ...before, schemaVersion: 999 }));
+
+  assert.deepEqual(loadProjectData(baseDir, created.id), before);
+});
+
+test('saveProjectData rejects a moment with NaN/Infinity (assertProjectSerializable) before writing', () => {
+  const baseDir = tmpBaseDir();
+  const created = createProject(baseDir, 'Проект');
+  const before = loadProjectData(baseDir, created.id);
+
+  const withBadMoment = {
+    ...before,
+    timelines: [
+      {
+        id: 'tl-1',
+        name: 'Линия',
+        events: [
+          {
+            id: 'ev-1',
+            interval: {
+              start: {
+                kind: 'epoch',
+                yearsBeforeEpoch: Number.NaN,
+                precision: 'millionYears',
+                approximate: false,
+              },
+              end: null,
+            },
+            name: 'Событие',
+            mediaIds: [],
+            attributeValues: {},
+            view: 'compact',
+            verticalPriority: 1000,
+          },
+        ],
+        attributes: [],
+        collapsed: false,
+      },
+    ],
+  };
+
+  assert.throws(() => saveProjectData(baseDir, created.id, withBadMoment));
+  assert.deepEqual(loadProjectData(baseDir, created.id), before);
+});
+
+test('loadProjectData on a project with a corrupted content.json throws a clear error instead of returning garbage', () => {
+  const baseDir = tmpBaseDir();
+  const created = createProject(baseDir, 'Проект');
+  const dir = path.join(projectsRoot(baseDir), created.id);
+  fs.writeFileSync(path.join(dir, 'content.json'), '{ not valid json');
+
+  assert.throws(() => loadProjectData(baseDir, created.id));
 });

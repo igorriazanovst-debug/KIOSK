@@ -7,7 +7,7 @@
 import React, { useRef } from 'react';
 import { Group, Rect, Text } from 'react-konva';
 import type { Widget } from '../types';
-import type { ChronolineWidgetProperties } from '../utils/chronoline/widgetType';
+import type { ChronolineWidgetProperties } from '@kiosk/shared';
 
 interface ChronolineWidgetProps {
   widget: Widget;

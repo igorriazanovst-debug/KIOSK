@@ -1,11 +1,11 @@
 // packages/player/electron/chrono/ipc.js
 // Единственная точка, через которую рендерер (виджет «Хронолиния» в
 // плеере) получает доступ к локальному хранилищу проектов. Каждый канал —
-// тонкая обёртка над projectStore, вся защита путей уже внутри него
-// (pathGuard). Ничего не открывает шире, чем нужно рендереру: список,
-// создание, переименование, удаление проектов. Открытие/сохранение
-// содержимого конкретного проекта (timelines/*.json, медиа) добавится в
-// Фазе 2-3 — здесь только менеджер проектов.
+// тонкая обёртка над projectStore, вся защита путей и валидация схемы уже
+// внутри него (pathGuard, parseChronoProject/assertProjectSerializable).
+// Ничего не открывает шире, чем нужно рендереру: список/создание/
+// переименование/удаление проектов + чтение/запись содержимого
+// (timelines/события) одного проекта. Медиа — отдельно, Фаза 5.
 
 const { resolveStorageDir } = require('./storageDir');
 const projectStore = require('./projectStore');
@@ -35,6 +35,14 @@ function registerChronoIpc({ ipcMain, app }) {
   ipcMain.handle('chrono:delete-project', async (_event, projectId) => {
     projectStore.deleteProject(baseDir, projectId);
     return { success: true };
+  });
+
+  ipcMain.handle('chrono:load-project-data', async (_event, projectId) => {
+    return projectStore.loadProjectData(baseDir, projectId);
+  });
+
+  ipcMain.handle('chrono:save-project-data', async (_event, projectId, data) => {
+    return projectStore.saveProjectData(baseDir, projectId, data);
   });
 
   return { baseDir, isFallback };
