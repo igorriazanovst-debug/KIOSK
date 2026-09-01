@@ -1,6 +1,7 @@
 const { app, BrowserWindow, ipcMain, dialog } = require('electron');
 const path = require('path');
 const fs = require('fs');
+const { registerChronoIpc } = require('./chrono/ipc');
 
 // ─── Файловое логирование (DEBUG) ───────────────────────────────────────────
 const PLAYER_LOG_FILE = path.join(path.dirname(process.execPath), 'player-debug.log');
@@ -940,6 +941,16 @@ function nodeStreamToWeb(nodeStream) {
 }
 
 app.whenReady().then(() => {
+  // Локальное хранилище проектов «Хронолинии» — не влияет на существующие
+  // клиентов, канал 'chrono:*' используется только виджетом chronoline,
+  // которого нет в проектах остальных клиентов.
+  try {
+    const { baseDir, isFallback } = registerChronoIpc({ ipcMain, app });
+    fileLog('[chrono] storage dir:', baseDir, isFallback ? '(fallback: no write access to shared dir)' : '');
+  } catch (err) {
+    fileLog('[chrono] failed to initialize local storage:', err && err.message);
+  }
+
   const { session } = require('electron');
   session.defaultSession.webRequest.onHeadersReceived((details, callback) => {
     callback({
