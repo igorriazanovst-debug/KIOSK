@@ -13,8 +13,14 @@
 // Линии/события можно добавлять, перетаскивать, удалять - и теперь
 // отменять/повторять (history.ts). Каждое изменение сохраняется на диск
 // немедленно (без debounce) - для дискретных действий пользователя (клик
-// "добавить", отпускание драга) это ок; debounce понадобится, когда
-// появится редактирование текстом "вживую" (описание события, Фаза 5).
+// "добавить", отпускание драга) этого достаточно; полноценный debounce +
+// журнал восстановления после сбоя питания сознательно отложены (YAGNI) до
+// появления непрерывного текстового редактирования (описание события,
+// Фаза 5) - именно тогда сохранение на каждое нажатие клавиши станет
+// реальной проблемой, а не гипотетической. Сейчас реальный пробел был не
+// в частоте сохранений, а в их видимости: сбой saveProjectData раньше
+// тихо оседал только в консоли - ниже это исправлено индикатором и
+// повтором.
 
 import React, { useEffect, useState } from 'react';
 import type { ChronoProject, ChronolineWidgetProperties, Viewport } from '@kiosk/shared';
@@ -37,7 +43,14 @@ type LoadState =
   | { status: 'error'; message: string }
   | { status: 'ready'; history: History<ChronoProject> };
 
+type SaveStatus =
+  | { kind: 'idle' }
+  | { kind: 'saving' }
+  | { kind: 'saved' }
+  | { kind: 'error'; message: string };
+
 const TOOLBAR_HEIGHT = 36;
+const SAVED_INDICATOR_FADE_MS = 2000;
 
 async function loadOrCreateProject(defaultName: string): Promise<ChronoProject> {
   const existing = await window.chronoAPI!.listProjects();
@@ -50,6 +63,13 @@ const ChronolineRuntime: React.FC<Props> = ({ properties, width, height }) => {
   const [viewport, setViewport] = useState<Viewport | null>(null);
   const [selectedEventId, setSelectedEventId] = useState<string | null>(null);
   const [addEventTimelineId, setAddEventTimelineId] = useState<string | null>(null);
+  const [saveStatus, setSaveStatus] = useState<SaveStatus>({ kind: 'idle' });
+
+  useEffect(() => {
+    if (saveStatus.kind !== 'saved') return;
+    const timer = setTimeout(() => setSaveStatus({ kind: 'idle' }), SAVED_INDICATOR_FADE_MS);
+    return () => clearTimeout(timer);
+  }, [saveStatus]);
 
   useEffect(() => {
     if (!window.chronoAPI) {
@@ -107,17 +127,23 @@ const ChronolineRuntime: React.FC<Props> = ({ properties, width, height }) => {
 
   const persistHistory = (nextHistory: History<ChronoProject>) => {
     setState({ status: 'ready', history: nextHistory });
-    window.chronoAPI?.saveProjectData(nextHistory.present.id, nextHistory.present).catch((err: unknown) => {
-      // Показ содержимого не должен падать из-за сбоя сохранения - ошибка
-      // просто остаётся в консоли; полноценная обработка (баннер, повтор)
-      // придёт вместе с автосохранением.
-      console.error('[Хронолиния] Не удалось сохранить проект:', err);
-    });
+    setSaveStatus({ kind: 'saving' });
+    window.chronoAPI
+      ?.saveProjectData(nextHistory.present.id, nextHistory.present)
+      .then(() => setSaveStatus({ kind: 'saved' }))
+      .catch((err: unknown) => {
+        const message = err instanceof Error ? err.message : String(err);
+        console.error('[Хронолиния] Не удалось сохранить проект:', err);
+        setSaveStatus({ kind: 'error', message });
+      });
   };
 
   const applyMutation = (updated: ChronoProject) => persistHistory(pushHistory(history, updated));
   const handleUndo = () => persistHistory(undo(history));
   const handleRedo = () => persistHistory(redo(history));
+  // Повтор не трогает undo-стек - это не новая правка, а попытка ещё раз
+  // сохранить уже применённое present, которое не доехало до диска.
+  const handleRetrySave = () => persistHistory(history);
 
   const handleAddTimeline = () => {
     const name = window.prompt('Название линии', '')?.trim();
@@ -165,6 +191,16 @@ const ChronolineRuntime: React.FC<Props> = ({ properties, width, height }) => {
           <button type="button" onClick={handleRedo} disabled={!canRedo(history)} title="Повторить">
             ↷ Повторить
           </button>
+          <span className={`chronoline-runtime__save-status chronoline-runtime__save-status--${saveStatus.kind}`}>
+            {saveStatus.kind === 'saving' && 'Сохранение…'}
+            {saveStatus.kind === 'saved' && '✓ Сохранено'}
+            {saveStatus.kind === 'error' && `⚠ Не сохранено: ${saveStatus.message}`}
+          </span>
+          {saveStatus.kind === 'error' && (
+            <button type="button" onClick={handleRetrySave} className="chronoline-runtime__retry-save">
+              Повторить сохранение
+            </button>
+          )}
         </div>
       )}
       <div className="chronoline-runtime__board" style={{ height: boardHeight }}>
