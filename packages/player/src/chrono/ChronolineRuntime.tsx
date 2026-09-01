@@ -16,8 +16,8 @@
 
 import React, { useEffect, useState } from 'react';
 import type { ChronoProject, ChronolineWidgetProperties, Viewport } from '@kiosk/shared';
-import { addTimeline, deleteTimeline } from '@kiosk/shared';
-import BoardView from './board/BoardView.tsx';
+import { addTimeline, deleteTimeline, updateEvent } from '@kiosk/shared';
+import BoardView, { type BoardViewProps } from './board/BoardView.tsx';
 import { computeInitialViewport } from './board/initialViewport.ts';
 import './ChronolineRuntime.css';
 
@@ -119,6 +119,10 @@ const ChronolineRuntime: React.FC<Props> = ({ properties, width, height }) => {
     persist(deleteTimeline(project, timelineId));
   };
 
+  const handleEventMoved: BoardViewProps['onEventMoved'] = (timelineId, eventId, newInterval) => {
+    persist(updateEvent(project, timelineId, eventId, { interval: newInterval }));
+  };
+
   return (
     <div className={`chronoline-runtime chronoline-runtime--theme-${properties.theme}`} style={{ width, height }}>
       <BoardView
@@ -129,6 +133,7 @@ const ChronolineRuntime: React.FC<Props> = ({ properties, width, height }) => {
         onSelectEvent={setSelectedEventId}
         onAddTimeline={properties.localEditingEnabled ? handleAddTimeline : undefined}
         onDeleteTimeline={properties.localEditingEnabled ? handleDeleteTimeline : undefined}
+        onEventMoved={properties.localEditingEnabled ? handleEventMoved : undefined}
       />
     </div>
   );

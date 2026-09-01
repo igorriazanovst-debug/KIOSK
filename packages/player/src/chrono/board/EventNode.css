@@ -11,6 +11,15 @@
   box-shadow: 0 0 0 2px #ffd54a;
 }
 
+.chrono-event-node--draggable {
+  cursor: grab;
+  touch-action: none;
+}
+
+.chrono-event-node--draggable:active {
+  cursor: grabbing;
+}
+
 .chrono-event-node__compact {
   height: 100%;
   min-height: 20px;

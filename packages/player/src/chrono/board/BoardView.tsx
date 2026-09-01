@@ -16,11 +16,12 @@
 
 import React, { useRef } from 'react';
 import { useGesture } from '@use-gesture/react';
-import type { ChronoTimeline, Viewport } from '@kiosk/shared';
+import type { ChronoInterval, ChronoTimeline, Viewport } from '@kiosk/shared';
 import ScaleRuler from './ScaleRuler.tsx';
 import EventNode from './EventNode.tsx';
 import { eventPixelBounds, isEventVisible } from './eventPosition.ts';
 import { panViewport, zoomViewportAtPoint } from './boardViewport.ts';
+import { previewDraggedInterval } from './eventDrag.ts';
 import './BoardView.css';
 
 export interface BoardViewProps {
@@ -32,6 +33,8 @@ export interface BoardViewProps {
   /** Кнопка добавления линии в сайдбаре не рендерится, если не передан (только просмотр) */
   onAddTimeline?: () => void;
   onDeleteTimeline?: (timelineId: string) => void;
+  /** Перетаскивание событий включено, только если передан (только просмотр иначе) */
+  onEventMoved?: (timelineId: string, eventId: string, newInterval: ChronoInterval) => void;
 }
 
 const TIMELINE_ROW_HEIGHT = 60;
@@ -46,6 +49,7 @@ const BoardView: React.FC<BoardViewProps> = ({
   onSelectEvent,
   onAddTimeline,
   onDeleteTimeline,
+  onEventMoved,
 }) => {
   const trackAreaRef = useRef<HTMLDivElement>(null);
 
@@ -113,6 +117,11 @@ const BoardView: React.FC<BoardViewProps> = ({
                     bounds={eventPixelBounds(event.interval, viewport)}
                     selected={event.id === selectedEventId}
                     onSelect={(id) => onSelectEvent(id)}
+                    draggable={!!onEventMoved}
+                    onDragEnd={(eventId, deltaPx) => {
+                      const newInterval = previewDraggedInterval(event.interval, deltaPx, viewport);
+                      onEventMoved?.(timeline.id, eventId, newInterval);
+                    }}
                   />
                 ))}
             </div>
