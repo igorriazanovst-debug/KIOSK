@@ -1,0 +1,24 @@
+.chronoline-runtime {
+  overflow: hidden;
+  box-sizing: border-box;
+}
+
+.chronoline-runtime--message {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  text-align: center;
+  color: rgba(255, 255, 255, 0.6);
+  background: #14161c;
+  font-family: Arial, sans-serif;
+  font-size: 14px;
+}
+
+.chronoline-runtime--error {
+  color: #ff6b6b;
+}
+
+.chronoline-runtime--theme-light {
+  background: #f4f4f4;
+}

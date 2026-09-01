@@ -3,6 +3,15 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import Player from './Player';
 import './index.css';
+import type { ChronoProject } from '@kiosk/shared';
+
+interface ChronoProjectManifest {
+  schemaVersion: number;
+  id: string;
+  name: string;
+  createdAt: string;
+  updatedAt: string;
+}
 
 // Расширяем Window для TypeScript
 declare global {
@@ -20,6 +29,15 @@ declare global {
       onUpdateApplied: (callback: (data: { version: number }) => void) => void;
       verifyUpdatePassword: (password: string) => Promise<{ success: boolean; error?: string }>;
       applyUpdate: () => Promise<{ success: boolean; error?: string }>;
+    };
+    /** Виджет «Хронолиния» — локальное хранилище проектов на устройстве (packages/player/electron/chrono) */
+    chronoAPI?: {
+      listProjects: () => Promise<ChronoProjectManifest[]>;
+      createProject: (name: string) => Promise<ChronoProjectManifest>;
+      renameProject: (projectId: string, newName: string) => Promise<ChronoProjectManifest>;
+      deleteProject: (projectId: string) => Promise<{ success: boolean }>;
+      loadProjectData: (projectId: string) => Promise<ChronoProject>;
+      saveProjectData: (projectId: string, data: ChronoProject) => Promise<ChronoProject>;
     };
   }
 }

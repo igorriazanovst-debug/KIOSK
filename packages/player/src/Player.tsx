@@ -6,6 +6,7 @@ import { serverConnection } from './services/server-connection';
 import ActivationScreen from './components/ActivationScreen';
 import UpdateBanner from './components/UpdateBanner';
 import NavigationRuntime from './NavigationRuntime';
+import ChronolineRuntime from './chrono/ChronolineRuntime.tsx';
 
 interface Project {
   name: string;
@@ -515,6 +516,16 @@ const Player: React.FC<PlayerProps> = ({ embedded = false }) => {
         );
       case 'browser-content':
         return renderBrowserContent(widget, commonStyle);
+      case 'chronoline':
+        return (
+          <div key={widget.id} style={{ ...commonStyle, overflow: 'hidden' }}>
+            <ChronolineRuntime
+              properties={widget.properties as any}
+              width={widget.width}
+              height={widget.height}
+            />
+          </div>
+        );
       default:
         return null;
     }
