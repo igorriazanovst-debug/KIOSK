@@ -1,0 +1,80 @@
+.chrono-filter-panel {
+  position: absolute;
+  left: 6px;
+  top: 34px;
+  z-index: 15;
+  width: min(360px, calc(100% - 12px));
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 10px;
+  border-radius: 6px;
+  background: #1e2028;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+  font-family: Arial, sans-serif;
+  font-size: 12px;
+  color: #eee;
+}
+
+.chrono-filter-panel__row {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.chrono-filter-panel input,
+.chrono-filter-panel select {
+  flex: 1;
+  min-width: 90px;
+  padding: 6px 8px;
+  border-radius: 4px;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  background: #14161c;
+  color: #fff;
+  font-size: 12px;
+}
+
+.chrono-filter-panel__text {
+  flex: 1 1 100%;
+}
+
+.chrono-filter-panel__date-field {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 110px;
+}
+
+.chrono-filter-panel__date-applied {
+  font-size: 11px;
+  color: #6bcf6b;
+}
+
+.chrono-filter-panel__row button {
+  padding: 6px 10px;
+  border-radius: 4px;
+  border: none;
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
+  cursor: pointer;
+  font-size: 12px;
+  white-space: nowrap;
+}
+
+.chrono-filter-panel__actions {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.chrono-filter-panel__actions button {
+  padding: 6px 12px;
+  border-radius: 4px;
+  border: none;
+  background: transparent;
+  color: rgba(255, 255, 255, 0.7);
+  cursor: pointer;
+  font-size: 12px;
+}

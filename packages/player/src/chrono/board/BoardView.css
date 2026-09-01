@@ -164,7 +164,7 @@
 
 .chrono-board__measure-panel {
   position: absolute;
-  left: 64px;
+  left: 92px;
   top: 6px;
   z-index: 6;
   padding: 4px 10px;
@@ -174,9 +174,62 @@
   color: #fff;
   font-size: 12px;
   white-space: nowrap;
-  max-width: calc(100% - 70px);
+  max-width: calc(100% - 98px);
   overflow: hidden;
   text-overflow: ellipsis;
+}
+
+.chrono-board__filter-toggle {
+  position: absolute;
+  left: 62px;
+  top: 6px;
+  z-index: 6;
+  width: 24px;
+  height: 24px;
+  padding: 0;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 4px;
+  background: rgba(0, 0, 0, 0.35);
+  color: rgba(255, 255, 255, 0.6);
+  cursor: pointer;
+  font-size: 13px;
+}
+
+.chrono-board__filter-toggle:hover {
+  color: #fff;
+  background: rgba(0, 0, 0, 0.6);
+}
+
+.chrono-board__filter-toggle--active {
+  border-color: #6bb8ff;
+  color: #6bb8ff;
+}
+
+.chrono-board__filter-indicator {
+  position: absolute;
+  left: 92px;
+  top: 6px;
+  z-index: 7;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 10px;
+  border-radius: 4px;
+  background: rgba(0, 0, 0, 0.55);
+  border: 1px solid rgba(107, 184, 255, 0.5);
+  color: #fff;
+  font-size: 12px;
+  white-space: nowrap;
+}
+
+.chrono-board__filter-indicator button {
+  border: none;
+  border-radius: 3px;
+  background: rgba(255, 255, 255, 0.15);
+  color: #fff;
+  cursor: pointer;
+  font-size: 11px;
+  padding: 2px 6px;
 }
 
 .chrono-board__paste-event {

@@ -21,9 +21,11 @@ import ScaleRuler from './ScaleRuler.tsx';
 import OverviewScale from './OverviewScale.tsx';
 import EventNode from './EventNode.tsx';
 import CompareStrip from './CompareStrip.tsx';
+import FilterPanel, { type AttributeOption } from './FilterPanel.tsx';
 import { eventPixelBounds, isEventVisible } from './eventPosition.ts';
 import { panViewport, zoomViewportAtPoint } from './boardViewport.ts';
 import { previewDraggedInterval, previewResizedInterval } from './eventDrag.ts';
+import { matchesEventFilter, isFilterActive, EMPTY_EVENT_FILTER, type EventFilter } from './eventFilter.ts';
 import './BoardView.css';
 
 export interface BoardViewProps {
@@ -120,6 +122,22 @@ const BoardView: React.FC<BoardViewProps> = ({
       ? formatDuration(durationBetween(measureAnchor.event.interval.start, measureTarget.event.interval.start))
       : null;
 
+  // Поиск/фильтр по тексту/дате/атрибутам (Фаза 6, последний пункт плана) -
+  // тоже эфемерное состояние взаимодействия, не сохраняется в проект.
+  const [filterOpen, setFilterOpen] = useState(false);
+  const [filter, setFilter] = useState<EventFilter>(EMPTY_EVENT_FILTER);
+  const filterActive = isFilterActive(filter);
+
+  const attributeOptions: AttributeOption[] = timelines.flatMap((t) =>
+    t.attributes.map((a) => ({ id: a.id, label: `${a.name} («${t.name}»)` }))
+  );
+
+  const totalEventCount = timelines.reduce((sum, t) => sum + t.events.length, 0);
+  const matchingEventCount = timelines.reduce(
+    (sum, t) => sum + t.events.filter((e) => matchesEventFilter(e, filter)).length,
+    0
+  );
+
   useGesture(
     {
       onDrag: ({ delta: [dx], pinching, cancel }) => {
@@ -205,6 +223,28 @@ const BoardView: React.FC<BoardViewProps> = ({
           >
             📐
           </button>
+          <button
+            type="button"
+            className={`chrono-board__filter-toggle${filterActive ? ' chrono-board__filter-toggle--active' : ''}`}
+            title="Поиск и фильтр"
+            onClick={(e) => {
+              e.stopPropagation();
+              setFilterOpen((o) => !o);
+            }}
+          >
+            🔍
+          </button>
+          {filterActive && (
+            <div className="chrono-board__filter-indicator" onClick={(e) => e.stopPropagation()}>
+              Применены фильтры: {matchingEventCount} из {totalEventCount}
+              <button type="button" onClick={() => setFilter(EMPTY_EVENT_FILTER)}>
+                Сбросить
+              </button>
+            </div>
+          )}
+          {filterOpen && (
+            <FilterPanel filter={filter} onChange={setFilter} attributeOptions={attributeOptions} onClose={() => setFilterOpen(false)} />
+          )}
           {measuring && (
             <div className="chrono-board__measure-panel" onClick={(e) => e.stopPropagation()}>
               {!measureAnchor && 'Выберите первое событие'}
@@ -254,6 +294,7 @@ const BoardView: React.FC<BoardViewProps> = ({
               )}
               {timeline.events
                 .filter((event) => isEventVisible(event.interval, viewport))
+                .filter((event) => matchesEventFilter(event, filter))
                 .map((event) => (
                   <EventNode
                     key={event.id}
