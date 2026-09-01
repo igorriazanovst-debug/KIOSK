@@ -1,0 +1,94 @@
+.chrono-event-node {
+  position: absolute;
+  top: 4px;
+  cursor: pointer;
+  outline: none;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.chrono-event-node--selected {
+  box-shadow: 0 0 0 2px #ffd54a;
+}
+
+.chrono-event-node__compact {
+  height: 100%;
+  min-height: 20px;
+  border-radius: 3px;
+}
+
+.chrono-event-node__flag {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  height: 100%;
+  padding: 2px 6px 2px 0;
+  background: rgba(0, 0, 0, 0.35);
+  border-radius: 4px;
+  white-space: nowrap;
+}
+
+.chrono-event-node__flag-tab {
+  width: 6px;
+  align-self: stretch;
+  border-radius: 3px 0 0 3px;
+  flex-shrink: 0;
+}
+
+.chrono-event-node__flag-label {
+  font-size: 13px;
+  color: #fff;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.chrono-event-node__image,
+.chrono-event-node__card {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.35);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.chrono-event-node__image-thumb,
+.chrono-event-node__card-thumb {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  background: rgba(255, 255, 255, 0.08);
+  min-height: 32px;
+}
+
+.chrono-event-node__image-label {
+  font-size: 12px;
+  color: #fff;
+  padding: 2px 4px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.chrono-event-node__card-body {
+  padding: 4px 6px;
+}
+
+.chrono-event-node__card-title {
+  font-size: 13px;
+  font-weight: 600;
+  color: #fff;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.chrono-event-node__card-place {
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.6);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}

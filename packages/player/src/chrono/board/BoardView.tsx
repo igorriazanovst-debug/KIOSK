@@ -1,0 +1,108 @@
+// packages/player/src/chrono/board/BoardView.tsx
+// Рабочая область доски: линии времени + шкала снизу, пан/зум жестами.
+// Интерфейс жестов — @use-gesture/react (решение спайка 0.4, план Фаза 0.4):
+// пан/зум по колесу мыши уже реализованы и типобезопасны; pinch-зум пальцами
+// сознательно не включён в этот проход — на сенсорном экране/доске он ведёт
+// себя иначе, чем в описании API, а живого экрана для проверки в этом
+// окружении нет (та же оговорка, что и у остальной Фазы 3/1) — доделывается
+// отдельно, с проверкой на реальном touch-устройстве.
+//
+// Заголовки линий — ОТДЕЛЬНАЯ колонка вне пиксельного пространства
+// viewport (не наложены поверх него): viewport.widthPx обязан совпадать с
+// шириной реальной области, где рисуются события и шкала, иначе позиции,
+// посчитанные через axisYearsToPx, разъедутся с тем, что видно на экране.
+// Поэтому имя линии и дорожка событий — в разных колонках flex-раскладки,
+// а не сайдбар-оверлей поверх общей ширины.
+
+import React, { useRef } from 'react';
+import { useGesture } from '@use-gesture/react';
+import type { ChronoTimeline, Viewport } from '@kiosk/shared';
+import ScaleRuler from './ScaleRuler.tsx';
+import EventNode from './EventNode.tsx';
+import { eventPixelBounds, isEventVisible } from './eventPosition.ts';
+import { panViewport, zoomViewportAtPoint } from './boardViewport.ts';
+import './BoardView.css';
+
+export interface BoardViewProps {
+  timelines: ChronoTimeline[];
+  viewport: Viewport;
+  onViewportChange: (viewport: Viewport) => void;
+  selectedEventId: string | null;
+  onSelectEvent: (eventId: string | null) => void;
+}
+
+const TIMELINE_ROW_HEIGHT = 60;
+const SCALE_RULER_HEIGHT = 40;
+const WHEEL_ZOOM_STEP = 1.15;
+
+const BoardView: React.FC<BoardViewProps> = ({
+  timelines,
+  viewport,
+  onViewportChange,
+  selectedEventId,
+  onSelectEvent,
+}) => {
+  const trackAreaRef = useRef<HTMLDivElement>(null);
+
+  useGesture(
+    {
+      onDrag: ({ delta: [dx], pinching, cancel }) => {
+        if (pinching) {
+          cancel();
+          return;
+        }
+        onViewportChange(panViewport(viewport, -dx));
+      },
+      onWheel: ({ delta: [, dy], event }) => {
+        event.preventDefault();
+        const rect = trackAreaRef.current?.getBoundingClientRect();
+        const clientX = 'clientX' in event ? (event as WheelEvent).clientX : viewport.widthPx / 2;
+        const pxAnchor = rect ? clientX - rect.left : viewport.widthPx / 2;
+        const scaleFactor = dy < 0 ? WHEEL_ZOOM_STEP : 1 / WHEEL_ZOOM_STEP;
+        onViewportChange(zoomViewportAtPoint(viewport, pxAnchor, scaleFactor));
+      },
+    },
+    {
+      target: trackAreaRef,
+      eventOptions: { passive: false },
+      drag: { filterTaps: true },
+    }
+  );
+
+  return (
+    <div className="chrono-board">
+      <div className="chrono-board__sidebar">
+        {timelines.map((timeline) => (
+          <div key={timeline.id} className="chrono-board__timeline-name" style={{ height: TIMELINE_ROW_HEIGHT }}>
+            {timeline.name}
+          </div>
+        ))}
+        <div className="chrono-board__sidebar-spacer" style={{ height: SCALE_RULER_HEIGHT }} />
+      </div>
+
+      <div className="chrono-board__main" style={{ width: viewport.widthPx }}>
+        <div className="chrono-board__track-area" ref={trackAreaRef} onClick={() => onSelectEvent(null)}>
+          {timelines.map((timeline) => (
+            <div key={timeline.id} className="chrono-board__timeline-track" style={{ height: TIMELINE_ROW_HEIGHT }}>
+              {timeline.events
+                .filter((event) => isEventVisible(event.interval, viewport))
+                .map((event) => (
+                  <EventNode
+                    key={event.id}
+                    event={event}
+                    bounds={eventPixelBounds(event.interval, viewport)}
+                    selected={event.id === selectedEventId}
+                    onSelect={(id) => onSelectEvent(id)}
+                  />
+                ))}
+            </div>
+          ))}
+        </div>
+
+        <ScaleRuler viewport={viewport} heightPx={SCALE_RULER_HEIGHT} />
+      </div>
+    </div>
+  );
+};
+
+export default BoardView;
