@@ -9,6 +9,7 @@ import VideoWidget from './VideoWidget';
 import ShapeWidget from './ShapeWidget';
 import MenuWidget from './MenuWidget';
 import NavigationWidget from './NavigationWidget';
+import ChronolineWidget from './ChronolineWidget';
 import './Canvas.css';
 import TextEditorOverlay from './TextEditorOverlay';
 import BrowserWidget from './BrowserWidget';
@@ -676,6 +677,30 @@ const Canvas: React.FC = () => {
                   return (
                     <React.Fragment key={widget.id}>
                       <NavigationWidget
+                        widget={widget}
+                        onSelect={(e: any) => handleWidgetClick(widget.id, e)}
+                        onDragEnd={(e: any) => handleDragEnd(widget.id, e)}
+                        onTransformEnd={(e: any) => handleTransformEnd(widget.id, e)}
+                        dragBoundFunc={snapToGrid ? dragBoundFunc : undefined}
+                      />
+                      {isLocked && (
+                        <Text
+                          x={widget.x + 5}
+                          y={widget.y + 5}
+                          text="🔒"
+                          fontSize={16}
+                          listening={false}
+                        />
+                      )}
+                    </React.Fragment>
+                  );
+                }
+
+                // Виджет «Хронолиния»
+                if (widget.type === 'chronoline') {
+                  return (
+                    <React.Fragment key={widget.id}>
+                      <ChronolineWidget
                         widget={widget}
                         onSelect={(e: any) => handleWidgetClick(widget.id, e)}
                         onDragEnd={(e: any) => handleDragEnd(widget.id, e)}

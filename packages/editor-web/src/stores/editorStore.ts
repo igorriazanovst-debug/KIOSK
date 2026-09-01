@@ -544,7 +544,8 @@ export const useEditorStore = create<EditorState>((set, get) => ({
       text: { width: 300, height: 100 },
       image: { width: 300, height: 200 },
       video: { width: 640, height: 360 },
-      menu: { width: 600, height: 40 }
+      menu: { width: 600, height: 40 },
+      chronoline: { width: 1200, height: 700 }
     };
 
     const defaultSize = defaultSizes[pendingWidget.type] || { width: 200, height: 100 };
