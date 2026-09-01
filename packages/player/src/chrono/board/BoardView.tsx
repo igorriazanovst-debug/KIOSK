@@ -14,12 +14,13 @@
 // Поэтому имя линии и дорожка событий — в разных колонках flex-раскладки,
 // а не сайдбар-оверлей поверх общей ширины.
 
-import React, { useRef } from 'react';
+import React, { useRef, useState } from 'react';
 import { useGesture } from '@use-gesture/react';
 import type { ChronoInterval, ChronoMedia, ChronoTimeline, Viewport } from '@kiosk/shared';
 import ScaleRuler from './ScaleRuler.tsx';
 import OverviewScale from './OverviewScale.tsx';
 import EventNode from './EventNode.tsx';
+import CompareStrip from './CompareStrip.tsx';
 import { eventPixelBounds, isEventVisible } from './eventPosition.ts';
 import { panViewport, zoomViewportAtPoint } from './boardViewport.ts';
 import { previewDraggedInterval, previewResizedInterval } from './eventDrag.ts';
@@ -68,6 +69,9 @@ const BoardView: React.FC<BoardViewProps> = ({
   getMediaUrl,
 }) => {
   const trackAreaRef = useRef<HTMLDivElement>(null);
+  // Эфемерное состояние взаимодействия, как и сам viewport - не часть
+  // ChronoProject, не сохраняется (см. CompareStrip.tsx).
+  const [compareStripAxisYears, setCompareStripAxisYears] = useState<number | null>(null);
 
   useGesture(
     {
@@ -132,6 +136,25 @@ const BoardView: React.FC<BoardViewProps> = ({
 
       <div className="chrono-board__main" style={{ width: viewport.widthPx }}>
         <div className="chrono-board__track-area" ref={trackAreaRef} onClick={() => onSelectEvent(null)}>
+          <button
+            type="button"
+            className={`chrono-board__compare-toggle${compareStripAxisYears !== null ? ' chrono-board__compare-toggle--active' : ''}`}
+            title="Полоса сравнения"
+            onClick={(e) => {
+              e.stopPropagation();
+              setCompareStripAxisYears((current) => (current === null ? viewport.centerAxisYears : null));
+            }}
+          >
+            📏
+          </button>
+          {compareStripAxisYears !== null && (
+            <CompareStrip
+              axisYears={compareStripAxisYears}
+              viewport={viewport}
+              onMove={setCompareStripAxisYears}
+              onRemove={() => setCompareStripAxisYears(null)}
+            />
+          )}
           {timelines.map((timeline) => (
             <div key={timeline.id} className="chrono-board__timeline-track" style={{ height: TIMELINE_ROW_HEIGHT }}>
               {onAddEventRequested && (

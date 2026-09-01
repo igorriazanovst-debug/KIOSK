@@ -110,6 +110,32 @@
   font-size: 14px;
 }
 
+.chrono-board__compare-toggle {
+  position: absolute;
+  left: 6px;
+  top: 6px;
+  z-index: 6;
+  width: 24px;
+  height: 24px;
+  padding: 0;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 4px;
+  background: rgba(0, 0, 0, 0.35);
+  color: rgba(255, 255, 255, 0.6);
+  cursor: pointer;
+  font-size: 13px;
+}
+
+.chrono-board__compare-toggle:hover {
+  color: #fff;
+  background: rgba(0, 0, 0, 0.6);
+}
+
+.chrono-board__compare-toggle--active {
+  border-color: #ffd54a;
+  color: #ffd54a;
+}
+
 .chrono-board__paste-event {
   position: absolute;
   right: 32px;
