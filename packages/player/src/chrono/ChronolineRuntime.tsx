@@ -42,7 +42,7 @@
 // источником истины.
 
 import React, { useEffect, useState } from 'react';
-import type { ChronoProject, ChronolineWidgetProperties, Viewport } from '@kiosk/shared';
+import type { ChronoProject, ChronolineWidgetProperties, TimelineEvent, Viewport } from '@kiosk/shared';
 import {
   addTimeline,
   deleteTimeline,
@@ -117,6 +117,10 @@ const ChronolineRuntime: React.FC<Props> = ({ properties, width, height }) => {
   const [selectedEventId, setSelectedEventId] = useState<string | null>(null);
   const [addEventTimelineId, setAddEventTimelineId] = useState<string | null>(null);
   const [attributeSettingsTimelineId, setAttributeSettingsTimelineId] = useState<string | null>(null);
+  // Буфер обмена НА УРОВНЕ ДОСКИ (не привязан к линии-источнику) - явное
+  // решение плана: если бы буфер жил на линии, перенос события на другую
+  // линию не работал бы, тот же дефект, что у эталона.
+  const [eventClipboard, setEventClipboard] = useState<TimelineEvent | null>(null);
   const [saveStatus, setSaveStatus] = useState<SaveStatus>({ kind: 'idle' });
   const [isPasswordSet, setIsPasswordSet] = useState(false);
   const [unlocked, setUnlocked] = useState(false);
@@ -402,6 +406,21 @@ const ChronolineRuntime: React.FC<Props> = ({ properties, width, height }) => {
     setSelectedEventId(null);
   };
 
+  const handleCopyEvent = () => {
+    if (!selectedEventInfo) return;
+    setEventClipboard(selectedEventInfo.event);
+  };
+
+  // Вставка создаёт НОВОЕ событие (свежий id) с тем же содержимым, на ТУ ЖЕ
+  // дату - пользователь затем перетаскивает копию, куда нужно (drag/resize
+  // уже построены в Фазе 3, повторно решать "куда вставить по времени" не
+  // нужно). Буфер не очищается после вставки - вставить на несколько линий
+  // подряд обязано работать без повторного копирования.
+  const handlePasteEvent = (timelineId: string) => {
+    if (!eventClipboard) return;
+    applyMutation(addEvent(project, timelineId, { ...eventClipboard, id: crypto.randomUUID() }));
+  };
+
   // Файл копируется в медиатеку и добавляется в каталог проекта СРАЗУ по
   // выбору (не откладывается до "Сохранить" на карточке события) - это
   // отдельная, самостоятельная мутация с собственной записью в истории.
@@ -513,6 +532,7 @@ const ChronolineRuntime: React.FC<Props> = ({ properties, width, height }) => {
           onOpenTimelineSettings={canEdit ? setAttributeSettingsTimelineId : undefined}
           onEventMoved={canEdit ? handleEventMoved : undefined}
           onAddEventRequested={canEdit ? setAddEventTimelineId : undefined}
+          onPasteEvent={canEdit && eventClipboard ? handlePasteEvent : undefined}
           mediaCatalog={project.media}
           getMediaUrl={(media) => mediaUrl(project.id, media)}
         />
@@ -533,6 +553,7 @@ const ChronolineRuntime: React.FC<Props> = ({ properties, width, height }) => {
             onImportMedia={handleImportMediaForEvent}
             onSave={handleEventDetailSave}
             onDelete={handleEventDetailDelete}
+            onCopy={canEdit ? handleCopyEvent : undefined}
             onClose={() => setSelectedEventId(null)}
           />
         )}

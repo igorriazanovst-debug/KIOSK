@@ -69,6 +69,8 @@ export interface EventDetailCardProps {
   onImportMedia: () => Promise<string | null>;
   onSave: (patch: EventDetailPatch) => void;
   onDelete: () => void;
+  /** В буфер обмена доски (не привязан к линии - вставка возможна на любую другую линию проекта), не передан - кнопка не рендерится */
+  onCopy?: () => void;
   onClose: () => void;
 }
 
@@ -165,6 +167,7 @@ const EventDetailCard: React.FC<EventDetailCardProps> = ({
   onImportMedia,
   onSave,
   onDelete,
+  onCopy,
   onClose,
 }) => {
   const [name, setName] = useState(event.name);
@@ -373,6 +376,11 @@ const EventDetailCard: React.FC<EventDetailCardProps> = ({
           {canEdit && (
             <button type="button" className="chrono-event-detail__delete" onClick={onDelete}>
               Удалить событие
+            </button>
+          )}
+          {onCopy && (
+            <button type="button" onClick={onCopy} title="Скопировать в буфер обмена доски">
+              📋 Копировать
             </button>
           )}
           <span className="chrono-event-detail__actions-spacer" />

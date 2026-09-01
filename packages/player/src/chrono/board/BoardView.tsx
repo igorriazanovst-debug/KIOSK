@@ -40,6 +40,8 @@ export interface BoardViewProps {
   onEventMoved?: (timelineId: string, eventId: string, newInterval: ChronoInterval) => void;
   /** Кнопка «+ событие» на дорожке не рендерится, если не передан */
   onAddEventRequested?: (timelineId: string) => void;
+  /** Кнопка «Вставить» на дорожке - показывается только когда есть непустой буфер обмена (не передан = нет буфера или нет прав) */
+  onPasteEvent?: (timelineId: string) => void;
   /** Каталог медиа проекта - для реальных превью у событий с видом «картинка»/«карточка» вместо заглушки */
   mediaCatalog?: ChronoMedia[];
   getMediaUrl?: (media: ChronoMedia) => string;
@@ -61,6 +63,7 @@ const BoardView: React.FC<BoardViewProps> = ({
   onOpenTimelineSettings,
   onEventMoved,
   onAddEventRequested,
+  onPasteEvent,
   mediaCatalog,
   getMediaUrl,
 }) => {
@@ -142,6 +145,19 @@ const BoardView: React.FC<BoardViewProps> = ({
                   }}
                 >
                   +
+                </button>
+              )}
+              {onPasteEvent && (
+                <button
+                  type="button"
+                  className="chrono-board__paste-event"
+                  title="Вставить событие из буфера обмена"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    onPasteEvent(timeline.id);
+                  }}
+                >
+                  📋
                 </button>
               )}
               {timeline.events
