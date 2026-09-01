@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { pxDeltaToAxisYearsDelta, previewDraggedInterval } from './eventDrag.ts';
+import { pxDeltaToAxisYearsDelta, previewDraggedInterval, previewResizedInterval } from './eventDrag.ts';
 import { calendarDateTimeToCivilDay, toAxisYears, type ChronoInterval, type Viewport } from '@kiosk/shared';
 
 const VIEWPORT: Viewport = { centerAxisYears: 1950, spanAxisYears: 100, widthPx: 1000 };
@@ -75,4 +75,71 @@ test('previewDraggedInterval with deltaPx=0 returns an interval at the same axis
   const dragged = previewDraggedInterval(interval, 0, VIEWPORT);
 
   assert.ok(Math.abs(toAxisYears(dragged.start) - toAxisYears(start)) < 0.01);
+});
+
+// ─── previewResizedInterval ────────────────────────────────────────────────
+
+test('resizing the "start" edge forward shrinks the interval, "end" stays exactly put', () => {
+  const start = yearMoment(1941);
+  const end = yearMoment(1945);
+  const interval: ChronoInterval = { start, end };
+
+  const resized = previewResizedInterval(interval, 'start', 100, VIEWPORT);
+
+  assert.ok(toAxisYears(resized.start) > toAxisYears(start));
+  assert.deepEqual(resized.end, end);
+});
+
+test('resizing the "start" edge backward extends the interval into the past', () => {
+  const start = yearMoment(1941);
+  const end = yearMoment(1945);
+  const interval: ChronoInterval = { start, end };
+
+  const resized = previewResizedInterval(interval, 'start', -100, VIEWPORT);
+
+  assert.ok(toAxisYears(resized.start) < toAxisYears(start));
+});
+
+test('resizing "start" past "end" clamps to a zero-width interval, never inverts', () => {
+  const start = yearMoment(1941);
+  const end = yearMoment(1945);
+  const interval: ChronoInterval = { start, end };
+
+  // huge forward delta - would push start well past 1945 without clamping
+  const resized = previewResizedInterval(interval, 'start', 10000, VIEWPORT);
+
+  assert.ok(toAxisYears(resized.start) <= toAxisYears(resized.end!));
+  assert.equal(toAxisYears(resized.start), toAxisYears(resized.end!));
+});
+
+test('resizing the "end" edge forward extends the interval into the future, "start" stays put', () => {
+  const start = yearMoment(1941);
+  const end = yearMoment(1945);
+  const interval: ChronoInterval = { start, end };
+
+  const resized = previewResizedInterval(interval, 'end', 100, VIEWPORT);
+
+  assert.ok(toAxisYears(resized.end!) > toAxisYears(end));
+  assert.deepEqual(resized.start, start);
+});
+
+test('resizing "end" past "start" clamps to a zero-width interval, never inverts', () => {
+  const start = yearMoment(1941);
+  const end = yearMoment(1945);
+  const interval: ChronoInterval = { start, end };
+
+  const resized = previewResizedInterval(interval, 'end', -10000, VIEWPORT);
+
+  assert.ok(toAxisYears(resized.start) <= toAxisYears(resized.end!));
+  assert.equal(toAxisYears(resized.start), toAxisYears(resized.end!));
+});
+
+test('resizing the "end" edge of an open-ended interval (null, "to the present") is a no-op', () => {
+  const start = yearMoment(1991);
+  const interval: ChronoInterval = { start, end: null };
+
+  const resized = previewResizedInterval(interval, 'end', 500, VIEWPORT);
+
+  assert.equal(resized.end, null);
+  assert.deepEqual(resized.start, start);
 });

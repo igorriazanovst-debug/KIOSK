@@ -13,6 +13,7 @@ import React, { useState } from 'react';
 import { useDrag } from '@use-gesture/react';
 import type { EventView, TimelineEvent } from '@kiosk/shared';
 import type { EventPixelBounds } from './eventPosition.ts';
+import type { ResizeEdge } from './eventDrag.ts';
 import './EventNode.css';
 
 export interface EventNodeProps {
@@ -20,13 +21,20 @@ export interface EventNodeProps {
   bounds: EventPixelBounds;
   selected: boolean;
   onSelect: (eventId: string) => void;
-  /** Разрешено ли перетаскивание (за флагом localEditingEnabled, как и остальное редактирование) */
+  /** Разрешено ли перетаскивание/растягивание (за флагом localEditingEnabled, как и остальное редактирование) */
   draggable?: boolean;
   /** Вызывается один раз по окончании жеста с итоговой дельтой в пикселях - решение о применении/сохранении принимает вызывающий код */
   onDragEnd?: (eventId: string, deltaPx: number) => void;
+  /** Растягивание конкретного края интервала - открытый конец (end===null) ручки справа не получает */
+  onResizeEnd?: (eventId: string, edge: ResizeEdge, deltaPx: number) => void;
 }
 
 const MIN_HEIGHT_PX = 28;
+/** Ручки resize не показываются на событиях уже, чем это - иначе они перекрывают друг друга */
+const MIN_WIDTH_FOR_HANDLES_PX = 16;
+const HANDLE_WIDTH_PX = 8;
+
+type Interaction = null | { kind: 'move'; px: number } | { kind: 'resize'; edge: ResizeEdge; px: number };
 
 function ViewCompact({ event }: { event: TimelineEvent }) {
   return (
@@ -79,12 +87,13 @@ const VIEW_COMPONENTS: Record<EventView, React.FC<{ event: TimelineEvent }>> = {
   card: ViewCard,
 };
 
-const EventNode: React.FC<EventNodeProps> = ({ event, bounds, selected, onSelect, draggable, onDragEnd }) => {
+const EventNode: React.FC<EventNodeProps> = ({ event, bounds, selected, onSelect, draggable, onDragEnd, onResizeEnd }) => {
   const ViewComponent = VIEW_COMPONENTS[event.view];
-  // Живое смещение во время жеста - применяется поверх canonical bounds
-  // (посчитанных родителем из фактического интервала), сбрасывается в 0,
-  // как только родитель пересчитает bounds из уже сдвинутого интервала.
-  const [dragOffsetPx, setDragOffsetPx] = useState(0);
+  // Живое смещение во время жеста (перетаскивание целиком или растягивание
+  // одного края) - применяется поверх canonical bounds (посчитанных
+  // родителем из фактического интервала), сбрасывается, как только родитель
+  // пересчитает bounds из уже применённого интервала.
+  const [interaction, setInteraction] = useState<Interaction>(null);
 
   const bindDrag = useDrag(
     ({ movement: [mx], last, event: nativeEvent }) => {
@@ -93,7 +102,7 @@ const EventNode: React.FC<EventNodeProps> = ({ event, bounds, selected, onSelect
       // события одновременно двигало бы весь видимый диапазон.
       nativeEvent.stopPropagation();
 
-      setDragOffsetPx(last ? 0 : mx);
+      setInteraction(last ? null : { kind: 'move', px: mx });
       if (last && mx !== 0) {
         onDragEnd?.(event.id, mx);
       }
@@ -101,15 +110,42 @@ const EventNode: React.FC<EventNodeProps> = ({ event, bounds, selected, onSelect
     { enabled: !!draggable, filterTaps: true }
   );
 
+  const bindResizeStart = useDrag(
+    ({ movement: [mx], last, event: nativeEvent }) => {
+      nativeEvent.stopPropagation();
+      setInteraction(last ? null : { kind: 'resize', edge: 'start', px: mx });
+      if (last && mx !== 0) onResizeEnd?.(event.id, 'start', mx);
+    },
+    { enabled: !!draggable, filterTaps: true }
+  );
+
+  const bindResizeEnd = useDrag(
+    ({ movement: [mx], last, event: nativeEvent }) => {
+      nativeEvent.stopPropagation();
+      setInteraction(last ? null : { kind: 'resize', edge: 'end', px: mx });
+      if (last && mx !== 0) onResizeEnd?.(event.id, 'end', mx);
+    },
+    { enabled: !!draggable, filterTaps: true }
+  );
+
+  const canShowHandles = draggable && bounds.width >= MIN_WIDTH_FOR_HANDLES_PX;
+  const showEndHandle = canShowHandles && event.interval.end !== null;
+
+  let left = bounds.left;
+  let width = Math.max(bounds.width, 2);
+  if (interaction?.kind === 'move') {
+    left += interaction.px;
+  } else if (interaction?.kind === 'resize' && interaction.edge === 'start') {
+    left += interaction.px;
+    width = Math.max(width - interaction.px, 2);
+  } else if (interaction?.kind === 'resize' && interaction.edge === 'end') {
+    width = Math.max(width + interaction.px, 2);
+  }
+
   return (
     <div
       className={`chrono-event-node chrono-event-node--${event.view}${selected ? ' chrono-event-node--selected' : ''}${draggable ? ' chrono-event-node--draggable' : ''}`}
-      style={{
-        left: bounds.left,
-        width: Math.max(bounds.width, 2),
-        minHeight: MIN_HEIGHT_PX,
-        transform: dragOffsetPx ? `translateX(${dragOffsetPx}px)` : undefined,
-      }}
+      style={{ left, width, minHeight: MIN_HEIGHT_PX }}
       onClick={(e) => {
         e.stopPropagation();
         onSelect(event.id);
@@ -122,6 +158,12 @@ const EventNode: React.FC<EventNodeProps> = ({ event, bounds, selected, onSelect
       {...(draggable ? bindDrag() : {})}
     >
       <ViewComponent event={event} />
+      {canShowHandles && (
+        <div className="chrono-event-node__handle chrono-event-node__handle--start" style={{ width: HANDLE_WIDTH_PX }} {...bindResizeStart()} />
+      )}
+      {showEndHandle && (
+        <div className="chrono-event-node__handle chrono-event-node__handle--end" style={{ width: HANDLE_WIDTH_PX }} {...bindResizeEnd()} />
+      )}
     </div>
   );
 };

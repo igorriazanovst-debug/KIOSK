@@ -21,7 +21,7 @@ import ScaleRuler from './ScaleRuler.tsx';
 import EventNode from './EventNode.tsx';
 import { eventPixelBounds, isEventVisible } from './eventPosition.ts';
 import { panViewport, zoomViewportAtPoint } from './boardViewport.ts';
-import { previewDraggedInterval } from './eventDrag.ts';
+import { previewDraggedInterval, previewResizedInterval } from './eventDrag.ts';
 import './BoardView.css';
 
 export interface BoardViewProps {
@@ -33,7 +33,7 @@ export interface BoardViewProps {
   /** Кнопка добавления линии в сайдбаре не рендерится, если не передан (только просмотр) */
   onAddTimeline?: () => void;
   onDeleteTimeline?: (timelineId: string) => void;
-  /** Перетаскивание событий включено, только если передан (только просмотр иначе) */
+  /** Перетаскивание/растягивание событий включено, только если передан (только просмотр иначе) */
   onEventMoved?: (timelineId: string, eventId: string, newInterval: ChronoInterval) => void;
   /** Кнопка «+ событие» на дорожке не рендерится, если не передан */
   onAddEventRequested?: (timelineId: string) => void;
@@ -136,6 +136,10 @@ const BoardView: React.FC<BoardViewProps> = ({
                     draggable={!!onEventMoved}
                     onDragEnd={(eventId, deltaPx) => {
                       const newInterval = previewDraggedInterval(event.interval, deltaPx, viewport);
+                      onEventMoved?.(timeline.id, eventId, newInterval);
+                    }}
+                    onResizeEnd={(eventId, edge, deltaPx) => {
+                      const newInterval = previewResizedInterval(event.interval, edge, deltaPx, viewport);
                       onEventMoved?.(timeline.id, eventId, newInterval);
                     }}
                   />

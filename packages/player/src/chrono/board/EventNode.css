@@ -20,6 +20,27 @@
   cursor: grabbing;
 }
 
+.chrono-event-node__handle {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  cursor: ew-resize;
+  touch-action: none;
+  z-index: 2;
+}
+
+.chrono-event-node__handle:hover {
+  background: rgba(255, 255, 255, 0.25);
+}
+
+.chrono-event-node__handle--start {
+  left: 0;
+}
+
+.chrono-event-node__handle--end {
+  right: 0;
+}
+
 .chrono-event-node__compact {
   height: 100%;
   min-height: 20px;
