@@ -112,7 +112,7 @@ export function formatCalendarMoment(m: CalendarMoment): string {
   return `${approxPrefix}${core}${calendarSuffix}`;
 }
 
-const EPOCH_UNIT_WORD: Record<EpochPrecision, string> = {
+export const EPOCH_UNIT_WORD: Record<EpochPrecision, string> = {
   millennium: 'тыс. лет',
   tenThousandYears: 'тыс. лет',
   hundredThousandYears: 'тыс. лет',
@@ -122,7 +122,7 @@ const EPOCH_UNIT_WORD: Record<EpochPrecision, string> = {
   billionYears: 'млрд лет',
 };
 
-const EPOCH_UNIT_DIVISOR: Record<EpochPrecision, number> = {
+export const EPOCH_UNIT_DIVISOR: Record<EpochPrecision, number> = {
   millennium: 1_000,
   tenThousandYears: 1_000,
   hundredThousandYears: 1_000,
