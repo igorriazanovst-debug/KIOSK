@@ -2,6 +2,7 @@ const { app, BrowserWindow, ipcMain, dialog } = require('electron');
 const path = require('path');
 const fs = require('fs');
 const { registerChronoIpc } = require('./chrono/ipc');
+const { buildBrowserWindowOptions } = require('./chrono/windowMode');
 
 // ─── Файловое логирование (DEBUG) ───────────────────────────────────────────
 const PLAYER_LOG_FILE = path.join(path.dirname(process.execPath), 'player-debug.log');
@@ -181,25 +182,47 @@ async function sendLoadProject() {
 // ═══ конец модуля офлайн-кэша ════════════════════════════════════════════════
 
 
+// Читает project.json синхронно, теми же путями поиска, что и
+// loadEmbeddedProject() ниже — но независимо от неё и ДО создания окна,
+// потому что опции BrowserWindow (fullscreen/kiosk/frame) нужно знать в
+// момент конструирования, а loadEmbeddedProject() вызывается уже после.
+// Специально не переиспользует состояние loadEmbeddedProject — она не
+// трогается вовсе, чтобы не рисковать остальным поведением плеера.
+function findProjectJsonForWindowModeSync() {
+  const searchPaths = [
+    path.join(process.resourcesPath || '', 'project.json'),
+    path.join(__dirname, 'project.json'),
+    path.join(app.getAppPath(), 'project.json'),
+    path.join(app.getAppPath(), 'electron', 'project.json'),
+    path.join(path.dirname(app.getPath('exe')), 'project.json'),
+  ];
+
+  for (const projectPath of searchPaths) {
+    if (fs.existsSync(projectPath)) {
+      try {
+        return JSON.parse(fs.readFileSync(projectPath, 'utf-8'));
+      } catch {
+        // тот же путь, что и в loadEmbeddedProject: битый файл — пробуем следующий
+      }
+    }
+  }
+  return null;
+}
+
 // Создание главного окна
 function createWindow() {
-  
+
+  const windowOptions = buildBrowserWindowOptions(findProjectJsonForWindowModeSync());
+
   mainWindow = new BrowserWindow({
-    width: 1280,
-    height: 800,
-    fullscreen: true,
-    kiosk: true,
-    frame: false,
-    autoHideMenuBar: true,
-    alwaysOnTop: true,
+    ...windowOptions,
     webPreferences: {
       nodeIntegration: false,
       contextIsolation: true,
       webSecurity: false,
       allowRunningInsecureContent: false,
       preload: path.join(__dirname, 'preload.js')
-    },
-    backgroundColor: '#000000'
+    }
   });
 
   // DIAG: ловим ошибки загрузки
