@@ -27,3 +27,4 @@ export * from './chrono/model/mutations';
 export * from './chrono/scale/ticks';
 export * from './chrono/scale/projection';
 export * from './chrono/widgetProperties';
+export * from './chrono/media';

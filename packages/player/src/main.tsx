@@ -3,7 +3,7 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import Player from './Player';
 import './index.css';
-import type { ChronoProject } from '@kiosk/shared';
+import type { ChronoProject, ChronoMedia } from '@kiosk/shared';
 
 interface ChronoProjectManifest {
   schemaVersion: number;
@@ -45,6 +45,8 @@ declare global {
         currentPassword?: string
       ) => Promise<{ success: boolean; locked: boolean; retryAfterMs: number }>;
       lockEditing: () => Promise<{ success: boolean }>;
+      pickMediaFile: () => Promise<string | null>;
+      importMedia: (projectId: string, sourceFilePath: string) => Promise<ChronoMedia>;
     };
   }
 }

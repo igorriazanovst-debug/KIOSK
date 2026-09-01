@@ -61,5 +61,7 @@ contextBridge.exposeInMainWorld('chronoAPI', {
   verifyPassword: (password) => ipcRenderer.invoke('chrono:auth-verify-password', password),
   changePassword: (newPassword, currentPassword) =>
     ipcRenderer.invoke('chrono:auth-change-password', newPassword, currentPassword),
-  lockEditing: () => ipcRenderer.invoke('chrono:auth-lock')
+  lockEditing: () => ipcRenderer.invoke('chrono:auth-lock'),
+  pickMediaFile: () => ipcRenderer.invoke('chrono:pick-media-file'),
+  importMedia: (projectId, sourceFilePath) => ipcRenderer.invoke('chrono:import-media', projectId, sourceFilePath)
 });

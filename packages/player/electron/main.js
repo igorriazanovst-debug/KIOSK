@@ -3,6 +3,8 @@ const path = require('path');
 const fs = require('fs');
 const { registerChronoIpc } = require('./chrono/ipc');
 const { buildBrowserWindowOptions } = require('./chrono/windowMode');
+const { mediaDir: chronoMediaDir } = require('./chrono/mediaStore');
+const { resolveWithinRoot: chronoResolveWithinRoot } = require('./chrono/pathGuard');
 
 // ─── Файловое логирование (DEBUG) ───────────────────────────────────────────
 const PLAYER_LOG_FILE = path.join(path.dirname(process.execPath), 'player-debug.log');
@@ -18,11 +20,24 @@ console.log = (...a) => { fileLog('LOG', ...a); _origLog(...a); };
 console.error = (...a) => { fileLog('ERR', ...a); _origErr(...a); };
 fileLog('=== Player started, execPath:', process.execPath, '===');
 process.on('uncaughtException', (e) => fileLog('UNCAUGHT:', e.message, e.stack));
-// Протокол kioskcache:// должен быть privileged ДО app.ready (для <video>, range, fetch)
+// Протоколы kioskcache:// и chronomedia:// должны быть privileged ДО
+// app.ready (для <video>, range, fetch). chronomedia:// раздаёт локальную
+// медиатеку виджета «Хронолиния» (mediaStore.js) - отдельная схема и
+// отдельный корень на диске от kioskcache (тот живёт в userData/media-cache,
+// per-Windows-пользователь; у Хронолинии общий на машину каталог, решение
+// Фазы 0/1 - смешивать их в одном протоколе значило бы молча нарушить это
+// решение).
 try {
   const { protocol: _protocol } = require('electron');
   _protocol.registerSchemesAsPrivileged([
-    { scheme: 'kioskcache', privileges: { standard: true, secure: true, supportFetchAPI: true, stream: true, bypassCSP: true } }
+    { scheme: 'kioskcache', privileges: { standard: true, secure: true, supportFetchAPI: true, stream: true, bypassCSP: true } },
+    // chronomedia БЕЗ bypassCSP (в отличие от kioskcache) - найдено
+    // security-review: bypassCSP снимает CSP целиком для схемы (script-src/
+    // object-src/frame-src и т.д.), а не только то, что реально нужно для
+    // <img src="chronomedia://...">. Схема вместо этого явно добавлена в
+    // CSP-заголовок ниже (см. onHeadersReceived) - остальные директивы
+    // (через фолбэк на default-src) продолжают действовать на неё.
+    { scheme: 'chronomedia', privileges: { standard: true, secure: true, supportFetchAPI: true, stream: true } }
   ]);
 } catch (e) { fileLog('protocol register error', e.message); }
 // ─────────────────────────────────────────────────────────────────────────────
@@ -31,6 +46,7 @@ let mainWindow = null;
 let activationWindow = null;
 let allowActivationClose = false;
 let currentProject = null;
+let chronoBaseDir = null;
 
 // ═══ OFFLINE-CACHE-MODULE-V1 — Офлайн-кэш медиафайлов ═══════════════════════════
 const { protocol, net } = require('electron');
@@ -968,7 +984,8 @@ app.whenReady().then(() => {
   // клиентов, канал 'chrono:*' используется только виджетом chronoline,
   // которого нет в проектах остальных клиентов.
   try {
-    const { baseDir, isFallback } = registerChronoIpc({ ipcMain, app });
+    const { baseDir, isFallback } = registerChronoIpc({ ipcMain, app, dialog });
+    chronoBaseDir = baseDir;
     fileLog('[chrono] storage dir:', baseDir, isFallback ? '(fallback: no write access to shared dir)' : '');
   } catch (err) {
     fileLog('[chrono] failed to initialize local storage:', err && err.message);
@@ -979,7 +996,9 @@ app.whenReady().then(() => {
     callback({
       responseHeaders: {
         ...details.responseHeaders,
-        'Content-Security-Policy': ["default-src 'self' 'unsafe-inline' 'unsafe-eval' data: file: blob: http: https: ws: wss:"]
+        // chronomedia: добавлена явно (не полагаемся на bypassCSP этой
+        // схемы - её больше нет, см. registerSchemesAsPrivileged выше).
+        'Content-Security-Policy': ["default-src 'self' 'unsafe-inline' 'unsafe-eval' data: file: blob: chronomedia: http: https: ws: wss:"]
       }
     });
   });
@@ -1034,6 +1053,75 @@ app.whenReady().then(() => {
       });
     } catch (e) {
       return new Response('Error: ' + e.message, { status: 500 });
+    }
+  });
+
+  // Обработчик протокола chronomedia://<projectId>/<sha256+ext> → локальный
+  // файл из медиатеки виджета «Хронолиния» (mediaStore.js). Путь резолвится
+  // через resolveWithinRoot (тот же guard, что у остального хранилища
+  // Хронолинии) - имя файла в URL приходит из рендерера, но пришедшее
+  // значение не более доверенное, чем любой другой ввод с той стороны
+  // process-границы.
+  protocol.handle('chronomedia', async (request) => {
+    try {
+      if (!chronoBaseDir) return new Response('Chrono storage not initialized', { status: 503 });
+
+      const u = new URL(request.url);
+      const projectId = u.hostname;
+      const fileName = decodeURIComponent(u.pathname.replace(/^\/+/, ''));
+      const dir = chronoMediaDir(chronoBaseDir, projectId);
+      const filePath = chronoResolveWithinRoot(dir, fileName);
+
+      if (!fs.existsSync(filePath)) {
+        return new Response('Not found', { status: 404 });
+      }
+
+      const stat = fs.statSync(filePath);
+      // Найдено security-review: fileName вроде "." или имени вложенной
+      // директории внутри media/ проходит resolveWithinRoot (это не выход
+      // за пределы корня) и fs.existsSync, но fs.createReadStream на
+      // директории роняет АСИНХРОННУЮ ошибку EISDIR уже во время чтения
+      // потока - вне этого синхронного try/catch, так что вместо чистого
+      // 404 запрос зависает/ломается. Явная проверка здесь, до создания
+      // потока.
+      if (!stat.isFile()) {
+        return new Response('Not found', { status: 404 });
+      }
+      const total = stat.size;
+      const mime = guessMime(fileName, filePath);
+      const rangeHeader = request.headers.get('range') || request.headers.get('Range');
+
+      if (rangeHeader) {
+        const m = /bytes=(\d*)-(\d*)/.exec(rangeHeader);
+        let start = m && m[1] ? parseInt(m[1], 10) : 0;
+        let end = m && m[2] ? parseInt(m[2], 10) : total - 1;
+        if (isNaN(start) || start < 0) start = 0;
+        if (isNaN(end) || end >= total) end = total - 1;
+        if (start > end) start = 0;
+        const chunkSize = end - start + 1;
+        const stream = fs.createReadStream(filePath, { start, end });
+        return new Response(nodeStreamToWeb(stream), {
+          status: 206,
+          headers: {
+            'Content-Type': mime,
+            'Content-Length': String(chunkSize),
+            'Content-Range': `bytes ${start}-${end}/${total}`,
+            'Accept-Ranges': 'bytes'
+          }
+        });
+      }
+
+      const stream = fs.createReadStream(filePath);
+      return new Response(nodeStreamToWeb(stream), {
+        status: 200,
+        headers: { 'Content-Type': mime, 'Content-Length': String(total), 'Accept-Ranges': 'bytes' }
+      });
+    } catch (e) {
+      // Путь вне корня (PathGuardError) и прочие сбои раздачи - оба 404, не
+      // 500: не выдаём наружу, существует ли путь за пределами разрешённого
+      // корня, разница между "нет такого файла" и "нельзя туда смотреть"
+      // рендереру не нужна.
+      return new Response('Not found', { status: 404 });
     }
   });
 

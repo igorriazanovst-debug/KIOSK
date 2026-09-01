@@ -1,7 +1,11 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { addTimeline, renameTimeline, deleteTimeline, addEvent, updateEvent, deleteEvent } from './mutations';
-import type { ChronoProject, TimelineEvent } from './schema';
+import { addTimeline, renameTimeline, deleteTimeline, addEvent, updateEvent, deleteEvent, addMedia } from './mutations';
+import type { ChronoProject, TimelineEvent, ChronoMedia } from './schema';
+
+function sampleMedia(overrides: Partial<ChronoMedia> = {}): ChronoMedia {
+  return { id: 'm1', fileName: 'photo.jpg', mimeType: 'image/jpeg', fileSize: 100, sha256: 'a'.repeat(64), ...overrides };
+}
 
 function emptyProject(): ChronoProject {
   return {
@@ -108,4 +112,35 @@ test('deleteEvent removes only the matching event from the matching timeline', (
 
   assert.equal(result.timelines[0].events.length, 1);
   assert.equal(result.timelines[0].events[0].id, 'ev-2');
+});
+
+// ─── addMedia ───────────────────────────────────────────────────────────
+
+test('addMedia appends a new record and returns it back unchanged when the sha256 is not yet in the catalog', () => {
+  const project = emptyProject();
+  const media = sampleMedia();
+
+  const result = addMedia(project, media);
+
+  assert.equal(result.project.media.length, 1);
+  assert.deepEqual(result.media, media);
+  assert.equal(project.media.length, 0, 'original project must stay untouched');
+});
+
+test('addMedia with a matching sha256 does not duplicate the catalog entry, and returns the EXISTING record (not the input)', () => {
+  const project = addMedia(emptyProject(), sampleMedia({ id: 'original-id' })).project;
+  const duplicateImport = sampleMedia({ id: 'freshly-generated-id', fileName: 'renamed.jpg' });
+
+  const result = addMedia(project, duplicateImport);
+
+  assert.equal(result.project.media.length, 1, 'must not add a second catalog entry for the same content');
+  assert.equal(result.media.id, 'original-id', 'must return the id already referenced by any event using this file, not a new one');
+});
+
+test('addMedia with a different sha256 adds a second, independent entry', () => {
+  let project = addMedia(emptyProject(), sampleMedia({ id: 'm1', sha256: 'a'.repeat(64) })).project;
+  const result = addMedia(project, sampleMedia({ id: 'm2', sha256: 'b'.repeat(64) }));
+
+  assert.equal(result.project.media.length, 2);
+  assert.equal(result.media.id, 'm2');
 });

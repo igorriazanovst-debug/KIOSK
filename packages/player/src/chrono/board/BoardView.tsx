@@ -16,7 +16,7 @@
 
 import React, { useRef } from 'react';
 import { useGesture } from '@use-gesture/react';
-import type { ChronoInterval, ChronoTimeline, Viewport } from '@kiosk/shared';
+import type { ChronoInterval, ChronoMedia, ChronoTimeline, Viewport } from '@kiosk/shared';
 import ScaleRuler from './ScaleRuler.tsx';
 import OverviewScale from './OverviewScale.tsx';
 import EventNode from './EventNode.tsx';
@@ -38,6 +38,9 @@ export interface BoardViewProps {
   onEventMoved?: (timelineId: string, eventId: string, newInterval: ChronoInterval) => void;
   /** Кнопка «+ событие» на дорожке не рендерится, если не передан */
   onAddEventRequested?: (timelineId: string) => void;
+  /** Каталог медиа проекта - для реальных превью у событий с видом «картинка»/«карточка» вместо заглушки */
+  mediaCatalog?: ChronoMedia[];
+  getMediaUrl?: (media: ChronoMedia) => string;
 }
 
 const TIMELINE_ROW_HEIGHT = 60;
@@ -55,6 +58,8 @@ const BoardView: React.FC<BoardViewProps> = ({
   onDeleteTimeline,
   onEventMoved,
   onAddEventRequested,
+  mediaCatalog,
+  getMediaUrl,
 }) => {
   const trackAreaRef = useRef<HTMLDivElement>(null);
 
@@ -144,6 +149,10 @@ const BoardView: React.FC<BoardViewProps> = ({
                       const newInterval = previewResizedInterval(event.interval, edge, deltaPx, viewport);
                       onEventMoved?.(timeline.id, eventId, newInterval);
                     }}
+                    defaultMedia={
+                      event.defaultMediaId ? mediaCatalog?.find((m) => m.id === event.defaultMediaId) : undefined
+                    }
+                    getMediaUrl={getMediaUrl}
                   />
                 ))}
             </div>

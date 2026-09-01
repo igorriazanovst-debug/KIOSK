@@ -5,7 +5,7 @@
 // Пригодится и editor-web в Фазе 7 (тот же принцип "один источник в
 // packages/shared", что и у остального домена chrono).
 
-import type { ChronoProject, ChronoTimeline, TimelineEvent } from './schema';
+import type { ChronoProject, ChronoTimeline, TimelineEvent, ChronoMedia } from './schema';
 
 /** @param id Присваивается вызывающим кодом (например crypto.randomUUID()), не здесь */
 export function addTimeline(project: ChronoProject, id: string, name: string): ChronoProject {
@@ -56,4 +56,22 @@ export function deleteEvent(project: ChronoProject, timelineId: string, eventId:
       t.id !== timelineId ? t : { ...t, events: t.events.filter((e) => e.id !== eventId) }
     ),
   };
+}
+
+/**
+ * Добавляет запись медиа в каталог проекта (project.media). Дедупликация
+ * по sha256 - забота mediaStore.js (electron, копирование файла) на
+ * уровне ФАЙЛА, здесь - на уровне КАТАЛОГА: importMedia на каждый вызов
+ * генерирует новый случайный id, даже если файл с тем же содержимым уже
+ * был импортирован раньше, поэтому если запись с таким sha256 уже есть в
+ * project.media, новая НЕ добавляется - вместо этого возвращается УЖЕ
+ * СУЩЕСТВУЮЩАЯ запись (с её собственным, другим id). Вызывающий код обязан
+ * использовать media из результата (не тот объект, что передал на вход)
+ * для event.mediaIds - иначе событие сослалось бы на id, которого в
+ * project.media нет.
+ */
+export function addMedia(project: ChronoProject, media: ChronoMedia): { project: ChronoProject; media: ChronoMedia } {
+  const existing = project.media.find((m) => m.sha256 === media.sha256);
+  if (existing) return { project, media: existing };
+  return { project: { ...project, media: [...project.media, media] }, media };
 }

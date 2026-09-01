@@ -28,7 +28,7 @@
 // превью, что и в AddEventForm.tsx.
 
 import React, { useMemo, useState } from 'react';
-import { parseChronoInput, formatInterval, type EventView, type ParseResult, type TimelineEvent } from '@kiosk/shared';
+import { parseChronoInput, formatInterval, type ChronoMedia, type EventView, type ParseResult, type TimelineEvent } from '@kiosk/shared';
 import { formatMomentPreview } from './formatMomentPreview.ts';
 import './EventDetailCard.css';
 
@@ -41,12 +41,19 @@ export interface EventDetailPatch {
   color?: string;
   fontColor?: string;
   interval?: TimelineEvent['interval'];
+  mediaIds: string[];
+  defaultMediaId: string | null;
 }
 
 export interface EventDetailCardProps {
   event: TimelineEvent;
   timelineName: string;
   canEdit: boolean;
+  /** Каталог медиа проекта (project.media) - для отрисовки уже прикреплённых превью по id */
+  mediaCatalog: ChronoMedia[];
+  getMediaUrl: (media: ChronoMedia) => string;
+  /** Открывает системный выбор файла, импортирует его в медиатеку проекта - возвращает id новой (или существующей при дедупе) записи, либо null при отмене/ошибке */
+  onImportMedia: () => Promise<string | null>;
   onSave: (patch: EventDetailPatch) => void;
   onDelete: () => void;
   onClose: () => void;
@@ -64,7 +71,17 @@ function referenceDateNow() {
   return { year: now.getFullYear(), month: now.getMonth() + 1, day: now.getDate() };
 }
 
-const EventDetailCard: React.FC<EventDetailCardProps> = ({ event, timelineName, canEdit, onSave, onDelete, onClose }) => {
+const EventDetailCard: React.FC<EventDetailCardProps> = ({
+  event,
+  timelineName,
+  canEdit,
+  mediaCatalog,
+  getMediaUrl,
+  onImportMedia,
+  onSave,
+  onDelete,
+  onClose,
+}) => {
   const [name, setName] = useState(event.name);
   const [place, setPlace] = useState(event.place ?? '');
   const [sourcesText, setSourcesText] = useState((event.sources ?? []).join('\n'));
@@ -73,6 +90,31 @@ const EventDetailCard: React.FC<EventDetailCardProps> = ({ event, timelineName, 
   const [color, setColor] = useState(event.color ?? '#4a90e2');
   const [fontColor, setFontColor] = useState(event.fontColor ?? '#ffffff');
   const [newDateText, setNewDateText] = useState('');
+  const [mediaIds, setMediaIds] = useState<string[]>(event.mediaIds);
+  const [defaultMediaId, setDefaultMediaId] = useState<string | null>(event.defaultMediaId ?? null);
+  const [mediaImporting, setMediaImporting] = useState(false);
+
+  const attachedMedia = mediaIds
+    .map((id) => mediaCatalog.find((m) => m.id === id))
+    .filter((m): m is ChronoMedia => !!m);
+
+  const handleImportMedia = async () => {
+    setMediaImporting(true);
+    try {
+      const mediaId = await onImportMedia();
+      if (mediaId) {
+        setMediaIds((ids) => (ids.includes(mediaId) ? ids : [...ids, mediaId]));
+        setDefaultMediaId((current) => current ?? mediaId);
+      }
+    } finally {
+      setMediaImporting(false);
+    }
+  };
+
+  const handleRemoveMedia = (mediaId: string) => {
+    setMediaIds((ids) => ids.filter((id) => id !== mediaId));
+    setDefaultMediaId((current) => (current === mediaId ? null : current));
+  };
 
   const parsedNewDate = useMemo<ParseResult>(
     () => (newDateText.trim() ? parseChronoInput(newDateText, { referenceDate: referenceDateNow() }) : { type: 'none' }),
@@ -96,6 +138,8 @@ const EventDetailCard: React.FC<EventDetailCardProps> = ({ event, timelineName, 
       view,
       color,
       fontColor,
+      mediaIds,
+      defaultMediaId,
     };
 
     if (newDateText.trim() && parsedNewDate.type !== 'none') {
@@ -155,6 +199,42 @@ const EventDetailCard: React.FC<EventDetailCardProps> = ({ event, timelineName, 
           <span>Описание</span>
           <textarea rows={4} value={description} onChange={(e) => setDescription(e.target.value)} readOnly={!canEdit} />
         </label>
+
+        {(attachedMedia.length > 0 || canEdit) && (
+          <div className="chrono-event-detail__field">
+            <span>Медиа</span>
+            <div className="chrono-event-detail__media-grid">
+              {attachedMedia.map((media) => (
+                <div
+                  key={media.id}
+                  className={`chrono-event-detail__media-thumb${media.id === defaultMediaId ? ' chrono-event-detail__media-thumb--default' : ''}`}
+                  title={media.fileName}
+                >
+                  {media.mimeType.startsWith('image/') ? (
+                    <img src={getMediaUrl(media)} alt={media.fileName} />
+                  ) : (
+                    <div className="chrono-event-detail__media-placeholder">{media.mimeType.startsWith('video/') ? '🎬' : '🎵'}</div>
+                  )}
+                  {canEdit && (
+                    <div className="chrono-event-detail__media-actions">
+                      <button type="button" title="Сделать основным" onClick={() => setDefaultMediaId(media.id)}>
+                        ★
+                      </button>
+                      <button type="button" title="Открепить" onClick={() => handleRemoveMedia(media.id)}>
+                        ×
+                      </button>
+                    </div>
+                  )}
+                </div>
+              ))}
+              {canEdit && (
+                <button type="button" className="chrono-event-detail__media-add" onClick={handleImportMedia} disabled={mediaImporting}>
+                  {mediaImporting ? '…' : '+ Файл'}
+                </button>
+              )}
+            </div>
+          </div>
+        )}
 
         <label className="chrono-event-detail__field">
           <span>Вид</span>

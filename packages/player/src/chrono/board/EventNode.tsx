@@ -5,13 +5,16 @@
 // готовый eventPosition.ts (Фаза 2 toRange + axisYearsToPx), сам компонент
 // только раскладывает вид по DOM.
 //
-// Медиатека (Фаза 5) ещё не построена — превью для видов "картинка"/
-// "карточка" сейчас placeholder-иконка, не реальное изображение с диска.
-// Это сознательный, явно обозначенный пробел, не тихая заглушка.
+// Превью для видов "картинка"/"карточка" - реальное изображение из
+// локальной медиатеки (Фаза 5, chronomedia:// в electron/main.js), если у
+// события есть defaultMediaId и медиа - картинка; для аудио/видео и
+// событий совсем без медиа - иконка-заглушка (полноценное
+// аудио/видео-превью внутри узла доски, не только в карточке события,
+// выходит за рамки этого прохода).
 
 import React, { useState } from 'react';
 import { useDrag } from '@use-gesture/react';
-import type { EventView, TimelineEvent } from '@kiosk/shared';
+import type { ChronoMedia, EventView, TimelineEvent } from '@kiosk/shared';
 import type { EventPixelBounds } from './eventPosition.ts';
 import type { ResizeEdge } from './eventDrag.ts';
 import './EventNode.css';
@@ -27,6 +30,9 @@ export interface EventNodeProps {
   onDragEnd?: (eventId: string, deltaPx: number) => void;
   /** Растягивание конкретного края интервала - открытый конец (end===null) ручки справа не получает */
   onResizeEnd?: (eventId: string, edge: ResizeEdge, deltaPx: number) => void;
+  /** Запись основного медиа события (по event.defaultMediaId) - undefined, если медиа нет или не найдено в каталоге */
+  defaultMedia?: ChronoMedia;
+  getMediaUrl?: (media: ChronoMedia) => string;
 }
 
 const MIN_HEIGHT_PX = 28;
@@ -53,25 +59,34 @@ function ViewFlag({ event }: { event: TimelineEvent }) {
   );
 }
 
-function ViewImage({ event }: { event: TimelineEvent }) {
-  const hasMedia = !!event.defaultMediaId;
+interface MediaViewProps {
+  event: TimelineEvent;
+  defaultMedia?: ChronoMedia;
+  getMediaUrl?: (media: ChronoMedia) => string;
+}
+
+function thumbContent(defaultMedia: ChronoMedia | undefined, getMediaUrl: ((media: ChronoMedia) => string) | undefined) {
+  if (defaultMedia && getMediaUrl && defaultMedia.mimeType.startsWith('image/')) {
+    return <img src={getMediaUrl(defaultMedia)} alt="" />;
+  }
+  if (defaultMedia?.mimeType.startsWith('video/')) return '🎬';
+  if (defaultMedia?.mimeType.startsWith('audio/')) return '🎵';
+  return '🖼';
+}
+
+function ViewImage({ event, defaultMedia, getMediaUrl }: MediaViewProps) {
   return (
     <div className="chrono-event-node__image">
-      <div className="chrono-event-node__image-thumb" aria-hidden={!hasMedia}>
-        {hasMedia ? null /* Фаза 5: реальное превью из локальной медиатеки */ : '🖼'}
-      </div>
+      <div className="chrono-event-node__image-thumb">{thumbContent(defaultMedia, getMediaUrl)}</div>
       <span className="chrono-event-node__image-label">{event.name}</span>
     </div>
   );
 }
 
-function ViewCard({ event }: { event: TimelineEvent }) {
-  const hasMedia = !!event.defaultMediaId;
+function ViewCard({ event, defaultMedia, getMediaUrl }: MediaViewProps) {
   return (
     <div className="chrono-event-node__card">
-      <div className="chrono-event-node__card-thumb" aria-hidden={!hasMedia}>
-        {hasMedia ? null : '🖼'}
-      </div>
+      <div className="chrono-event-node__card-thumb">{thumbContent(defaultMedia, getMediaUrl)}</div>
       <div className="chrono-event-node__card-body">
         <div className="chrono-event-node__card-title">{event.name}</div>
         {event.place && <div className="chrono-event-node__card-place">{event.place}</div>}
@@ -80,14 +95,24 @@ function ViewCard({ event }: { event: TimelineEvent }) {
   );
 }
 
-const VIEW_COMPONENTS: Record<EventView, React.FC<{ event: TimelineEvent }>> = {
+const VIEW_COMPONENTS: Record<EventView, React.FC<MediaViewProps>> = {
   compact: ViewCompact,
   flag: ViewFlag,
   image: ViewImage,
   card: ViewCard,
 };
 
-const EventNode: React.FC<EventNodeProps> = ({ event, bounds, selected, onSelect, draggable, onDragEnd, onResizeEnd }) => {
+const EventNode: React.FC<EventNodeProps> = ({
+  event,
+  bounds,
+  selected,
+  onSelect,
+  draggable,
+  onDragEnd,
+  onResizeEnd,
+  defaultMedia,
+  getMediaUrl,
+}) => {
   const ViewComponent = VIEW_COMPONENTS[event.view];
   // Живое смещение во время жеста (перетаскивание целиком или растягивание
   // одного края) - применяется поверх canonical bounds (посчитанных
@@ -157,7 +182,7 @@ const EventNode: React.FC<EventNodeProps> = ({ event, bounds, selected, onSelect
       }}
       {...(draggable ? bindDrag() : {})}
     >
-      <ViewComponent event={event} />
+      <ViewComponent event={event} defaultMedia={defaultMedia} getMediaUrl={getMediaUrl} />
       {canShowHandles && (
         <div className="chrono-event-node__handle chrono-event-node__handle--start" style={{ width: HANDLE_WIDTH_PX }} {...bindResizeStart()} />
       )}

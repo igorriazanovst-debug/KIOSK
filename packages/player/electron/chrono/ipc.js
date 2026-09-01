@@ -19,18 +19,26 @@
 const { resolveStorageDir } = require('./storageDir');
 const projectStore = require('./projectStore');
 const auth = require('./auth');
+const mediaStore = require('./mediaStore');
 const { createSessionLock } = require('./sessionLock');
+const { createPickedMediaPaths } = require('./pickedMediaPaths');
+
+const MEDIA_FILE_FILTERS = [
+  { name: 'Изображения и видео', extensions: ['jpg', 'jpeg', 'png', 'gif', 'webp', 'mp4', 'webm', 'mov', 'mp3', 'wav', 'ogg'] },
+];
 
 /**
- * @param {{ ipcMain: import('electron').IpcMain, app: import('electron').App }} deps
+ * @param {{ ipcMain: import('electron').IpcMain, app: import('electron').App, dialog: import('electron').Dialog }} deps
  * @returns {{ baseDir: string, isFallback: boolean }}
  */
-function registerChronoIpc({ ipcMain, app }) {
+function registerChronoIpc({ ipcMain, app, dialog }) {
   const { dir: baseDir, isFallback } = resolveStorageDir({
     platform: process.platform,
     userDataDir: app.getPath('userData'),
   });
   const sessionLock = createSessionLock();
+  const pickedMediaPaths = createPickedMediaPaths();
+  mediaStore.sweepOrphanedTmpFiles(baseDir);
 
   function requireUnlocked() {
     if (auth.isPasswordSet(baseDir) && !sessionLock.isUnlocked()) {
@@ -90,6 +98,34 @@ function registerChronoIpc({ ipcMain, app }) {
   ipcMain.handle('chrono:auth-lock', async () => {
     sessionLock.lock();
     return { success: true };
+  });
+
+  ipcMain.handle('chrono:pick-media-file', async () => {
+    // Заблокированная сессия не должна получать доступ к системному
+    // диалогу выбора файла - это раскрытие структуры локальной файловой
+    // системы (имена/пути файлов пользователя), более широкое, чем "видно
+    // содержимое доски", доступное иначе без всякого пароля.
+    requireUnlocked();
+    const result = await dialog.showOpenDialog({ properties: ['openFile'], filters: MEDIA_FILE_FILTERS });
+    if (result.canceled || result.filePaths.length === 0) return null;
+    const filePath = result.filePaths[0];
+    pickedMediaPaths.remember(filePath);
+    return filePath;
+  });
+
+  ipcMain.handle('chrono:import-media', async (_event, projectId, sourceFilePath) => {
+    requireUnlocked();
+    // Импортировать можно ТОЛЬКО путь, реально возвращённый диалогом выше -
+    // без этой проверки chrono:import-media принимал бы любую строку от
+    // рендерера как путь на диске (найдено security-review): рендерер не
+    // выбирает файлы ОС напрямую, но мог бы вызвать сам IPC-канал с
+    // произвольным путём, минуя диалог, и скопировать в медиатеку чужой
+    // реальный файл с диска. Одноразово - consume() сжигает разрешение,
+    // повторный импорт того же пути требует заново пройти через диалог.
+    if (!pickedMediaPaths.consume(sourceFilePath)) {
+      throw new Error('Файл должен быть выбран через системный диалог');
+    }
+    return mediaStore.importMedia(baseDir, projectId, sourceFilePath);
   });
 
   return { baseDir, isFallback };

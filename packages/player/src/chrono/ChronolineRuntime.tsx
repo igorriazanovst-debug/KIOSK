@@ -43,11 +43,12 @@
 
 import React, { useEffect, useState } from 'react';
 import type { ChronoProject, ChronolineWidgetProperties, Viewport } from '@kiosk/shared';
-import { addTimeline, deleteTimeline, addEvent, updateEvent, deleteEvent } from '@kiosk/shared';
+import { addTimeline, deleteTimeline, addEvent, updateEvent, deleteEvent, addMedia } from '@kiosk/shared';
 import BoardView, { type BoardViewProps } from './board/BoardView.tsx';
 import { computeInitialViewport } from './board/initialViewport.ts';
 import AddEventForm, { type AddEventFormResult } from './AddEventForm.tsx';
 import EventDetailCard, { type EventDetailPatch } from './EventDetailCard.tsx';
+import { mediaUrl } from './media.ts';
 import PasswordPrompt, { type PasswordPromptMode, type PasswordSubmitValues, type PasswordPromptResult } from './PasswordPrompt.tsx';
 import { initHistory, pushHistory, undo, redo, canUndo, canRedo, type History } from './history.ts';
 import './ChronolineRuntime.css';
@@ -369,6 +370,27 @@ const ChronolineRuntime: React.FC<Props> = ({ properties, width, height }) => {
     setSelectedEventId(null);
   };
 
+  // Файл копируется в медиатеку и добавляется в каталог проекта СРАЗУ по
+  // выбору (не откладывается до "Сохранить" на карточке события) - это
+  // отдельная, самостоятельная мутация с собственной записью в истории.
+  // Если пользователь потом нажмёт "Отмена" на карточке, файл останется
+  // прикреплённым к каталогу, но не привязанным ни к одному событию -
+  // безвредный сирота, тот же компромисс, что и у большинства файловых
+  // загрузчиков, не стоит того, чтобы городить отдельный "черновой" статус.
+  const handleImportMediaForEvent = async (): Promise<string | null> => {
+    const filePath = await window.chronoAPI?.pickMediaFile();
+    if (!filePath) return null;
+    try {
+      const imported = await window.chronoAPI!.importMedia(project.id, filePath);
+      const { project: updatedProject, media } = addMedia(project, imported);
+      applyMutation(updatedProject);
+      return media.id;
+    } catch (err) {
+      handleMutatingIpcError(err, 'Не удалось добавить файл');
+      return null;
+    }
+  };
+
   const boardHeight = editingEnabled ? height - TOOLBAR_HEIGHT : height;
 
   return (
@@ -458,6 +480,8 @@ const ChronolineRuntime: React.FC<Props> = ({ properties, width, height }) => {
           onDeleteTimeline={canEdit ? handleDeleteTimeline : undefined}
           onEventMoved={canEdit ? handleEventMoved : undefined}
           onAddEventRequested={canEdit ? setAddEventTimelineId : undefined}
+          mediaCatalog={project.media}
+          getMediaUrl={(media) => mediaUrl(project.id, media)}
         />
         {addEventTimeline && (
           <AddEventForm
@@ -471,6 +495,9 @@ const ChronolineRuntime: React.FC<Props> = ({ properties, width, height }) => {
             event={selectedEventInfo.event}
             timelineName={selectedEventInfo.timeline.name}
             canEdit={canEdit}
+            mediaCatalog={project.media}
+            getMediaUrl={(media) => mediaUrl(project.id, media)}
+            onImportMedia={handleImportMediaForEvent}
             onSave={handleEventDetailSave}
             onDelete={handleEventDetailDelete}
             onClose={() => setSelectedEventId(null)}
