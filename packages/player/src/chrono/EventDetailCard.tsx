@@ -186,6 +186,7 @@ const EventDetailCard: React.FC<EventDetailCardProps> = ({
   const attachedMedia = mediaIds
     .map((id) => mediaCatalog.find((m) => m.id === id))
     .filter((m): m is ChronoMedia => !!m);
+  const defaultMedia = attachedMedia.find((m) => m.id === defaultMediaId);
 
   const handleImportMedia = async () => {
     setMediaImporting(true);
@@ -289,6 +290,17 @@ const EventDetailCard: React.FC<EventDetailCardProps> = ({
           <span>Описание</span>
           <textarea rows={4} value={description} onChange={(e) => setDescription(e.target.value)} readOnly={!canEdit} />
         </label>
+
+        {defaultMedia && (defaultMedia.mimeType.startsWith('video/') || defaultMedia.mimeType.startsWith('audio/')) && (
+          <div className="chrono-event-detail__field">
+            <span>Просмотр</span>
+            {defaultMedia.mimeType.startsWith('video/') ? (
+              <video className="chrono-event-detail__preview-media" src={getMediaUrl(defaultMedia)} controls />
+            ) : (
+              <audio className="chrono-event-detail__preview-media" src={getMediaUrl(defaultMedia)} controls />
+            )}
+          </div>
+        )}
 
         {(attachedMedia.length > 0 || canEdit) && (
           <div className="chrono-event-detail__field">
