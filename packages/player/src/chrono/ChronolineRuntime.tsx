@@ -43,10 +43,11 @@
 
 import React, { useEffect, useState } from 'react';
 import type { ChronoProject, ChronolineWidgetProperties, Viewport } from '@kiosk/shared';
-import { addTimeline, deleteTimeline, addEvent, updateEvent } from '@kiosk/shared';
+import { addTimeline, deleteTimeline, addEvent, updateEvent, deleteEvent } from '@kiosk/shared';
 import BoardView, { type BoardViewProps } from './board/BoardView.tsx';
 import { computeInitialViewport } from './board/initialViewport.ts';
 import AddEventForm, { type AddEventFormResult } from './AddEventForm.tsx';
+import EventDetailCard, { type EventDetailPatch } from './EventDetailCard.tsx';
 import PasswordPrompt, { type PasswordPromptMode, type PasswordSubmitValues, type PasswordPromptResult } from './PasswordPrompt.tsx';
 import { initHistory, pushHistory, undo, redo, canUndo, canRedo, type History } from './history.ts';
 import './ChronolineRuntime.css';
@@ -345,6 +346,29 @@ const ChronolineRuntime: React.FC<Props> = ({ properties, width, height }) => {
   };
 
   const addEventTimeline = addEventTimelineId ? project.timelines.find((t) => t.id === addEventTimelineId) : null;
+
+  const selectedEventInfo = (() => {
+    if (!selectedEventId) return undefined;
+    for (const timeline of project.timelines) {
+      const event = timeline.events.find((e) => e.id === selectedEventId);
+      if (event) return { timeline, event };
+    }
+    return undefined;
+  })();
+
+  const handleEventDetailSave = (patch: EventDetailPatch) => {
+    if (!selectedEventInfo) return;
+    applyMutation(updateEvent(project, selectedEventInfo.timeline.id, selectedEventInfo.event.id, patch));
+    setSelectedEventId(null);
+  };
+
+  const handleEventDetailDelete = () => {
+    if (!selectedEventInfo) return;
+    if (!window.confirm(`Удалить событие «${selectedEventInfo.event.name}»?`)) return;
+    applyMutation(deleteEvent(project, selectedEventInfo.timeline.id, selectedEventInfo.event.id));
+    setSelectedEventId(null);
+  };
+
   const boardHeight = editingEnabled ? height - TOOLBAR_HEIGHT : height;
 
   return (
@@ -440,6 +464,16 @@ const ChronolineRuntime: React.FC<Props> = ({ properties, width, height }) => {
             timelineName={addEventTimeline.name}
             onSubmit={handleAddEventSubmit}
             onCancel={() => setAddEventTimelineId(null)}
+          />
+        )}
+        {selectedEventInfo && (
+          <EventDetailCard
+            event={selectedEventInfo.event}
+            timelineName={selectedEventInfo.timeline.name}
+            canEdit={canEdit}
+            onSave={handleEventDetailSave}
+            onDelete={handleEventDetailDelete}
+            onClose={() => setSelectedEventId(null)}
           />
         )}
         {passwordPromptMode && (

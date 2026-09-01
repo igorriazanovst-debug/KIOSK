@@ -1,0 +1,124 @@
+.chrono-event-detail__overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.55);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 20;
+}
+
+.chrono-event-detail {
+  width: min(480px, 90%);
+  max-height: 85%;
+  overflow-y: auto;
+  background: #1e2028;
+  border-radius: 8px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5);
+  font-family: Arial, sans-serif;
+  color: #eee;
+}
+
+.chrono-event-detail__title {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.chrono-event-detail__field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.chrono-event-detail__field--inline {
+  flex-direction: row;
+  align-items: center;
+  gap: 8px;
+}
+
+.chrono-event-detail__field input,
+.chrono-event-detail__field textarea,
+.chrono-event-detail__field select {
+  padding: 8px 10px;
+  border-radius: 4px;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  background: #14161c;
+  color: #fff;
+  font-size: 14px;
+  font-family: inherit;
+  resize: vertical;
+}
+
+.chrono-event-detail__field input[readonly],
+.chrono-event-detail__field textarea[readonly] {
+  border-color: transparent;
+  background: transparent;
+  padding-left: 0;
+}
+
+.chrono-event-detail__current-date {
+  font-size: 14px;
+  color: #fff;
+  padding: 4px 0;
+}
+
+.chrono-event-detail__parse-preview {
+  font-size: 12px;
+  color: #6bcf6b;
+}
+
+.chrono-event-detail__parse-preview--error {
+  color: #ff8a65;
+}
+
+.chrono-event-detail__colors {
+  display: flex;
+  gap: 20px;
+}
+
+.chrono-event-detail__actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 4px;
+}
+
+.chrono-event-detail__actions-spacer {
+  flex: 1;
+}
+
+.chrono-event-detail__actions button {
+  padding: 8px 16px;
+  border-radius: 4px;
+  border: none;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.chrono-event-detail__actions button[type='submit'] {
+  background: #4a90e2;
+  color: #fff;
+}
+
+.chrono-event-detail__actions button[type='submit']:disabled {
+  background: #3a3d47;
+  color: rgba(255, 255, 255, 0.4);
+  cursor: not-allowed;
+}
+
+.chrono-event-detail__actions button[type='button']:not(.chrono-event-detail__delete) {
+  background: transparent;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.chrono-event-detail__delete {
+  background: transparent;
+  color: #ff6b6b;
+}
