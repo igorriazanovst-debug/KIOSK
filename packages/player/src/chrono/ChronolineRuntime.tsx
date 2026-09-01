@@ -16,6 +16,7 @@
 
 import React, { useEffect, useState } from 'react';
 import type { ChronoProject, ChronolineWidgetProperties, Viewport } from '@kiosk/shared';
+import { addTimeline, deleteTimeline } from '@kiosk/shared';
 import BoardView from './board/BoardView.tsx';
 import { computeInitialViewport } from './board/initialViewport.ts';
 import './ChronolineRuntime.css';
@@ -93,14 +94,41 @@ const ChronolineRuntime: React.FC<Props> = ({ properties, width, height }) => {
 
   if (!viewport) return null;
 
+  const project = state.project;
+
+  const persist = (updated: ChronoProject) => {
+    setState({ status: 'ready', project: updated });
+    window.chronoAPI?.saveProjectData(updated.id, updated).catch((err: unknown) => {
+      // Показ содержимого не должен падать из-за сбоя сохранения - ошибка
+      // просто остаётся в консоли; полноценная обработка (баннер, повтор)
+      // придёт вместе с автосохранением.
+      console.error('[Хронолиния] Не удалось сохранить проект:', err);
+    });
+  };
+
+  const handleAddTimeline = () => {
+    const name = window.prompt('Название линии', '')?.trim();
+    if (!name) return;
+    persist(addTimeline(project, crypto.randomUUID(), name));
+  };
+
+  const handleDeleteTimeline = (timelineId: string) => {
+    const timeline = project.timelines.find((t) => t.id === timelineId);
+    if (!timeline) return;
+    if (!window.confirm(`Удалить линию «${timeline.name}» со всеми событиями?`)) return;
+    persist(deleteTimeline(project, timelineId));
+  };
+
   return (
     <div className={`chronoline-runtime chronoline-runtime--theme-${properties.theme}`} style={{ width, height }}>
       <BoardView
-        timelines={state.project.timelines}
+        timelines={project.timelines}
         viewport={viewport}
         onViewportChange={setViewport}
         selectedEventId={selectedEventId}
         onSelectEvent={setSelectedEventId}
+        onAddTimeline={properties.localEditingEnabled ? handleAddTimeline : undefined}
+        onDeleteTimeline={properties.localEditingEnabled ? handleDeleteTimeline : undefined}
       />
     </div>
   );

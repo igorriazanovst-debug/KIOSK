@@ -18,13 +18,50 @@
 .chrono-board__timeline-name {
   display: flex;
   align-items: center;
+  justify-content: space-between;
+  gap: 6px;
   padding: 0 10px;
   font-size: 13px;
   color: rgba(255, 255, 255, 0.7);
   border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.chrono-board__timeline-name-text {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+
+.chrono-board__timeline-delete {
+  flex-shrink: 0;
+  border: none;
+  background: transparent;
+  color: rgba(255, 255, 255, 0.4);
+  cursor: pointer;
+  font-size: 16px;
+  line-height: 1;
+  padding: 2px 4px;
+}
+
+.chrono-board__timeline-delete:hover {
+  color: #ff6b6b;
+}
+
+.chrono-board__add-timeline {
+  width: 100%;
+  border: none;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  background: transparent;
+  color: rgba(255, 255, 255, 0.5);
+  cursor: pointer;
+  padding: 8px 10px;
+  text-align: left;
+  font-size: 13px;
+}
+
+.chrono-board__add-timeline:hover {
+  color: rgba(255, 255, 255, 0.9);
+  background: rgba(255, 255, 255, 0.04);
 }
 
 .chrono-board__main {

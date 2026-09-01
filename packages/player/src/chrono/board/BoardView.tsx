@@ -29,6 +29,9 @@ export interface BoardViewProps {
   onViewportChange: (viewport: Viewport) => void;
   selectedEventId: string | null;
   onSelectEvent: (eventId: string | null) => void;
+  /** Кнопка добавления линии в сайдбаре не рендерится, если не передан (только просмотр) */
+  onAddTimeline?: () => void;
+  onDeleteTimeline?: (timelineId: string) => void;
 }
 
 const TIMELINE_ROW_HEIGHT = 60;
@@ -41,6 +44,8 @@ const BoardView: React.FC<BoardViewProps> = ({
   onViewportChange,
   selectedEventId,
   onSelectEvent,
+  onAddTimeline,
+  onDeleteTimeline,
 }) => {
   const trackAreaRef = useRef<HTMLDivElement>(null);
 
@@ -74,9 +79,24 @@ const BoardView: React.FC<BoardViewProps> = ({
       <div className="chrono-board__sidebar">
         {timelines.map((timeline) => (
           <div key={timeline.id} className="chrono-board__timeline-name" style={{ height: TIMELINE_ROW_HEIGHT }}>
-            {timeline.name}
+            <span className="chrono-board__timeline-name-text">{timeline.name}</span>
+            {onDeleteTimeline && (
+              <button
+                type="button"
+                className="chrono-board__timeline-delete"
+                title="Удалить линию"
+                onClick={() => onDeleteTimeline(timeline.id)}
+              >
+                ×
+              </button>
+            )}
           </div>
         ))}
+        {onAddTimeline && (
+          <button type="button" className="chrono-board__add-timeline" onClick={onAddTimeline}>
+            + Линия
+          </button>
+        )}
         <div className="chrono-board__sidebar-spacer" style={{ height: SCALE_RULER_HEIGHT }} />
       </div>
 
