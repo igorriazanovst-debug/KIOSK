@@ -18,6 +18,7 @@ import React, { useRef } from 'react';
 import { useGesture } from '@use-gesture/react';
 import type { ChronoInterval, ChronoTimeline, Viewport } from '@kiosk/shared';
 import ScaleRuler from './ScaleRuler.tsx';
+import OverviewScale from './OverviewScale.tsx';
 import EventNode from './EventNode.tsx';
 import { eventPixelBounds, isEventVisible } from './eventPosition.ts';
 import { panViewport, zoomViewportAtPoint } from './boardViewport.ts';
@@ -41,6 +42,7 @@ export interface BoardViewProps {
 
 const TIMELINE_ROW_HEIGHT = 60;
 const SCALE_RULER_HEIGHT = 40;
+const OVERVIEW_HEIGHT = 46;
 const WHEEL_ZOOM_STEP = 1.15;
 
 const BoardView: React.FC<BoardViewProps> = ({
@@ -104,7 +106,7 @@ const BoardView: React.FC<BoardViewProps> = ({
             + Линия
           </button>
         )}
-        <div className="chrono-board__sidebar-spacer" style={{ height: SCALE_RULER_HEIGHT }} />
+        <div className="chrono-board__sidebar-spacer" style={{ height: SCALE_RULER_HEIGHT + OVERVIEW_HEIGHT }} />
       </div>
 
       <div className="chrono-board__main" style={{ width: viewport.widthPx }}>
@@ -149,6 +151,13 @@ const BoardView: React.FC<BoardViewProps> = ({
         </div>
 
         <ScaleRuler viewport={viewport} heightPx={SCALE_RULER_HEIGHT} />
+        <OverviewScale
+          timelines={timelines}
+          viewport={viewport}
+          onViewportChange={onViewportChange}
+          widthPx={viewport.widthPx}
+          heightPx={OVERVIEW_HEIGHT}
+        />
       </div>
     </div>
   );

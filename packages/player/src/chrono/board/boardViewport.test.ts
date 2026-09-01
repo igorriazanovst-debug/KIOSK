@@ -1,7 +1,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { axisYearsToPx, type Viewport } from '@kiosk/shared';
-import { panViewport, zoomViewportAtPoint, visibleAxisRange, MIN_SPAN_YEARS, MAX_SPAN_YEARS } from './boardViewport.ts';
+import { panViewport, zoomViewportAtPoint, visibleAxisRange, resizeViewportWindow, MIN_SPAN_YEARS, MAX_SPAN_YEARS } from './boardViewport.ts';
 
 const VIEWPORT: Viewport = { centerAxisYears: 1950, spanAxisYears: 100, widthPx: 1000 };
 
@@ -82,4 +82,47 @@ test('visibleAxisRange returns [center - span/2, center + span/2]', () => {
   const range = visibleAxisRange(VIEWPORT);
   assert.equal(range.start, 1900);
   assert.equal(range.end, 2000);
+});
+
+// ─── resizeViewportWindow ────────────────────────────────────────────────
+
+test('resizing the "start" edge forward shrinks the span, "end" boundary stays fixed', () => {
+  const resized = resizeViewportWindow(VIEWPORT, 'start', 10);
+  const range = visibleAxisRange(resized);
+
+  assert.equal(range.start, 1910);
+  assert.equal(range.end, 2000, 'the end boundary must not move when resizing the start edge');
+});
+
+test('resizing the "end" edge backward shrinks the span, "start" boundary stays fixed', () => {
+  const resized = resizeViewportWindow(VIEWPORT, 'end', -10);
+  const range = visibleAxisRange(resized);
+
+  assert.equal(range.start, 1900, 'the start boundary must not move when resizing the end edge');
+  assert.equal(range.end, 1990);
+});
+
+test('resizing "start" past "end" clamps to MIN_SPAN_YEARS instead of inverting', () => {
+  const resized = resizeViewportWindow(VIEWPORT, 'start', 1000);
+  const range = visibleAxisRange(resized);
+
+  assert.ok(range.start <= range.end);
+  assert.ok(resized.spanAxisYears >= MIN_SPAN_YEARS - 1e-9);
+  // Tolerance, not exact equality: at MIN_SPAN_YEARS (1e-6) the subtraction
+  // fixedEnd - draggedStart is near-cancellation between large numbers,
+  // same class of float drift as elsewhere in this codebase's axis math.
+  assert.ok(Math.abs(range.end - 2000) < 1e-6, 'the fixed edge must still be (numerically) where it was');
+});
+
+test('resizing "end" past "start" clamps to MIN_SPAN_YEARS instead of inverting', () => {
+  const resized = resizeViewportWindow(VIEWPORT, 'end', -1000);
+  const range = visibleAxisRange(resized);
+
+  assert.ok(range.start <= range.end);
+  assert.ok(Math.abs(range.start - 1900) < 1e-6, 'the fixed edge must still be (numerically) where it was');
+});
+
+test('resizeViewportWindow respects a custom maxSpanYears clamp on extreme widening', () => {
+  const resized = resizeViewportWindow(VIEWPORT, 'start', -1e15, MIN_SPAN_YEARS, MAX_SPAN_YEARS);
+  assert.equal(resized.spanAxisYears, MAX_SPAN_YEARS);
 });

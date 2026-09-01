@@ -4,7 +4,8 @@
 // масштабе. Пустой проект (ещё нет ни одного события) — разумный дефолт
 // вокруг текущего календарного года, не нулевой/бесконечный диапазон.
 
-import { toRange, type ChronoProject, type Viewport } from '@kiosk/shared';
+import type { ChronoProject, Viewport } from '@kiosk/shared';
+import { collectAxisYearBounds } from './timelineBounds.ts';
 
 const DEFAULT_SPAN_YEARS = 100;
 const PADDING_FRACTION = 0.1;
@@ -16,18 +17,7 @@ const MIN_SPAN_YEARS = 10;
  * @param now Точка отсчёта для пустого проекта — параметризована для тестируемости
  */
 export function computeInitialViewport(project: ChronoProject, widthPx: number, now: Date = new Date()): Viewport {
-  const bounds: number[] = [];
-
-  for (const timeline of project.timelines) {
-    for (const event of timeline.events) {
-      const startRange = toRange(event.interval.start);
-      bounds.push(startRange.start, startRange.end);
-      if (event.interval.end !== null) {
-        const endRange = toRange(event.interval.end);
-        bounds.push(endRange.start, endRange.end);
-      }
-    }
-  }
+  const bounds = collectAxisYearBounds(project.timelines);
 
   if (bounds.length === 0) {
     return { centerAxisYears: now.getUTCFullYear(), spanAxisYears: DEFAULT_SPAN_YEARS, widthPx };
