@@ -19,6 +19,7 @@
     "clean": "rimraf dist dist-electron"
   },
   "dependencies": {
+    "@kiosk/shared": "file:../shared",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "uuid": "^9.0.0",

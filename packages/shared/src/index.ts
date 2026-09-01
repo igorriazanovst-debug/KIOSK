@@ -9,3 +9,6 @@ export * from './constants/features';
 
 // Utils
 export * from './utils/validation';
+
+// Chrono («Хронолиния»)
+export * from './chrono';
