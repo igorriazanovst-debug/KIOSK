@@ -53,6 +53,7 @@ import {
   addAttributeDef,
   renameAttributeDef,
   deleteAttributeDef,
+  setTimelineColor,
   type AttributeDef,
 } from '@kiosk/shared';
 import BoardView, { type BoardViewProps } from '@kiosk/chrono-ui/board/BoardView';
@@ -471,6 +472,11 @@ const ChronolineRuntime: React.FC<Props> = ({ properties, width, height }) => {
     applyMutation(deleteAttributeDef(project, attributeSettingsTimelineId, attrId));
   };
 
+  const handleChangeTimelineColor = (color: string | undefined) => {
+    if (!attributeSettingsTimelineId) return;
+    applyMutation(setTimelineColor(project, attributeSettingsTimelineId, color));
+  };
+
   const addEventTimeline = addEventTimelineId ? project.timelines.find((t) => t.id === addEventTimelineId) : null;
 
   const selectedEventInfo = (() => {
@@ -674,6 +680,7 @@ const ChronolineRuntime: React.FC<Props> = ({ properties, width, height }) => {
             onAddAttribute={handleAddAttribute}
             onRenameAttribute={handleRenameAttribute}
             onDeleteAttribute={handleDeleteAttribute}
+            onChangeColor={handleChangeTimelineColor}
             onClose={() => setAttributeSettingsTimelineId(null)}
           />
         )}

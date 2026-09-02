@@ -17,8 +17,12 @@ export interface TimelineSettingsProps {
   onAddAttribute: (attr: AttributeDef) => void;
   onRenameAttribute: (attrId: string, name: string) => void;
   onDeleteAttribute: (attrId: string) => void;
+  /** FR-034 ТЗ - акцентный цвет линии; undefined сбрасывает на цвет по умолчанию */
+  onChangeColor: (color: string | undefined) => void;
   onClose: () => void;
 }
+
+const DEFAULT_TIMELINE_COLOR = '#4a90e2';
 
 const TYPE_OPTIONS: { value: AttributeType; label: string }[] = [
   { value: 'string', label: 'Строка' },
@@ -36,6 +40,7 @@ const TimelineSettings: React.FC<TimelineSettingsProps> = ({
   onAddAttribute,
   onRenameAttribute,
   onDeleteAttribute,
+  onChangeColor,
   onClose,
 }) => {
   const [newName, setNewName] = useState('');
@@ -83,6 +88,22 @@ const TimelineSettings: React.FC<TimelineSettingsProps> = ({
     <div className="chrono-timeline-settings__overlay" onClick={onClose}>
       <div className="chrono-timeline-settings" onClick={(e) => e.stopPropagation()}>
         <h3 className="chrono-timeline-settings__title">Атрибуты линии «{timeline.name}»</h3>
+
+        <div className="chrono-timeline-settings__color-row">
+          <label className="chrono-timeline-settings__color-label">
+            <span>Цвет линии</span>
+            <input
+              type="color"
+              value={timeline.color ?? DEFAULT_TIMELINE_COLOR}
+              onChange={(e) => onChangeColor(e.target.value)}
+            />
+          </label>
+          {timeline.color && (
+            <button type="button" onClick={() => onChangeColor(undefined)}>
+              Сбросить
+            </button>
+          )}
+        </div>
 
         <ul className="chrono-timeline-settings__list">
           {timeline.attributes.map((attr) => (

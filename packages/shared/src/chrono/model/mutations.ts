@@ -20,6 +20,14 @@ export function renameTimeline(project: ChronoProject, timelineId: string, name:
   };
 }
 
+/** FR-034 ТЗ ("создание собственных стилей отображения линий") - пока один параметр стиля, акцентный цвет линии; undefined сбрасывает на цвет по умолчанию */
+export function setTimelineColor(project: ChronoProject, timelineId: string, color: string | undefined): ChronoProject {
+  return {
+    ...project,
+    timelines: project.timelines.map((t) => (t.id === timelineId ? { ...t, color } : t)),
+  };
+}
+
 export function deleteTimeline(project: ChronoProject, timelineId: string): ChronoProject {
   return { ...project, timelines: project.timelines.filter((t) => t.id !== timelineId) };
 }

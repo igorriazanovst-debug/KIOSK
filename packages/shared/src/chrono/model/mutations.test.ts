@@ -3,6 +3,7 @@ import assert from 'node:assert/strict';
 import {
   addTimeline,
   renameTimeline,
+  setTimelineColor,
   deleteTimeline,
   addEvent,
   updateEvent,
@@ -72,6 +73,25 @@ test('renameTimeline on an unknown id is a no-op (returns an equivalent project,
   const project = addTimeline(emptyProject(), 'tl-1', 'Линия');
   const result = renameTimeline(project, 'does-not-exist', 'X');
   assert.deepEqual(result.timelines, project.timelines);
+});
+
+test('setTimelineColor sets the color on only the matching timeline, does not mutate the original', () => {
+  let project = addTimeline(emptyProject(), 'tl-1', 'Первая');
+  project = addTimeline(project, 'tl-2', 'Вторая');
+
+  const updated = setTimelineColor(project, 'tl-1', '#ff0000');
+
+  assert.equal(updated.timelines.find((t) => t.id === 'tl-1')!.color, '#ff0000');
+  assert.equal(updated.timelines.find((t) => t.id === 'tl-2')!.color, undefined);
+  assert.equal(project.timelines.find((t) => t.id === 'tl-1')!.color, undefined, 'original project must stay untouched');
+});
+
+test('setTimelineColor with undefined resets the color back to default', () => {
+  let project = addTimeline(emptyProject(), 'tl-1', 'Линия');
+  project = setTimelineColor(project, 'tl-1', '#00ff00');
+
+  const reset = setTimelineColor(project, 'tl-1', undefined);
+  assert.equal(reset.timelines[0].color, undefined);
 });
 
 test('deleteTimeline removes only the matching timeline', () => {

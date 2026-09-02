@@ -167,7 +167,15 @@ const BoardView: React.FC<BoardViewProps> = ({
     <div className="chrono-board">
       <div className="chrono-board__sidebar">
         {timelines.map((timeline) => (
-          <div key={timeline.id} className="chrono-board__timeline-name" style={{ height: TIMELINE_ROW_HEIGHT }}>
+          <div
+            key={timeline.id}
+            className="chrono-board__timeline-name"
+            // FR-034 ТЗ ("собственные стили отображения линий") - пока
+            // единственный параметр стиля, акцентная полоса цвета линии
+            // слева от названия и вдоль всей дорожки (см. ниже) - способ
+            // отличить линии друг от друга без чтения подписи.
+            style={{ height: TIMELINE_ROW_HEIGHT, borderLeft: timeline.color ? `3px solid ${timeline.color}` : undefined }}
+          >
             <span className="chrono-board__timeline-name-text">{timeline.name}</span>
             {onOpenTimelineSettings && (
               <button
@@ -265,7 +273,17 @@ const BoardView: React.FC<BoardViewProps> = ({
             />
           )}
           {timelines.map((timeline) => (
-            <div key={timeline.id} className="chrono-board__timeline-track" style={{ height: TIMELINE_ROW_HEIGHT }}>
+            <div
+              key={timeline.id}
+              className="chrono-board__timeline-track"
+              // Тот же цвет линии, что и в сайдбаре - лёгкий тон фона
+              // дорожки (не сплошная заливка), чтобы не спорить по
+              // контрасту с самими событиями.
+              style={{
+                height: TIMELINE_ROW_HEIGHT,
+                backgroundColor: timeline.color ? `color-mix(in srgb, ${timeline.color} 10%, transparent)` : undefined,
+              }}
+            >
               {onAddEventRequested && (
                 <button
                   type="button"
