@@ -55,6 +55,11 @@ test('a chronoline widget switches on window chrome', () => {
   assert.equal(result.resizable, true);
   assert.equal(result.minimizable, true);
   assert.equal(result.maximizable, true);
+  // useContentSize - без него width/height считают рамку окна как часть
+  // содержимого, и доска Хронолинии (доверяет заявленной ширине виджета)
+  // рендерится на несколько px шире реально видимой области - найдено
+  // вживую при первом реальном запуске в Electron.
+  assert.equal(result.useContentSize, true);
 });
 
 test('window mode is triggered regardless of where in the widget list chronoline sits, and coexists with other widgets', () => {

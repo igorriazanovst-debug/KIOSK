@@ -1,8 +1,8 @@
-const { app, BrowserWindow, ipcMain, dialog } = require('electron');
+const { app, BrowserWindow, ipcMain, dialog, Menu } = require('electron');
 const path = require('path');
 const fs = require('fs');
 const { registerChronoIpc } = require('./chrono/ipc');
-const { buildBrowserWindowOptions } = require('./chrono/windowMode');
+const { buildBrowserWindowOptions, hasChronolineWidget } = require('./chrono/windowMode');
 const { mediaDir: chronoMediaDir } = require('./chrono/mediaStore');
 const { resolveWithinRoot: chronoResolveWithinRoot } = require('./chrono/pathGuard');
 
@@ -228,7 +228,23 @@ function findProjectJsonForWindowModeSync() {
 // Создание главного окна
 function createWindow() {
 
-  const windowOptions = buildBrowserWindowOptions(findProjectJsonForWindowModeSync());
+  const projectDataForWindowMode = findProjectJsonForWindowModeSync();
+  const windowOptions = buildBrowserWindowOptions(projectDataForWindowMode);
+
+  // Найдено вживую (скриншот, замечено пользователем): в оконном режиме
+  // (frame:true, autoHideMenuBar:false - только у виджета "Хронолиния")
+  // Electron рисует свой ДЕФОЛТНЫЙ нативный меню-бар (File Edit View
+  // Window Help) - на английском и с пунктами вроде Reload/Toggle
+  // DevTools, не нужными и не переведёнными для этого продукта. У доски
+  // уже есть собственный полный тулбар на русском для всех нужных
+  // действий - системное меню просто убирается, а не переводится (нечего
+  // в нём показывать конечному пользователю школы/музея). Обычный
+  // kiosk-режим (autoHideMenuBar+fullscreen+kiosk) этот бар и так не
+  // показывает - трогаем меню только когда обнаружен виджет "Хронолиния",
+  // чтобы не менять поведение для остальных клиентов.
+  if (hasChronolineWidget(projectDataForWindowMode)) {
+    Menu.setApplicationMenu(null);
+  }
 
   mainWindow = new BrowserWindow({
     ...windowOptions,
