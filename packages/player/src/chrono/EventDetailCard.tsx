@@ -4,6 +4,13 @@
 // доски). Без права редактирования поля просто readOnly - тот же JSX, не
 // отдельная view-only ветка вёрстки.
 //
+// НЕ рендерит собственный overlay/backdrop (FR-019 ТЗ: "одновременный
+// просмотр... из не менее чем 2-х хронологических линий") - компонент
+// только сама панель, overlay + расположение нескольких панелей в ряд
+// (или ровно одной) - забота ChronolineRuntime.tsx, чтобы 2+ открытые
+// карточки не рисовались друг поверх друга как раньше, когда каждая
+// карточка сама была модалкой на весь экран.
+//
 // Описание - пока обычный textarea (plain text в TimelineEvent.descriptionHtml),
 // НЕ RichTextEditor.tsx из editor-web: тот тянет @tiptap как React-дерево
 // зависимостей, специфичных для editor-web-приложения (react-router и
@@ -312,8 +319,7 @@ const EventDetailCard: React.FC<EventDetailCardProps> = ({
   };
 
   return (
-    <div className="chrono-event-detail__overlay" onClick={onClose}>
-      <form className="chrono-event-detail" onClick={(e) => e.stopPropagation()} onSubmit={handleSave}>
+      <form className="chrono-event-detail" onSubmit={handleSave}>
         <h3 className="chrono-event-detail__title">
           {canEdit ? 'Событие' : event.name} — «{timeline.name}»
         </h3>
@@ -409,7 +415,19 @@ const EventDetailCard: React.FC<EventDetailCardProps> = ({
         {timeline.attributes.map((attr) => (
           <div key={attr.id} className="chrono-event-detail__field">
             <span>{attr.name}</span>
-            {renderAttributeInput(attr, attributeValues[attr.id], (v) => setAttributeValue(attr.id, v), !canEdit, allEvents, onNavigateToEvent)}
+            {renderAttributeInput(
+              attr,
+              attributeValues[attr.id],
+              (v) => setAttributeValue(attr.id, v),
+              !canEdit,
+              // Само событие исключается ЗДЕСЬ, а не вызывающим кодом - при
+              // нескольких одновременно открытых карточках (FR-019)
+              // вызывающий код передаёт ОДИН и тот же allEvents всем
+              // карточкам, каждая карточка сама знает, какой id ей нужно
+              // убрать из своего собственного списка.
+              allEvents.filter((o) => o.id !== event.id),
+              onNavigateToEvent
+            )}
           </div>
         ))}
 
@@ -459,7 +477,6 @@ const EventDetailCard: React.FC<EventDetailCardProps> = ({
           )}
         </div>
       </form>
-    </div>
   );
 };
 

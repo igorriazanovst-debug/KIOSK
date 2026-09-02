@@ -8,6 +8,20 @@
   z-index: 20;
 }
 
+/* FR-019 ТЗ - несколько одновременно открытых карточек событий (даже с
+   разных линий) в ряд, не друг поверх друга. Одна карточка внутри
+   выглядит и ведёт себя так же, как и раньше. */
+.chrono-event-detail__stack {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  gap: 16px;
+  max-width: 95vw;
+  max-height: 90%;
+  overflow-x: auto;
+  padding: 4px;
+}
+
 .chrono-event-detail {
   width: min(480px, 90%);
   max-height: 85%;

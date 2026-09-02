@@ -484,40 +484,41 @@ const ChronolineRuntime: React.FC<Props> = ({ properties, width, height }) => {
 
   const addEventTimeline = addEventTimelineId ? project.timelines.find((t) => t.id === addEventTimelineId) : null;
 
-  const selectedEventInfo = (() => {
-    if (!selectedEventId) return undefined;
+  // FR-019 ТЗ ("одновременный просмотр... из не менее чем 2-х
+  // хронологических линиях") - клик на событие ДОБАВЛЯЕТ его карточку к
+  // уже открытым, не заменяет их (см. handleSelectEvent ниже). selectedEventId
+  // остаётся отдельно - только для подсветки последней кликнутой отметки на
+  // доске (BoardView не знает про множественный выбор карточек вообще).
+  const [openCardEventIds, setOpenCardEventIds] = useState<string[]>([]);
+
+  const findEventInfo = (eventId: string) => {
     for (const timeline of project.timelines) {
-      const event = timeline.events.find((e) => e.id === selectedEventId);
+      const event = timeline.events.find((e) => e.id === eventId);
       if (event) return { timeline, event };
     }
     return undefined;
-  })();
+  };
+
+  const handleSelectEvent = (eventId: string | null) => {
+    if (eventId === null) {
+      setSelectedEventId(null);
+      setOpenCardEventIds([]);
+      return;
+    }
+    setSelectedEventId(eventId);
+    setOpenCardEventIds((ids) => (ids.includes(eventId) ? ids : [...ids, eventId]));
+  };
+
+  const closeCard = (eventId: string) => setOpenCardEventIds((ids) => ids.filter((id) => id !== eventId));
 
   // FR-032 ТЗ: пикер ссылки на событие в EventDetailCard - по ВСЕМ линиям
-  // проекта (строка 34 ТЗ), не только текущей. Текущее событие исключается
-  // здесь, а не в самой карточке - EventDetailCard не обязан знать, что
-  // "себя саму" нельзя предлагать в списке, это забота вызывающего кода.
+  // проекта (строка 34 ТЗ), не только текущей. Одна и та же ОБЩАЯ
+  // (неотфильтрованная) выборка передаётся всем одновременно открытым
+  // карточкам - каждая карточка сама убирает из неё СВОЙ id (см.
+  // EventDetailCard.tsx), т.к. у разных карточек он разный.
   const allEventsForLinking = project.timelines.flatMap((t) =>
-    t.events.filter((e) => e.id !== selectedEventId).map((e) => ({ id: e.id, name: e.name, timelineName: t.name }))
+    t.events.map((e) => ({ id: e.id, name: e.name, timelineName: t.name }))
   );
-
-  const handleEventDetailSave = (patch: EventDetailPatch) => {
-    if (!selectedEventInfo) return;
-    applyMutation(updateEvent(project, selectedEventInfo.timeline.id, selectedEventInfo.event.id, patch));
-    setSelectedEventId(null);
-  };
-
-  const handleEventDetailDelete = () => {
-    if (!selectedEventInfo) return;
-    if (!window.confirm(`Удалить событие «${selectedEventInfo.event.name}»?`)) return;
-    applyMutation(deleteEvent(project, selectedEventInfo.timeline.id, selectedEventInfo.event.id));
-    setSelectedEventId(null);
-  };
-
-  const handleCopyEvent = () => {
-    if (!selectedEventInfo) return;
-    setEventClipboard(selectedEventInfo.event);
-  };
 
   // Вставка создаёт НОВОЕ событие (свежий id) с тем же содержимым, на ТУ ЖЕ
   // дату - пользователь затем перетаскивает копию, куда нужно (drag/resize
@@ -703,7 +704,7 @@ const ChronolineRuntime: React.FC<Props> = ({ properties, width, height }) => {
           viewport={viewport}
           onViewportChange={setViewport}
           selectedEventId={selectedEventId}
-          onSelectEvent={setSelectedEventId}
+          onSelectEvent={handleSelectEvent}
           onAddTimeline={canEdit ? handleAddTimeline : undefined}
           onDeleteTimeline={canEdit ? handleDeleteTimeline : undefined}
           onOpenTimelineSettings={canEdit ? setAttributeSettingsTimelineId : undefined}
@@ -721,27 +722,49 @@ const ChronolineRuntime: React.FC<Props> = ({ properties, width, height }) => {
             onCancel={() => setAddEventTimelineId(null)}
           />
         )}
-        {selectedEventInfo && (
-          <EventDetailCard
-            // Перемонтируем карточку при переходе по ссылке eventLink на
-            // другое событие - её внутреннее состояние (name/place/... через
-            // useState) иначе инициализировалось бы только один раз и не
-            // подхватило бы данные нового события при смене одного и того
-            // же React-элемента.
-            key={selectedEventInfo.event.id}
-            event={selectedEventInfo.event}
-            timeline={selectedEventInfo.timeline}
-            canEdit={canEdit}
-            mediaCatalog={project.media}
-            getMediaUrl={(media) => mediaUrl(project.id, media)}
-            allEvents={allEventsForLinking}
-            onNavigateToEvent={setSelectedEventId}
-            onImportMedia={handleImportMediaForEvent}
-            onSave={handleEventDetailSave}
-            onDelete={handleEventDetailDelete}
-            onCopy={canEdit ? handleCopyEvent : undefined}
-            onClose={() => setSelectedEventId(null)}
-          />
+        {openCardEventIds.length > 0 && (
+          // FR-019 ТЗ - overlay/раскладка в ряд здесь, НЕ внутри
+          // EventDetailCard (см. её заголовочный комментарий) - иначе 2+
+          // одновременно открытые карточки рисовались бы каждая своим
+          // полноэкранным overlay друг поверх друга.
+          <div
+            className="chrono-event-detail__overlay"
+            onClick={() => {
+              setSelectedEventId(null);
+              setOpenCardEventIds([]);
+            }}
+          >
+            <div className="chrono-event-detail__stack" onClick={(e) => e.stopPropagation()}>
+              {openCardEventIds.map((eventId) => {
+                const info = findEventInfo(eventId);
+                if (!info) return null;
+                return (
+                  <EventDetailCard
+                    key={eventId}
+                    event={info.event}
+                    timeline={info.timeline}
+                    canEdit={canEdit}
+                    mediaCatalog={project.media}
+                    getMediaUrl={(media) => mediaUrl(project.id, media)}
+                    allEvents={allEventsForLinking}
+                    onNavigateToEvent={handleSelectEvent}
+                    onImportMedia={handleImportMediaForEvent}
+                    onSave={(patch) => {
+                      applyMutation(updateEvent(project, info.timeline.id, info.event.id, patch));
+                      closeCard(eventId);
+                    }}
+                    onDelete={() => {
+                      if (!window.confirm(`Удалить событие «${info.event.name}»?`)) return;
+                      applyMutation(deleteEvent(project, info.timeline.id, info.event.id));
+                      closeCard(eventId);
+                    }}
+                    onCopy={canEdit ? () => setEventClipboard(info.event) : undefined}
+                    onClose={() => closeCard(eventId)}
+                  />
+                );
+              })}
+            </div>
+          </div>
         )}
         {attributeSettingsTimeline && (
           <TimelineSettings
