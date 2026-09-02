@@ -165,6 +165,8 @@ export const ChronoProjectSchema = z.object({
   compareStrip: z.object({ enabled: z.boolean(), color: z.string() }).optional(),
   /** Отсутствует у проектов, сохранённых до этого поля - тогда viewport пересчитывается заново по содержимому (см. computeInitialViewport) */
   viewport: SavedViewportSchema.optional(),
+  /** FR-035 ТЗ: единое фоновое изображение хронолинии - id записи в media[], null/отсутствует = фона нет */
+  backgroundMediaId: z.string().nullable().optional(),
   createdAt: z.string(),
   updatedAt: z.string(),
 });

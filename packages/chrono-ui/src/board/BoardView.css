@@ -88,6 +88,17 @@
   cursor: grab;
 }
 
+.chrono-board__background {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  opacity: 0.25;
+  pointer-events: none;
+  z-index: 0;
+}
+
 .chrono-board__timeline-track {
   position: relative;
   border-bottom: 1px solid rgba(255, 255, 255, 0.06);

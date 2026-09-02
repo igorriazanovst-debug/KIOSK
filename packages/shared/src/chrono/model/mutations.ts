@@ -84,6 +84,11 @@ export function addMedia(project: ChronoProject, media: ChronoMedia): { project:
   return { project: { ...project, media: [...project.media, media] }, media };
 }
 
+/** FR-035 ТЗ ("единое фоновое изображение хронолинии") - mediaId должен уже быть в project.media[] (через addMedia); null снимает фон */
+export function setBackgroundMedia(project: ChronoProject, mediaId: string | null): ChronoProject {
+  return { ...project, backgroundMediaId: mediaId };
+}
+
 /** @param attr Собран целиком вызывающим кодом (id, тип, enumValues при необходимости) */
 export function addAttributeDef(project: ChronoProject, timelineId: string, attr: AttributeDef): ChronoProject {
   return {

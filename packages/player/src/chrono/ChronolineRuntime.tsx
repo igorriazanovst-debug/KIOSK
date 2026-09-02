@@ -54,6 +54,7 @@ import {
   renameAttributeDef,
   deleteAttributeDef,
   setTimelineColor,
+  setBackgroundMedia,
   type AttributeDef,
 } from '@kiosk/shared';
 import BoardView, { type BoardViewProps } from '@kiosk/chrono-ui/board/BoardView';
@@ -545,6 +546,28 @@ const ChronolineRuntime: React.FC<Props> = ({ properties, width, height }) => {
     }
   };
 
+  // FR-035 ТЗ - единое фоновое изображение хронолинии, тот же
+  // pick+import-поток, что и у медиа события (handleImportMediaForEvent),
+  // только результат идёт в project.backgroundMediaId, а не в mediaIds
+  // конкретного события.
+  const backgroundMedia = project.backgroundMediaId
+    ? project.media.find((m) => m.id === project.backgroundMediaId) ?? null
+    : null;
+
+  const handleSetBackgroundImage = async () => {
+    const filePath = await window.chronoAPI?.pickMediaFile();
+    if (!filePath) return;
+    try {
+      const imported = await window.chronoAPI!.importMedia(project.id, filePath);
+      const { project: withMedia, media } = addMedia(project, imported);
+      applyMutation(setBackgroundMedia(withMedia, media.id));
+    } catch (err) {
+      handleMutatingIpcError(err, 'Не удалось задать фоновое изображение');
+    }
+  };
+
+  const handleClearBackgroundImage = () => applyMutation(setBackgroundMedia(project, null));
+
   const boardHeight = editingEnabled ? height - TOOLBAR_HEIGHT : height;
 
   return (
@@ -580,6 +603,14 @@ const ChronolineRuntime: React.FC<Props> = ({ properties, width, height }) => {
               <button type="button" onClick={handleImportProject} title="Импортировать проект из файла">
                 ⭱ Импорт
               </button>
+              <button type="button" onClick={handleSetBackgroundImage} title="Задать фоновое изображение хронолинии">
+                🖼 Фон
+              </button>
+              {backgroundMedia && (
+                <button type="button" onClick={handleClearBackgroundImage} title="Убрать фоновое изображение">
+                  🖼 ×
+                </button>
+              )}
               <span className="chronoline-runtime__toolbar-separator" />
               <button type="button" onClick={handleUndo} disabled={!canUndo(history)} title="Отменить">
                 ↶ Отменить
@@ -644,6 +675,7 @@ const ChronolineRuntime: React.FC<Props> = ({ properties, width, height }) => {
           onPasteEvent={canEdit && eventClipboard ? handlePasteEvent : undefined}
           mediaCatalog={project.media}
           getMediaUrl={(media) => mediaUrl(project.id, media)}
+          backgroundImageUrl={backgroundMedia ? mediaUrl(project.id, backgroundMedia) : undefined}
         />
         {addEventTimeline && (
           <AddEventForm

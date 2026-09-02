@@ -9,6 +9,7 @@ import {
   updateEvent,
   deleteEvent,
   addMedia,
+  setBackgroundMedia,
   addAttributeDef,
   renameAttributeDef,
   deleteAttributeDef,
@@ -178,6 +179,20 @@ test('addMedia with a different sha256 adds a second, independent entry', () => 
 
   assert.equal(result.project.media.length, 2);
   assert.equal(result.media.id, 'm2');
+});
+
+test('setBackgroundMedia sets backgroundMediaId, does not mutate the original', () => {
+  const project = emptyProject();
+  const updated = setBackgroundMedia(project, 'm1');
+
+  assert.equal(updated.backgroundMediaId, 'm1');
+  assert.equal(project.backgroundMediaId, undefined, 'original project must stay untouched');
+});
+
+test('setBackgroundMedia with null removes the background', () => {
+  const project = setBackgroundMedia(emptyProject(), 'm1');
+  const result = setBackgroundMedia(project, null);
+  assert.equal(result.backgroundMediaId, null);
 });
 
 // ─── addAttributeDef / renameAttributeDef / deleteAttributeDef ───────────

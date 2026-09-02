@@ -48,6 +48,8 @@ export interface BoardViewProps {
   /** Каталог медиа проекта - для реальных превью у событий с видом «картинка»/«карточка» вместо заглушки */
   mediaCatalog?: ChronoMedia[];
   getMediaUrl?: (media: ChronoMedia) => string;
+  /** FR-035 ТЗ: единое фоновое изображение хронолинии (уже готовый URL - chronomedia:// у player, обычный у editor-web) */
+  backgroundImageUrl?: string;
 }
 
 const TIMELINE_ROW_HEIGHT = 60;
@@ -69,6 +71,7 @@ const BoardView: React.FC<BoardViewProps> = ({
   onPasteEvent,
   mediaCatalog,
   getMediaUrl,
+  backgroundImageUrl,
 }) => {
   const trackAreaRef = useRef<HTMLDivElement>(null);
   // Эфемерное состояние взаимодействия, как и сам viewport - не часть
@@ -209,6 +212,12 @@ const BoardView: React.FC<BoardViewProps> = ({
 
       <div className="chrono-board__main" style={{ width: viewport.widthPx }}>
         <div className="chrono-board__track-area" ref={trackAreaRef} onClick={() => onSelectEvent(null)}>
+          {backgroundImageUrl && (
+            // FR-035 ТЗ: единое фоновое изображение хронолинии. Приглушено
+            // (opacity), а не поверх текста в полную силу - события/шкала
+            // остаются читаемы независимо от того, что на картинке.
+            <div className="chrono-board__background" style={{ backgroundImage: `url(${backgroundImageUrl})` }} />
+          )}
           <button
             type="button"
             className={`chrono-board__compare-toggle${compareStripAxisYears !== null ? ' chrono-board__compare-toggle--active' : ''}`}
