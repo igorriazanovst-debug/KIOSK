@@ -41,7 +41,7 @@
 // назад при ошибке "LOCKED:" от main-процесса), а не является
 // источником истины.
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import type { ChronoProject, ChronolineWidgetProperties, TimelineEvent, Viewport } from '@kiosk/shared';
 import {
   addTimeline,
@@ -99,10 +99,24 @@ type SaveStatus =
 const TOOLBAR_HEIGHT = 36;
 const SAVED_INDICATOR_FADE_MS = 2000;
 const AUTH_STATUS_POLL_MS = 60_000;
+const VIEWPORT_SAVE_DEBOUNCE_MS = 1_000;
 const LOCKED_ERROR_MARKER = 'LOCKED:';
 
 function isLockedError(err: unknown): boolean {
   return err instanceof Error && err.message.includes(LOCKED_ERROR_MARKER);
+}
+
+/**
+ * FR-014 ТЗ: масштаб/центр экрана - часть "параметров отображения",
+ * которые проект обязан сохранять. Если сохранённого viewport нет (проект
+ * создан до этого поля, или ни разу не сохранялся после открытия) -
+ * пересчитываем заново по содержимому, как и раньше.
+ */
+function resolveViewport(project: ChronoProject, widthPx: number): Viewport {
+  if (project.viewport) {
+    return { centerAxisYears: project.viewport.centerAxisYears, spanAxisYears: project.viewport.spanAxisYears, widthPx };
+  }
+  return computeInitialViewport(project, widthPx);
 }
 
 async function loadOrCreateProject(defaultName: string): Promise<{ project: ChronoProject; list: ProjectManifest[] }> {
@@ -132,11 +146,47 @@ const ChronolineRuntime: React.FC<Props> = ({ properties, width, height }) => {
   const [passwordPromptMode, setPasswordPromptMode] = useState<PasswordPromptMode | null>(null);
   const [resetInfo, setResetInfo] = useState<ResetChallengeInfo | null>(null);
 
+  // Всегда свежая ссылка на текущий present - debounce-сохранение viewport
+  // ниже не должно перетереть контентную правку, случившуюся уже ПОСЛЕ
+  // того, как таймер был поставлен (замыкание useEffect иначе держало бы
+  // историю на момент постановки таймера, не на момент его срабатывания).
+  const historyRef = useRef<History<ChronoProject> | null>(null);
+  historyRef.current = state.status === 'ready' ? state.history : null;
+
   useEffect(() => {
     if (saveStatus.kind !== 'saved') return;
     const timer = setTimeout(() => setSaveStatus({ kind: 'idle' }), SAVED_INDICATOR_FADE_MS);
     return () => clearTimeout(timer);
   }, [saveStatus]);
+
+  // FR-014 ТЗ: сохраняем масштаб/центр экрана - но НЕ немедленно на каждый
+  // пиксель пана/зума (в отличие от контентных правок, см. заголовок
+  // файла) - viewport меняется на каждый кадр жеста, немедленное
+  // сохранение означало бы десятки полных перезаписей project.json в
+  // секунду. Debounce, тихая деградация при ошибке - потеря сохранённого
+  // масштаба не теряет пользовательский контент, не заслуживает того же
+  // индикатора/повтора, что и saveStatus контентных правок.
+  useEffect(() => {
+    if (!viewport || !window.chronoAPI) return;
+    const timer = setTimeout(() => {
+      const current = historyRef.current?.present;
+      if (!current) return;
+      const saved = current.viewport;
+      if (saved && saved.centerAxisYears === viewport.centerAxisYears && saved.spanAxisYears === viewport.spanAxisYears) {
+        return;
+      }
+      window.chronoAPI!
+        .saveProjectData(current.id, {
+          ...current,
+          viewport: { centerAxisYears: viewport.centerAxisYears, spanAxisYears: viewport.spanAxisYears },
+        })
+        .catch(() => {
+          // Тихая деградация - см. комментарий выше.
+        });
+    }, VIEWPORT_SAVE_DEBOUNCE_MS);
+    return () => clearTimeout(timer);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [viewport?.centerAxisYears, viewport?.spanAxisYears]);
 
   // Challenge запрашивается заново при каждом входе в режим 'reset' -
   // предыдущий challenge мог быть погашен успешным сбросом с другого
@@ -158,7 +208,7 @@ const ChronolineRuntime: React.FC<Props> = ({ properties, width, height }) => {
       .then(([{ project, list }, authStatus]) => {
         if (cancelled) return;
         setState({ status: 'ready', history: initHistory(project), projectList: list });
-        setViewport(computeInitialViewport(project, width));
+        setViewport(resolveViewport(project, width));
         setIsPasswordSet(authStatus.isPasswordSet);
         // Отражаем РЕАЛЬНОЕ состояние сессии в main-процессе, а не всегда
         // стартуем с false: если виджет размонтировался/смонтировался
@@ -256,7 +306,7 @@ const ChronolineRuntime: React.FC<Props> = ({ properties, width, height }) => {
   // СВОЮ историю с чистого листа, а не продолжение старой.
   const openProject = (next: ChronoProject, list: ProjectManifest[]) => {
     setState({ status: 'ready', history: initHistory(next), projectList: list });
-    setViewport(computeInitialViewport(next, width));
+    setViewport(resolveViewport(next, width));
     setSelectedEventId(null);
     setAddEventTimelineId(null);
     setSaveStatus({ kind: 'idle' });
@@ -432,6 +482,14 @@ const ChronolineRuntime: React.FC<Props> = ({ properties, width, height }) => {
     return undefined;
   })();
 
+  // FR-032 ТЗ: пикер ссылки на событие в EventDetailCard - по ВСЕМ линиям
+  // проекта (строка 34 ТЗ), не только текущей. Текущее событие исключается
+  // здесь, а не в самой карточке - EventDetailCard не обязан знать, что
+  // "себя саму" нельзя предлагать в списке, это забота вызывающего кода.
+  const allEventsForLinking = project.timelines.flatMap((t) =>
+    t.events.filter((e) => e.id !== selectedEventId).map((e) => ({ id: e.id, name: e.name, timelineName: t.name }))
+  );
+
   const handleEventDetailSave = (patch: EventDetailPatch) => {
     if (!selectedEventInfo) return;
     applyMutation(updateEvent(project, selectedEventInfo.timeline.id, selectedEventInfo.event.id, patch));
@@ -590,11 +648,19 @@ const ChronolineRuntime: React.FC<Props> = ({ properties, width, height }) => {
         )}
         {selectedEventInfo && (
           <EventDetailCard
+            // Перемонтируем карточку при переходе по ссылке eventLink на
+            // другое событие - её внутреннее состояние (name/place/... через
+            // useState) иначе инициализировалось бы только один раз и не
+            // подхватило бы данные нового события при смене одного и того
+            // же React-элемента.
+            key={selectedEventInfo.event.id}
             event={selectedEventInfo.event}
             timeline={selectedEventInfo.timeline}
             canEdit={canEdit}
             mediaCatalog={project.media}
             getMediaUrl={(media) => mediaUrl(project.id, media)}
+            allEvents={allEventsForLinking}
+            onNavigateToEvent={setSelectedEventId}
             onImportMedia={handleImportMediaForEvent}
             onSave={handleEventDetailSave}
             onDelete={handleEventDetailDelete}

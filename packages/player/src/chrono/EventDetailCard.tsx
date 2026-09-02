@@ -18,10 +18,12 @@
 //
 // Атрибуты (6 типов, строка 15 ТЗ) - значения редактируются здесь, ОПРЕДЕЛЕНИЯ
 // (имя/тип/enumValues) - в TimelineSettings.tsx (линия, не событие). Тип
-// eventLink показан только для чтения (список id через запятую) -
-// полноценный выбор события (модалка-пикер по всем линиям проекта) вынесен
-// за рамки этого прохода, тот же принцип "явно отложено", что и у
-// RichTextEditor ниже.
+// eventLink (FR-032 ТЗ) - выпадающий список остальных событий проекта (по
+// ВСЕМ линиям, не только текущей - строка 34 ТЗ прямо это требует) для
+// добавления ссылки + список уже добавленных ссылок как кликабельные
+// "чипы": клик переходит к тому событию (onNavigateToEvent, см.
+// ChronolineRuntime.tsx - переключает selectedEventId, эта же карточка
+// перемонтируется с key={event.id} на новые данные).
 //
 // Редактирование даты - НЕ инлайн-парсинг текущего значения (formatInterval
 // не гарантированно распознаётся собственным parseChronoInput обратно для
@@ -58,6 +60,12 @@ export interface EventDetailPatch {
   attributeValues: Record<string, AttributeValue>;
 }
 
+export interface EventLinkOption {
+  id: string;
+  name: string;
+  timelineName: string;
+}
+
 export interface EventDetailCardProps {
   event: TimelineEvent;
   timeline: ChronoTimeline;
@@ -65,6 +73,10 @@ export interface EventDetailCardProps {
   /** Каталог медиа проекта (project.media) - для отрисовки уже прикреплённых превью по id */
   mediaCatalog: ChronoMedia[];
   getMediaUrl: (media: ChronoMedia) => string;
+  /** Все события проекта по всем линиям (для пикера eventLink) - текущее событие уже исключено вызывающим кодом */
+  allEvents: EventLinkOption[];
+  /** Переключает открытую карточку на другое событие (клик по чипу eventLink) */
+  onNavigateToEvent: (eventId: string) => void;
   /** Открывает системный выбор файла, импортирует его в медиатеку проекта - возвращает id новой (или существующей при дедупе) записи, либо null при отмене/ошибке */
   onImportMedia: () => Promise<string | null>;
   onSave: (patch: EventDetailPatch) => void;
@@ -91,7 +103,9 @@ function renderAttributeInput(
   attr: AttributeDef,
   value: AttributeValue | undefined,
   onChange: (value: AttributeValue) => void,
-  readOnly: boolean
+  readOnly: boolean,
+  linkOptions: EventLinkOption[],
+  onNavigateToEvent: (eventId: string) => void
 ) {
   switch (attr.type) {
     case 'string':
@@ -150,10 +164,59 @@ function renderAttributeInput(
     }
 
     case 'eventLink': {
-      // Полноценный выбор события (пикер по всем линиям проекта) отложен -
-      // см. заголовок файла. Здесь только просмотр уже проставленных ссылок.
       const ids = Array.isArray(value) ? value : [];
-      return <div className="chrono-event-detail__current-date">{ids.length > 0 ? ids.join(', ') : '—'}</div>;
+      const linked = ids.map((id) => ({ id, option: linkOptions.find((o) => o.id === id) }));
+      // Уже добавленное событие не предлагаем добавить второй раз - тот же
+      // id не может быть ссылкой на самого себя дважды.
+      const available = linkOptions.filter((o) => !ids.includes(o.id));
+
+      return (
+        <div className="chrono-event-detail__event-links">
+          {linked.length > 0 ? (
+            <div className="chrono-event-detail__event-link-chips">
+              {linked.map(({ id, option }) => (
+                <span key={id} className="chrono-event-detail__event-link-chip">
+                  <button
+                    type="button"
+                    className="chrono-event-detail__event-link-chip-nav"
+                    onClick={() => onNavigateToEvent(id)}
+                    title="Перейти к событию"
+                  >
+                    {option ? `${option.name} («${option.timelineName}»)` : id}
+                  </button>
+                  {!readOnly && (
+                    <button
+                      type="button"
+                      className="chrono-event-detail__event-link-chip-remove"
+                      title="Убрать ссылку"
+                      onClick={() => onChange(ids.filter((existing) => existing !== id))}
+                    >
+                      ×
+                    </button>
+                  )}
+                </span>
+              ))}
+            </div>
+          ) : (
+            <div className="chrono-event-detail__current-date">—</div>
+          )}
+          {!readOnly && available.length > 0 && (
+            <select
+              value=""
+              onChange={(e) => {
+                if (e.target.value) onChange([...ids, e.target.value]);
+              }}
+            >
+              <option value="">+ Добавить ссылку на событие…</option>
+              {available.map((o) => (
+                <option key={o.id} value={o.id}>
+                  {o.name} («{o.timelineName}»)
+                </option>
+              ))}
+            </select>
+          )}
+        </div>
+      );
     }
   }
 }
@@ -164,6 +227,8 @@ const EventDetailCard: React.FC<EventDetailCardProps> = ({
   canEdit,
   mediaCatalog,
   getMediaUrl,
+  allEvents,
+  onNavigateToEvent,
   onImportMedia,
   onSave,
   onDelete,
@@ -344,7 +409,7 @@ const EventDetailCard: React.FC<EventDetailCardProps> = ({
         {timeline.attributes.map((attr) => (
           <div key={attr.id} className="chrono-event-detail__field">
             <span>{attr.name}</span>
-            {renderAttributeInput(attr, attributeValues[attr.id], (v) => setAttributeValue(attr.id, v), !canEdit)}
+            {renderAttributeInput(attr, attributeValues[attr.id], (v) => setAttributeValue(attr.id, v), !canEdit, allEvents, onNavigateToEvent)}
           </div>
         ))}
 

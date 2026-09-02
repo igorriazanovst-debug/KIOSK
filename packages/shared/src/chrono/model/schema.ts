@@ -143,6 +143,19 @@ export type ChronoMedia = z.infer<typeof MediaSchema>;
  */
 export const CHRONO_PROJECT_SCHEMA_VERSION = 1 as const;
 
+/**
+ * Масштаб/центр экрана (FR-014 ТЗ: "сохранение хронологических линий в
+ * виде единого проекта, сохраняющего ВСЕ параметры отображения"). Только
+ * центр и охват оси - НЕ widthPx: ширина области отрисовки берётся из
+ * текущего окна/канваса при открытии, а не из значения, сохранённого в
+ * прошлый раз на другом экране/другом размере окна виджета.
+ */
+export const SavedViewportSchema = z.object({
+  centerAxisYears: z.number(),
+  spanAxisYears: z.number().positive(),
+});
+export type SavedViewport = z.infer<typeof SavedViewportSchema>;
+
 export const ChronoProjectSchema = z.object({
   schemaVersion: z.literal(CHRONO_PROJECT_SCHEMA_VERSION),
   id: z.string().min(1),
@@ -150,6 +163,8 @@ export const ChronoProjectSchema = z.object({
   timelines: z.array(TimelineSchema).default([]),
   media: z.array(MediaSchema).default([]),
   compareStrip: z.object({ enabled: z.boolean(), color: z.string() }).optional(),
+  /** Отсутствует у проектов, сохранённых до этого поля - тогда viewport пересчитывается заново по содержимому (см. computeInitialViewport) */
+  viewport: SavedViewportSchema.optional(),
   createdAt: z.string(),
   updatedAt: z.string(),
 });
