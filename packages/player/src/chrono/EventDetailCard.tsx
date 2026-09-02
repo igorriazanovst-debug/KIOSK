@@ -11,17 +11,10 @@
 // карточки не рисовались друг поверх друга как раньше, когда каждая
 // карточка сама была модалкой на весь экран.
 //
-// Описание - пока обычный textarea (plain text в TimelineEvent.descriptionHtml),
-// НЕ RichTextEditor.tsx из editor-web: тот тянет @tiptap как React-дерево
-// зависимостей, специфичных для editor-web-приложения (react-router и
-// т.п.), а packages/shared (единственное место, куда player и editor-web
-// оба уже подключены без дублирования - см. widgetProperties.ts, Фаза 3)
-// принципиально не имеет React-зависимостей и не должно их получить ради
-// одного компонента. Перенос RichTextEditor в переиспользуемый вид -
-// отдельное архитектурное решение (нужен пакет компонентов или прямая
-// связь player->editor-web, которой сейчас нет), сознательно не решается
-// здесь мимоходом. Текущее ограничение задокументировано, не тихо
-// проигнорировано.
+// Описание - FR-017 ТЗ, форматированный текст через RichTextField.tsx
+// (собственная минимальная копия на tiptap прямо в player, НЕ
+// RichTextEditor.tsx из editor-web и не через общий пакет компонентов -
+// см. заголовочный комментарий RichTextField.tsx, почему).
 //
 // Атрибуты (6 типов, строка 15 ТЗ) - значения редактируются здесь, ОПРЕДЕЛЕНИЯ
 // (имя/тип/enumValues) - в TimelineSettings.tsx (линия, не событие). Тип
@@ -51,6 +44,7 @@ import {
   type TimelineEvent,
 } from '@kiosk/shared';
 import { formatMomentPreview } from '@kiosk/chrono-ui/formatMomentPreview';
+import RichTextField from './RichTextField.tsx';
 import './EventDetailCard.css';
 
 export interface EventDetailPatch {
@@ -360,10 +354,10 @@ const EventDetailCard: React.FC<EventDetailCardProps> = ({
           <textarea rows={2} value={sourcesText} onChange={(e) => setSourcesText(e.target.value)} readOnly={!canEdit} />
         </label>
 
-        <label className="chrono-event-detail__field">
+        <div className="chrono-event-detail__field">
           <span>Описание</span>
-          <textarea rows={4} value={description} onChange={(e) => setDescription(e.target.value)} readOnly={!canEdit} />
-        </label>
+          <RichTextField value={description} onChange={setDescription} readOnly={!canEdit} />
+        </div>
 
         {defaultMedia && (defaultMedia.mimeType.startsWith('video/') || defaultMedia.mimeType.startsWith('audio/')) && (
           <div className="chrono-event-detail__field">

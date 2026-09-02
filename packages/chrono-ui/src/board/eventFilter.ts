@@ -41,10 +41,20 @@ function attributeValueToText(value: unknown): string {
   return String(value);
 }
 
+// descriptionHtml - форматированный текст (FR-017), не голый текст -
+// поиск должен смотреть на видимые слова, а не совпадать по разметке
+// ("b" не обязан находить событие только потому, что в его описании есть
+// <b>...</b>). Простая regex-зачистка тегов, без DOMParser - chrono-ui
+// переиспользуется и вне DOM-контекста (юнит-тесты), да и для поиска
+// достаточно грубой зачистки, не полного парсинга HTML.
+function stripHtmlTags(html: string): string {
+  return html.replace(/<[^>]*>/g, ' ');
+}
+
 export function matchesEventFilter(event: TimelineEvent, filter: EventFilter): boolean {
   if (filter.text.trim()) {
     const needle = filter.text.trim().toLowerCase();
-    const haystack = [event.name, event.place ?? '', event.descriptionHtml ?? ''].join(' ').toLowerCase();
+    const haystack = [event.name, event.place ?? '', stripHtmlTags(event.descriptionHtml ?? '')].join(' ').toLowerCase();
     if (!haystack.includes(needle)) return false;
   }
 
