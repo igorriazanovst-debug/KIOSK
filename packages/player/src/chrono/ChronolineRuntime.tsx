@@ -427,6 +427,8 @@ const ChronolineRuntime: React.FC<Props> = ({ properties, width, height }) => {
         mediaIds: [],
         attributeValues: {},
         view: result.view,
+        color: result.color,
+        fontColor: result.fontColor,
         verticalPriority: 1000,
       })
     );

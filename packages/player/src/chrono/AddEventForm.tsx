@@ -8,12 +8,15 @@
 import React, { useMemo, useState } from 'react';
 import { parseChronoInput, type ChronoInterval, type EventView, type ParseResult } from '@kiosk/shared';
 import { formatMomentPreview } from '@kiosk/chrono-ui/formatMomentPreview';
+import { EVENT_TEMPLATES } from './eventTemplates.ts';
 import './AddEventForm.css';
 
 export interface AddEventFormResult {
   name: string;
   interval: ChronoInterval;
   view: EventView;
+  color?: string;
+  fontColor?: string;
 }
 
 export interface AddEventFormProps {
@@ -38,6 +41,9 @@ const AddEventForm: React.FC<AddEventFormProps> = ({ timelineName, onSubmit, onC
   const [name, setName] = useState('');
   const [dateText, setDateText] = useState('');
   const [view, setView] = useState<EventView>('compact');
+  const [color, setColor] = useState<string | undefined>(undefined);
+  const [fontColor, setFontColor] = useState<string | undefined>(undefined);
+  const [templateId, setTemplateId] = useState<string>('default');
 
   const parsed = useMemo<ParseResult>(
     () => (dateText.trim() ? parseChronoInput(dateText, { referenceDate: referenceDateNow() }) : { type: 'none' }),
@@ -46,6 +52,15 @@ const AddEventForm: React.FC<AddEventFormProps> = ({ timelineName, onSubmit, onC
 
   const canSubmit = name.trim().length > 0 && parsed.type !== 'none';
 
+  const handleApplyTemplate = (id: string) => {
+    const template = EVENT_TEMPLATES.find((t) => t.id === id);
+    if (!template) return;
+    setTemplateId(id);
+    setView(template.view);
+    setColor(template.color);
+    setFontColor(template.fontColor);
+  };
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!canSubmit) return;
@@ -53,7 +68,7 @@ const AddEventForm: React.FC<AddEventFormProps> = ({ timelineName, onSubmit, onC
     const interval: ChronoInterval =
       parsed.type === 'range' ? { start: parsed.start, end: parsed.end } : { start: parsed.moment, end: parsed.moment };
 
-    onSubmit({ name: name.trim(), interval, view });
+    onSubmit({ name: name.trim(), interval, view, color, fontColor });
   };
 
   return (
@@ -78,9 +93,32 @@ const AddEventForm: React.FC<AddEventFormProps> = ({ timelineName, onSubmit, onC
           </span>
         </label>
 
+        <div className="chrono-add-event__field">
+          <span>Шаблон оформления</span>
+          <div className="chrono-add-event__templates">
+            {EVENT_TEMPLATES.map((template) => (
+              <button
+                key={template.id}
+                type="button"
+                className={`chrono-add-event__template${template.id === templateId ? ' chrono-add-event__template--active' : ''}`}
+                style={template.color ? { backgroundColor: template.color, color: template.fontColor } : undefined}
+                onClick={() => handleApplyTemplate(template.id)}
+              >
+                {template.label}
+              </button>
+            ))}
+          </div>
+        </div>
+
         <label className="chrono-add-event__field">
           <span>Вид</span>
-          <select value={view} onChange={(e) => setView(e.target.value as EventView)}>
+          <select
+            value={view}
+            onChange={(e) => {
+              setView(e.target.value as EventView);
+              setTemplateId('');
+            }}
+          >
             {VIEW_OPTIONS.map((opt) => (
               <option key={opt.value} value={opt.value}>
                 {opt.label}

@@ -55,6 +55,27 @@
   color: #ff8a65;
 }
 
+.chrono-add-event__templates {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.chrono-add-event__template {
+  padding: 6px 10px;
+  border-radius: 4px;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  background: #14161c;
+  color: #eee;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.chrono-add-event__template--active {
+  border-color: #4a90e2;
+  box-shadow: 0 0 0 1px #4a90e2 inset;
+}
+
 .chrono-add-event__actions {
   display: flex;
   justify-content: flex-end;
