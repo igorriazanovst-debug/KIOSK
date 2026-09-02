@@ -61,6 +61,7 @@ import {
 import BoardView, { type BoardViewProps } from '@kiosk/chrono-ui/board/BoardView';
 import { computeInitialViewport } from '@kiosk/chrono-ui/board/initialViewport';
 import AddEventForm, { type AddEventFormResult } from './AddEventForm.tsx';
+import PromptDialog from './PromptDialog.tsx';
 import EventDetailCard, { type EventDetailPatch } from './EventDetailCard.tsx';
 import TimelineSettings from './TimelineSettings.tsx';
 import MediaLibraryPanel from './MediaLibraryPanel.tsx';
@@ -100,8 +101,25 @@ type SaveStatus =
   | { kind: 'saved' }
   | { kind: 'error'; message: string };
 
+// Замена window.prompt() (см. PromptDialog.tsx) - какое из трёх текстовых
+// действий сейчас открыто, чтобы один общий обработчик submit знал, что
+// делать со введённым значением.
+type PromptRequest =
+  | { kind: 'create-project' }
+  | { kind: 'rename-project'; initialValue: string }
+  | { kind: 'add-timeline' };
+
 const TOOLBAR_HEIGHT = 36;
 const SAVED_INDICATOR_FADE_MS = 2000;
+// Ширина сайдбара имён линий - `@kiosk/chrono-ui`'s BoardView.css,
+// `.chrono-board__sidebar { width: 140px }`. Не переиспользуем оттуда
+// напрямую (там это чистое CSS-число, JS-константы нет) - дублирование
+// зафиксировано явно здесь, а не спрятано. Без вычитания этой ширины
+// `.chrono-board__main` (дорожки событий) рендерился на 140px шире
+// реально видимой области - кнопка «+ добавить событие», закреплённая
+// правым краем дорожки, оказывалась физически недостижима (обрезана
+// overflow:hidden). Найдено вживую при первом реальном запуске в Electron.
+const BOARD_SIDEBAR_WIDTH_PX = 140;
 const AUTH_STATUS_POLL_MS = 60_000;
 const VIEWPORT_SAVE_DEBOUNCE_MS = 1_000;
 const LOCKED_ERROR_MARKER = 'LOCKED:';
@@ -151,6 +169,17 @@ const ChronolineRuntime: React.FC<Props> = ({ properties, width, height }) => {
   const [resetInfo, setResetInfo] = useState<ResetChallengeInfo | null>(null);
   const [mediaLibraryOpen, setMediaLibraryOpen] = useState(false);
   const [mediaLibraryAdding, setMediaLibraryAdding] = useState(false);
+  // FR-019 ТЗ ("одновременный просмотр... из не менее чем 2-х
+  // хронологических линиях") - клик на событие ДОБАВЛЯЕТ его карточку к
+  // уже открытым, не заменяет их (см. handleSelectEvent ниже). selectedEventId
+  // остаётся отдельно - только для подсветки последней кликнутой отметки на
+  // доске (BoardView не знает про множественный выбор карточек вообще).
+  // Хук обязан стоять здесь, ДО ранних return (loading/unavailable/error/
+  // !viewport) ниже по функции - иначе число вызванных хуков расходится
+  // между рендером-заглушкой и обычным рендером (React error #310),
+  // найдено вживую при первом реальном запуске в Electron.
+  const [openCardEventIds, setOpenCardEventIds] = useState<string[]>([]);
+  const [promptRequest, setPromptRequest] = useState<PromptRequest | null>(null);
 
   // Всегда свежая ссылка на текущий present - debounce-сохранение viewport
   // ниже не должно перетереть контентную правку, случившуюся уже ПОСЛЕ
@@ -214,7 +243,7 @@ const ChronolineRuntime: React.FC<Props> = ({ properties, width, height }) => {
       .then(([{ project, list }, authStatus]) => {
         if (cancelled) return;
         setState({ status: 'ready', history: initHistory(project), projectList: list });
-        setViewport(resolveViewport(project, width));
+        setViewport(resolveViewport(project, width - BOARD_SIDEBAR_WIDTH_PX));
         setIsPasswordSet(authStatus.isPasswordSet);
         // Отражаем РЕАЛЬНОЕ состояние сессии в main-процессе, а не всегда
         // стартуем с false: если виджет размонтировался/смонтировался
@@ -312,7 +341,7 @@ const ChronolineRuntime: React.FC<Props> = ({ properties, width, height }) => {
   // СВОЮ историю с чистого листа, а не продолжение старой.
   const openProject = (next: ChronoProject, list: ProjectManifest[]) => {
     setState({ status: 'ready', history: initHistory(next), projectList: list });
-    setViewport(resolveViewport(next, width));
+    setViewport(resolveViewport(next, width - BOARD_SIDEBAR_WIDTH_PX));
     setSelectedEventId(null);
     setAddEventTimelineId(null);
     setSaveStatus({ kind: 'idle' });
@@ -339,9 +368,11 @@ const ChronolineRuntime: React.FC<Props> = ({ properties, width, height }) => {
     window.alert(fallbackMessage);
   };
 
-  const handleCreateProject = () => {
-    const name = window.prompt('Название нового проекта', '')?.trim();
-    if (!name) return;
+  const handleCreateProject = () => setPromptRequest({ kind: 'create-project' });
+
+  const handleRenameProject = () => setPromptRequest({ kind: 'rename-project', initialValue: project.name });
+
+  const submitCreateProject = (name: string) => {
     window.chronoAPI
       ?.createProject(name)
       .then((created) => Promise.all([window.chronoAPI!.loadProjectData(created.id), window.chronoAPI!.listProjects()]))
@@ -349,9 +380,8 @@ const ChronolineRuntime: React.FC<Props> = ({ properties, width, height }) => {
       .catch((err: unknown) => handleMutatingIpcError(err, 'Не удалось создать проект'));
   };
 
-  const handleRenameProject = () => {
-    const name = window.prompt('Новое название проекта', project.name)?.trim();
-    if (!name || name === project.name) return;
+  const submitRenameProject = (name: string) => {
+    if (name === project.name) return;
     // Название проекта хранится в двух местах - манифест каталога
     // (project.json, используется в списке переключения) и content.json
     // (собственное поле модели ChronoProject). Держим оба в синхроне, а не
@@ -400,10 +430,27 @@ const ChronolineRuntime: React.FC<Props> = ({ properties, width, height }) => {
       .catch((err: unknown) => handleMutatingIpcError(err, 'Не удалось импортировать проект - файл повреждён или не является архивом Хронолинии'));
   };
 
-  const handleAddTimeline = () => {
-    const name = window.prompt('Название линии', '')?.trim();
-    if (!name) return;
+  const handleAddTimeline = () => setPromptRequest({ kind: 'add-timeline' });
+
+  const submitAddTimeline = (name: string) => {
     applyMutation(addTimeline(project, crypto.randomUUID(), name));
+  };
+
+  const handlePromptSubmit = (value: string) => {
+    const request = promptRequest;
+    setPromptRequest(null);
+    if (!request) return;
+    switch (request.kind) {
+      case 'create-project':
+        submitCreateProject(value);
+        break;
+      case 'rename-project':
+        submitRenameProject(value);
+        break;
+      case 'add-timeline':
+        submitAddTimeline(value);
+        break;
+    }
   };
 
   const handleDeleteTimeline = (timelineId: string) => {
@@ -485,13 +532,6 @@ const ChronolineRuntime: React.FC<Props> = ({ properties, width, height }) => {
   };
 
   const addEventTimeline = addEventTimelineId ? project.timelines.find((t) => t.id === addEventTimelineId) : null;
-
-  // FR-019 ТЗ ("одновременный просмотр... из не менее чем 2-х
-  // хронологических линиях") - клик на событие ДОБАВЛЯЕТ его карточку к
-  // уже открытым, не заменяет их (см. handleSelectEvent ниже). selectedEventId
-  // остаётся отдельно - только для подсветки последней кликнутой отметки на
-  // доске (BoardView не знает про множественный выбор карточек вообще).
-  const [openCardEventIds, setOpenCardEventIds] = useState<string[]>([]);
 
   const findEventInfo = (eventId: string) => {
     for (const timeline of project.timelines) {
@@ -786,6 +826,20 @@ const ChronolineRuntime: React.FC<Props> = ({ properties, width, height }) => {
             adding={mediaLibraryAdding}
             onDelete={handleDeleteLibraryMedia}
             onClose={() => setMediaLibraryOpen(false)}
+          />
+        )}
+        {promptRequest && (
+          <PromptDialog
+            title={
+              promptRequest.kind === 'create-project'
+                ? 'Название нового проекта'
+                : promptRequest.kind === 'rename-project'
+                  ? 'Новое название проекта'
+                  : 'Название линии'
+            }
+            initialValue={promptRequest.kind === 'rename-project' ? promptRequest.initialValue : ''}
+            onSubmit={handlePromptSubmit}
+            onCancel={() => setPromptRequest(null)}
           />
         )}
         {passwordPromptMode && (

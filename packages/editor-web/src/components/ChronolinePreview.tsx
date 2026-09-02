@@ -19,9 +19,21 @@ export interface ChronolinePreviewProps {
 }
 
 const DEFAULT_WIDTH_PX = 720;
+// Ширина сайдбара имён линий - `@kiosk/chrono-ui`'s BoardView.css,
+// `.chrono-board__sidebar { width: 140px }`. `widthPx` здесь означает
+// "сколько всего места есть под доску" (сайдбар + дорожки), а
+// computeInitialViewport считает координаты ТОЛЬКО для дорожек - без
+// вычитания сайдбара события позиционировались бы так, будто дорожки на
+// 140px шире, чем реально есть на экране. Тот же баг найден и исправлен в
+// player/src/chrono/ChronolineRuntime.tsx при первом реальном запуске в
+// Electron - дублирование числа здесь намеренное (chrono-ui не
+// экспортирует его как JS-константу, только CSS-литерал).
+const BOARD_SIDEBAR_WIDTH_PX = 140;
 
 const ChronolinePreview: React.FC<ChronolinePreviewProps> = ({ project, widthPx = DEFAULT_WIDTH_PX }) => {
-  const [viewport, setViewport] = useState<Viewport>(() => computeInitialViewport(project, widthPx));
+  const [viewport, setViewport] = useState<Viewport>(() =>
+    computeInitialViewport(project, widthPx - BOARD_SIDEBAR_WIDTH_PX)
+  );
   const [selectedEventId, setSelectedEventId] = useState<string | null>(null);
 
   return (
