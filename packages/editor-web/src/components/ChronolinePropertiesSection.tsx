@@ -6,18 +6,18 @@
 // устройстве после установки — этот виджет не хранит их в projectData
 // сервера. См. widgetType.ts и Хронолайнер_vs_KIOSK_анализ.md (раздел 8).
 //
-// Компонент не использует хуков — при widget.type !== CHRONOLINE_WIDGET_TYPE
-// просто ничего не рендерит, без риска нарушить порядок вызова хуков между
-// рендерами (в отличие от NavigationPropertiesSection.tsx, где ранний return
-// стоит ДО вызовов useState/useEffect — жизнеспособно только пока эта секция
-// не станет содержать собственное состояние).
+// Хук (галерея шаблонов, Фаза 7) вызывается ДО раннего return — порядок
+// вызова хуков обязан быть одинаковым на каждом рендере независимо от
+// widget.type (в отличие от NavigationPropertiesSection.tsx, где этот
+// инвариант нарушен).
 
-import React from 'react';
+import React, { useState } from 'react';
 import type { Widget } from '../types';
 import {
   CHRONOLINE_WIDGET_TYPE,
   ChronolineWidgetProperties,
 } from '@kiosk/shared';
+import ChronolineEditorModal from './ChronolineEditorModal';
 
 interface Props {
   widget: Widget;
@@ -26,6 +26,8 @@ interface Props {
 }
 
 const ChronolinePropertiesSection: React.FC<Props> = ({ widget, onPropertiesChange }) => {
+  const [galleryOpen, setGalleryOpen] = useState(false);
+
   if (widget.type !== CHRONOLINE_WIDGET_TYPE) return null;
 
   const props = widget.properties as Partial<ChronolineWidgetProperties>;
@@ -33,6 +35,18 @@ const ChronolinePropertiesSection: React.FC<Props> = ({ widget, onPropertiesChan
   return (
     <div className="property-section">
       <h4>🕒 Хронолиния</h4>
+
+      <div className="property-field">
+        <button
+          type="button"
+          className="btn-primary"
+          style={{ width: '100%', padding: '8px', marginBottom: 8 }}
+          onClick={() => setGalleryOpen(true)}
+        >
+          🕒 Посмотреть примеры шаблонов
+        </button>
+      </div>
+      {galleryOpen && <ChronolineEditorModal onClose={() => setGalleryOpen(false)} />}
 
       <div className="property-field">
         <label>Заголовок виджета</label>

@@ -42,5 +42,11 @@ export default defineConfig({
         }
       }
     }
-  }
+  },
+  server: {
+    // packages/chrono-templates читается напрямую (относительным путём, см.
+    // src/chronoTemplates.ts) — сосед editor-web вне его корня, dev-сервер
+    // Vite по умолчанию не отдаёт файлы за пределами project root.
+    fs: { allow: ['..'] },
+  },
 });
