@@ -44,6 +44,7 @@ const AddEventForm: React.FC<AddEventFormProps> = ({ timelineName, onSubmit, onC
   const [color, setColor] = useState<string | undefined>(undefined);
   const [fontColor, setFontColor] = useState<string | undefined>(undefined);
   const [templateId, setTemplateId] = useState<string>('default');
+  const [namePlaceholder, setNamePlaceholder] = useState<string>('Название события');
 
   const parsed = useMemo<ParseResult>(
     () => (dateText.trim() ? parseChronoInput(dateText, { referenceDate: referenceDateNow() }) : { type: 'none' }),
@@ -59,6 +60,7 @@ const AddEventForm: React.FC<AddEventFormProps> = ({ timelineName, onSubmit, onC
     setView(template.view);
     setColor(template.color);
     setFontColor(template.fontColor);
+    setNamePlaceholder(template.namePlaceholder ?? 'Название события');
   };
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -78,7 +80,7 @@ const AddEventForm: React.FC<AddEventFormProps> = ({ timelineName, onSubmit, onC
 
         <label className="chrono-add-event__field">
           <span>Название</span>
-          <input autoFocus value={name} onChange={(e) => setName(e.target.value)} placeholder="Название события" />
+          <input autoFocus value={name} onChange={(e) => setName(e.target.value)} placeholder={namePlaceholder} />
         </label>
 
         <label className="chrono-add-event__field">
@@ -117,6 +119,7 @@ const AddEventForm: React.FC<AddEventFormProps> = ({ timelineName, onSubmit, onC
             onChange={(e) => {
               setView(e.target.value as EventView);
               setTemplateId('');
+              setNamePlaceholder('Название события');
             }}
           >
             {VIEW_OPTIONS.map((opt) => (
