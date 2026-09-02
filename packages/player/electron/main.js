@@ -528,7 +528,14 @@ async function activatePlayer(email, password, serverUrl, projectId) {
   }
   console.error('[Auth] Activation failed:', resp.body);
   const serverError = resp.body && resp.body.error;
-  return { success: false, error: serverError || `Ошибка активации (код ${resp.status})` };
+  // 400 от express-validator (`validateRequest.ts`) кладёт причину не в
+  // `error` (там только общее "Validation failed"), а в `details` -
+  // массив {field, message}. Без этого пользователь видит бесполезное
+  // "Validation failed" без единой зацепки, какое поле не прошло.
+  const details = Array.isArray(resp.body && resp.body.details) ? resp.body.details : [];
+  const detailsText = details.map((d) => d.message).filter(Boolean).join('; ');
+  const message = detailsText ? `${serverError}: ${detailsText}` : serverError;
+  return { success: false, error: message || `Ошибка активации (код ${resp.status})` };
 }
 
 // Проверка версии проекта
