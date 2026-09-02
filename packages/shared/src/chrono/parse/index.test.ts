@@ -82,6 +82,38 @@ test('"10 лет назад" resolves through the full pipeline', () => {
   assert.deepEqual(ymd((r as { moment: ChronoMoment }).moment), { year: 2016, month: 1, day: 1, precision: 'year' });
 });
 
+// ─── Глубокое время (C-11, Хронолайнер_план_исправлений.md) - раньше
+// парсер понимал только календарную ветку, "65 млн лет назад" нигде не
+// проходило целиком, хотя весь остальной домен (математика/отрисовка/
+// формат) эпохальные моменты уже поддерживал. ─────────────────────────────
+
+test('"65 млн лет назад" resolves through the full pipeline as an epoch moment', () => {
+  const r = parseChronoInput('65 млн лет назад', CTX);
+  assert.equal(r.type, 'moment');
+  const m = (r as { moment: ChronoMoment }).moment;
+  assert.equal(m.kind, 'epoch');
+  assert.deepEqual(m, { kind: 'epoch', yearsBeforeEpoch: 65_000_000, precision: 'millionYears', approximate: true });
+});
+
+test('"10 лет назад" (no unit word) still resolves as a CALENDAR moment, not epoch - no ambiguity between the two rules', () => {
+  const r = parseChronoInput('10 лет назад', CTX);
+  assert.equal(r.type, 'moment');
+  assert.equal((r as { moment: ChronoMoment }).moment.kind, 'calendar');
+});
+
+test('"с 1941 по 65 млн лет назад" (mixed calendar/epoch endpoints) is honestly rejected, not silently accepted as a reversed/nonsensical range', () => {
+  const r = parseChronoInput('с 1941 по 65 млн лет назад', CTX);
+  assert.deepEqual(r, { type: 'none' });
+});
+
+test('"с 201 млн лет назад по 145 млн лет назад" (Jurassic period) resolves as an epoch range', () => {
+  const r = parseChronoInput('с 201 млн лет назад по 145 млн лет назад', CTX);
+  assert.equal(r.type, 'range');
+  const range = r as { start: ChronoMoment; end: ChronoMoment };
+  assert.equal(range.start.kind, 'epoch');
+  assert.equal(range.end.kind, 'epoch');
+});
+
 // ─── Honest failure: unrecognized input returns {type: 'none'}, never a
 // silently wrong guess (this is the property chrono-node's spike showed it
 // LACKS - it returned a plausible-looking but nonsensical date for garbled

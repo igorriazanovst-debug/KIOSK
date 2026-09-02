@@ -19,6 +19,7 @@ import { normalizeRu } from './normalizeRu';
 import type { ParseContext, ParseResult } from './types';
 import { EXACT_DATE_RULES } from './rules/exactDate';
 import { RELATIVE_RULES } from './rules/relative';
+import { EPOCH_RELATIVE_RULES } from './rules/epochRelative';
 import { parseRange } from './rules/range';
 
 export type { ParseContext, ParseResult } from './types';
@@ -39,6 +40,11 @@ export function parseChronoInput(input: string, ctx: ParseContext): ParseResult 
 
   for (const rule of RELATIVE_RULES) {
     const moment = rule(normalized, ctx);
+    if (moment) return { type: 'moment', moment };
+  }
+
+  for (const rule of EPOCH_RELATIVE_RULES) {
+    const moment = rule(normalized);
     if (moment) return { type: 'moment', moment };
   }
 
