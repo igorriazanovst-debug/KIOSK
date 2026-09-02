@@ -180,6 +180,17 @@ const ChronolineRuntime: React.FC<Props> = ({ properties, width, height }) => {
   // найдено вживую при первом реальном запуске в Electron.
   const [openCardEventIds, setOpenCardEventIds] = useState<string[]>([]);
   const [promptRequest, setPromptRequest] = useState<PromptRequest | null>(null);
+  // Полноэкранный экран блокировки: Хронолиния - не встроенный виджет
+  // среди прочих на канвасе, а фактически отдельное полноэкранное
+  // приложение (оконный режим, Фаза 1) - блокировка должна выглядеть
+  // соответственно, а не маленькой кнопкой в углу тулбара. При этом
+  // просмотр ленты без разблокировки остаётся доступен (осознанное
+  // решение Фазы 4) - через явный переход "Смотреть без разблокировки",
+  // а не автоматически. lockScreenDismissed сбрасывается в false при
+  // каждой новой блокировке (см. использования ниже), чтобы "просмотр
+  // без пароля" не переживал повторную блокировку молча.
+  const [lockScreenDismissed, setLockScreenDismissed] = useState(false);
+  const [fullScreenLockMode, setFullScreenLockMode] = useState<'unlock' | 'reset'>('unlock');
 
   // Всегда свежая ссылка на текущий present - debounce-сохранение viewport
   // ниже не должно перетереть контентную правку, случившуюся уже ПОСЛЕ
@@ -225,12 +236,14 @@ const ChronolineRuntime: React.FC<Props> = ({ properties, width, height }) => {
 
   // Challenge запрашивается заново при каждом входе в режим 'reset' -
   // предыдущий challenge мог быть погашен успешным сбросом с другого
-  // сеанса (одноразовый, см. resetCode.js).
+  // сеанса (одноразовый, см. resetCode.js). Два независимых источника
+  // режима 'reset' - обычная модалка (passwordPromptMode) и полноэкранный
+  // экран блокировки (fullScreenLockMode) - оба должны запрашивать заново.
   useEffect(() => {
-    if (passwordPromptMode !== 'reset' || !window.chronoAPI) return;
+    if ((passwordPromptMode !== 'reset' && fullScreenLockMode !== 'reset') || !window.chronoAPI) return;
     setResetInfo(null);
     window.chronoAPI.getResetChallenge().then(setResetInfo);
-  }, [passwordPromptMode]);
+  }, [passwordPromptMode, fullScreenLockMode]);
 
   useEffect(() => {
     if (!window.chronoAPI) {
@@ -271,7 +284,10 @@ const ChronolineRuntime: React.FC<Props> = ({ properties, width, height }) => {
     if (!unlocked || !window.chronoAPI) return;
     const timer = setInterval(() => {
       window.chronoAPI?.getAuthStatus().then((status) => {
-        if (!status.unlocked) setUnlocked(false);
+        if (!status.unlocked) {
+          setUnlocked(false);
+          setLockScreenDismissed(false);
+        }
       });
     }, AUTH_STATUS_POLL_MS);
     return () => clearInterval(timer);
@@ -322,6 +338,7 @@ const ChronolineRuntime: React.FC<Props> = ({ properties, width, height }) => {
         // просто показать общую ошибку сохранения.
         if (isLockedError(err)) {
           setUnlocked(false);
+          setLockScreenDismissed(false);
           setSaveStatus({ kind: 'error', message: 'Сессия истекла - потребуется разблокировать снова' });
           return;
         }
@@ -362,6 +379,7 @@ const ChronolineRuntime: React.FC<Props> = ({ properties, width, height }) => {
     console.error('[Хронолиния]', fallbackMessage, err);
     if (isLockedError(err)) {
       setUnlocked(false);
+      setLockScreenDismissed(false);
       window.alert('Сессия истекла - разблокируйте редактирование снова');
       return;
     }
@@ -482,21 +500,24 @@ const ChronolineRuntime: React.FC<Props> = ({ properties, width, height }) => {
     setAddEventTimelineId(null);
   };
 
-  const handlePasswordSubmit = async (values: PasswordSubmitValues): Promise<PasswordPromptResult> => {
-    if (passwordPromptMode === 'unlock') {
+  // Принимает режим ЯВНО, а не читает passwordPromptMode из замыкания -
+  // у полноэкранного экрана блокировки свой независимый источник режима
+  // (fullScreenLockMode), не завязанный на модалку из тулбара.
+  const handlePasswordSubmit = async (mode: PasswordPromptMode, values: PasswordSubmitValues): Promise<PasswordPromptResult> => {
+    if (mode === 'unlock') {
       return window.chronoAPI!.verifyPassword(values.password || '');
     }
-    if (passwordPromptMode === 'setup') {
+    if (mode === 'setup') {
       return window.chronoAPI!.changePassword(values.newPassword || '');
     }
-    if (passwordPromptMode === 'reset') {
+    if (mode === 'reset') {
       return window.chronoAPI!.resetWithCode(values.resetCode || '', values.newPassword || '');
     }
     return window.chronoAPI!.changePassword(values.newPassword || '', values.currentPassword);
   };
 
-  const handlePasswordSuccess = () => {
-    if (passwordPromptMode === 'unlock' || passwordPromptMode === 'setup' || passwordPromptMode === 'reset') {
+  const handlePasswordSuccess = (mode: PasswordPromptMode) => {
+    if (mode === 'unlock' || mode === 'setup' || mode === 'reset') {
       setUnlocked(true);
       setIsPasswordSet(true);
     }
@@ -504,7 +525,11 @@ const ChronolineRuntime: React.FC<Props> = ({ properties, width, height }) => {
   };
 
   const handleLockEditing = () => {
-    window.chronoAPI?.lockEditing().finally(() => setUnlocked(false));
+    window.chronoAPI?.lockEditing().finally(() => {
+      setUnlocked(false);
+      setLockScreenDismissed(false);
+      setFullScreenLockMode('unlock');
+    });
   };
 
   const attributeSettingsTimeline = attributeSettingsTimelineId
@@ -749,11 +774,27 @@ const ChronolineRuntime: React.FC<Props> = ({ properties, width, height }) => {
             <button
               type="button"
               className="chronoline-runtime__auth-button"
-              onClick={() => setPasswordPromptMode('unlock')}
+              onClick={() => setLockScreenDismissed(false)}
             >
               🔒 Разблокировать редактирование
             </button>
           )}
+        </div>
+      )}
+      {editingEnabled && !canEdit && !lockScreenDismissed && (
+        <div className="chronoline-runtime__lockscreen">
+          <div className="chronoline-runtime__lockscreen-icon">🔒</div>
+          <h2 className="chronoline-runtime__lockscreen-title">Хронолиния заблокирована</h2>
+          <p className="chronoline-runtime__lockscreen-subtitle">Введите пароль устройства, чтобы редактировать</p>
+          <PasswordPrompt
+            mode={fullScreenLockMode}
+            onSubmit={(values) => handlePasswordSubmit(fullScreenLockMode, values)}
+            onSuccess={() => handlePasswordSuccess(fullScreenLockMode)}
+            onCancel={() => setLockScreenDismissed(true)}
+            onForgotPassword={fullScreenLockMode === 'unlock' ? () => setFullScreenLockMode('reset') : undefined}
+            resetInfo={resetInfo}
+            cancelLabel="Смотреть без разблокировки"
+          />
         </div>
       )}
       <div className="chronoline-runtime__board" style={{ height: boardHeight }}>
@@ -861,8 +902,8 @@ const ChronolineRuntime: React.FC<Props> = ({ properties, width, height }) => {
         {passwordPromptMode && (
           <PasswordPrompt
             mode={passwordPromptMode}
-            onSubmit={handlePasswordSubmit}
-            onSuccess={handlePasswordSuccess}
+            onSubmit={(values) => handlePasswordSubmit(passwordPromptMode, values)}
+            onSuccess={() => handlePasswordSuccess(passwordPromptMode)}
             onCancel={() => setPasswordPromptMode(null)}
             onForgotPassword={passwordPromptMode === 'unlock' ? () => setPasswordPromptMode('reset') : undefined}
             resetInfo={resetInfo}

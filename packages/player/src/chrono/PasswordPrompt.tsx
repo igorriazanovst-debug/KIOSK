@@ -47,6 +47,10 @@ export interface PasswordPromptProps {
   onForgotPassword?: () => void;
   /** Только для mode='reset' - родитель сам запрашивает challenge через getResetChallenge(), null пока грузится */
   resetInfo?: ResetChallengeInfo | null;
+  /** Подпись кнопки отмены - по умолчанию "Отмена". Полноэкранный экран блокировки
+   * (ChronolineRuntime) переопределяет её на "Смотреть без разблокировки", т.к. там
+   * это не отмена диалога, а осознанный переход в режим только просмотра. */
+  cancelLabel?: string;
 }
 
 const TITLES: Record<PasswordPromptMode, string> = {
@@ -69,6 +73,7 @@ const PasswordPrompt: React.FC<PasswordPromptProps> = ({
   onCancel,
   onForgotPassword,
   resetInfo,
+  cancelLabel = 'Отмена',
 }) => {
   const [password, setPassword] = useState('');
   const [currentPassword, setCurrentPassword] = useState('');
@@ -260,7 +265,7 @@ const PasswordPrompt: React.FC<PasswordPromptProps> = ({
 
         <div className="chrono-password-prompt__actions">
           <button type="button" onClick={onCancel}>
-            Отмена
+            {cancelLabel}
           </button>
           {!(mode === 'reset' && !resetInfo?.available) && (
             <button type="submit" disabled={locked || submitting}>

@@ -120,3 +120,49 @@
 .chronoline-runtime--theme-light {
   background: #f4f4f4;
 }
+
+/* Полноэкранный экран блокировки - занимает всю область виджета (не окна
+   ОС - "в границах виджета", решение Фазы 0), поверх доски. Доска
+   продолжает существовать под ним - "Смотреть без разблокировки"
+   (кнопка "Отмена" внутри PasswordPrompt, cancelLabel) просто прячет
+   этот слой, открывая уже отрендеренную доску в режиме только просмотра. */
+.chronoline-runtime__lockscreen {
+  position: absolute;
+  inset: 0;
+  z-index: 40;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  /* НЕ justify-content:center - PasswordPrompt рендерит СВОЙ собственный
+     position:absolute;inset:0 оверлей с центрированной по всей высоте
+     диалоговой карточкой (непрозрачной), не участвующий в этом flex-потоке.
+     Если заголовок тоже центрировать по всей высоте, оба центрируются в
+     одну и ту же точку и заголовок полностью перекрывается диалогом
+     (найдено вживую). Вместо этого заголовок стоит явно в верхней трети,
+     диалог PasswordPrompt центрируется независимо ниже него. */
+  padding-top: 8%;
+  gap: 6px;
+  background: radial-gradient(circle at 50% 40%, #22252e 0%, #14161c 70%);
+  font-family: Arial, sans-serif;
+  color: #eee;
+  text-align: center;
+  box-sizing: border-box;
+}
+
+.chronoline-runtime__lockscreen-icon {
+  font-size: 48px;
+  margin-bottom: 8px;
+  opacity: 0.9;
+}
+
+.chronoline-runtime__lockscreen-title {
+  margin: 0;
+  font-size: 22px;
+  font-weight: 600;
+}
+
+.chronoline-runtime__lockscreen-subtitle {
+  margin: 0 0 18px;
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.6);
+}
