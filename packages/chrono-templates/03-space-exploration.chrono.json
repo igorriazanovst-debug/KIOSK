@@ -1,0 +1,202 @@
+{
+  "schemaVersion": 1,
+  "id": "template-space-exploration",
+  "name": "Освоение космоса",
+  "timelines": [
+    {
+      "id": "tl-1",
+      "name": "Космическая эра",
+      "events": [
+        {
+          "id": "ev-1",
+          "interval": {
+            "start": {
+              "kind": "calendar",
+              "civilDay": {
+                "day": 2436116,
+                "secondOfDay": 0
+              },
+              "precision": "day",
+              "calendar": "gregorian",
+              "approximate": false
+            },
+            "end": null
+          },
+          "name": "Запуск первого искусственного спутника Земли — «Спутник-1»",
+          "place": "",
+          "sources": [],
+          "mediaIds": [],
+          "attributeValues": {},
+          "view": "flag",
+          "verticalPriority": 1000
+        },
+        {
+          "id": "ev-2",
+          "interval": {
+            "start": {
+              "kind": "calendar",
+              "civilDay": {
+                "day": 2436146,
+                "secondOfDay": 0
+              },
+              "precision": "day",
+              "calendar": "gregorian",
+              "approximate": false
+            },
+            "end": null
+          },
+          "name": "Полёт Лайки на «Спутнике-2» — первое живое существо на орбите",
+          "place": "",
+          "sources": [],
+          "mediaIds": [],
+          "attributeValues": {},
+          "view": "compact",
+          "verticalPriority": 1000
+        },
+        {
+          "id": "ev-3",
+          "interval": {
+            "start": {
+              "kind": "calendar",
+              "civilDay": {
+                "day": 2437402,
+                "secondOfDay": 0
+              },
+              "precision": "day",
+              "calendar": "gregorian",
+              "approximate": false
+            },
+            "end": null
+          },
+          "name": "Первый полёт человека в космос — Юрий Гагарин",
+          "place": "",
+          "sources": [],
+          "mediaIds": [],
+          "attributeValues": {},
+          "view": "flag",
+          "verticalPriority": 1000
+        },
+        {
+          "id": "ev-4",
+          "interval": {
+            "start": {
+              "kind": "calendar",
+              "civilDay": {
+                "day": 2438197,
+                "secondOfDay": 0
+              },
+              "precision": "day",
+              "calendar": "gregorian",
+              "approximate": false
+            },
+            "end": null
+          },
+          "name": "Полёт Валентины Терешковой — первой женщины-космонавта",
+          "place": "",
+          "sources": [],
+          "mediaIds": [],
+          "attributeValues": {},
+          "view": "compact",
+          "verticalPriority": 1000
+        },
+        {
+          "id": "ev-5",
+          "interval": {
+            "start": {
+              "kind": "calendar",
+              "civilDay": {
+                "day": 2438838,
+                "secondOfDay": 0
+              },
+              "precision": "day",
+              "calendar": "gregorian",
+              "approximate": false
+            },
+            "end": null
+          },
+          "name": "Алексей Леонов совершил первый в истории выход в открытый космос",
+          "place": "",
+          "sources": [],
+          "mediaIds": [],
+          "attributeValues": {},
+          "view": "compact",
+          "verticalPriority": 1000
+        },
+        {
+          "id": "ev-6",
+          "interval": {
+            "start": {
+              "kind": "calendar",
+              "civilDay": {
+                "day": 2440423,
+                "secondOfDay": 0
+              },
+              "precision": "day",
+              "calendar": "gregorian",
+              "approximate": false
+            },
+            "end": null
+          },
+          "name": "Высадка на Луну — миссия «Аполлон-11»",
+          "place": "",
+          "sources": [],
+          "mediaIds": [],
+          "attributeValues": {},
+          "view": "flag",
+          "verticalPriority": 1000
+        },
+        {
+          "id": "ev-7",
+          "interval": {
+            "start": {
+              "kind": "calendar",
+              "civilDay": {
+                "day": 2441061,
+                "secondOfDay": 0
+              },
+              "precision": "day",
+              "calendar": "gregorian",
+              "approximate": false
+            },
+            "end": null
+          },
+          "name": "Запуск первой в мире орбитальной станции — «Салют-1»",
+          "place": "",
+          "sources": [],
+          "mediaIds": [],
+          "attributeValues": {},
+          "view": "compact",
+          "verticalPriority": 1000
+        },
+        {
+          "id": "ev-8",
+          "interval": {
+            "start": {
+              "kind": "calendar",
+              "civilDay": {
+                "day": 2451138,
+                "secondOfDay": 0
+              },
+              "precision": "day",
+              "calendar": "gregorian",
+              "approximate": false
+            },
+            "end": null
+          },
+          "name": "Начало сборки Международной космической станции — запуск модуля «Заря»",
+          "place": "",
+          "sources": [],
+          "mediaIds": [],
+          "attributeValues": {},
+          "view": "compact",
+          "verticalPriority": 1000
+        }
+      ],
+      "attributes": [],
+      "collapsed": false
+    }
+  ],
+  "media": [],
+  "createdAt": "2026-09-02T16:30:34.062Z",
+  "updatedAt": "2026-09-02T16:30:34.062Z"
+}

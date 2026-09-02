@@ -1,0 +1,317 @@
+{
+  "schemaVersion": 1,
+  "id": "template-russian-history-overview",
+  "name": "История России: ключевые даты",
+  "timelines": [
+    {
+      "id": "tl-1",
+      "name": "Ключевые события",
+      "events": [
+        {
+          "id": "ev-1",
+          "interval": {
+            "start": {
+              "kind": "calendar",
+              "civilDay": {
+                "day": 2081920,
+                "secondOfDay": 0
+              },
+              "precision": "year",
+              "calendar": "gregorian",
+              "approximate": false
+            },
+            "end": null
+          },
+          "name": "Крещение Руси",
+          "place": "",
+          "sources": [],
+          "mediaIds": [],
+          "attributeValues": {},
+          "view": "compact",
+          "verticalPriority": 1000
+        },
+        {
+          "id": "ev-2",
+          "interval": {
+            "start": {
+              "kind": "calendar",
+              "civilDay": {
+                "day": 2172866,
+                "secondOfDay": 0
+              },
+              "precision": "year",
+              "calendar": "gregorian",
+              "approximate": false
+            },
+            "end": null
+          },
+          "name": "Начало монголо-татарского нашествия на Русь",
+          "place": "",
+          "sources": [],
+          "mediaIds": [],
+          "attributeValues": {},
+          "view": "compact",
+          "verticalPriority": 1000
+        },
+        {
+          "id": "ev-3",
+          "interval": {
+            "start": {
+              "kind": "calendar",
+              "civilDay": {
+                "day": 2261619,
+                "secondOfDay": 0
+              },
+              "precision": "year",
+              "calendar": "gregorian",
+              "approximate": false
+            },
+            "end": null
+          },
+          "name": "Стояние на реке Угре — конец ордынского владычества",
+          "place": "",
+          "sources": [],
+          "mediaIds": [],
+          "attributeValues": {},
+          "view": "compact",
+          "verticalPriority": 1000
+        },
+        {
+          "id": "ev-4",
+          "interval": {
+            "start": {
+              "kind": "calendar",
+              "civilDay": {
+                "day": 2286090,
+                "secondOfDay": 0
+              },
+              "precision": "year",
+              "calendar": "gregorian",
+              "approximate": false
+            },
+            "end": null
+          },
+          "name": "Венчание Ивана IV на царство",
+          "place": "",
+          "sources": [],
+          "mediaIds": [],
+          "attributeValues": {},
+          "view": "compact",
+          "verticalPriority": 1000
+        },
+        {
+          "id": "ev-5",
+          "interval": {
+            "start": {
+              "kind": "calendar",
+              "civilDay": {
+                "day": 2310197,
+                "secondOfDay": 0
+              },
+              "precision": "year",
+              "calendar": "gregorian",
+              "approximate": false
+            },
+            "end": null
+          },
+          "name": "Избрание Михаила Романова на царство — начало династии Романовых",
+          "place": "",
+          "sources": [],
+          "mediaIds": [],
+          "attributeValues": {},
+          "view": "compact",
+          "verticalPriority": 1000
+        },
+        {
+          "id": "ev-6",
+          "interval": {
+            "start": {
+              "kind": "calendar",
+              "civilDay": {
+                "day": 2343068,
+                "secondOfDay": 0
+              },
+              "precision": "year",
+              "calendar": "gregorian",
+              "approximate": false
+            },
+            "end": null
+          },
+          "name": "Основание Санкт-Петербурга",
+          "place": "Санкт-Петербург",
+          "sources": [],
+          "mediaIds": [],
+          "attributeValues": {},
+          "view": "compact",
+          "verticalPriority": 1000
+        },
+        {
+          "id": "ev-7",
+          "interval": {
+            "start": {
+              "kind": "calendar",
+              "civilDay": {
+                "day": 2382879,
+                "secondOfDay": 0
+              },
+              "precision": "year",
+              "calendar": "gregorian",
+              "approximate": false
+            },
+            "end": null
+          },
+          "name": "Отечественная война 1812 года",
+          "place": "",
+          "sources": [],
+          "mediaIds": [],
+          "attributeValues": {},
+          "view": "compact",
+          "verticalPriority": 1000
+        },
+        {
+          "id": "ev-8",
+          "interval": {
+            "start": {
+              "kind": "calendar",
+              "civilDay": {
+                "day": 2400777,
+                "secondOfDay": 0
+              },
+              "precision": "year",
+              "calendar": "gregorian",
+              "approximate": false
+            },
+            "end": null
+          },
+          "name": "Отмена крепостного права",
+          "place": "",
+          "sources": [],
+          "mediaIds": [],
+          "attributeValues": {},
+          "view": "compact",
+          "verticalPriority": 1000
+        },
+        {
+          "id": "ev-9",
+          "interval": {
+            "start": {
+              "kind": "calendar",
+              "civilDay": {
+                "day": 2421230,
+                "secondOfDay": 0
+              },
+              "precision": "year",
+              "calendar": "gregorian",
+              "approximate": false
+            },
+            "end": null
+          },
+          "name": "Октябрьская революция",
+          "place": "",
+          "sources": [],
+          "mediaIds": [],
+          "attributeValues": {},
+          "view": "compact",
+          "verticalPriority": 1000
+        },
+        {
+          "id": "ev-10",
+          "interval": {
+            "start": {
+              "kind": "calendar",
+              "civilDay": {
+                "day": 2430168,
+                "secondOfDay": 0
+              },
+              "precision": "day",
+              "calendar": "gregorian",
+              "approximate": false
+            },
+            "end": null
+          },
+          "name": "Начало Великой Отечественной войны",
+          "place": "",
+          "sources": [],
+          "mediaIds": [],
+          "attributeValues": {},
+          "view": "flag",
+          "verticalPriority": 1000
+        },
+        {
+          "id": "ev-11",
+          "interval": {
+            "start": {
+              "kind": "calendar",
+              "civilDay": {
+                "day": 2431585,
+                "secondOfDay": 0
+              },
+              "precision": "day",
+              "calendar": "gregorian",
+              "approximate": false
+            },
+            "end": null
+          },
+          "name": "Победа в Великой Отечественной войне",
+          "place": "",
+          "sources": [],
+          "mediaIds": [],
+          "attributeValues": {},
+          "view": "flag",
+          "verticalPriority": 1000
+        },
+        {
+          "id": "ev-12",
+          "interval": {
+            "start": {
+              "kind": "calendar",
+              "civilDay": {
+                "day": 2437402,
+                "secondOfDay": 0
+              },
+              "precision": "day",
+              "calendar": "gregorian",
+              "approximate": false
+            },
+            "end": null
+          },
+          "name": "Первый полёт человека в космос — Юрий Гагарин",
+          "place": "",
+          "sources": [],
+          "mediaIds": [],
+          "attributeValues": {},
+          "view": "flag",
+          "verticalPriority": 1000
+        },
+        {
+          "id": "ev-13",
+          "interval": {
+            "start": {
+              "kind": "calendar",
+              "civilDay": {
+                "day": 2448616,
+                "secondOfDay": 0
+              },
+              "precision": "day",
+              "calendar": "gregorian",
+              "approximate": false
+            },
+            "end": null
+          },
+          "name": "Распад СССР",
+          "place": "",
+          "sources": [],
+          "mediaIds": [],
+          "attributeValues": {},
+          "view": "compact",
+          "verticalPriority": 1000
+        }
+      ],
+      "attributes": [],
+      "collapsed": false
+    }
+  ],
+  "media": [],
+  "createdAt": "2026-09-02T16:30:34.060Z",
+  "updatedAt": "2026-09-02T16:30:34.060Z"
+}

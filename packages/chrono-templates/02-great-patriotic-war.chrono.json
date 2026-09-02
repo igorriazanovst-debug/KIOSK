@@ -1,0 +1,243 @@
+{
+  "schemaVersion": 1,
+  "id": "template-great-patriotic-war",
+  "name": "Великая Отечественная война 1941–1945",
+  "timelines": [
+    {
+      "id": "tl-1",
+      "name": "Ход войны",
+      "events": [
+        {
+          "id": "ev-1",
+          "interval": {
+            "start": {
+              "kind": "calendar",
+              "civilDay": {
+                "day": 2430168,
+                "secondOfDay": 0
+              },
+              "precision": "day",
+              "calendar": "gregorian",
+              "approximate": false
+            },
+            "end": null
+          },
+          "name": "Начало Великой Отечественной войны",
+          "place": "",
+          "sources": [],
+          "mediaIds": [],
+          "attributeValues": {},
+          "view": "flag",
+          "verticalPriority": 1000
+        },
+        {
+          "id": "ev-2",
+          "interval": {
+            "start": {
+              "kind": "calendar",
+              "civilDay": {
+                "day": 2430246,
+                "secondOfDay": 0
+              },
+              "precision": "day",
+              "calendar": "gregorian",
+              "approximate": false
+            },
+            "end": null
+          },
+          "name": "Начало блокады Ленинграда",
+          "place": "Ленинград",
+          "sources": [],
+          "mediaIds": [],
+          "attributeValues": {},
+          "view": "compact",
+          "verticalPriority": 1000
+        },
+        {
+          "id": "ev-3",
+          "interval": {
+            "start": {
+              "kind": "calendar",
+              "civilDay": {
+                "day": 2430334,
+                "secondOfDay": 0
+              },
+              "precision": "day",
+              "calendar": "gregorian",
+              "approximate": false
+            },
+            "end": null
+          },
+          "name": "Начало контрнаступления советских войск под Москвой",
+          "place": "Москва",
+          "sources": [],
+          "mediaIds": [],
+          "attributeValues": {},
+          "view": "compact",
+          "verticalPriority": 1000
+        },
+        {
+          "id": "ev-4",
+          "interval": {
+            "start": {
+              "kind": "calendar",
+              "civilDay": {
+                "day": 2430558,
+                "secondOfDay": 0
+              },
+              "precision": "day",
+              "calendar": "gregorian",
+              "approximate": false
+            },
+            "end": {
+              "kind": "calendar",
+              "civilDay": {
+                "day": 2430758,
+                "secondOfDay": 0
+              },
+              "precision": "day",
+              "calendar": "gregorian",
+              "approximate": false
+            }
+          },
+          "name": "Сталинградская битва",
+          "place": "Сталинград",
+          "sources": [],
+          "mediaIds": [],
+          "attributeValues": {},
+          "view": "card",
+          "verticalPriority": 1000
+        },
+        {
+          "id": "ev-5",
+          "interval": {
+            "start": {
+              "kind": "calendar",
+              "civilDay": {
+                "day": 2430911,
+                "secondOfDay": 0
+              },
+              "precision": "day",
+              "calendar": "gregorian",
+              "approximate": false
+            },
+            "end": {
+              "kind": "calendar",
+              "civilDay": {
+                "day": 2430960,
+                "secondOfDay": 0
+              },
+              "precision": "day",
+              "calendar": "gregorian",
+              "approximate": false
+            }
+          },
+          "name": "Курская битва",
+          "place": "",
+          "sources": [],
+          "mediaIds": [],
+          "attributeValues": {},
+          "view": "card",
+          "verticalPriority": 1000
+        },
+        {
+          "id": "ev-6",
+          "interval": {
+            "start": {
+              "kind": "calendar",
+              "civilDay": {
+                "day": 2431117,
+                "secondOfDay": 0
+              },
+              "precision": "day",
+              "calendar": "gregorian",
+              "approximate": false
+            },
+            "end": null
+          },
+          "name": "Полное освобождение Ленинграда от блокады",
+          "place": "Ленинград",
+          "sources": [],
+          "mediaIds": [],
+          "attributeValues": {},
+          "view": "compact",
+          "verticalPriority": 1000
+        },
+        {
+          "id": "ev-7",
+          "interval": {
+            "start": {
+              "kind": "calendar",
+              "civilDay": {
+                "day": 2431248,
+                "secondOfDay": 0
+              },
+              "precision": "day",
+              "calendar": "gregorian",
+              "approximate": false
+            },
+            "end": null
+          },
+          "name": "Открытие Второго фронта — высадка союзников в Нормандии",
+          "place": "",
+          "sources": [],
+          "mediaIds": [],
+          "attributeValues": {},
+          "view": "compact",
+          "verticalPriority": 1000
+        },
+        {
+          "id": "ev-8",
+          "interval": {
+            "start": {
+              "kind": "calendar",
+              "civilDay": {
+                "day": 2431585,
+                "secondOfDay": 0
+              },
+              "precision": "day",
+              "calendar": "gregorian",
+              "approximate": false
+            },
+            "end": null
+          },
+          "name": "День Победы — капитуляция Германии",
+          "place": "",
+          "sources": [],
+          "mediaIds": [],
+          "attributeValues": {},
+          "view": "flag",
+          "verticalPriority": 1000
+        },
+        {
+          "id": "ev-9",
+          "interval": {
+            "start": {
+              "kind": "calendar",
+              "civilDay": {
+                "day": 2431701,
+                "secondOfDay": 0
+              },
+              "precision": "day",
+              "calendar": "gregorian",
+              "approximate": false
+            },
+            "end": null
+          },
+          "name": "Капитуляция Японии — окончание Второй мировой войны",
+          "place": "",
+          "sources": [],
+          "mediaIds": [],
+          "attributeValues": {},
+          "view": "compact",
+          "verticalPriority": 1000
+        }
+      ],
+      "attributes": [],
+      "collapsed": false
+    }
+  ],
+  "media": [],
+  "createdAt": "2026-09-02T16:30:34.062Z",
+  "updatedAt": "2026-09-02T16:30:34.062Z"
+}
