@@ -10,6 +10,7 @@ interface ClientJWTPayload {
   licenseId: string;
   organizationId: string;
   userId?: string;
+  email?: string;
   type: 'client' | 'license_user';
 }
 
@@ -52,6 +53,7 @@ export const authenticateClient = (req: Request, res: Response, next: NextFuncti
         licenseId: payload.licenseId,
         organizationId: payload.organizationId,
         userId: payload.userId || payload.licenseUserId,
+        email: payload.email,
         type: payload.type,
       };
 
@@ -98,6 +100,7 @@ export const optionalAuth = (req: Request, res: Response, next: NextFunction) =>
           licenseId: payload.licenseId,
           organizationId: payload.organizationId,
           userId: payload.userId || payload.licenseUserId,
+          email: payload.email,
           type: payload.type,
         };
       }

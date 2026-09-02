@@ -8,6 +8,7 @@
     "build": "tsc && tsc-alias && cp src/routes/*.js dist/routes/ 2>/dev/null && mkdir -p dist/utils && cp src/utils/*.js dist/utils/ 2>/dev/null || true",
     "start": "node dist/app.js",
     "generate-keys": "node scripts/generate-keys.js",
+    "chrono-reset-code": "node scripts/chrono-reset-code.js",
     "prisma:generate": "prisma generate",
     "prisma:migrate": "prisma migrate dev",
     "prisma:deploy": "prisma migrate deploy",
@@ -22,6 +23,7 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
+    "@kiosk/shared": "file:../shared",
     "@prisma/client": "^5.7.0",
     "@types/multer": "^2.0.0",
     "bcrypt": "^5.1.1",

@@ -1,0 +1,79 @@
+.chrono-rich-text {
+  border-radius: 4px;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  background: #14161c;
+  overflow: hidden;
+}
+
+.chrono-rich-text--readonly {
+  border-color: transparent;
+  background: transparent;
+}
+
+.chrono-rich-text__toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2px;
+  padding: 4px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.chrono-rich-text__toolbar button {
+  min-width: 26px;
+  height: 26px;
+  padding: 0 6px;
+  border: none;
+  border-radius: 3px;
+  background: transparent;
+  color: rgba(255, 255, 255, 0.75);
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.chrono-rich-text__toolbar button:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.chrono-rich-text__toolbar button.active {
+  background: #4a90e2;
+  color: #fff;
+}
+
+.chrono-rich-text__divider {
+  width: 1px;
+  align-self: stretch;
+  margin: 2px 4px;
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.chrono-rich-text__content {
+  padding: 8px 10px;
+  min-height: 90px;
+  color: #fff;
+  font-size: 14px;
+}
+
+.chrono-rich-text--readonly .chrono-rich-text__content {
+  padding: 0;
+  min-height: 0;
+}
+
+.chrono-rich-text__content .ProseMirror {
+  outline: none;
+  min-height: 74px;
+}
+
+.chrono-rich-text__content p {
+  margin: 0 0 8px;
+}
+
+.chrono-rich-text__content p:last-child {
+  margin-bottom: 0;
+}
+
+.chrono-rich-text__content ul,
+.chrono-rich-text__content ol {
+  margin: 0 0 8px;
+  padding-left: 22px;
+}

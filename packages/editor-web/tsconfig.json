@@ -15,7 +15,11 @@
     "noUnusedParameters": false,
     "noFallthroughCasesInSwitch": false,
     "allowSyntheticDefaultImports": true,
-    "esModuleInterop": true
+    "esModuleInterop": true,
+    "baseUrl": ".",
+    "paths": {
+      "@kiosk/chrono-ui/*": ["../chrono-ui/dist/*"]
+    }
   },
   "include": ["src"]
 }

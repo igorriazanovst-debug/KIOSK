@@ -3,6 +3,15 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import Player from './Player';
 import './index.css';
+import type { ChronoProject, ChronoMedia } from '@kiosk/shared';
+
+interface ChronoProjectManifest {
+  schemaVersion: number;
+  id: string;
+  name: string;
+  createdAt: string;
+  updatedAt: string;
+}
 
 // Расширяем Window для TypeScript
 declare global {
@@ -20,6 +29,38 @@ declare global {
       onUpdateApplied: (callback: (data: { version: number }) => void) => void;
       verifyUpdatePassword: (password: string) => Promise<{ success: boolean; error?: string }>;
       applyUpdate: () => Promise<{ success: boolean; error?: string }>;
+    };
+    /** Виджет «Хронолиния» — локальное хранилище проектов на устройстве (packages/player/electron/chrono) */
+    chronoAPI?: {
+      listProjects: () => Promise<ChronoProjectManifest[]>;
+      createProject: (name: string) => Promise<ChronoProjectManifest>;
+      renameProject: (projectId: string, newName: string) => Promise<ChronoProjectManifest>;
+      deleteProject: (projectId: string) => Promise<{ success: boolean }>;
+      loadProjectData: (projectId: string) => Promise<ChronoProject>;
+      saveProjectData: (projectId: string, data: ChronoProject) => Promise<ChronoProject>;
+      getAuthStatus: () => Promise<{ isPasswordSet: boolean; unlocked: boolean; locked: boolean; retryAfterMs: number }>;
+      verifyPassword: (password: string) => Promise<{ success: boolean; locked: boolean; retryAfterMs: number }>;
+      changePassword: (
+        newPassword: string,
+        currentPassword?: string
+      ) => Promise<{ success: boolean; locked: boolean; retryAfterMs: number }>;
+      lockEditing: () => Promise<{ success: boolean }>;
+      getResetChallenge: () => Promise<{
+        available: boolean;
+        buildCode?: string;
+        challenge?: string;
+        locked: boolean;
+        retryAfterMs: number;
+      }>;
+      resetWithCode: (
+        code: string,
+        newPassword: string
+      ) => Promise<{ success: boolean; locked: boolean; retryAfterMs: number }>;
+      pickMediaFile: () => Promise<string | null>;
+      importMedia: (projectId: string, sourceFilePath: string) => Promise<ChronoMedia>;
+      exportProject: (projectId: string) => Promise<{ success: boolean; canceled?: boolean; filePath?: string }>;
+      importProject: () => Promise<ChronoProjectManifest | null>;
+      deleteMedia: (projectId: string, media: { sha256: string; fileName: string }) => Promise<{ success: boolean }>;
     };
   }
 }

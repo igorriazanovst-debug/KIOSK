@@ -17,9 +17,12 @@
   "author": "",
   "license": "MIT",
   "devDependencies": {
+    "@types/node": "^20.10.5",
     "typescript": "^5.0.0"
   },
-  "dependencies": {},
+  "dependencies": {
+    "zod": "^4.5.4"
+  },
   "files": [
     "dist"
   ]

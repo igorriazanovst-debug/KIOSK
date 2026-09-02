@@ -3,6 +3,7 @@ import { apiClient } from '../services/api-client';
 import { useEditorStore } from '../stores/editorStore';
 import ActionEditor from './ActionEditor';
 import NavigationPropertiesSection from './NavigationPropertiesSection';
+import ChronolinePropertiesSection from './ChronolinePropertiesSection';
 import './PropertiesPanel.css';
 import RichTextEditor from './RichTextEditor';
 
@@ -53,6 +54,13 @@ const PropertiesPanel: React.FC = () => {
       <div className="properties-content">
         {/* Секция виджета навигации */}
         <NavigationPropertiesSection
+          widget={selectedWidget}
+          onPropertiesChange={handlePropertiesChange}
+          onUpdateWidget={(updates) => updateWidget(selectedWidget.id, updates)}
+        />
+
+        {/* Секция виджета «Хронолиния» */}
+        <ChronolinePropertiesSection
           widget={selectedWidget}
           onPropertiesChange={handlePropertiesChange}
           onUpdateWidget={(updates) => updateWidget(selectedWidget.id, updates)}

@@ -1,0 +1,168 @@
+.chronoline-runtime {
+  position: relative;
+  overflow: hidden;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+}
+
+.chronoline-runtime__toolbar {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0 10px;
+  background: #1a1c22;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.chronoline-runtime__toolbar button {
+  border: none;
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.08);
+  color: rgba(255, 255, 255, 0.85);
+  padding: 5px 10px;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.chronoline-runtime__toolbar button:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.16);
+}
+
+.chronoline-runtime__toolbar button:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+.chronoline-runtime__project-select {
+  border: none;
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.08);
+  color: rgba(255, 255, 255, 0.85);
+  padding: 5px 8px;
+  font-size: 13px;
+  max-width: 180px;
+}
+
+.chronoline-runtime__toolbar-separator {
+  width: 1px;
+  align-self: stretch;
+  margin: 6px 2px;
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.chronoline-runtime__save-status {
+  margin-left: auto;
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.5);
+  white-space: nowrap;
+}
+
+.chronoline-runtime__save-status--saved {
+  color: #6bcf6b;
+}
+
+.chronoline-runtime__save-status--error {
+  color: #ff8a65;
+}
+
+.chronoline-runtime__retry-save {
+  border: none;
+  border-radius: 4px;
+  background: #ff8a65;
+  color: #1a1c22;
+  padding: 5px 10px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.chronoline-runtime__retry-save:hover {
+  background: #ffab8a;
+}
+
+.chronoline-runtime__auth-button {
+  border: none;
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.08);
+  color: rgba(255, 255, 255, 0.85);
+  padding: 5px 10px;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.chronoline-runtime__auth-button:hover {
+  background: rgba(255, 255, 255, 0.16);
+}
+
+.chronoline-runtime__board {
+  position: relative;
+  box-sizing: border-box;
+}
+
+.chronoline-runtime--message {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  text-align: center;
+  color: rgba(255, 255, 255, 0.6);
+  background: #14161c;
+  font-family: Arial, sans-serif;
+  font-size: 14px;
+}
+
+.chronoline-runtime--error {
+  color: #ff6b6b;
+}
+
+.chronoline-runtime--theme-light {
+  background: #f4f4f4;
+}
+
+/* Полноэкранный экран блокировки - занимает всю область виджета (не окна
+   ОС - "в границах виджета", решение Фазы 0), поверх доски. Доска
+   продолжает существовать под ним - "Смотреть без разблокировки"
+   (кнопка "Отмена" внутри PasswordPrompt, cancelLabel) просто прячет
+   этот слой, открывая уже отрендеренную доску в режиме только просмотра. */
+.chronoline-runtime__lockscreen {
+  position: absolute;
+  inset: 0;
+  z-index: 40;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  /* НЕ justify-content:center - PasswordPrompt рендерит СВОЙ собственный
+     position:absolute;inset:0 оверлей с центрированной по всей высоте
+     диалоговой карточкой (непрозрачной), не участвующий в этом flex-потоке.
+     Если заголовок тоже центрировать по всей высоте, оба центрируются в
+     одну и ту же точку и заголовок полностью перекрывается диалогом
+     (найдено вживую). Вместо этого заголовок стоит явно в верхней трети,
+     диалог PasswordPrompt центрируется независимо ниже него. */
+  padding-top: 8%;
+  gap: 6px;
+  background: radial-gradient(circle at 50% 40%, #22252e 0%, #14161c 70%);
+  font-family: Arial, sans-serif;
+  color: #eee;
+  text-align: center;
+  box-sizing: border-box;
+}
+
+.chronoline-runtime__lockscreen-icon {
+  font-size: 48px;
+  margin-bottom: 8px;
+  opacity: 0.9;
+}
+
+.chronoline-runtime__lockscreen-title {
+  margin: 0;
+  font-size: 22px;
+  font-weight: 600;
+}
+
+.chronoline-runtime__lockscreen-subtitle {
+  margin: 0 0 18px;
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.6);
+}

@@ -1,0 +1,108 @@
+.chrono-add-event__overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.55);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 20;
+}
+
+.chrono-add-event {
+  width: min(420px, 90%);
+  background: #1e2028;
+  border-radius: 8px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5);
+  font-family: Arial, sans-serif;
+  color: #eee;
+}
+
+.chrono-add-event__title {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.chrono-add-event__field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.chrono-add-event__field input,
+.chrono-add-event__field select {
+  padding: 8px 10px;
+  border-radius: 4px;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  background: #14161c;
+  color: #fff;
+  font-size: 14px;
+}
+
+.chrono-add-event__parse-preview {
+  font-size: 12px;
+  color: #6bcf6b;
+  min-height: 16px;
+}
+
+.chrono-add-event__parse-preview--error {
+  color: #ff8a65;
+}
+
+.chrono-add-event__templates {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.chrono-add-event__template {
+  padding: 6px 10px;
+  border-radius: 4px;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  background: #14161c;
+  color: #eee;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.chrono-add-event__template--active {
+  border-color: #4a90e2;
+  box-shadow: 0 0 0 1px #4a90e2 inset;
+}
+
+.chrono-add-event__actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: 4px;
+}
+
+.chrono-add-event__actions button {
+  padding: 8px 16px;
+  border-radius: 4px;
+  border: none;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.chrono-add-event__actions button[type='submit'] {
+  background: #4a90e2;
+  color: #fff;
+}
+
+.chrono-add-event__actions button[type='submit']:disabled {
+  background: #3a3d47;
+  color: rgba(255, 255, 255, 0.4);
+  cursor: not-allowed;
+}
+
+.chrono-add-event__actions button[type='button'] {
+  background: transparent;
+  color: rgba(255, 255, 255, 0.7);
+}

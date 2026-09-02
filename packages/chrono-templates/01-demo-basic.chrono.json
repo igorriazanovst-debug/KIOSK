@@ -1,0 +1,87 @@
+{
+  "schemaVersion": 1,
+  "id": "demo-template-basic",
+  "name": "Пример: пустая хронолиния с тремя событиями",
+  "timelines": [
+    {
+      "id": "tl-1",
+      "name": "Линия событий",
+      "events": [
+        {
+          "id": "ev-1",
+          "interval": {
+            "start": {
+              "kind": "calendar",
+              "civilDay": {
+                "day": 2415021,
+                "secondOfDay": 0
+              },
+              "precision": "year",
+              "calendar": "gregorian",
+              "approximate": false
+            },
+            "end": null
+          },
+          "name": "Первое событие (замените на своё)",
+          "place": "",
+          "sources": [],
+          "mediaIds": [],
+          "attributeValues": {},
+          "view": "compact",
+          "verticalPriority": 1000
+        },
+        {
+          "id": "ev-2",
+          "interval": {
+            "start": {
+              "kind": "calendar",
+              "civilDay": {
+                "day": 2433283,
+                "secondOfDay": 0
+              },
+              "precision": "year",
+              "calendar": "gregorian",
+              "approximate": false
+            },
+            "end": null
+          },
+          "name": "Второе событие",
+          "place": "",
+          "sources": [],
+          "mediaIds": [],
+          "attributeValues": {},
+          "view": "compact",
+          "verticalPriority": 1000
+        },
+        {
+          "id": "ev-3",
+          "interval": {
+            "start": {
+              "kind": "calendar",
+              "civilDay": {
+                "day": 2451545,
+                "secondOfDay": 0
+              },
+              "precision": "year",
+              "calendar": "gregorian",
+              "approximate": false
+            },
+            "end": null
+          },
+          "name": "Третье событие",
+          "place": "",
+          "sources": [],
+          "mediaIds": [],
+          "attributeValues": {},
+          "view": "compact",
+          "verticalPriority": 1000
+        }
+      ],
+      "attributes": [],
+      "collapsed": false
+    }
+  ],
+  "media": [],
+  "createdAt": "2026-09-02T06:50:46.708Z",
+  "updatedAt": "2026-09-02T06:50:46.708Z"
+}
