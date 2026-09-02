@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { computeInitialViewport } from './initialViewport.ts';
+import { computeInitialViewport } from './initialViewport.js';
 import { calendarDateTimeToCivilDay, toAxisYears, type ChronoProject, type ChronoTimeline, type ChronoMoment } from '@kiosk/shared';
 
 function yearMoment(year: number): ChronoMoment {

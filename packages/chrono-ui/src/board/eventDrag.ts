@@ -15,7 +15,7 @@
 // плотность пикселей (pxDeltaToAxisYearsDelta).
 
 import { shiftInterval, shiftMoment, toAxisYears, type ChronoInterval, type Viewport } from '@kiosk/shared';
-import { pxDeltaToAxisYearsDelta } from './boardViewport.ts';
+import { pxDeltaToAxisYearsDelta } from './boardViewport.js';
 
 export type ResizeEdge = 'start' | 'end';
 

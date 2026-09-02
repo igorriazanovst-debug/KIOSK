@@ -1,0 +1,23 @@
+{
+  "name": "@kiosk/chrono-ui",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Read-only доска Хронолинии, общая для player и editor-web. Не отдельная опубликованная зависимость: player и editor-web подключают исходники напрямую через resolve.alias (Vite) и paths (tsc), не через file:-зависимость в своих package.json. package.json здесь нужен только для того, чтобы npm install создал node_modules, необходимый для запуска собственных тестов этого пакета (node --test резолвит импорты по физическому пути файла, а не по alias/paths потребителя).",
+  "scripts": {
+    "build": "tsc && node scripts/copy-css.mjs",
+    "clean": "rimraf dist",
+    "test": "node --test dist/board/*.test.js"
+  },
+  "dependencies": {
+    "@kiosk/shared": "file:../shared",
+    "@use-gesture/react": "^10.3.1",
+    "react": "^18.2.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.10.5",
+    "@types/react": "^18.2.0",
+    "rimraf": "^5.0.0",
+    "typescript": "^5.0.0"
+  }
+}

@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { pxDeltaToAxisYearsDelta, previewDraggedInterval, previewResizedInterval } from './eventDrag.ts';
+import { pxDeltaToAxisYearsDelta, previewDraggedInterval, previewResizedInterval } from './eventDrag.js';
 import { calendarDateTimeToCivilDay, toAxisYears, type ChronoInterval, type Viewport } from '@kiosk/shared';
 
 const VIEWPORT: Viewport = { centerAxisYears: 1950, spanAxisYears: 100, widthPx: 1000 };

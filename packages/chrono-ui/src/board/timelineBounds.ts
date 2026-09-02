@@ -1,6 +1,6 @@
 // packages/player/src/chrono/board/timelineBounds.ts
 // Сбор границ (в годах оси) всех событий проекта - общая часть для
-// initialViewport.ts (стартовый масштаб) и overviewScale.ts (обзорная
+// initialViewport.ts (стартовый масштаб) и overviewMath.ts (обзорная
 // шкала снизу), вынесена, чтобы не дублировать один и тот же цикл по
 // toRange() в двух местах.
 

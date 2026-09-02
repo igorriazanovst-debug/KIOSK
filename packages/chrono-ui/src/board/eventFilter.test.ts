@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { matchesEventFilter, isFilterActive, EMPTY_EVENT_FILTER, type EventFilter } from './eventFilter.ts';
+import { matchesEventFilter, isFilterActive, EMPTY_EVENT_FILTER, type EventFilter } from './eventFilter.js';
 import { calendarDateTimeToCivilDay, type ChronoMoment, type TimelineEvent } from '@kiosk/shared';
 
 function yearMoment(year: number): ChronoMoment {

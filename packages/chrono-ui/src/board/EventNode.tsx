@@ -15,8 +15,8 @@
 import React, { useState } from 'react';
 import { useDrag } from '@use-gesture/react';
 import type { ChronoMedia, EventView, TimelineEvent } from '@kiosk/shared';
-import type { EventPixelBounds } from './eventPosition.ts';
-import type { ResizeEdge } from './eventDrag.ts';
+import type { EventPixelBounds } from './eventPosition.js';
+import type { ResizeEdge } from './eventDrag.js';
 import './EventNode.css';
 
 export interface EventNodeProps {

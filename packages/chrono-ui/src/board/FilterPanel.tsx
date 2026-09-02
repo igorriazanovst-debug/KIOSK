@@ -6,8 +6,8 @@
 
 import React, { useMemo, useState } from 'react';
 import { parseChronoInput, type ParseResult } from '@kiosk/shared';
-import { formatMomentPreview } from '../formatMomentPreview.ts';
-import type { EventFilter } from './eventFilter.ts';
+import { formatMomentPreview } from '../formatMomentPreview.js';
+import type { EventFilter } from './eventFilter.js';
 import './FilterPanel.css';
 
 export interface AttributeOption {

@@ -1,4 +1,4 @@
-// packages/player/src/chrono/board/overviewScale.ts
+// packages/chrono-ui/src/board/overviewMath.ts
 // Чистая математика обзорной шкалы снизу (OverviewScale.tsx): диапазон
 // показа шкалы и позиция окна "текущий видимый viewport" внутри неё.
 // Сама шкала - это ЕЩЁ ОДИН Viewport (более крупного масштаба), поэтому
@@ -6,7 +6,7 @@
 // системы координат.
 
 import { axisYearsToPx, type ChronoTimeline, type Viewport } from '@kiosk/shared';
-import { collectAxisYearBounds } from './timelineBounds.ts';
+import { collectAxisYearBounds } from './timelineBounds.js';
 
 const PADDING_FRACTION = 0.1;
 const MIN_SPAN_YEARS = 10;

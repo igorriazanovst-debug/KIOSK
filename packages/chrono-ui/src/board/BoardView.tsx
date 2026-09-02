@@ -17,15 +17,15 @@
 import React, { useRef, useState } from 'react';
 import { useGesture } from '@use-gesture/react';
 import { durationBetween, formatDuration, type ChronoInterval, type ChronoMedia, type ChronoTimeline, type Viewport } from '@kiosk/shared';
-import ScaleRuler from './ScaleRuler.tsx';
-import OverviewScale from './OverviewScale.tsx';
-import EventNode from './EventNode.tsx';
-import CompareStrip from './CompareStrip.tsx';
-import FilterPanel, { type AttributeOption } from './FilterPanel.tsx';
-import { eventPixelBounds, isEventVisible } from './eventPosition.ts';
-import { panViewport, zoomViewportAtPoint } from './boardViewport.ts';
-import { previewDraggedInterval, previewResizedInterval } from './eventDrag.ts';
-import { matchesEventFilter, isFilterActive, EMPTY_EVENT_FILTER, type EventFilter } from './eventFilter.ts';
+import ScaleRuler from './ScaleRuler.js';
+import OverviewScale from './OverviewScale.js';
+import EventNode from './EventNode.js';
+import CompareStrip from './CompareStrip.js';
+import FilterPanel, { type AttributeOption } from './FilterPanel.js';
+import { eventPixelBounds, isEventVisible } from './eventPosition.js';
+import { panViewport, zoomViewportAtPoint } from './boardViewport.js';
+import { previewDraggedInterval, previewResizedInterval } from './eventDrag.js';
+import { matchesEventFilter, isFilterActive, EMPTY_EVENT_FILTER, type EventFilter } from './eventFilter.js';
 import './BoardView.css';
 
 export interface BoardViewProps {

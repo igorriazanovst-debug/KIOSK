@@ -8,8 +8,8 @@
 
 import React, { useMemo } from 'react';
 import { generateTicks, axisYearsToPx, type Viewport } from '@kiosk/shared';
-import { visibleAxisRange } from './boardViewport.ts';
-import { formatTickLabel } from './tickLabel.ts';
+import { visibleAxisRange } from './boardViewport.js';
+import { formatTickLabel } from './tickLabel.js';
 import './ScaleRuler.css';
 
 export interface ScaleRulerProps {

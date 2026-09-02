@@ -5,7 +5,7 @@
 // вокруг текущего календарного года, не нулевой/бесконечный диапазон.
 
 import type { ChronoProject, Viewport } from '@kiosk/shared';
-import { collectAxisYearBounds } from './timelineBounds.ts';
+import { collectAxisYearBounds } from './timelineBounds.js';
 
 const DEFAULT_SPAN_YEARS = 100;
 const PADDING_FRACTION = 0.1;

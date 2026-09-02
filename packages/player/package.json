@@ -16,7 +16,8 @@
     "electron:build:deb": "npm run build && electron-builder --linux deb",
     "electron:build:rpm": "npm run build && electron-builder --linux rpm",
     "package": "npm run build && electron-builder --dir",
-    "clean": "rimraf dist dist-electron"
+    "clean": "rimraf dist dist-electron",
+    "test": "node --experimental-strip-types --test src/chrono/*.test.ts electron/chrono/*.test.js"
   },
   "dependencies": {
     "@kiosk/shared": "file:../shared",

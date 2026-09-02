@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { eventPixelBounds, isEventVisible } from './eventPosition.ts';
+import { eventPixelBounds, isEventVisible } from './eventPosition.js';
 import { calendarDateTimeToCivilDay, toRange, axisYearsToPx, type ChronoInterval, type Viewport } from '@kiosk/shared';
 
 const VIEWPORT: Viewport = { centerAxisYears: 1950, spanAxisYears: 100, widthPx: 1000 };

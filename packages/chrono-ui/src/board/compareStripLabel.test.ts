@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { formatCompareStripLabel } from './compareStripLabel.ts';
+import { formatCompareStripLabel } from './compareStripLabel.js';
 
 test('formatCompareStripLabel shows a plain calendar year within the historical threshold', () => {
   assert.equal(formatCompareStripLabel(1941), '1941');

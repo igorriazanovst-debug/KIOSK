@@ -14,9 +14,9 @@
 import React, { useMemo, useRef } from 'react';
 import { useDrag } from '@use-gesture/react';
 import { pxToAxisYears, type ChronoTimeline, type Viewport } from '@kiosk/shared';
-import ScaleRuler from './ScaleRuler.tsx';
-import { computeOverviewRange, windowBoundsPx } from './overviewScale.ts';
-import { pxDeltaToAxisYearsDelta, resizeViewportWindow } from './boardViewport.ts';
+import ScaleRuler from './ScaleRuler.js';
+import { computeOverviewRange, windowBoundsPx } from './overviewMath.js';
+import { pxDeltaToAxisYearsDelta, resizeViewportWindow } from './boardViewport.js';
 import './OverviewScale.css';
 
 export interface OverviewScaleProps {

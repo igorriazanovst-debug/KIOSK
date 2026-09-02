@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { computeOverviewRange, windowBoundsPx } from './overviewScale.ts';
+import { computeOverviewRange, windowBoundsPx } from './overviewMath.js';
 import { calendarDateTimeToCivilDay, type ChronoTimeline, type Viewport } from '@kiosk/shared';
 
 const VIEWPORT: Viewport = { centerAxisYears: 1950, spanAxisYears: 100, widthPx: 1000 };

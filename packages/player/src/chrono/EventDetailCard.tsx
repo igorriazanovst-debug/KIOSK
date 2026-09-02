@@ -41,7 +41,7 @@ import {
   type ParseResult,
   type TimelineEvent,
 } from '@kiosk/shared';
-import { formatMomentPreview } from './formatMomentPreview.ts';
+import { formatMomentPreview } from '@kiosk/chrono-ui/formatMomentPreview';
 import './EventDetailCard.css';
 
 export interface EventDetailPatch {

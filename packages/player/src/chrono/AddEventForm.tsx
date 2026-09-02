@@ -7,7 +7,7 @@
 
 import React, { useMemo, useState } from 'react';
 import { parseChronoInput, type ChronoInterval, type EventView, type ParseResult } from '@kiosk/shared';
-import { formatMomentPreview } from './formatMomentPreview.ts';
+import { formatMomentPreview } from '@kiosk/chrono-ui/formatMomentPreview';
 import './AddEventForm.css';
 
 export interface AddEventFormResult {

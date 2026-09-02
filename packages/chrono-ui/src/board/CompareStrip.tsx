@@ -14,8 +14,8 @@
 import React from 'react';
 import { useDrag } from '@use-gesture/react';
 import { axisYearsToPx, type Viewport } from '@kiosk/shared';
-import { pxDeltaToAxisYearsDelta } from './boardViewport.ts';
-import { formatCompareStripLabel } from './compareStripLabel.ts';
+import { pxDeltaToAxisYearsDelta } from './boardViewport.js';
+import { formatCompareStripLabel } from './compareStripLabel.js';
 import './CompareStrip.css';
 
 export interface CompareStripProps {

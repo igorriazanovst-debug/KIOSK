@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { formatTickLabel } from './tickLabel.ts';
+import { formatTickLabel } from './tickLabel.js';
 import type { Tick } from '@kiosk/shared';
 
 function tick(axisYears: number, unit: Tick['unit'], multiplier = 1): Tick {

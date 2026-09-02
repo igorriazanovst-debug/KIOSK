@@ -1,7 +1,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { axisYearsToPx, type Viewport } from '@kiosk/shared';
-import { panViewport, zoomViewportAtPoint, visibleAxisRange, resizeViewportWindow, MIN_SPAN_YEARS, MAX_SPAN_YEARS } from './boardViewport.ts';
+import { panViewport, zoomViewportAtPoint, visibleAxisRange, resizeViewportWindow, MIN_SPAN_YEARS, MAX_SPAN_YEARS } from './boardViewport.js';
 
 const VIEWPORT: Viewport = { centerAxisYears: 1950, spanAxisYears: 100, widthPx: 1000 };
 

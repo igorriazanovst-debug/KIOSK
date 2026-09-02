@@ -55,8 +55,8 @@ import {
   deleteAttributeDef,
   type AttributeDef,
 } from '@kiosk/shared';
-import BoardView, { type BoardViewProps } from './board/BoardView.tsx';
-import { computeInitialViewport } from './board/initialViewport.ts';
+import BoardView, { type BoardViewProps } from '@kiosk/chrono-ui/board/BoardView';
+import { computeInitialViewport } from '@kiosk/chrono-ui/board/initialViewport';
 import AddEventForm, { type AddEventFormResult } from './AddEventForm.tsx';
 import EventDetailCard, { type EventDetailPatch } from './EventDetailCard.tsx';
 import TimelineSettings from './TimelineSettings.tsx';
