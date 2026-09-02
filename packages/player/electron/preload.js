@@ -65,5 +65,7 @@ contextBridge.exposeInMainWorld('chronoAPI', {
   getResetChallenge: () => ipcRenderer.invoke('chrono:reset-challenge'),
   resetWithCode: (code, newPassword) => ipcRenderer.invoke('chrono:reset-with-code', code, newPassword),
   pickMediaFile: () => ipcRenderer.invoke('chrono:pick-media-file'),
-  importMedia: (projectId, sourceFilePath) => ipcRenderer.invoke('chrono:import-media', projectId, sourceFilePath)
+  importMedia: (projectId, sourceFilePath) => ipcRenderer.invoke('chrono:import-media', projectId, sourceFilePath),
+  exportProject: (projectId) => ipcRenderer.invoke('chrono:export-project', projectId),
+  importProject: () => ipcRenderer.invoke('chrono:import-project')
 });

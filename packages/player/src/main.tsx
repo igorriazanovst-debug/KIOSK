@@ -58,6 +58,8 @@ declare global {
       ) => Promise<{ success: boolean; locked: boolean; retryAfterMs: number }>;
       pickMediaFile: () => Promise<string | null>;
       importMedia: (projectId: string, sourceFilePath: string) => Promise<ChronoMedia>;
+      exportProject: (projectId: string) => Promise<{ success: boolean; canceled?: boolean; filePath?: string }>;
+      importProject: () => Promise<ChronoProjectManifest | null>;
     };
   }
 }

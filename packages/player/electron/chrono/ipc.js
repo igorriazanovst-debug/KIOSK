@@ -23,6 +23,7 @@ const mediaStore = require('./mediaStore');
 const { createSessionLock } = require('./sessionLock');
 const { createPickedMediaPaths } = require('./pickedMediaPaths');
 const resetCode = require('./resetCode');
+const archive = require('./archive');
 
 const MEDIA_FILE_FILTERS = [
   { name: 'Изображения и видео', extensions: ['jpg', 'jpeg', 'png', 'gif', 'webp', 'mp4', 'webm', 'mov', 'mp3', 'wav', 'ogg'] },
@@ -80,6 +81,36 @@ function registerChronoIpc({ ipcMain, app, dialog }) {
   ipcMain.handle('chrono:save-project-data', async (_event, projectId, data) => {
     requireUnlocked();
     return projectStore.saveProjectData(baseDir, projectId, data);
+  });
+
+  // Экспорт/импорт в свой архивный формат (Фаза 8). Путь к файлу НИКОГДА не
+  // приходит от рендерера (в отличие от media - там это два отдельных
+  // IPC-вызова с промежуточным разрешением через pickedMediaPaths) - весь
+  // диалог выбора файла происходит ВНУТРИ одного этого обработчика, так что
+  // скомпрометированный рендерер не может подсунуть произвольный путь ни
+  // на чтение (импорт чужого файла), ни на запись (перезапись системного
+  // файла путём подмены пути экспорта).
+  ipcMain.handle('chrono:export-project', async (_event, projectId) => {
+    requireUnlocked();
+    const manifest = projectStore.readManifest(baseDir, projectId);
+    const safeName = manifest.name.replace(/[\\/:*?"<>|\x00-\x1f]/g, '_').trim() || 'chronoline';
+    const result = await dialog.showSaveDialog({
+      defaultPath: `${safeName}.chronoline`,
+      filters: [{ name: 'Архив Хронолинии', extensions: ['chronoline'] }],
+    });
+    if (result.canceled || !result.filePath) return { success: false, canceled: true };
+    await archive.exportProjectToZip(baseDir, projectId, result.filePath);
+    return { success: true, filePath: result.filePath };
+  });
+
+  ipcMain.handle('chrono:import-project', async () => {
+    requireUnlocked();
+    const result = await dialog.showOpenDialog({
+      properties: ['openFile'],
+      filters: [{ name: 'Архив Хронолинии', extensions: ['chronoline'] }],
+    });
+    if (result.canceled || result.filePaths.length === 0) return null;
+    return archive.importProjectFromZip(baseDir, result.filePaths[0]);
   });
 
   ipcMain.handle('chrono:auth-status', async () => {

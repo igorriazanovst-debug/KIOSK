@@ -323,6 +323,27 @@ const ChronolineRuntime: React.FC<Props> = ({ properties, width, height }) => {
       .catch((err: unknown) => handleMutatingIpcError(err, 'Не удалось удалить проект'));
   };
 
+  const handleExportProject = () => {
+    window.chronoAPI
+      ?.exportProject(project.id)
+      .then((result) => {
+        if (!result.success && !result.canceled) window.alert('Не удалось экспортировать проект');
+      })
+      .catch((err: unknown) => handleMutatingIpcError(err, 'Не удалось экспортировать проект'));
+  };
+
+  const handleImportProject = () => {
+    window.chronoAPI
+      ?.importProject()
+      .then((manifest) => {
+        if (!manifest) return; // диалог отменён
+        return Promise.all([window.chronoAPI!.loadProjectData(manifest.id), window.chronoAPI!.listProjects()]).then(
+          ([next, list]) => openProject(next, list)
+        );
+      })
+      .catch((err: unknown) => handleMutatingIpcError(err, 'Не удалось импортировать проект - файл повреждён или не является архивом Хронолинии'));
+  };
+
   const handleAddTimeline = () => {
     const name = window.prompt('Название линии', '')?.trim();
     if (!name) return;
@@ -488,6 +509,12 @@ const ChronolineRuntime: React.FC<Props> = ({ properties, width, height }) => {
               </button>
               <button type="button" onClick={handleDeleteProject} title="Удалить проект">
                 🗑
+              </button>
+              <button type="button" onClick={handleExportProject} title="Экспортировать проект в файл">
+                ⭳ Экспорт
+              </button>
+              <button type="button" onClick={handleImportProject} title="Импортировать проект из файла">
+                ⭱ Импорт
               </button>
               <span className="chronoline-runtime__toolbar-separator" />
               <button type="button" onClick={handleUndo} disabled={!canUndo(history)} title="Отменить">

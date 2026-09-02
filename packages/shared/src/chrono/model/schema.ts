@@ -112,11 +112,21 @@ export type ChronoTimeline = z.infer<typeof TimelineSchema>;
 
 export const MediaSchema = z.object({
   id: z.string().min(1),
-  fileName: z.string(),
+  // Без ограничения на разделители пути fileName мог бы дойти до диалога
+  // "Сохранить как"/лога как псевдо-путь; лимит длины - на случай
+  // патологически длинного значения в чужом импортированном content.json.
+  fileName: z.string().min(1).max(255).refine((s) => !/[/\\]/.test(s), 'fileName must not contain path separators'),
   mimeType: z.string(),
   fileSize: z.number().int().nonnegative(),
-  /** Дедупликация (Фаза 5) */
-  sha256: z.string(),
+  /**
+   * Дедупликация (Фаза 5) - ровно 64 hex-символа (sha256 в hex), не просто
+   * строка. Найдено security-review Фазы 8 (MEDIUM): mediaStore.diskFileName
+   * безопасен для path traversal только ПОТОМУ, что resolveWithinRoot
+   * проверяет итоговый путь, а не потому, что sha256/fileName валидны сами
+   * по себе - хрупкий инвариант, который будущая правка могла бы тихо
+   * сломать. Ограничение здесь делает его явным контрактом схемы.
+   */
+  sha256: z.string().regex(/^[0-9a-f]{64}$/, 'sha256 must be a 64-character lowercase hex string'),
   width: z.number().int().optional(),
   height: z.number().int().optional(),
   duration: z.number().optional(),
