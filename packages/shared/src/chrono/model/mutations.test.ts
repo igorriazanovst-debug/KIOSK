@@ -10,6 +10,7 @@ import {
   deleteEvent,
   addMedia,
   setBackgroundMedia,
+  deleteMedia,
   addAttributeDef,
   renameAttributeDef,
   deleteAttributeDef,
@@ -193,6 +194,37 @@ test('setBackgroundMedia with null removes the background', () => {
   const project = setBackgroundMedia(emptyProject(), 'm1');
   const result = setBackgroundMedia(project, null);
   assert.equal(result.backgroundMediaId, null);
+});
+
+test('deleteMedia removes the catalog entry and scrubs mediaIds/defaultMediaId across every event on every timeline', () => {
+  let project = addTimeline(emptyProject(), 'tl-1', 'A');
+  project = addMedia(project, sampleMedia({ id: 'm1', sha256: 'a'.repeat(64) })).project;
+  project = addEvent(project, 'tl-1', { ...sampleEvent('ev-1'), mediaIds: ['m1'], defaultMediaId: 'm1' });
+
+  const result = deleteMedia(project, 'm1');
+
+  assert.equal(result.media.length, 0);
+  const event = result.timelines[0].events[0];
+  assert.deepEqual(event.mediaIds, []);
+  assert.equal(event.defaultMediaId, null);
+});
+
+test('deleteMedia also clears backgroundMediaId when it points at the deleted media', () => {
+  let project = addMedia(emptyProject(), sampleMedia({ id: 'm1', sha256: 'a'.repeat(64) })).project;
+  project = setBackgroundMedia(project, 'm1');
+
+  const result = deleteMedia(project, 'm1');
+  assert.equal(result.backgroundMediaId, null);
+});
+
+test('deleteMedia on an unrelated id is a no-op for other media/events', () => {
+  let project = addTimeline(emptyProject(), 'tl-1', 'A');
+  project = addMedia(project, sampleMedia({ id: 'm1', sha256: 'a'.repeat(64) })).project;
+  project = addEvent(project, 'tl-1', { ...sampleEvent('ev-1'), mediaIds: ['m1'], defaultMediaId: 'm1' });
+
+  const result = deleteMedia(project, 'does-not-exist');
+  assert.equal(result.media.length, 1);
+  assert.deepEqual(result.timelines[0].events[0].mediaIds, ['m1']);
 });
 
 // ─── addAttributeDef / renameAttributeDef / deleteAttributeDef ───────────

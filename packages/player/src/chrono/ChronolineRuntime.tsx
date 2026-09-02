@@ -42,7 +42,7 @@
 // источником истины.
 
 import React, { useEffect, useRef, useState } from 'react';
-import type { ChronoProject, ChronolineWidgetProperties, TimelineEvent, Viewport } from '@kiosk/shared';
+import type { ChronoProject, ChronolineWidgetProperties, TimelineEvent, ChronoMedia, Viewport } from '@kiosk/shared';
 import {
   addTimeline,
   deleteTimeline,
@@ -55,6 +55,7 @@ import {
   deleteAttributeDef,
   setTimelineColor,
   setBackgroundMedia,
+  deleteMedia,
   type AttributeDef,
 } from '@kiosk/shared';
 import BoardView, { type BoardViewProps } from '@kiosk/chrono-ui/board/BoardView';
@@ -62,6 +63,7 @@ import { computeInitialViewport } from '@kiosk/chrono-ui/board/initialViewport';
 import AddEventForm, { type AddEventFormResult } from './AddEventForm.tsx';
 import EventDetailCard, { type EventDetailPatch } from './EventDetailCard.tsx';
 import TimelineSettings from './TimelineSettings.tsx';
+import MediaLibraryPanel from './MediaLibraryPanel.tsx';
 import { mediaUrl } from './media.ts';
 import PasswordPrompt, {
   type PasswordPromptMode,
@@ -147,6 +149,8 @@ const ChronolineRuntime: React.FC<Props> = ({ properties, width, height }) => {
   const [unlocked, setUnlocked] = useState(false);
   const [passwordPromptMode, setPasswordPromptMode] = useState<PasswordPromptMode | null>(null);
   const [resetInfo, setResetInfo] = useState<ResetChallengeInfo | null>(null);
+  const [mediaLibraryOpen, setMediaLibraryOpen] = useState(false);
+  const [mediaLibraryAdding, setMediaLibraryAdding] = useState(false);
 
   // Всегда свежая ссылка на текущий present - debounce-сохранение viewport
   // ниже не должно перетереть контентную правку, случившуюся уже ПОСЛЕ
@@ -568,6 +572,36 @@ const ChronolineRuntime: React.FC<Props> = ({ properties, width, height }) => {
 
   const handleClearBackgroundImage = () => applyMutation(setBackgroundMedia(project, null));
 
+  // FR-020 ТЗ - добавление в медиатеку НЕ привязано к конкретному событию
+  // (в отличие от handleImportMediaForEvent) - файл просто попадает в
+  // project.media[], прикрепить его к событию можно позже через обычный
+  // выбор в EventDetailCard.
+  const handleAddLibraryMedia = async () => {
+    const filePath = await window.chronoAPI?.pickMediaFile();
+    if (!filePath) return;
+    setMediaLibraryAdding(true);
+    try {
+      const imported = await window.chronoAPI!.importMedia(project.id, filePath);
+      const { project: updatedProject } = addMedia(project, imported);
+      applyMutation(updatedProject);
+    } catch (err) {
+      handleMutatingIpcError(err, 'Не удалось добавить файл в медиатеку');
+    } finally {
+      setMediaLibraryAdding(false);
+    }
+  };
+
+  // Сначала убираем запись из content.json (обычный applyMutation - с тем
+  // же индикатором/повтором, что и у любой другой правки), и только потом
+  // физически удаляем файл - обратный порядок оставлял бы окно, где
+  // content.json ссылается на уже не существующий файл.
+  const handleDeleteLibraryMedia = (m: ChronoMedia) => {
+    applyMutation(deleteMedia(project, m.id));
+    window.chronoAPI?.deleteMedia(project.id, { sha256: m.sha256, fileName: m.fileName }).catch(() => {
+      // Тихая деградация - осиротевший файл на диске не теряет пользовательский контент.
+    });
+  };
+
   const boardHeight = editingEnabled ? height - TOOLBAR_HEIGHT : height;
 
   return (
@@ -611,6 +645,9 @@ const ChronolineRuntime: React.FC<Props> = ({ properties, width, height }) => {
                   🖼 ×
                 </button>
               )}
+              <button type="button" onClick={() => setMediaLibraryOpen(true)} title="Медиатека проекта">
+                🗂 Медиатека
+              </button>
               <span className="chronoline-runtime__toolbar-separator" />
               <button type="button" onClick={handleUndo} disabled={!canUndo(history)} title="Отменить">
                 ↶ Отменить
@@ -714,6 +751,16 @@ const ChronolineRuntime: React.FC<Props> = ({ properties, width, height }) => {
             onDeleteAttribute={handleDeleteAttribute}
             onChangeColor={handleChangeTimelineColor}
             onClose={() => setAttributeSettingsTimelineId(null)}
+          />
+        )}
+        {mediaLibraryOpen && (
+          <MediaLibraryPanel
+            media={project.media}
+            getMediaUrl={(m) => mediaUrl(project.id, m)}
+            onAdd={handleAddLibraryMedia}
+            adding={mediaLibraryAdding}
+            onDelete={handleDeleteLibraryMedia}
+            onClose={() => setMediaLibraryOpen(false)}
           />
         )}
         {passwordPromptMode && (

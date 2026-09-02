@@ -89,6 +89,31 @@ export function setBackgroundMedia(project: ChronoProject, mediaId: string | nul
   return { ...project, backgroundMediaId: mediaId };
 }
 
+/**
+ * FR-020 ТЗ ("показ/добавление/удаление всех медиа хронолинии в одном
+ * месте") - удаляет запись из каталога И зачищает все ссылки на неё
+ * (mediaIds/defaultMediaId любого события любой линии, backgroundMediaId),
+ * а не только детач из ОДНОГО события, как делает существующий поток в
+ * EventDetailCard.tsx. Файл на диске эта функция не трогает - она чистая
+ * (см. заголовок файла), физическое удаление - забота вызывающего кода
+ * (mediaStore.js/IPC), вызывается ОТДЕЛЬНО.
+ */
+export function deleteMedia(project: ChronoProject, mediaId: string): ChronoProject {
+  return {
+    ...project,
+    media: project.media.filter((m) => m.id !== mediaId),
+    backgroundMediaId: project.backgroundMediaId === mediaId ? null : project.backgroundMediaId,
+    timelines: project.timelines.map((t) => ({
+      ...t,
+      events: t.events.map((e) => ({
+        ...e,
+        mediaIds: e.mediaIds.filter((id) => id !== mediaId),
+        defaultMediaId: e.defaultMediaId === mediaId ? null : e.defaultMediaId,
+      })),
+    })),
+  };
+}
+
 /** @param attr Собран целиком вызывающим кодом (id, тип, enumValues при необходимости) */
 export function addAttributeDef(project: ChronoProject, timelineId: string, attr: AttributeDef): ChronoProject {
   return {

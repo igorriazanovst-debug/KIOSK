@@ -139,6 +139,23 @@ function mediaFilePath(baseDir, projectId, media) {
 }
 
 /**
+ * FR-020 ТЗ ("удаление всех медиафайлов хронолинии в одном месте") -
+ * физическое удаление файла, вызывается ПОСЛЕ того, как запись уже убрана
+ * из content.json (см. deleteMedia в mutations.ts + ipc.js) - обратный
+ * порядок означал бы окно, где content.json ещё ссылается на уже
+ * удалённый файл. Отсутствие файла - не ошибка (force:true) - тот же
+ * принцип, что и у остального кода: медиа могло уже отсутствовать на
+ * диске по любой причине, важно лишь, что после вызова его точно нет.
+ *
+ * @param {string} baseDir
+ * @param {string} projectId
+ * @param {{ sha256: string, fileName: string }} media
+ */
+function deleteMediaFile(baseDir, projectId, media) {
+  fs.rmSync(mediaFilePath(baseDir, projectId, media), { force: true });
+}
+
+/**
  * Удаляет осиротевшие `*.tmp-*` файлы во всех медиатеках проекта -
  * найдено security-review: если процесс убит между copyFileSync и
  * renameSync (импорт крупного видео, обрыв питания киоска), временный
@@ -177,6 +194,7 @@ module.exports = {
   mediaDir,
   diskFileName,
   guessMimeType,
+  deleteMediaFile,
   sweepOrphanedTmpFiles,
   MediaImportError,
   MAX_IMPORT_SIZE_BYTES,

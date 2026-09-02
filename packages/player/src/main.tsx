@@ -60,6 +60,7 @@ declare global {
       importMedia: (projectId: string, sourceFilePath: string) => Promise<ChronoMedia>;
       exportProject: (projectId: string) => Promise<{ success: boolean; canceled?: boolean; filePath?: string }>;
       importProject: () => Promise<ChronoProjectManifest | null>;
+      deleteMedia: (projectId: string, media: { sha256: string; fileName: string }) => Promise<{ success: boolean }>;
     };
   }
 }

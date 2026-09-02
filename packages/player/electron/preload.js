@@ -67,5 +67,6 @@ contextBridge.exposeInMainWorld('chronoAPI', {
   pickMediaFile: () => ipcRenderer.invoke('chrono:pick-media-file'),
   importMedia: (projectId, sourceFilePath) => ipcRenderer.invoke('chrono:import-media', projectId, sourceFilePath),
   exportProject: (projectId) => ipcRenderer.invoke('chrono:export-project', projectId),
-  importProject: () => ipcRenderer.invoke('chrono:import-project')
+  importProject: () => ipcRenderer.invoke('chrono:import-project'),
+  deleteMedia: (projectId, media) => ipcRenderer.invoke('chrono:delete-media', projectId, media)
 });

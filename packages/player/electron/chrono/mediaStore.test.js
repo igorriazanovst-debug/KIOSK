@@ -3,7 +3,15 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
-import { importMedia, mediaFilePath, diskFileName, sweepOrphanedTmpFiles, MediaImportError, MAX_IMPORT_SIZE_BYTES } from './mediaStore.js';
+import {
+  importMedia,
+  mediaFilePath,
+  diskFileName,
+  deleteMediaFile,
+  sweepOrphanedTmpFiles,
+  MediaImportError,
+  MAX_IMPORT_SIZE_BYTES,
+} from './mediaStore.js';
 import { createProject, projectsRoot } from './projectStore.js';
 import { PathGuardError } from './pathGuard.js';
 
@@ -30,6 +38,25 @@ test('importMedia copies the file into the project media dir and returns matchin
   assert.equal(media.fileSize, Buffer.byteLength('fake jpeg bytes'));
   assert.equal(media.sha256.length, 64, 'sha256 hex digest is 64 chars');
   assert.ok(fs.existsSync(mediaFilePath(baseDir, project.id, media)));
+});
+
+test('deleteMediaFile removes the file on disk', () => {
+  const baseDir = tmpBaseDir();
+  const project = createProject(baseDir, 'Проект');
+  const media = importMedia(baseDir, project.id, tmpSourceFile('photo.jpg', 'fake jpeg bytes'));
+  const filePath = mediaFilePath(baseDir, project.id, media);
+  assert.ok(fs.existsSync(filePath));
+
+  deleteMediaFile(baseDir, project.id, media);
+  assert.equal(fs.existsSync(filePath), false);
+});
+
+test('deleteMediaFile on an already-missing file does not throw', () => {
+  const baseDir = tmpBaseDir();
+  const project = createProject(baseDir, 'Проект');
+  assert.doesNotThrow(() =>
+    deleteMediaFile(baseDir, project.id, { sha256: 'a'.repeat(64), fileName: 'never-imported.jpg' })
+  );
 });
 
 test('importing the exact same content twice does not duplicate the file on disk (dedup by sha256)', () => {

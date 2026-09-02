@@ -208,6 +208,25 @@ function registerChronoIpc({ ipcMain, app, dialog }) {
     return mediaStore.importMedia(baseDir, projectId, sourceFilePath);
   });
 
+  // FR-020 ТЗ - единая медиатека проекта, удаление файла. Только
+  // физическое удаление на диске - запись из content.media[] убирается
+  // ОТДЕЛЬНО, обычным saveProjectData (deleteMedia из mutations.ts, тот же
+  // путь, что у остальных мутаций проекта на стороне рендерера) - ДО этого
+  // вызова, чтобы не было окна, где content.json ссылается на уже
+  // удалённый файл. Поэтому метаданные {sha256, fileName} передаются
+  // явно, а не ищутся по mediaId в content.json - к этому моменту записи
+  // там уже может не быть. Безопасно: mediaFilePath всё равно резолвит
+  // путь через resolveWithinRoot, ограничена media-каталогом ЭТОГО
+  // проекта, а sha256/fileName после ужесточения MediaSchema (Фаза 8,
+  // security-review) обязаны иметь безопасную форму (64 hex / без
+  // разделителей пути) ещё на этапе, когда запись впервые попала в
+  // content.json - откуда бы вызывающий код её ни взял.
+  handle('chrono:delete-media', async (_event, projectId, media) => {
+    requireUnlocked();
+    mediaStore.deleteMediaFile(baseDir, projectId, media);
+    return { success: true };
+  });
+
   return { baseDir, isFallback };
 }
 
