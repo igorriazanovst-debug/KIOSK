@@ -708,7 +708,7 @@ const ChronolineRuntime: React.FC<Props> = ({ properties, width, height }) => {
                   Повторить сохранение
                 </button>
               )}
-              {isPasswordSet && (
+              {isPasswordSet ? (
                 <>
                   <button
                     type="button"
@@ -727,15 +727,31 @@ const ChronolineRuntime: React.FC<Props> = ({ properties, width, height }) => {
                     🔒 Заблокировать
                   </button>
                 </>
+              ) : (
+                // Найдено вживую: пока пароль не задан, canEdit ВСЕГДА true
+                // (редактирование разрешено без пароля) - точка входа в
+                // установку пароля обязана быть здесь, в ветке
+                // "редактирование разрешено", а не в противоположной ветке
+                // "редактирование заблокировано" (там она была физически
+                // недостижима: canEdit становится false только когда пароль
+                // уже задан и сессия заблокирована - обратное состояние).
+                <button
+                  type="button"
+                  className="chronoline-runtime__auth-button"
+                  onClick={() => setPasswordPromptMode('setup')}
+                  title="Установить пароль для локального редактирования"
+                >
+                  🔓 Установить пароль
+                </button>
               )}
             </>
           ) : (
             <button
               type="button"
               className="chronoline-runtime__auth-button"
-              onClick={() => setPasswordPromptMode(isPasswordSet ? 'unlock' : 'setup')}
+              onClick={() => setPasswordPromptMode('unlock')}
             >
-              {isPasswordSet ? '🔒 Разблокировать редактирование' : '🔓 Установить пароль'}
+              🔒 Разблокировать редактирование
             </button>
           )}
         </div>
