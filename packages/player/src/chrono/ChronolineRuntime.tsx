@@ -234,6 +234,19 @@ const ChronolineRuntime: React.FC<Props> = ({ properties, width, height }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [viewport?.centerAxisYears, viewport?.spanAxisYears]);
 
+  // Реальный размер окна/экрана может измениться в любой момент после
+  // загрузки проекта (fullscreen-киоск на другом разрешении, resizable-окно
+  // оконного режима, Фаза 1) - Player.tsx передаёт живой width/height,
+  // реагирующий на resize. viewport.widthPx обязан следовать за ним,
+  // иначе шкала/события останутся привязаны к пиксельной ширине на момент
+  // открытия проекта. centerAxisYears/spanAxisYears (какой временной
+  // диапазон виден) НЕ трогаем здесь - это пользовательский "кадр", он не
+  // должен прыгать при ресайзе окна (сохраняется отдельно, см. выше).
+  useEffect(() => {
+    const widthPx = width - BOARD_SIDEBAR_WIDTH_PX;
+    setViewport((prev) => (prev && prev.widthPx !== widthPx ? { ...prev, widthPx } : prev));
+  }, [width]);
+
   // Challenge запрашивается заново при каждом входе в режим 'reset' -
   // предыдущий challenge мог быть погашен успешным сбросом с другого
   // сеанса (одноразовый, см. resetCode.js). Два независимых источника

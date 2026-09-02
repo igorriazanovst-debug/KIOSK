@@ -113,6 +113,20 @@ const Player: React.FC<PlayerProps> = ({ embedded = false }) => {
   const [popupData, setPopupData] = useState<any>(null);
   const [browserActivePages, setBrowserActivePages] = useState<Record<string, string>>({});
   const videoRefs = useRef<Map<string, HTMLVideoElement>>(new Map());
+  // Хронолиния - отдельное standalone-приложение (не позиционируемый widget
+  // среди прочих), работает и в fullscreen-киоске на произвольном разрешении
+  // экрана, и в resizable-окне (windowMode.js) - в обоих случаях реальный
+  // размер окна знает только рантайм, не то, что было задано при
+  // проектировании в редакторе. Живой размер окна, реагирует на resize -
+  // используется ТОЛЬКО для виджета chronoline (см. renderWidget), остальные
+  // типы виджетов по-прежнему рендерятся по статичным project.canvas/widget.*.
+  const [viewportSize, setViewportSize] = useState({ width: window.innerWidth, height: window.innerHeight });
+
+  useEffect(() => {
+    const onResize = () => setViewportSize({ width: window.innerWidth, height: window.innerHeight });
+    window.addEventListener('resize', onResize);
+    return () => window.removeEventListener('resize', onResize);
+  }, []);
 
   useEffect(() => {
     loadProject();
@@ -517,12 +531,18 @@ const Player: React.FC<PlayerProps> = ({ embedded = false }) => {
       case 'browser-content':
         return renderBrowserContent(widget, commonStyle);
       case 'chronoline':
+        // Заполняет реальный размер окна/экрана целиком, игнорируя
+        // x/y/width/height из project.json (заданные в редакторе на момент
+        // проектирования) - см. комментарий у viewportSize выше.
         return (
-          <div key={widget.id} style={{ ...commonStyle, overflow: 'hidden' }}>
+          <div
+            key={widget.id}
+            style={{ ...commonStyle, left: 0, top: 0, width: viewportSize.width, height: viewportSize.height, overflow: 'hidden' }}
+          >
             <ChronolineRuntime
               properties={widget.properties as any}
-              width={widget.width}
-              height={widget.height}
+              width={viewportSize.width}
+              height={viewportSize.height}
             />
           </div>
         );
@@ -1055,13 +1075,18 @@ const Player: React.FC<PlayerProps> = ({ embedded = false }) => {
     return <ActivationScreen onActivated={() => setShowActivation(false)} />;
   }
 
+  // Хронолиния заполняет реальный размер окна/экрана (см. viewportSize
+  // выше) - без этого канвас оставался бы фиксированным на project.canvas.*,
+  // заданном при проектировании, и не совпадал бы с фактическим окном.
+  const isChronolineProject = project.widgets.some((w) => w.type === 'chronoline');
+
   return (
     <div className="player-container">
       <div
         className="player-canvas"
         style={{
-          width: project.canvas.width,
-          height: project.canvas.height,
+          width: isChronolineProject ? viewportSize.width : project.canvas.width,
+          height: isChronolineProject ? viewportSize.height : project.canvas.height,
           backgroundColor: project.canvas.backgroundColor || '#ffffff',
           position: 'relative',
           overflow: 'hidden'
