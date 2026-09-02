@@ -4,10 +4,18 @@ import { Square, Type, Image, Video, MousePointer, Menu, Globe, Compass, History
 import OutlinePanel from './OutlinePanel';
 import { NAVIGATION_WIDGET_TYPE, NAVIGATION_DEFAULT_PROPS, NAVIGATION_DEFAULT_SIZE } from '../utils/navigation/widgetType';
 import { CHRONOLINE_WIDGET_TYPE, CHRONOLINE_DEFAULT_PROPS, CHRONOLINE_DEFAULT_SIZE } from '@kiosk/shared';
+import { apiClient } from '../services/api-client';
 import './WidgetLibrary.css';
+
+// Временно: виджет «Хронолиния» на этапе обкатки доступен только этому
+// аккаунту (реальный запрет — на сервере, см. packages/server/src/config/chronolineAccess.ts;
+// здесь только скрываем пункт для остальных, чтобы не путать).
+const CHRONOLINE_ALLOWED_EMAILS = ['mokretcov.m@poznaikino.ru'];
 
 const WidgetLibrary: React.FC = () => {
   const { addWidget, project } = useEditorStore();
+  const currentUserEmail = apiClient.getCurrentUserEmail();
+  const isChronolineAllowed = !!currentUserEmail && CHRONOLINE_ALLOWED_EMAILS.includes(currentUserEmail.toLowerCase());
 
   const widgetTypes = [
     {
@@ -97,13 +105,13 @@ const WidgetLibrary: React.FC = () => {
       defaultProps: NAVIGATION_DEFAULT_PROPS,
       defaultSize: NAVIGATION_DEFAULT_SIZE
     },
-    {
+    ...(isChronolineAllowed ? [{
       type: CHRONOLINE_WIDGET_TYPE,
       name: 'Хронолиния',
       icon: History,
       defaultProps: CHRONOLINE_DEFAULT_PROPS,
       defaultSize: CHRONOLINE_DEFAULT_SIZE
-    }
+    }] : [])
   ];
 
   const handleAddWidget = (type: string, defaultProps: any) => {

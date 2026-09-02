@@ -4,6 +4,7 @@ import { ProjectService } from '../services/ProjectService';
 import { FileService } from '../services/FileService';
 import { createAuditLog } from '../services/AuditService';
 import { ProjectAccessService } from '../services/ProjectAccessService';
+import { isEmailAllowedForChronoline, projectDataHasChronolineWidget } from '../config/chronolineAccess';
 import multer from 'multer';
 import path from 'path';
 
@@ -191,6 +192,13 @@ export class ProjectController {
         });
       }
 
+      if (projectDataHasChronolineWidget(projectData) && !isEmailAllowedForChronoline(req.client.email)) {
+        return res.status(403).json({
+          error: 'Chronoline widget not allowed',
+          message: 'Виджет «Хронолиния» пока недоступен для этого аккаунта'
+        });
+      }
+
       const project = await ProjectService.createProject({
         name,
         description,
@@ -323,6 +331,17 @@ export class ProjectController {
 
       const { id } = req.params;
       const updates = req.body;
+
+      if (
+        Object.prototype.hasOwnProperty.call(updates, 'projectData') &&
+        projectDataHasChronolineWidget(updates.projectData) &&
+        !isEmailAllowedForChronoline(req.client.email)
+      ) {
+        return res.status(403).json({
+          error: 'Chronoline widget not allowed',
+          message: 'Виджет «Хронолиния» пока недоступен для этого аккаунта'
+        });
+      }
 
       const project = await ProjectService.updateProject(
         id,

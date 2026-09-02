@@ -259,6 +259,22 @@ class ApiClient {
   }
 
   /**
+   * Email текущего пользователя из payload JWT (без верификации подписи —
+   * только для UI-решений вроде видимости пунктов меню; реальная проверка
+   * прав всегда происходит на сервере).
+   */
+  public getCurrentUserEmail(): string | null {
+    if (!this.token) return null;
+    try {
+      const payloadBase64 = this.token.split('.')[1];
+      const payload = JSON.parse(atob(payloadBase64.replace(/-/g, '+').replace(/_/g, '/')));
+      return typeof payload.email === 'string' ? payload.email : null;
+    } catch {
+      return null;
+    }
+  }
+
+  /**
    * Получить данные организации
    */
   public getOrganizationData(): { name: string | null; plan: string | null } {
