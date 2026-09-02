@@ -61,7 +61,12 @@ import AddEventForm, { type AddEventFormResult } from './AddEventForm.tsx';
 import EventDetailCard, { type EventDetailPatch } from './EventDetailCard.tsx';
 import TimelineSettings from './TimelineSettings.tsx';
 import { mediaUrl } from './media.ts';
-import PasswordPrompt, { type PasswordPromptMode, type PasswordSubmitValues, type PasswordPromptResult } from './PasswordPrompt.tsx';
+import PasswordPrompt, {
+  type PasswordPromptMode,
+  type PasswordSubmitValues,
+  type PasswordPromptResult,
+  type ResetChallengeInfo,
+} from './PasswordPrompt.tsx';
 import { initHistory, pushHistory, undo, redo, canUndo, canRedo, type History } from './history.ts';
 import './ChronolineRuntime.css';
 
@@ -125,12 +130,22 @@ const ChronolineRuntime: React.FC<Props> = ({ properties, width, height }) => {
   const [isPasswordSet, setIsPasswordSet] = useState(false);
   const [unlocked, setUnlocked] = useState(false);
   const [passwordPromptMode, setPasswordPromptMode] = useState<PasswordPromptMode | null>(null);
+  const [resetInfo, setResetInfo] = useState<ResetChallengeInfo | null>(null);
 
   useEffect(() => {
     if (saveStatus.kind !== 'saved') return;
     const timer = setTimeout(() => setSaveStatus({ kind: 'idle' }), SAVED_INDICATOR_FADE_MS);
     return () => clearTimeout(timer);
   }, [saveStatus]);
+
+  // Challenge запрашивается заново при каждом входе в режим 'reset' -
+  // предыдущий challenge мог быть погашен успешным сбросом с другого
+  // сеанса (одноразовый, см. resetCode.js).
+  useEffect(() => {
+    if (passwordPromptMode !== 'reset' || !window.chronoAPI) return;
+    setResetInfo(null);
+    window.chronoAPI.getResetChallenge().then(setResetInfo);
+  }, [passwordPromptMode]);
 
   useEffect(() => {
     if (!window.chronoAPI) {
@@ -348,11 +363,14 @@ const ChronolineRuntime: React.FC<Props> = ({ properties, width, height }) => {
     if (passwordPromptMode === 'setup') {
       return window.chronoAPI!.changePassword(values.newPassword || '');
     }
+    if (passwordPromptMode === 'reset') {
+      return window.chronoAPI!.resetWithCode(values.resetCode || '', values.newPassword || '');
+    }
     return window.chronoAPI!.changePassword(values.newPassword || '', values.currentPassword);
   };
 
   const handlePasswordSuccess = () => {
-    if (passwordPromptMode === 'unlock' || passwordPromptMode === 'setup') {
+    if (passwordPromptMode === 'unlock' || passwordPromptMode === 'setup' || passwordPromptMode === 'reset') {
       setUnlocked(true);
       setIsPasswordSet(true);
     }
@@ -572,6 +590,8 @@ const ChronolineRuntime: React.FC<Props> = ({ properties, width, height }) => {
             onSubmit={handlePasswordSubmit}
             onSuccess={handlePasswordSuccess}
             onCancel={() => setPasswordPromptMode(null)}
+            onForgotPassword={passwordPromptMode === 'unlock' ? () => setPasswordPromptMode('reset') : undefined}
+            resetInfo={resetInfo}
           />
         )}
       </div>

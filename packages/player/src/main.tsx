@@ -45,6 +45,17 @@ declare global {
         currentPassword?: string
       ) => Promise<{ success: boolean; locked: boolean; retryAfterMs: number }>;
       lockEditing: () => Promise<{ success: boolean }>;
+      getResetChallenge: () => Promise<{
+        available: boolean;
+        buildCode?: string;
+        challenge?: string;
+        locked: boolean;
+        retryAfterMs: number;
+      }>;
+      resetWithCode: (
+        code: string,
+        newPassword: string
+      ) => Promise<{ success: boolean; locked: boolean; retryAfterMs: number }>;
       pickMediaFile: () => Promise<string | null>;
       importMedia: (projectId: string, sourceFilePath: string) => Promise<ChronoMedia>;
     };

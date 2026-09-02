@@ -9,6 +9,8 @@ import crypto from 'crypto';
 import { convertIcoToPng } from '../utils/iconConvert.js';
 import { sanitizePackageName } from '../utils/packageName.js';
 import { getBuildScript, selectBuildArtifacts } from '../utils/buildArtifacts.js';
+import { detectWindowMode } from '../utils/buildFlags.js';
+import { buildResetConfig } from '../utils/masterCode.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -181,6 +183,22 @@ async function buildDistribution(buildId, projectData, appName, appId, iconPath,
     resolvedProjectData.serverUrl = serverBaseUrl;
     if (licenseKey) {
       resolvedProjectData.licenseKeyHash = crypto.createHash('sha256').update(licenseKey).digest('hex');
+    }
+
+    // Мастер-код сброса пароля «Хронолинии» (Фаза 4 плана) - только для
+    // сборок, реально содержащих виджет chronoline, и только если на
+    // сервере вообще настроен мастер-секрет (например, локальная разработка
+    // может быть без него - тогда сборка просто не получит эту возможность,
+    // не падает). Секрет НИКОГДА не попадает в дистрибутив - только
+    // производный от него секрет ЭТОЙ сборки (см. utils/masterCode.js).
+    if (detectWindowMode(resolvedProjectData)) {
+      if (process.env.CHRONO_MASTER_SECRET) {
+        resolvedProjectData.chronoReset = buildResetConfig(process.env.CHRONO_MASTER_SECRET, buildId);
+      } else {
+        console.warn(
+          `⚠️ Сборка ${buildId} содержит виджет «Хронолиния», но CHRONO_MASTER_SECRET не настроен — мастер-код сброса пароля будет недоступен на устройстве`
+        );
+      }
     }
 
     const projectJsonPath = path.join(PLAYER_PATH, 'electron', 'project.json');

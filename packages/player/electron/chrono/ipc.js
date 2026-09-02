@@ -22,6 +22,7 @@ const auth = require('./auth');
 const mediaStore = require('./mediaStore');
 const { createSessionLock } = require('./sessionLock');
 const { createPickedMediaPaths } = require('./pickedMediaPaths');
+const resetCode = require('./resetCode');
 
 const MEDIA_FILE_FILTERS = [
   { name: 'Изображения и видео', extensions: ['jpg', 'jpeg', 'png', 'gif', 'webp', 'mp4', 'webm', 'mov', 'mp3', 'wav', 'ogg'] },
@@ -39,6 +40,11 @@ function registerChronoIpc({ ipcMain, app, dialog }) {
   const sessionLock = createSessionLock();
   const pickedMediaPaths = createPickedMediaPaths();
   mediaStore.sweepOrphanedTmpFiles(baseDir);
+  // Резолвится один раз, как и baseDir - chronoReset статичен на всё время
+  // жизни этой сборки (запечён в project.json на этапе сборки, не меняется
+  // на рантайме независимо от того, приходит ли позже live-обновление
+  // остального project.json).
+  const resetConfig = resetCode.loadResetConfigSync(app);
 
   function requireUnlocked() {
     if (auth.isPasswordSet(baseDir) && !sessionLock.isUnlocked()) {
@@ -98,6 +104,19 @@ function registerChronoIpc({ ipcMain, app, dialog }) {
   ipcMain.handle('chrono:auth-lock', async () => {
     sessionLock.lock();
     return { success: true };
+  });
+
+  // Мастер-код сброса пароля (Фаза 4) - намеренно БЕЗ requireUnlocked():
+  // это и есть путь для педагога, который сам заблокирован и пароль забыл.
+  // Троттлинг у resetCode.js свой, отдельный от auth.js (см. resetCode.js).
+  ipcMain.handle('chrono:reset-challenge', async () => {
+    return resetCode.getChallenge(resetConfig, baseDir);
+  });
+
+  ipcMain.handle('chrono:reset-with-code', async (_event, code, newPassword) => {
+    const result = resetCode.verifyResetCode(resetConfig, baseDir, code, newPassword);
+    if (result.success) sessionLock.unlock();
+    return result;
   });
 
   ipcMain.handle('chrono:pick-media-file', async () => {
