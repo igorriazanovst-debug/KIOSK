@@ -30,6 +30,25 @@ const MEDIA_FILE_FILTERS = [
 ];
 
 /**
+ * Диагностика дисковых ошибок без квот (Фаза 8 плана: "квоты на диск -
+ * решено не вводить") - педагог должен получить понятное русское
+ * сообщение, а не сырой код ошибки Node, если на устройстве кончилось
+ * место или нет прав записи в каталог хранилища.
+ * @param {unknown} err
+ * @returns {Error}
+ */
+function translateDiskError(err) {
+  const code = err && typeof err === 'object' ? /** @type {any} */ (err).code : undefined;
+  if (code === 'ENOSPC') {
+    return new Error('На устройстве закончилось место на диске. Освободите место и попробуйте снова.');
+  }
+  if (code === 'EACCES' || code === 'EPERM') {
+    return new Error('Нет прав на запись в каталог хранения данных «Хронолинии». Обратитесь к администратору устройства.');
+  }
+  return err instanceof Error ? err : new Error(String(err));
+}
+
+/**
  * @param {{ ipcMain: import('electron').IpcMain, app: import('electron').App, dialog: import('electron').Dialog }} deps
  * @returns {{ baseDir: string, isFallback: boolean }}
  */
@@ -54,31 +73,42 @@ function registerChronoIpc({ ipcMain, app, dialog }) {
     sessionLock.touch();
   }
 
-  ipcMain.handle('chrono:list-projects', async () => {
+  /** Тонкая обёртка над ipcMain.handle - переводит дисковые ошибки (ENOSPC/EACCES) в понятное сообщение для всех каналов разом, не только для явно "пишущих". */
+  function handle(channel, fn) {
+    ipcMain.handle(channel, async (...args) => {
+      try {
+        return await fn(...args);
+      } catch (err) {
+        throw translateDiskError(err);
+      }
+    });
+  }
+
+  handle('chrono:list-projects', async () => {
     return projectStore.listProjects(baseDir);
   });
 
-  ipcMain.handle('chrono:create-project', async (_event, name) => {
+  handle('chrono:create-project', async (_event, name) => {
     requireUnlocked();
     return projectStore.createProject(baseDir, name);
   });
 
-  ipcMain.handle('chrono:rename-project', async (_event, projectId, newName) => {
+  handle('chrono:rename-project', async (_event, projectId, newName) => {
     requireUnlocked();
     return projectStore.renameProject(baseDir, projectId, newName);
   });
 
-  ipcMain.handle('chrono:delete-project', async (_event, projectId) => {
+  handle('chrono:delete-project', async (_event, projectId) => {
     requireUnlocked();
     projectStore.deleteProject(baseDir, projectId);
     return { success: true };
   });
 
-  ipcMain.handle('chrono:load-project-data', async (_event, projectId) => {
+  handle('chrono:load-project-data', async (_event, projectId) => {
     return projectStore.loadProjectData(baseDir, projectId);
   });
 
-  ipcMain.handle('chrono:save-project-data', async (_event, projectId, data) => {
+  handle('chrono:save-project-data', async (_event, projectId, data) => {
     requireUnlocked();
     return projectStore.saveProjectData(baseDir, projectId, data);
   });
@@ -90,7 +120,7 @@ function registerChronoIpc({ ipcMain, app, dialog }) {
   // скомпрометированный рендерер не может подсунуть произвольный путь ни
   // на чтение (импорт чужого файла), ни на запись (перезапись системного
   // файла путём подмены пути экспорта).
-  ipcMain.handle('chrono:export-project', async (_event, projectId) => {
+  handle('chrono:export-project', async (_event, projectId) => {
     requireUnlocked();
     const manifest = projectStore.readManifest(baseDir, projectId);
     const safeName = manifest.name.replace(/[\\/:*?"<>|\x00-\x1f]/g, '_').trim() || 'chronoline';
@@ -103,7 +133,7 @@ function registerChronoIpc({ ipcMain, app, dialog }) {
     return { success: true, filePath: result.filePath };
   });
 
-  ipcMain.handle('chrono:import-project', async () => {
+  handle('chrono:import-project', async () => {
     requireUnlocked();
     const result = await dialog.showOpenDialog({
       properties: ['openFile'],
@@ -113,17 +143,17 @@ function registerChronoIpc({ ipcMain, app, dialog }) {
     return archive.importProjectFromZip(baseDir, result.filePaths[0]);
   });
 
-  ipcMain.handle('chrono:auth-status', async () => {
+  handle('chrono:auth-status', async () => {
     return { isPasswordSet: auth.isPasswordSet(baseDir), unlocked: sessionLock.isUnlocked(), ...auth.checkLockout(baseDir) };
   });
 
-  ipcMain.handle('chrono:auth-verify-password', async (_event, password) => {
+  handle('chrono:auth-verify-password', async (_event, password) => {
     const result = auth.verifyPassword(baseDir, password);
     if (result.success) sessionLock.unlock();
     return result;
   });
 
-  ipcMain.handle('chrono:auth-change-password', async (_event, newPassword, currentPassword) => {
+  handle('chrono:auth-change-password', async (_event, newPassword, currentPassword) => {
     const result = auth.changePassword(baseDir, newPassword, currentPassword);
     // Установка/смена пароля - тоже успешное подтверждение личности,
     // разблокирует сессию сразу, не заставляет вводить только что
@@ -132,7 +162,7 @@ function registerChronoIpc({ ipcMain, app, dialog }) {
     return result;
   });
 
-  ipcMain.handle('chrono:auth-lock', async () => {
+  handle('chrono:auth-lock', async () => {
     sessionLock.lock();
     return { success: true };
   });
@@ -140,17 +170,17 @@ function registerChronoIpc({ ipcMain, app, dialog }) {
   // Мастер-код сброса пароля (Фаза 4) - намеренно БЕЗ requireUnlocked():
   // это и есть путь для педагога, который сам заблокирован и пароль забыл.
   // Троттлинг у resetCode.js свой, отдельный от auth.js (см. resetCode.js).
-  ipcMain.handle('chrono:reset-challenge', async () => {
+  handle('chrono:reset-challenge', async () => {
     return resetCode.getChallenge(resetConfig, baseDir);
   });
 
-  ipcMain.handle('chrono:reset-with-code', async (_event, code, newPassword) => {
+  handle('chrono:reset-with-code', async (_event, code, newPassword) => {
     const result = resetCode.verifyResetCode(resetConfig, baseDir, code, newPassword);
     if (result.success) sessionLock.unlock();
     return result;
   });
 
-  ipcMain.handle('chrono:pick-media-file', async () => {
+  handle('chrono:pick-media-file', async () => {
     // Заблокированная сессия не должна получать доступ к системному
     // диалогу выбора файла - это раскрытие структуры локальной файловой
     // системы (имена/пути файлов пользователя), более широкое, чем "видно
@@ -163,7 +193,7 @@ function registerChronoIpc({ ipcMain, app, dialog }) {
     return filePath;
   });
 
-  ipcMain.handle('chrono:import-media', async (_event, projectId, sourceFilePath) => {
+  handle('chrono:import-media', async (_event, projectId, sourceFilePath) => {
     requireUnlocked();
     // Импортировать можно ТОЛЬКО путь, реально возвращённый диалогом выше -
     // без этой проверки chrono:import-media принимал бы любую строку от
@@ -181,4 +211,4 @@ function registerChronoIpc({ ipcMain, app, dialog }) {
   return { baseDir, isFallback };
 }
 
-module.exports = { registerChronoIpc };
+module.exports = { registerChronoIpc, translateDiskError };

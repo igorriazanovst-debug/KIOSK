@@ -10,6 +10,7 @@ import React, { useMemo } from 'react';
 import { generateTicks, axisYearsToPx, type Viewport } from '@kiosk/shared';
 import { visibleAxisRange } from './boardViewport.js';
 import { formatTickLabel } from './tickLabel.js';
+import { computeTodayMarkerPx } from './todayMarker.js';
 import './ScaleRuler.css';
 
 export interface ScaleRulerProps {
@@ -30,8 +31,26 @@ const ScaleRuler: React.FC<ScaleRulerProps> = ({ viewport, targetTickCount = 8, 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [viewport.centerAxisYears, viewport.spanAxisYears, viewport.widthPx, targetTickCount]);
 
+  // FR-030 ТЗ: маркер текущей даты на шкале, только если она попадает в
+  // видимый диапазон. "now" не тикает live таймером - обновляется вместе с
+  // обычным ре-рендером доски (пан/зум/правки), этого достаточно для
+  // масштаба "школьный урок", отдельный интервал ради минутной точности не
+  // оправдан.
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const todayMarkerPx = useMemo(() => computeTodayMarkerPx(viewport, new Date()), [
+    viewport.centerAxisYears,
+    viewport.spanAxisYears,
+    viewport.widthPx,
+  ]);
+
   return (
     <div className="chrono-scale-ruler" style={{ width: viewport.widthPx, height: heightPx }}>
+      {todayMarkerPx !== null && (
+        <div className="chrono-scale-today-marker" style={{ left: todayMarkerPx }}>
+          <div className="chrono-scale-today-marker-line" />
+          <span className="chrono-scale-today-marker-label">Сегодня</span>
+        </div>
+      )}
       {ticks.map((tick) => {
         const px = axisYearsToPx(tick.axisYears, viewport);
         return (
