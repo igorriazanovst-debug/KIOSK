@@ -51,7 +51,7 @@ const RichTextField: React.FC<RichTextFieldProps> = ({ value, onChange, readOnly
   // не отслеживает пропс value, только собственное внутреннее состояние.
   useEffect(() => {
     if (editor && value !== editor.getHTML()) {
-      editor.commands.setContent(value || '<p></p>', false);
+      editor.commands.setContent(value || '<p></p>', { emitUpdate: false });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [value]);
