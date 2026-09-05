@@ -2,9 +2,15 @@ const { app, BrowserWindow, ipcMain, dialog, Menu } = require('electron');
 const path = require('path');
 const fs = require('fs');
 const { registerChronoIpc } = require('./chrono/ipc');
-const { buildBrowserWindowOptions, hasChronolineWidget } = require('./chrono/windowMode');
+const { buildBrowserWindowOptions, hasStandaloneAppWidget, hasNaturalCommunitiesWidget, NATCOM_WIDGET_TYPE } = require('./chrono/windowMode');
 const { mediaDir: chronoMediaDir } = require('./chrono/mediaStore');
 const { resolveWithinRoot: chronoResolveWithinRoot } = require('./chrono/pathGuard');
+const { startNatComServer } = require('./natcom/server');
+
+// Хендл встроенного сервера «Конструктор природных сообществ» (Тип 5) - один
+// на процесс, останавливается/перезапускается вместе с окном (см. createWindow).
+let natcomServerHandle = null;
+let natcomServerPort = null;
 
 // ─── Файловое логирование (DEBUG) ───────────────────────────────────────────
 const PLAYER_LOG_FILE = path.join(path.dirname(process.execPath), 'player-debug.log');
@@ -232,18 +238,38 @@ function createWindow() {
   const windowOptions = buildBrowserWindowOptions(projectDataForWindowMode);
 
   // Найдено вживую (скриншот, замечено пользователем): в оконном режиме
-  // (frame:true, autoHideMenuBar:false - только у виджета "Хронолиния")
-  // Electron рисует свой ДЕФОЛТНЫЙ нативный меню-бар (File Edit View
-  // Window Help) - на английском и с пунктами вроде Reload/Toggle
-  // DevTools, не нужными и не переведёнными для этого продукта. У доски
-  // уже есть собственный полный тулбар на русском для всех нужных
-  // действий - системное меню просто убирается, а не переводится (нечего
-  // в нём показывать конечному пользователю школы/музея). Обычный
-  // kiosk-режим (autoHideMenuBar+fullscreen+kiosk) этот бар и так не
-  // показывает - трогаем меню только когда обнаружен виджет "Хронолиния",
-  // чтобы не менять поведение для остальных клиентов.
-  if (hasChronolineWidget(projectDataForWindowMode)) {
+  // (frame:true, autoHideMenuBar:false - у standalone-app виджетов вроде
+  // "Хронолиния"/"naturalcommunities") Electron рисует свой ДЕФОЛТНЫЙ
+  // нативный меню-бар (File Edit View Window Help) - на английском и с
+  // пунктами вроде Reload/Toggle DevTools, не нужными и не переведёнными
+  // для этих продуктов. У каждого уже есть собственный полный тулбар на
+  // русском для всех нужных действий - системное меню просто убирается, а
+  // не переводится (нечего в нём показывать конечному пользователю школы/
+  // музея). Обычный kiosk-режим (autoHideMenuBar+fullscreen+kiosk) этот бар
+  // и так не показывает - трогаем меню только когда обнаружен один из
+  // standalone-app виджетов, чтобы не менять поведение для остальных
+  // клиентов.
+  if (hasStandaloneAppWidget(projectDataForWindowMode)) {
     Menu.setApplicationMenu(null);
+  }
+
+  // Встроенный сервер «Конструктор природных сообществ» (Тип 5) - если
+  // виджет есть в проекте, поднимаем Express+socket.io на 0.0.0.0 сразу при
+  // создании окна (тот же момент, что и остальная инициализация плеера для
+  // этого проекта). Порт/ёмкость берутся из свойств самого виджета, заданных
+  // в редакторе (см. NATCOM_DEFAULT_PROPS в @kiosk/shared) - не хардкод.
+  if (hasNaturalCommunitiesWidget(projectDataForWindowMode) && !natcomServerHandle) {
+    const natcomWidget = (projectDataForWindowMode.widgets || []).find(
+      (w) => w && typeof w === 'object' && w.type === NATCOM_WIDGET_TYPE
+    );
+    const props = (natcomWidget && natcomWidget.properties) || {};
+    const port = Number(props.serverPort) || 33000;
+    try {
+      natcomServerHandle = startNatComServer({ port, onLog: fileLog });
+      natcomServerPort = port;
+    } catch (err) {
+      fileLog('[natcom] failed to start embedded server:', err && err.message);
+    }
   }
 
   mainWindow = new BrowserWindow({
@@ -340,6 +366,23 @@ function loadEmbeddedProject() {
 // Обработчики IPC
 ipcMain.handle('get-project', async () => {
   return currentProject;
+});
+
+// «Конструктор природных сообществ» (Тип 5) - адреса, по которым другие
+// устройства школьной сети могут подключиться к встроенному серверу этого
+// ПК (не localhost - именно LAN-адреса интерфейса).
+ipcMain.handle('natcom:get-server-info', async () => {
+  const os = require('os');
+  const interfaces = os.networkInterfaces();
+  const addresses = [];
+  for (const name of Object.keys(interfaces)) {
+    for (const iface of interfaces[name] || []) {
+      if (iface.family === 'IPv4' && !iface.internal) {
+        addresses.push(iface.address);
+      }
+    }
+  }
+  return { port: natcomServerPort, addresses };
 });
 
 ipcMain.handle('open-project', async () => {
@@ -1158,6 +1201,10 @@ app.whenReady().then(() => {
 });
 
 app.on('window-all-closed', () => {
+  if (natcomServerHandle) {
+    natcomServerHandle.stop().catch(() => {});
+    natcomServerHandle = null;
+  }
   if (process.platform !== 'darwin') {
     app.quit();
   }

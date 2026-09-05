@@ -7,6 +7,7 @@ import ActivationScreen from './components/ActivationScreen';
 import UpdateBanner from './components/UpdateBanner';
 import NavigationRuntime from './NavigationRuntime';
 import ChronolineRuntime from './chrono/ChronolineRuntime.tsx';
+import NatComRuntime from './natcom/NatComRuntime.tsx';
 
 interface Project {
   name: string;
@@ -113,13 +114,14 @@ const Player: React.FC<PlayerProps> = ({ embedded = false }) => {
   const [popupData, setPopupData] = useState<any>(null);
   const [browserActivePages, setBrowserActivePages] = useState<Record<string, string>>({});
   const videoRefs = useRef<Map<string, HTMLVideoElement>>(new Map());
-  // Хронолиния - отдельное standalone-приложение (не позиционируемый widget
-  // среди прочих), работает и в fullscreen-киоске на произвольном разрешении
-  // экрана, и в resizable-окне (windowMode.js) - в обоих случаях реальный
-  // размер окна знает только рантайм, не то, что было задано при
-  // проектировании в редакторе. Живой размер окна, реагирует на resize -
-  // используется ТОЛЬКО для виджета chronoline (см. renderWidget), остальные
-  // типы виджетов по-прежнему рендерятся по статичным project.canvas/widget.*.
+  // Standalone-app виджеты ("chronoline", "naturalcommunities") - не
+  // позиционируемые widget среди прочих, работают и в fullscreen-киоске на
+  // произвольном разрешении экрана, и в resizable-окне (windowMode.js) - в
+  // обоих случаях реальный размер окна знает только рантайм, не то, что было
+  // задано при проектировании в редакторе. Живой размер окна, реагирует на
+  // resize - используется ТОЛЬКО для этих типов виджета (см. renderWidget),
+  // остальные типы виджетов по-прежнему рендерятся по статичным
+  // project.canvas/widget.*.
   const [viewportSize, setViewportSize] = useState({ width: window.innerWidth, height: window.innerHeight });
 
   useEffect(() => {
@@ -544,6 +546,17 @@ const Player: React.FC<PlayerProps> = ({ embedded = false }) => {
               width={viewportSize.width}
               height={viewportSize.height}
             />
+          </div>
+        );
+      case 'naturalcommunities':
+        // Тот же принцип, что "chronoline" выше — заполняет реальный размер
+        // окна/экрана целиком (см. isStandaloneAppProject/viewportSize).
+        return (
+          <div
+            key={widget.id}
+            style={{ ...commonStyle, left: 0, top: 0, width: viewportSize.width, height: viewportSize.height, overflow: 'hidden' }}
+          >
+            <NatComRuntime properties={widget.properties as any} />
           </div>
         );
       default:
@@ -1075,18 +1088,21 @@ const Player: React.FC<PlayerProps> = ({ embedded = false }) => {
     return <ActivationScreen onActivated={() => setShowActivation(false)} />;
   }
 
-  // Хронолиния заполняет реальный размер окна/экрана (см. viewportSize
-  // выше) - без этого канвас оставался бы фиксированным на project.canvas.*,
-  // заданном при проектировании, и не совпадал бы с фактическим окном.
-  const isChronolineProject = project.widgets.some((w) => w.type === 'chronoline');
+  // Standalone-app виджеты ("chronoline", "naturalcommunities") заполняют
+  // реальный размер окна/экрана (см. viewportSize выше) - без этого канвас
+  // оставался бы фиксированным на project.canvas.*, заданном при
+  // проектировании, и не совпадал бы с фактическим окном.
+  const isStandaloneAppProject = project.widgets.some(
+    (w) => w.type === 'chronoline' || w.type === 'naturalcommunities'
+  );
 
   return (
     <div className="player-container">
       <div
         className="player-canvas"
         style={{
-          width: isChronolineProject ? viewportSize.width : project.canvas.width,
-          height: isChronolineProject ? viewportSize.height : project.canvas.height,
+          width: isStandaloneAppProject ? viewportSize.width : project.canvas.width,
+          height: isStandaloneAppProject ? viewportSize.height : project.canvas.height,
           backgroundColor: project.canvas.backgroundColor || '#ffffff',
           position: 'relative',
           overflow: 'hidden'

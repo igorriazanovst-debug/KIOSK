@@ -83,3 +83,30 @@ test('resolveStorageDir still throws for a genuinely unsupported platform with n
   const userDataDir = fs.mkdtempSync(path.join(os.tmpdir(), 'chrono-userdata-'));
   assert.throws(() => resolveStorageDir({ platform: 'freebsd', userDataDir }));
 });
+
+// ─── appDirName override - naturalcommunities uses its own storage dir ─────
+
+test('computeSharedDataDir with a custom appDirName does not use the default APP_DIR_NAME', () => {
+  const dir = computeSharedDataDir('win32', 'kiosk-natcom');
+  assert.ok(dir.includes('kiosk-natcom'));
+  assert.ok(!dir.includes(APP_DIR_NAME));
+});
+
+test('resolveStorageDir with a custom appDirName/fallbackSubdir keeps naturalcommunities data separate from chrono', () => {
+  const userDataDir = fs.mkdtempSync(path.join(os.tmpdir(), 'natcom-userdata-'));
+  const tmp = fs.mkdtempSync(path.join(os.tmpdir(), 'natcom-shared-'));
+  const blockingFile = path.join(tmp, 'blocked');
+  fs.writeFileSync(blockingFile, 'not a directory');
+  const unwritableShared = path.join(blockingFile, 'kiosk-natcom');
+
+  const result = resolveStorageDir({
+    platform: process.platform,
+    userDataDir,
+    sharedDirOverride: unwritableShared,
+    appDirName: 'kiosk-natcom',
+    fallbackSubdir: 'natcom',
+  });
+
+  assert.equal(result.isFallback, true);
+  assert.equal(result.dir, path.join(userDataDir, 'natcom'));
+});

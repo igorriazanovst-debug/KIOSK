@@ -70,3 +70,9 @@ contextBridge.exposeInMainWorld('chronoAPI', {
   importProject: () => ipcRenderer.invoke('chrono:import-project'),
   deleteMedia: (projectId, media) => ipcRenderer.invoke('chrono:delete-media', projectId, media)
 });
+
+// Встроенный сервер «Конструктор природных сообществ» (Тип 5) — отдельный
+// namespace, используется только виджетом naturalcommunities.
+contextBridge.exposeInMainWorld('natcomAPI', {
+  getServerInfo: () => ipcRenderer.invoke('natcom:get-server-info')
+});

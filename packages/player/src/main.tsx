@@ -62,6 +62,10 @@ declare global {
       importProject: () => Promise<ChronoProjectManifest | null>;
       deleteMedia: (projectId: string, media: { sha256: string; fileName: string }) => Promise<{ success: boolean }>;
     };
+    /** Виджет «Конструктор природных сообществ» — встроенный локальный сервер (packages/player/electron/natcom) */
+    natcomAPI?: {
+      getServerInfo: () => Promise<{ port: number | null; addresses: string[] }>;
+    };
   }
 }
 

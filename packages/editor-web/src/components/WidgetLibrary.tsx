@@ -1,9 +1,9 @@
 import React from 'react';
 import { useEditorStore } from '../stores/editorStore';
-import { Square, Type, Image, Video, MousePointer, Menu, Globe, Compass, History } from 'lucide-react';
+import { Square, Type, Image, Video, MousePointer, Menu, Globe, Compass, History, TreePine } from 'lucide-react';
 import OutlinePanel from './OutlinePanel';
 import { NAVIGATION_WIDGET_TYPE, NAVIGATION_DEFAULT_PROPS, NAVIGATION_DEFAULT_SIZE } from '../utils/navigation/widgetType';
-import { CHRONOLINE_WIDGET_TYPE, CHRONOLINE_DEFAULT_PROPS, CHRONOLINE_DEFAULT_SIZE } from '@kiosk/shared';
+import { CHRONOLINE_WIDGET_TYPE, CHRONOLINE_DEFAULT_PROPS, CHRONOLINE_DEFAULT_SIZE, NATCOM_WIDGET_TYPE, NATCOM_DEFAULT_PROPS, NATCOM_DEFAULT_SIZE } from '@kiosk/shared';
 import { apiClient } from '../services/api-client';
 import './WidgetLibrary.css';
 
@@ -111,7 +111,14 @@ const WidgetLibrary: React.FC = () => {
       icon: History,
       defaultProps: CHRONOLINE_DEFAULT_PROPS,
       defaultSize: CHRONOLINE_DEFAULT_SIZE
-    }] : [])
+    }] : []),
+    {
+      type: NATCOM_WIDGET_TYPE,
+      name: 'Конструктор природных сообществ',
+      icon: TreePine,
+      defaultProps: NATCOM_DEFAULT_PROPS,
+      defaultSize: NATCOM_DEFAULT_SIZE
+    }
   ];
 
   const handleAddWidget = (type: string, defaultProps: any) => {

@@ -28,3 +28,6 @@ export * from './chrono/scale/ticks';
 export * from './chrono/scale/projection';
 export * from './chrono/widgetProperties';
 export * from './chrono/media';
+
+// Natural Communities («Конструктор природных сообществ»)
+export * from './naturalCommunities/widgetProperties';

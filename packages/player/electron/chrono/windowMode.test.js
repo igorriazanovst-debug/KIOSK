@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { buildBrowserWindowOptions, hasChronolineWidget, BASE_WINDOW_OPTIONS } from './windowMode.js';
+import { buildBrowserWindowOptions, hasChronolineWidget, hasNaturalCommunitiesWidget, hasStandaloneAppWidget, BASE_WINDOW_OPTIONS } from './windowMode.js';
 
 // ─── The regression-safety guarantee ────────────────────────────────────────
 // Every one of these MUST deep-equal BASE_WINDOW_OPTIONS exactly - this is
@@ -78,6 +78,30 @@ test('window mode preserves the base size/background even while switching chrome
   assert.equal(result.width, BASE_WINDOW_OPTIONS.width);
   assert.equal(result.height, BASE_WINDOW_OPTIONS.height);
   assert.equal(result.backgroundColor, BASE_WINDOW_OPTIONS.backgroundColor);
+});
+
+// ─── naturalcommunities - second standalone-app widget type ────────────────
+
+test('a naturalcommunities widget switches on window chrome, same as chronoline', () => {
+  const result = buildBrowserWindowOptions({ widgets: [{ id: '1', type: 'naturalcommunities', properties: {} }] });
+
+  assert.equal(result.fullscreen, false);
+  assert.equal(result.kiosk, false);
+  assert.equal(result.frame, true);
+  assert.equal(result.autoHideMenuBar, false);
+  assert.equal(result.useContentSize, true);
+});
+
+test('hasNaturalCommunitiesWidget does not fire for chronoline and vice versa', () => {
+  assert.equal(hasNaturalCommunitiesWidget({ widgets: [{ type: 'chronoline' }] }), false);
+  assert.equal(hasChronolineWidget({ widgets: [{ type: 'naturalcommunities' }] }), false);
+});
+
+test('hasStandaloneAppWidget fires for either type, and for neither when absent', () => {
+  assert.equal(hasStandaloneAppWidget({ widgets: [{ type: 'chronoline' }] }), true);
+  assert.equal(hasStandaloneAppWidget({ widgets: [{ type: 'naturalcommunities' }] }), true);
+  assert.equal(hasStandaloneAppWidget({ widgets: [{ type: 'image' }] }), false);
+  assert.equal(hasStandaloneAppWidget({}), false);
 });
 
 test('BASE_WINDOW_OPTIONS is frozen and cannot be mutated by callers', () => {
