@@ -3,41 +3,78 @@
   height: 100%;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 16px;
   background: #0b2818;
   color: #eef7ef;
   font-family: Arial, sans-serif;
   box-sizing: border-box;
-  padding: 24px;
-  text-align: center;
+}
+
+.natcom-runtime__bar {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding: 14px 24px;
+  background: rgba(0, 0, 0, 0.2);
+  flex-shrink: 0;
 }
 
 .natcom-runtime__title {
   margin: 0;
-  font-size: 32px;
+  font-size: 20px;
   font-weight: 700;
+  white-space: nowrap;
+}
+
+.natcom-runtime__nav {
+  display: flex;
+  gap: 8px;
+}
+
+.natcom-runtime__nav-button {
+  padding: 6px 14px;
+  border-radius: 4px;
+  border: none;
+  background: none;
+  color: rgba(238, 247, 239, 0.7);
+  font-size: 15px;
+  cursor: pointer;
+}
+
+.natcom-runtime__nav-button--active {
+  background: rgba(255, 255, 255, 0.12);
+  color: #eef7ef;
 }
 
 .natcom-runtime__status {
-  font-size: 18px;
-  color: rgba(238, 247, 239, 0.85);
+  margin-left: auto;
+  font-size: 14px;
+  color: rgba(238, 247, 239, 0.7);
+  white-space: nowrap;
 }
 
 .natcom-runtime__status--error {
   color: #f2a0a0;
 }
 
-.natcom-runtime__addresses {
-  list-style: none;
-  margin: 12px 0 0;
-  padding: 0;
-  font-size: 22px;
+.natcom-runtime__status code {
+  background: rgba(255, 255, 255, 0.1);
+  padding: 3px 8px;
+  border-radius: 4px;
 }
 
-.natcom-runtime__addresses code {
-  background: rgba(255, 255, 255, 0.1);
-  padding: 4px 10px;
-  border-radius: 4px;
+.natcom-runtime__stub {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  color: rgba(238, 247, 239, 0.75);
+  font-size: 18px;
+  text-align: center;
+}
+
+.natcom-runtime__stub-id {
+  font-size: 14px;
+  color: rgba(238, 247, 239, 0.5);
 }

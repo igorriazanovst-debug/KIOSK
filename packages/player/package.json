@@ -76,6 +76,14 @@
         "filter": [
           "*.json"
         ]
+      },
+      {
+        "from": "../natcom-library",
+        "to": "natcom-library",
+        "filter": [
+          "**/*",
+          "!README.md"
+        ]
       }
     ],
     "win": {

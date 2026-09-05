@@ -3,7 +3,7 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import Player from './Player';
 import './index.css';
-import type { ChronoProject, ChronoMedia, NatComProject } from '@kiosk/shared';
+import type { ChronoProject, ChronoMedia, NatComProject, NatComLibrary } from '@kiosk/shared';
 
 interface ChronoProjectManifest {
   schemaVersion: number;
@@ -65,6 +65,8 @@ declare global {
     /** Виджет «Конструктор природных сообществ» — встроенный локальный сервер и хранилище презентаций (packages/player/electron/natcom) */
     natcomAPI?: {
       getServerInfo: () => Promise<{ port: number | null; addresses: string[] }>;
+      getContext: () => Promise<{ ownerId: string; organizationId: string }>;
+      getLibrary: () => Promise<NatComLibrary | null>;
       listProjects: () => Promise<NatComProject[]>;
       createProject: (params: { title: string; backgroundId: string; ownerId: string; organizationId: string }) => Promise<NatComProject>;
       loadProject: (projectId: string) => Promise<NatComProject>;

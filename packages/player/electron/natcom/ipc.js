@@ -15,6 +15,7 @@
 
 const { resolveStorageDir } = require('../chrono/storageDir');
 const projectStore = require('./projectStore');
+const { loadLibrarySync } = require('./library');
 
 const NATCOM_APP_DIR_NAME = 'kiosk-natcom';
 
@@ -45,6 +46,11 @@ function registerNatComIpc({ ipcMain, app }) {
     fallbackSubdir: 'natcom',
   });
 
+  // Библиотека читается и валидируется ОДИН раз при регистрации канала, не
+  // на каждый IPC-вызов - она read-only и не меняется во время работы
+  // процесса (тот же принцип, что resetConfig у chrono/ipc.js).
+  const loaded = loadLibrarySync();
+
   /** Тонкая обёртка над ipcMain.handle - переводит дисковые ошибки в понятное сообщение для всех каналов разом (тот же принцип, что chrono/ipc.js). */
   function handle(channel, fn) {
     ipcMain.handle(channel, async (...args) => {
@@ -55,6 +61,10 @@ function registerNatComIpc({ ipcMain, app }) {
       }
     });
   }
+
+  handle('natcom:get-library', async () => {
+    return loaded ? loaded.library : null;
+  });
 
   handle('natcom:list-projects', async () => {
     return projectStore.listProjects(baseDir);
@@ -77,7 +87,7 @@ function registerNatComIpc({ ipcMain, app }) {
     return { success: true };
   });
 
-  return { baseDir, isFallback };
+  return { baseDir, isFallback, libraryLoaded: !!loaded };
 }
 
 module.exports = { registerNatComIpc, translateDiskError, NATCOM_APP_DIR_NAME };

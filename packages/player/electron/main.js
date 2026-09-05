@@ -386,6 +386,24 @@ ipcMain.handle('natcom:get-server-info', async () => {
   return { port: natcomServerPort, addresses };
 });
 
+// «Конструктор природных сообществ» - ownerId/organizationId для создаваемых
+// презентаций. Ролей/организаций как отдельной сущности ещё нет (Эпик 5
+// бэклога заблокирован открытым вопросом №3) - пока одно активированное
+// устройство = один "владелец", а organizationId берём из уже существующего
+// лицензионного JWT (decode без проверки подписи, тот же паттерн, что
+// getCurrentUserEmail() в editor-web - только для не security-critical UI).
+ipcMain.handle('natcom:get-context', async () => {
+  let organizationId = 'local';
+  if (playerToken) {
+    try {
+      const payloadB64 = playerToken.split('.')[1];
+      const payload = JSON.parse(Buffer.from(payloadB64, 'base64').toString('utf-8'));
+      if (payload && payload.organizationId) organizationId = payload.organizationId;
+    } catch {}
+  }
+  return { ownerId: getDeviceId(), organizationId };
+});
+
 ipcMain.handle('open-project', async () => {
   const result = await dialog.showOpenDialog(mainWindow, {
     properties: ['openFile'],
@@ -1062,8 +1080,9 @@ app.whenReady().then(() => {
   // не влияет на существующих клиентов, канал 'natcom:*' используется
   // только виджетом naturalcommunities.
   try {
-    const { baseDir: natcomBaseDir, isFallback: natcomIsFallback } = registerNatComIpc({ ipcMain, app });
+    const { baseDir: natcomBaseDir, isFallback: natcomIsFallback, libraryLoaded } = registerNatComIpc({ ipcMain, app });
     fileLog('[natcom] storage dir:', natcomBaseDir, natcomIsFallback ? '(fallback: no write access to shared dir)' : '');
+    if (!libraryLoaded) fileLog('[natcom] WARNING: library (natcom-library/index.json) not found - Home screen will be empty');
   } catch (err) {
     fileLog('[natcom] failed to initialize local storage:', err && err.message);
   }

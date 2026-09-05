@@ -1,0 +1,115 @@
+{
+  "schemaVersion": 1,
+  "backgrounds": [
+    {
+      "id": "b1",
+      "name": "Лес",
+      "imageMediaId": "m-bg-1"
+    }
+  ],
+  "categories": [
+    {
+      "id": "c1",
+      "name": "Млекопитающие"
+    },
+    {
+      "id": "c2",
+      "name": "Растения"
+    }
+  ],
+  "objects": [
+    {
+      "id": "o1",
+      "categoryId": "c1",
+      "name": "Медведь бурый",
+      "description": "Крупный хищник, всеяден, обитает в лесной зоне. Впадает в спячку зимой.",
+      "imageMediaId": "m-o1"
+    },
+    {
+      "id": "o2",
+      "categoryId": "c1",
+      "name": "Волк",
+      "description": "Хищник, живёт стаями, охотится на копытных. Важный регулятор численности других видов.",
+      "imageMediaId": "m-o2"
+    },
+    {
+      "id": "o3",
+      "categoryId": "c1",
+      "name": "Заяц-беляк",
+      "description": "Травоядный грызун, зимой меняет окраску меха на белую для маскировки в снегу.",
+      "imageMediaId": "m-o3"
+    },
+    {
+      "id": "o4",
+      "categoryId": "c2",
+      "name": "Ель",
+      "description": "Вечнозелёное хвойное дерево, образует густые леса - ельники.",
+      "imageMediaId": "m-o4"
+    },
+    {
+      "id": "o5",
+      "categoryId": "c2",
+      "name": "Берёза",
+      "description": "Лиственное дерево с характерной белой корой, светолюбива.",
+      "imageMediaId": "m-o5"
+    },
+    {
+      "id": "o6",
+      "categoryId": "c2",
+      "name": "Ромашка",
+      "description": "Травянистое растение с белыми лепестками и жёлтой серединкой, растёт на полянах.",
+      "imageMediaId": "m-o6"
+    }
+  ],
+  "media": [
+    {
+      "id": "m-bg-1",
+      "fileName": "bg-les.svg",
+      "mimeType": "image/svg+xml",
+      "fileSize": 314,
+      "sha256": "a8ea121f3413289a976181a75d91a5cd04753936ec48b6245a9fcf35290bd6c9"
+    },
+    {
+      "id": "m-o1",
+      "fileName": "medved.svg",
+      "mimeType": "image/svg+xml",
+      "fileSize": 305,
+      "sha256": "969ce0ee859a904de7e0c5d5d79db4784f30fbc008ac598f9d981bc9338607bf"
+    },
+    {
+      "id": "m-o2",
+      "fileName": "volk.svg",
+      "mimeType": "image/svg+xml",
+      "fileSize": 288,
+      "sha256": "cd911b165c29eead0ae8e2e9ec1e2a737b0ce2aac41fd1c3952fc7e4343d361a"
+    },
+    {
+      "id": "m-o3",
+      "fileName": "zayac.svg",
+      "mimeType": "image/svg+xml",
+      "fileSize": 299,
+      "sha256": "2dafb48a41a4850901a36860cb7c039ae4293c5e34fab5c037b73ef8af872fd8"
+    },
+    {
+      "id": "m-o4",
+      "fileName": "el.svg",
+      "mimeType": "image/svg+xml",
+      "fileSize": 286,
+      "sha256": "eca9c0a4570ac9e10c6944dd9a4fdd37847c20b2abb3ba523c90559006d6e351"
+    },
+    {
+      "id": "m-o5",
+      "fileName": "bereza.svg",
+      "mimeType": "image/svg+xml",
+      "fileSize": 292,
+      "sha256": "d8433a5f1dfce398790aa27aae748e9271218188824d002306eedfefcdb6d39a"
+    },
+    {
+      "id": "m-o6",
+      "fileName": "romashka.svg",
+      "mimeType": "image/svg+xml",
+      "fileSize": 294,
+      "sha256": "1643f0fda2859bbcacdc6caf1e34358ec443f62699fbb2089c9adb562b34cb79"
+    }
+  ]
+}
