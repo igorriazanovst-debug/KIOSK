@@ -12,6 +12,7 @@ const { startNatComServer } = require('./natcom/server');
 // на процесс, останавливается/перезапускается вместе с окном (см. createWindow).
 let natcomServerHandle = null;
 let natcomServerPort = null;
+let natcomServerError = null;
 
 // ─── Файловое логирование (DEBUG) ───────────────────────────────────────────
 const PLAYER_LOG_FILE = path.join(path.dirname(process.execPath), 'player-debug.log');
@@ -302,7 +303,13 @@ function createWindow() {
           const payload = decodePlayerToken();
           return (payload && payload.licenseId) || null;
         },
-        onLog: fileLog
+        onLog: fileLog,
+        // T5-112: диагностика типовых сбоев среды - педагог должен УВИДЕТЬ
+        // причину на экране виджета (см. natcom:get-server-info ниже), не
+        // только запись в файле отладочного лога.
+        onServerError: (err) => {
+          natcomServerError = { code: (err && err.code) || null, message: (err && err.message) || String(err) };
+        }
       });
       natcomServerPort = port;
     } catch (err) {
@@ -420,7 +427,7 @@ ipcMain.handle('natcom:get-server-info', async () => {
       }
     }
   }
-  return { port: natcomServerPort, addresses };
+  return { port: natcomServerPort, addresses, error: natcomServerError };
 });
 
 // Какую презентацию сейчас показывает педагог браузерам учеников (Эпик 8.1) -

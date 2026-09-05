@@ -112,7 +112,8 @@ function guessLibraryAssetMime(fileName) {
  *   getLicenseInfo?: () => ({ plan: string, organizationId: string, expiresAt: string } | null),
  *   getCentralServerUrl?: () => string | null,
  *   getExpectedLicenseId?: () => string | null,
- *   onLog?: (...args: unknown[]) => void
+ *   onLog?: (...args: unknown[]) => void,
+ *   onServerError?: (err: NodeJS.ErrnoException) => void
  * }} options
  * @returns {{
  *   httpServer: import('http').Server,
@@ -133,7 +134,8 @@ function startNatComServer({
   getLicenseInfo = () => null,
   getCentralServerUrl = () => null,
   getExpectedLicenseId = () => null,
-  onLog = () => {}
+  onLog = () => {},
+  onServerError = () => {}
 }) {
   const app = express();
   const adminSessions = new Map();
@@ -328,9 +330,12 @@ function startNatComServer({
   });
 
   httpServer.on('error', (err) => {
-    // EADDRINUSE и подобные — не должны ронять весь Electron-процесс
-    // (T5-112, диагностика типовых сбоев среды). Пока — просто лог.
+    // EADDRINUSE и подобные — не должны ронять весь Electron-процесс.
+    // T5-112: педагог должен УВИДЕТЬ причину, не только запись в файле
+    // отладочного лога, который он никогда не откроет - onServerError
+    // прокидывается наружу (main.js -> natcom:get-server-info -> UI).
     onLog('[natcom] server error:', err && err.message);
+    onServerError(err);
   });
 
   // 0.0.0.0, не 'localhost' - иначе другие устройства школьной сети не

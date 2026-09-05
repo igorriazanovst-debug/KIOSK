@@ -467,3 +467,33 @@ test('POST /api/admin/disconnect-all requires an admin session and actually disc
     }
   );
 });
+
+// Эпик 12 (T5-112) - диагностика типовых сбоев среды: порт занят другим
+// процессом должен дойти до onServerError (и оттуда - до UI педагога), не
+// потеряться в файле отладочного лога.
+test('a real EADDRINUSE (port already occupied by another process) is reported via onServerError', async () => {
+  const blocker = http.createServer();
+  // '0.0.0.0' - тот же адрес, что и настоящий startNatComServer ниже, иначе
+  // на некоторых сетевых стеках bind на 0.0.0.0 поверх уже занятого
+  // 127.0.0.1 не конфликтует (найдено при первом прогоне этого теста).
+  await new Promise((resolve) => blocker.listen(0, '0.0.0.0', resolve));
+  const occupiedPort = blocker.address().port;
+
+  const baseDir = makeTempBaseDir();
+  let capturedError = null;
+  const handle = startNatComServer({
+    port: occupiedPort,
+    maxClients: 2,
+    baseDir,
+    onLog: () => {},
+    onServerError: (err) => { capturedError = err; }
+  });
+
+  await new Promise((resolve) => setTimeout(resolve, 300));
+
+  assert.ok(capturedError, 'expected onServerError to have been called');
+  assert.equal(capturedError.code, 'EADDRINUSE');
+
+  await new Promise((resolve) => blocker.close(resolve));
+  // handle.httpServer никогда не успешно забиндился - stop()/close() ему не нужны.
+});

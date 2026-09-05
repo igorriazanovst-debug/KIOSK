@@ -64,7 +64,7 @@ declare global {
     };
     /** Виджет «Конструктор природных сообществ» — встроенный локальный сервер и хранилище презентаций (packages/player/electron/natcom) */
     natcomAPI?: {
-      getServerInfo: () => Promise<{ port: number | null; addresses: string[] }>;
+      getServerInfo: () => Promise<{ port: number | null; addresses: string[]; error: { code: string | null; message: string } | null }>;
       getContext: () => Promise<{ ownerId: string; organizationId: string }>;
       setActiveProject: (projectId: string | null) => Promise<void>;
       getLibrary: () => Promise<NatComLibrary | null>;

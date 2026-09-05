@@ -27,9 +27,25 @@ interface Props {
 
 type View = 'home' | 'editor' | 'player' | 'help';
 
+// T5-112: диагностика типовых сбоев среды - педагог должен понять причину
+// сразу на экране виджета, не открывать файл отладочного лога.
+function describeServerError(error: { code: string | null; message: string }, port: number | null): string {
+  if (error.code === 'EADDRINUSE') {
+    return `Порт ${port ?? ''} уже занят другой программой на этом компьютере. Измените порт виджета в свойствах (в редакторе) или закройте программу, использующую этот порт.`;
+  }
+  if (error.code === 'EACCES') {
+    return `Нет прав на использование порта ${port ?? ''}. Обычно это происходит с портами меньше 1024 — выберите порт больше 1024 в свойствах виджета.`;
+  }
+  return `Не удалось запустить встроенный сервер: ${error.message}`;
+}
+
 const NatComRuntime: React.FC<Props> = ({ properties }) => {
   const [view, setView] = useState<View>('home');
-  const [serverInfo, setServerInfo] = useState<{ port: number | null; addresses: string[] } | null>(null);
+  const [serverInfo, setServerInfo] = useState<{
+    port: number | null;
+    addresses: string[];
+    error: { code: string | null; message: string } | null;
+  } | null>(null);
   const [library, setLibrary] = useState<NatComLibrary | null>(null);
   const [context, setContext] = useState<{ ownerId: string; organizationId: string } | null>(null);
   const [projects, setProjects] = useState<NatComProject[]>([]);
@@ -190,6 +206,10 @@ const NatComRuntime: React.FC<Props> = ({ properties }) => {
         </nav>
         {!window.natcomAPI ? (
           <span className="natcom-runtime__status natcom-runtime__status--error">Сервер недоступен</span>
+        ) : serverInfo?.error ? (
+          <span className="natcom-runtime__status natcom-runtime__status--error">
+            {describeServerError(serverInfo.error, serverInfo.port)}
+          </span>
         ) : serverInfo && serverInfo.addresses.length > 0 ? (
           <span className="natcom-runtime__status">
             <code>http://{serverInfo.addresses[0]}:{serverInfo.port}/</code>

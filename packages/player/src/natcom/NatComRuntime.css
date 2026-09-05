@@ -54,6 +54,9 @@
 
 .natcom-runtime__status--error {
   color: #f2a0a0;
+  white-space: normal;
+  max-width: 480px;
+  text-align: right;
 }
 
 .natcom-runtime__status code {
