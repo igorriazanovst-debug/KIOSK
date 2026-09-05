@@ -7,21 +7,14 @@
 // памяти сервера, здесь - в sessionStorage (переживает обновление страницы
 // в рамках одной вкладки, не переживает закрытие - "рабочая смена").
 
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import './admin.css';
+import ClientsSection from './ClientsSection';
+import LicenseSection from './LicenseSection';
 
 const SESSION_STORAGE_KEY = 'natcom-admin-session';
 
-interface ClientRow {
-  id: string;
-  connectedAt: string;
-}
-
-interface ClientsResponse {
-  maxClients: number;
-  connectedCount: number;
-  clients: ClientRow[];
-}
+type AdminTab = 'clients' | 'license';
 
 const AdminApp: React.FC = () => {
   const [sessionToken, setSessionToken] = useState<string | null>(() => sessionStorage.getItem(SESSION_STORAGE_KEY));
@@ -29,13 +22,11 @@ const AdminApp: React.FC = () => {
   const [password, setPassword] = useState('');
   const [loginError, setLoginError] = useState<string | null>(null);
   const [isLoggingIn, setIsLoggingIn] = useState(false);
-  const [clientsData, setClientsData] = useState<ClientsResponse | null>(null);
-  const [isDisconnecting, setIsDisconnecting] = useState(false);
+  const [activeTab, setActiveTab] = useState<AdminTab>('clients');
 
   const logout = useCallback(() => {
     sessionStorage.removeItem(SESSION_STORAGE_KEY);
     setSessionToken(null);
-    setClientsData(null);
   }, []);
 
   const handleLogin = async (e: React.FormEvent) => {
@@ -60,48 +51,6 @@ const AdminApp: React.FC = () => {
       setLoginError(err instanceof Error ? err.message : String(err));
     } finally {
       setIsLoggingIn(false);
-    }
-  };
-
-  useEffect(() => {
-    if (!sessionToken) return;
-    let cancelled = false;
-
-    const poll = async () => {
-      try {
-        const resp = await fetch('/api/admin/clients', {
-          headers: { Authorization: `Bearer ${sessionToken}` },
-        });
-        if (resp.status === 403) {
-          if (!cancelled) logout();
-          return;
-        }
-        const body = await resp.json();
-        if (!cancelled) setClientsData(body);
-      } catch {
-        // сетевой сбой одного опроса - не критично, следующий тик попробует снова
-      }
-    };
-
-    poll();
-    const interval = setInterval(poll, 3000);
-    return () => {
-      cancelled = true;
-      clearInterval(interval);
-    };
-  }, [sessionToken, logout]);
-
-  const handleDisconnectAll = async () => {
-    if (!sessionToken) return;
-    if (!window.confirm('Отключить всех подключённых учеников?')) return;
-    setIsDisconnecting(true);
-    try {
-      await fetch('/api/admin/disconnect-all', {
-        method: 'POST',
-        headers: { Authorization: `Bearer ${sessionToken}` },
-      });
-    } finally {
-      setIsDisconnecting(false);
     }
   };
 
@@ -130,44 +79,25 @@ const AdminApp: React.FC = () => {
   return (
     <div className="admin-app">
       <header className="admin-app__header">
-        <h1>Клиенты</h1>
+        <h1>Администратор</h1>
         <button onClick={logout}>Выйти</button>
       </header>
-      {clientsData && (
-        <>
-          <p className="admin-app__summary">
-            Подключено: {clientsData.connectedCount} / {clientsData.maxClients}
-          </p>
-          <table className="admin-app__table">
-            <thead>
-              <tr>
-                <th>Подключение</th>
-                <th>С какого времени</th>
-              </tr>
-            </thead>
-            <tbody>
-              {clientsData.clients.map((c) => (
-                <tr key={c.id}>
-                  <td>{c.id}</td>
-                  <td>{new Date(c.connectedAt).toLocaleTimeString('ru-RU')}</td>
-                </tr>
-              ))}
-              {clientsData.clients.length === 0 && (
-                <tr>
-                  <td colSpan={2} className="admin-app__empty">Никто не подключён</td>
-                </tr>
-              )}
-            </tbody>
-          </table>
-          <button
-            className="admin-app__disconnect-all"
-            onClick={handleDisconnectAll}
-            disabled={isDisconnecting || clientsData.connectedCount === 0}
-          >
-            Отключить всех
-          </button>
-        </>
-      )}
+      <nav className="admin-app__tabs">
+        <button
+          className={activeTab === 'clients' ? 'admin-app__tab admin-app__tab--active' : 'admin-app__tab'}
+          onClick={() => setActiveTab('clients')}
+        >
+          Клиенты
+        </button>
+        <button
+          className={activeTab === 'license' ? 'admin-app__tab admin-app__tab--active' : 'admin-app__tab'}
+          onClick={() => setActiveTab('license')}
+        >
+          Лицензия
+        </button>
+      </nav>
+      {activeTab === 'clients' && <ClientsSection sessionToken={sessionToken} onSessionExpired={logout} />}
+      {activeTab === 'license' && <LicenseSection />}
     </div>
   );
 };

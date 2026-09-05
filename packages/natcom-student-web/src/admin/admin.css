@@ -130,3 +130,69 @@ html, body, #root {
   opacity: 0.5;
   cursor: default;
 }
+
+.admin-app__tabs {
+  display: flex;
+  gap: 4px;
+  margin: 20px 0 4px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.admin-app__tab {
+  padding: 8px 16px;
+  border: none;
+  background: transparent;
+  color: rgba(238, 247, 239, 0.6);
+  font-size: 14px;
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+}
+
+.admin-app__tab--active {
+  color: #eef7ef;
+  border-bottom-color: #3fae68;
+}
+
+.admin-app__license-card {
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 8px;
+  padding: 20px;
+  max-width: 420px;
+}
+
+.admin-app__license-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 14px;
+}
+
+.admin-app__license-label {
+  color: rgba(238, 247, 239, 0.6);
+}
+
+.admin-app__license-mono {
+  font-family: monospace;
+  font-size: 12px;
+}
+
+.admin-app__license-badge {
+  padding: 2px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+.admin-app__license-badge--active {
+  background: rgba(63, 174, 104, 0.2);
+  color: #6fd497;
+}
+
+.admin-app__license-badge--expired {
+  background: rgba(192, 57, 43, 0.2);
+  color: #f2a0a0;
+}
