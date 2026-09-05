@@ -7,19 +7,41 @@
 // учительского ПК — тот же Node-рантайм, что и весь остальной main-процесс,
 // не отдельный исполняемый файл и не Docker-контейнер, как у оригинала.
 //
-// Эпик 2 бэклога (вертикальный срез): только заглушка-страница и учёт факта
-// подключения/отключения по socket.io, без ёмкости/ролей/домена — это
-// нарастает в следующих эпиках (T5-030+).
+// Эпик 4 бэклога (T5-030..034): REST (`/api/options`, `/api/license`,
+// `/api/projects/:id`) + ёмкость подключений через socket.io
+// (`join`/`disconnect`/`changeClients`).
+//
+// Осознанное отличие от протокола оригинала: там `reset` ("отключить всех") -
+// обычное клиентское socket.io-событие, которое мог прислать ЛЮБОЙ
+// подключившийся браузер. Ролей/авторизации (Эпик 5) здесь ещё нет, поэтому
+// делать `reset` публичным событием значило бы дать любому ученику право
+// вышвырнуть весь класс - реальная дыра, которую мы сознательно не
+// копируем. Вместо этого `resetAllConnections()` - функция на самом объекте
+// сервера, вызываемая только доверенным Electron-кодом (учительский UI,
+// когда появится в Эпике 9), никогда не socket.io-событием.
 
 const express = require('express');
 const http = require('http');
 const { Server: SocketIoServer } = require('socket.io');
+const projectStore = require('./projectStore');
 
 /**
- * @param {{ port: number, onLog?: (...args: unknown[]) => void }} options
- * @returns {{ httpServer: import('http').Server, io: import('socket.io').Server, stop: () => Promise<void> }}
+ * @param {{
+ *   port: number,
+ *   maxClients: number,
+ *   baseDir: string,
+ *   getLicenseInfo?: () => ({ plan: string, organizationId: string, expiresAt: string } | null),
+ *   onLog?: (...args: unknown[]) => void
+ * }} options
+ * @returns {{
+ *   httpServer: import('http').Server,
+ *   io: import('socket.io').Server,
+ *   stop: () => Promise<void>,
+ *   resetAllConnections: () => void,
+ *   getConnectedCount: () => number
+ * }}
  */
-function startNatComServer({ port, onLog = () => {} }) {
+function startNatComServer({ port, maxClients, baseDir, getLicenseInfo = () => null, onLog = () => {} }) {
   const app = express();
 
   app.get('/', (_req, res) => {
@@ -27,9 +49,37 @@ function startNatComServer({ port, onLog = () => {} }) {
       '<!doctype html><html><head><meta charset="utf-8"><title>Конструктор природных сообществ</title></head>' +
       '<body style="font-family:sans-serif;padding:40px;text-align:center;">' +
       '<h1>Конструктор природных сообществ</h1>' +
-      '<p>Встроенный сервер запущен. Это временная заглушка вертикального среза (Эпик 2).</p>' +
+      '<p>Встроенный сервер запущен.</p>' +
       '</body></html>'
     );
+  });
+
+  // T5-030
+  app.get('/api/options', (_req, res) => {
+    res.json({ maxClients, connectedCount: connectedSockets.size });
+  });
+
+  app.get('/api/license', (_req, res) => {
+    const info = getLicenseInfo();
+    if (!info) {
+      res.json({ available: false });
+      return;
+    }
+    res.json({ available: true, ...info });
+  });
+
+  // T5-031 - REST здесь ТОЛЬКО на чтение (просмотр готовой презентации
+  // браузером ученика). Создание/правка остаются через Electron IPC
+  // учительского экрана (Home/Editor) - не через открытый без авторизации
+  // REST, в отличие от read-file/save-file по произвольному имени у
+  // оригинала.
+  app.get('/api/projects/:id', (req, res) => {
+    try {
+      const project = projectStore.loadProject(baseDir, req.params.id);
+      res.json(project);
+    } catch {
+      res.status(404).json({ error: 'Презентация не найдена' });
+    }
   });
 
   const httpServer = http.createServer(app);
@@ -37,17 +87,39 @@ function startNatComServer({ port, onLog = () => {} }) {
     cors: { origin: '*' },
   });
 
+  // T5-032/033: ёмкость - параметр (maxClients из свойств виджета), не
+  // константа в коде.
+  const connectedSockets = new Set();
+
+  function broadcastChangeClients() {
+    io.emit('changeClients', { count: connectedSockets.size, maxClients });
+  }
+
   io.on('connection', (socket) => {
     onLog('[natcom] client connected:', socket.id);
+
+    socket.on('join', (_payload, ack) => {
+      const acknowledge = typeof ack === 'function' ? ack : () => {};
+      if (connectedSockets.size >= maxClients) {
+        acknowledge({ accepted: false, reason: 'capacity' });
+        return;
+      }
+      connectedSockets.add(socket.id);
+      acknowledge({ accepted: true });
+      broadcastChangeClients();
+    });
+
     socket.on('disconnect', (reason) => {
+      connectedSockets.delete(socket.id);
       onLog('[natcom] client disconnected:', socket.id, reason);
+      broadcastChangeClients();
     });
   });
 
   httpServer.on('error', (err) => {
     // EADDRINUSE и подобные — не должны ронять весь Electron-процесс
     // (T5-112, диагностика типовых сбоев среды). Пока — просто лог, живая
-    // диагностика для педагога добавится вместе с UI виджета (Эпик 6/12).
+    // диагностика для педагога добавится вместе с UI виджета (Эпик 9).
     onLog('[natcom] server error:', err && err.message);
   });
 
@@ -57,6 +129,15 @@ function startNatComServer({ port, onLog = () => {} }) {
     onLog('[natcom] listening on 0.0.0.0:' + port);
   });
 
+  function resetAllConnections() {
+    for (const id of connectedSockets) {
+      const s = io.sockets.sockets.get(id);
+      if (s) s.disconnect(true);
+    }
+    connectedSockets.clear();
+    broadcastChangeClients();
+  }
+
   function stop() {
     return new Promise((resolve) => {
       io.close(() => {
@@ -65,7 +146,7 @@ function startNatComServer({ port, onLog = () => {} }) {
     });
   }
 
-  return { httpServer, io, stop };
+  return { httpServer, io, stop, resetAllConnections, getConnectedCount: () => connectedSockets.size };
 }
 
 module.exports = { startNatComServer };

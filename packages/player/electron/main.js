@@ -54,6 +54,7 @@ let activationWindow = null;
 let allowActivationClose = false;
 let currentProject = null;
 let chronoBaseDir = null;
+let natcomBaseDir = null;
 
 // ═══ OFFLINE-CACHE-MODULE-V1 — Офлайн-кэш медиафайлов ═══════════════════════════
 const { protocol, net } = require('electron');
@@ -265,8 +266,23 @@ function createWindow() {
     );
     const props = (natcomWidget && natcomWidget.properties) || {};
     const port = Number(props.serverPort) || 33000;
+    const maxClients = Number(props.maxClients) || 31;
     try {
-      natcomServerHandle = startNatComServer({ port, onLog: fileLog });
+      natcomServerHandle = startNatComServer({
+        port,
+        maxClients,
+        baseDir: natcomBaseDir,
+        getLicenseInfo: () => {
+          const payload = decodePlayerToken();
+          if (!payload) return null;
+          return {
+            plan: payload.plan || null,
+            organizationId: payload.organizationId || null,
+            expiresAt: playerTokenExpiresAt || null
+          };
+        },
+        onLog: fileLog
+      });
       natcomServerPort = port;
     } catch (err) {
       fileLog('[natcom] failed to start embedded server:', err && err.message);
@@ -393,14 +409,8 @@ ipcMain.handle('natcom:get-server-info', async () => {
 // лицензионного JWT (decode без проверки подписи, тот же паттерн, что
 // getCurrentUserEmail() в editor-web - только для не security-critical UI).
 ipcMain.handle('natcom:get-context', async () => {
-  let organizationId = 'local';
-  if (playerToken) {
-    try {
-      const payloadB64 = playerToken.split('.')[1];
-      const payload = JSON.parse(Buffer.from(payloadB64, 'base64').toString('utf-8'));
-      if (payload && payload.organizationId) organizationId = payload.organizationId;
-    } catch {}
-  }
+  const payload = decodePlayerToken();
+  const organizationId = (payload && payload.organizationId) || 'local';
   return { ownerId: getDeviceId(), organizationId };
 });
 
@@ -854,6 +864,21 @@ let heartbeatTimer = null;
 let deviceId = null;
 let reassignInFlight = false;
 
+// Decode-only (без проверки подписи) чтение claims лицензионного JWT
+// плеера - тот же паттерн, что getCurrentUserEmail() в editor-web: подпись
+// уже проверена сервером при выдаче токена, здесь он используется только
+// для не security-critical локального UI (какая организация/план у этого
+// устройства), а не для авторизации операций.
+function decodePlayerToken() {
+  if (!playerToken) return null;
+  try {
+    const payloadB64 = playerToken.split('.')[1];
+    return JSON.parse(Buffer.from(payloadB64, 'base64').toString('utf-8'));
+  } catch {
+    return null;
+  }
+}
+
 function getDeviceId() {
   const configDir = app.getPath('userData');
   const idFile = path.join(configDir, 'device-id.txt');
@@ -1080,7 +1105,8 @@ app.whenReady().then(() => {
   // не влияет на существующих клиентов, канал 'natcom:*' используется
   // только виджетом naturalcommunities.
   try {
-    const { baseDir: natcomBaseDir, isFallback: natcomIsFallback, libraryLoaded } = registerNatComIpc({ ipcMain, app });
+    const { baseDir, isFallback: natcomIsFallback, libraryLoaded } = registerNatComIpc({ ipcMain, app });
+    natcomBaseDir = baseDir;
     fileLog('[natcom] storage dir:', natcomBaseDir, natcomIsFallback ? '(fallback: no write access to shared dir)' : '');
     if (!libraryLoaded) fileLog('[natcom] WARNING: library (natcom-library/index.json) not found - Home screen will be empty');
   } catch (err) {
