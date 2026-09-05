@@ -15,6 +15,7 @@ import React, { useCallback, useEffect, useState } from 'react';
 import type { NatComWidgetProperties, NatComLibrary, NatComProject } from '@kiosk/shared';
 import HomeScreen from './screens/HomeScreen';
 import HelpScreen from './screens/HelpScreen';
+import EditorScreen from './editor/EditorScreen';
 import './NatComRuntime.css';
 
 interface Props {
@@ -54,6 +55,14 @@ const NatComRuntime: React.FC<Props> = ({ properties }) => {
     return () => { cancelled = true; };
   }, [refreshProjects]);
 
+  // Возврат на Home (кнопка «Главная» из редактора, «Сохранить как…») может
+  // означать, что список презентаций устарел - EditorScreen создаёт новую
+  // презентацию через свой собственный window.natcomAPI.createProject(),
+  // в обход handleCreate/refreshProjects этого компонента.
+  useEffect(() => {
+    if (view === 'home') refreshProjects();
+  }, [view, refreshProjects]);
+
   const handleCreate = useCallback(async (title: string, backgroundId: string) => {
     if (!window.natcomAPI || !context) return;
     setIsCreating(true);
@@ -83,10 +92,20 @@ const NatComRuntime: React.FC<Props> = ({ properties }) => {
 
   const renderContent = () => {
     if (view === 'help') return <HelpScreen />;
-    if (view === 'editor' || view === 'player') {
+    if (view === 'editor') {
+      if (!activeProjectId || !library) {
+        return (
+          <div className="natcom-runtime__stub">
+            <p>{!library ? 'Библиотека не загружена — редактор недоступен.' : 'Презентация не выбрана.'}</p>
+          </div>
+        );
+      }
+      return <EditorScreen key={activeProjectId} projectId={activeProjectId} library={library} onBack={() => setView('home')} />;
+    }
+    if (view === 'player') {
       return (
         <div className="natcom-runtime__stub">
-          <p>Экран «{view === 'editor' ? 'Редактор' : 'Плеер'}» ещё в разработке.</p>
+          <p>Экран «Плеер» ещё в разработке.</p>
           <p className="natcom-runtime__stub-id">Презентация: {activeProjectId}</p>
         </div>
       );
@@ -103,6 +122,13 @@ const NatComRuntime: React.FC<Props> = ({ properties }) => {
       />
     );
   };
+
+  // Editor управляет своей собственной шапкой (заголовок проекта, кнопка
+  // «Главная», режимы) - внешний natcom-runtime__bar только отнимал бы
+  // высоту экрана без пользы.
+  if (view === 'editor') {
+    return <div className="natcom-runtime">{renderContent()}</div>;
+  }
 
   return (
     <div className="natcom-runtime">

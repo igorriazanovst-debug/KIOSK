@@ -17,7 +17,7 @@
     "electron:build:rpm": "npm run build && electron-builder --linux rpm",
     "package": "npm run build && electron-builder --dir",
     "clean": "rimraf dist dist-electron",
-    "test": "node --experimental-strip-types --test src/chrono/*.test.ts electron/chrono/*.test.js electron/natcom/*.test.js"
+    "test": "node --experimental-strip-types --test src/chrono/*.test.ts src/natcom/*.test.ts electron/chrono/*.test.js electron/natcom/*.test.js"
   },
   "dependencies": {
     "@kiosk/shared": "file:../shared",
@@ -26,8 +26,10 @@
     "@tiptap/starter-kit": "^3.20.0",
     "@use-gesture/react": "^10.3.1",
     "express": "^4.18.2",
+    "konva": "^9.3.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-konva": "^18.2.10",
     "socket.io": "^4.8.3",
     "uuid": "^9.0.0",
     "ws": "^8.19.0",

@@ -1,0 +1,214 @@
+.natcom-editor {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  background: #0b2818;
+  color: #eef7ef;
+  font-family: Arial, sans-serif;
+  box-sizing: border-box;
+}
+
+.natcom-editor-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 16px;
+  background: rgba(0, 0, 0, 0.25);
+  flex-shrink: 0;
+  flex-wrap: wrap;
+}
+
+.natcom-editor-toolbar__back {
+  background: none;
+  border: none;
+  color: rgba(238, 247, 239, 0.75);
+  cursor: pointer;
+  font-size: 14px;
+  white-space: nowrap;
+}
+
+.natcom-editor-toolbar__title {
+  flex: 1;
+  min-width: 160px;
+  padding: 6px 10px;
+  border-radius: 4px;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  background: rgba(255, 255, 255, 0.95);
+  color: #0b2818;
+  font-size: 15px;
+}
+
+.natcom-editor-toolbar__modes {
+  display: flex;
+  gap: 4px;
+}
+
+.natcom-editor-toolbar__mode {
+  padding: 6px 12px;
+  border-radius: 4px;
+  border: none;
+  background: rgba(255, 255, 255, 0.08);
+  color: rgba(238, 247, 239, 0.8);
+  cursor: pointer;
+  font-size: 13px;
+}
+
+.natcom-editor-toolbar__mode--active {
+  background: #3fae68;
+  color: #fff;
+}
+
+.natcom-editor-toolbar__selection-actions,
+.natcom-editor-toolbar__actions {
+  display: flex;
+  gap: 6px;
+}
+
+.natcom-editor-toolbar__selection-actions button,
+.natcom-editor-toolbar__actions button {
+  padding: 6px 12px;
+  border-radius: 4px;
+  border: none;
+  background: rgba(255, 255, 255, 0.1);
+  color: #eef7ef;
+  cursor: pointer;
+  font-size: 13px;
+}
+
+.natcom-editor-toolbar__actions button:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+.natcom-editor__body {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+}
+
+.natcom-editor__stage-column {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.natcom-workspace-wrapper {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.natcom-workspace {
+  background: #1a1a1a;
+}
+
+.natcom-ribbon {
+  flex-shrink: 0;
+  height: 150px;
+  background: rgba(0, 0, 0, 0.2);
+  display: flex;
+  flex-direction: column;
+  padding: 8px 12px;
+  box-sizing: border-box;
+}
+
+.natcom-ribbon__categories {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 6px;
+  flex-shrink: 0;
+}
+
+.natcom-ribbon__category {
+  padding: 4px 10px;
+  border-radius: 4px;
+  border: none;
+  background: rgba(255, 255, 255, 0.08);
+  color: rgba(238, 247, 239, 0.75);
+  cursor: pointer;
+  font-size: 13px;
+}
+
+.natcom-ribbon__category--active {
+  background: #3fae68;
+  color: #fff;
+}
+
+.natcom-ribbon__objects {
+  flex: 1;
+  display: flex;
+  gap: 10px;
+  overflow-x: auto;
+}
+
+.natcom-ribbon__object {
+  flex-shrink: 0;
+  width: 84px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  cursor: grab;
+  padding: 4px;
+  border-radius: 4px;
+}
+
+.natcom-ribbon__object:hover {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.natcom-ribbon__object img {
+  width: 64px;
+  height: 64px;
+  object-fit: contain;
+}
+
+.natcom-ribbon__object span {
+  font-size: 11px;
+  text-align: center;
+  color: rgba(238, 247, 239, 0.8);
+}
+
+.natcom-ribbon__empty {
+  color: rgba(238, 247, 239, 0.5);
+  font-size: 13px;
+}
+
+.natcom-edit-panel {
+  width: 300px;
+  flex-shrink: 0;
+  background: rgba(0, 0, 0, 0.25);
+  padding: 16px;
+  box-sizing: border-box;
+  overflow-y: auto;
+}
+
+.natcom-edit-panel h3 {
+  margin: 0 0 12px;
+}
+
+.natcom-edit-panel__field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-bottom: 14px;
+  font-size: 13px;
+  color: rgba(238, 247, 239, 0.75);
+}
+
+.natcom-edit-panel__field input,
+.natcom-edit-panel__field textarea {
+  padding: 6px 8px;
+  border-radius: 4px;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  background: rgba(255, 255, 255, 0.95);
+  color: #0b2818;
+  font-size: 14px;
+  font-family: inherit;
+  resize: vertical;
+}

@@ -44,7 +44,12 @@ try {
     // <img src="chronomedia://...">. Схема вместо этого явно добавлена в
     // CSP-заголовок ниже (см. onHeadersReceived) - остальные директивы
     // (через фолбэк на default-src) продолжают действовать на неё.
-    { scheme: 'chronomedia', privileges: { standard: true, secure: true, supportFetchAPI: true, stream: true } }
+    { scheme: 'chronomedia', privileges: { standard: true, secure: true, supportFetchAPI: true, stream: true } },
+    // natcomlib - поставочная (read-only) библиотека виджета «Конструктор
+    // природных сообществ» (packages/natcom-library/assets/), тот же
+    // принцип, что chronomedia - без bypassCSP, схема явно добавлена в
+    // CSP-заголовок ниже.
+    { scheme: 'natcomlib', privileges: { standard: true, secure: true, supportFetchAPI: true, stream: true } }
   ]);
 } catch (e) { fileLog('protocol register error', e.message); }
 // ─────────────────────────────────────────────────────────────────────────────
@@ -55,6 +60,7 @@ let allowActivationClose = false;
 let currentProject = null;
 let chronoBaseDir = null;
 let natcomBaseDir = null;
+let natcomAssetsDir = null;
 
 // ═══ OFFLINE-CACHE-MODULE-V1 — Офлайн-кэш медиафайлов ═══════════════════════════
 const { protocol, net } = require('electron');
@@ -1105,8 +1111,9 @@ app.whenReady().then(() => {
   // не влияет на существующих клиентов, канал 'natcom:*' используется
   // только виджетом naturalcommunities.
   try {
-    const { baseDir, isFallback: natcomIsFallback, libraryLoaded } = registerNatComIpc({ ipcMain, app });
+    const { baseDir, isFallback: natcomIsFallback, libraryLoaded, assetsDir } = registerNatComIpc({ ipcMain, app });
     natcomBaseDir = baseDir;
+    natcomAssetsDir = assetsDir;
     fileLog('[natcom] storage dir:', natcomBaseDir, natcomIsFallback ? '(fallback: no write access to shared dir)' : '');
     if (!libraryLoaded) fileLog('[natcom] WARNING: library (natcom-library/index.json) not found - Home screen will be empty');
   } catch (err) {
@@ -1118,9 +1125,9 @@ app.whenReady().then(() => {
     callback({
       responseHeaders: {
         ...details.responseHeaders,
-        // chronomedia: добавлена явно (не полагаемся на bypassCSP этой
-        // схемы - её больше нет, см. registerSchemesAsPrivileged выше).
-        'Content-Security-Policy': ["default-src 'self' 'unsafe-inline' 'unsafe-eval' data: file: blob: chronomedia: http: https: ws: wss:"]
+        // chronomedia:/natcomlib: добавлены явно (не полагаемся на bypassCSP
+        // этих схем - его нет, см. registerSchemesAsPrivileged выше).
+        'Content-Security-Policy': ["default-src 'self' 'unsafe-inline' 'unsafe-eval' data: file: blob: chronomedia: natcomlib: http: https: ws: wss:"]
       }
     });
   });
@@ -1243,6 +1250,37 @@ app.whenReady().then(() => {
       // 500: не выдаём наружу, существует ли путь за пределами разрешённого
       // корня, разница между "нет такого файла" и "нельзя туда смотреть"
       // рендереру не нужна.
+      return new Response('Not found', { status: 404 });
+    }
+  });
+
+  // Обработчик протокола natcomlib:///<fileName> → локальный файл из
+  // поставочной библиотеки «Конструктора природных сообществ»
+  // (packages/natcom-library/assets/, см. electron/natcom/library.js).
+  // В отличие от chronomedia здесь нет измерения "id проекта" - библиотека
+  // одна на всё приложение, read-only, поэтому используется пустой host
+  // (три слэша) - имя файла целиком в pathname, не рискуем лишиться
+  // регистра в имени файла (URL-хосты лаункейзятся).
+  protocol.handle('natcomlib', async (request) => {
+    try {
+      if (!natcomAssetsDir) return new Response('Library not initialized', { status: 503 });
+
+      const u = new URL(request.url);
+      const fileName = decodeURIComponent(u.pathname.replace(/^\/+/, ''));
+      const filePath = chronoResolveWithinRoot(natcomAssetsDir, fileName);
+
+      if (!fs.existsSync(filePath) || !fs.statSync(filePath).isFile()) {
+        return new Response('Not found', { status: 404 });
+      }
+
+      const stat = fs.statSync(filePath);
+      const mime = guessMime(fileName, filePath);
+      const stream = fs.createReadStream(filePath);
+      return new Response(nodeStreamToWeb(stream), {
+        status: 200,
+        headers: { 'Content-Type': mime, 'Content-Length': String(stat.size) }
+      });
+    } catch {
       return new Response('Not found', { status: 404 });
     }
   });
