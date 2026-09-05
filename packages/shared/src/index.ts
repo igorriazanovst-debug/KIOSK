@@ -31,3 +31,6 @@ export * from './chrono/media';
 
 // Natural Communities («Конструктор природных сообществ»)
 export * from './naturalCommunities/widgetProperties';
+export * from './naturalCommunities/model/schema';
+export * from './naturalCommunities/model/project';
+export * from './naturalCommunities/model/geometry';

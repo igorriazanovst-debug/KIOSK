@@ -3,7 +3,7 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import Player from './Player';
 import './index.css';
-import type { ChronoProject, ChronoMedia } from '@kiosk/shared';
+import type { ChronoProject, ChronoMedia, NatComProject } from '@kiosk/shared';
 
 interface ChronoProjectManifest {
   schemaVersion: number;
@@ -62,9 +62,14 @@ declare global {
       importProject: () => Promise<ChronoProjectManifest | null>;
       deleteMedia: (projectId: string, media: { sha256: string; fileName: string }) => Promise<{ success: boolean }>;
     };
-    /** Виджет «Конструктор природных сообществ» — встроенный локальный сервер (packages/player/electron/natcom) */
+    /** Виджет «Конструктор природных сообществ» — встроенный локальный сервер и хранилище презентаций (packages/player/electron/natcom) */
     natcomAPI?: {
       getServerInfo: () => Promise<{ port: number | null; addresses: string[] }>;
+      listProjects: () => Promise<NatComProject[]>;
+      createProject: (params: { title: string; backgroundId: string; ownerId: string; organizationId: string }) => Promise<NatComProject>;
+      loadProject: (projectId: string) => Promise<NatComProject>;
+      saveProject: (projectId: string, data: NatComProject) => Promise<NatComProject>;
+      deleteProject: (projectId: string) => Promise<{ success: boolean }>;
     };
   }
 }

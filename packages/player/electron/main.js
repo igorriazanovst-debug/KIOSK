@@ -2,6 +2,7 @@ const { app, BrowserWindow, ipcMain, dialog, Menu } = require('electron');
 const path = require('path');
 const fs = require('fs');
 const { registerChronoIpc } = require('./chrono/ipc');
+const { registerNatComIpc } = require('./natcom/ipc');
 const { buildBrowserWindowOptions, hasStandaloneAppWidget, hasNaturalCommunitiesWidget, NATCOM_WIDGET_TYPE } = require('./chrono/windowMode');
 const { mediaDir: chronoMediaDir } = require('./chrono/mediaStore');
 const { resolveWithinRoot: chronoResolveWithinRoot } = require('./chrono/pathGuard');
@@ -1055,6 +1056,16 @@ app.whenReady().then(() => {
     fileLog('[chrono] storage dir:', baseDir, isFallback ? '(fallback: no write access to shared dir)' : '');
   } catch (err) {
     fileLog('[chrono] failed to initialize local storage:', err && err.message);
+  }
+
+  // Локальное хранилище презентаций «Конструктора природных сообществ» —
+  // не влияет на существующих клиентов, канал 'natcom:*' используется
+  // только виджетом naturalcommunities.
+  try {
+    const { baseDir: natcomBaseDir, isFallback: natcomIsFallback } = registerNatComIpc({ ipcMain, app });
+    fileLog('[natcom] storage dir:', natcomBaseDir, natcomIsFallback ? '(fallback: no write access to shared dir)' : '');
+  } catch (err) {
+    fileLog('[natcom] failed to initialize local storage:', err && err.message);
   }
 
   const { session } = require('electron');

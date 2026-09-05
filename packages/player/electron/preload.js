@@ -71,8 +71,14 @@ contextBridge.exposeInMainWorld('chronoAPI', {
   deleteMedia: (projectId, media) => ipcRenderer.invoke('chrono:delete-media', projectId, media)
 });
 
-// Встроенный сервер «Конструктор природных сообществ» (Тип 5) — отдельный
-// namespace, используется только виджетом naturalcommunities.
+// Встроенный сервер и локальное хранилище презентаций «Конструктора
+// природных сообществ» (Тип 5) — отдельный namespace, используется только
+// виджетом naturalcommunities.
 contextBridge.exposeInMainWorld('natcomAPI', {
-  getServerInfo: () => ipcRenderer.invoke('natcom:get-server-info')
+  getServerInfo: () => ipcRenderer.invoke('natcom:get-server-info'),
+  listProjects: () => ipcRenderer.invoke('natcom:list-projects'),
+  createProject: (params) => ipcRenderer.invoke('natcom:create-project', params),
+  loadProject: (projectId) => ipcRenderer.invoke('natcom:load-project', projectId),
+  saveProject: (projectId, data) => ipcRenderer.invoke('natcom:save-project', projectId, data),
+  deleteProject: (projectId) => ipcRenderer.invoke('natcom:delete-project', projectId)
 });
