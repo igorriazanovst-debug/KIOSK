@@ -94,6 +94,19 @@
   background: rgba(255, 255, 255, 0.08);
 }
 
+.natcom-screen__list-play {
+  padding: 10px 14px;
+  background: none;
+  border: none;
+  color: rgba(238, 247, 239, 0.6);
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.natcom-screen__list-play:hover {
+  color: #eef7ef;
+}
+
 .natcom-screen__list-delete {
   padding: 10px 14px;
   background: none;

@@ -3,19 +3,22 @@
 // учительском ПК, пока встроенный сервер (packages/player/electron/natcom/server.js)
 // обслуживает браузеры остальных устройств школьной сети.
 //
-// Тип5_бэклог.md, T5-050: роутинг Home/Editor/Player/Help. Editor и Player -
-// пока заглушки (Эпики 7/8 ещё не реализованы), Home и Help - рабочие
-// (T5-051/T5-052).
+// Тип5_бэклог.md, T5-050: роутинг Home/Editor/Player/Help. Все четыре
+// экрана рабочие (Home/Help - T5-051/T5-052, Editor - Эпик 7, Player -
+// Эпик 8). Открытый вопрос №11 плана РЕШЁН 2026-09-05: на своём устройстве
+// педагог видит тот же нативный NatComRuntime, что и здесь, без отдельного
+// «пульта управления» (тот отдельно учтён под ролью Администратора - Эпик
+// 10, экран «Клиенты»).
 //
-// Что именно здесь должно быть дальше (пульт управления классом vs
-// полноценный редактор/плеер) — открытый вопрос №11 плана, решается при
-// проектировании Эпика 8 (клиент-плеер).
+// Player здесь - ЛОКАЛЬНЫЙ Electron-экран (устройство педагога), НЕ
+// веб-клиент ученика (браузер) - см. Эпик 8.1 бэклога, отдельная задача.
 
 import React, { useCallback, useEffect, useState } from 'react';
 import type { NatComWidgetProperties, NatComLibrary, NatComProject } from '@kiosk/shared';
 import HomeScreen from './screens/HomeScreen';
 import HelpScreen from './screens/HelpScreen';
 import EditorScreen from './editor/EditorScreen';
+import PlayerScreen from './player/PlayerScreen';
 import './NatComRuntime.css';
 
 interface Props {
@@ -85,9 +88,14 @@ const NatComRuntime: React.FC<Props> = ({ properties }) => {
     await refreshProjects();
   }, [refreshProjects]);
 
-  const handleOpen = useCallback((projectId: string) => {
+  const handleOpenEditor = useCallback((projectId: string) => {
     setActiveProjectId(projectId);
     setView('editor');
+  }, []);
+
+  const handleOpenPlayer = useCallback((projectId: string) => {
+    setActiveProjectId(projectId);
+    setView('player');
   }, []);
 
   const renderContent = () => {
@@ -103,12 +111,14 @@ const NatComRuntime: React.FC<Props> = ({ properties }) => {
       return <EditorScreen key={activeProjectId} projectId={activeProjectId} library={library} onBack={() => setView('home')} />;
     }
     if (view === 'player') {
-      return (
-        <div className="natcom-runtime__stub">
-          <p>Экран «Плеер» ещё в разработке.</p>
-          <p className="natcom-runtime__stub-id">Презентация: {activeProjectId}</p>
-        </div>
-      );
+      if (!activeProjectId || !library) {
+        return (
+          <div className="natcom-runtime__stub">
+            <p>{!library ? 'Библиотека не загружена — плеер недоступен.' : 'Презентация не выбрана.'}</p>
+          </div>
+        );
+      }
+      return <PlayerScreen key={activeProjectId} projectId={activeProjectId} library={library} />;
     }
     return (
       <HomeScreen
@@ -117,7 +127,8 @@ const NatComRuntime: React.FC<Props> = ({ properties }) => {
         isLoading={isLoadingProjects}
         isCreating={isCreating}
         onCreate={handleCreate}
-        onOpen={handleOpen}
+        onOpenEditor={handleOpenEditor}
+        onOpenPlayer={handleOpenPlayer}
         onDelete={handleDelete}
       />
     );

@@ -12,11 +12,12 @@ interface Props {
   isLoading: boolean;
   isCreating: boolean;
   onCreate: (title: string, backgroundId: string) => Promise<void>;
-  onOpen: (projectId: string) => void;
+  onOpenEditor: (projectId: string) => void;
+  onOpenPlayer: (projectId: string) => void;
   onDelete: (projectId: string) => Promise<void>;
 }
 
-const HomeScreen: React.FC<Props> = ({ library, projects, isLoading, isCreating, onCreate, onOpen, onDelete }) => {
+const HomeScreen: React.FC<Props> = ({ library, projects, isLoading, isCreating, onCreate, onOpenEditor, onOpenPlayer, onDelete }) => {
   const [title, setTitle] = useState('');
   const [backgroundId, setBackgroundId] = useState('');
 
@@ -82,8 +83,15 @@ const HomeScreen: React.FC<Props> = ({ library, projects, isLoading, isCreating,
           <ul className="natcom-screen__list">
             {projects.map((project) => (
               <li key={project.id} className="natcom-screen__list-item">
-                <button className="natcom-screen__list-title" onClick={() => onOpen(project.id)}>
+                <button className="natcom-screen__list-title" onClick={() => onOpenEditor(project.id)}>
                   {project.title || 'Без названия'}
+                </button>
+                <button
+                  className="natcom-screen__list-play"
+                  onClick={() => onOpenPlayer(project.id)}
+                  title="Открыть в плеере"
+                >
+                  Плеер
                 </button>
                 <button
                   className="natcom-screen__list-delete"

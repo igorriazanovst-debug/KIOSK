@@ -15,13 +15,19 @@ const LIBRARY: NatComLibrary = {
   ],
 };
 
-test('natcomLibraryAssetUrl encodes the filename into a natcomlib:/// URL', () => {
-  assert.equal(natcomLibraryAssetUrl('medved.svg'), 'natcomlib:///medved.svg');
-  assert.equal(natcomLibraryAssetUrl('a b.svg'), 'natcomlib:///a%20b.svg');
+test('natcomLibraryAssetUrl encodes the filename into a natcomlib://asset/ URL', () => {
+  assert.equal(natcomLibraryAssetUrl('medved.svg'), 'natcomlib://asset/medved.svg');
+  assert.equal(natcomLibraryAssetUrl('a b.svg'), 'natcomlib://asset/a%20b.svg');
+});
+
+test('the URL host is non-empty - a standard-scheme URL with an empty host reparses with the filename swallowed into the host (found live, Эпик 8)', () => {
+  const url = new URL(natcomLibraryAssetUrl('medved.svg'));
+  assert.equal(url.hostname, 'asset');
+  assert.equal(url.pathname, '/medved.svg');
 });
 
 test('resolveMediaUrl resolves a known media id to its asset URL', () => {
-  assert.equal(resolveMediaUrl(LIBRARY, 'media-1'), 'natcomlib:///medved.svg');
+  assert.equal(resolveMediaUrl(LIBRARY, 'media-1'), 'natcomlib://asset/medved.svg');
 });
 
 test('resolveMediaUrl returns null for a missing or unknown media id', () => {
