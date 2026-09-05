@@ -11,7 +11,7 @@ const os = require('node:os');
 const path = require('node:path');
 const fs = require('node:fs');
 const { io: ioClient } = require('socket.io-client');
-const { startNatComServer } = require('./server');
+const { startNatComServer, requireRole } = require('./server');
 const projectStore = require('./projectStore');
 
 function makeTempBaseDir() {
@@ -182,5 +182,43 @@ test('resetAllConnections disconnects everyone and zeroes the connected count', 
     assert.equal(handle.getConnectedCount(), 0);
     const options = await fetch(`http://127.0.0.1:${port}/api/options`).then((r) => r.json());
     assert.equal(options.connectedCount, 0);
+  });
+});
+
+// T5-040/T5-041 - роль как атрибут сессии, серверная проверка не только
+// скрытием кнопки. Сейчас у сервера нет мутирующих REST-маршрутов (создание/
+// правка остаются Electron IPC-only), поэтому реального 403 в проде пока
+// неоткуда взяться - но сам guard уже работает и протестирован здесь
+// напрямую, чтобы Эпик 7/8 могли добавить requireRole('teacher') на первую
+// мутирующую операцию без переизобретения механизма.
+test('requireRole allows a request whose role meets the minimum', () => {
+  const req = { natcomRole: 'student' };
+  let called = false;
+  const res = { status: () => { throw new Error('should not reject'); } };
+  requireRole('student')(req, res, () => { called = true; });
+  assert.equal(called, true);
+});
+
+test('requireRole rejects a request below the minimum with 403', () => {
+  const req = { natcomRole: 'student' };
+  let statusCode = null;
+  let body = null;
+  const res = {
+    status(code) { statusCode = code; return this; },
+    json(payload) { body = payload; }
+  };
+  let called = false;
+  requireRole('teacher')(req, res, () => { called = true; });
+  assert.equal(called, false);
+  assert.equal(statusCode, 403);
+  assert.ok(body && body.error);
+});
+
+test('existing REST routes stay reachable for the student-level session everyone gets', async () => {
+  await withServer({}, async ({ port }) => {
+    const options = await fetch(`http://127.0.0.1:${port}/api/options`);
+    assert.equal(options.status, 200);
+    const license = await fetch(`http://127.0.0.1:${port}/api/license`);
+    assert.equal(license.status, 200);
   });
 });

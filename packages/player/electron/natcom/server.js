@@ -23,7 +23,31 @@
 const express = require('express');
 const http = require('http');
 const { Server: SocketIoServer } = require('socket.io');
+const { hasAtLeastRole } = require('@kiosk/shared');
 const projectStore = require('./projectStore');
+
+// T5-040/T5-041: роль - атрибут сессии, проверяемый на сервере, не только
+// скрытие кнопки в UI. Сейчас у этого сервера ЕДИНСТВЕННЫЙ сетевой
+// "вход" - браузер ученика (Педагог работает через Electron IPC
+// учительского экрана, это отдельный доверенный процесс, который никогда
+// не пересекает сеть) - поэтому каждый REST-запрос сюда архитектурно
+// student-сессия. requireRole() уже готов принять более высокий порог,
+// когда Эпик 7/8 добавит первую мутирующую операцию, реально требующую
+// роли «Педагог»/«Администратор».
+function attachRole(req, _res, next) {
+  req.natcomRole = 'student';
+  next();
+}
+
+function requireRole(minRole) {
+  return (req, res, next) => {
+    if (!hasAtLeastRole(req.natcomRole, minRole)) {
+      res.status(403).json({ error: 'Недостаточно прав' });
+      return;
+    }
+    next();
+  };
+}
 
 /**
  * @param {{
@@ -43,6 +67,7 @@ const projectStore = require('./projectStore');
  */
 function startNatComServer({ port, maxClients, baseDir, getLicenseInfo = () => null, onLog = () => {} }) {
   const app = express();
+  app.use(attachRole);
 
   app.get('/', (_req, res) => {
     res.type('html').send(
@@ -55,11 +80,11 @@ function startNatComServer({ port, maxClients, baseDir, getLicenseInfo = () => n
   });
 
   // T5-030
-  app.get('/api/options', (_req, res) => {
+  app.get('/api/options', requireRole('student'), (_req, res) => {
     res.json({ maxClients, connectedCount: connectedSockets.size });
   });
 
-  app.get('/api/license', (_req, res) => {
+  app.get('/api/license', requireRole('student'), (_req, res) => {
     const info = getLicenseInfo();
     if (!info) {
       res.json({ available: false });
@@ -73,7 +98,7 @@ function startNatComServer({ port, maxClients, baseDir, getLicenseInfo = () => n
   // учительского экрана (Home/Editor) - не через открытый без авторизации
   // REST, в отличие от read-file/save-file по произвольному имени у
   // оригинала.
-  app.get('/api/projects/:id', (req, res) => {
+  app.get('/api/projects/:id', requireRole('student'), (req, res) => {
     try {
       const project = projectStore.loadProject(baseDir, req.params.id);
       res.json(project);
@@ -149,4 +174,4 @@ function startNatComServer({ port, maxClients, baseDir, getLicenseInfo = () => n
   return { httpServer, io, stop, resetAllConnections, getConnectedCount: () => connectedSockets.size };
 }
 
-module.exports = { startNatComServer };
+module.exports = { startNatComServer, attachRole, requireRole };
