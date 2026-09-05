@@ -1151,7 +1151,7 @@ app.whenReady().then(() => {
   // не влияет на существующих клиентов, канал 'natcom:*' используется
   // только виджетом naturalcommunities.
   try {
-    const { baseDir, isFallback: natcomIsFallback, libraryLoaded, assetsDir, library } = registerNatComIpc({ ipcMain, app });
+    const { baseDir, isFallback: natcomIsFallback, libraryLoaded, assetsDir, library } = registerNatComIpc({ ipcMain, app, dialog });
     natcomBaseDir = baseDir;
     natcomAssetsDir = assetsDir;
     natcomLibrary = library;

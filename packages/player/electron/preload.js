@@ -83,5 +83,7 @@ contextBridge.exposeInMainWorld('natcomAPI', {
   createProject: (params) => ipcRenderer.invoke('natcom:create-project', params),
   loadProject: (projectId) => ipcRenderer.invoke('natcom:load-project', projectId),
   saveProject: (projectId, data) => ipcRenderer.invoke('natcom:save-project', projectId, data),
-  deleteProject: (projectId) => ipcRenderer.invoke('natcom:delete-project', projectId)
+  deleteProject: (projectId) => ipcRenderer.invoke('natcom:delete-project', projectId),
+  exportProject: (projectId) => ipcRenderer.invoke('natcom:export-project', projectId),
+  importProject: (context) => ipcRenderer.invoke('natcom:import-project', context)
 });

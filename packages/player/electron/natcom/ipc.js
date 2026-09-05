@@ -13,11 +13,43 @@
 // осознанного дублирования, что у resetCode.js/masterCode.js (см.
 // Сценарий_разработки_фичи.md, раздел 3).
 
+const fs = require('fs');
 const { resolveStorageDir } = require('../chrono/storageDir');
 const projectStore = require('./projectStore');
 const { loadLibrarySync } = require('./library');
+const { parseNatComProject, assertProjectReferencesExist } = require('@kiosk/shared');
 
 const NATCOM_APP_DIR_NAME = 'kiosk-natcom';
+const EXPORT_FILE_FILTERS = [{ name: 'Презентация «Конструктора природных сообществ»', extensions: ['natcom'] }];
+
+/**
+ * Разбор+валидация импортируемого файла (T5-081, ТЗ раздел 9 - "импортируемый
+ * контент должен проверяться по типу/формату"). Чистая функция (без fs/dialog) -
+ * тестируется напрямую, без Electron.
+ *
+ * @param {string} raw
+ * @param {import('@kiosk/shared').NatComLibrary | null} library
+ * @returns {import('@kiosk/shared').NatComProject}
+ */
+function parseImportedProject(raw, library) {
+  let json;
+  try {
+    json = JSON.parse(raw);
+  } catch {
+    throw new Error('Файл повреждён или не в формате JSON');
+  }
+  const project = parseNatComProject(json);
+  if (library) {
+    assertProjectReferencesExist(project, library);
+  }
+  return project;
+}
+
+/** Windows/macOS запрещают эти символы в имени файла - defaultPath диалога сохранения. */
+function sanitizeFileName(name) {
+  const trimmed = String(name || '').trim().replace(/[\\/:*?"<>|]/g, '_');
+  return trimmed.length > 0 ? trimmed : 'Презентация';
+}
 
 /**
  * @param {unknown} err
@@ -35,10 +67,10 @@ function translateDiskError(err) {
 }
 
 /**
- * @param {{ ipcMain: import('electron').IpcMain, app: import('electron').App }} deps
+ * @param {{ ipcMain: import('electron').IpcMain, app: import('electron').App, dialog: import('electron').Dialog }} deps
  * @returns {{ baseDir: string, isFallback: boolean, libraryLoaded: boolean, assetsDir: string | null, library: import('@kiosk/shared').NatComLibrary | null }}
  */
-function registerNatComIpc({ ipcMain, app }) {
+function registerNatComIpc({ ipcMain, app, dialog }) {
   const { dir: baseDir, isFallback } = resolveStorageDir({
     platform: process.platform,
     userDataDir: app.getPath('userData'),
@@ -87,6 +119,44 @@ function registerNatComIpc({ ipcMain, app }) {
     return { success: true };
   });
 
+  // T5-081 - импорт/экспорт файлом (свой формат `.natcom`, обычный JSON -
+  // в отличие от Хронолинии презентация не ссылается на локальные
+  // пользовательские медиафайлы, только на поставочную библиотеку, поэтому
+  // архив (как `.chronoline`) не нужен, достаточно валидируемого документа).
+  handle('natcom:export-project', async (_event, projectId) => {
+    const project = projectStore.loadProject(baseDir, projectId);
+    const result = await dialog.showSaveDialog({
+      title: 'Экспорт презентации',
+      defaultPath: `${sanitizeFileName(project.title)}.natcom`,
+      filters: EXPORT_FILE_FILTERS
+    });
+    if (result.canceled || !result.filePath) {
+      return { success: false, canceled: true };
+    }
+    fs.writeFileSync(result.filePath, JSON.stringify(project, null, 2), 'utf8');
+    return { success: true, filePath: result.filePath };
+  });
+
+  handle('natcom:import-project', async (_event, context) => {
+    const result = await dialog.showOpenDialog({
+      title: 'Импорт презентации',
+      properties: ['openFile'],
+      filters: EXPORT_FILE_FILTERS
+    });
+    if (result.canceled || !result.filePaths[0]) {
+      return null;
+    }
+    const raw = fs.readFileSync(result.filePaths[0], 'utf8');
+    const parsedProject = parseImportedProject(raw, loaded ? loaded.library : null);
+    const created = projectStore.createProject(baseDir, {
+      title: parsedProject.title,
+      backgroundId: parsedProject.backgroundId,
+      ownerId: context.ownerId,
+      organizationId: context.organizationId
+    });
+    return projectStore.saveProject(baseDir, created.id, { ...created, objects: parsedProject.objects });
+  });
+
   return {
     baseDir,
     isFallback,
@@ -96,4 +166,4 @@ function registerNatComIpc({ ipcMain, app }) {
   };
 }
 
-module.exports = { registerNatComIpc, translateDiskError, NATCOM_APP_DIR_NAME };
+module.exports = { registerNatComIpc, translateDiskError, NATCOM_APP_DIR_NAME, parseImportedProject };

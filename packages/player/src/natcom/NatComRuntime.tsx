@@ -35,6 +35,7 @@ const NatComRuntime: React.FC<Props> = ({ properties }) => {
   const [projects, setProjects] = useState<NatComProject[]>([]);
   const [isLoadingProjects, setIsLoadingProjects] = useState(true);
   const [isCreating, setIsCreating] = useState(false);
+  const [isImporting, setIsImporting] = useState(false);
   const [activeProjectId, setActiveProjectId] = useState<string | null>(null);
 
   const refreshProjects = useCallback(async () => {
@@ -88,6 +89,31 @@ const NatComRuntime: React.FC<Props> = ({ properties }) => {
     await refreshProjects();
   }, [refreshProjects]);
 
+  const handleImport = useCallback(async () => {
+    if (!window.natcomAPI || !context) return;
+    setIsImporting(true);
+    try {
+      const imported = await window.natcomAPI.importProject(context);
+      if (imported) await refreshProjects();
+    } catch (err) {
+      window.alert('Не удалось импортировать презентацию: ' + (err instanceof Error ? err.message : String(err)));
+    } finally {
+      setIsImporting(false);
+    }
+  }, [context, refreshProjects]);
+
+  const handleExport = useCallback(async (projectId: string) => {
+    if (!window.natcomAPI) return;
+    try {
+      const result = await window.natcomAPI.exportProject(projectId);
+      if (!result.success && !result.canceled) {
+        window.alert('Не удалось экспортировать презентацию');
+      }
+    } catch (err) {
+      window.alert('Не удалось экспортировать презентацию: ' + (err instanceof Error ? err.message : String(err)));
+    }
+  }, []);
+
   const handleOpenEditor = useCallback((projectId: string) => {
     setActiveProjectId(projectId);
     setView('editor');
@@ -126,10 +152,13 @@ const NatComRuntime: React.FC<Props> = ({ properties }) => {
         projects={projects}
         isLoading={isLoadingProjects}
         isCreating={isCreating}
+        isImporting={isImporting}
         onCreate={handleCreate}
         onOpenEditor={handleOpenEditor}
         onOpenPlayer={handleOpenPlayer}
         onDelete={handleDelete}
+        onImport={handleImport}
+        onExport={handleExport}
       />
     );
   };

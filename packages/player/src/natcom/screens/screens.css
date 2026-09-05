@@ -53,6 +53,22 @@
   cursor: default;
 }
 
+.natcom-screen__import {
+  margin-top: 10px;
+  padding: 8px 14px;
+  border-radius: 4px;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  background: none;
+  color: #eef7ef;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.natcom-screen__import:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+
 .natcom-screen__hint {
   color: rgba(238, 247, 239, 0.75);
   font-size: 15px;
@@ -104,6 +120,19 @@
 }
 
 .natcom-screen__list-play:hover {
+  color: #eef7ef;
+}
+
+.natcom-screen__list-export {
+  padding: 10px 14px;
+  background: none;
+  border: none;
+  color: rgba(238, 247, 239, 0.6);
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.natcom-screen__list-export:hover {
   color: #eef7ef;
 }
 

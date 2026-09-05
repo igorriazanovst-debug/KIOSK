@@ -73,6 +73,8 @@ declare global {
       loadProject: (projectId: string) => Promise<NatComProject>;
       saveProject: (projectId: string, data: NatComProject) => Promise<NatComProject>;
       deleteProject: (projectId: string) => Promise<{ success: boolean }>;
+      exportProject: (projectId: string) => Promise<{ success: boolean; canceled?: boolean; filePath?: string }>;
+      importProject: (context: { ownerId: string; organizationId: string }) => Promise<NatComProject | null>;
     };
   }
 }

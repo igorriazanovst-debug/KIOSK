@@ -11,13 +11,28 @@ interface Props {
   projects: NatComProject[];
   isLoading: boolean;
   isCreating: boolean;
+  isImporting: boolean;
   onCreate: (title: string, backgroundId: string) => Promise<void>;
   onOpenEditor: (projectId: string) => void;
   onOpenPlayer: (projectId: string) => void;
   onDelete: (projectId: string) => Promise<void>;
+  onImport: () => Promise<void>;
+  onExport: (projectId: string) => Promise<void>;
 }
 
-const HomeScreen: React.FC<Props> = ({ library, projects, isLoading, isCreating, onCreate, onOpenEditor, onOpenPlayer, onDelete }) => {
+const HomeScreen: React.FC<Props> = ({
+  library,
+  projects,
+  isLoading,
+  isCreating,
+  isImporting,
+  onCreate,
+  onOpenEditor,
+  onOpenPlayer,
+  onDelete,
+  onImport,
+  onExport,
+}) => {
   const [title, setTitle] = useState('');
   const [backgroundId, setBackgroundId] = useState('');
 
@@ -71,6 +86,9 @@ const HomeScreen: React.FC<Props> = ({ library, projects, isLoading, isCreating,
             </button>
           </div>
         )}
+        <button className="natcom-screen__import" onClick={onImport} disabled={isImporting}>
+          {isImporting ? 'Импорт…' : 'Импортировать презентацию…'}
+        </button>
       </section>
 
       <section className="natcom-screen__panel">
@@ -92,6 +110,13 @@ const HomeScreen: React.FC<Props> = ({ library, projects, isLoading, isCreating,
                   title="Открыть в плеере"
                 >
                   Плеер
+                </button>
+                <button
+                  className="natcom-screen__list-export"
+                  onClick={() => onExport(project.id)}
+                  title="Экспортировать презентацию в файл"
+                >
+                  Экспорт
                 </button>
                 <button
                   className="natcom-screen__list-delete"
