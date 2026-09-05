@@ -4,6 +4,7 @@ import { useEditorStore } from '../stores/editorStore';
 import ActionEditor from './ActionEditor';
 import NavigationPropertiesSection from './NavigationPropertiesSection';
 import ChronolinePropertiesSection from './ChronolinePropertiesSection';
+import NatComPropertiesSection from './NatComPropertiesSection';
 import './PropertiesPanel.css';
 import RichTextEditor from './RichTextEditor';
 
@@ -64,6 +65,12 @@ const PropertiesPanel: React.FC = () => {
           widget={selectedWidget}
           onPropertiesChange={handlePropertiesChange}
           onUpdateWidget={(updates) => updateWidget(selectedWidget.id, updates)}
+        />
+
+        {/* Секция виджета «Конструктор природных сообществ» */}
+        <NatComPropertiesSection
+          widget={selectedWidget}
+          onPropertiesChange={handlePropertiesChange}
         />
 
         {/* Основные свойства */}
