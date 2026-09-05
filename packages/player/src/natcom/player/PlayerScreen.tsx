@@ -62,6 +62,19 @@ const PlayerScreen: React.FC<PlayerScreenProps> = ({ projectId, library }) => {
     };
   }, [projectId]);
 
+  // Сообщает встроенному серверу, какую презентацию сейчас показывает
+  // педагог - веб-клиент ученика (Эпик 8.1) читает это через
+  // GET /api/active-project + событие 'activeProjectChanged'. Очищается
+  // при уходе с экрана (Home/другая презентация) - иначе браузеры учеников
+  // продолжали бы видеть уже закрытую презентацию.
+  useEffect(() => {
+    if (!window.natcomAPI) return;
+    window.natcomAPI.setActiveProject(projectId);
+    return () => {
+      window.natcomAPI?.setActiveProject(null);
+    };
+  }, [projectId]);
+
   if (loadError) {
     return <p className="natcom-player__error">Ошибка загрузки: {loadError}</p>;
   }

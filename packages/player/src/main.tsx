@@ -66,6 +66,7 @@ declare global {
     natcomAPI?: {
       getServerInfo: () => Promise<{ port: number | null; addresses: string[] }>;
       getContext: () => Promise<{ ownerId: string; organizationId: string }>;
+      setActiveProject: (projectId: string | null) => Promise<void>;
       getLibrary: () => Promise<NatComLibrary | null>;
       listProjects: () => Promise<NatComProject[]>;
       createProject: (params: { title: string; backgroundId: string; ownerId: string; organizationId: string }) => Promise<NatComProject>;

@@ -1,0 +1,100 @@
+html, body, #root {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: #0b2818;
+}
+
+.student-app {
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+
+.student-app__message {
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #eef7ef;
+  font-family: Arial, sans-serif;
+  font-size: 20px;
+  text-align: center;
+  padding: 24px;
+  box-sizing: border-box;
+  background: #0b2818;
+}
+
+.detail-card__overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+}
+
+.detail-card {
+  background: #0b2818;
+  color: #eef7ef;
+  border-radius: 8px;
+  padding: 24px;
+  max-width: 640px;
+  width: 90%;
+  max-height: 85vh;
+  overflow-y: auto;
+  position: relative;
+  box-sizing: border-box;
+  font-family: Arial, sans-serif;
+}
+
+.detail-card__close {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  padding: 6px 14px;
+  border-radius: 4px;
+  border: none;
+  background: rgba(255, 255, 255, 0.1);
+  color: #eef7ef;
+  cursor: pointer;
+}
+
+.detail-card__media {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+
+.detail-card__image,
+.detail-card__video {
+  max-width: 100%;
+  max-height: 40vh;
+  border-radius: 4px;
+}
+
+.detail-card__sound {
+  padding: 6px 14px;
+  border-radius: 4px;
+  border: none;
+  background: #3fae68;
+  color: #fff;
+  cursor: pointer;
+}
+
+.detail-card__title {
+  margin: 0 0 10px;
+  font-size: 24px;
+}
+
+.detail-card__description {
+  margin: 0;
+  line-height: 1.6;
+  color: rgba(238, 247, 239, 0.85);
+}

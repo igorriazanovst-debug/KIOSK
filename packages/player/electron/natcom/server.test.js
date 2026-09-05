@@ -222,3 +222,63 @@ test('existing REST routes stay reachable for the student-level session everyone
     assert.equal(license.status, 200);
   });
 });
+
+// Эпик 8.1 (T5-073/074) - веб-клиент ученика: библиотека, активная
+// презентация, статика файлов библиотеки по обычному HTTP-пути (браузер
+// без Electron не видит natcomlib://).
+
+test('GET /api/library returns 503 when no library was loaded, 200 with it otherwise', async () => {
+  await withServer({}, async ({ port }) => {
+    const missing = await fetch(`http://127.0.0.1:${port}/api/library`);
+    assert.equal(missing.status, 503);
+  });
+
+  const library = { schemaVersion: 1, backgrounds: [], categories: [], objects: [], media: [] };
+  await withServer({ library }, async ({ port }) => {
+    const resp = await fetch(`http://127.0.0.1:${port}/api/library`);
+    assert.equal(resp.status, 200);
+    assert.deepEqual(await resp.json(), library);
+  });
+});
+
+test('GET /api/active-project defaults to null, setActiveProject updates it and broadcasts activeProjectChanged', async () => {
+  await withServer({}, async ({ handle, port }) => {
+    const before = await fetch(`http://127.0.0.1:${port}/api/active-project`).then((r) => r.json());
+    assert.deepEqual(before, { projectId: null });
+
+    const client = connectClient(port);
+    await waitForConnect(client);
+    const changePromise = waitForEvent(client, 'activeProjectChanged');
+
+    handle.setActiveProject('project-123');
+
+    const change = await changePromise;
+    assert.deepEqual(change, { projectId: 'project-123' });
+
+    const after = await fetch(`http://127.0.0.1:${port}/api/active-project`).then((r) => r.json());
+    assert.deepEqual(after, { projectId: 'project-123' });
+
+    client.close();
+  });
+});
+
+test('GET /library-assets/:fileName serves a real file from assetsDir, 404 for unknown/missing', async () => {
+  const assetsDir = fs.mkdtempSync(path.join(os.tmpdir(), 'natcom-assets-test-'));
+  fs.writeFileSync(path.join(assetsDir, 'test.svg'), '<svg></svg>');
+
+  await withServer({ assetsDir }, async ({ port }) => {
+    const resp = await fetch(`http://127.0.0.1:${port}/library-assets/test.svg`);
+    assert.equal(resp.status, 200);
+    assert.ok(resp.headers.get('content-type').startsWith('image/svg+xml'));
+    assert.equal((await resp.text()).trim(), '<svg></svg>');
+
+    const missing = await fetch(`http://127.0.0.1:${port}/library-assets/does-not-exist.svg`);
+    assert.equal(missing.status, 404);
+  });
+
+  await withServer({}, async ({ port }) => {
+    // assetsDir не передан вовсе - 503, не 404 (различие "не настроено" vs "нет файла").
+    const resp = await fetch(`http://127.0.0.1:${port}/library-assets/anything.svg`);
+    assert.equal(resp.status, 503);
+  });
+});

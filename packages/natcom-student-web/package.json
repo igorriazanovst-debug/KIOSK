@@ -1,0 +1,29 @@
+{
+  "name": "@kiosk/natcom-student-web",
+  "version": "1.0.0",
+  "description": "Веб-клиент ученика виджета «Конструктор природных сообществ» - обслуживается встроенным сервером packages/player/electron/natcom/server.js, не Electron",
+  "author": "Kiosk Platform Team",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "preview": "vite preview",
+    "clean": "rimraf dist"
+  },
+  "dependencies": {
+    "@kiosk/shared": "file:../shared",
+    "konva": "^9.3.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-konva": "^18.2.10",
+    "socket.io-client": "^4.8.3"
+  },
+  "devDependencies": {
+    "@types/react": "^18.2.43",
+    "@types/react-dom": "^18.2.17",
+    "@vitejs/plugin-react": "^4.2.1",
+    "rimraf": "^5.0.0",
+    "typescript": "^5.9.3",
+    "vite": "^7.3.1"
+  }
+}

@@ -87,6 +87,13 @@
           "**/*",
           "!README.md"
         ]
+      },
+      {
+        "from": "../natcom-student-web/dist",
+        "to": "natcom-student-web",
+        "filter": [
+          "**/*"
+        ]
       }
     ],
     "win": {

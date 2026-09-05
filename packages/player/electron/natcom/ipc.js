@@ -36,7 +36,7 @@ function translateDiskError(err) {
 
 /**
  * @param {{ ipcMain: import('electron').IpcMain, app: import('electron').App }} deps
- * @returns {{ baseDir: string, isFallback: boolean, libraryLoaded: boolean, assetsDir: string | null }}
+ * @returns {{ baseDir: string, isFallback: boolean, libraryLoaded: boolean, assetsDir: string | null, library: import('@kiosk/shared').NatComLibrary | null }}
  */
 function registerNatComIpc({ ipcMain, app }) {
   const { dir: baseDir, isFallback } = resolveStorageDir({
@@ -87,7 +87,13 @@ function registerNatComIpc({ ipcMain, app }) {
     return { success: true };
   });
 
-  return { baseDir, isFallback, libraryLoaded: !!loaded, assetsDir: loaded ? loaded.assetsDir : null };
+  return {
+    baseDir,
+    isFallback,
+    libraryLoaded: !!loaded,
+    assetsDir: loaded ? loaded.assetsDir : null,
+    library: loaded ? loaded.library : null
+  };
 }
 
 module.exports = { registerNatComIpc, translateDiskError, NATCOM_APP_DIR_NAME };

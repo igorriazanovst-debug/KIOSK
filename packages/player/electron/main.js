@@ -61,6 +61,7 @@ let currentProject = null;
 let chronoBaseDir = null;
 let natcomBaseDir = null;
 let natcomAssetsDir = null;
+let natcomLibrary = null;
 
 // ═══ OFFLINE-CACHE-MODULE-V1 — Офлайн-кэш медиафайлов ═══════════════════════════
 const { protocol, net } = require('electron');
@@ -278,6 +279,9 @@ function createWindow() {
         port,
         maxClients,
         baseDir: natcomBaseDir,
+        assetsDir: natcomAssetsDir,
+        library: natcomLibrary,
+        studentWebDir: findNatComStudentWebDir(),
         getLicenseInfo: () => {
           const payload = decodePlayerToken();
           if (!payload) return null;
@@ -406,6 +410,14 @@ ipcMain.handle('natcom:get-server-info', async () => {
     }
   }
   return { port: natcomServerPort, addresses };
+});
+
+// Какую презентацию сейчас показывает педагог браузерам учеников (Эпик 8.1) -
+// вызывается из PlayerScreen.tsx при открытии экрана «Плеер» (projectId) и
+// при возврате на Home (null). Сам сервер уже транслирует это подключённым
+// браузерам событием socket.io 'activeProjectChanged'.
+ipcMain.handle('natcom:set-active-project', async (_event, projectId) => {
+  if (natcomServerHandle) natcomServerHandle.setActiveProject(projectId);
 });
 
 // «Конструктор природных сообществ» - ownerId/organizationId для создаваемых
@@ -885,6 +897,23 @@ function decodePlayerToken() {
   }
 }
 
+// Веб-клиент ученика (Эпик 8.1) - отдельный vite-бандл
+// (packages/natcom-student-web/dist), тот же паттерн поиска путей, что
+// natcom/library.js: packaged-сборка (extraResources) vs dev-режим
+// (относительно __dirname). Отсутствие бандла - не ошибка (dev без сборки
+// студенческого пакета, либо более старая версия кода) - server.js в этом
+// случае просто продолжает отдавать плейсхолдер-страницу.
+function findNatComStudentWebDir() {
+  const candidates = [
+    path.join(process.resourcesPath || '', 'natcom-student-web'),
+    path.join(__dirname, '..', '..', 'natcom-student-web', 'dist')
+  ];
+  for (const candidate of candidates) {
+    if (fs.existsSync(path.join(candidate, 'index.html'))) return candidate;
+  }
+  return null;
+}
+
 function getDeviceId() {
   const configDir = app.getPath('userData');
   const idFile = path.join(configDir, 'device-id.txt');
@@ -1111,9 +1140,10 @@ app.whenReady().then(() => {
   // не влияет на существующих клиентов, канал 'natcom:*' используется
   // только виджетом naturalcommunities.
   try {
-    const { baseDir, isFallback: natcomIsFallback, libraryLoaded, assetsDir } = registerNatComIpc({ ipcMain, app });
+    const { baseDir, isFallback: natcomIsFallback, libraryLoaded, assetsDir, library } = registerNatComIpc({ ipcMain, app });
     natcomBaseDir = baseDir;
     natcomAssetsDir = assetsDir;
+    natcomLibrary = library;
     fileLog('[natcom] storage dir:', natcomBaseDir, natcomIsFallback ? '(fallback: no write access to shared dir)' : '');
     if (!libraryLoaded) fileLog('[natcom] WARNING: library (natcom-library/index.json) not found - Home screen will be empty');
   } catch (err) {

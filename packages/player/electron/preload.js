@@ -77,6 +77,7 @@ contextBridge.exposeInMainWorld('chronoAPI', {
 contextBridge.exposeInMainWorld('natcomAPI', {
   getServerInfo: () => ipcRenderer.invoke('natcom:get-server-info'),
   getContext: () => ipcRenderer.invoke('natcom:get-context'),
+  setActiveProject: (projectId) => ipcRenderer.invoke('natcom:set-active-project', projectId),
   getLibrary: () => ipcRenderer.invoke('natcom:get-library'),
   listProjects: () => ipcRenderer.invoke('natcom:list-projects'),
   createProject: (params) => ipcRenderer.invoke('natcom:create-project', params),
