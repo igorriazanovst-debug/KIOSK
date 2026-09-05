@@ -22,5 +22,16 @@ export default defineConfig({
   },
   build: {
     sourcemap: true,
+    rollupOptions: {
+      // Мульти-страничная сборка: index.html - студенческий клиент (T5-074),
+      // admin.html - панель администратора (Эпик 10, T5-090/091). Разные
+      // аудитории/уровень доступа - разные HTML+JS входы одного бандла, не
+      // общий JS с client-side роутингом (не тянуть код админки туда, где
+      // она не нужна, и наоборот).
+      input: {
+        main: path.resolve(__dirname, 'index.html'),
+        admin: path.resolve(__dirname, 'admin.html'),
+      },
+    },
   },
 });

@@ -10,9 +10,45 @@ const assert = require('node:assert/strict');
 const os = require('node:os');
 const path = require('node:path');
 const fs = require('node:fs');
+const http = require('node:http');
 const { io: ioClient } = require('socket.io-client');
-const { startNatComServer, requireRole } = require('./server');
+const { startNatComServer, requireRole, createAttachRole } = require('./server');
 const projectStore = require('./projectStore');
+
+// Подставной "центральный сервер" (POST /api/auth/editor-login) - реальный
+// HTTP-сервер на эфемерном порту, не мок на уровне JS-модуля (тот же принцип,
+// что withServer ниже: подменяется только внешняя система, не наш код).
+function withMockCentralServer(handler, fn) {
+  return new Promise((resolvePromise, rejectPromise) => {
+    const mockServer = http.createServer((req, res) => {
+      let body = '';
+      req.on('data', (chunk) => { body += chunk; });
+      req.on('end', () => {
+        try {
+          handler(req, res, body ? JSON.parse(body) : {});
+        } catch (err) {
+          res.statusCode = 500;
+          res.end(JSON.stringify({ error: err.message }));
+        }
+      });
+    });
+    mockServer.on('error', rejectPromise);
+    mockServer.listen(0, '127.0.0.1', async () => {
+      const url = `http://127.0.0.1:${mockServer.address().port}`;
+      try {
+        await fn(url);
+      } finally {
+        mockServer.close(() => resolvePromise());
+      }
+    });
+  });
+}
+
+function respondJson(res, status, body) {
+  res.statusCode = status;
+  res.setHeader('Content-Type', 'application/json');
+  res.end(JSON.stringify(body));
+}
 
 function makeTempBaseDir() {
   return fs.mkdtempSync(path.join(os.tmpdir(), 'natcom-server-test-'));
@@ -281,4 +317,153 @@ test('GET /library-assets/:fileName serves a real file from assetsDir, 404 for u
     const resp = await fetch(`http://127.0.0.1:${port}/library-assets/anything.svg`);
     assert.equal(resp.status, 503);
   });
+});
+
+// Эпик 10 (T5-090/091) - вход администратора через существующую модель
+// LicenseUser центрального сервера (не собственная bcrypt-реализация),
+// проверка что LicenseUser относится к ТОЙ ЖЕ лицензии, короткоживущая
+// локальная сессия, «Отключить всех» и список клиентов доступны ТОЛЬКО
+// после реального входа.
+
+test('createAttachRole: no token -> student; valid session -> admin; expired session -> student and evicted', () => {
+  const sessions = new Map();
+  sessions.set('valid-token', { email: 'a@b.com', expiresAt: Date.now() + 60000 });
+  sessions.set('expired-token', { email: 'a@b.com', expiresAt: Date.now() - 1000 });
+  const attachRole = createAttachRole(sessions);
+
+  const withAuthHeader = (token) => ({ headers: token ? { authorization: `Bearer ${token}` } : {} });
+
+  let req = withAuthHeader(null);
+  attachRole(req, {}, () => {});
+  assert.equal(req.natcomRole, 'student');
+
+  req = withAuthHeader('valid-token');
+  attachRole(req, {}, () => {});
+  assert.equal(req.natcomRole, 'admin');
+
+  req = withAuthHeader('expired-token');
+  attachRole(req, {}, () => {});
+  assert.equal(req.natcomRole, 'student');
+  assert.equal(sessions.has('expired-token'), false);
+});
+
+test('POST /api/admin/login returns 503 when no central server is configured', async () => {
+  await withServer({}, async ({ port }) => {
+    const resp = await fetch(`http://127.0.0.1:${port}/api/admin/login`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email: 'a@b.com', password: 'x' })
+    });
+    assert.equal(resp.status, 503);
+  });
+});
+
+test('POST /api/admin/login succeeds against a real (mocked) central server and issues a usable session', async () => {
+  await withMockCentralServer(
+    (req, res, body) => {
+      assert.equal(req.url, '/api/auth/editor-login');
+      assert.equal(body.email, 'teacher@school.ru');
+      respondJson(res, 200, { success: true, license: { id: 'lic-1' }, user: { email: 'teacher@school.ru', role: 'OWNER' } });
+    },
+    async (centralUrl) => {
+      await withServer(
+        { getCentralServerUrl: () => centralUrl, getExpectedLicenseId: () => 'lic-1' },
+        async ({ port }) => {
+          const loginResp = await fetch(`http://127.0.0.1:${port}/api/admin/login`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email: 'teacher@school.ru', password: 'secret' })
+          });
+          assert.equal(loginResp.status, 200);
+          const { sessionToken } = await loginResp.json();
+          assert.ok(sessionToken);
+
+          const withoutAuth = await fetch(`http://127.0.0.1:${port}/api/admin/clients`);
+          assert.equal(withoutAuth.status, 403);
+
+          const withAuth = await fetch(`http://127.0.0.1:${port}/api/admin/clients`, {
+            headers: { Authorization: `Bearer ${sessionToken}` }
+          });
+          assert.equal(withAuth.status, 200);
+          const body = await withAuth.json();
+          assert.deepEqual(body, { maxClients: 2, connectedCount: 0, clients: [] });
+        }
+      );
+    }
+  );
+});
+
+test('POST /api/admin/login rejects a LicenseUser belonging to a different license', async () => {
+  await withMockCentralServer(
+    (_req, res) => respondJson(res, 200, { success: true, license: { id: 'lic-OTHER' }, user: { email: 'x@y.ru', role: 'MEMBER' } }),
+    async (centralUrl) => {
+      await withServer(
+        { getCentralServerUrl: () => centralUrl, getExpectedLicenseId: () => 'lic-1' },
+        async ({ port }) => {
+          const resp = await fetch(`http://127.0.0.1:${port}/api/admin/login`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email: 'x@y.ru', password: 'secret' })
+          });
+          assert.equal(resp.status, 403);
+        }
+      );
+    }
+  );
+});
+
+test('POST /api/admin/login propagates invalid-credentials from the central server', async () => {
+  await withMockCentralServer(
+    (_req, res) => respondJson(res, 401, { success: false, message: 'Wrong password' }),
+    async (centralUrl) => {
+      await withServer({ getCentralServerUrl: () => centralUrl }, async ({ port }) => {
+        const resp = await fetch(`http://127.0.0.1:${port}/api/admin/login`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email: 'x@y.ru', password: 'wrong' })
+        });
+        assert.equal(resp.status, 401);
+        const body = await resp.json();
+        assert.equal(body.error, 'Wrong password');
+      });
+    }
+  );
+});
+
+test('POST /api/admin/disconnect-all requires an admin session and actually disconnects real socket clients', async () => {
+  await withMockCentralServer(
+    (_req, res) => respondJson(res, 200, { success: true, license: { id: 'lic-1' }, user: { email: 'a@b.com', role: 'OWNER' } }),
+    async (centralUrl) => {
+      await withServer({ getCentralServerUrl: () => centralUrl }, async ({ handle, port }) => {
+        const clientA = connectClient(port);
+        const clientB = connectClient(port);
+        await Promise.all([waitForConnect(clientA), waitForConnect(clientB)]);
+        await joinAck(clientA);
+        await joinAck(clientB);
+        assert.equal(handle.getConnectedCount(), 2);
+
+        const withoutAuth = await fetch(`http://127.0.0.1:${port}/api/admin/disconnect-all`, { method: 'POST' });
+        assert.equal(withoutAuth.status, 403);
+        assert.equal(handle.getConnectedCount(), 2);
+
+        const loginResp = await fetch(`http://127.0.0.1:${port}/api/admin/login`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email: 'a@b.com', password: 'secret' })
+        });
+        const { sessionToken } = await loginResp.json();
+
+        const disconnectedA = new Promise((resolve) => clientA.once('disconnect', resolve));
+        const disconnectedB = new Promise((resolve) => clientB.once('disconnect', resolve));
+
+        const withAuth = await fetch(`http://127.0.0.1:${port}/api/admin/disconnect-all`, {
+          method: 'POST',
+          headers: { Authorization: `Bearer ${sessionToken}` }
+        });
+        assert.equal(withAuth.status, 200);
+        await Promise.all([disconnectedA, disconnectedB]);
+        assert.equal(handle.getConnectedCount(), 0);
+      });
+    }
+  );
 });

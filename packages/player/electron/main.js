@@ -291,6 +291,17 @@ function createWindow() {
             expiresAt: playerTokenExpiresAt || null
           };
         },
+        // Эпик 10 (T5-090): вход администратора идёт через существующий
+        // POST /api/auth/editor-login того же центрального сервера, к
+        // которому активирован этот плеер - без internet-соединения на
+        // МОМЕНТ входа вход в админку недоступен (это ожидаемо - остальной
+        // виджет продолжает работать офлайн, вход администратора - нет).
+        getCentralServerUrl: () => (currentProject && currentProject.serverUrl) || null,
+        // Не даёт зайти в админку по LAN учётной записи ЧУЖОЙ лицензии.
+        getExpectedLicenseId: () => {
+          const payload = decodePlayerToken();
+          return (payload && payload.licenseId) || null;
+        },
         onLog: fileLog
       });
       natcomServerPort = port;
