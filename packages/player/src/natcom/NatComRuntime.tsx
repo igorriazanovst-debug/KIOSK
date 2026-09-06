@@ -53,6 +53,8 @@ const NatComRuntime: React.FC<Props> = ({ properties }) => {
   const [isCreating, setIsCreating] = useState(false);
   const [isImporting, setIsImporting] = useState(false);
   const [activeProjectId, setActiveProjectId] = useState<string | null>(null);
+  const [templates, setTemplates] = useState<NatComProject[]>([]);
+  const [usingTemplateId, setUsingTemplateId] = useState<string | null>(null);
 
   const refreshProjects = useCallback(async () => {
     if (!window.natcomAPI) return;
@@ -71,6 +73,7 @@ const NatComRuntime: React.FC<Props> = ({ properties }) => {
     window.natcomAPI.getServerInfo().then((info) => { if (!cancelled) setServerInfo(info); });
     window.natcomAPI.getLibrary().then((lib) => { if (!cancelled) setLibrary(lib); });
     window.natcomAPI.getContext().then((ctx) => { if (!cancelled) setContext(ctx); });
+    window.natcomAPI.listTemplates().then((tpls) => { if (!cancelled) setTemplates(tpls); });
     refreshProjects();
     return () => { cancelled = true; };
   }, [refreshProjects]);
@@ -130,6 +133,25 @@ const NatComRuntime: React.FC<Props> = ({ properties }) => {
     }
   }, []);
 
+  // T5-103 (ТЗ FR-009/FR-016): материализует готовую презентацию как новую
+  // независимую презентацию и сразу открывает её в Плеере - педагог должен
+  // иметь возможность начать урок «в один клик», без промежуточного шага
+  // «сначала создать копию на Главной, потом отдельно найти и открыть».
+  const handleUseTemplate = useCallback(async (templateId: string) => {
+    if (!window.natcomAPI || !context) return;
+    setUsingTemplateId(templateId);
+    try {
+      const created = await window.natcomAPI.useTemplate(templateId, context);
+      await refreshProjects();
+      setActiveProjectId(created.id);
+      setView('player');
+    } catch (err) {
+      window.alert('Не удалось открыть готовую презентацию: ' + (err instanceof Error ? err.message : String(err)));
+    } finally {
+      setUsingTemplateId(null);
+    }
+  }, [context, refreshProjects]);
+
   const handleOpenEditor = useCallback((projectId: string) => {
     setActiveProjectId(projectId);
     setView('editor');
@@ -175,6 +197,9 @@ const NatComRuntime: React.FC<Props> = ({ properties }) => {
         onDelete={handleDelete}
         onImport={handleImport}
         onExport={handleExport}
+        templates={templates}
+        usingTemplateId={usingTemplateId}
+        onUseTemplate={handleUseTemplate}
       />
     );
   };

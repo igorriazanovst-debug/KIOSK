@@ -75,6 +75,10 @@ declare global {
       deleteProject: (projectId: string) => Promise<{ success: boolean }>;
       exportProject: (projectId: string) => Promise<{ success: boolean; canceled?: boolean; filePath?: string }>;
       importProject: (context: { ownerId: string; organizationId: string }) => Promise<NatComProject | null>;
+      /** T5-103: готовые презентации из поставки (ТЗ FR-009/FR-016) - read-only список, isDefault=true */
+      listTemplates: () => Promise<NatComProject[]>;
+      /** Материализует выбранную готовую презентацию как новую, независимую презентацию в хранилище устройства */
+      useTemplate: (templateId: string, context: { ownerId: string; organizationId: string }) => Promise<NatComProject>;
     };
   }
 }

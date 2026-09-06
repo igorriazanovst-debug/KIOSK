@@ -89,6 +89,13 @@
         ]
       },
       {
+        "from": "../natcom-templates",
+        "to": "natcom-templates",
+        "filter": [
+          "*.json"
+        ]
+      },
+      {
         "from": "../natcom-student-web/dist",
         "to": "natcom-student-web",
         "filter": [

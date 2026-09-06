@@ -1,0 +1,203 @@
+{
+  "schemaVersion": 1,
+  "id": "template-taiga-dalnevostochnaya",
+  "title": "Тайга дальневосточная",
+  "backgroundId": "b5",
+  "objects": [
+    {
+      "id": "obj-o53",
+      "libraryObjectId": "o53",
+      "xFraction": 0.0574,
+      "yFraction": 0.4174,
+      "widthFraction": 0.1587,
+      "heightFraction": 0.1587,
+      "rotation": 0,
+      "flip": false
+    },
+    {
+      "id": "obj-o54",
+      "libraryObjectId": "o54",
+      "xFraction": 0.2053,
+      "yFraction": 0.6187,
+      "widthFraction": 0.1593,
+      "heightFraction": 0.1593,
+      "rotation": 0,
+      "flip": true
+    },
+    {
+      "id": "obj-o55",
+      "libraryObjectId": "o55",
+      "xFraction": 0.3532,
+      "yFraction": 0.8199,
+      "widthFraction": 0.1599,
+      "heightFraction": 0.1599,
+      "rotation": 0,
+      "flip": false
+    },
+    {
+      "id": "obj-o56",
+      "libraryObjectId": "o56",
+      "xFraction": 0.5011,
+      "yFraction": 0.4212,
+      "widthFraction": 0.1605,
+      "heightFraction": 0.1605,
+      "rotation": 0,
+      "flip": true
+    },
+    {
+      "id": "obj-o57",
+      "libraryObjectId": "o57",
+      "xFraction": 0.649,
+      "yFraction": 0.6224,
+      "widthFraction": 0.1612,
+      "heightFraction": 0.1612,
+      "rotation": 0,
+      "flip": false
+    },
+    {
+      "id": "obj-o58",
+      "libraryObjectId": "o58",
+      "xFraction": 0.7969,
+      "yFraction": 0.8236,
+      "widthFraction": 0.1618,
+      "heightFraction": 0.1618,
+      "rotation": 0,
+      "flip": true
+    },
+    {
+      "id": "obj-o59",
+      "libraryObjectId": "o59",
+      "xFraction": 0.9,
+      "yFraction": 0.4249,
+      "widthFraction": 0.1624,
+      "heightFraction": 0.1624,
+      "rotation": 0,
+      "flip": false
+    },
+    {
+      "id": "obj-o60",
+      "libraryObjectId": "o60",
+      "xFraction": 0.0521,
+      "yFraction": 0.0722,
+      "widthFraction": 0.106,
+      "heightFraction": 0.106,
+      "rotation": 0,
+      "flip": true
+    },
+    {
+      "id": "obj-o61",
+      "libraryObjectId": "o61",
+      "xFraction": 0.2294,
+      "yFraction": 0.2434,
+      "widthFraction": 0.1067,
+      "heightFraction": 0.1067,
+      "rotation": 0,
+      "flip": false
+    },
+    {
+      "id": "obj-o62",
+      "libraryObjectId": "o62",
+      "xFraction": 0.4066,
+      "yFraction": 0.4146,
+      "widthFraction": 0.1073,
+      "heightFraction": 0.1073,
+      "rotation": 0,
+      "flip": true
+    },
+    {
+      "id": "obj-o63",
+      "libraryObjectId": "o63",
+      "xFraction": 0.5838,
+      "yFraction": 0.0759,
+      "widthFraction": 0.1079,
+      "heightFraction": 0.1079,
+      "rotation": 0,
+      "flip": false
+    },
+    {
+      "id": "obj-o64",
+      "libraryObjectId": "o64",
+      "xFraction": 0.7611,
+      "yFraction": 0.2471,
+      "widthFraction": 0.1085,
+      "heightFraction": 0.1085,
+      "rotation": 0,
+      "flip": true
+    },
+    {
+      "id": "obj-o65",
+      "libraryObjectId": "o65",
+      "xFraction": 0.9,
+      "yFraction": 0.4184,
+      "widthFraction": 0.1091,
+      "heightFraction": 0.1091,
+      "rotation": 0,
+      "flip": false
+    },
+    {
+      "id": "obj-o66",
+      "libraryObjectId": "o66",
+      "xFraction": 0.0596,
+      "yFraction": 0.5496,
+      "widthFraction": 0.1298,
+      "heightFraction": 0.1298,
+      "rotation": 0,
+      "flip": true
+    },
+    {
+      "id": "obj-o67",
+      "libraryObjectId": "o67",
+      "xFraction": 0.2368,
+      "yFraction": 0.7158,
+      "widthFraction": 0.1304,
+      "heightFraction": 0.1304,
+      "rotation": 0,
+      "flip": false
+    },
+    {
+      "id": "obj-o68",
+      "libraryObjectId": "o68",
+      "xFraction": 0.414,
+      "yFraction": 0.86,
+      "widthFraction": 0.131,
+      "heightFraction": 0.131,
+      "rotation": 0,
+      "flip": true
+    },
+    {
+      "id": "obj-o69",
+      "libraryObjectId": "o69",
+      "xFraction": 0.5913,
+      "yFraction": 0.5533,
+      "widthFraction": 0.1316,
+      "heightFraction": 0.1316,
+      "rotation": 0,
+      "flip": false
+    },
+    {
+      "id": "obj-o70",
+      "libraryObjectId": "o70",
+      "xFraction": 0.7546,
+      "yFraction": 0.7056,
+      "widthFraction": 0.1253,
+      "heightFraction": 0.1253,
+      "rotation": 0,
+      "flip": true
+    },
+    {
+      "id": "obj-o71",
+      "libraryObjectId": "o71",
+      "xFraction": 0.9,
+      "yFraction": 0.86,
+      "widthFraction": 0.1259,
+      "heightFraction": 0.1259,
+      "rotation": 0,
+      "flip": false
+    }
+  ],
+  "ownerId": "template",
+  "organizationId": "template",
+  "isDefault": true,
+  "createdAt": "2026-09-06T12:00:00.000Z",
+  "updatedAt": "2026-09-06T12:00:00.000Z"
+}

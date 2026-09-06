@@ -1,0 +1,123 @@
+{
+  "schemaVersion": 1,
+  "id": "template-arktika",
+  "title": "Арктика",
+  "backgroundId": "b2",
+  "objects": [
+    {
+      "id": "obj-o15",
+      "libraryObjectId": "o15",
+      "xFraction": 0.0661,
+      "yFraction": 0.4262,
+      "widthFraction": 0.163,
+      "heightFraction": 0.163,
+      "rotation": 0,
+      "flip": true
+    },
+    {
+      "id": "obj-o16",
+      "libraryObjectId": "o16",
+      "xFraction": 0.2434,
+      "yFraction": 0.6274,
+      "widthFraction": 0.1637,
+      "heightFraction": 0.1637,
+      "rotation": 0,
+      "flip": false
+    },
+    {
+      "id": "obj-o17",
+      "libraryObjectId": "o17",
+      "xFraction": 0.4206,
+      "yFraction": 0.8286,
+      "widthFraction": 0.1643,
+      "heightFraction": 0.1643,
+      "rotation": 0,
+      "flip": true
+    },
+    {
+      "id": "obj-o18",
+      "libraryObjectId": "o18",
+      "xFraction": 0.5978,
+      "yFraction": 0.4299,
+      "widthFraction": 0.1649,
+      "heightFraction": 0.1649,
+      "rotation": 0,
+      "flip": false
+    },
+    {
+      "id": "obj-o19",
+      "libraryObjectId": "o19",
+      "xFraction": 0.7751,
+      "yFraction": 0.6311,
+      "widthFraction": 0.1655,
+      "heightFraction": 0.1655,
+      "rotation": 0,
+      "flip": true
+    },
+    {
+      "id": "obj-o20",
+      "libraryObjectId": "o20",
+      "xFraction": 0.9,
+      "yFraction": 0.8184,
+      "widthFraction": 0.1592,
+      "heightFraction": 0.1592,
+      "rotation": 0,
+      "flip": false
+    },
+    {
+      "id": "obj-o21",
+      "libraryObjectId": "o21",
+      "xFraction": 0.0596,
+      "yFraction": 0.0796,
+      "widthFraction": 0.1098,
+      "heightFraction": 0.1098,
+      "rotation": 0,
+      "flip": true
+    },
+    {
+      "id": "obj-o22",
+      "libraryObjectId": "o22",
+      "xFraction": 0.5008,
+      "yFraction": 0.2509,
+      "widthFraction": 0.1104,
+      "heightFraction": 0.1104,
+      "rotation": 0,
+      "flip": false
+    },
+    {
+      "id": "obj-o23",
+      "libraryObjectId": "o23",
+      "xFraction": 0.9,
+      "yFraction": 0.4221,
+      "widthFraction": 0.111,
+      "heightFraction": 0.111,
+      "rotation": 0,
+      "flip": true
+    },
+    {
+      "id": "obj-o24",
+      "libraryObjectId": "o24",
+      "xFraction": 0.0633,
+      "yFraction": 0.5534,
+      "widthFraction": 0.1316,
+      "heightFraction": 0.1316,
+      "rotation": 0,
+      "flip": false
+    },
+    {
+      "id": "obj-o25",
+      "libraryObjectId": "o25",
+      "xFraction": 0.9,
+      "yFraction": 0.7196,
+      "widthFraction": 0.1323,
+      "heightFraction": 0.1323,
+      "rotation": 0,
+      "flip": true
+    }
+  ],
+  "ownerId": "template",
+  "organizationId": "template",
+  "isDefault": true,
+  "createdAt": "2026-09-06T12:00:00.000Z",
+  "updatedAt": "2026-09-06T12:00:00.000Z"
+}

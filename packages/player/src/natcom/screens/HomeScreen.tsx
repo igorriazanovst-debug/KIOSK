@@ -18,6 +18,10 @@ interface Props {
   onDelete: (projectId: string) => Promise<void>;
   onImport: () => Promise<void>;
   onExport: (projectId: string) => Promise<void>;
+  /** T5-103 (ТЗ FR-009/FR-016): готовые презентации из поставки */
+  templates: NatComProject[];
+  usingTemplateId: string | null;
+  onUseTemplate: (templateId: string) => Promise<void>;
 }
 
 const HomeScreen: React.FC<Props> = ({
@@ -32,6 +36,9 @@ const HomeScreen: React.FC<Props> = ({
   onDelete,
   onImport,
   onExport,
+  templates,
+  usingTemplateId,
+  onUseTemplate,
 }) => {
   const [title, setTitle] = useState('');
   const [backgroundId, setBackgroundId] = useState('');
@@ -55,6 +62,33 @@ const HomeScreen: React.FC<Props> = ({
 
   return (
     <div className="natcom-screen">
+      {templates.length > 0 && (
+        <section className="natcom-screen__panel">
+          <h2 className="natcom-screen__heading">Готовые презентации</h2>
+          <p className="natcom-screen__hint">
+            Готовый набор объектов на сцене для каждого природного сообщества — открывается сразу в
+            Плеере как новая, независимая презентация; исходный шаблон при этом не меняется.
+          </p>
+          <ul className="natcom-screen__list">
+            {templates.map((template) => (
+              <li key={template.id} className="natcom-screen__list-item">
+                <span className="natcom-screen__list-title">
+                  {template.title} <span className="natcom-screen__hint">({template.objects.length} объектов)</span>
+                </span>
+                <button
+                  className="natcom-screen__list-play"
+                  onClick={() => onUseTemplate(template.id)}
+                  disabled={usingTemplateId !== null}
+                  title="Открыть готовую презентацию в плеере"
+                >
+                  {usingTemplateId === template.id ? 'Открытие…' : 'Открыть'}
+                </button>
+              </li>
+            ))}
+          </ul>
+        </section>
+      )}
+
       <section className="natcom-screen__panel">
         <h2 className="natcom-screen__heading">Новая презентация</h2>
         {!library ? (

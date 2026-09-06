@@ -1,0 +1,103 @@
+{
+  "schemaVersion": 1,
+  "id": "template-pustynya",
+  "title": "Пустыня",
+  "backgroundId": "b7",
+  "objects": [
+    {
+      "id": "obj-o81",
+      "libraryObjectId": "o81",
+      "xFraction": 0.0502,
+      "yFraction": 0.4103,
+      "widthFraction": 0.1551,
+      "heightFraction": 0.1551,
+      "rotation": 0,
+      "flip": true
+    },
+    {
+      "id": "obj-o82",
+      "libraryObjectId": "o82",
+      "xFraction": 0.4915,
+      "yFraction": 0.6115,
+      "widthFraction": 0.1557,
+      "heightFraction": 0.1557,
+      "rotation": 0,
+      "flip": false
+    },
+    {
+      "id": "obj-o83",
+      "libraryObjectId": "o83",
+      "xFraction": 0.9,
+      "yFraction": 0.8128,
+      "widthFraction": 0.1563,
+      "heightFraction": 0.1563,
+      "rotation": 0,
+      "flip": true
+    },
+    {
+      "id": "obj-o84",
+      "libraryObjectId": "o84",
+      "xFraction": 0.494,
+      "yFraction": 0.594,
+      "widthFraction": 0.127,
+      "heightFraction": 0.127,
+      "rotation": 0,
+      "flip": false
+    },
+    {
+      "id": "obj-o85",
+      "libraryObjectId": "o85",
+      "xFraction": 0.0552,
+      "yFraction": 0.0752,
+      "widthFraction": 0.1076,
+      "heightFraction": 0.1076,
+      "rotation": 0,
+      "flip": true
+    },
+    {
+      "id": "obj-o86",
+      "libraryObjectId": "o86",
+      "xFraction": 0.9,
+      "yFraction": 0.2465,
+      "widthFraction": 0.1082,
+      "heightFraction": 0.1082,
+      "rotation": 0,
+      "flip": false
+    },
+    {
+      "id": "obj-o87",
+      "libraryObjectId": "o87",
+      "xFraction": 0.0577,
+      "yFraction": 0.5477,
+      "widthFraction": 0.1288,
+      "heightFraction": 0.1288,
+      "rotation": 0,
+      "flip": true
+    },
+    {
+      "id": "obj-o88",
+      "libraryObjectId": "o88",
+      "xFraction": 0.4989,
+      "yFraction": 0.714,
+      "widthFraction": 0.1294,
+      "heightFraction": 0.1294,
+      "rotation": 0,
+      "flip": false
+    },
+    {
+      "id": "obj-o89",
+      "libraryObjectId": "o89",
+      "xFraction": 0.9,
+      "yFraction": 0.86,
+      "widthFraction": 0.1301,
+      "heightFraction": 0.1301,
+      "rotation": 0,
+      "flip": true
+    }
+  ],
+  "ownerId": "template",
+  "organizationId": "template",
+  "isDefault": true,
+  "createdAt": "2026-09-06T12:00:00.000Z",
+  "updatedAt": "2026-09-06T12:00:00.000Z"
+}

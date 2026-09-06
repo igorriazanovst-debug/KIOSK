@@ -184,3 +184,53 @@ test('import: a file with an unresolvable library reference is rejected and crea
   const listed = await ipcMain.invoke('natcom:list-projects');
   assert.ok(!listed.some((p) => p.title === 'Битая презентация (тест импорта)'));
 });
+
+// T5-103 (ТЗ FR-009/FR-016) - готовые презентации из поставки.
+
+test('list-templates: returns all 7 ready-made presentations, one per natural community', async () => {
+  const userDataDir = tmpUserDataDir();
+  const ipcMain = makeFakeIpcMain();
+  registerNatComIpc({ ipcMain, app: makeFakeApp(userDataDir), dialog: makeFakeDialog() });
+
+  const templates = await ipcMain.invoke('natcom:list-templates');
+  assert.equal(templates.length, 7);
+  assert.ok(templates.every((t) => t.isDefault === true));
+  assert.ok(templates.some((t) => t.title === 'Лес'));
+});
+
+test('use-template: materializes a ready-made presentation as a brand-new, independent project', async () => {
+  const userDataDir = tmpUserDataDir();
+  const ipcMain = makeFakeIpcMain();
+  registerNatComIpc({ ipcMain, app: makeFakeApp(userDataDir), dialog: makeFakeDialog() });
+
+  const templates = await ipcMain.invoke('natcom:list-templates');
+  const forest = templates.find((t) => t.title === 'Лес');
+
+  const created = await ipcMain.invoke('natcom:use-template', forest.id, CONTEXT);
+  try {
+    assert.notEqual(created.id, forest.id);
+    assert.equal(created.title, 'Лес');
+    assert.equal(created.backgroundId, forest.backgroundId);
+    assert.equal(created.ownerId, CONTEXT.ownerId);
+    assert.equal(created.organizationId, CONTEXT.organizationId);
+    assert.deepEqual(created.objects, forest.objects);
+
+    const listed = await ipcMain.invoke('natcom:list-projects');
+    assert.ok(listed.some((p) => p.id === created.id));
+
+    // Изменение материализованной копии не должно влиять на исходный шаблон -
+    // это ДВЕ независимые сущности, не общая ссылка.
+    const reTemplates = await ipcMain.invoke('natcom:list-templates');
+    assert.deepEqual(reTemplates.find((t) => t.id === forest.id).objects, forest.objects);
+  } finally {
+    await ipcMain.invoke('natcom:delete-project', created.id);
+  }
+});
+
+test('use-template: an unknown template id is rejected and creates nothing', async () => {
+  const userDataDir = tmpUserDataDir();
+  const ipcMain = makeFakeIpcMain();
+  registerNatComIpc({ ipcMain, app: makeFakeApp(userDataDir), dialog: makeFakeDialog() });
+
+  await assert.rejects(() => ipcMain.invoke('natcom:use-template', 'template-does-not-exist', CONTEXT), /не найдена/);
+});

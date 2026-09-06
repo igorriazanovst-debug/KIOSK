@@ -17,6 +17,7 @@ const fs = require('fs');
 const { resolveStorageDir } = require('../chrono/storageDir');
 const projectStore = require('./projectStore');
 const { loadLibrarySync } = require('./library');
+const { loadTemplatesSync } = require('./templates');
 const { parseNatComProject, assertProjectReferencesExist } = require('@kiosk/shared');
 
 const NATCOM_APP_DIR_NAME = 'kiosk-natcom';
@@ -43,6 +44,26 @@ function parseImportedProject(raw, library) {
     assertProjectReferencesExist(project, library);
   }
   return project;
+}
+
+/**
+ * Материализует разобранную презентацию (импортированный файл или готовый
+ * шаблон, T5-103) как новую, полностью независимую презентацию в локальном
+ * хранилище ТЕКУЩЕГО устройства - общий хвост natcom:import-project и
+ * natcom:use-template, не дублируется в каждом хендлере отдельно.
+ *
+ * @param {string} baseDir
+ * @param {import('@kiosk/shared').NatComProject} parsedProject
+ * @param {{ ownerId: string; organizationId: string }} context
+ */
+function materializeProjectCopy(baseDir, parsedProject, context) {
+  const created = projectStore.createProject(baseDir, {
+    title: parsedProject.title,
+    backgroundId: parsedProject.backgroundId,
+    ownerId: context.ownerId,
+    organizationId: context.organizationId
+  });
+  return projectStore.saveProject(baseDir, created.id, { ...created, objects: parsedProject.objects });
 }
 
 /** Windows/macOS запрещают эти символы в имени файла - defaultPath диалога сохранения. */
@@ -148,19 +169,32 @@ function registerNatComIpc({ ipcMain, app, dialog }) {
     }
     const raw = fs.readFileSync(result.filePaths[0], 'utf8');
     const parsedProject = parseImportedProject(raw, loaded ? loaded.library : null);
-    const created = projectStore.createProject(baseDir, {
-      title: parsedProject.title,
-      backgroundId: parsedProject.backgroundId,
-      ownerId: context.ownerId,
-      organizationId: context.organizationId
-    });
-    return projectStore.saveProject(baseDir, created.id, { ...created, objects: parsedProject.objects });
+    return materializeProjectCopy(baseDir, parsedProject, context);
+  });
+
+  // T5-103 (ТЗ FR-009/FR-016) - готовые презентации из поставки
+  // (packages/natcom-templates), read-only список + материализация выбранной
+  // как обычной, полностью независимой презентации (тот же путь, что импорт
+  // файла - см. materializeProjectCopy).
+  const templates = loadTemplatesSync(loaded ? loaded.library : null);
+
+  handle('natcom:list-templates', async () => {
+    return templates;
+  });
+
+  handle('natcom:use-template', async (_event, templateId, context) => {
+    const template = templates.find((t) => t.id === templateId);
+    if (!template) {
+      throw new Error(`Готовая презентация "${templateId}" не найдена`);
+    }
+    return materializeProjectCopy(baseDir, template, context);
   });
 
   return {
     baseDir,
     isFallback,
     libraryLoaded: !!loaded,
+    templatesLoaded: templates.length,
     assetsDir: loaded ? loaded.assetsDir : null,
     library: loaded ? loaded.library : null
   };

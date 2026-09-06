@@ -1,0 +1,103 @@
+{
+  "schemaVersion": 1,
+  "id": "template-step",
+  "title": "Степь",
+  "backgroundId": "b6",
+  "objects": [
+    {
+      "id": "obj-o72",
+      "libraryObjectId": "o72",
+      "xFraction": 0.053,
+      "yFraction": 0.4131,
+      "widthFraction": 0.1565,
+      "heightFraction": 0.1565,
+      "rotation": 0,
+      "flip": true
+    },
+    {
+      "id": "obj-o73",
+      "libraryObjectId": "o73",
+      "xFraction": 0.3476,
+      "yFraction": 0.6143,
+      "widthFraction": 0.1571,
+      "heightFraction": 0.1571,
+      "rotation": 0,
+      "flip": false
+    },
+    {
+      "id": "obj-o74",
+      "libraryObjectId": "o74",
+      "xFraction": 0.6422,
+      "yFraction": 0.8156,
+      "widthFraction": 0.1577,
+      "heightFraction": 0.1577,
+      "rotation": 0,
+      "flip": false
+    },
+    {
+      "id": "obj-o75",
+      "libraryObjectId": "o75",
+      "xFraction": 0.9,
+      "yFraction": 0.4168,
+      "widthFraction": 0.1584,
+      "heightFraction": 0.1584,
+      "rotation": 0,
+      "flip": true
+    },
+    {
+      "id": "obj-o76",
+      "libraryObjectId": "o76",
+      "xFraction": 0.058,
+      "yFraction": 0.078,
+      "widthFraction": 0.109,
+      "heightFraction": 0.109,
+      "rotation": 0,
+      "flip": false
+    },
+    {
+      "id": "obj-o77",
+      "libraryObjectId": "o77",
+      "xFraction": 0.9,
+      "yFraction": 0.2493,
+      "widthFraction": 0.1096,
+      "heightFraction": 0.1096,
+      "rotation": 0,
+      "flip": true
+    },
+    {
+      "id": "obj-o78",
+      "libraryObjectId": "o78",
+      "xFraction": 0.0605,
+      "yFraction": 0.5505,
+      "widthFraction": 0.1302,
+      "heightFraction": 0.1302,
+      "rotation": 0,
+      "flip": false
+    },
+    {
+      "id": "obj-o79",
+      "libraryObjectId": "o79",
+      "xFraction": 0.5017,
+      "yFraction": 0.7168,
+      "widthFraction": 0.1308,
+      "heightFraction": 0.1308,
+      "rotation": 0,
+      "flip": true
+    },
+    {
+      "id": "obj-o80",
+      "libraryObjectId": "o80",
+      "xFraction": 0.9,
+      "yFraction": 0.86,
+      "widthFraction": 0.1245,
+      "heightFraction": 0.1245,
+      "rotation": 0,
+      "flip": false
+    }
+  ],
+  "ownerId": "template",
+  "organizationId": "template",
+  "isDefault": true,
+  "createdAt": "2026-09-06T12:00:00.000Z",
+  "updatedAt": "2026-09-06T12:00:00.000Z"
+}
