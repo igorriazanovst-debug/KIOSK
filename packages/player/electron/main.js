@@ -416,17 +416,26 @@ ipcMain.handle('get-project', async () => {
 // «Конструктор природных сообществ» (Тип 5) - адреса, по которым другие
 // устройства школьной сети могут подключиться к встроенному серверу этого
 // ПК (не localhost - именно LAN-адреса интерфейса).
+// Имя интерфейса (не только IP) может выдавать VPN/виртуальный адаптер
+// (WireGuard, OpenVPN TAP/TUN, Hyper-V/VMware/VirtualBox, Docker и т.п.) -
+// такие адреса недостижимы с других устройств реальной школьной сети,
+// хотя технически валидны как non-internal IPv4. Их не выбрасываем (может
+// быть легитимный сценарий), но отодвигаем в конец списка, чтобы UI по
+// умолчанию показывал учителю адрес физического адаптера (Wi-Fi/Ethernet).
+const VIRTUAL_IFACE_NAME_RE = /vpn|tap|tun\d|ppp|virtual|vmware|virtualbox|hyper-v|vethernet|docker|zerotier|tailscale|wireguard|npcap|loopback|bluetooth/i;
 ipcMain.handle('natcom:get-server-info', async () => {
   const os = require('os');
   const interfaces = os.networkInterfaces();
-  const addresses = [];
+  const physical = [];
+  const likelyVirtual = [];
   for (const name of Object.keys(interfaces)) {
     for (const iface of interfaces[name] || []) {
       if (iface.family === 'IPv4' && !iface.internal) {
-        addresses.push(iface.address);
+        (VIRTUAL_IFACE_NAME_RE.test(name) ? likelyVirtual : physical).push(iface.address);
       }
     }
   }
+  const addresses = [...physical, ...likelyVirtual];
   return { port: natcomServerPort, addresses, error: natcomServerError };
 });
 

@@ -238,6 +238,20 @@ const NatComRuntime: React.FC<Props> = ({ properties }) => {
         ) : serverInfo && serverInfo.addresses.length > 0 ? (
           <span className="natcom-runtime__status">
             <code>http://{serverInfo.addresses[0]}:{serverInfo.port}/</code>
+            {serverInfo.addresses.length > 1 && (
+              // На компьютере несколько сетевых адаптеров (например реальный
+              // Wi-Fi/Ethernet и виртуальный - VPN, Hyper-V и т.п.) - первый
+              // адрес обычно верный, но если ученики видят «страница не
+              // найдена», стоит попробовать другой вариант из списка.
+              <span className="natcom-runtime__status-alt">
+                {' '}или: {serverInfo.addresses.slice(1).map((addr, i) => (
+                  <React.Fragment key={addr}>
+                    {i > 0 && ', '}
+                    <code>http://{addr}:{serverInfo.port}/</code>
+                  </React.Fragment>
+                ))}
+              </span>
+            )}
           </span>
         ) : null}
       </header>
