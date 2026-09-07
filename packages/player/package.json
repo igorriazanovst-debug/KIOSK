@@ -25,6 +25,7 @@
     "@tiptap/react": "^3.20.0",
     "@tiptap/starter-kit": "^3.20.0",
     "@use-gesture/react": "^10.3.1",
+    "compression": "^1.8.1",
     "express": "^4.18.2",
     "konva": "^9.3.0",
     "react": "^18.2.0",

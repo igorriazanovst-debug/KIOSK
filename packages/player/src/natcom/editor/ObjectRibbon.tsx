@@ -21,6 +21,7 @@ const ObjectRibbon: React.FC<ObjectRibbonProps> = ({ library, onAddObject }) => 
 
   return (
     <div className="natcom-ribbon">
+      <p className="natcom-ribbon__hint">Нажмите на животное или растение, чтобы добавить его на сцену</p>
       <div className="natcom-ribbon__categories">
         {library.categories.map((category) => (
           <button

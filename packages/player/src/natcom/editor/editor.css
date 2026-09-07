@@ -109,12 +109,19 @@
 
 .natcom-ribbon {
   flex-shrink: 0;
-  height: 150px;
+  height: 168px;
   background: rgba(0, 0, 0, 0.2);
   display: flex;
   flex-direction: column;
   padding: 8px 12px;
   box-sizing: border-box;
+}
+
+.natcom-ribbon__hint {
+  margin: 0 0 6px;
+  font-size: 12px;
+  opacity: 0.75;
+  flex-shrink: 0;
 }
 
 .natcom-ribbon__categories {

@@ -39,6 +39,7 @@
 // осознанно НЕ публичным API - см. историю в Тип5_бэклог.md, Эпик 4/8.1.
 
 const express = require('express');
+const compression = require('compression');
 const http = require('http');
 const path = require('path');
 const fs = require('fs');
@@ -139,6 +140,10 @@ function startNatComServer({
 }) {
   const app = express();
   const adminSessions = new Map();
+  // T5-112 (перф): без gzip браузер ученика по школьному Wi-Fi качает JS-бандл
+  // и JSON библиотеки/презентации несжатыми - главный бандл ~860KB против
+  // ~217KB в gzip, вклад в те самые "долго грузится" наравне с картинками.
+  app.use(compression());
   app.use(express.json());
   app.use(createAttachRole(adminSessions));
 
@@ -147,9 +152,10 @@ function startNatComServer({
   // (extraResources в packaged-сборке, относительный путь в dev). Если его
   // нет - ниже остаётся плейсхолдер-страница (dev без сборки студенческого
   // бандла, или более старая версия кода). extensions:['html'] даёт
-  // /admin вместо /admin.html (T5-090).
+  // /admin вместо /admin.html (T5-090). maxAge - бандл/картинки в нём
+  // именуются с content-hash (Vite), безопасно кэшировать надолго.
   if (studentWebDir && fs.existsSync(studentWebDir)) {
-    app.use(express.static(studentWebDir, { extensions: ['html'] }));
+    app.use(express.static(studentWebDir, { extensions: ['html'], maxAge: '1h' }));
   }
 
   app.get('/', (_req, res) => {
@@ -224,6 +230,10 @@ function startNatComServer({
         res.status(404).end();
         return;
       }
+      // Файлы библиотеки шьются в дистрибутив на этапе сборки и не меняются
+      // без переустановки - безопасно кэшировать надолго (важно, когда
+      // ученик несколько раз открывает/закрывает презентацию за урок).
+      res.set('Cache-Control', 'public, max-age=86400');
       res.type(guessLibraryAssetMime(req.params.fileName)).sendFile(filePath);
     } catch {
       res.status(404).end();

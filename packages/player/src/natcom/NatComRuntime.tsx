@@ -86,17 +86,23 @@ const NatComRuntime: React.FC<Props> = ({ properties }) => {
     if (view === 'home') refreshProjects();
   }, [view, refreshProjects]);
 
+  // После создания презентации сразу открываем её в Редакторе - иначе
+  // педагог остаётся на «Главной» и не понимает, что нужен ещё один клик,
+  // чтобы увидеть ленту готовых объектов (по аналогии с handleUseTemplate
+  // выше, который сразу открывает готовую презентацию).
   const handleCreate = useCallback(async (title: string, backgroundId: string) => {
     if (!window.natcomAPI || !context) return;
     setIsCreating(true);
     try {
-      await window.natcomAPI.createProject({
+      const created = await window.natcomAPI.createProject({
         title,
         backgroundId,
         ownerId: context.ownerId,
         organizationId: context.organizationId
       });
       await refreshProjects();
+      setActiveProjectId(created.id);
+      setView('editor');
     } finally {
       setIsCreating(false);
     }
