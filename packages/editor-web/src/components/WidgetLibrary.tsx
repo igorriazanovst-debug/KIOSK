@@ -7,15 +7,18 @@ import { CHRONOLINE_WIDGET_TYPE, CHRONOLINE_DEFAULT_PROPS, CHRONOLINE_DEFAULT_SI
 import { apiClient } from '../services/api-client';
 import './WidgetLibrary.css';
 
-// Временно: виджет «Хронолиния» на этапе обкатки доступен только этому
-// аккаунту (реальный запрет — на сервере, см. packages/server/src/config/chronolineAccess.ts;
-// здесь только скрываем пункт для остальных, чтобы не путать).
+// Временно: виджеты «Хронолиния» и «Конструктор природных сообществ»
+// доступны только этому аккаунту (реальный запрет — на сервере, см.
+// packages/server/src/config/chronolineAccess.ts и natcomAccess.ts; здесь
+// только скрываем пункт для остальных, чтобы не путать).
 const CHRONOLINE_ALLOWED_EMAILS = ['mokretcov.m@poznaikino.ru'];
+const NATCOM_ALLOWED_EMAILS = ['mokretcov.m@poznaikino.ru'];
 
 const WidgetLibrary: React.FC = () => {
   const { addWidget, project } = useEditorStore();
   const currentUserEmail = apiClient.getCurrentUserEmail();
   const isChronolineAllowed = !!currentUserEmail && CHRONOLINE_ALLOWED_EMAILS.includes(currentUserEmail.toLowerCase());
+  const isNatcomAllowed = !!currentUserEmail && NATCOM_ALLOWED_EMAILS.includes(currentUserEmail.toLowerCase());
 
   const widgetTypes = [
     {
@@ -112,13 +115,13 @@ const WidgetLibrary: React.FC = () => {
       defaultProps: CHRONOLINE_DEFAULT_PROPS,
       defaultSize: CHRONOLINE_DEFAULT_SIZE
     }] : []),
-    {
+    ...(isNatcomAllowed ? [{
       type: NATCOM_WIDGET_TYPE,
       name: 'Конструктор природных сообществ',
       icon: TreePine,
       defaultProps: NATCOM_DEFAULT_PROPS,
       defaultSize: NATCOM_DEFAULT_SIZE
-    }
+    }] : [])
   ];
 
   const handleAddWidget = (type: string, defaultProps: any) => {

@@ -5,6 +5,7 @@ import { FileService } from '../services/FileService';
 import { createAuditLog } from '../services/AuditService';
 import { ProjectAccessService } from '../services/ProjectAccessService';
 import { isEmailAllowedForChronoline, projectDataHasChronolineWidget } from '../config/chronolineAccess';
+import { isEmailAllowedForNatcom, projectDataHasNatcomWidget } from '../config/natcomAccess';
 import multer from 'multer';
 import path from 'path';
 
@@ -199,6 +200,13 @@ export class ProjectController {
         });
       }
 
+      if (projectDataHasNatcomWidget(projectData) && !isEmailAllowedForNatcom(req.client.email)) {
+        return res.status(403).json({
+          error: 'NatCom widget not allowed',
+          message: 'Виджет «Конструктор природных сообществ» пока недоступен для этого аккаунта'
+        });
+      }
+
       const project = await ProjectService.createProject({
         name,
         description,
@@ -340,6 +348,17 @@ export class ProjectController {
         return res.status(403).json({
           error: 'Chronoline widget not allowed',
           message: 'Виджет «Хронолиния» пока недоступен для этого аккаунта'
+        });
+      }
+
+      if (
+        Object.prototype.hasOwnProperty.call(updates, 'projectData') &&
+        projectDataHasNatcomWidget(updates.projectData) &&
+        !isEmailAllowedForNatcom(req.client.email)
+      ) {
+        return res.status(403).json({
+          error: 'NatCom widget not allowed',
+          message: 'Виджет «Конструктор природных сообществ» пока недоступен для этого аккаунта'
         });
       }
 
