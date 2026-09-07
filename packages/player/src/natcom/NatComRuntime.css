@@ -49,13 +49,7 @@
   margin-left: auto;
   font-size: 14px;
   color: rgba(238, 247, 239, 0.7);
-  white-space: normal;
-  text-align: right;
-  max-width: 480px;
-}
-
-.natcom-runtime__status-alt {
-  opacity: 0.7;
+  white-space: nowrap;
 }
 
 .natcom-runtime__status--error {

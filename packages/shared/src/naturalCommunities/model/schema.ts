@@ -54,6 +54,11 @@ export const LibraryObjectSchema = z.object({
   imageMediaId: z.string().min(1),
   /** Ссылка на MediaFile.id (видео поведения) - опционально: не все представители обязаны иметь анимацию для MVP-контента (см. план, раздел 5) */
   animationMediaId: z.string().nullable().optional(),
+  /** Ссылка на MediaFile.id (звук животного без видео) - для объектов без
+   * видео поведения, у которых нашлась реальная звукозапись (T5-112,
+   * замечание пользователя 2026-09-07: "не во всех карточках есть звук").
+   * Игнорируется, если задан animationMediaId - звук уже встроен в видео. */
+  soundMediaId: z.string().nullable().optional(),
 });
 export type LibraryObject = z.infer<typeof LibraryObjectSchema>;
 
