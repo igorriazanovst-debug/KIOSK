@@ -19,6 +19,7 @@ const router = Router();
 
 // Пути
 const PLAYER_PATH = path.join(__dirname, '..', '..', '..', 'player');
+const STUDENT_WEB_PATH = path.join(__dirname, '..', '..', '..', 'natcom-student-web');
 const TEMP_DIR = path.join(__dirname, '..', '..', 'data', 'temp');
 const OUTPUT_DIR = path.join(__dirname, '..', '..', 'data', 'builds');
 
@@ -285,6 +286,30 @@ async function buildDistribution(buildId, projectData, appName, appId, iconPath,
     console.log('🔨 Сборка React приложения...');
     await runCommand('npm', ['run', 'build'], PLAYER_PATH);
     console.log('✅ React приложение собрано');
+
+    // 5.5. Сборка веб-клиента ученика (natcom-student-web) - ОТДЕЛЬНЫЙ пакет,
+    // не подпакет player'а. electron-builder просто копирует его dist/ через
+    // extraResources (package.json), сам НЕ пересобирает - если пропустить
+    // этот шаг, каждая сборка молча тащит СТАРЫЙ dist, собранный когда-то
+    // вручную, и правки в packages/natcom-student-web/src просто не попадают
+    // в готовый .exe (нашли живьём: T5-112, кнопка звука у ученика не
+    // появлялась несколько сборок подряд именно по этой причине).
+    try {
+      await fs.access(STUDENT_WEB_PATH);
+      updateStatus('building', 55, 'Сборка веб-клиента ученика');
+      console.log('🔨 Сборка natcom-student-web...');
+      const studentWebNodeModules = path.join(STUDENT_WEB_PATH, 'node_modules');
+      try {
+        await fs.access(studentWebNodeModules);
+      } catch {
+        console.log('📦 Установка зависимостей natcom-student-web...');
+        await runCommand('npm', ['install'], STUDENT_WEB_PATH);
+      }
+      await runCommand('npm', ['run', 'build'], STUDENT_WEB_PATH);
+      console.log('✅ natcom-student-web собран');
+    } catch (e) {
+      console.warn('⚠️ natcom-student-web не найден или не собрался - пропускаем (не блокирует остальную сборку):', e.message);
+    }
 
     // 6. Сборка Electron дистрибутива
     const buildScript = getBuildScript(platform);
