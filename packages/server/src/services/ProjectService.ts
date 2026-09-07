@@ -19,14 +19,27 @@ export class ProjectService {
   }) {
     const prisma = getPrismaClient();
 
+    // Генерируем id заранее и встраиваем его в сам JSON-блок projectData —
+    // иначе projectData.id (который плеер шлёт на активацию и который
+    // используют билды/навигация) может не совпадать с реальным id строки в
+    // БД (например если клиент не проставил id или прислал своё внутреннее
+    // значение). Рассинхрон ловится валидатором как "projectId must be a
+    // valid UUID" при активации собранного .exe.
+    const crypto = await import('crypto');
+    const id = crypto.randomUUID();
+    const projectData = params.projectData && typeof params.projectData === 'object'
+      ? { ...params.projectData, id }
+      : params.projectData;
+
     const project = await prisma.project.create({
       data: {
+        id,
         name: params.name,
         description: params.description,
         licenseId: params.licenseId,
         organizationId: params.organizationId,
         createdByUserId: params.createdByUserId,
-        projectData: params.projectData,
+        projectData,
         canvasWidth: params.canvasWidth || 1920,
         canvasHeight: params.canvasHeight || 1080,
         canvasBackground: params.canvasBackground || '#1a1a1a',
@@ -156,6 +169,14 @@ export class ProjectService {
     const existing = await this.getProjectById(projectId, organizationId);
     if (!existing) {
       throw new Error('Project not found or access denied');
+    }
+
+    // Принудительно синхронизируем id внутри projectData с реальным id
+    // строки БД при каждом сохранении — самоисцеление для проектов, у
+    // которых id внутри projectData исторически разъехался с id в БД
+    // (см. комментарий в createProject).
+    if (updates.projectData && typeof updates.projectData === 'object') {
+      updates = { ...updates, projectData: { ...updates.projectData, id: projectId } };
     }
 
     const project = await prisma.project.update({

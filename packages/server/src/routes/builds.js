@@ -438,6 +438,15 @@ router.post('/', upload.single('icon'), async (req, res) => {
     } else {
       console.log('[builds] DB load failed, falling back to posted projectData');
     }
+    // Подстраховка: projectData.id, сохранённый в БД, у старых проектов может
+    // не совпадать с реальным id строки (см. ProjectService) — плеер шлёт
+    // именно этот id при активации, и рассинхрон ломает её ("projectId must
+    // be a valid UUID" или "Project does not belong to this license").
+    // projectId здесь уже проверенный реальный id (им же успешно нашли
+    // строку в БД), поэтому принудительно им же и перезаписываем.
+    if (projectId && finalProjectData && typeof finalProjectData === 'object') {
+      finalProjectData.id = projectId;
+    }
 
     buildDistribution(buildId, finalProjectData, appName, appId, req.file?.path, serverBaseUrl, licenseKey, platform).catch(err => {
       console.error(`Build ${buildId} failed:`, err);
@@ -571,6 +580,10 @@ router.post('/for-license/:licenseId', async (req, res, next) => {
         failed_at: new Date().toISOString()
       });
       return;
+    }
+    // См. аналогичную подстраховку в POST /api/builds выше.
+    if (typeof projectData === 'object') {
+      projectData.id = projectId;
     }
 
     buildDistribution(buildId, projectData, appName, appId, req.file?.path, serverBaseUrl, license.licenseKey, platform).catch(err => {
