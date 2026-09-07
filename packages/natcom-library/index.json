@@ -73,7 +73,8 @@
       "categoryId": "c1",
       "name": "Волк",
       "description": "Живёт стаями по 5-10 особей с чёткой иерархией. Основная добыча — копытные: олени, косули, кабаны, слабых и больных животных стая выбраковывает в первую очередь, тем самым оздоровляя популяцию жертв. Общаются воем, который слышен на расстоянии до нескольких километров. Пара волков сохраняет верность друг другу на протяжении многих лет.",
-      "imageMediaId": "m-o2"
+      "imageMediaId": "m-o2",
+      "soundMediaId": "m-sound-o2"
     },
     {
       "id": "o3",
@@ -87,7 +88,8 @@
       "categoryId": "c1",
       "name": "Белка",
       "description": "Грызун, проводящий почти всю жизнь на деревьях, прыжки между ветвями достигают 3-4 метров. Питается орехами, семенами шишек, грибами; на зиму делает многочисленные запасы, часть из которых забывает — так белки невольно помогают лесу распространять семена деревьев. Мех меняет дважды в год.",
-      "imageMediaId": "m-o4"
+      "imageMediaId": "m-o4",
+      "soundMediaId": "m-sound-o4"
     },
     {
       "id": "o5",
@@ -101,7 +103,8 @@
       "categoryId": "c2",
       "name": "Дятел пёстрый",
       "description": "Долбит кору и древесину крепким клювом в поисках личинок жуков-короедов, за день способен обследовать несколько деревьев. Барабанная дробь по сухому стволу — не поиск пищи, а сигнал другим дятлам о занятой территории. Выдалбливает дупла, которые после него часто заселяют другие птицы.",
-      "imageMediaId": "m-o6"
+      "imageMediaId": "m-o6",
+      "soundMediaId": "m-sound-o6"
     },
     {
       "id": "o7",
@@ -116,14 +119,16 @@
       "categoryId": "c2",
       "name": "Синица",
       "description": "Небольшая подвижная птица, зимой часто держится смешанными стайками вместе с другими мелкими птицами. Летом основа питания — насекомые и их личинки, одна пара синиц за сезон выкармливания птенцов способна съесть несколько тысяч гусениц, чем заметно помогает лесу. Зимой переходит на семена и не откажется от корма в кормушке.",
-      "imageMediaId": "m-o8"
+      "imageMediaId": "m-o8",
+      "soundMediaId": "m-sound-o8"
     },
     {
       "id": "o9",
       "categoryId": "c2",
       "name": "Иволга",
       "description": "Яркая птица, которую чаще слышно, чем видно — прячется в густой листве кроны. Песня напоминает флейту, а тревожный крик похож на кошачье мяуканье. Питается крупными насекомыми и гусеницами, к концу лета — ягодами и плодами. Гнездо в форме подвесной корзиночки плетёт высоко в развилке ветвей.",
-      "imageMediaId": "m-o9"
+      "imageMediaId": "m-o9",
+      "soundMediaId": "m-sound-o9"
     },
     {
       "id": "o10",
@@ -158,7 +163,8 @@
       "categoryId": "c4",
       "name": "Лягушка озёрная",
       "description": "Крупная озёрная лягушка, самая шумная из земноводных средней полосы — самцы издают громкое кваканье в брачный период. Активна и днём, и ночью, питается насекомыми, мелкими беспозвоночными и молодью рыб. Зимует на дне водоёмов, зарывшись в ил.",
-      "imageMediaId": "m-o14"
+      "imageMediaId": "m-o14",
+      "soundMediaId": "m-sound-o14"
     },
     {
       "id": "o15",
@@ -215,7 +221,8 @@
       "categoryId": "c2",
       "name": "Глупыш",
       "description": "Морская птица, внешне похожая на чайку, но родственная альбатросам. Почти всю жизнь проводит в открытом море, на сушу выходит только для гнездования на скалистых обрывах. При опасности способна выплюнуть в противника струю едкой маслянистой жидкости из желудка.",
-      "imageMediaId": "m-o22"
+      "imageMediaId": "m-o22",
+      "soundMediaId": "m-sound-o22"
     },
     {
       "id": "o23",
@@ -279,7 +286,8 @@
       "categoryId": "c2",
       "name": "Куропатка белая",
       "description": "Птица, круглый год меняющая окраску маскировочного оперения: летом бурая под цвет тундры, зимой почти полностью белая. Питается почками, побегами и семенами кустарников, зимой разгребает снег лапами в поисках пищи. При опасности взлетает внезапно с громким хлопаньем крыльев, отвлекая хищника от гнезда.",
-      "imageMediaId": "m-o31"
+      "imageMediaId": "m-o31",
+      "soundMediaId": "m-sound-o31"
     },
     {
       "id": "o32",
@@ -385,14 +393,16 @@
       "categoryId": "c2",
       "name": "Желна",
       "description": "Крупнейший дятел тайги, полностью чёрного оперения с ярко-красной шапочкой на голове. Способен продалбливать глубокие прямоугольные отверстия в стволах в поисках муравьёв и личинок жуков-древоточцев. Заброшенные дупла желны достаточно велики, чтобы в них селились совы и куницы.",
-      "imageMediaId": "m-o46"
+      "imageMediaId": "m-o46",
+      "soundMediaId": "m-sound-o46"
     },
     {
       "id": "o47",
       "categoryId": "c2",
       "name": "Филин",
       "description": "Одна из крупнейших сов мира, узнаваема по характерным перьевым «ушкам» на голове и ярко-оранжевым глазам. Охотится ночью на грызунов, зайцев и даже других хищных птиц, обладает почти бесшумным полётом. Территориальные крики пары филинов слышны на несколько километров тихой ночью.",
-      "imageMediaId": "m-o47"
+      "imageMediaId": "m-o47",
+      "soundMediaId": "m-sound-o47"
     },
     {
       "id": "o48",
@@ -456,14 +466,16 @@
       "categoryId": "c1",
       "name": "Кабан",
       "description": "Всеядное парнокопытное с мощным пятачком, которым перепахивает лесную подстилку в поисках корней, желудей и личинок. Такая «пахота» рыхлит почву и способствует прорастанию семян деревьев. Детёныши рождаются полосатыми — камуфляж, который исчезает к нескольким месяцам жизни.",
-      "imageMediaId": "m-o56"
+      "imageMediaId": "m-o56",
+      "soundMediaId": "m-sound-o56"
     },
     {
       "id": "o57",
       "categoryId": "c1",
       "name": "Косуля",
       "description": "Некрупный стройный олень, самцы носят небольшие рога с несколькими отростками. При опасности издаёт характерный отрывистый лающий звук и убегает резкими прыжками, отпугивая хищника белым пятном на задней части тела. Летом питается травой и листвой, зимой переходит на кору и почки кустарников.",
-      "imageMediaId": "m-o57"
+      "imageMediaId": "m-o57",
+      "soundMediaId": "m-sound-o57"
     },
     {
       "id": "o58",
@@ -491,14 +503,16 @@
       "categoryId": "c2",
       "name": "Фазан уссурийский",
       "description": "Крупная яркая птица с длинным хвостом, самцы значительно наряднее скромно окрашенных самок. Предпочитает густые заросли кустарника и опушки леса, хорошо бегает, но взлетает неохотно и только в случае опасности. Питается семенами, ягодами, насекомыми и мелкими беспозвоночными.",
-      "imageMediaId": "m-o61"
+      "imageMediaId": "m-o61",
+      "soundMediaId": "m-sound-o61"
     },
     {
       "id": "o62",
       "categoryId": "c2",
       "name": "Журавль чёрный",
       "description": "Редкий вид журавля с тёмным оперением и белой «шапочкой» на голове, гнездится на труднодоступных болотах и марях таёжной зоны Дальнего Востока. Занесён в Красную книгу, один из наименее изученных журавлей мира. Пары сохраняют верность друг другу на протяжении многих лет.",
-      "imageMediaId": "m-o62"
+      "imageMediaId": "m-o62",
+      "soundMediaId": "m-sound-o62"
     },
     {
       "id": "o63",
@@ -512,14 +526,16 @@
       "categoryId": "c2",
       "name": "Баклан",
       "description": "Крупная водоплавающая птица с тёмным оперением, отлично ныряет и подолгу преследует рыбу под водой. В отличие от уток перья баклана слабо смазаны жиром и намокают, поэтому после рыбалки птица подолгу сушит расправленные крылья на солнце. Гнездится колониями на прибрежных скалах и деревьях.",
-      "imageMediaId": "m-o64"
+      "imageMediaId": "m-o64",
+      "soundMediaId": "m-sound-o64"
     },
     {
       "id": "o65",
       "categoryId": "c2",
       "name": "Пустельга",
       "description": "Небольшой сокол, узнаваем по характерной манере охоты — способен неподвижно «зависать» в воздухе на одном месте, высматривая добычу внизу. Питается преимущественно мелкими грызунами и крупными насекомыми. Гнёзд не строит, занимает старые гнёзда ворон и других птиц.",
-      "imageMediaId": "m-o65"
+      "imageMediaId": "m-o65",
+      "soundMediaId": "m-sound-o65"
     },
     {
       "id": "o66",
@@ -568,14 +584,16 @@
       "categoryId": "c1",
       "name": "Волк степной",
       "description": "Подвид волка, приспособленный к жизни в открытых степных пространствах, светлее и немного мельче лесных волков. Охотится преимущественно на сурков, зайцев и копытных, при недостатке крупной добычи переходит на грызунов и падаль. Держится небольшими семейными группами, в степи, лишённой укрытий, полагается на скорость и выносливость при преследовании добычи.",
-      "imageMediaId": "m-o72"
+      "imageMediaId": "m-o72",
+      "soundMediaId": "m-sound-o2"
     },
     {
       "id": "o73",
       "categoryId": "c1",
       "name": "Корсак",
       "description": "Некрупная степная лисица с крупными ушами, помогающими улавливать движение грызунов под землёй и отдавать лишнее тепло в жару. Роет собственные норы или занимает чужие — сурчиные и барсучьи. Питается мышевидными грызунами, ящерицами, насекомыми, при случае разоряет птичьи гнёзда.",
-      "imageMediaId": "m-o73"
+      "imageMediaId": "m-o73",
+      "soundMediaId": "m-sound-o73"
     },
     {
       "id": "o74",
@@ -597,14 +615,16 @@
       "categoryId": "c2",
       "name": "Дрофа",
       "description": "Одна из самых тяжёлых летающих птиц мира, самцы могут весить до 16 килограммов. Прекрасно бегает по открытой степи, взлетает неохотно и только при явной опасности. Питается растительной пищей, семенами и насекомыми, численность вида сильно сократилась из-за распашки степей и занесена в Красную книгу.",
-      "imageMediaId": "m-o76"
+      "imageMediaId": "m-o76",
+      "soundMediaId": "m-sound-o76"
     },
     {
       "id": "o77",
       "categoryId": "c2",
       "name": "Курганник",
       "description": "Крупный степной канюк, часто высматривает добычу, паря широкими кругами высоко над открытой местностью. Охотится на сусликов, полёвок и другую степную мелкую живность, гнездится на одиноких деревьях, курганах или столбах линий электропередач. Пары из года в год возвращаются к одному и тому же гнезду.",
-      "imageMediaId": "m-o77"
+      "imageMediaId": "m-o77",
+      "soundMediaId": "m-sound-o77"
     },
     {
       "id": "o78",
@@ -661,7 +681,8 @@
       "categoryId": "c2",
       "name": "Джек (дрофа-красотка)",
       "description": "Некрупная пустынная дрофа с характерным чёрно-белым хохлом на шее, который распускает во время брачного танца. Прекрасно бегает по открытому песку и щебню, взлетает лишь в крайнем случае. Питается насекомыми, ящерицами, семенами и побегами пустынных растений.",
-      "imageMediaId": "m-o85"
+      "imageMediaId": "m-o85",
+      "soundMediaId": "m-sound-o76"
     },
     {
       "id": "o86",
@@ -693,109 +714,866 @@
     }
   ],
   "media": [
-    { "id": "m-bg-1", "fileName": "bg-les.png", "mimeType": "image/png", "fileSize": 7860423, "sha256": "4680c99b27d6e27e5106c9d99358304c0b5d2c18bf6771989f6111c6f1074ce2" },
-    { "id": "m-o1", "fileName": "medved.png", "mimeType": "image/png", "fileSize": 3672916, "sha256": "ea319ec47c63c0447d6eb3716d55af688c46a65c385affc9b4e390d3d86b2129" },
-    { "id": "m-o2", "fileName": "volk.png", "mimeType": "image/png", "fileSize": 4291390, "sha256": "12f08cda3dff97630e5da3c6623bb39f8b4ef37f0d154a394b6c0004ab2ae4d5" },
-    { "id": "m-o3", "fileName": "lisica.png", "mimeType": "image/png", "fileSize": 4848600, "sha256": "d6cc8f251331bf70c85b1c48dbc8e12dd5b339ab3725c4199c55578d350fa92f" },
-    { "id": "m-o4", "fileName": "belka.png", "mimeType": "image/png", "fileSize": 4817398, "sha256": "0139e95b448ab00a7769a15ec6118178428aed43f5a24d2ca6240e39ffc0aba7" },
-    { "id": "m-o5", "fileName": "ezh.png", "mimeType": "image/png", "fileSize": 5172841, "sha256": "cd47e68e9cc62cf7515f7246d854912b6e7ffa391c1e4d0cc994302de9a805d2" },
-    { "id": "m-o6", "fileName": "dyatel.png", "mimeType": "image/png", "fileSize": 3442779, "sha256": "8e4b91eee655c246aaa7e501f4b79393c774c808f8f9cfd0eb12ab2196a7e71b" },
-    { "id": "m-o7", "fileName": "sova.png", "mimeType": "image/png", "fileSize": 5499579, "sha256": "f5b7a48257c5e7da869a57c035dcb4052a1c6f3bb7d121ca233a13d9d1ee3d12" },
-    { "id": "m-o8", "fileName": "sinica.png", "mimeType": "image/png", "fileSize": 3092182, "sha256": "b71b0d6f2cd591e609cad4d329d080f4bd5867b55b229ddc555f0778ab6a2b6f" },
-    { "id": "m-o9", "fileName": "ivolga.png", "mimeType": "image/png", "fileSize": 4305574, "sha256": "0a8b93395cc54295d30995d7a10dd19cfb3000fa93e911580bffafc4e93ee424" },
-    { "id": "m-o10", "fileName": "el.png", "mimeType": "image/png", "fileSize": 5408170, "sha256": "d82a33040816016246571f9d95dfba75dfac51139b8cb813d57695614d3259cb" },
-    { "id": "m-o11", "fileName": "bereza.png", "mimeType": "image/png", "fileSize": 3544145, "sha256": "9252a1083be1100edb136ac7fe9f5b7b106c3132229542e6460c10d2fed87791" },
-    { "id": "m-o12", "fileName": "dub.png", "mimeType": "image/png", "fileSize": 5033870, "sha256": "35bf4e3694aca328be25f2cc57109ef7e5c34535c33942a39323dfe64ed6cb77" },
-    { "id": "m-o13", "fileName": "landysh.png", "mimeType": "image/png", "fileSize": 5299464, "sha256": "f6c6e193626f778b2fc0d1cba70b0cc9ec60429d6746113297706941208161f2" },
-    { "id": "m-o14", "fileName": "lyagushka.png", "mimeType": "image/png", "fileSize": 3405499, "sha256": "f58a014301c0148b99bde6a3d6b9a48942db2e486b5090b051703d3bc880b815" },
-    { "id": "m-bg-2", "fileName": "bg-arktika.png", "mimeType": "image/png", "fileSize": 4827296, "sha256": "4de0d24df965e7c4d4ae630f90ac8164a906a8b00c7bccf7253593d514b846a1" },
-    { "id": "m-o15", "fileName": "medved-white.png", "mimeType": "image/png", "fileSize": 4818132, "sha256": "1de7b112f4039bc1be7812525f0004f9a5fb48365f06e00cfa85cbb9995907bd" },
-    { "id": "m-o16", "fileName": "morzh.png", "mimeType": "image/png", "fileSize": 3274113, "sha256": "8befd7292c5198d089c96da200a484d9c73477389d3889fd0627de9d42b322fa" },
-    { "id": "m-o17", "fileName": "pesec.png", "mimeType": "image/png", "fileSize": 4092722, "sha256": "b7c96404a4bda6d1520f98e840946ee0e1b361958088d482465236cbc3221e9f" },
-    { "id": "m-o18", "fileName": "lahtak.png", "mimeType": "image/png", "fileSize": 2821727, "sha256": "652bcec66aef1398e1e5f9d73c9d3c712fc20c0d2fe06b0d34441c49097b6d1b" },
-    { "id": "m-o19", "fileName": "beluha.png", "mimeType": "image/png", "fileSize": 2929643, "sha256": "f07520883fb4dbde1e94e497f1b4f89d1ddc9b8f49b9ccdcf130bb4c15ef88ed" },
-    { "id": "m-o20", "fileName": "ovcebyk.png", "mimeType": "image/png", "fileSize": 4420641, "sha256": "d168a9ada9f7cb316b57d8ef7b9499d5cf898c26fc0616e1672d2c26ecdf1577" },
-    { "id": "m-o21", "fileName": "sova-polyarnaya.png", "mimeType": "image/png", "fileSize": 4129606, "sha256": "edfe8df41938cab31b7061b4e7cf7e77885e79bc0b0a5c9b520832a24f24599d" },
-    { "id": "m-o22", "fileName": "glupysh.png", "mimeType": "image/png", "fileSize": 4088483, "sha256": "8520471978243eb3a312a4d7808b776d5e6ca3ac506f0093a248824fa39db256" },
-    { "id": "m-o23", "fileName": "topolik.png", "mimeType": "image/png", "fileSize": 4656309, "sha256": "bc06c65bd13a1ef8a54d18d8c3eb563610037757286603a376e8d1fd84609975" },
-    { "id": "m-o24", "fileName": "yagel.png", "mimeType": "image/png", "fileSize": 4729238, "sha256": "a8fce0a6fa2acda08c23b68d5f837d6f0e05d0fe9a5d6bfcac373c973878ee07" },
-    { "id": "m-o25", "fileName": "ksantoria.png", "mimeType": "image/png", "fileSize": 5316616, "sha256": "b363d2e7dac57868efbf3bd3d8410370e5ff568db9461808e695632cc1cba2b6" },
-    { "id": "m-bg-3", "fileName": "bg-tundra.png", "mimeType": "image/png", "fileSize": 5616877, "sha256": "a07ec38fea6f03de11b250bf40da496bbebf8f2076dc1794fc7837edb0ad0670" },
-    { "id": "m-o26", "fileName": "lemming.png", "mimeType": "image/png", "fileSize": 3887423, "sha256": "1e56e94ead471311c67be57b0174b4d9be1ad1fc27b2a83254752f596ecff13a" },
-    { "id": "m-o27", "fileName": "olen-severny.png", "mimeType": "image/png", "fileSize": 3658552, "sha256": "98d6b6d2ba81c236d0e6203eeaa8e8aeba8c5971b66a334572b52081710c865d" },
-    { "id": "m-o28", "fileName": "rosomaha.png", "mimeType": "image/png", "fileSize": 4715377, "sha256": "128fd55daaa086dcaf084e48c84b5c2686f9c276f7b3fd1a4284dffa6c9ea87b" },
-    { "id": "m-o29", "fileName": "volk-polyarny.png", "mimeType": "image/png", "fileSize": 3355485, "sha256": "3dc7e48cde14e97e85581af223f15c9501898d281086457973d0e37cfa6608b3" },
-    { "id": "m-o30", "fileName": "zayac-belyak.png", "mimeType": "image/png", "fileSize": 3262278, "sha256": "a2b74f92e6d3ac74d7950a267de554667ce9a45c875f1bfc7212efbd140831aa" },
-    { "id": "m-o31", "fileName": "kuropatka.png", "mimeType": "image/png", "fileSize": 3188511, "sha256": "6b2899aabb4d0273635ad88a4a4c4959c2404aa8cd0ee3a600ff0f4b83bdbfbb" },
-    { "id": "m-o32", "fileName": "sterh.png", "mimeType": "image/png", "fileSize": 4204313, "sha256": "ece380d84664f88d777abb3e5bbb5f93dd7ceea0272653c3571871ac6d0e5c50" },
-    { "id": "m-o33", "fileName": "krechet.png", "mimeType": "image/png", "fileSize": 3740353, "sha256": "2b28065195f7d3b1b8cfd188b3afc4ea7d4204cbf8a9314178b924103e5091fe" },
-    { "id": "m-o34", "fileName": "lun-pegy.png", "mimeType": "image/png", "fileSize": 2435170, "sha256": "cc7af35bc9a1902e0267f031f0920fcba75cedec6541a2fcfd6f1e450102c21b" },
-    { "id": "m-o35", "fileName": "moroshka.png", "mimeType": "image/png", "fileSize": 4252462, "sha256": "4743567502378e4d4a0fb58d86ec50ced19c7ff5a2723ac792d2ebfda0b1569f" },
-    { "id": "m-o36", "fileName": "bereza-karlikovaya.png", "mimeType": "image/png", "fileSize": 5491977, "sha256": "b66b874bd6d9867b58ae07f45b8534532cfa55e97331f9a99f4cae091389d63b" },
-    { "id": "m-o37", "fileName": "myatlik.png", "mimeType": "image/png", "fileSize": 6158459, "sha256": "9414373e0145a774efd22dd75cb5e9b7eb1edd5eb5dec2abfd4a6a87c461104d" },
-    { "id": "m-o38", "fileName": "brusnika.png", "mimeType": "image/png", "fileSize": 5821859, "sha256": "fb1a2bafea644add8393a4cb38b1d5b2d41411d3d537ffc5df3a948b198b9320" },
-    { "id": "m-bg-4", "fileName": "bg-taiga-sib.png", "mimeType": "image/png", "fileSize": 5691446, "sha256": "02221ec58141baf8bd7da62547af6f63304b6c2106ff08ee3596f9b5f1ebab45" },
-    { "id": "m-o39", "fileName": "los.png", "mimeType": "image/png", "fileSize": 3452647, "sha256": "8342dcf3ddcae709ccca8bb875ab05ac72b832446c2c6c00e2c658af2a2a5d45" },
-    { "id": "m-o40", "fileName": "kabarga.png", "mimeType": "image/png", "fileSize": 3255639, "sha256": "83609d0be1608c9374504747bccb9939e3a2271896c7589e62e8beb36fdb7be2" },
-    { "id": "m-o41", "fileName": "burunduk.png", "mimeType": "image/png", "fileSize": 4910263, "sha256": "7131db780fdbda56f00162fc72110061a5e1310b372087abc16ecbcc0248cf4e" },
-    { "id": "m-o42", "fileName": "letyaga.png", "mimeType": "image/png", "fileSize": 3173262, "sha256": "21515a43c671200df9541af80e30570fc58d9b9e7b800212a2083a8ea1e46dc5" },
-    { "id": "m-o43", "fileName": "gornostay.png", "mimeType": "image/png", "fileSize": 2738953, "sha256": "1d389c91c645c5ec75318c3c2bb604fd6ef2b5bba0aa9d9a8152d6b62f8d83d5" },
-    { "id": "m-o44", "fileName": "izyubr.png", "mimeType": "image/png", "fileSize": 5064934, "sha256": "83d95dd98ab0af7dcea8f8f1b3637668a336e82d1e02a362ea20c5c4737c116e" },
-    { "id": "m-o45", "fileName": "gluhar.png", "mimeType": "image/png", "fileSize": 3253539, "sha256": "64c9d7bebb331dcb1a5543a1d534bba2228affafcde8757ea6bc6fa07502d01a" },
-    { "id": "m-o46", "fileName": "zhelna.png", "mimeType": "image/png", "fileSize": 4901505, "sha256": "5f953538e7431ac78a9ec2be5a50f7b4daf21695761daf3b2f0aca6665dd8ef0" },
-    { "id": "m-o47", "fileName": "filin.png", "mimeType": "image/png", "fileSize": 4558592, "sha256": "4cfe47b7bf7e9b80266e3a494c096969e3aebe139063534317c7e258bdfe78e4" },
-    { "id": "m-o48", "fileName": "sapsan.png", "mimeType": "image/png", "fileSize": 4223300, "sha256": "9e58dcdb878af051746af494c357f2300dc71546996d83a93c74292c8b2a3700" },
-    { "id": "m-o49", "fileName": "kedr.png", "mimeType": "image/png", "fileSize": 6131648, "sha256": "b77df34b4f69af5c7aecab76563457d7cbcccb306a3015f5e55937e6ea8be184" },
-    { "id": "m-o50", "fileName": "listvennica.png", "mimeType": "image/png", "fileSize": 4782840, "sha256": "67d9bdd8a4fb8e06f64d5090cd90e432f7bfb494fe7a9d0f3feb58c644793257" },
-    { "id": "m-o51", "fileName": "mozhevelnik.png", "mimeType": "image/png", "fileSize": 5235598, "sha256": "bcf009fece3bd88624dd7db0f7bb5cebd22f1690f2ffb07ba023be479ab5892a" },
-    { "id": "m-o52", "fileName": "ryabina.png", "mimeType": "image/png", "fileSize": 5689153, "sha256": "3138385ae337fd59418772620609f6a89f0e64399a0b74ca3077492efd87f64f" },
-    { "id": "m-bg-5", "fileName": "bg-taiga-dv.png", "mimeType": "image/png", "fileSize": 7650730, "sha256": "cad3e20dc5c561ca07930511ba5548dde52af9710a41e4b09d38f3f6aee16cb8" },
-    { "id": "m-o53", "fileName": "tigr.png", "mimeType": "image/png", "fileSize": 4223572, "sha256": "01de557380421da9feecac4303917f57b7c85ad5b320843a4774d96b360c6713" },
-    { "id": "m-o54", "fileName": "leopard.png", "mimeType": "image/png", "fileSize": 5162166, "sha256": "ebdac1e5d166d47785ea4bf4b9fd3c1ba3c5e05c2de16845a20875adfb175006" },
-    { "id": "m-o55", "fileName": "medved-gimalaysky.png", "mimeType": "image/png", "fileSize": 3245512, "sha256": "e3f0c244acfee7fd701df84fa63a922709951e7d08b3ab9fb67e64b4b3a28c96" },
-    { "id": "m-o56", "fileName": "kaban.png", "mimeType": "image/png", "fileSize": 3061973, "sha256": "df3e364273141ab3a5213d6233bbbb28007ab4a9f8d54d82774a4778ac9166cf" },
-    { "id": "m-o57", "fileName": "kosulya.png", "mimeType": "image/png", "fileSize": 2341901, "sha256": "49c2569e7d464f31d9e547ca8eedc47ed45b585b24d3ed64a5ef7620d075f4a2" },
-    { "id": "m-o58", "fileName": "kunica.png", "mimeType": "image/png", "fileSize": 3097064, "sha256": "41e0d58fd148cf1214858cc55d705d9c11c0763fcaffaa324f7b5059bd3d9809" },
-    { "id": "m-o59", "fileName": "hor.png", "mimeType": "image/png", "fileSize": 4469381, "sha256": "e5c9219ece97fae16d2ccfe124a47fc45b96b7f2e3665d77eadfa8a969cc8c59" },
-    { "id": "m-o60", "fileName": "mandarinka.png", "mimeType": "image/png", "fileSize": 4682021, "sha256": "cedccc833f793fedaea93d99e7a6d00c039fc737564a5e7e8b78bae629b60ca6" },
-    { "id": "m-o61", "fileName": "fazan.png", "mimeType": "image/png", "fileSize": 3456380, "sha256": "6a25eeec8850d4dfc32ae1d3f89b584d9e27a9ae2222d5070adc710543682e4d" },
-    { "id": "m-o62", "fileName": "zhuravl-chernyi.png", "mimeType": "image/png", "fileSize": 2929847, "sha256": "ec957778cd732f8b38d926715e8c7f73dfe755b71cd3c0661f1ffd2e043f3dbb" },
-    { "id": "m-o63", "fileName": "aist.png", "mimeType": "image/png", "fileSize": 2652439, "sha256": "c75c0dc51a1ff4ba39a12e2d7705b1fcade37db0f98117bc7618b8b21e3138d4" },
-    { "id": "m-o64", "fileName": "baklan.png", "mimeType": "image/png", "fileSize": 4634065, "sha256": "0aac9130b31d749287573ef8a96ca0093a55d142b167a609bb7ade4f8a19ade4" },
-    { "id": "m-o65", "fileName": "pustelga.png", "mimeType": "image/png", "fileSize": 3741656, "sha256": "e120f9b2b84a380068129002f52e6f1cb9bd55756e4e8c8c02ec824f8128c474" },
-    { "id": "m-o66", "fileName": "barhat.png", "mimeType": "image/png", "fileSize": 5687753, "sha256": "f7a26c42f5175e246230599ca3ecb5e5135c19348eff80f996aebace9e7998fb" },
-    { "id": "m-o67", "fileName": "kedr-koreysky.png", "mimeType": "image/png", "fileSize": 5535157, "sha256": "bd5e49ccfcac0acfcaf352c89fcdfb22dc839430c408bd4d102f199db28bca7b" },
-    { "id": "m-o68", "fileName": "limonnik.png", "mimeType": "image/png", "fileSize": 5437843, "sha256": "46e8fc60f46f4f0f9b796859f44f7497ce1c1bc253d9a865f5fc434873f2c691" },
-    { "id": "m-o69", "fileName": "eleuterokokk.png", "mimeType": "image/png", "fileSize": 3969064, "sha256": "14be28070ecba5bbf8f4702314bc2c855f2073efaa07472fc44dc52ff604e1a0" },
-    { "id": "m-o70", "fileName": "dub-mongolsky.png", "mimeType": "image/png", "fileSize": 5344349, "sha256": "bd097c872c5d052b28a1670a5bb5c54328d5c437653b434c797ea67225471264" },
-    { "id": "m-o71", "fileName": "rododendron.png", "mimeType": "image/png", "fileSize": 6108994, "sha256": "b8eeed1347e0845182e5879a9a285a591741b56ed4e6cd1359c9b1f998624ea9" },
-    { "id": "m-bg-6", "fileName": "bg-step.png", "mimeType": "image/png", "fileSize": 5137680, "sha256": "d27a526eebc19cf083dbbf357b3f6a75ae02dfd333b4206553c30db455e1195f" },
-    { "id": "m-o72", "fileName": "volk-stepnoy.png", "mimeType": "image/png", "fileSize": 3883377, "sha256": "daa53b2f7d994a4c7ab4c57b10d5f738a7b172aa55a8811ac869255adcbd49fe" },
-    { "id": "m-o73", "fileName": "korsak.png", "mimeType": "image/png", "fileSize": 2816489, "sha256": "71bb7da9cbf3ab055b959853f5316a7fbd42332fcfe69790656b01f27d678d12" },
-    { "id": "m-o74", "fileName": "saygak.png", "mimeType": "image/png", "fileSize": 3905355, "sha256": "2726cc35619cccda32eb8bec84408463dbe70a82e1b78640eb7c01fbf7dc1cb9" },
-    { "id": "m-o75", "fileName": "tushkanchik.png", "mimeType": "image/png", "fileSize": 2748232, "sha256": "d70838c14a5eac5133c6446cbeea2bacafbe576d803d8969463238702b69063b" },
-    { "id": "m-o76", "fileName": "drofa.png", "mimeType": "image/png", "fileSize": 2897571, "sha256": "31675408074411ae6d4e64fcd9a20ee42ae4e3e82be6dff023204e7a4b0e646f" },
-    { "id": "m-o77", "fileName": "kurgannik.png", "mimeType": "image/png", "fileSize": 4397877, "sha256": "868d78a167b77a5b346f8c8dcd9e3ef75bf9f36d1569150e73a8b2d618f4040e" },
-    { "id": "m-o78", "fileName": "kovyl.png", "mimeType": "image/png", "fileSize": 5756338, "sha256": "21adf72743c47963f6c6a13a4188448f9951cce219686d547102ce1110317f2a" },
-    { "id": "m-o79", "fileName": "kachim.png", "mimeType": "image/png", "fileSize": 6114480, "sha256": "9d52c05b1f8c10ce64b15e6a7f509ccce74979bcc8e2ee2988d454497de9036b" },
-    { "id": "m-o80", "fileName": "tulpan.png", "mimeType": "image/png", "fileSize": 855936, "sha256": "8a7128c496e9f3daa42332f19c8998af00af3584a5241b687e2c26a3f8da143d" },
-    { "id": "m-bg-7", "fileName": "bg-desert.png", "mimeType": "image/png", "fileSize": 4373205, "sha256": "fdf6999e4aa7c487a41877eee1a3cff0af06808f562785f01101067b20648b8e" },
-    { "id": "m-o81", "fileName": "verblyud.png", "mimeType": "image/png", "fileSize": 4895626, "sha256": "2ebf2359bfe535905f0f8924ee874f24a35754daf3500af8f9f7578ee9f8a37c" },
-    { "id": "m-o82", "fileName": "ezh-ushasty.png", "mimeType": "image/png", "fileSize": 4555367, "sha256": "69904908d72b5f30c81439f1b617d6e13018ae0ca3a181fcd9bae3b21c8198e5" },
-    { "id": "m-o83", "fileName": "dzheyran.png", "mimeType": "image/png", "fileSize": 3697889, "sha256": "e3fe4fcc9216f2a23f9be0bb0ffa1dca1098b702b3866ca905a7a42e3f712d47" },
-    { "id": "m-o84", "fileName": "cherepaha.png", "mimeType": "image/png", "fileSize": 5101246, "sha256": "b80af6172ec28d0337b0ba0afc0af2adc5c3f9237d3fdbd13e3149edc7ea9330" },
-    { "id": "m-o85", "fileName": "dzhek.png", "mimeType": "image/png", "fileSize": 3135678, "sha256": "912b299f3d3c14cddb5a1ec174b869742118a603e8ad1b9fd6b9a4adbcd41aef" },
-    { "id": "m-o86", "fileName": "saksaulnaya-soyka.png", "mimeType": "image/png", "fileSize": 3112211, "sha256": "56a79f57fe9d01a059f47c29b65c6b5b6619b3989409daf1c7daa5dd565109c5" },
-    { "id": "m-o87", "fileName": "saksaul.png", "mimeType": "image/png", "fileSize": 4427423, "sha256": "a7684718fe86d80340e7b34fc2f1ea1b99f4081f09f4b3da4e6cbe3b6ef0f64d" },
-    { "id": "m-o88", "fileName": "pyrey.png", "mimeType": "image/png", "fileSize": 3720241, "sha256": "078b4885a05fea9aa68e59f8fbc616b1c0a9f8e292909a5d4175eaf375be60ca" },
-    { "id": "m-o89", "fileName": "polyn.png", "mimeType": "image/png", "fileSize": 5470613, "sha256": "088ffa2b4b18c9517ec72baf751bc3a7d7cc70929518db0e26dd494080deb6fc" },
-    { "id": "m-anim-o1", "fileName": "medved-behavior.mp4", "mimeType": "video/mp4", "fileSize": 2985569, "sha256": "6680ca23081536e31026771daf23fa8976ce297c3312a38e3d756c57f5253542" },
-    { "id": "m-anim-o7", "fileName": "sova-behavior.mp4", "mimeType": "video/mp4", "fileSize": 4205783, "sha256": "3a1d76f825fb5c636db7d28d23f458e05c9aa38532edb8e80e094fa98dc90b91" },
-    { "id": "m-anim-o15", "fileName": "medved-white-behavior.mp4", "mimeType": "video/mp4", "fileSize": 3033266, "sha256": "38344c662a87c698d2d2be6fca2b2890931b0f658dd6e862e4b015a1579f6d4e" },
-    { "id": "m-anim-o27", "fileName": "olen-severny-behavior.mp4", "mimeType": "video/mp4", "fileSize": 2895834, "sha256": "d60c10ee78f9943b677aed18feafc5e9562f6aa6b4254a49b4278e9b6a0784aa" },
-    { "id": "m-anim-o39", "fileName": "los-behavior.mp4", "mimeType": "video/mp4", "fileSize": 2386087, "sha256": "d148214d48278083d126155f8e7b82fc7dce874614131eac88bd14f1f429eda8" },
-    { "id": "m-anim-o53", "fileName": "tigr-behavior.mp4", "mimeType": "video/mp4", "fileSize": 3433536, "sha256": "6a89bbe04fbae68b077da6c3deb61b90ebdf340acee90cc5ad2307ab47b80901" },
-    { "id": "m-anim-o74", "fileName": "saygak-behavior.mp4", "mimeType": "video/mp4", "fileSize": 3019110, "sha256": "653dd21085b7c39e453af0773917b28c4c354525687ec75937cc8e15975ca75a" },
-    { "id": "m-anim-o81", "fileName": "verblyud-behavior.mp4", "mimeType": "video/mp4", "fileSize": 3018390, "sha256": "b7222569c8c50313c98ffd9d052063ee191f6fe9d2ee02eb4fdc5c857f115877" }
+    {
+      "id": "m-bg-1",
+      "fileName": "bg-les.png",
+      "mimeType": "image/png",
+      "fileSize": 7860423,
+      "sha256": "4680c99b27d6e27e5106c9d99358304c0b5d2c18bf6771989f6111c6f1074ce2"
+    },
+    {
+      "id": "m-o1",
+      "fileName": "medved.png",
+      "mimeType": "image/png",
+      "fileSize": 3672916,
+      "sha256": "ea319ec47c63c0447d6eb3716d55af688c46a65c385affc9b4e390d3d86b2129"
+    },
+    {
+      "id": "m-o2",
+      "fileName": "volk.png",
+      "mimeType": "image/png",
+      "fileSize": 4291390,
+      "sha256": "12f08cda3dff97630e5da3c6623bb39f8b4ef37f0d154a394b6c0004ab2ae4d5"
+    },
+    {
+      "id": "m-o3",
+      "fileName": "lisica.png",
+      "mimeType": "image/png",
+      "fileSize": 4848600,
+      "sha256": "d6cc8f251331bf70c85b1c48dbc8e12dd5b339ab3725c4199c55578d350fa92f"
+    },
+    {
+      "id": "m-o4",
+      "fileName": "belka.png",
+      "mimeType": "image/png",
+      "fileSize": 4817398,
+      "sha256": "0139e95b448ab00a7769a15ec6118178428aed43f5a24d2ca6240e39ffc0aba7"
+    },
+    {
+      "id": "m-o5",
+      "fileName": "ezh.png",
+      "mimeType": "image/png",
+      "fileSize": 5172841,
+      "sha256": "cd47e68e9cc62cf7515f7246d854912b6e7ffa391c1e4d0cc994302de9a805d2"
+    },
+    {
+      "id": "m-o6",
+      "fileName": "dyatel.png",
+      "mimeType": "image/png",
+      "fileSize": 3442779,
+      "sha256": "8e4b91eee655c246aaa7e501f4b79393c774c808f8f9cfd0eb12ab2196a7e71b"
+    },
+    {
+      "id": "m-o7",
+      "fileName": "sova.png",
+      "mimeType": "image/png",
+      "fileSize": 5499579,
+      "sha256": "f5b7a48257c5e7da869a57c035dcb4052a1c6f3bb7d121ca233a13d9d1ee3d12"
+    },
+    {
+      "id": "m-o8",
+      "fileName": "sinica.png",
+      "mimeType": "image/png",
+      "fileSize": 3092182,
+      "sha256": "b71b0d6f2cd591e609cad4d329d080f4bd5867b55b229ddc555f0778ab6a2b6f"
+    },
+    {
+      "id": "m-o9",
+      "fileName": "ivolga.png",
+      "mimeType": "image/png",
+      "fileSize": 4305574,
+      "sha256": "0a8b93395cc54295d30995d7a10dd19cfb3000fa93e911580bffafc4e93ee424"
+    },
+    {
+      "id": "m-o10",
+      "fileName": "el.png",
+      "mimeType": "image/png",
+      "fileSize": 5408170,
+      "sha256": "d82a33040816016246571f9d95dfba75dfac51139b8cb813d57695614d3259cb"
+    },
+    {
+      "id": "m-o11",
+      "fileName": "bereza.png",
+      "mimeType": "image/png",
+      "fileSize": 3544145,
+      "sha256": "9252a1083be1100edb136ac7fe9f5b7b106c3132229542e6460c10d2fed87791"
+    },
+    {
+      "id": "m-o12",
+      "fileName": "dub.png",
+      "mimeType": "image/png",
+      "fileSize": 5033870,
+      "sha256": "35bf4e3694aca328be25f2cc57109ef7e5c34535c33942a39323dfe64ed6cb77"
+    },
+    {
+      "id": "m-o13",
+      "fileName": "landysh.png",
+      "mimeType": "image/png",
+      "fileSize": 5299464,
+      "sha256": "f6c6e193626f778b2fc0d1cba70b0cc9ec60429d6746113297706941208161f2"
+    },
+    {
+      "id": "m-o14",
+      "fileName": "lyagushka.png",
+      "mimeType": "image/png",
+      "fileSize": 3405499,
+      "sha256": "f58a014301c0148b99bde6a3d6b9a48942db2e486b5090b051703d3bc880b815"
+    },
+    {
+      "id": "m-bg-2",
+      "fileName": "bg-arktika.png",
+      "mimeType": "image/png",
+      "fileSize": 4827296,
+      "sha256": "4de0d24df965e7c4d4ae630f90ac8164a906a8b00c7bccf7253593d514b846a1"
+    },
+    {
+      "id": "m-o15",
+      "fileName": "medved-white.png",
+      "mimeType": "image/png",
+      "fileSize": 4818132,
+      "sha256": "1de7b112f4039bc1be7812525f0004f9a5fb48365f06e00cfa85cbb9995907bd"
+    },
+    {
+      "id": "m-o16",
+      "fileName": "morzh.png",
+      "mimeType": "image/png",
+      "fileSize": 3274113,
+      "sha256": "8befd7292c5198d089c96da200a484d9c73477389d3889fd0627de9d42b322fa"
+    },
+    {
+      "id": "m-o17",
+      "fileName": "pesec.png",
+      "mimeType": "image/png",
+      "fileSize": 4092722,
+      "sha256": "b7c96404a4bda6d1520f98e840946ee0e1b361958088d482465236cbc3221e9f"
+    },
+    {
+      "id": "m-o18",
+      "fileName": "lahtak.png",
+      "mimeType": "image/png",
+      "fileSize": 2821727,
+      "sha256": "652bcec66aef1398e1e5f9d73c9d3c712fc20c0d2fe06b0d34441c49097b6d1b"
+    },
+    {
+      "id": "m-o19",
+      "fileName": "beluha.png",
+      "mimeType": "image/png",
+      "fileSize": 2929643,
+      "sha256": "f07520883fb4dbde1e94e497f1b4f89d1ddc9b8f49b9ccdcf130bb4c15ef88ed"
+    },
+    {
+      "id": "m-o20",
+      "fileName": "ovcebyk.png",
+      "mimeType": "image/png",
+      "fileSize": 4420641,
+      "sha256": "d168a9ada9f7cb316b57d8ef7b9499d5cf898c26fc0616e1672d2c26ecdf1577"
+    },
+    {
+      "id": "m-o21",
+      "fileName": "sova-polyarnaya.png",
+      "mimeType": "image/png",
+      "fileSize": 4129606,
+      "sha256": "edfe8df41938cab31b7061b4e7cf7e77885e79bc0b0a5c9b520832a24f24599d"
+    },
+    {
+      "id": "m-o22",
+      "fileName": "glupysh.png",
+      "mimeType": "image/png",
+      "fileSize": 4088483,
+      "sha256": "8520471978243eb3a312a4d7808b776d5e6ca3ac506f0093a248824fa39db256"
+    },
+    {
+      "id": "m-o23",
+      "fileName": "topolik.png",
+      "mimeType": "image/png",
+      "fileSize": 4656309,
+      "sha256": "bc06c65bd13a1ef8a54d18d8c3eb563610037757286603a376e8d1fd84609975"
+    },
+    {
+      "id": "m-o24",
+      "fileName": "yagel.png",
+      "mimeType": "image/png",
+      "fileSize": 4729238,
+      "sha256": "a8fce0a6fa2acda08c23b68d5f837d6f0e05d0fe9a5d6bfcac373c973878ee07"
+    },
+    {
+      "id": "m-o25",
+      "fileName": "ksantoria.png",
+      "mimeType": "image/png",
+      "fileSize": 5316616,
+      "sha256": "b363d2e7dac57868efbf3bd3d8410370e5ff568db9461808e695632cc1cba2b6"
+    },
+    {
+      "id": "m-bg-3",
+      "fileName": "bg-tundra.png",
+      "mimeType": "image/png",
+      "fileSize": 5616877,
+      "sha256": "a07ec38fea6f03de11b250bf40da496bbebf8f2076dc1794fc7837edb0ad0670"
+    },
+    {
+      "id": "m-o26",
+      "fileName": "lemming.png",
+      "mimeType": "image/png",
+      "fileSize": 3887423,
+      "sha256": "1e56e94ead471311c67be57b0174b4d9be1ad1fc27b2a83254752f596ecff13a"
+    },
+    {
+      "id": "m-o27",
+      "fileName": "olen-severny.png",
+      "mimeType": "image/png",
+      "fileSize": 3658552,
+      "sha256": "98d6b6d2ba81c236d0e6203eeaa8e8aeba8c5971b66a334572b52081710c865d"
+    },
+    {
+      "id": "m-o28",
+      "fileName": "rosomaha.png",
+      "mimeType": "image/png",
+      "fileSize": 4715377,
+      "sha256": "128fd55daaa086dcaf084e48c84b5c2686f9c276f7b3fd1a4284dffa6c9ea87b"
+    },
+    {
+      "id": "m-o29",
+      "fileName": "volk-polyarny.png",
+      "mimeType": "image/png",
+      "fileSize": 3355485,
+      "sha256": "3dc7e48cde14e97e85581af223f15c9501898d281086457973d0e37cfa6608b3"
+    },
+    {
+      "id": "m-o30",
+      "fileName": "zayac-belyak.png",
+      "mimeType": "image/png",
+      "fileSize": 3262278,
+      "sha256": "a2b74f92e6d3ac74d7950a267de554667ce9a45c875f1bfc7212efbd140831aa"
+    },
+    {
+      "id": "m-o31",
+      "fileName": "kuropatka.png",
+      "mimeType": "image/png",
+      "fileSize": 3188511,
+      "sha256": "6b2899aabb4d0273635ad88a4a4c4959c2404aa8cd0ee3a600ff0f4b83bdbfbb"
+    },
+    {
+      "id": "m-o32",
+      "fileName": "sterh.png",
+      "mimeType": "image/png",
+      "fileSize": 4204313,
+      "sha256": "ece380d84664f88d777abb3e5bbb5f93dd7ceea0272653c3571871ac6d0e5c50"
+    },
+    {
+      "id": "m-o33",
+      "fileName": "krechet.png",
+      "mimeType": "image/png",
+      "fileSize": 3740353,
+      "sha256": "2b28065195f7d3b1b8cfd188b3afc4ea7d4204cbf8a9314178b924103e5091fe"
+    },
+    {
+      "id": "m-o34",
+      "fileName": "lun-pegy.png",
+      "mimeType": "image/png",
+      "fileSize": 2435170,
+      "sha256": "cc7af35bc9a1902e0267f031f0920fcba75cedec6541a2fcfd6f1e450102c21b"
+    },
+    {
+      "id": "m-o35",
+      "fileName": "moroshka.png",
+      "mimeType": "image/png",
+      "fileSize": 4252462,
+      "sha256": "4743567502378e4d4a0fb58d86ec50ced19c7ff5a2723ac792d2ebfda0b1569f"
+    },
+    {
+      "id": "m-o36",
+      "fileName": "bereza-karlikovaya.png",
+      "mimeType": "image/png",
+      "fileSize": 5491977,
+      "sha256": "b66b874bd6d9867b58ae07f45b8534532cfa55e97331f9a99f4cae091389d63b"
+    },
+    {
+      "id": "m-o37",
+      "fileName": "myatlik.png",
+      "mimeType": "image/png",
+      "fileSize": 6158459,
+      "sha256": "9414373e0145a774efd22dd75cb5e9b7eb1edd5eb5dec2abfd4a6a87c461104d"
+    },
+    {
+      "id": "m-o38",
+      "fileName": "brusnika.png",
+      "mimeType": "image/png",
+      "fileSize": 5821859,
+      "sha256": "fb1a2bafea644add8393a4cb38b1d5b2d41411d3d537ffc5df3a948b198b9320"
+    },
+    {
+      "id": "m-bg-4",
+      "fileName": "bg-taiga-sib.png",
+      "mimeType": "image/png",
+      "fileSize": 5691446,
+      "sha256": "02221ec58141baf8bd7da62547af6f63304b6c2106ff08ee3596f9b5f1ebab45"
+    },
+    {
+      "id": "m-o39",
+      "fileName": "los.png",
+      "mimeType": "image/png",
+      "fileSize": 3452647,
+      "sha256": "8342dcf3ddcae709ccca8bb875ab05ac72b832446c2c6c00e2c658af2a2a5d45"
+    },
+    {
+      "id": "m-o40",
+      "fileName": "kabarga.png",
+      "mimeType": "image/png",
+      "fileSize": 3255639,
+      "sha256": "83609d0be1608c9374504747bccb9939e3a2271896c7589e62e8beb36fdb7be2"
+    },
+    {
+      "id": "m-o41",
+      "fileName": "burunduk.png",
+      "mimeType": "image/png",
+      "fileSize": 4910263,
+      "sha256": "7131db780fdbda56f00162fc72110061a5e1310b372087abc16ecbcc0248cf4e"
+    },
+    {
+      "id": "m-o42",
+      "fileName": "letyaga.png",
+      "mimeType": "image/png",
+      "fileSize": 3173262,
+      "sha256": "21515a43c671200df9541af80e30570fc58d9b9e7b800212a2083a8ea1e46dc5"
+    },
+    {
+      "id": "m-o43",
+      "fileName": "gornostay.png",
+      "mimeType": "image/png",
+      "fileSize": 2738953,
+      "sha256": "1d389c91c645c5ec75318c3c2bb604fd6ef2b5bba0aa9d9a8152d6b62f8d83d5"
+    },
+    {
+      "id": "m-o44",
+      "fileName": "izyubr.png",
+      "mimeType": "image/png",
+      "fileSize": 5064934,
+      "sha256": "83d95dd98ab0af7dcea8f8f1b3637668a336e82d1e02a362ea20c5c4737c116e"
+    },
+    {
+      "id": "m-o45",
+      "fileName": "gluhar.png",
+      "mimeType": "image/png",
+      "fileSize": 3253539,
+      "sha256": "64c9d7bebb331dcb1a5543a1d534bba2228affafcde8757ea6bc6fa07502d01a"
+    },
+    {
+      "id": "m-o46",
+      "fileName": "zhelna.png",
+      "mimeType": "image/png",
+      "fileSize": 4901505,
+      "sha256": "5f953538e7431ac78a9ec2be5a50f7b4daf21695761daf3b2f0aca6665dd8ef0"
+    },
+    {
+      "id": "m-o47",
+      "fileName": "filin.png",
+      "mimeType": "image/png",
+      "fileSize": 4558592,
+      "sha256": "4cfe47b7bf7e9b80266e3a494c096969e3aebe139063534317c7e258bdfe78e4"
+    },
+    {
+      "id": "m-o48",
+      "fileName": "sapsan.png",
+      "mimeType": "image/png",
+      "fileSize": 4223300,
+      "sha256": "9e58dcdb878af051746af494c357f2300dc71546996d83a93c74292c8b2a3700"
+    },
+    {
+      "id": "m-o49",
+      "fileName": "kedr.png",
+      "mimeType": "image/png",
+      "fileSize": 6131648,
+      "sha256": "b77df34b4f69af5c7aecab76563457d7cbcccb306a3015f5e55937e6ea8be184"
+    },
+    {
+      "id": "m-o50",
+      "fileName": "listvennica.png",
+      "mimeType": "image/png",
+      "fileSize": 4782840,
+      "sha256": "67d9bdd8a4fb8e06f64d5090cd90e432f7bfb494fe7a9d0f3feb58c644793257"
+    },
+    {
+      "id": "m-o51",
+      "fileName": "mozhevelnik.png",
+      "mimeType": "image/png",
+      "fileSize": 5235598,
+      "sha256": "bcf009fece3bd88624dd7db0f7bb5cebd22f1690f2ffb07ba023be479ab5892a"
+    },
+    {
+      "id": "m-o52",
+      "fileName": "ryabina.png",
+      "mimeType": "image/png",
+      "fileSize": 5689153,
+      "sha256": "3138385ae337fd59418772620609f6a89f0e64399a0b74ca3077492efd87f64f"
+    },
+    {
+      "id": "m-bg-5",
+      "fileName": "bg-taiga-dv.png",
+      "mimeType": "image/png",
+      "fileSize": 7650730,
+      "sha256": "cad3e20dc5c561ca07930511ba5548dde52af9710a41e4b09d38f3f6aee16cb8"
+    },
+    {
+      "id": "m-o53",
+      "fileName": "tigr.png",
+      "mimeType": "image/png",
+      "fileSize": 4223572,
+      "sha256": "01de557380421da9feecac4303917f57b7c85ad5b320843a4774d96b360c6713"
+    },
+    {
+      "id": "m-o54",
+      "fileName": "leopard.png",
+      "mimeType": "image/png",
+      "fileSize": 5162166,
+      "sha256": "ebdac1e5d166d47785ea4bf4b9fd3c1ba3c5e05c2de16845a20875adfb175006"
+    },
+    {
+      "id": "m-o55",
+      "fileName": "medved-gimalaysky.png",
+      "mimeType": "image/png",
+      "fileSize": 3245512,
+      "sha256": "e3f0c244acfee7fd701df84fa63a922709951e7d08b3ab9fb67e64b4b3a28c96"
+    },
+    {
+      "id": "m-o56",
+      "fileName": "kaban.png",
+      "mimeType": "image/png",
+      "fileSize": 3061973,
+      "sha256": "df3e364273141ab3a5213d6233bbbb28007ab4a9f8d54d82774a4778ac9166cf"
+    },
+    {
+      "id": "m-o57",
+      "fileName": "kosulya.png",
+      "mimeType": "image/png",
+      "fileSize": 2341901,
+      "sha256": "49c2569e7d464f31d9e547ca8eedc47ed45b585b24d3ed64a5ef7620d075f4a2"
+    },
+    {
+      "id": "m-o58",
+      "fileName": "kunica.png",
+      "mimeType": "image/png",
+      "fileSize": 3097064,
+      "sha256": "41e0d58fd148cf1214858cc55d705d9c11c0763fcaffaa324f7b5059bd3d9809"
+    },
+    {
+      "id": "m-o59",
+      "fileName": "hor.png",
+      "mimeType": "image/png",
+      "fileSize": 4469381,
+      "sha256": "e5c9219ece97fae16d2ccfe124a47fc45b96b7f2e3665d77eadfa8a969cc8c59"
+    },
+    {
+      "id": "m-o60",
+      "fileName": "mandarinka.png",
+      "mimeType": "image/png",
+      "fileSize": 4682021,
+      "sha256": "cedccc833f793fedaea93d99e7a6d00c039fc737564a5e7e8b78bae629b60ca6"
+    },
+    {
+      "id": "m-o61",
+      "fileName": "fazan.png",
+      "mimeType": "image/png",
+      "fileSize": 3456380,
+      "sha256": "6a25eeec8850d4dfc32ae1d3f89b584d9e27a9ae2222d5070adc710543682e4d"
+    },
+    {
+      "id": "m-o62",
+      "fileName": "zhuravl-chernyi.png",
+      "mimeType": "image/png",
+      "fileSize": 2929847,
+      "sha256": "ec957778cd732f8b38d926715e8c7f73dfe755b71cd3c0661f1ffd2e043f3dbb"
+    },
+    {
+      "id": "m-o63",
+      "fileName": "aist.png",
+      "mimeType": "image/png",
+      "fileSize": 2652439,
+      "sha256": "c75c0dc51a1ff4ba39a12e2d7705b1fcade37db0f98117bc7618b8b21e3138d4"
+    },
+    {
+      "id": "m-o64",
+      "fileName": "baklan.png",
+      "mimeType": "image/png",
+      "fileSize": 4634065,
+      "sha256": "0aac9130b31d749287573ef8a96ca0093a55d142b167a609bb7ade4f8a19ade4"
+    },
+    {
+      "id": "m-o65",
+      "fileName": "pustelga.png",
+      "mimeType": "image/png",
+      "fileSize": 3741656,
+      "sha256": "e120f9b2b84a380068129002f52e6f1cb9bd55756e4e8c8c02ec824f8128c474"
+    },
+    {
+      "id": "m-o66",
+      "fileName": "barhat.png",
+      "mimeType": "image/png",
+      "fileSize": 5687753,
+      "sha256": "f7a26c42f5175e246230599ca3ecb5e5135c19348eff80f996aebace9e7998fb"
+    },
+    {
+      "id": "m-o67",
+      "fileName": "kedr-koreysky.png",
+      "mimeType": "image/png",
+      "fileSize": 5535157,
+      "sha256": "bd5e49ccfcac0acfcaf352c89fcdfb22dc839430c408bd4d102f199db28bca7b"
+    },
+    {
+      "id": "m-o68",
+      "fileName": "limonnik.png",
+      "mimeType": "image/png",
+      "fileSize": 5437843,
+      "sha256": "46e8fc60f46f4f0f9b796859f44f7497ce1c1bc253d9a865f5fc434873f2c691"
+    },
+    {
+      "id": "m-o69",
+      "fileName": "eleuterokokk.png",
+      "mimeType": "image/png",
+      "fileSize": 3969064,
+      "sha256": "14be28070ecba5bbf8f4702314bc2c855f2073efaa07472fc44dc52ff604e1a0"
+    },
+    {
+      "id": "m-o70",
+      "fileName": "dub-mongolsky.png",
+      "mimeType": "image/png",
+      "fileSize": 5344349,
+      "sha256": "bd097c872c5d052b28a1670a5bb5c54328d5c437653b434c797ea67225471264"
+    },
+    {
+      "id": "m-o71",
+      "fileName": "rododendron.png",
+      "mimeType": "image/png",
+      "fileSize": 6108994,
+      "sha256": "b8eeed1347e0845182e5879a9a285a591741b56ed4e6cd1359c9b1f998624ea9"
+    },
+    {
+      "id": "m-bg-6",
+      "fileName": "bg-step.png",
+      "mimeType": "image/png",
+      "fileSize": 5137680,
+      "sha256": "d27a526eebc19cf083dbbf357b3f6a75ae02dfd333b4206553c30db455e1195f"
+    },
+    {
+      "id": "m-o72",
+      "fileName": "volk-stepnoy.png",
+      "mimeType": "image/png",
+      "fileSize": 3883377,
+      "sha256": "daa53b2f7d994a4c7ab4c57b10d5f738a7b172aa55a8811ac869255adcbd49fe"
+    },
+    {
+      "id": "m-o73",
+      "fileName": "korsak.png",
+      "mimeType": "image/png",
+      "fileSize": 2816489,
+      "sha256": "71bb7da9cbf3ab055b959853f5316a7fbd42332fcfe69790656b01f27d678d12"
+    },
+    {
+      "id": "m-o74",
+      "fileName": "saygak.png",
+      "mimeType": "image/png",
+      "fileSize": 3905355,
+      "sha256": "2726cc35619cccda32eb8bec84408463dbe70a82e1b78640eb7c01fbf7dc1cb9"
+    },
+    {
+      "id": "m-o75",
+      "fileName": "tushkanchik.png",
+      "mimeType": "image/png",
+      "fileSize": 2748232,
+      "sha256": "d70838c14a5eac5133c6446cbeea2bacafbe576d803d8969463238702b69063b"
+    },
+    {
+      "id": "m-o76",
+      "fileName": "drofa.png",
+      "mimeType": "image/png",
+      "fileSize": 2897571,
+      "sha256": "31675408074411ae6d4e64fcd9a20ee42ae4e3e82be6dff023204e7a4b0e646f"
+    },
+    {
+      "id": "m-o77",
+      "fileName": "kurgannik.png",
+      "mimeType": "image/png",
+      "fileSize": 4397877,
+      "sha256": "868d78a167b77a5b346f8c8dcd9e3ef75bf9f36d1569150e73a8b2d618f4040e"
+    },
+    {
+      "id": "m-o78",
+      "fileName": "kovyl.png",
+      "mimeType": "image/png",
+      "fileSize": 5756338,
+      "sha256": "21adf72743c47963f6c6a13a4188448f9951cce219686d547102ce1110317f2a"
+    },
+    {
+      "id": "m-o79",
+      "fileName": "kachim.png",
+      "mimeType": "image/png",
+      "fileSize": 6114480,
+      "sha256": "9d52c05b1f8c10ce64b15e6a7f509ccce74979bcc8e2ee2988d454497de9036b"
+    },
+    {
+      "id": "m-o80",
+      "fileName": "tulpan.png",
+      "mimeType": "image/png",
+      "fileSize": 855936,
+      "sha256": "8a7128c496e9f3daa42332f19c8998af00af3584a5241b687e2c26a3f8da143d"
+    },
+    {
+      "id": "m-bg-7",
+      "fileName": "bg-desert.png",
+      "mimeType": "image/png",
+      "fileSize": 4373205,
+      "sha256": "fdf6999e4aa7c487a41877eee1a3cff0af06808f562785f01101067b20648b8e"
+    },
+    {
+      "id": "m-o81",
+      "fileName": "verblyud.png",
+      "mimeType": "image/png",
+      "fileSize": 4895626,
+      "sha256": "2ebf2359bfe535905f0f8924ee874f24a35754daf3500af8f9f7578ee9f8a37c"
+    },
+    {
+      "id": "m-o82",
+      "fileName": "ezh-ushasty.png",
+      "mimeType": "image/png",
+      "fileSize": 4555367,
+      "sha256": "69904908d72b5f30c81439f1b617d6e13018ae0ca3a181fcd9bae3b21c8198e5"
+    },
+    {
+      "id": "m-o83",
+      "fileName": "dzheyran.png",
+      "mimeType": "image/png",
+      "fileSize": 3697889,
+      "sha256": "e3fe4fcc9216f2a23f9be0bb0ffa1dca1098b702b3866ca905a7a42e3f712d47"
+    },
+    {
+      "id": "m-o84",
+      "fileName": "cherepaha.png",
+      "mimeType": "image/png",
+      "fileSize": 5101246,
+      "sha256": "b80af6172ec28d0337b0ba0afc0af2adc5c3f9237d3fdbd13e3149edc7ea9330"
+    },
+    {
+      "id": "m-o85",
+      "fileName": "dzhek.png",
+      "mimeType": "image/png",
+      "fileSize": 3135678,
+      "sha256": "912b299f3d3c14cddb5a1ec174b869742118a603e8ad1b9fd6b9a4adbcd41aef"
+    },
+    {
+      "id": "m-o86",
+      "fileName": "saksaulnaya-soyka.png",
+      "mimeType": "image/png",
+      "fileSize": 3112211,
+      "sha256": "56a79f57fe9d01a059f47c29b65c6b5b6619b3989409daf1c7daa5dd565109c5"
+    },
+    {
+      "id": "m-o87",
+      "fileName": "saksaul.png",
+      "mimeType": "image/png",
+      "fileSize": 4427423,
+      "sha256": "a7684718fe86d80340e7b34fc2f1ea1b99f4081f09f4b3da4e6cbe3b6ef0f64d"
+    },
+    {
+      "id": "m-o88",
+      "fileName": "pyrey.png",
+      "mimeType": "image/png",
+      "fileSize": 3720241,
+      "sha256": "078b4885a05fea9aa68e59f8fbc616b1c0a9f8e292909a5d4175eaf375be60ca"
+    },
+    {
+      "id": "m-o89",
+      "fileName": "polyn.png",
+      "mimeType": "image/png",
+      "fileSize": 5470613,
+      "sha256": "088ffa2b4b18c9517ec72baf751bc3a7d7cc70929518db0e26dd494080deb6fc"
+    },
+    {
+      "id": "m-anim-o1",
+      "fileName": "medved-behavior.mp4",
+      "mimeType": "video/mp4",
+      "fileSize": 2967716,
+      "sha256": "205051f1e2bcb67c978c5d889f8549a00bfd1d834b051aabda91bb266b8523dc"
+    },
+    {
+      "id": "m-anim-o7",
+      "fileName": "sova-behavior.mp4",
+      "mimeType": "video/mp4",
+      "fileSize": 4190629,
+      "sha256": "3d0f069a9ad243de80d89e2bd25c035acfbc4987b6edf0f415a51b19394ac675"
+    },
+    {
+      "id": "m-anim-o15",
+      "fileName": "medved-white-behavior.mp4",
+      "mimeType": "video/mp4",
+      "fileSize": 3015353,
+      "sha256": "bcd9cb57e3fa7aec2cafe77a5783dd8d5df2a02c3eebb583afc75af48da8be9e"
+    },
+    {
+      "id": "m-anim-o27",
+      "fileName": "olen-severny-behavior.mp4",
+      "mimeType": "video/mp4",
+      "fileSize": 2883121,
+      "sha256": "97ece4a9bb115a64033dc6fed4f3e5635b2c76914f1faeb20f1291f8cc274421"
+    },
+    {
+      "id": "m-anim-o39",
+      "fileName": "los-behavior.mp4",
+      "mimeType": "video/mp4",
+      "fileSize": 2372173,
+      "sha256": "3b1775d13f81f2f09a6908fb299438fd60f0568644e00f9fbcf08c56319732af"
+    },
+    {
+      "id": "m-anim-o53",
+      "fileName": "tigr-behavior.mp4",
+      "mimeType": "video/mp4",
+      "fileSize": 3420363,
+      "sha256": "dc4061fdbee4a1d6da53da73fe1fda72decd7d01f670dc51c90714d78dd685df"
+    },
+    {
+      "id": "m-anim-o74",
+      "fileName": "saygak-behavior.mp4",
+      "mimeType": "video/mp4",
+      "fileSize": 3005250,
+      "sha256": "c9cecccb44eef8a599eded9b6c90cc79155fa4c596d11f98d790af2ce84bef2e"
+    },
+    {
+      "id": "m-anim-o81",
+      "fileName": "verblyud-behavior.mp4",
+      "mimeType": "video/mp4",
+      "fileSize": 3007178,
+      "sha256": "2ffbc4100b0870b232d09bf9ed7cb3ed12c96a8f283f2316ee64cf3670417d19"
+    },
+    {
+      "id": "m-sound-o2",
+      "fileName": "wolf-sound.mp3",
+      "mimeType": "audio/mpeg",
+      "fileSize": 96906,
+      "sha256": "eea38870e5c60f9d3f359799260b2d4f7a148d9d97e1eeeabc33335a02b5008f"
+    },
+    {
+      "id": "m-sound-o4",
+      "fileName": "squirrel-sound.mp3",
+      "mimeType": "audio/mpeg",
+      "fileSize": 72768,
+      "sha256": "66e6ccc88bbea462f0ce8cdcbe40f050b95b6dd796f27af19914e914b05f6114"
+    },
+    {
+      "id": "m-sound-o56",
+      "fileName": "boar-sound.mp3",
+      "mimeType": "audio/mpeg",
+      "fileSize": 8821,
+      "sha256": "5797ff313b3838e18e10c6ab6b14fd429c2038d2075fb5ee38db2ff7d13b5bce"
+    },
+    {
+      "id": "m-sound-o57",
+      "fileName": "roedeer-sound.mp3",
+      "mimeType": "audio/mpeg",
+      "fileSize": 96906,
+      "sha256": "483a2d45a9423d3180743cde788b28146658594ba97394fcc34293b9b48f61e6"
+    },
+    {
+      "id": "m-sound-o73",
+      "fileName": "fox-sound.mp3",
+      "mimeType": "audio/mpeg",
+      "fileSize": 96906,
+      "sha256": "c14ec55d11865d606047be681bdf2f538075a91f8cc94d2cd1edaa4b76575b99"
+    },
+    {
+      "id": "m-sound-o6",
+      "fileName": "woodpecker-drum-sound.mp3",
+      "mimeType": "audio/mpeg",
+      "fileSize": 7880,
+      "sha256": "483a15077d7c067f3af7f81c9b4b1a5cb443ba5fbc00ba41cc422553db913be7"
+    },
+    {
+      "id": "m-sound-o8",
+      "fileName": "tit-sound.mp3",
+      "mimeType": "audio/mpeg",
+      "fileSize": 34525,
+      "sha256": "828e288623d69ae0ed94d60797ae8370cb02017ef8dec6053938a30245a49ccc"
+    },
+    {
+      "id": "m-sound-o9",
+      "fileName": "oriole-sound.mp3",
+      "mimeType": "audio/mpeg",
+      "fileSize": 96906,
+      "sha256": "97771e668c5719ea253ff5fee6a0f769542d2e80c78829999a2ed400ca53e57f"
+    },
+    {
+      "id": "m-sound-o22",
+      "fileName": "fulmar-sound.mp3",
+      "mimeType": "audio/mpeg",
+      "fileSize": 96906,
+      "sha256": "f2315479ef2fef78443f99ee813715a63be32b057062c5a96216b7752d57a055"
+    },
+    {
+      "id": "m-sound-o46",
+      "fileName": "black-woodpecker-sound.mp3",
+      "mimeType": "audio/mpeg",
+      "fileSize": 66813,
+      "sha256": "61e13bafb4eb30385562209e7bae7bec9ef9417dd9419baf5c6646f29d1939cf"
+    },
+    {
+      "id": "m-sound-o31",
+      "fileName": "grouse-sound.mp3",
+      "mimeType": "audio/mpeg",
+      "fileSize": 96906,
+      "sha256": "009c48a3eed3250600c4e55aa9bae6f9b1c06e5ac10f9c74a0299ca6cdf76a2c"
+    },
+    {
+      "id": "m-sound-o47",
+      "fileName": "eagleowl-sound.mp3",
+      "mimeType": "audio/mpeg",
+      "fileSize": 97221,
+      "sha256": "c45c561963d6b1d5902a9450f98f60ef560463de8878e6613fe96b9e023d857b"
+    },
+    {
+      "id": "m-sound-o61",
+      "fileName": "pheasant-sound.mp3",
+      "mimeType": "audio/mpeg",
+      "fileSize": 97242,
+      "sha256": "ad815a0babdce5e95853a9b16360b0cc630c4751ac0aaf70bd1c01030521c358"
+    },
+    {
+      "id": "m-sound-o62",
+      "fileName": "crane-sound.mp3",
+      "mimeType": "audio/mpeg",
+      "fileSize": 96906,
+      "sha256": "7b36f965f892a5933612c6c343971702a81e86abdd4c5c945b239ec4778fff92"
+    },
+    {
+      "id": "m-sound-o64",
+      "fileName": "cormorant-sound.mp3",
+      "mimeType": "audio/mpeg",
+      "fileSize": 97371,
+      "sha256": "3e76c71a00a5586949648f9cfd4f986cb6dbb01f9ea65c1e398bc8374d472abe"
+    },
+    {
+      "id": "m-sound-o65",
+      "fileName": "kestrel-sound.mp3",
+      "mimeType": "audio/mpeg",
+      "fileSize": 97524,
+      "sha256": "cb4192d1387f30f739faee8d0f76330794dc5de4c43636932aa4badf8d740df7"
+    },
+    {
+      "id": "m-sound-o76",
+      "fileName": "bustard-sound.mp3",
+      "mimeType": "audio/mpeg",
+      "fileSize": 96906,
+      "sha256": "da694ce1180af16ac9fc64070c3f092fb0b61c33d42e73631221d9ed1e08a78e"
+    },
+    {
+      "id": "m-sound-o77",
+      "fileName": "buzzard-sound.mp3",
+      "mimeType": "audio/mpeg",
+      "fileSize": 97220,
+      "sha256": "f527417f14875233ac47f0a8a910f1636ad8668bfea256534384026f33d4948d"
+    },
+    {
+      "id": "m-sound-o14",
+      "fileName": "frog-sound.mp3",
+      "mimeType": "audio/mpeg",
+      "fileSize": 96906,
+      "sha256": "d4e7b86e7252fbfb56452f3c4fe1118e6ccc3d8e846157e6f21fe13e9d6e4606"
+    }
   ]
 }
