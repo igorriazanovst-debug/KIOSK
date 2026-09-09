@@ -15,18 +15,18 @@ test('pilotContent.json validates against MathMachineContentSchema', () => {
   assert.equal(result.success, true, result.success ? '' : JSON.stringify((result as any).error?.issues, null, 2));
 });
 
-test('pilotContent has exactly eighty-four topics (2 from Этап 1 + 5 from wave 1 + 5 from wave 2 + 13 from wave 3 + 6 from wave 4 + 6 from wave 5 + 6 from wave 6 + 13 from wave 7 + 14 from wave 8 + 14 from wave 9) with at least one group each', () => {
+test('pilotContent has exactly ninety-eight topics (2 from Этап 1 + 5 from wave 1 + 5 from wave 2 + 13 from wave 3 + 6 from wave 4 + 6 from wave 5 + 6 from wave 6 + 13 from wave 7 + 14 from wave 8 + 14 from wave 9 + 14 from wave 10) with at least one group each', () => {
   const parsed = MathMachineContentSchema.parse(pilotContent);
   const topicIds = Object.keys(parsed.topics);
-  assert.equal(topicIds.length, 84);
+  assert.equal(topicIds.length, 98);
   for (const id of topicIds) {
     assert.ok(parsed.topics[id].groupIds.length >= 1);
   }
 });
 
-test('pilotContent has exactly 1709 tasks (18 from Этап 1 + 80 from wave 1 + 76 from wave 2 + 135 from wave 3 + 92 from wave 4 + 100 from wave 5 + 104 from wave 6 + 348 from wave 7 + 368 from wave 8 + 388 from wave 9)', () => {
+test('pilotContent has exactly 2087 tasks (18 from Этап 1 + 80 from wave 1 + 76 from wave 2 + 135 from wave 3 + 92 from wave 4 + 100 from wave 5 + 104 from wave 6 + 348 from wave 7 + 368 from wave 8 + 388 from wave 9 + 378 from wave 10)', () => {
   const parsed = MathMachineContentSchema.parse(pilotContent);
-  assert.equal(Object.keys(parsed.tasks).length, 1709);
+  assert.equal(Object.keys(parsed.tasks).length, 2087);
 });
 
 test('every task referenced by a group actually exists in tasks', () => {
