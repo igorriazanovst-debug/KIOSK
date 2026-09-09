@@ -48,7 +48,7 @@ test('every task with an audioTaskTextId has a corresponding mp3 file on disk', 
     const mp3Path = path.join(MEDIA_DIR, `${task.audioTaskTextId}.mp3`);
     assert.ok(fs.existsSync(mp3Path), `missing audio file for task ${task.id}: ${mp3Path}`);
   }
-  assert.equal(checked, 18, 'expected exactly 18 pilot tasks (Этап 1) to have narration audio');
+  assert.equal(checked, 2835, 'ТЗ FR-013 требует озвучку текста задания без оговорки объёма — все задания каталога должны иметь audioTaskTextId, не только пилотные 18 из Этапа 1');
 });
 
 test('every real topic categorizes into exactly one catalog-screen category (no orphans)', () => {
