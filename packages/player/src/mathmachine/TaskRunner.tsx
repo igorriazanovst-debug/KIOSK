@@ -74,7 +74,9 @@ const TaskRunner: React.FC<Props> = ({ task, soundOn, onCorrect, onClose }) => {
       <div style={headerStyle}>
         <span>{task.text}</span>
         <div style={{ display: 'flex', gap: 8 }}>
-          <button onClick={() => soundOn && playNarration(task)} title="Повторить озвучку" style={iconButtonStyle}>🔊</button>
+          {task.audioTaskTextId && (
+            <button onClick={() => soundOn && playNarration(task)} title="Повторить озвучку" style={iconButtonStyle}>🔊</button>
+          )}
           <button onClick={handleRestart} title="Начать сначала" style={iconButtonStyle}>↺</button>
           <button onClick={onClose} title="Закрыть" style={iconButtonStyle}>✕</button>
         </div>

@@ -1100,12 +1100,17 @@ const Player: React.FC<PlayerProps> = ({ embedded = false }) => {
     return <ActivationScreen onActivated={() => setShowActivation(false)} />;
   }
 
-  // Standalone-app виджеты ("chronoline", "naturalcommunities") заполняют
-  // реальный размер окна/экрана (см. viewportSize выше) - без этого канвас
-  // оставался бы фиксированным на project.canvas.*, заданном при
-  // проектировании, и не совпадал бы с фактическим окном.
+  // Standalone-app виджеты ("chronoline", "naturalcommunities", "mathmachine")
+  // заполняют реальный размер окна/экрана (см. viewportSize выше) - без этого
+  // канвас оставался бы фиксированным на project.canvas.*, заданном при
+  // проектировании, и не совпадал бы с фактическим окном. Список должен
+  // совпадать с STANDALONE_APP_WIDGET_TYPES в electron/chrono/windowMode.js
+  // (тот отвечает за опции самого BrowserWindow) - если он не совпадает,
+  // окно создаётся маленьким нефullscreen-окном, но канвас внутри рисуется
+  // по project.canvas.* и получается больше окна → двойной скролл и обрезка
+  // контента (найдено вживую при ручном тестировании «Матемашки»).
   const isStandaloneAppProject = project.widgets.some(
-    (w) => w.type === 'chronoline' || w.type === 'naturalcommunities'
+    (w) => w.type === 'chronoline' || w.type === 'naturalcommunities' || w.type === 'mathmachine'
   );
 
   return (
