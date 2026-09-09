@@ -7,6 +7,9 @@ import {
   RULER_MAX_CM,
   type TwoSegmentsPuzzle,
 } from './twoSegmentsLogic.ts';
+import ToolShell, { toolPrimaryButtonStyle, toolSecondaryButtonStyle } from './ToolShell';
+import ToolFeedbackBanner from './ToolFeedbackBanner';
+import { COLOR, FONT } from '../theme';
 
 const CANVAS_WIDTH = 640;
 const CANVAS_HEIGHT = 260;
@@ -55,13 +58,26 @@ const TwoSegmentsTool: React.FC<Props> = ({ onClose }) => {
   const ticks = Array.from({ length: RULER_MAX_CM + 1 }, (_, cm) => cm);
 
   return (
-    <div style={{ padding: 16 }}>
-      <div style={{ display: 'flex', justifyContent: 'space-between', maxWidth: CANVAS_WIDTH }}>
-        <h3>Два отрезка</h3>
-        <button onClick={onClose}>Выйти</button>
-      </div>
-
-      <p style={{ fontSize: 18 }}>
+    <ToolShell
+      icon="📏"
+      title="Два отрезка"
+      onClose={onClose}
+      actions={
+        <>
+          <button onClick={handleCheck} style={toolPrimaryButtonStyle}>Проверить</button>
+          <button onClick={newPuzzle} style={toolSecondaryButtonStyle}>Новое задание</button>
+        </>
+      }
+      banner={
+        isCorrect !== null ? (
+          <ToolFeedbackBanner
+            correct={isCorrect}
+            text={isCorrect ? 'Верно! Отрезки подобраны точно!' : 'Пока не совпадает — подвинь розовый кружок ещё раз.'}
+          />
+        ) : undefined
+      }
+    >
+      <p style={instructionStyle}>
         Розовый отрезок на {puzzle.delta} см {directionLabel(puzzle.direction)} зелёного.
       </p>
 
@@ -71,35 +87,40 @@ const TwoSegmentsTool: React.FC<Props> = ({ onClose }) => {
             <Line
               key={cm}
               points={[cmToPx(cm), REFERENCE_Y - 10, cmToPx(cm), DRAGGED_Y + BAR_HEIGHT + 10]}
-              stroke="#ddd"
+              stroke={COLOR.border}
               strokeWidth={1}
             />
           ))}
 
           <Rect x={RULER_X0} y={REFERENCE_Y} width={puzzle.referenceLength * PX_PER_CM} height={BAR_HEIGHT} fill="#2ecc71" />
-          <Text x={RULER_X0} y={REFERENCE_Y - 22} text={`Зелёный: ${puzzle.referenceLength} см`} fontSize={16} />
+          <Text x={RULER_X0} y={REFERENCE_Y - 22} text={`Зелёный: ${puzzle.referenceLength} см`} fontSize={16} fill={COLOR.text} />
 
           <Rect x={RULER_X0} y={DRAGGED_Y} width={draggedLength * PX_PER_CM} height={BAR_HEIGHT} fill="#e84393" />
-          <Text x={RULER_X0} y={DRAGGED_Y - 22} text={`Розовый: ${draggedLength} см`} fontSize={16} />
+          <Text x={RULER_X0} y={DRAGGED_Y - 22} text={`Розовый: ${draggedLength} см`} fontSize={16} fill={COLOR.text} />
 
           <Circle
             x={cmToPx(draggedLength)}
             y={DRAGGED_Y + BAR_HEIGHT / 2}
-            radius={12}
-            fill={isCorrect === true ? '#2ecc71' : isCorrect === false ? '#e74c3c' : '#e84393'}
+            radius={16}
+            fill={isCorrect === true ? COLOR.mint : isCorrect === false ? COLOR.amberDark : '#e84393'}
+            stroke={isCorrect === null ? undefined : '#fff'}
+            strokeWidth={isCorrect === null ? 0 : 2}
             draggable
             dragBoundFunc={(pos) => ({ x: pos.x, y: DRAGGED_Y + BAR_HEIGHT / 2 })}
             onDragMove={handleHandleDragMove}
           />
         </Layer>
       </Stage>
-
-      <div style={{ display: 'flex', gap: 8, marginTop: 8 }}>
-        <button onClick={handleCheck}>Проверить</button>
-        <button onClick={newPuzzle}>Новое задание</button>
-      </div>
-    </div>
+    </ToolShell>
   );
+};
+
+const instructionStyle: React.CSSProperties = {
+  margin: '0 0 12px',
+  fontFamily: FONT.ui,
+  fontSize: 16,
+  fontWeight: 700,
+  color: COLOR.indigoDark,
 };
 
 export default TwoSegmentsTool;

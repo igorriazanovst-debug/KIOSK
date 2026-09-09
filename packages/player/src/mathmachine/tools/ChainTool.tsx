@@ -10,6 +10,9 @@ import {
   type ChainCategory,
   type ChainPuzzle,
 } from './chainLogic.ts';
+import ToolShell, { toolTabStyle, toolPrimaryButtonStyle, toolSecondaryButtonStyle } from './ToolShell';
+import ToolFeedbackBanner from './ToolFeedbackBanner';
+import { COLOR } from '../theme';
 
 const CANVAS_WIDTH = 640;
 const CANVAS_HEIGHT = 340;
@@ -100,40 +103,51 @@ const ChainTool: React.FC<Props> = ({ onClose }) => {
   }
 
   const paletteValues = paletteValuesForTab(activeTab, puzzle);
+  const allCorrect = result ? Object.values(result).every(Boolean) : null;
 
   return (
-    <div style={{ padding: 16 }}>
-      <div style={{ display: 'flex', justifyContent: 'space-between', maxWidth: CANVAS_WIDTH }}>
-        <h3>Цепочка</h3>
-        <button onClick={onClose}>Выйти</button>
-      </div>
-
-      <div style={{ display: 'flex', gap: 8, marginBottom: 8 }}>
-        {TABS.map((tab) => (
-          <button key={tab.id} onClick={() => setActiveTab(tab.id)} style={tabButtonStyle(tab.id === activeTab)}>
-            {tab.label}
-          </button>
-        ))}
-      </div>
-
+    <ToolShell
+      icon="🔗"
+      title="Цепочка"
+      onClose={onClose}
+      sidebar={TABS.map((tab) => (
+        <button key={tab.id} onClick={() => setActiveTab(tab.id)} style={toolTabStyle(tab.id === activeTab)}>
+          {tab.label}
+        </button>
+      ))}
+      actions={
+        <>
+          <button onClick={handleCheck} style={toolPrimaryButtonStyle}>Проверить</button>
+          <button onClick={newPuzzle} style={toolSecondaryButtonStyle}>Новая цепочка</button>
+        </>
+      }
+      banner={
+        allCorrect !== null ? (
+          <ToolFeedbackBanner
+            correct={allCorrect}
+            text={allCorrect ? 'Отлично! Вся цепочка собрана верно!' : 'Кое-где закралась ошибка — попробуй ещё раз.'}
+          />
+        ) : undefined
+      }
+    >
       <Stage width={CANVAS_WIDTH} height={CANVAS_HEIGHT}>
         <Layer>
-          <Line points={[20, CHAIN_Y, CANVAS_WIDTH - 20, CHAIN_Y]} stroke="#f1c40f" strokeWidth={4} />
+          <Line points={[20, CHAIN_Y, CANVAS_WIDTH - 20, CHAIN_Y]} stroke={COLOR.amber} strokeWidth={4} />
           {puzzle.values.map((value, index) => {
             const isBlank = puzzle.blankIndices.includes(index);
             const placed = placedByIndex[index];
             const shown = isBlank ? placed : value;
             const isCorrect = result ? result[index] : undefined;
-            const strokeColor = isCorrect === true ? '#2ecc71' : isCorrect === false ? '#e74c3c' : '#888';
+            const strokeColor = isCorrect === true ? COLOR.mint : isCorrect === false ? COLOR.amberDark : COLOR.textMuted;
             return (
               <React.Fragment key={index}>
                 <Circle
                   x={slotX(index, puzzle.values.length)}
                   y={CHAIN_Y}
-                  radius={26}
+                  radius={30}
                   fill={shown ? '#fff' : 'transparent'}
                   stroke={strokeColor}
-                  strokeWidth={3}
+                  strokeWidth={isCorrect === undefined ? 3 : 5}
                   dash={shown ? undefined : [6, 4]}
                 />
                 {shown && (
@@ -144,6 +158,7 @@ const ChainTool: React.FC<Props> = ({ onClose }) => {
                     width={40}
                     align="center"
                     fontSize={20}
+                    fill={COLOR.text}
                   />
                 )}
               </React.Fragment>
@@ -156,30 +171,15 @@ const ChainTool: React.FC<Props> = ({ onClose }) => {
             tileHomeRef.current[tileKey] = home;
             return (
               <Group key={tileKey} x={home.x} y={home.y} draggable onDragEnd={handleTileDragEnd(value, tileKey)}>
-                <Circle radius={24} fill="#eaf4ff" stroke="#3498db" strokeWidth={2} />
-                <Text text={value} x={-20} y={-10} width={40} align="center" fontSize={18} listening={false} />
+                <Circle radius={24} fill={COLOR.indigoLight} stroke={COLOR.indigo} strokeWidth={2} />
+                <Text text={value} x={-20} y={-10} width={40} align="center" fontSize={18} fill={COLOR.indigoDark} listening={false} />
               </Group>
             );
           })}
         </Layer>
       </Stage>
-
-      <div style={{ display: 'flex', gap: 8, marginTop: 8 }}>
-        <button onClick={handleCheck}>Проверить</button>
-        <button onClick={newPuzzle}>Новая цепочка</button>
-      </div>
-    </div>
+    </ToolShell>
   );
 };
-
-function tabButtonStyle(active: boolean): React.CSSProperties {
-  return {
-    padding: '6px 12px',
-    borderRadius: 6,
-    border: active ? '2px solid #2ecc71' : '1px solid #ccc',
-    background: active ? '#eafff2' : '#fff',
-    cursor: 'pointer',
-  };
-}
 
 export default ChainTool;
