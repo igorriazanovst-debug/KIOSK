@@ -49,7 +49,7 @@ const TaskRunner: React.FC<Props> = ({ task, soundOn, onCorrect, onClose }) => {
   }, []);
 
   function handleSubmit() {
-    if (answer == null || phase !== 'answering') return;
+    if (answer == null || phase === 'success' || phase === 'revealed') return;
     if (checkTaskAnswer(task, answer)) {
       setPhase('success');
       setTimeout(onCorrect, 1200);
@@ -85,7 +85,7 @@ const TaskRunner: React.FC<Props> = ({ task, soundOn, onCorrect, onClose }) => {
         choices={task.choices}
         value={answer}
         onChange={setAnswer}
-        disabled={phase !== 'answering'}
+        disabled={phase === 'success' || phase === 'revealed'}
       />
 
       {phase === 'hint' && <div style={hintStyle}>Попробуй ещё раз. Подсказка: {HINTS[task.typeId]}</div>}
