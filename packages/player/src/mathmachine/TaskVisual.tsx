@@ -1,5 +1,6 @@
 import React from 'react';
 import type { Task } from '@kiosk/shared';
+import { COLOR, FONT } from './theme';
 
 const TaskVisual: React.FC<{ task: Task }> = ({ task }) => {
   switch (task.typeId) {
@@ -28,7 +29,7 @@ const TaskVisual: React.FC<{ task: Task }> = ({ task }) => {
       return (
         <div style={barsColumnStyle}>
           <div style={{ ...barStyle, width: left * 20 }} />
-          <div style={{ ...barStyle, width: right * 20, background: '#e67e22' }} />
+          <div style={{ ...barStyle, width: right * 20, background: COLOR.amber }} />
         </div>
       );
     }
@@ -67,9 +68,9 @@ const TaskVisual: React.FC<{ task: Task }> = ({ task }) => {
 };
 
 const dotsRowStyle: React.CSSProperties = { display: 'flex', gap: 8, flexWrap: 'wrap', maxWidth: 400, justifyContent: 'center' };
-const dotStyle: React.CSSProperties = { width: 28, height: 28, borderRadius: '50%', background: '#3498db' };
-const equationStyle: React.CSSProperties = { fontSize: 36, fontWeight: 700 };
+const dotStyle: React.CSSProperties = { width: 28, height: 28, borderRadius: '50%', background: COLOR.amber, border: `2px solid ${COLOR.amberDark}` };
+const equationStyle: React.CSSProperties = { fontFamily: FONT.ui, fontSize: 36, fontWeight: 800, color: COLOR.indigoDark };
 const barsColumnStyle: React.CSSProperties = { display: 'flex', flexDirection: 'column', gap: 12, alignItems: 'flex-start' };
-const barStyle: React.CSSProperties = { height: 24, background: '#9b59b6', borderRadius: 4 };
+const barStyle: React.CSSProperties = { height: 24, background: COLOR.mint, borderRadius: 4 };
 
 export default TaskVisual;

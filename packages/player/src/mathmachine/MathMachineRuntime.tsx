@@ -5,6 +5,7 @@ import CatalogScreen from './CatalogScreen';
 import LabScreen from './LabScreen';
 import { loadUserData, saveUserData } from './userDataStorage';
 import pilotContentJson from './content/pilotContent.json';
+import { COLOR, FONT, NOTEBOOK_GRID_BACKGROUND } from './theme';
 
 interface Props {
   properties: MathMachineWidgetProperties;
@@ -44,13 +45,16 @@ const MathMachineRuntime: React.FC<Props> = ({ properties }) => {
   }
 
   return (
-    <div style={{ width: '100%', height: '100%', background: '#fffdf5', overflow: 'auto' }}>
+    <div style={{ ...NOTEBOOK_GRID_BACKGROUND, width: '100%', height: '100%', overflow: 'auto', fontFamily: FONT.ui, color: COLOR.text }}>
       <div style={topBarStyle}>
-        <span>{properties.title}</span>
-        <div style={{ display: 'flex', gap: 8 }}>
-          <button onClick={() => setScreen('catalog')}>Задания</button>
-          <button onClick={() => setScreen('lab')}>Лаборатория</button>
-          <button onClick={() => setUserData((prev) => ({ ...prev, soundOn: !prev.soundOn }))}>
+        <span style={logoStyle}>{properties.title}</span>
+        <div style={{ display: 'flex', gap: 10 }}>
+          <button onClick={() => setScreen('catalog')} style={navButtonStyle(screen === 'catalog')}>Задания</button>
+          <button onClick={() => setScreen('lab')} style={navButtonStyle(screen === 'lab')}>Лаборатория</button>
+          <button
+            onClick={() => setUserData((prev) => ({ ...prev, soundOn: !prev.soundOn }))}
+            style={soundButtonStyle}
+          >
             {userData.soundOn ? '🔊 Звук вкл' : '🔇 Звук выкл'}
           </button>
         </div>
@@ -69,6 +73,39 @@ const MathMachineRuntime: React.FC<Props> = ({ properties }) => {
   );
 };
 
-const topBarStyle: React.CSSProperties = { display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '8px 24px', fontSize: 14, color: '#555', borderBottom: '1px solid #eee' };
+const topBarStyle: React.CSSProperties = {
+  display: 'flex',
+  justifyContent: 'space-between',
+  alignItems: 'center',
+  padding: '14px 28px',
+  background: COLOR.surface,
+  borderBottom: `3px solid ${COLOR.indigo}`,
+  boxShadow: '0 2px 6px rgba(58, 51, 43, 0.08)',
+};
+const logoStyle: React.CSSProperties = { fontFamily: FONT.display, fontSize: 26, color: COLOR.indigo };
+function navButtonStyle(active: boolean): React.CSSProperties {
+  return {
+    padding: '9px 18px',
+    fontFamily: FONT.ui,
+    fontSize: 15,
+    fontWeight: 700,
+    borderRadius: 10,
+    border: active ? `2px solid ${COLOR.indigo}` : '2px solid transparent',
+    background: active ? COLOR.indigoLight : 'transparent',
+    color: active ? COLOR.indigoDark : COLOR.textMuted,
+    cursor: 'pointer',
+  };
+}
+const soundButtonStyle: React.CSSProperties = {
+  padding: '9px 16px',
+  fontFamily: FONT.ui,
+  fontSize: 14,
+  fontWeight: 700,
+  borderRadius: 10,
+  border: `2px solid ${COLOR.border}`,
+  background: COLOR.surface,
+  color: COLOR.textMuted,
+  cursor: 'pointer',
+};
 
 export default MathMachineRuntime;

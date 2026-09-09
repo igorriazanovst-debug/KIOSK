@@ -3,6 +3,8 @@ import type { Task } from '@kiosk/shared';
 import { checkTaskAnswer, getAnswerMode } from '@kiosk/shared';
 import AnswerInput from './AnswerInput';
 import TaskVisual from './TaskVisual';
+import Mascot from './Mascot';
+import { COLOR, FONT, RADIUS, SHADOW } from './theme';
 
 interface Props {
   task: Task;
@@ -72,9 +74,9 @@ const TaskRunner: React.FC<Props> = ({ task, soundOn, onCorrect, onClose }) => {
       <div style={headerStyle}>
         <span>{task.text}</span>
         <div style={{ display: 'flex', gap: 8 }}>
-          <button onClick={() => soundOn && playNarration(task)} title="Повторить озвучку">🔊</button>
-          <button onClick={handleRestart} title="Начать сначала">↺</button>
-          <button onClick={onClose} title="Закрыть">✕</button>
+          <button onClick={() => soundOn && playNarration(task)} title="Повторить озвучку" style={iconButtonStyle}>🔊</button>
+          <button onClick={handleRestart} title="Начать сначала" style={iconButtonStyle}>↺</button>
+          <button onClick={onClose} title="Закрыть" style={iconButtonStyle}>✕</button>
         </div>
       </div>
 
@@ -88,9 +90,19 @@ const TaskRunner: React.FC<Props> = ({ task, soundOn, onCorrect, onClose }) => {
         disabled={phase === 'success' || phase === 'revealed'}
       />
 
-      {phase === 'hint' && <div style={hintStyle}>Попробуй ещё раз. Подсказка: {HINTS[task.typeId]}</div>}
+      {phase === 'hint' && (
+        <div style={hintStyle}>
+          <Mascot pose="thinking" size={56} />
+          <span>Попробуй ещё раз. Подсказка: {HINTS[task.typeId]}</span>
+        </div>
+      )}
       {phase === 'revealed' && <div style={revealStyle}>Правильный ответ: {String(task.correctAnswer)}</div>}
-      {phase === 'success' && <div style={successStyle}>🎉 Верно!</div>}
+      {phase === 'success' && (
+        <div style={successStyle}>
+          <Mascot pose="celebrating" size={72} />
+          <span>Верно!</span>
+        </div>
+      )}
 
       <button
         onClick={phase === 'revealed' ? onCorrect : handleSubmit}
@@ -103,11 +115,74 @@ const TaskRunner: React.FC<Props> = ({ task, soundOn, onCorrect, onClose }) => {
   );
 };
 
-const containerStyle: React.CSSProperties = { display: 'flex', flexDirection: 'column', gap: 16, padding: 24, alignItems: 'center', background: '#fdf6e3', minHeight: '100%', boxSizing: 'border-box' };
-const headerStyle: React.CSSProperties = { display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '100%', maxWidth: 640, fontSize: 20, fontWeight: 700 };
-const hintStyle: React.CSSProperties = { background: '#fff3cd', padding: 12, borderRadius: 8, maxWidth: 500, textAlign: 'center' };
-const revealStyle: React.CSSProperties = { background: '#f8d7da', padding: 12, borderRadius: 8 };
-const successStyle: React.CSSProperties = { fontSize: 24 };
-const submitButtonStyle: React.CSSProperties = { padding: '12px 32px', fontSize: 18, fontWeight: 700, borderRadius: 10, background: '#e67e22', color: '#fff', border: 'none', cursor: 'pointer' };
+const containerStyle: React.CSSProperties = {
+  display: 'flex',
+  flexDirection: 'column',
+  gap: 18,
+  padding: 28,
+  alignItems: 'center',
+  background: COLOR.cream,
+  minHeight: '100%',
+  boxSizing: 'border-box',
+  fontFamily: FONT.ui,
+  color: COLOR.text,
+};
+const headerStyle: React.CSSProperties = {
+  display: 'flex',
+  justifyContent: 'space-between',
+  alignItems: 'center',
+  width: '100%',
+  maxWidth: 640,
+  fontSize: 20,
+  fontWeight: 700,
+  color: COLOR.indigoDark,
+};
+const iconButtonStyle: React.CSSProperties = {
+  width: 36,
+  height: 36,
+  borderRadius: RADIUS.sm,
+  border: `2px solid ${COLOR.border}`,
+  background: COLOR.surface,
+  cursor: 'pointer',
+  fontSize: 16,
+};
+const hintStyle: React.CSSProperties = {
+  display: 'flex',
+  alignItems: 'center',
+  gap: 14,
+  background: COLOR.amberLight,
+  border: `2px solid ${COLOR.amber}`,
+  padding: '12px 20px',
+  borderRadius: RADIUS.md,
+  maxWidth: 560,
+  textAlign: 'left',
+};
+const revealStyle: React.CSSProperties = {
+  background: COLOR.indigoLight,
+  color: COLOR.indigoDark,
+  padding: '12px 20px',
+  borderRadius: RADIUS.md,
+  fontWeight: 700,
+};
+const successStyle: React.CSSProperties = {
+  display: 'flex',
+  alignItems: 'center',
+  gap: 14,
+  fontSize: 26,
+  fontWeight: 700,
+  color: COLOR.mintDark,
+};
+const submitButtonStyle: React.CSSProperties = {
+  padding: '13px 36px',
+  fontFamily: FONT.ui,
+  fontSize: 18,
+  fontWeight: 700,
+  borderRadius: RADIUS.md,
+  background: COLOR.amber,
+  color: COLOR.text,
+  border: 'none',
+  cursor: 'pointer',
+  boxShadow: SHADOW.card,
+};
 
 export default TaskRunner;
