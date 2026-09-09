@@ -42,7 +42,11 @@ test('every generated task has a correctAnswer consistent with its own params', 
           const { a, b, direction } = task.params as { a: number; b: number; direction: number };
           const expected = direction === 1 ? Math.min(a, b) : Math.max(a, b);
           assert.equal(task.correctAnswer, expected);
-          assert.deepEqual(task.choices, [a, b]);
+          assert.deepEqual(
+            [...(task.choices as number[])].sort((x, y) => x - y),
+            [a, b].sort((x, y) => x - y),
+            `choices must be a permutation of {a,b}: ${task.id}`,
+          );
         }
         if (task.typeId === 'digit_recognition') {
           const { target } = task.params as { target: number };
@@ -65,6 +69,120 @@ test('every generated task has a correctAnswer consistent with its own params', 
       }
     }
   }
+});
+
+// ─── Батарея тестов-инвариантов Эпика 12 (переделка 2026-09-09) ─────────
+// Урок исходного проекта, обобщённый: правильный ответ не должен
+// вычисляться ни из позиции кнопки, ни из формы/порядка контента —
+// проверяется на позицию (частота/периодичность/линейная формула),
+// специфичный для «Сравнения» порядок слов в тексте, и специфичную для
+// «Цифр» эвристику «средний вариант».
+
+function maxFrequency(values: number[]): number {
+  const counts = new Map<number, number>();
+  for (const v of values) counts.set(v, (counts.get(v) ?? 0) + 1);
+  return Math.max(...counts.values());
+}
+
+function exploitablePeriod(values: number[]): number | null {
+  const n = values.length;
+  for (let period = 1; period <= Math.floor(n / 2); period++) {
+    let matches = true;
+    for (let i = period; i < n; i++) {
+      if (values[i] !== values[i % period]) {
+        matches = false;
+        break;
+      }
+    }
+    if (matches) return period;
+  }
+  return null;
+}
+
+function maxLinearFormulaMatch(values: number[], modulus: number): number {
+  let best = 0;
+  for (let a = 0; a < modulus; a++) {
+    for (let c = 0; c < modulus; c++) {
+      let matches = 0;
+      values.forEach((v, i) => {
+        if (((a * i + c) % modulus + modulus) % modulus === v) matches++;
+      });
+      best = Math.max(best, matches);
+    }
+  }
+  return best;
+}
+
+test('within every choice-mode group, the button position is not exploitable (frequency/period/linear formula)', () => {
+  let checkedGroups = 0;
+  for (const topic of WAVE1_TOPICS) {
+    for (const group of topic.groups) {
+      const choiceTasks = group.tasks.filter((t) => Array.isArray(t.choices));
+      if (choiceTasks.length < 4) continue;
+      checkedGroups += 1;
+      const numOptions = choiceTasks[0].choices!.length;
+      const positions = choiceTasks.map((t) => t.choices!.findIndex((c) => String(c) === String(t.correctAnswer)));
+      const freq = maxFrequency(positions);
+      assert.ok(
+        freq <= Math.ceil(choiceTasks.length / 2),
+        `group ${group.id}: button position ${JSON.stringify(positions)} hits one slot ${freq}/${choiceTasks.length} times`,
+      );
+      const period = exploitablePeriod(positions);
+      assert.ok(
+        period === null || period > choiceTasks.length / 2,
+        `group ${group.id}: positions ${JSON.stringify(positions)} follow an exploitable period ${period}`,
+      );
+      const linear = maxLinearFormulaMatch(positions, numOptions);
+      assert.ok(
+        linear <= Math.ceil(choiceTasks.length / 2),
+        `group ${group.id}: a linear formula (a*i+c) mod N matches positions ${JSON.stringify(positions)} in ${linear}/${choiceTasks.length} tasks`,
+      );
+    }
+  }
+  assert.ok(checkedGroups > 0, 'expected at least one choice-mode group to exist');
+});
+
+test('within "Сравнение", the correct number is not always named at the same position in the question text', () => {
+  let checkedGroups = 0;
+  for (const topic of WAVE1_TOPICS) {
+    for (const group of topic.groups) {
+      const tasks = group.tasks.filter((t) => t.typeId === 'number_compare');
+      if (tasks.length < 4) continue;
+      checkedGroups += 1;
+      const namedFirstFlags = tasks.map((t) => {
+        const match = /: (-?\d+) или (-?\d+)\?/.exec(t.text);
+        assert.ok(match, `unparseable comparison text: ${t.text}`);
+        return Number(match![1]) === Number(t.correctAnswer) ? 1 : 0;
+      });
+      const freq = maxFrequency(namedFirstFlags);
+      assert.ok(
+        freq <= Math.ceil(tasks.length / 2),
+        `group ${group.id}: correct number named first/second ${JSON.stringify(namedFirstFlags)} — constant in ${freq}/${tasks.length}`,
+      );
+    }
+  }
+  assert.ok(checkedGroups > 0, 'expected at least one number_compare group to exist');
+});
+
+test('within "Цифры", taking the median of the three shown choices does not solve most tasks', () => {
+  let checkedGroups = 0;
+  for (const topic of WAVE1_TOPICS) {
+    for (const group of topic.groups) {
+      const tasks = group.tasks.filter((t) => t.typeId === 'digit_recognition');
+      if (tasks.length < 4) continue;
+      checkedGroups += 1;
+      let solved = 0;
+      for (const t of tasks) {
+        const sorted = [...(t.choices as number[])].sort((a, b) => a - b);
+        if (sorted[1] === t.correctAnswer) solved += 1;
+      }
+      assert.ok(
+        solved <= Math.ceil(tasks.length / 2),
+        `group ${group.id}: "take the median" heuristic solves ${solved}/${tasks.length} tasks`,
+      );
+    }
+  }
+  assert.ok(checkedGroups > 0, 'expected at least one digit_recognition group to exist');
 });
 
 const BASE_CONTENT: MathMachineContent = {

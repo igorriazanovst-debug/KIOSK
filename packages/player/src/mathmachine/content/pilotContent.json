@@ -1146,7 +1146,7 @@
     },
     "cmp_next_1": {
       "typeId": "number_compare",
-      "text": "Какое число больше: 2 или 3?",
+      "text": "Какое число больше: 3 или 2?",
       "params": {
         "a": 2,
         "b": 3,
@@ -1161,7 +1161,7 @@
     },
     "cmp_next_2": {
       "typeId": "number_compare",
-      "text": "Какое число больше: 3 или 4?",
+      "text": "Какое число больше: 4 или 3?",
       "params": {
         "a": 3,
         "b": 4,
@@ -1169,8 +1169,8 @@
       },
       "correctAnswer": 4,
       "choices": [
-        3,
-        4
+        4,
+        3
       ],
       "id": "cmp_next_2"
     },
@@ -1191,7 +1191,7 @@
     },
     "cmp_next_4": {
       "typeId": "number_compare",
-      "text": "Какое число больше: 5 или 6?",
+      "text": "Какое число больше: 6 или 5?",
       "params": {
         "a": 5,
         "b": 6,
@@ -1199,8 +1199,8 @@
       },
       "correctAnswer": 6,
       "choices": [
-        5,
-        6
+        6,
+        5
       ],
       "id": "cmp_next_4"
     },
@@ -1214,8 +1214,8 @@
       },
       "correctAnswer": 7,
       "choices": [
-        6,
-        7
+        7,
+        6
       ],
       "id": "cmp_next_5"
     },
@@ -1244,14 +1244,14 @@
       },
       "correctAnswer": 9,
       "choices": [
-        8,
-        9
+        9,
+        8
       ],
       "id": "cmp_next_7"
     },
     "cmp_next_8": {
       "typeId": "number_compare",
-      "text": "Какое число больше: 9 или 10?",
+      "text": "Какое число больше: 10 или 9?",
       "params": {
         "a": 9,
         "b": 10,
@@ -1266,7 +1266,7 @@
     },
     "cmp_gap_intro": {
       "typeId": "number_compare",
-      "text": "Какое число меньше: 1 или 3?",
+      "text": "Какое число меньше: 3 или 1?",
       "params": {
         "a": 1,
         "b": 3,
@@ -1289,14 +1289,14 @@
       },
       "correctAnswer": 2,
       "choices": [
-        2,
-        4
+        4,
+        2
       ],
       "id": "cmp_gap_1"
     },
     "cmp_gap_2": {
       "typeId": "number_compare",
-      "text": "Какое число меньше: 3 или 5?",
+      "text": "Какое число меньше: 5 или 3?",
       "params": {
         "a": 3,
         "b": 5,
@@ -1304,8 +1304,8 @@
       },
       "correctAnswer": 3,
       "choices": [
-        3,
-        5
+        5,
+        3
       ],
       "id": "cmp_gap_2"
     },
@@ -1334,14 +1334,14 @@
       },
       "correctAnswer": 5,
       "choices": [
-        5,
-        7
+        7,
+        5
       ],
       "id": "cmp_gap_4"
     },
     "cmp_gap_5": {
       "typeId": "number_compare",
-      "text": "Какое число меньше: 6 или 8?",
+      "text": "Какое число меньше: 8 или 6?",
       "params": {
         "a": 6,
         "b": 8,
@@ -1349,14 +1349,14 @@
       },
       "correctAnswer": 6,
       "choices": [
-        6,
-        8
+        8,
+        6
       ],
       "id": "cmp_gap_5"
     },
     "cmp_gap_6": {
       "typeId": "number_compare",
-      "text": "Какое число меньше: 7 или 9?",
+      "text": "Какое число меньше: 9 или 7?",
       "params": {
         "a": 7,
         "b": 9,
@@ -1392,9 +1392,9 @@
       },
       "correctAnswer": 0,
       "choices": [
+        2,
         0,
-        1,
-        2
+        3
       ],
       "id": "digit_intro"
     },
@@ -1406,9 +1406,9 @@
       },
       "correctAnswer": 1,
       "choices": [
-        1,
         0,
-        2
+        2,
+        1
       ],
       "id": "digit_1"
     },
@@ -1420,9 +1420,9 @@
       },
       "correctAnswer": 2,
       "choices": [
-        2,
-        1,
-        3
+        4,
+        5,
+        2
       ],
       "id": "digit_2"
     },
@@ -1434,9 +1434,9 @@
       },
       "correctAnswer": 3,
       "choices": [
-        3,
-        2,
-        4
+        4,
+        6,
+        3
       ],
       "id": "digit_3"
     },
@@ -1448,9 +1448,9 @@
       },
       "correctAnswer": 4,
       "choices": [
+        5,
         4,
-        3,
-        5
+        1
       ],
       "id": "digit_4"
     },
@@ -1463,8 +1463,8 @@
       "correctAnswer": 5,
       "choices": [
         5,
-        4,
-        6
+        8,
+        3
       ],
       "id": "digit_5"
     },
@@ -1476,9 +1476,9 @@
       },
       "correctAnswer": 6,
       "choices": [
+        8,
         6,
-        5,
-        7
+        9
       ],
       "id": "digit_6"
     },
@@ -1491,8 +1491,8 @@
       "correctAnswer": 7,
       "choices": [
         7,
-        6,
-        8
+        5,
+        6
       ],
       "id": "digit_7"
     },
@@ -1504,9 +1504,9 @@
       },
       "correctAnswer": 8,
       "choices": [
+        9,
         8,
-        7,
-        9
+        7
       ],
       "id": "digit_8"
     },
@@ -1518,9 +1518,9 @@
       },
       "correctAnswer": 9,
       "choices": [
-        9,
+        7,
         8,
-        1
+        9
       ],
       "id": "digit_9"
     },
@@ -1748,17 +1748,17 @@
       "text": "Какое число самое маленькое?",
       "params": {
         "series": [
-          2,
           5,
-          9
+          9,
+          2
         ],
         "direction": 1
       },
       "correctAnswer": 2,
       "choices": [
-        2,
         5,
-        9
+        9,
+        2
       ],
       "id": "order_min_1"
     },
@@ -1767,17 +1767,17 @@
       "text": "Какое число самое маленькое?",
       "params": {
         "series": [
-          3,
           6,
-          10
+          10,
+          3
         ],
         "direction": 1
       },
       "correctAnswer": 3,
       "choices": [
-        3,
         6,
-        10
+        10,
+        3
       ],
       "id": "order_min_2"
     },
@@ -1786,17 +1786,17 @@
       "text": "Какое число самое маленькое?",
       "params": {
         "series": [
+          11,
           4,
-          7,
-          11
+          7
         ],
         "direction": 1
       },
       "correctAnswer": 4,
       "choices": [
+        11,
         4,
-        7,
-        11
+        7
       ],
       "id": "order_min_3"
     },
@@ -1805,17 +1805,17 @@
       "text": "Какое число самое маленькое?",
       "params": {
         "series": [
-          5,
           8,
-          12
+          12,
+          5
         ],
         "direction": 1
       },
       "correctAnswer": 5,
       "choices": [
-        5,
         8,
-        12
+        12,
+        5
       ],
       "id": "order_min_4"
     },
@@ -1824,17 +1824,17 @@
       "text": "Какое число самое маленькое?",
       "params": {
         "series": [
+          13,
           6,
-          9,
-          13
+          9
         ],
         "direction": 1
       },
       "correctAnswer": 6,
       "choices": [
+        13,
         6,
-        9,
-        13
+        9
       ],
       "id": "order_min_5"
     },
@@ -1843,17 +1843,17 @@
       "text": "Какое число самое маленькое?",
       "params": {
         "series": [
+          14,
           7,
-          10,
-          14
+          10
         ],
         "direction": 1
       },
       "correctAnswer": 7,
       "choices": [
+        14,
         7,
-        10,
-        14
+        10
       ],
       "id": "order_min_6"
     },
@@ -1900,17 +1900,17 @@
       "text": "Какое число самое большое?",
       "params": {
         "series": [
-          2,
           4,
-          7
+          7,
+          2
         ],
         "direction": 0
       },
       "correctAnswer": 7,
       "choices": [
-        2,
         4,
-        7
+        7,
+        2
       ],
       "id": "order_max_1"
     },
@@ -1919,17 +1919,17 @@
       "text": "Какое число самое большое?",
       "params": {
         "series": [
+          8,
           3,
-          5,
-          8
+          5
         ],
         "direction": 0
       },
       "correctAnswer": 8,
       "choices": [
+        8,
         3,
-        5,
-        8
+        5
       ],
       "id": "order_max_2"
     },
@@ -1938,17 +1938,17 @@
       "text": "Какое число самое большое?",
       "params": {
         "series": [
-          4,
           6,
-          9
+          9,
+          4
         ],
         "direction": 0
       },
       "correctAnswer": 9,
       "choices": [
-        4,
         6,
-        9
+        9,
+        4
       ],
       "id": "order_max_3"
     },
@@ -1957,17 +1957,17 @@
       "text": "Какое число самое большое?",
       "params": {
         "series": [
+          10,
           5,
-          7,
-          10
+          7
         ],
         "direction": 0
       },
       "correctAnswer": 10,
       "choices": [
+        10,
         5,
-        7,
-        10
+        7
       ],
       "id": "order_max_4"
     },
@@ -1976,17 +1976,17 @@
       "text": "Какое число самое большое?",
       "params": {
         "series": [
+          11,
           6,
-          8,
-          11
+          8
         ],
         "direction": 0
       },
       "correctAnswer": 11,
       "choices": [
+        11,
         6,
-        8,
-        11
+        8
       ],
       "id": "order_max_5"
     },
@@ -1995,17 +1995,17 @@
       "text": "Какое число самое большое?",
       "params": {
         "series": [
+          12,
           7,
-          9,
-          12
+          9
         ],
         "direction": 0
       },
       "correctAnswer": 12,
       "choices": [
+        12,
         7,
-        9,
-        12
+        9
       ],
       "id": "order_max_6"
     },
@@ -4519,14 +4519,6 @@
     {
       "id": "weights",
       "name": "Весы"
-    },
-    {
-      "id": "chain",
-      "name": "Цепочка"
-    },
-    {
-      "id": "two_segments",
-      "name": "Два отрезка"
     }
   ],
   "media": {}

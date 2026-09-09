@@ -4,6 +4,18 @@
 // в отдельном runGenerateWave1.ts. Перечисление детерминировано (без RNG) —
 // для конечных арифметических диапазонов это проще и надёжнее случайной
 // генерации: результат воспроизводим построчным чтением кода.
+//
+// Переделка Эпика 12 (2026-09-09, реставрация): позиция правильного ответа
+// в choice-группах теперь выводится из ХЭША СОДЕРЖАНИЯ задания (params),
+// а не из индекса задания внутри группы — иначе позиция образует
+// тривиальный цикл, предсказуемый без чтения условия. Тем же приёмом
+// устранены находки этой волны: (1) «Сравнение» называло числа в тексте
+// вопроса строго по возрастанию независимо от того, что спрашивается —
+// эвристика по самому тексту вопроса решала группу на 100%, не только по
+// позиции кнопки; (2) «Цифры» — дистракторы target±1 всегда делали
+// правильный ответ медианой трёх показанных чисел; (3) «Упорядочение» —
+// ряд всегда строился по возрастанию, поэтому минимум/максимум всегда
+// стоял на одном и том же (первом/последнем) месте.
 
 import type { MathMachineContent, Task, Group, Topic } from '@kiosk/shared';
 
@@ -25,6 +37,40 @@ function buildGroup(idPrefix: string, name: string, tasks: Omit<Task, 'id'>[]): 
     id: i === 0 ? `${idPrefix}_intro` : `${idPrefix}_${i}`,
   }));
   return { id: `grp_${idPrefix}`, name, tasks: builtTasks };
+}
+
+// ─── Хэш содержания задания (FNV-1a + avalanche-перемешивание) ──────────
+// Не криптографический — единственная цель: разные (соль, params) должны
+// давать разные, невыводимые из номера-задания-в-группе значения. Соль
+// разделяет назначение хэша (позиция кнопки / порядок слов в тексте /
+// выбор дистрактора), чтобы эти оси не совпадали друг с другом.
+
+function fnv1a(str: string): number {
+  let h = 0x811c9dc5;
+  for (let i = 0; i < str.length; i++) {
+    h ^= str.charCodeAt(i);
+    h = Math.imul(h, 0x01000193);
+  }
+  return h >>> 0;
+}
+
+function avalanche(h: number): number {
+  h ^= h >>> 16;
+  h = Math.imul(h, 0x85ebca6b);
+  h ^= h >>> 13;
+  h = Math.imul(h, 0xc2b2ae35);
+  h ^= h >>> 16;
+  return h >>> 0;
+}
+
+function contentHash(salt: string, parts: (number | string)[]): number {
+  return avalanche(fnv1a(salt + '|' + parts.join(',')));
+}
+
+function rotate<T>(arr: T[], shift: number): T[] {
+  const n = arr.length;
+  const s = ((shift % n) + n) % n;
+  return [...arr.slice(s), ...arr.slice(0, s)];
 }
 
 // ─── Вычитание (17 заданий: 9 + 8) ────────────────────────────────────
@@ -54,16 +100,23 @@ function buildSubtractionTopic(): TopicSpec {
 
 // ─── Сравнение (17 заданий: 9 + 8) ─────────────────────────────────────
 // direction: 1 = спрашиваем "меньше" (ищем минимум); 0 = "больше" (максимум).
+// Порядок называния чисел в тексте вопроса и позиция кнопки — две
+// НЕЗАВИСИМЫЕ оси, каждая со своей солью, чтобы одна не выводилась из
+// другой.
 
 function numberCompareTask(a: number, b: number, direction: 0 | 1): Omit<Task, 'id'> {
   const question = direction === 1 ? 'меньше' : 'больше';
   const correct = direction === 1 ? Math.min(a, b) : Math.max(a, b);
+  const nameSwapped = contentHash('w1-cmp-text-order-1', [a, b, direction]) % 2 === 1;
+  const [first, second] = nameSwapped ? [b, a] : [a, b];
+  const posShift = contentHash('w1-cmp-position-46', [a, b, direction]);
+  const choices = rotate([a, b], posShift);
   return {
     typeId: 'number_compare',
-    text: `Какое число ${question}: ${a} или ${b}?`,
+    text: `Какое число ${question}: ${first} или ${second}?`,
     params: { a, b, direction },
     correctAnswer: correct,
-    choices: [a, b],
+    choices,
   };
 }
 
@@ -82,20 +135,27 @@ function buildComparisonTopic(): TopicSpec {
 }
 
 // ─── Цифры (10 заданий) ────────────────────────────────────────────────
+// Дистракторы больше не всегда target±1 (что делало target медианой трёх
+// показанных чисел) — выбираются хэшем из более широкого пула смещений,
+// так что target не всегда оказывается серединой при сортировке.
+
+const DIGIT_OFFSET_POOL = [-3, -2, -1, 1, 2, 3];
 
 function digitTask(target: number): Omit<Task, 'id'> {
-  const distractors: number[] = [target - 1, target + 1].filter((d) => d >= 0 && d <= 9 && d !== target);
-  let fallback = (target + 2) % 10;
-  while (distractors.length < 2) {
-    if (!distractors.includes(fallback) && fallback !== target) distractors.push(fallback);
-    fallback = (fallback + 1) % 10;
-  }
+  const candidates = DIGIT_OFFSET_POOL.map((d) => target + d).filter((v) => v >= 0 && v <= 9);
+  const idx1 = contentHash('w1-digit-d1', [target]) % candidates.length;
+  const d1 = candidates[idx1];
+  const rest = candidates.filter((v) => v !== d1);
+  const idx2 = contentHash('w1-digit-d2', [target, d1]) % rest.length;
+  const d2 = rest[idx2];
+  const posShift = contentHash('w1-digit-position-1', [target]);
+  const choices = rotate([target, d1, d2], posShift);
   return {
     typeId: 'digit_recognition',
     text: `Найди цифру ${target}`,
     params: { target },
     correctAnswer: target,
-    choices: [target, ...distractors.slice(0, 2)],
+    choices,
   };
 }
 
@@ -139,10 +199,15 @@ function buildCompositionTopic(): TopicSpec {
 }
 
 // ─── Упорядочение (16 заданий: 8 + 8) ──────────────────────────────────
-// direction: 1 = ищем наименьшее; 0 = ищем наибольшее (та же конвенция, что number_compare).
+// direction: 1 = ищем наименьшее; 0 = ищем наибольшее. Базовый ряд всегда
+// строился по возрастанию, поэтому минимум/максимум стоял на одном и том
+// же месте (первом/последнем) во всех заданиях группы — теперь порядок
+// показа ряда поворачивается хэшем содержания, независимо от direction.
 
-function orderingTask(series: number[], direction: 0 | 1): Omit<Task, 'id'> {
+function orderingTask(baseSeries: number[], direction: 0 | 1): Omit<Task, 'id'> {
   const question = direction === 1 ? 'самое маленькое' : 'самое большое';
+  const posShift = contentHash('w1-order-position-12', [...baseSeries, direction]);
+  const series = rotate(baseSeries, posShift);
   const correct = direction === 1 ? Math.min(...series) : Math.max(...series);
   return {
     typeId: 'number_ordering',
