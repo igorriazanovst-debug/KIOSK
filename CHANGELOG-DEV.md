@@ -5,6 +5,16 @@
 
 ---
 
+## 2026-09-09 (продолжение 2)
+
+### REFACTOR — общий модуль для дублированных хелперов генераторов контента
+- **Что было:** `buildGroup`/`rotate`/`contentHash`(+`fnv1a`/`avalanche`)/`DIVISION_DECOY_SCHEMES`/`formatDivision`/`divideTask`/`mergeIntoContent` дублировались по себе в `generateWave1/2/3Content.ts` — осознанное решение спеки волны 2 («каждый скрипт волны самодостаточен»), но при переделке Эпика 12 правки приходилось вносить в 2-3 местах одновременно.
+- **Способ:** вынесены в `generatorShared.ts` — только чистая инфраструктура; сама волна (задания/темы/диапазоны) осталась в каждом `generateWaveNContent.ts`. Соли для `divideTask` передаются явно на месте вызова (без изменений значений), не берутся из общего дефолта.
+- **Файлы:** `packages/player/src/mathmachine/content/{generatorShared.ts,generatorShared.test.ts,generateWave1Content.ts,generateWave2Content.ts,generateWave3Content.ts}`.
+- **Проверка:** чисто структурный рефакторинг — `pilotContent.json` перегенерирован от базы Этапа 1 через все три `runGenerateWaveN.ts` и совпал ПОБАЙТОВО (`diff` exit 0) с состоянием до рефакторинга. player 270/270 (было 259 + 11 новых тестов), `tsc --noEmit` чист. Коммит `5d17bc1`.
+
+---
+
 ## 2026-09-09 (продолжение)
 
 ### FEATURE — офлайн-озвучка 18 пилотных заданий Этапа 1
