@@ -28,6 +28,26 @@ const orderingTask: Task = {
   id: 't7', typeId: 'number_ordering', text: 'Какое число самое маленькое?', params: { series: [4, 7, 2], direction: 1 },
   correctAnswer: 2, choices: [4, 7, 2],
 };
+const multiplyTask: Task = {
+  id: 'w2t1', typeId: 'number_multiply_two', text: 'Сколько будет 3 умножить на 4?', params: { a: 3, b: 4 },
+  correctAnswer: 12,
+};
+const divideTask: Task = {
+  id: 'w2t2', typeId: 'number_divide_remainder', text: 'Сколько будет 7 разделить на 2?', params: { a: 7, b: 2 },
+  correctAnswer: '3 ост. 1', choices: ['3 ост. 1', '3 ост. 2', '2 ост. 1'],
+};
+const multipleCheckTask: Task = {
+  id: 'w2t3', typeId: 'number_multiple_check', text: 'Какое из чисел делится на 3 без остатка?', params: { n: 3, options: [9, 10, 8] },
+  correctAnswer: 9, choices: [9, 10, 8],
+};
+const roundTask: Task = {
+  id: 'w2t4', typeId: 'round_to_ten', text: 'Округли 47 до десятков', params: { n: 47 },
+  correctAnswer: 50,
+};
+const ordinalTask: Task = {
+  id: 'w2t5', typeId: 'ordinal_position', text: 'Какое число стоит на 3-м месте: 5, 8, 2, 9, 1?', params: { series: [5, 8, 2, 9, 1], position: 3 },
+  correctAnswer: 2,
+};
 
 test('checkTaskAnswer accepts a correct numeric answer given as a number', () => {
   assert.equal(checkTaskAnswer(sumTask, 5), true);
@@ -79,4 +99,25 @@ test('checkTaskAnswer validates each Этап 2b wave 1 type correctly', () => {
   assert.equal(checkTaskAnswer(compositionTask, 2), false);
   assert.equal(checkTaskAnswer(orderingTask, 2), true);
   assert.equal(checkTaskAnswer(orderingTask, 7), false);
+});
+
+test('getAnswerMode returns the right mode for each Этап 2b wave 2 type', () => {
+  assert.equal(getAnswerMode('number_multiply_two'), 'numeric');
+  assert.equal(getAnswerMode('number_divide_remainder'), 'choice');
+  assert.equal(getAnswerMode('number_multiple_check'), 'choice');
+  assert.equal(getAnswerMode('round_to_ten'), 'numeric');
+  assert.equal(getAnswerMode('ordinal_position'), 'numeric');
+});
+
+test('checkTaskAnswer validates each Этап 2b wave 2 type correctly', () => {
+  assert.equal(checkTaskAnswer(multiplyTask, 12), true);
+  assert.equal(checkTaskAnswer(multiplyTask, 11), false);
+  assert.equal(checkTaskAnswer(divideTask, '3 ост. 1'), true);
+  assert.equal(checkTaskAnswer(divideTask, '3 ост. 2'), false);
+  assert.equal(checkTaskAnswer(multipleCheckTask, 9), true);
+  assert.equal(checkTaskAnswer(multipleCheckTask, 10), false);
+  assert.equal(checkTaskAnswer(roundTask, 50), true);
+  assert.equal(checkTaskAnswer(roundTask, 40), false);
+  assert.equal(checkTaskAnswer(ordinalTask, 2), true);
+  assert.equal(checkTaskAnswer(ordinalTask, 8), false);
 });

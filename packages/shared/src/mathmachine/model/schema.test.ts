@@ -93,3 +93,10 @@ test('TaskTypeIdSchema accepts the five Этап 2b wave 1 task types', () => {
     assert.equal(TaskTypeIdSchema.safeParse(id).success, true, `expected ${id} to be a valid TaskTypeId`);
   }
 });
+
+test('TaskTypeIdSchema accepts the five Этап 2b wave 2 task types', () => {
+  const wave2Types = ['number_multiply_two', 'number_divide_remainder', 'number_multiple_check', 'round_to_ten', 'ordinal_position'];
+  for (const id of wave2Types) {
+    assert.equal(TaskTypeIdSchema.safeParse(id).success, true, `expected ${id} to be a valid TaskTypeId`);
+  }
+});

@@ -47,6 +47,18 @@ const TaskVisual: React.FC<{ task: Task }> = ({ task }) => {
       const series = (task.params.series as unknown as number[]) ?? [];
       return <div style={equationStyle}>{series.join('   ')}</div>;
     }
+    case 'number_multiply_two':
+      return <div style={equationStyle}>{String(task.params.a)} × {String(task.params.b)} = ?</div>;
+    case 'number_divide_remainder':
+      return <div style={equationStyle}>{String(task.params.a)} : {String(task.params.b)} = ?</div>;
+    case 'number_multiple_check':
+      return <div style={equationStyle}>Делится на {String(task.params.n)}?</div>;
+    case 'round_to_ten':
+      return <div style={equationStyle}>{String(task.params.n)} ≈ ?</div>;
+    case 'ordinal_position': {
+      const series = (task.params.series as unknown as number[]) ?? [];
+      return <div style={equationStyle}>{series.join('   ')}</div>;
+    }
     default:
       return null;
   }

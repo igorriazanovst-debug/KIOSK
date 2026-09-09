@@ -11,7 +11,12 @@
         "top_comparison",
         "top_digits",
         "top_composition",
-        "top_ordering"
+        "top_ordering",
+        "top_multiplication",
+        "top_division",
+        "top_multiples",
+        "top_rounding",
+        "top_ordinal"
       ]
     }
   ],
@@ -69,6 +74,45 @@
       "groupIds": [
         "grp_order_min",
         "grp_order_max"
+      ]
+    },
+    "top_multiplication": {
+      "id": "top_multiplication",
+      "name": "Умножение",
+      "groupIds": [
+        "grp_mult_by2",
+        "grp_mult_by5"
+      ]
+    },
+    "top_division": {
+      "id": "top_division",
+      "name": "Деление",
+      "groupIds": [
+        "grp_div_23",
+        "grp_div_45"
+      ]
+    },
+    "top_multiples": {
+      "id": "top_multiples",
+      "name": "Кратные",
+      "groupIds": [
+        "grp_kratn_23",
+        "grp_kratn_45"
+      ]
+    },
+    "top_rounding": {
+      "id": "top_rounding",
+      "name": "Оценки",
+      "groupIds": [
+        "grp_round_a",
+        "grp_round_b"
+      ]
+    },
+    "top_ordinal": {
+      "id": "top_ordinal",
+      "name": "Порядковые числительные",
+      "groupIds": [
+        "grp_ordpos"
       ]
     }
   },
@@ -247,6 +291,136 @@
         "order_max_5",
         "order_max_6",
         "order_max_7"
+      ]
+    },
+    "grp_mult_by2": {
+      "id": "grp_mult_by2",
+      "name": "Таблица умножения на 2",
+      "taskIds": [
+        "mult_by2_intro",
+        "mult_by2_1",
+        "mult_by2_2",
+        "mult_by2_3",
+        "mult_by2_4",
+        "mult_by2_5",
+        "mult_by2_6",
+        "mult_by2_7",
+        "mult_by2_8",
+        "mult_by2_9"
+      ]
+    },
+    "grp_mult_by5": {
+      "id": "grp_mult_by5",
+      "name": "Таблица умножения на 5",
+      "taskIds": [
+        "mult_by5_intro",
+        "mult_by5_1",
+        "mult_by5_2",
+        "mult_by5_3",
+        "mult_by5_4",
+        "mult_by5_5",
+        "mult_by5_6",
+        "mult_by5_7",
+        "mult_by5_8",
+        "mult_by5_9"
+      ]
+    },
+    "grp_div_23": {
+      "id": "grp_div_23",
+      "name": "Деление на 2 и 3",
+      "taskIds": [
+        "div_23_intro",
+        "div_23_1",
+        "div_23_2",
+        "div_23_3",
+        "div_23_4",
+        "div_23_5",
+        "div_23_6",
+        "div_23_7"
+      ]
+    },
+    "grp_div_45": {
+      "id": "grp_div_45",
+      "name": "Деление на 4 и 5",
+      "taskIds": [
+        "div_45_intro",
+        "div_45_1",
+        "div_45_2",
+        "div_45_3",
+        "div_45_4",
+        "div_45_5",
+        "div_45_6",
+        "div_45_7"
+      ]
+    },
+    "grp_kratn_23": {
+      "id": "grp_kratn_23",
+      "name": "Кратные 2 и 3",
+      "taskIds": [
+        "kratn_23_intro",
+        "kratn_23_1",
+        "kratn_23_2",
+        "kratn_23_3",
+        "kratn_23_4",
+        "kratn_23_5",
+        "kratn_23_6",
+        "kratn_23_7"
+      ]
+    },
+    "grp_kratn_45": {
+      "id": "grp_kratn_45",
+      "name": "Кратные 4 и 5",
+      "taskIds": [
+        "kratn_45_intro",
+        "kratn_45_1",
+        "kratn_45_2",
+        "kratn_45_3",
+        "kratn_45_4",
+        "kratn_45_5",
+        "kratn_45_6",
+        "kratn_45_7"
+      ]
+    },
+    "grp_round_a": {
+      "id": "grp_round_a",
+      "name": "Округление до 60",
+      "taskIds": [
+        "round_a_intro",
+        "round_a_1",
+        "round_a_2",
+        "round_a_3",
+        "round_a_4",
+        "round_a_5",
+        "round_a_6",
+        "round_a_7"
+      ]
+    },
+    "grp_round_b": {
+      "id": "grp_round_b",
+      "name": "Округление от 60",
+      "taskIds": [
+        "round_b_intro",
+        "round_b_1",
+        "round_b_2",
+        "round_b_3",
+        "round_b_4",
+        "round_b_5",
+        "round_b_6",
+        "round_b_7"
+      ]
+    },
+    "grp_ordpos": {
+      "id": "grp_ordpos",
+      "name": "Найди число по номеру",
+      "taskIds": [
+        "ordpos_intro",
+        "ordpos_1",
+        "ordpos_2",
+        "ordpos_3",
+        "ordpos_4",
+        "ordpos_5",
+        "ordpos_6",
+        "ordpos_7"
       ]
     }
   },
@@ -1522,6 +1696,1022 @@
         13
       ],
       "id": "order_max_7"
+    },
+    "mult_by2_intro": {
+      "typeId": "number_multiply_two",
+      "text": "Сколько будет 1 умножить на 2?",
+      "params": {
+        "a": 1,
+        "b": 2
+      },
+      "correctAnswer": 2,
+      "id": "mult_by2_intro"
+    },
+    "mult_by2_1": {
+      "typeId": "number_multiply_two",
+      "text": "Сколько будет 2 умножить на 2?",
+      "params": {
+        "a": 2,
+        "b": 2
+      },
+      "correctAnswer": 4,
+      "id": "mult_by2_1"
+    },
+    "mult_by2_2": {
+      "typeId": "number_multiply_two",
+      "text": "Сколько будет 3 умножить на 2?",
+      "params": {
+        "a": 3,
+        "b": 2
+      },
+      "correctAnswer": 6,
+      "id": "mult_by2_2"
+    },
+    "mult_by2_3": {
+      "typeId": "number_multiply_two",
+      "text": "Сколько будет 4 умножить на 2?",
+      "params": {
+        "a": 4,
+        "b": 2
+      },
+      "correctAnswer": 8,
+      "id": "mult_by2_3"
+    },
+    "mult_by2_4": {
+      "typeId": "number_multiply_two",
+      "text": "Сколько будет 5 умножить на 2?",
+      "params": {
+        "a": 5,
+        "b": 2
+      },
+      "correctAnswer": 10,
+      "id": "mult_by2_4"
+    },
+    "mult_by2_5": {
+      "typeId": "number_multiply_two",
+      "text": "Сколько будет 6 умножить на 2?",
+      "params": {
+        "a": 6,
+        "b": 2
+      },
+      "correctAnswer": 12,
+      "id": "mult_by2_5"
+    },
+    "mult_by2_6": {
+      "typeId": "number_multiply_two",
+      "text": "Сколько будет 7 умножить на 2?",
+      "params": {
+        "a": 7,
+        "b": 2
+      },
+      "correctAnswer": 14,
+      "id": "mult_by2_6"
+    },
+    "mult_by2_7": {
+      "typeId": "number_multiply_two",
+      "text": "Сколько будет 8 умножить на 2?",
+      "params": {
+        "a": 8,
+        "b": 2
+      },
+      "correctAnswer": 16,
+      "id": "mult_by2_7"
+    },
+    "mult_by2_8": {
+      "typeId": "number_multiply_two",
+      "text": "Сколько будет 9 умножить на 2?",
+      "params": {
+        "a": 9,
+        "b": 2
+      },
+      "correctAnswer": 18,
+      "id": "mult_by2_8"
+    },
+    "mult_by2_9": {
+      "typeId": "number_multiply_two",
+      "text": "Сколько будет 10 умножить на 2?",
+      "params": {
+        "a": 10,
+        "b": 2
+      },
+      "correctAnswer": 20,
+      "id": "mult_by2_9"
+    },
+    "mult_by5_intro": {
+      "typeId": "number_multiply_two",
+      "text": "Сколько будет 1 умножить на 5?",
+      "params": {
+        "a": 1,
+        "b": 5
+      },
+      "correctAnswer": 5,
+      "id": "mult_by5_intro"
+    },
+    "mult_by5_1": {
+      "typeId": "number_multiply_two",
+      "text": "Сколько будет 2 умножить на 5?",
+      "params": {
+        "a": 2,
+        "b": 5
+      },
+      "correctAnswer": 10,
+      "id": "mult_by5_1"
+    },
+    "mult_by5_2": {
+      "typeId": "number_multiply_two",
+      "text": "Сколько будет 3 умножить на 5?",
+      "params": {
+        "a": 3,
+        "b": 5
+      },
+      "correctAnswer": 15,
+      "id": "mult_by5_2"
+    },
+    "mult_by5_3": {
+      "typeId": "number_multiply_two",
+      "text": "Сколько будет 4 умножить на 5?",
+      "params": {
+        "a": 4,
+        "b": 5
+      },
+      "correctAnswer": 20,
+      "id": "mult_by5_3"
+    },
+    "mult_by5_4": {
+      "typeId": "number_multiply_two",
+      "text": "Сколько будет 5 умножить на 5?",
+      "params": {
+        "a": 5,
+        "b": 5
+      },
+      "correctAnswer": 25,
+      "id": "mult_by5_4"
+    },
+    "mult_by5_5": {
+      "typeId": "number_multiply_two",
+      "text": "Сколько будет 6 умножить на 5?",
+      "params": {
+        "a": 6,
+        "b": 5
+      },
+      "correctAnswer": 30,
+      "id": "mult_by5_5"
+    },
+    "mult_by5_6": {
+      "typeId": "number_multiply_two",
+      "text": "Сколько будет 7 умножить на 5?",
+      "params": {
+        "a": 7,
+        "b": 5
+      },
+      "correctAnswer": 35,
+      "id": "mult_by5_6"
+    },
+    "mult_by5_7": {
+      "typeId": "number_multiply_two",
+      "text": "Сколько будет 8 умножить на 5?",
+      "params": {
+        "a": 8,
+        "b": 5
+      },
+      "correctAnswer": 40,
+      "id": "mult_by5_7"
+    },
+    "mult_by5_8": {
+      "typeId": "number_multiply_two",
+      "text": "Сколько будет 9 умножить на 5?",
+      "params": {
+        "a": 9,
+        "b": 5
+      },
+      "correctAnswer": 45,
+      "id": "mult_by5_8"
+    },
+    "mult_by5_9": {
+      "typeId": "number_multiply_two",
+      "text": "Сколько будет 10 умножить на 5?",
+      "params": {
+        "a": 10,
+        "b": 5
+      },
+      "correctAnswer": 50,
+      "id": "mult_by5_9"
+    },
+    "div_23_intro": {
+      "typeId": "number_divide_remainder",
+      "text": "Сколько будет 5 разделить на 2?",
+      "params": {
+        "a": 5,
+        "b": 2
+      },
+      "correctAnswer": "2 ост. 1",
+      "choices": [
+        "2 ост. 1",
+        "2 ост. 0",
+        "1 ост. 1"
+      ],
+      "id": "div_23_intro"
+    },
+    "div_23_1": {
+      "typeId": "number_divide_remainder",
+      "text": "Сколько будет 7 разделить на 2?",
+      "params": {
+        "a": 7,
+        "b": 2
+      },
+      "correctAnswer": "3 ост. 1",
+      "choices": [
+        "3 ост. 0",
+        "2 ост. 1",
+        "3 ост. 1"
+      ],
+      "id": "div_23_1"
+    },
+    "div_23_2": {
+      "typeId": "number_divide_remainder",
+      "text": "Сколько будет 9 разделить на 2?",
+      "params": {
+        "a": 9,
+        "b": 2
+      },
+      "correctAnswer": "4 ост. 1",
+      "choices": [
+        "3 ост. 1",
+        "4 ост. 1",
+        "4 ост. 0"
+      ],
+      "id": "div_23_2"
+    },
+    "div_23_3": {
+      "typeId": "number_divide_remainder",
+      "text": "Сколько будет 11 разделить на 2?",
+      "params": {
+        "a": 11,
+        "b": 2
+      },
+      "correctAnswer": "5 ост. 1",
+      "choices": [
+        "5 ост. 1",
+        "5 ост. 0",
+        "4 ост. 1"
+      ],
+      "id": "div_23_3"
+    },
+    "div_23_4": {
+      "typeId": "number_divide_remainder",
+      "text": "Сколько будет 7 разделить на 3?",
+      "params": {
+        "a": 7,
+        "b": 3
+      },
+      "correctAnswer": "2 ост. 1",
+      "choices": [
+        "2 ост. 2",
+        "1 ост. 1",
+        "2 ост. 1"
+      ],
+      "id": "div_23_4"
+    },
+    "div_23_5": {
+      "typeId": "number_divide_remainder",
+      "text": "Сколько будет 8 разделить на 3?",
+      "params": {
+        "a": 8,
+        "b": 3
+      },
+      "correctAnswer": "2 ост. 2",
+      "choices": [
+        "1 ост. 2",
+        "2 ост. 2",
+        "2 ост. 0"
+      ],
+      "id": "div_23_5"
+    },
+    "div_23_6": {
+      "typeId": "number_divide_remainder",
+      "text": "Сколько будет 10 разделить на 3?",
+      "params": {
+        "a": 10,
+        "b": 3
+      },
+      "correctAnswer": "3 ост. 1",
+      "choices": [
+        "3 ост. 1",
+        "3 ост. 2",
+        "2 ост. 1"
+      ],
+      "id": "div_23_6"
+    },
+    "div_23_7": {
+      "typeId": "number_divide_remainder",
+      "text": "Сколько будет 11 разделить на 3?",
+      "params": {
+        "a": 11,
+        "b": 3
+      },
+      "correctAnswer": "3 ост. 2",
+      "choices": [
+        "3 ост. 0",
+        "2 ост. 2",
+        "3 ост. 2"
+      ],
+      "id": "div_23_7"
+    },
+    "div_45_intro": {
+      "typeId": "number_divide_remainder",
+      "text": "Сколько будет 9 разделить на 4?",
+      "params": {
+        "a": 9,
+        "b": 4
+      },
+      "correctAnswer": "2 ост. 1",
+      "choices": [
+        "2 ост. 1",
+        "2 ост. 2",
+        "1 ост. 1"
+      ],
+      "id": "div_45_intro"
+    },
+    "div_45_1": {
+      "typeId": "number_divide_remainder",
+      "text": "Сколько будет 11 разделить на 4?",
+      "params": {
+        "a": 11,
+        "b": 4
+      },
+      "correctAnswer": "2 ост. 3",
+      "choices": [
+        "2 ост. 0",
+        "1 ост. 3",
+        "2 ост. 3"
+      ],
+      "id": "div_45_1"
+    },
+    "div_45_2": {
+      "typeId": "number_divide_remainder",
+      "text": "Сколько будет 13 разделить на 4?",
+      "params": {
+        "a": 13,
+        "b": 4
+      },
+      "correctAnswer": "3 ост. 1",
+      "choices": [
+        "2 ост. 1",
+        "3 ост. 1",
+        "3 ост. 2"
+      ],
+      "id": "div_45_2"
+    },
+    "div_45_3": {
+      "typeId": "number_divide_remainder",
+      "text": "Сколько будет 14 разделить на 4?",
+      "params": {
+        "a": 14,
+        "b": 4
+      },
+      "correctAnswer": "3 ост. 2",
+      "choices": [
+        "3 ост. 2",
+        "3 ост. 3",
+        "2 ост. 2"
+      ],
+      "id": "div_45_3"
+    },
+    "div_45_4": {
+      "typeId": "number_divide_remainder",
+      "text": "Сколько будет 7 разделить на 5?",
+      "params": {
+        "a": 7,
+        "b": 5
+      },
+      "correctAnswer": "1 ост. 2",
+      "choices": [
+        "1 ост. 3",
+        "0 ост. 2",
+        "1 ост. 2"
+      ],
+      "id": "div_45_4"
+    },
+    "div_45_5": {
+      "typeId": "number_divide_remainder",
+      "text": "Сколько будет 8 разделить на 5?",
+      "params": {
+        "a": 8,
+        "b": 5
+      },
+      "correctAnswer": "1 ост. 3",
+      "choices": [
+        "0 ост. 3",
+        "1 ост. 3",
+        "1 ост. 4"
+      ],
+      "id": "div_45_5"
+    },
+    "div_45_6": {
+      "typeId": "number_divide_remainder",
+      "text": "Сколько будет 12 разделить на 5?",
+      "params": {
+        "a": 12,
+        "b": 5
+      },
+      "correctAnswer": "2 ост. 2",
+      "choices": [
+        "2 ост. 2",
+        "2 ост. 3",
+        "1 ост. 2"
+      ],
+      "id": "div_45_6"
+    },
+    "div_45_7": {
+      "typeId": "number_divide_remainder",
+      "text": "Сколько будет 13 разделить на 5?",
+      "params": {
+        "a": 13,
+        "b": 5
+      },
+      "correctAnswer": "2 ост. 3",
+      "choices": [
+        "2 ост. 4",
+        "1 ост. 3",
+        "2 ост. 3"
+      ],
+      "id": "div_45_7"
+    },
+    "kratn_23_intro": {
+      "typeId": "number_multiple_check",
+      "text": "Какое из чисел делится на 2 без остатка?",
+      "params": {
+        "n": 2,
+        "options": [
+          4,
+          5,
+          3
+        ]
+      },
+      "correctAnswer": 4,
+      "choices": [
+        4,
+        5,
+        3
+      ],
+      "id": "kratn_23_intro"
+    },
+    "kratn_23_1": {
+      "typeId": "number_multiple_check",
+      "text": "Какое из чисел делится на 2 без остатка?",
+      "params": {
+        "n": 2,
+        "options": [
+          7,
+          5,
+          6
+        ]
+      },
+      "correctAnswer": 6,
+      "choices": [
+        7,
+        5,
+        6
+      ],
+      "id": "kratn_23_1"
+    },
+    "kratn_23_2": {
+      "typeId": "number_multiple_check",
+      "text": "Какое из чисел делится на 2 без остатка?",
+      "params": {
+        "n": 2,
+        "options": [
+          7,
+          8,
+          9
+        ]
+      },
+      "correctAnswer": 8,
+      "choices": [
+        7,
+        8,
+        9
+      ],
+      "id": "kratn_23_2"
+    },
+    "kratn_23_3": {
+      "typeId": "number_multiple_check",
+      "text": "Какое из чисел делится на 2 без остатка?",
+      "params": {
+        "n": 2,
+        "options": [
+          10,
+          11,
+          9
+        ]
+      },
+      "correctAnswer": 10,
+      "choices": [
+        10,
+        11,
+        9
+      ],
+      "id": "kratn_23_3"
+    },
+    "kratn_23_4": {
+      "typeId": "number_multiple_check",
+      "text": "Какое из чисел делится на 3 без остатка?",
+      "params": {
+        "n": 3,
+        "options": [
+          7,
+          5,
+          6
+        ]
+      },
+      "correctAnswer": 6,
+      "choices": [
+        7,
+        5,
+        6
+      ],
+      "id": "kratn_23_4"
+    },
+    "kratn_23_5": {
+      "typeId": "number_multiple_check",
+      "text": "Какое из чисел делится на 3 без остатка?",
+      "params": {
+        "n": 3,
+        "options": [
+          8,
+          9,
+          10
+        ]
+      },
+      "correctAnswer": 9,
+      "choices": [
+        8,
+        9,
+        10
+      ],
+      "id": "kratn_23_5"
+    },
+    "kratn_23_6": {
+      "typeId": "number_multiple_check",
+      "text": "Какое из чисел делится на 3 без остатка?",
+      "params": {
+        "n": 3,
+        "options": [
+          12,
+          13,
+          11
+        ]
+      },
+      "correctAnswer": 12,
+      "choices": [
+        12,
+        13,
+        11
+      ],
+      "id": "kratn_23_6"
+    },
+    "kratn_23_7": {
+      "typeId": "number_multiple_check",
+      "text": "Какое из чисел делится на 3 без остатка?",
+      "params": {
+        "n": 3,
+        "options": [
+          16,
+          14,
+          15
+        ]
+      },
+      "correctAnswer": 15,
+      "choices": [
+        16,
+        14,
+        15
+      ],
+      "id": "kratn_23_7"
+    },
+    "kratn_45_intro": {
+      "typeId": "number_multiple_check",
+      "text": "Какое из чисел делится на 4 без остатка?",
+      "params": {
+        "n": 4,
+        "options": [
+          8,
+          9,
+          7
+        ]
+      },
+      "correctAnswer": 8,
+      "choices": [
+        8,
+        9,
+        7
+      ],
+      "id": "kratn_45_intro"
+    },
+    "kratn_45_1": {
+      "typeId": "number_multiple_check",
+      "text": "Какое из чисел делится на 4 без остатка?",
+      "params": {
+        "n": 4,
+        "options": [
+          13,
+          11,
+          12
+        ]
+      },
+      "correctAnswer": 12,
+      "choices": [
+        13,
+        11,
+        12
+      ],
+      "id": "kratn_45_1"
+    },
+    "kratn_45_2": {
+      "typeId": "number_multiple_check",
+      "text": "Какое из чисел делится на 4 без остатка?",
+      "params": {
+        "n": 4,
+        "options": [
+          15,
+          16,
+          17
+        ]
+      },
+      "correctAnswer": 16,
+      "choices": [
+        15,
+        16,
+        17
+      ],
+      "id": "kratn_45_2"
+    },
+    "kratn_45_3": {
+      "typeId": "number_multiple_check",
+      "text": "Какое из чисел делится на 4 без остатка?",
+      "params": {
+        "n": 4,
+        "options": [
+          20,
+          21,
+          19
+        ]
+      },
+      "correctAnswer": 20,
+      "choices": [
+        20,
+        21,
+        19
+      ],
+      "id": "kratn_45_3"
+    },
+    "kratn_45_4": {
+      "typeId": "number_multiple_check",
+      "text": "Какое из чисел делится на 5 без остатка?",
+      "params": {
+        "n": 5,
+        "options": [
+          11,
+          9,
+          10
+        ]
+      },
+      "correctAnswer": 10,
+      "choices": [
+        11,
+        9,
+        10
+      ],
+      "id": "kratn_45_4"
+    },
+    "kratn_45_5": {
+      "typeId": "number_multiple_check",
+      "text": "Какое из чисел делится на 5 без остатка?",
+      "params": {
+        "n": 5,
+        "options": [
+          14,
+          15,
+          16
+        ]
+      },
+      "correctAnswer": 15,
+      "choices": [
+        14,
+        15,
+        16
+      ],
+      "id": "kratn_45_5"
+    },
+    "kratn_45_6": {
+      "typeId": "number_multiple_check",
+      "text": "Какое из чисел делится на 5 без остатка?",
+      "params": {
+        "n": 5,
+        "options": [
+          20,
+          21,
+          19
+        ]
+      },
+      "correctAnswer": 20,
+      "choices": [
+        20,
+        21,
+        19
+      ],
+      "id": "kratn_45_6"
+    },
+    "kratn_45_7": {
+      "typeId": "number_multiple_check",
+      "text": "Какое из чисел делится на 5 без остатка?",
+      "params": {
+        "n": 5,
+        "options": [
+          26,
+          24,
+          25
+        ]
+      },
+      "correctAnswer": 25,
+      "choices": [
+        26,
+        24,
+        25
+      ],
+      "id": "kratn_45_7"
+    },
+    "round_a_intro": {
+      "typeId": "round_to_ten",
+      "text": "Округли 12 до десятков",
+      "params": {
+        "n": 12
+      },
+      "correctAnswer": 10,
+      "id": "round_a_intro"
+    },
+    "round_a_1": {
+      "typeId": "round_to_ten",
+      "text": "Округли 17 до десятков",
+      "params": {
+        "n": 17
+      },
+      "correctAnswer": 20,
+      "id": "round_a_1"
+    },
+    "round_a_2": {
+      "typeId": "round_to_ten",
+      "text": "Округли 23 до десятков",
+      "params": {
+        "n": 23
+      },
+      "correctAnswer": 20,
+      "id": "round_a_2"
+    },
+    "round_a_3": {
+      "typeId": "round_to_ten",
+      "text": "Округли 28 до десятков",
+      "params": {
+        "n": 28
+      },
+      "correctAnswer": 30,
+      "id": "round_a_3"
+    },
+    "round_a_4": {
+      "typeId": "round_to_ten",
+      "text": "Округли 34 до десятков",
+      "params": {
+        "n": 34
+      },
+      "correctAnswer": 30,
+      "id": "round_a_4"
+    },
+    "round_a_5": {
+      "typeId": "round_to_ten",
+      "text": "Округли 41 до десятков",
+      "params": {
+        "n": 41
+      },
+      "correctAnswer": 40,
+      "id": "round_a_5"
+    },
+    "round_a_6": {
+      "typeId": "round_to_ten",
+      "text": "Округли 47 до десятков",
+      "params": {
+        "n": 47
+      },
+      "correctAnswer": 50,
+      "id": "round_a_6"
+    },
+    "round_a_7": {
+      "typeId": "round_to_ten",
+      "text": "Округли 53 до десятков",
+      "params": {
+        "n": 53
+      },
+      "correctAnswer": 50,
+      "id": "round_a_7"
+    },
+    "round_b_intro": {
+      "typeId": "round_to_ten",
+      "text": "Округли 58 до десятков",
+      "params": {
+        "n": 58
+      },
+      "correctAnswer": 60,
+      "id": "round_b_intro"
+    },
+    "round_b_1": {
+      "typeId": "round_to_ten",
+      "text": "Округли 62 до десятков",
+      "params": {
+        "n": 62
+      },
+      "correctAnswer": 60,
+      "id": "round_b_1"
+    },
+    "round_b_2": {
+      "typeId": "round_to_ten",
+      "text": "Округли 69 до десятков",
+      "params": {
+        "n": 69
+      },
+      "correctAnswer": 70,
+      "id": "round_b_2"
+    },
+    "round_b_3": {
+      "typeId": "round_to_ten",
+      "text": "Округли 74 до десятков",
+      "params": {
+        "n": 74
+      },
+      "correctAnswer": 70,
+      "id": "round_b_3"
+    },
+    "round_b_4": {
+      "typeId": "round_to_ten",
+      "text": "Округли 81 до десятков",
+      "params": {
+        "n": 81
+      },
+      "correctAnswer": 80,
+      "id": "round_b_4"
+    },
+    "round_b_5": {
+      "typeId": "round_to_ten",
+      "text": "Округли 86 до десятков",
+      "params": {
+        "n": 86
+      },
+      "correctAnswer": 90,
+      "id": "round_b_5"
+    },
+    "round_b_6": {
+      "typeId": "round_to_ten",
+      "text": "Округли 93 до десятков",
+      "params": {
+        "n": 93
+      },
+      "correctAnswer": 90,
+      "id": "round_b_6"
+    },
+    "round_b_7": {
+      "typeId": "round_to_ten",
+      "text": "Округли 97 до десятков",
+      "params": {
+        "n": 97
+      },
+      "correctAnswer": 100,
+      "id": "round_b_7"
+    },
+    "ordpos_intro": {
+      "typeId": "ordinal_position",
+      "text": "Какое число стоит на 1-м месте: 3, 7, 2, 9, 15?",
+      "params": {
+        "series": [
+          3,
+          7,
+          2,
+          9,
+          15
+        ],
+        "position": 1
+      },
+      "correctAnswer": 3,
+      "id": "ordpos_intro"
+    },
+    "ordpos_1": {
+      "typeId": "ordinal_position",
+      "text": "Какое число стоит на 2-м месте: 5, 12, 1, 8, 17?",
+      "params": {
+        "series": [
+          5,
+          12,
+          1,
+          8,
+          17
+        ],
+        "position": 2
+      },
+      "correctAnswer": 12,
+      "id": "ordpos_1"
+    },
+    "ordpos_2": {
+      "typeId": "ordinal_position",
+      "text": "Какое число стоит на 3-м месте: 6, 14, 3, 11, 19?",
+      "params": {
+        "series": [
+          6,
+          14,
+          3,
+          11,
+          19
+        ],
+        "position": 3
+      },
+      "correctAnswer": 3,
+      "id": "ordpos_2"
+    },
+    "ordpos_3": {
+      "typeId": "ordinal_position",
+      "text": "Какое число стоит на 4-м месте: 2, 9, 16, 4, 13?",
+      "params": {
+        "series": [
+          2,
+          9,
+          16,
+          4,
+          13
+        ],
+        "position": 4
+      },
+      "correctAnswer": 4,
+      "id": "ordpos_3"
+    },
+    "ordpos_4": {
+      "typeId": "ordinal_position",
+      "text": "Какое число стоит на 5-м месте: 7, 1, 18, 10, 5?",
+      "params": {
+        "series": [
+          7,
+          1,
+          18,
+          10,
+          5
+        ],
+        "position": 5
+      },
+      "correctAnswer": 5,
+      "id": "ordpos_4"
+    },
+    "ordpos_5": {
+      "typeId": "ordinal_position",
+      "text": "Какое число стоит на 1-м месте: 11, 3, 15, 8, 20?",
+      "params": {
+        "series": [
+          11,
+          3,
+          15,
+          8,
+          20
+        ],
+        "position": 1
+      },
+      "correctAnswer": 11,
+      "id": "ordpos_5"
+    },
+    "ordpos_6": {
+      "typeId": "ordinal_position",
+      "text": "Какое число стоит на 2-м месте: 4, 17, 9, 2, 14?",
+      "params": {
+        "series": [
+          4,
+          17,
+          9,
+          2,
+          14
+        ],
+        "position": 2
+      },
+      "correctAnswer": 17,
+      "id": "ordpos_6"
+    },
+    "ordpos_7": {
+      "typeId": "ordinal_position",
+      "text": "Какое число стоит на 3-м месте: 13, 6, 19, 1, 10?",
+      "params": {
+        "series": [
+          13,
+          6,
+          19,
+          1,
+          10
+        ],
+        "position": 3
+      },
+      "correctAnswer": 19,
+      "id": "ordpos_7"
     }
   },
   "mathTools": [

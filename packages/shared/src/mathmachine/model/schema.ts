@@ -18,7 +18,7 @@ export const MediaAssetSchema = z.object({
 });
 export type MediaAsset = z.infer<typeof MediaAssetSchema>;
 
-/** Пилотные типы заданий Этапа 1 (спека, разд. 4). Этап 2 расширит список. */
+/** Типы заданий Этапа 1 + Этапа 2b, волны 1-2 (спеки 2026-09-08). */
 export const TASK_TYPE_IDS = [
   'number_counting',
   'number_sum_two',
@@ -30,6 +30,11 @@ export const TASK_TYPE_IDS = [
   'digit_recognition',
   'number_composition',
   'number_ordering',
+  'number_multiply_two',
+  'number_divide_remainder',
+  'number_multiple_check',
+  'round_to_ten',
+  'ordinal_position',
 ] as const;
 export const TaskTypeIdSchema = z.enum(TASK_TYPE_IDS);
 export type TaskTypeId = z.infer<typeof TaskTypeIdSchema>;

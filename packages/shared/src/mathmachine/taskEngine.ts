@@ -33,6 +33,11 @@ export const TASK_TYPE_REGISTRY: Record<TaskTypeId, TaskTypeDefinition> = {
   digit_recognition: { id: 'digit_recognition', answerMode: 'choice', checkAnswer: choiceCheck },
   number_composition: { id: 'number_composition', answerMode: 'numeric', checkAnswer: numericCheck },
   number_ordering: { id: 'number_ordering', answerMode: 'choice', checkAnswer: choiceCheck },
+  number_multiply_two: { id: 'number_multiply_two', answerMode: 'numeric', checkAnswer: numericCheck },
+  number_divide_remainder: { id: 'number_divide_remainder', answerMode: 'choice', checkAnswer: choiceCheck },
+  number_multiple_check: { id: 'number_multiple_check', answerMode: 'choice', checkAnswer: choiceCheck },
+  round_to_ten: { id: 'round_to_ten', answerMode: 'numeric', checkAnswer: numericCheck },
+  ordinal_position: { id: 'ordinal_position', answerMode: 'numeric', checkAnswer: numericCheck },
 };
 
 export function checkTaskAnswer(task: Task, userAnswer: number | string): boolean {
