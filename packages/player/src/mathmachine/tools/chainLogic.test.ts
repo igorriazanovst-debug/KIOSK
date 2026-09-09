@@ -61,3 +61,17 @@ test('buildNumberPaletteValues returns the base digits for non-number categories
   const puzzle: ChainPuzzle = { category: 'shape', values: ['circle', 'square', 'circle'], blankIndices: [1] };
   assert.deepEqual(buildNumberPaletteValues(puzzle), ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9']);
 });
+
+test('generateChainPuzzle honors an explicit forcedCategory instead of picking randomly', () => {
+  for (let i = 0; i < 50; i++) {
+    const puzzle = generateChainPuzzle(Math.random, 'letter');
+    assert.equal(puzzle.category, 'letter');
+    for (const v of puzzle.values) assert.ok((LETTER_POOL as readonly string[]).includes(v));
+  }
+});
+
+test('generateChainPuzzle with forcedCategory "number" still produces a valid numeric progression', () => {
+  const puzzle = generateChainPuzzle(() => 0, 'number');
+  assert.equal(puzzle.category, 'number');
+  assert.deepEqual(puzzle.values, ['12', '9', '6', '3', '0']);
+});

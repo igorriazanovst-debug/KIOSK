@@ -66,8 +66,16 @@ function pickBlankIndices(rng: () => number, length: number): number[] {
   return shuffled.slice(0, count).sort((a, b) => a - b);
 }
 
-export function generateChainPuzzle(rng: () => number = Math.random): ChainPuzzle {
-  const category = pickOne<ChainCategory>(rng, ['number', 'shape', 'letter', 'toy']);
+// forcedCategory: найдено вживую — раньше вкладка (Числа/Фигуры/Буквы/
+// Игрушки) в ChainTool.tsx была полностью независима от того, какую
+// категорию на самом деле выбрал generateChainPuzzle() внутри себя
+// случайно. Переключение вкладки меняло только палитру снизу, а сама
+// цепочка сверху оставалась от старой категории — пользователь мог
+// вставлять буквы в цепочку из чисел и не получать ни одного верного
+// ответа. Теперь ChainTool явно передаёт нужную категорию при смене
+// вкладки/генерации новой цепочки, а не полагается на случайный выбор.
+export function generateChainPuzzle(rng: () => number = Math.random, forcedCategory?: ChainCategory): ChainPuzzle {
+  const category = forcedCategory ?? pickOne<ChainCategory>(rng, ['number', 'shape', 'letter', 'toy']);
   const length = pickInt(rng, CHAIN_LENGTH_MIN, CHAIN_LENGTH_MAX);
   const values = category === 'number' ? generateNumberValues(rng, length) : generatePatternValues(rng, category, length);
   const blankIndices = pickBlankIndices(rng, length);

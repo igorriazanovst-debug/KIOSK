@@ -66,13 +66,26 @@ const ChainTool: React.FC<Props> = ({ onClose }) => {
   const [puzzle, setPuzzle] = useState<ChainPuzzle>(() => generateChainPuzzle());
   const [placedByIndex, setPlacedByIndex] = useState<Record<number, string>>({});
   const [result, setResult] = useState<Record<number, boolean> | null>(null);
-  const [activeTab, setActiveTab] = useState<ChainCategory>('number');
+  // Инициализируется КАТЕГОРИЕЙ РЕАЛЬНОГО пазла сверху, а не константой
+  // 'number' — иначе при случайно сгенерированной небуквенной/нечисловой
+  // цепочке на старте вкладка и сама цепочка расходились с первого кадра.
+  const [activeTab, setActiveTab] = useState<ChainCategory>(() => puzzle.category);
   const tileHomeRef = useRef<Record<string, { x: number; y: number }>>({});
 
-  function newPuzzle() {
-    setPuzzle(generateChainPuzzle());
+  // Единственный способ сменить категорию — эта функция: она держит
+  // activeTab и puzzle.category синхронными всегда (и при явной смене
+  // вкладки, и при генерации новой цепочки). Раньше вкладки и цепочка
+  // были двумя независимыми состояниями — смена вкладки меняла только
+  // палитру снизу, а сама цепочка сверху оставалась от старой категории.
+  function regeneratePuzzle(category: ChainCategory) {
+    setPuzzle(generateChainPuzzle(Math.random, category));
     setPlacedByIndex({});
     setResult(null);
+    setActiveTab(category);
+  }
+
+  function newPuzzle() {
+    regeneratePuzzle(activeTab);
   }
 
   function handleCheck() {
@@ -111,7 +124,7 @@ const ChainTool: React.FC<Props> = ({ onClose }) => {
       title="Цепочка"
       onClose={onClose}
       sidebar={TABS.map((tab) => (
-        <button key={tab.id} onClick={() => setActiveTab(tab.id)} style={toolTabStyle(tab.id === activeTab)}>
+        <button key={tab.id} onClick={() => regeneratePuzzle(tab.id)} style={toolTabStyle(tab.id === activeTab)}>
           {tab.label}
         </button>
       ))}
