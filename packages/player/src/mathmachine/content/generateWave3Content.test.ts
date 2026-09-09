@@ -32,20 +32,68 @@ test('no duplicate topic, group, or task ids across all of WAVE3_TOPICS', () => 
 // Урок волны 2, обобщённый до класса «правильный ответ не должен
 // вычисляться из ФОРМЫ вариантов» — с первого коммита, не постфактум.
 
-test('within every choice-mode group, the correct answer is not always at the same button position', () => {
+function maxFrequency(values: number[]): number {
+  const counts = new Map<number, number>();
+  for (const v of values) counts.set(v, (counts.get(v) ?? 0) + 1);
+  return Math.max(...counts.values());
+}
+
+function exploitablePeriod(values: number[]): number | null {
+  const n = values.length;
+  for (let period = 1; period <= Math.floor(n / 2); period++) {
+    let matches = true;
+    for (let i = period; i < n; i++) {
+      if (values[i] !== values[i % period]) {
+        matches = false;
+        break;
+      }
+    }
+    if (matches) return period;
+  }
+  return null;
+}
+
+function maxLinearFormulaMatch(values: number[], modulus: number): number {
+  let best = 0;
+  for (let a = 0; a < modulus; a++) {
+    for (let c = 0; c < modulus; c++) {
+      let matches = 0;
+      values.forEach((v, i) => {
+        if (((a * i + c) % modulus + modulus) % modulus === v) matches++;
+      });
+      best = Math.max(best, matches);
+    }
+  }
+  return best;
+}
+
+test('within every choice-mode group, the button position is not exploitable (frequency/period/linear formula)', () => {
+  let checkedGroups = 0;
   for (const topic of WAVE3_TOPICS) {
     for (const group of topic.groups) {
       const choiceTasks = group.tasks.filter((t) => Array.isArray(t.choices));
-      if (choiceTasks.length < 2) continue;
-      const positions = new Set(
-        choiceTasks.map((t) => t.choices!.findIndex((c) => String(c) === String(t.correctAnswer))),
-      );
+      if (choiceTasks.length < 4) continue;
+      checkedGroups += 1;
+      const numOptions = choiceTasks[0].choices!.length;
+      const positions = choiceTasks.map((t) => t.choices!.findIndex((c) => String(c) === String(t.correctAnswer)));
+      const freq = maxFrequency(positions);
       assert.ok(
-        positions.size > 1,
-        `group ${group.id} always places the correct answer at button position ${[...positions]} — a child could solve it without reading`,
+        freq <= Math.ceil(choiceTasks.length / 2),
+        `group ${group.id}: button position ${JSON.stringify(positions)} hits one slot ${freq}/${choiceTasks.length} times`,
+      );
+      const period = exploitablePeriod(positions);
+      assert.ok(
+        period === null || period > choiceTasks.length / 2,
+        `group ${group.id}: positions ${JSON.stringify(positions)} follow an exploitable period ${period}`,
+      );
+      const linear = maxLinearFormulaMatch(positions, numOptions);
+      assert.ok(
+        linear <= Math.ceil(choiceTasks.length / 2),
+        `group ${group.id}: a linear formula (a*i+c) mod N matches positions ${JSON.stringify(positions)} in ${linear}/${choiceTasks.length} tasks`,
       );
     }
   }
+  assert.ok(checkedGroups > 0, 'expected at least one choice-mode group to exist');
 });
 
 function parseDivisionOption(option: string): { quotient: number; remainder: number } {
@@ -108,6 +156,26 @@ test('within every number_divide_remainder group, no structural shortcut solves 
     }
   }
   assert.ok(checkedGroups > 0, 'expected at least one number_divide_remainder group to exist');
+});
+
+// Системная находка Эпика 12 (оригинал): позиция правильного ответа была
+// не просто предсказуема ВНУТРИ группы, а БАЙТ-В-БАЙТ идентична МЕЖДУ
+// разными группами (одна и та же последовательность во всём каталоге) —
+// признак того, что позиция зависела от номера задания, а не от его
+// содержания. Проверяем это явно для трёх групп деления этой волны.
+test('the three division groups do not all share the identical button-position sequence', () => {
+  const divisionGroups = WAVE3_TOPICS.flatMap((t) => t.groups).filter((g) =>
+    g.tasks.some((t) => t.typeId === 'number_divide_remainder'),
+  );
+  assert.ok(divisionGroups.length >= 2, 'expected at least two division groups to compare');
+  const sequences = divisionGroups.map((g) =>
+    g.tasks.map((t) => t.choices!.findIndex((c) => String(c) === String(t.correctAnswer))).join(','),
+  );
+  const distinct = new Set(sequences);
+  assert.ok(
+    distinct.size > 1,
+    `all division groups share the identical position sequence ${sequences[0]} — position is derived from task index, not content`,
+  );
 });
 
 // Найдено вживую (R1): в grp_div_67 частное-минус-остаток правильного
