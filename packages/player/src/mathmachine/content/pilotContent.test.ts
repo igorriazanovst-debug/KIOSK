@@ -4,6 +4,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { MathMachineContentSchema } from '@kiosk/shared';
+import { listTopicsByCategory } from '../topicCategories.ts';
 import pilotContent from './pilotContent.json' with { type: 'json' };
 
 // public/media, не src/mathmachine/media — vite копирует public/* в dist/*
@@ -48,4 +49,12 @@ test('every task with an audioTaskTextId has a corresponding mp3 file on disk', 
     assert.ok(fs.existsSync(mp3Path), `missing audio file for task ${task.id}: ${mp3Path}`);
   }
   assert.equal(checked, 18, 'expected exactly 18 pilot tasks (Этап 1) to have narration audio');
+});
+
+test('every real topic categorizes into exactly one catalog-screen category (no orphans)', () => {
+  const parsed = MathMachineContentSchema.parse(pilotContent);
+  const categorized = listTopicsByCategory(parsed).flatMap((g) => g.topics.map((t) => t.topicId));
+  const allTopicIds = Object.keys(parsed.topics);
+  assert.equal(categorized.length, allTopicIds.length, 'a topic id matched no category (or matched more than one) — add/fix a TOPIC_CATEGORIES prefix in topicCategories.ts');
+  assert.deepEqual([...categorized].sort(), [...allTopicIds].sort());
 });
