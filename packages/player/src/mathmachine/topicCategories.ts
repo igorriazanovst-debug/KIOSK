@@ -21,6 +21,14 @@ function byPrefix(prefix: string): (topicId: string) => boolean {
 }
 
 export const TOPIC_CATEGORIES: TopicCategoryDef[] = [
+  // top_counting_add_combo/top_counting_subtract_combo проверяются РАНЬШЕ
+  // top_counting*, иначе они тихо попали бы в «Счёт» — тот же принцип, что
+  // addition_three перед addition ниже (см. комментарий к файлу).
+  {
+    key: 'counting_combo',
+    name: 'Счёт: сложение и вычитание',
+    matchesTopicId: (id) => byPrefix('counting_add_combo')(id) || byPrefix('counting_subtract_combo')(id),
+  },
   { key: 'counting', name: 'Счёт', matchesTopicId: byPrefix('counting') },
   { key: 'digits', name: 'Цифры', matchesTopicId: byPrefix('digits') },
   { key: 'composition', name: 'Состав числа', matchesTopicId: byPrefix('composition') },
@@ -40,6 +48,10 @@ export const TOPIC_CATEGORIES: TopicCategoryDef[] = [
   // см. Тип6_бэклог.md, Эпик 30.
   { key: 'measure', name: 'Величины', matchesTopicId: byPrefix('measure') },
   { key: 'time', name: 'Время', matchesTopicId: byPrefix('time') },
+  // Этап 4 (2026-09-10) — Класс А покрытия FR-022 (геометрия, пространство)
+  // — см. Тип6_бэклог.md, Эпик 32.
+  { key: 'geometry', name: 'Геометрия', matchesTopicId: byPrefix('geometry') },
+  { key: 'space', name: 'Пространство', matchesTopicId: byPrefix('space') },
 ];
 
 export function categorizeTopicId(topicId: string): TopicCategoryDef | undefined {

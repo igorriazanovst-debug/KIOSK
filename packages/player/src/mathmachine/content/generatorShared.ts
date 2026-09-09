@@ -84,6 +84,16 @@ export function formatDivision(quotient: number, remainder: number): string {
   return `${quotient} ост. ${remainder}`;
 }
 
+// ─── Категориальные параметры Этапа 4 ───────────────────────────────────
+// TaskParamsSchema допускает только number | number[] (не строки) — общие
+// упорядоченные списки, чтобы generateFR022Group2Content.ts и
+// TaskVisual.tsx кодировали/декодировали один и тот же индекс одинаково.
+
+export const SHAPE_IDS = ['circle', 'square', 'triangle', 'rectangle', 'pentagon', 'hexagon'] as const;
+export const SOLID_IDS = ['cube', 'sphere', 'cone', 'cylinder', 'pyramid'] as const;
+export const POSITION_RELATION_IDS = ['left', 'right', 'above', 'below'] as const;
+export const DIRECTION_IDS = ['up', 'down', 'left', 'right'] as const;
+
 /**
  * Соли передаются явно вызывающей волной (не берутся из общего дефолта) —
  * так подобранная и проверенная для конкретной волны соль остаётся видна
