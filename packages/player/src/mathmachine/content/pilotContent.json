@@ -128,7 +128,15 @@
         "top_missing_8",
         "top_counting_8",
         "top_addition_three_wide7",
-        "top_rounding_thousands_5"
+        "top_rounding_thousands_5",
+        "top_measure_length",
+        "top_measure_mass",
+        "top_measure_volume",
+        "top_time_weekday",
+        "top_time_season",
+        "top_time_event",
+        "top_measure_estimate",
+        "top_shares_fraction_compare"
       ]
     }
   ],
@@ -1138,6 +1146,62 @@
       "groupIds": [
         "grp_round_t5_i",
         "grp_round_t5_j"
+      ]
+    },
+    "top_measure_length": {
+      "id": "top_measure_length",
+      "name": "Длина: что длиннее",
+      "groupIds": [
+        "grp_measure_length"
+      ]
+    },
+    "top_measure_mass": {
+      "id": "top_measure_mass",
+      "name": "Масса: что тяжелее",
+      "groupIds": [
+        "grp_measure_mass"
+      ]
+    },
+    "top_measure_volume": {
+      "id": "top_measure_volume",
+      "name": "Объём: куда больше поместится",
+      "groupIds": [
+        "grp_measure_volume"
+      ]
+    },
+    "top_time_weekday": {
+      "id": "top_time_weekday",
+      "name": "Время: дни недели",
+      "groupIds": [
+        "grp_time_weekday"
+      ]
+    },
+    "top_time_season": {
+      "id": "top_time_season",
+      "name": "Время: времена года",
+      "groupIds": [
+        "grp_time_season"
+      ]
+    },
+    "top_time_event": {
+      "id": "top_time_event",
+      "name": "Время: что было раньше",
+      "groupIds": [
+        "grp_time_event"
+      ]
+    },
+    "top_measure_estimate": {
+      "id": "top_measure_estimate",
+      "name": "Величины: оцени на глаз",
+      "groupIds": [
+        "grp_measure_estimate"
+      ]
+    },
+    "top_shares_fraction_compare": {
+      "id": "top_shares_fraction_compare",
+      "name": "Доли целого: сравнение дробей",
+      "groupIds": [
+        "grp_shares_fraction_compare"
       ]
     }
   },
@@ -5553,6 +5617,123 @@
         "round_t5_j_12",
         "round_t5_j_13",
         "round_t5_j_14"
+      ]
+    },
+    "grp_measure_length": {
+      "id": "grp_measure_length",
+      "name": "Сравнение длин",
+      "taskIds": [
+        "measure_length_intro",
+        "measure_length_1",
+        "measure_length_2",
+        "measure_length_3",
+        "measure_length_4",
+        "measure_length_5",
+        "measure_length_6",
+        "measure_length_7",
+        "measure_length_8",
+        "measure_length_9"
+      ]
+    },
+    "grp_measure_mass": {
+      "id": "grp_measure_mass",
+      "name": "Сравнение массы",
+      "taskIds": [
+        "measure_mass_intro",
+        "measure_mass_1",
+        "measure_mass_2",
+        "measure_mass_3",
+        "measure_mass_4",
+        "measure_mass_5",
+        "measure_mass_6",
+        "measure_mass_7",
+        "measure_mass_8",
+        "measure_mass_9"
+      ]
+    },
+    "grp_measure_volume": {
+      "id": "grp_measure_volume",
+      "name": "Сравнение объёма",
+      "taskIds": [
+        "measure_volume_intro",
+        "measure_volume_1",
+        "measure_volume_2",
+        "measure_volume_3",
+        "measure_volume_4",
+        "measure_volume_5",
+        "measure_volume_6",
+        "measure_volume_7",
+        "measure_volume_8",
+        "measure_volume_9"
+      ]
+    },
+    "grp_time_weekday": {
+      "id": "grp_time_weekday",
+      "name": "Дни недели по порядку",
+      "taskIds": [
+        "time_weekday_intro",
+        "time_weekday_1",
+        "time_weekday_2",
+        "time_weekday_3",
+        "time_weekday_4",
+        "time_weekday_5",
+        "time_weekday_6"
+      ]
+    },
+    "grp_time_season": {
+      "id": "grp_time_season",
+      "name": "Времена года по кругу",
+      "taskIds": [
+        "time_season_intro",
+        "time_season_1",
+        "time_season_2",
+        "time_season_3"
+      ]
+    },
+    "grp_time_event": {
+      "id": "grp_time_event",
+      "name": "Что было раньше",
+      "taskIds": [
+        "time_event_intro",
+        "time_event_1",
+        "time_event_2",
+        "time_event_3",
+        "time_event_4",
+        "time_event_5",
+        "time_event_6",
+        "time_event_7",
+        "time_event_8",
+        "time_event_9"
+      ]
+    },
+    "grp_measure_estimate": {
+      "id": "grp_measure_estimate",
+      "name": "Оцени размер на глаз",
+      "taskIds": [
+        "measure_estimate_intro",
+        "measure_estimate_1",
+        "measure_estimate_2",
+        "measure_estimate_3",
+        "measure_estimate_4",
+        "measure_estimate_5",
+        "measure_estimate_6",
+        "measure_estimate_7"
+      ]
+    },
+    "grp_shares_fraction_compare": {
+      "id": "grp_shares_fraction_compare",
+      "name": "Сравнение дробей",
+      "taskIds": [
+        "shares_fraction_compare_intro",
+        "shares_fraction_compare_1",
+        "shares_fraction_compare_2",
+        "shares_fraction_compare_3",
+        "shares_fraction_compare_4",
+        "shares_fraction_compare_5",
+        "shares_fraction_compare_6",
+        "shares_fraction_compare_7",
+        "shares_fraction_compare_8",
+        "shares_fraction_compare_9"
       ]
     }
   },
@@ -47217,6 +47398,1049 @@
       "correctAnswer": 10000,
       "id": "round_t5_j_14",
       "audioTaskTextId": "round_t5_j_14"
+    },
+    "measure_length_intro": {
+      "typeId": "compare_length",
+      "text": "Какой отрезок длиннее — первый или второй?",
+      "params": {
+        "leftLength": 10,
+        "rightLength": 4
+      },
+      "correctAnswer": "Первый",
+      "choices": [
+        "Первый",
+        "Второй"
+      ],
+      "id": "measure_length_intro",
+      "audioTaskTextId": "measure_length_intro"
+    },
+    "measure_length_1": {
+      "typeId": "compare_length",
+      "text": "Какой отрезок длиннее — первый или второй?",
+      "params": {
+        "leftLength": 4,
+        "rightLength": 7
+      },
+      "correctAnswer": "Второй",
+      "choices": [
+        "Второй",
+        "Первый"
+      ],
+      "id": "measure_length_1",
+      "audioTaskTextId": "measure_length_1"
+    },
+    "measure_length_2": {
+      "typeId": "compare_length",
+      "text": "Какой отрезок длиннее — первый или второй?",
+      "params": {
+        "leftLength": 7,
+        "rightLength": 10
+      },
+      "correctAnswer": "Второй",
+      "choices": [
+        "Первый",
+        "Второй"
+      ],
+      "id": "measure_length_2",
+      "audioTaskTextId": "measure_length_2"
+    },
+    "measure_length_3": {
+      "typeId": "compare_length",
+      "text": "Какой отрезок длиннее — первый или второй?",
+      "params": {
+        "leftLength": 10,
+        "rightLength": 4
+      },
+      "correctAnswer": "Первый",
+      "choices": [
+        "Первый",
+        "Второй"
+      ],
+      "id": "measure_length_3",
+      "audioTaskTextId": "measure_length_3"
+    },
+    "measure_length_4": {
+      "typeId": "compare_length",
+      "text": "Какой отрезок длиннее — первый или второй?",
+      "params": {
+        "leftLength": 4,
+        "rightLength": 7
+      },
+      "correctAnswer": "Второй",
+      "choices": [
+        "Второй",
+        "Первый"
+      ],
+      "id": "measure_length_4",
+      "audioTaskTextId": "measure_length_4"
+    },
+    "measure_length_5": {
+      "typeId": "compare_length",
+      "text": "Какой отрезок длиннее — первый или второй?",
+      "params": {
+        "leftLength": 7,
+        "rightLength": 10
+      },
+      "correctAnswer": "Второй",
+      "choices": [
+        "Первый",
+        "Второй"
+      ],
+      "id": "measure_length_5",
+      "audioTaskTextId": "measure_length_5"
+    },
+    "measure_length_6": {
+      "typeId": "compare_length",
+      "text": "Какой отрезок длиннее — первый или второй?",
+      "params": {
+        "leftLength": 10,
+        "rightLength": 4
+      },
+      "correctAnswer": "Первый",
+      "choices": [
+        "Первый",
+        "Второй"
+      ],
+      "id": "measure_length_6",
+      "audioTaskTextId": "measure_length_6"
+    },
+    "measure_length_7": {
+      "typeId": "compare_length",
+      "text": "Какой отрезок длиннее — первый или второй?",
+      "params": {
+        "leftLength": 4,
+        "rightLength": 7
+      },
+      "correctAnswer": "Второй",
+      "choices": [
+        "Второй",
+        "Первый"
+      ],
+      "id": "measure_length_7",
+      "audioTaskTextId": "measure_length_7"
+    },
+    "measure_length_8": {
+      "typeId": "compare_length",
+      "text": "Какой отрезок длиннее — первый или второй?",
+      "params": {
+        "leftLength": 7,
+        "rightLength": 10
+      },
+      "correctAnswer": "Второй",
+      "choices": [
+        "Первый",
+        "Второй"
+      ],
+      "id": "measure_length_8",
+      "audioTaskTextId": "measure_length_8"
+    },
+    "measure_length_9": {
+      "typeId": "compare_length",
+      "text": "Какой отрезок длиннее — первый или второй?",
+      "params": {
+        "leftLength": 10,
+        "rightLength": 4
+      },
+      "correctAnswer": "Первый",
+      "choices": [
+        "Первый",
+        "Второй"
+      ],
+      "id": "measure_length_9",
+      "audioTaskTextId": "measure_length_9"
+    },
+    "measure_mass_intro": {
+      "typeId": "compare_mass",
+      "text": "Что тяжелее: слон или мышь?",
+      "params": {
+        "leftMass": 5000,
+        "rightMass": 0.02
+      },
+      "correctAnswer": "Слон",
+      "choices": [
+        "Слон",
+        "Мышь"
+      ],
+      "id": "measure_mass_intro",
+      "audioTaskTextId": "measure_mass_intro"
+    },
+    "measure_mass_1": {
+      "typeId": "compare_mass",
+      "text": "Что тяжелее: виноградинка или арбуз?",
+      "params": {
+        "leftMass": 0.005,
+        "rightMass": 6
+      },
+      "correctAnswer": "Арбуз",
+      "choices": [
+        "Виноградинка",
+        "Арбуз"
+      ],
+      "id": "measure_mass_1",
+      "audioTaskTextId": "measure_mass_1"
+    },
+    "measure_mass_2": {
+      "typeId": "compare_mass",
+      "text": "Что тяжелее: грузовик или велосипед?",
+      "params": {
+        "leftMass": 8000,
+        "rightMass": 12
+      },
+      "correctAnswer": "Грузовик",
+      "choices": [
+        "Грузовик",
+        "Велосипед"
+      ],
+      "id": "measure_mass_2",
+      "audioTaskTextId": "measure_mass_2"
+    },
+    "measure_mass_3": {
+      "typeId": "compare_mass",
+      "text": "Что тяжелее: кит или рыбка?",
+      "params": {
+        "leftMass": 100000,
+        "rightMass": 0.1
+      },
+      "correctAnswer": "Кит",
+      "choices": [
+        "Кит",
+        "Рыбка"
+      ],
+      "id": "measure_mass_3",
+      "audioTaskTextId": "measure_mass_3"
+    },
+    "measure_mass_4": {
+      "typeId": "compare_mass",
+      "text": "Что тяжелее: кирпич или перо?",
+      "params": {
+        "leftMass": 3,
+        "rightMass": 0.001
+      },
+      "correctAnswer": "Кирпич",
+      "choices": [
+        "Кирпич",
+        "Перо"
+      ],
+      "id": "measure_mass_4",
+      "audioTaskTextId": "measure_mass_4"
+    },
+    "measure_mass_5": {
+      "typeId": "compare_mass",
+      "text": "Что тяжелее: медведь или кошка?",
+      "params": {
+        "leftMass": 300,
+        "rightMass": 4
+      },
+      "correctAnswer": "Медведь",
+      "choices": [
+        "Медведь",
+        "Кошка"
+      ],
+      "id": "measure_mass_5",
+      "audioTaskTextId": "measure_mass_5"
+    },
+    "measure_mass_6": {
+      "typeId": "compare_mass",
+      "text": "Что тяжелее: подушка или диван?",
+      "params": {
+        "leftMass": 0.5,
+        "rightMass": 40
+      },
+      "correctAnswer": "Диван",
+      "choices": [
+        "Подушка",
+        "Диван"
+      ],
+      "id": "measure_mass_6",
+      "audioTaskTextId": "measure_mass_6"
+    },
+    "measure_mass_7": {
+      "typeId": "compare_mass",
+      "text": "Что тяжелее: холодильник или кружка?",
+      "params": {
+        "leftMass": 70,
+        "rightMass": 0.3
+      },
+      "correctAnswer": "Холодильник",
+      "choices": [
+        "Холодильник",
+        "Кружка"
+      ],
+      "id": "measure_mass_7",
+      "audioTaskTextId": "measure_mass_7"
+    },
+    "measure_mass_8": {
+      "typeId": "compare_mass",
+      "text": "Что тяжелее: кролик или лошадь?",
+      "params": {
+        "leftMass": 2,
+        "rightMass": 500
+      },
+      "correctAnswer": "Лошадь",
+      "choices": [
+        "Кролик",
+        "Лошадь"
+      ],
+      "id": "measure_mass_8",
+      "audioTaskTextId": "measure_mass_8"
+    },
+    "measure_mass_9": {
+      "typeId": "compare_mass",
+      "text": "Что тяжелее: бревно или карандаш?",
+      "params": {
+        "leftMass": 50,
+        "rightMass": 0.01
+      },
+      "correctAnswer": "Бревно",
+      "choices": [
+        "Бревно",
+        "Карандаш"
+      ],
+      "id": "measure_mass_9",
+      "audioTaskTextId": "measure_mass_9"
+    },
+    "measure_volume_intro": {
+      "typeId": "compare_volume",
+      "text": "Что вмещает больше воды: стакан или бассейн?",
+      "params": {
+        "leftVolume": 0.25,
+        "rightVolume": 50000
+      },
+      "correctAnswer": "Бассейн",
+      "choices": [
+        "Стакан",
+        "Бассейн"
+      ],
+      "id": "measure_volume_intro",
+      "audioTaskTextId": "measure_volume_intro"
+    },
+    "measure_volume_1": {
+      "typeId": "compare_volume",
+      "text": "Что вмещает больше воды: чайная ложка или ванна?",
+      "params": {
+        "leftVolume": 0.005,
+        "rightVolume": 150
+      },
+      "correctAnswer": "Ванна",
+      "choices": [
+        "Чайная ложка",
+        "Ванна"
+      ],
+      "id": "measure_volume_1",
+      "audioTaskTextId": "measure_volume_1"
+    },
+    "measure_volume_2": {
+      "typeId": "compare_volume",
+      "text": "Что вмещает больше воды: бочка или чашка?",
+      "params": {
+        "leftVolume": 200,
+        "rightVolume": 0.002
+      },
+      "correctAnswer": "Бочка",
+      "choices": [
+        "Бочка",
+        "Чашка"
+      ],
+      "id": "measure_volume_2",
+      "audioTaskTextId": "measure_volume_2"
+    },
+    "measure_volume_3": {
+      "typeId": "compare_volume",
+      "text": "Что вмещает больше воды: лужа или озеро?",
+      "params": {
+        "leftVolume": 2,
+        "rightVolume": 1000000
+      },
+      "correctAnswer": "Озеро",
+      "choices": [
+        "Лужа",
+        "Озеро"
+      ],
+      "id": "measure_volume_3",
+      "audioTaskTextId": "measure_volume_3"
+    },
+    "measure_volume_4": {
+      "typeId": "compare_volume",
+      "text": "Что вмещает больше воды: ведро или кружка?",
+      "params": {
+        "leftVolume": 10,
+        "rightVolume": 0.3
+      },
+      "correctAnswer": "Ведро",
+      "choices": [
+        "Ведро",
+        "Кружка"
+      ],
+      "id": "measure_volume_4",
+      "audioTaskTextId": "measure_volume_4"
+    },
+    "measure_volume_5": {
+      "typeId": "compare_volume",
+      "text": "Что вмещает больше воды: аквариум или маленький стакан?",
+      "params": {
+        "leftVolume": 60,
+        "rightVolume": 0.02
+      },
+      "correctAnswer": "Аквариум",
+      "choices": [
+        "Аквариум",
+        "Маленький стакан"
+      ],
+      "id": "measure_volume_5",
+      "audioTaskTextId": "measure_volume_5"
+    },
+    "measure_volume_6": {
+      "typeId": "compare_volume",
+      "text": "Что вмещает больше воды: бак для воды или бутылка?",
+      "params": {
+        "leftVolume": 5000,
+        "rightVolume": 1.5
+      },
+      "correctAnswer": "Бак для воды",
+      "choices": [
+        "Бак для воды",
+        "Бутылка"
+      ],
+      "id": "measure_volume_6",
+      "audioTaskTextId": "measure_volume_6"
+    },
+    "measure_volume_7": {
+      "typeId": "compare_volume",
+      "text": "Что вмещает больше воды: кастрюля или столовая ложка?",
+      "params": {
+        "leftVolume": 5,
+        "rightVolume": 0.015
+      },
+      "correctAnswer": "Кастрюля",
+      "choices": [
+        "Кастрюля",
+        "Столовая ложка"
+      ],
+      "id": "measure_volume_7",
+      "audioTaskTextId": "measure_volume_7"
+    },
+    "measure_volume_8": {
+      "typeId": "compare_volume",
+      "text": "Что вмещает больше воды: ведро или море?",
+      "params": {
+        "leftVolume": 10,
+        "rightVolume": 10000000
+      },
+      "correctAnswer": "Море",
+      "choices": [
+        "Ведро",
+        "Море"
+      ],
+      "id": "measure_volume_8",
+      "audioTaskTextId": "measure_volume_8"
+    },
+    "measure_volume_9": {
+      "typeId": "compare_volume",
+      "text": "Что вмещает больше воды: флакон или кувшин?",
+      "params": {
+        "leftVolume": 0.1,
+        "rightVolume": 2
+      },
+      "correctAnswer": "Кувшин",
+      "choices": [
+        "Флакон",
+        "Кувшин"
+      ],
+      "id": "measure_volume_9",
+      "audioTaskTextId": "measure_volume_9"
+    },
+    "time_weekday_intro": {
+      "typeId": "weekday_order",
+      "text": "Сегодня понедельник. Какой день будет завтра?",
+      "params": {
+        "dayIndex": 0
+      },
+      "correctAnswer": "Вторник",
+      "choices": [
+        "Вторник",
+        "Четверг",
+        "Суббота"
+      ],
+      "id": "time_weekday_intro",
+      "audioTaskTextId": "time_weekday_intro"
+    },
+    "time_weekday_1": {
+      "typeId": "weekday_order",
+      "text": "Сегодня вторник. Какой день будет завтра?",
+      "params": {
+        "dayIndex": 1
+      },
+      "correctAnswer": "Среда",
+      "choices": [
+        "Среда",
+        "Пятница",
+        "Воскресенье"
+      ],
+      "id": "time_weekday_1",
+      "audioTaskTextId": "time_weekday_1"
+    },
+    "time_weekday_2": {
+      "typeId": "weekday_order",
+      "text": "Сегодня среда. Какой день будет завтра?",
+      "params": {
+        "dayIndex": 2
+      },
+      "correctAnswer": "Четверг",
+      "choices": [
+        "Понедельник",
+        "Суббота",
+        "Четверг"
+      ],
+      "id": "time_weekday_2",
+      "audioTaskTextId": "time_weekday_2"
+    },
+    "time_weekday_3": {
+      "typeId": "weekday_order",
+      "text": "Сегодня четверг. Какой день будет завтра?",
+      "params": {
+        "dayIndex": 3
+      },
+      "correctAnswer": "Пятница",
+      "choices": [
+        "Среда",
+        "Пятница",
+        "Суббота"
+      ],
+      "id": "time_weekday_3",
+      "audioTaskTextId": "time_weekday_3"
+    },
+    "time_weekday_4": {
+      "typeId": "weekday_order",
+      "text": "Сегодня пятница. Какой день будет завтра?",
+      "params": {
+        "dayIndex": 4
+      },
+      "correctAnswer": "Суббота",
+      "choices": [
+        "Четверг",
+        "Суббота",
+        "Воскресенье"
+      ],
+      "id": "time_weekday_4",
+      "audioTaskTextId": "time_weekday_4"
+    },
+    "time_weekday_5": {
+      "typeId": "weekday_order",
+      "text": "Сегодня суббота. Какой день будет завтра?",
+      "params": {
+        "dayIndex": 5
+      },
+      "correctAnswer": "Воскресенье",
+      "choices": [
+        "Пятница",
+        "Воскресенье",
+        "Понедельник"
+      ],
+      "id": "time_weekday_5",
+      "audioTaskTextId": "time_weekday_5"
+    },
+    "time_weekday_6": {
+      "typeId": "weekday_order",
+      "text": "Сегодня воскресенье. Какой день будет завтра?",
+      "params": {
+        "dayIndex": 6
+      },
+      "correctAnswer": "Понедельник",
+      "choices": [
+        "Понедельник",
+        "Суббота",
+        "Пятница"
+      ],
+      "id": "time_weekday_6",
+      "audioTaskTextId": "time_weekday_6"
+    },
+    "time_season_intro": {
+      "typeId": "season_order",
+      "text": "Сейчас зима. Какое время года будет следующим?",
+      "params": {
+        "seasonIndex": 0
+      },
+      "correctAnswer": "Весна",
+      "choices": [
+        "Лето",
+        "Осень",
+        "Весна"
+      ],
+      "id": "time_season_intro",
+      "audioTaskTextId": "time_season_intro"
+    },
+    "time_season_1": {
+      "typeId": "season_order",
+      "text": "Сейчас весна. Какое время года будет следующим?",
+      "params": {
+        "seasonIndex": 1
+      },
+      "correctAnswer": "Лето",
+      "choices": [
+        "Осень",
+        "Лето",
+        "Зима"
+      ],
+      "id": "time_season_1",
+      "audioTaskTextId": "time_season_1"
+    },
+    "time_season_2": {
+      "typeId": "season_order",
+      "text": "Сейчас лето. Какое время года будет следующим?",
+      "params": {
+        "seasonIndex": 2
+      },
+      "correctAnswer": "Осень",
+      "choices": [
+        "Весна",
+        "Осень",
+        "Зима"
+      ],
+      "id": "time_season_2",
+      "audioTaskTextId": "time_season_2"
+    },
+    "time_season_3": {
+      "typeId": "season_order",
+      "text": "Сейчас осень. Какое время года будет следующим?",
+      "params": {
+        "seasonIndex": 3
+      },
+      "correctAnswer": "Зима",
+      "choices": [
+        "Весна",
+        "Лето",
+        "Зима"
+      ],
+      "id": "time_season_3",
+      "audioTaskTextId": "time_season_3"
+    },
+    "time_event_intro": {
+      "typeId": "event_order",
+      "text": "Что бывает раньше: «Закат солнца» или «Восход солнца»?",
+      "params": {
+        "pairIndex": 0
+      },
+      "correctAnswer": "Восход солнца",
+      "choices": [
+        "Закат солнца",
+        "Восход солнца"
+      ],
+      "id": "time_event_intro",
+      "audioTaskTextId": "time_event_intro"
+    },
+    "time_event_1": {
+      "typeId": "event_order",
+      "text": "Что бывает раньше: «Ужин» или «Завтрак»?",
+      "params": {
+        "pairIndex": 1
+      },
+      "correctAnswer": "Завтрак",
+      "choices": [
+        "Ужин",
+        "Завтрак"
+      ],
+      "id": "time_event_1",
+      "audioTaskTextId": "time_event_1"
+    },
+    "time_event_2": {
+      "typeId": "event_order",
+      "text": "Что бывает раньше: «Посадка семени» или «Сбор урожая»?",
+      "params": {
+        "pairIndex": 2
+      },
+      "correctAnswer": "Посадка семени",
+      "choices": [
+        "Посадка семени",
+        "Сбор урожая"
+      ],
+      "id": "time_event_2",
+      "audioTaskTextId": "time_event_2"
+    },
+    "time_event_3": {
+      "typeId": "event_order",
+      "text": "Что бывает раньше: «Готовый пирог» или «Замес теста»?",
+      "params": {
+        "pairIndex": 3
+      },
+      "correctAnswer": "Замес теста",
+      "choices": [
+        "Готовый пирог",
+        "Замес теста"
+      ],
+      "id": "time_event_3",
+      "audioTaskTextId": "time_event_3"
+    },
+    "time_event_4": {
+      "typeId": "event_order",
+      "text": "Что бывает раньше: «Вечер» или «Утро»?",
+      "params": {
+        "pairIndex": 4
+      },
+      "correctAnswer": "Утро",
+      "choices": [
+        "Вечер",
+        "Утро"
+      ],
+      "id": "time_event_4",
+      "audioTaskTextId": "time_event_4"
+    },
+    "time_event_5": {
+      "typeId": "event_order",
+      "text": "Что бывает раньше: «Школа» или «Детский сад»?",
+      "params": {
+        "pairIndex": 5
+      },
+      "correctAnswer": "Детский сад",
+      "choices": [
+        "Школа",
+        "Детский сад"
+      ],
+      "id": "time_event_5",
+      "audioTaskTextId": "time_event_5"
+    },
+    "time_event_6": {
+      "typeId": "event_order",
+      "text": "Что бывает раньше: «Гусеница» или «Бабочка»?",
+      "params": {
+        "pairIndex": 6
+      },
+      "correctAnswer": "Гусеница",
+      "choices": [
+        "Гусеница",
+        "Бабочка"
+      ],
+      "id": "time_event_6",
+      "audioTaskTextId": "time_event_6"
+    },
+    "time_event_7": {
+      "typeId": "event_order",
+      "text": "Что бывает раньше: «Птенец» или «Яйцо»?",
+      "params": {
+        "pairIndex": 7
+      },
+      "correctAnswer": "Яйцо",
+      "choices": [
+        "Птенец",
+        "Яйцо"
+      ],
+      "id": "time_event_7",
+      "audioTaskTextId": "time_event_7"
+    },
+    "time_event_8": {
+      "typeId": "event_order",
+      "text": "Что бывает раньше: «Радуга» или «Дождь»?",
+      "params": {
+        "pairIndex": 8
+      },
+      "correctAnswer": "Дождь",
+      "choices": [
+        "Радуга",
+        "Дождь"
+      ],
+      "id": "time_event_8",
+      "audioTaskTextId": "time_event_8"
+    },
+    "time_event_9": {
+      "typeId": "event_order",
+      "text": "Что бывает раньше: «Рассвет» или «Полдень»?",
+      "params": {
+        "pairIndex": 9
+      },
+      "correctAnswer": "Рассвет",
+      "choices": [
+        "Рассвет",
+        "Полдень"
+      ],
+      "id": "time_event_9",
+      "audioTaskTextId": "time_event_9"
+    },
+    "measure_estimate_intro": {
+      "typeId": "estimate_mass_volume",
+      "text": "Какой из этих предметов ближе всего по размеру к обычной коробке из-под обуви?",
+      "params": {
+        "pairIndex": 0
+      },
+      "correctAnswer": "яблоко",
+      "choices": [
+        "грузовик",
+        "яблоко",
+        "слон",
+        "перо"
+      ],
+      "id": "measure_estimate_intro",
+      "audioTaskTextId": "measure_estimate_intro"
+    },
+    "measure_estimate_1": {
+      "typeId": "estimate_mass_volume",
+      "text": "Какой из этих предметов ближе всего по размеру к обычной коробке из-под обуви?",
+      "params": {
+        "pairIndex": 1
+      },
+      "correctAnswer": "книга",
+      "choices": [
+        "дом",
+        "песчинка",
+        "корабль",
+        "книга"
+      ],
+      "id": "measure_estimate_1",
+      "audioTaskTextId": "measure_estimate_1"
+    },
+    "measure_estimate_2": {
+      "typeId": "estimate_mass_volume",
+      "text": "Какой из этих предметов ближе всего по размеру к обычной коробке из-под обуви?",
+      "params": {
+        "pairIndex": 2
+      },
+      "correctAnswer": "котёнок",
+      "choices": [
+        "самолёт",
+        "котёнок",
+        "кит",
+        "муравей"
+      ],
+      "id": "measure_estimate_2",
+      "audioTaskTextId": "measure_estimate_2"
+    },
+    "measure_estimate_3": {
+      "typeId": "estimate_mass_volume",
+      "text": "Какой из этих предметов ближе всего по размеру к обычной коробке из-под обуви?",
+      "params": {
+        "pairIndex": 3
+      },
+      "correctAnswer": "ведро",
+      "choices": [
+        "ведро",
+        "гора",
+        "пуговица",
+        "здание"
+      ],
+      "id": "measure_estimate_3",
+      "audioTaskTextId": "measure_estimate_3"
+    },
+    "measure_estimate_4": {
+      "typeId": "estimate_mass_volume",
+      "text": "Какой из этих предметов ближе всего по размеру к обычной коробке из-под обуви?",
+      "params": {
+        "pairIndex": 4
+      },
+      "correctAnswer": "подушка",
+      "choices": [
+        "поезд",
+        "подушка",
+        "дом",
+        "скрепка"
+      ],
+      "id": "measure_estimate_4",
+      "audioTaskTextId": "measure_estimate_4"
+    },
+    "measure_estimate_5": {
+      "typeId": "estimate_mass_volume",
+      "text": "Какой из этих предметов ближе всего по размеру к обычной коробке из-под обуви?",
+      "params": {
+        "pairIndex": 5
+      },
+      "correctAnswer": "рюкзак",
+      "choices": [
+        "айсберг",
+        "рюкзак",
+        "гора",
+        "снежинка"
+      ],
+      "id": "measure_estimate_5",
+      "audioTaskTextId": "measure_estimate_5"
+    },
+    "measure_estimate_6": {
+      "typeId": "estimate_mass_volume",
+      "text": "Какой из этих предметов ближе всего по размеру к обычной коробке из-под обуви?",
+      "params": {
+        "pairIndex": 6
+      },
+      "correctAnswer": "мяч",
+      "choices": [
+        "зёрнышко",
+        "астероид",
+        "мяч",
+        "планета"
+      ],
+      "id": "measure_estimate_6",
+      "audioTaskTextId": "measure_estimate_6"
+    },
+    "measure_estimate_7": {
+      "typeId": "estimate_mass_volume",
+      "text": "Какой из этих предметов ближе всего по размеру к обычной коробке из-под обуви?",
+      "params": {
+        "pairIndex": 7
+      },
+      "correctAnswer": "телефон",
+      "choices": [
+        "машина",
+        "пылинка",
+        "поезд",
+        "телефон"
+      ],
+      "id": "measure_estimate_7",
+      "audioTaskTextId": "measure_estimate_7"
+    },
+    "shares_fraction_compare_intro": {
+      "typeId": "estimate_fraction",
+      "text": "Какая дробь больше: 1/4 или 3/4?",
+      "params": {
+        "denominator": 4,
+        "numA": 1,
+        "numB": 3
+      },
+      "correctAnswer": "3/4",
+      "choices": [
+        "1/4",
+        "3/4"
+      ],
+      "id": "shares_fraction_compare_intro",
+      "audioTaskTextId": "shares_fraction_compare_intro"
+    },
+    "shares_fraction_compare_1": {
+      "typeId": "estimate_fraction",
+      "text": "Какая дробь больше: 2/4 или 3/4?",
+      "params": {
+        "denominator": 4,
+        "numA": 2,
+        "numB": 3
+      },
+      "correctAnswer": "3/4",
+      "choices": [
+        "2/4",
+        "3/4"
+      ],
+      "id": "shares_fraction_compare_1",
+      "audioTaskTextId": "shares_fraction_compare_1"
+    },
+    "shares_fraction_compare_2": {
+      "typeId": "estimate_fraction",
+      "text": "Какая дробь больше: 1/5 или 4/5?",
+      "params": {
+        "denominator": 5,
+        "numA": 1,
+        "numB": 4
+      },
+      "correctAnswer": "4/5",
+      "choices": [
+        "1/5",
+        "4/5"
+      ],
+      "id": "shares_fraction_compare_2",
+      "audioTaskTextId": "shares_fraction_compare_2"
+    },
+    "shares_fraction_compare_3": {
+      "typeId": "estimate_fraction",
+      "text": "Какая дробь больше: 2/5 или 3/5?",
+      "params": {
+        "denominator": 5,
+        "numA": 2,
+        "numB": 3
+      },
+      "correctAnswer": "3/5",
+      "choices": [
+        "2/5",
+        "3/5"
+      ],
+      "id": "shares_fraction_compare_3",
+      "audioTaskTextId": "shares_fraction_compare_3"
+    },
+    "shares_fraction_compare_4": {
+      "typeId": "estimate_fraction",
+      "text": "Какая дробь больше: 3/5 или 4/5?",
+      "params": {
+        "denominator": 5,
+        "numA": 3,
+        "numB": 4
+      },
+      "correctAnswer": "4/5",
+      "choices": [
+        "4/5",
+        "3/5"
+      ],
+      "id": "shares_fraction_compare_4",
+      "audioTaskTextId": "shares_fraction_compare_4"
+    },
+    "shares_fraction_compare_5": {
+      "typeId": "estimate_fraction",
+      "text": "Какая дробь больше: 1/6 или 5/6?",
+      "params": {
+        "denominator": 6,
+        "numA": 1,
+        "numB": 5
+      },
+      "correctAnswer": "5/6",
+      "choices": [
+        "5/6",
+        "1/6"
+      ],
+      "id": "shares_fraction_compare_5",
+      "audioTaskTextId": "shares_fraction_compare_5"
+    },
+    "shares_fraction_compare_6": {
+      "typeId": "estimate_fraction",
+      "text": "Какая дробь больше: 2/6 или 5/6?",
+      "params": {
+        "denominator": 6,
+        "numA": 2,
+        "numB": 5
+      },
+      "correctAnswer": "5/6",
+      "choices": [
+        "5/6",
+        "2/6"
+      ],
+      "id": "shares_fraction_compare_6",
+      "audioTaskTextId": "shares_fraction_compare_6"
+    },
+    "shares_fraction_compare_7": {
+      "typeId": "estimate_fraction",
+      "text": "Какая дробь больше: 3/8 или 5/8?",
+      "params": {
+        "denominator": 8,
+        "numA": 3,
+        "numB": 5
+      },
+      "correctAnswer": "5/8",
+      "choices": [
+        "5/8",
+        "3/8"
+      ],
+      "id": "shares_fraction_compare_7",
+      "audioTaskTextId": "shares_fraction_compare_7"
+    },
+    "shares_fraction_compare_8": {
+      "typeId": "estimate_fraction",
+      "text": "Какая дробь больше: 1/8 или 7/8?",
+      "params": {
+        "denominator": 8,
+        "numA": 1,
+        "numB": 7
+      },
+      "correctAnswer": "7/8",
+      "choices": [
+        "1/8",
+        "7/8"
+      ],
+      "id": "shares_fraction_compare_8",
+      "audioTaskTextId": "shares_fraction_compare_8"
+    },
+    "shares_fraction_compare_9": {
+      "typeId": "estimate_fraction",
+      "text": "Какая дробь больше: 3/10 или 7/10?",
+      "params": {
+        "denominator": 10,
+        "numA": 3,
+        "numB": 7
+      },
+      "correctAnswer": "7/10",
+      "choices": [
+        "3/10",
+        "7/10"
+      ],
+      "id": "shares_fraction_compare_9",
+      "audioTaskTextId": "shares_fraction_compare_9"
     }
   },
   "mathTools": [
