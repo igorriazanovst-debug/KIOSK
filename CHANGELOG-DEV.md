@@ -5,6 +5,19 @@
 
 ---
 
+## 2026-09-09/10 (продолжение 25) — ДЕПЛОЙ НА ПРОД
+
+### FEATURE — «Матемашка» задеплоена на production, реальный проект + установщик
+- **По прямому запросу пользователя**, тем же путём, что Хронолайнер (PR #6) и Тип5 «Конструктор (сетевая)»: `git pull` на сервере (`git checkout -- packages/player/electron/project.json packages/player/package.json` перед этим — оба файла традиционно "грязные" после любой прошлой сборки через `/api/builds`) → пересборка `packages/shared` → `packages/server` (симлинк `@kiosk/shared` цел) → `packages/editor-web` (`npm run build` + `rsync -a --delete` в `/opt/kiosk/editor-web`, бэкап сделан первым делом) → `konva`/`react-konva` в `packages/player/node_modules` уже стояли версией из package.json (остались с деплоя Тип5, который их и добавил) — `npm install` не понадобился → `systemctl restart kiosk-license-server`.
+- **Ограничение доступа к виджету** (`mathmachineAccess.ts`, allow-list `mokretcov.m@poznaikino.ru`, скрытие в палитре `WidgetLibrary.tsx`, 403 в `ProjectController`) — уже было реализовано в коде на этапе создания виджета (Этап 1), деплой только перенёс его на прод. Sanity-check прямо в задеплоенном `dist/config/mathmachineAccess.js` подтвердил allow для mokretcov (в т.ч. регистронезависимо) и НЕ-блокировку по коду для `test@kiosk.local`/`igor.riazanov.st@gmail.com` на уровне EMAIL-ограничения именно как и предполагает архитектура — реальная защита от РЕДАКТИРОВАНИЯ идёт через этот allow-list, а игрок/сборка разрешены им по лицензии (см. ниже).
+- **Реальный проект «Матемашка»** создан от имени mokretcov (`POST /api/projects`, 201, id `87bab6dd-448f-4583-8f61-745d7061c001`, канва 1920×1080, один виджет `mathmachine` на весь экран) под лицензией `b5b35574-873e-4a9c-9f5d-024770da2992` ("Demo Organization").
+- **`test@kiosk.local` верификация**: подтверждено прямым SQL-запросом в БД (`license_users`), что `test@kiosk.local` состоит на ТОЙ ЖЕ лицензии `b5b35574-...`, что и mokretcov, и что новый проект принадлежит этой же лицензии — значит доступ уровня Плеер/сборка (`ProjectAccessService.licenseHasAccess`, сверка по лицензии, не по email) сработает автоматически при установке под `test@kiosk.local`, без отдельного `ProjectGrant` — тот же вывод, что и в прецеденте Тип5.
+- **Реальная сборка** через продакшен `POST /api/builds` (не локальный `electron-builder`) — 214.86 МБ, ~3.5 минуты (queued→building→packaging→finalizing→completed, 0 ошибок), скачана по SFTP. Публичная ссылка на скачивание (без авторизации, как и предполагает `GET /api/builds/download/:fileName`, проверено `curl -r 0-1023` → `206 Partial Content`): `http://31.192.110.121/api/builds/download/__________Windows_1788989541333.exe` (имя файла — транслитерация кириллического `appName` "Матемашка", все символы не-ASCII превратились в `_`, известное поведение `safeAppName.replace(/[^a-zA-Z0-9]/g,'_')`, задокументировано ещё в прецеденте Тип5). Локальная копия — `Тип6_Матемашка/сборка_с_прода/Matemashka_Setup.exe` (вне git).
+- Все временные скрипты (`create_mathmachine_project.js`, `trigger_mathmachine_build.js`, `sanity_check_mathmachine.js`) писались через SFTP прямо в `packages/server/` и удалены сразу же после использования — ни одного не осталось на проде.
+- **Проверено**: логи `kiosk-license-server` чистые после рестарта, health-check 400 на пустой body (не 500/краш), `git status` на сервере чист после `checkout --`+`pull` (только традиционный неотслеживаемый `editorStore.ts.broken_*`, не мой).
+
+---
+
 ## 2026-09-09 (продолжение 24)
 
 ### FEATURE — Этап 3, Группа 1: 8 категорий FR-022 «лёгкие победы» (+69 заданий)
