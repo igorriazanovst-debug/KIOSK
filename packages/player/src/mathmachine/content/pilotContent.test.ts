@@ -1,7 +1,14 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
+import fs from 'node:fs';
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
 import { MathMachineContentSchema } from '@kiosk/shared';
 import pilotContent from './pilotContent.json' with { type: 'json' };
+
+// public/media, не src/mathmachine/media — vite копирует public/* в dist/*
+// без изменений при сборке; см. generate_pilot_audio.ps1.
+const MEDIA_DIR = path.join(path.dirname(fileURLToPath(import.meta.url)), '..', '..', '..', 'public', 'media');
 
 test('pilotContent.json validates against MathMachineContentSchema', () => {
   const result = MathMachineContentSchema.safeParse(pilotContent);
@@ -29,4 +36,16 @@ test('every task referenced by a group actually exists in tasks', () => {
       assert.ok(parsed.tasks[taskId], `missing task ${taskId} referenced by group ${group.id}`);
     }
   }
+});
+
+test('every task with an audioTaskTextId has a corresponding mp3 file on disk', () => {
+  const parsed = MathMachineContentSchema.parse(pilotContent);
+  let checked = 0;
+  for (const task of Object.values(parsed.tasks)) {
+    if (!task.audioTaskTextId) continue;
+    checked += 1;
+    const mp3Path = path.join(MEDIA_DIR, `${task.audioTaskTextId}.mp3`);
+    assert.ok(fs.existsSync(mp3Path), `missing audio file for task ${task.id}: ${mp3Path}`);
+  }
+  assert.equal(checked, 18, 'expected exactly 18 pilot tasks (Этап 1) to have narration audio');
 });
