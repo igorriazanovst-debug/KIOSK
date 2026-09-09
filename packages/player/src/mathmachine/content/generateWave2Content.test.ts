@@ -29,20 +29,164 @@ test('no duplicate topic, group, or task ids across all of WAVE2_TOPICS', () => 
   }
 });
 
-test('within every choice-mode group, the correct answer is not always at the same button position', () => {
+// ─── Батарея тестов-инвариантов Эпика 12 (переделка 2026-09-09) ─────────
+
+function maxFrequency(values: number[]): number {
+  const counts = new Map<number, number>();
+  for (const v of values) counts.set(v, (counts.get(v) ?? 0) + 1);
+  return Math.max(...counts.values());
+}
+
+function exploitablePeriod(values: number[]): number | null {
+  const n = values.length;
+  for (let period = 1; period <= Math.floor(n / 2); period++) {
+    let matches = true;
+    for (let i = period; i < n; i++) {
+      if (values[i] !== values[i % period]) {
+        matches = false;
+        break;
+      }
+    }
+    if (matches) return period;
+  }
+  return null;
+}
+
+function maxLinearFormulaMatch(values: number[], modulus: number): number {
+  let best = 0;
+  for (let a = 0; a < modulus; a++) {
+    for (let c = 0; c < modulus; c++) {
+      let matches = 0;
+      values.forEach((v, i) => {
+        if (((a * i + c) % modulus + modulus) % modulus === v) matches++;
+      });
+      best = Math.max(best, matches);
+    }
+  }
+  return best;
+}
+
+test('within every choice-mode group, the button position is not exploitable (frequency/period/linear formula)', () => {
+  let checkedGroups = 0;
   for (const topic of WAVE2_TOPICS) {
     for (const group of topic.groups) {
       const choiceTasks = group.tasks.filter((t) => Array.isArray(t.choices));
-      if (choiceTasks.length < 2) continue;
-      const positions = new Set(
-        choiceTasks.map((t) => t.choices!.findIndex((c) => String(c) === String(t.correctAnswer))),
-      );
+      if (choiceTasks.length < 4) continue;
+      checkedGroups += 1;
+      const numOptions = choiceTasks[0].choices!.length;
+      const positions = choiceTasks.map((t) => t.choices!.findIndex((c) => String(c) === String(t.correctAnswer)));
+      const freq = maxFrequency(positions);
       assert.ok(
-        positions.size > 1,
-        `group ${group.id} always places the correct answer at button position ${[...positions]} — a child could solve it without reading`,
+        freq <= Math.ceil(choiceTasks.length / 2),
+        `group ${group.id}: button position ${JSON.stringify(positions)} hits one slot ${freq}/${choiceTasks.length} times`,
+      );
+      const period = exploitablePeriod(positions);
+      assert.ok(
+        period === null || period > choiceTasks.length / 2,
+        `group ${group.id}: positions ${JSON.stringify(positions)} follow an exploitable period ${period}`,
+      );
+      const linear = maxLinearFormulaMatch(positions, numOptions);
+      assert.ok(
+        linear <= Math.ceil(choiceTasks.length / 2),
+        `group ${group.id}: a linear formula (a*i+c) mod N matches positions ${JSON.stringify(positions)} in ${linear}/${choiceTasks.length} tasks`,
       );
     }
   }
+  assert.ok(checkedGroups > 0, 'expected at least one choice-mode group to exist');
+});
+
+function parseDivisionOption(option: string): { quotient: number; remainder: number } {
+  const match = /^(-?\d+) ост\. (\d+)$/.exec(option);
+  assert.ok(match, `unparseable division option: ${option}`);
+  return { quotient: Number(match![1]), remainder: Number(match![2]) };
+}
+
+function majorityOf(values: number[]): number | null {
+  const winners = [...new Set(values)].filter((v) => values.filter((x) => x === v).length >= 2);
+  return winners.length === 1 ? winners[0] : null;
+}
+
+function minorityOf(values: number[]): number | null {
+  const singles = [...new Set(values)].filter((v) => values.filter((x) => x === v).length === 1);
+  return singles.length === 1 ? singles[0] : null;
+}
+
+const DIVISION_SHORTCUTS: Record<string, (choices: string[]) => string | null> = {
+  'majority quotient + majority remainder': (choices) => {
+    const parsed = choices.map(parseDivisionOption);
+    const quotient = majorityOf(parsed.map((p) => p.quotient));
+    const remainder = majorityOf(parsed.map((p) => p.remainder));
+    if (quotient === null || remainder === null) return null;
+    const guess = `${quotient} ост. ${remainder}`;
+    return choices.includes(guess) ? guess : null;
+  },
+  'the option with the odd-one-out quotient': (choices) => {
+    const parsed = choices.map(parseDivisionOption);
+    const quotient = minorityOf(parsed.map((p) => p.quotient));
+    if (quotient === null) return null;
+    return choices[parsed.findIndex((p) => p.quotient === quotient)];
+  },
+  'the option with the odd-one-out remainder': (choices) => {
+    const parsed = choices.map(parseDivisionOption);
+    const remainder = minorityOf(parsed.map((p) => p.remainder));
+    if (remainder === null) return null;
+    return choices[parsed.findIndex((p) => p.remainder === remainder)];
+  },
+};
+
+test('within every number_divide_remainder group, no structural shortcut solves most tasks (F2 class)', () => {
+  let checkedGroups = 0;
+  for (const topic of WAVE2_TOPICS) {
+    for (const group of topic.groups) {
+      const tasks = group.tasks.filter((t) => t.typeId === 'number_divide_remainder');
+      if (tasks.length < 2) continue;
+      checkedGroups += 1;
+      for (const [name, shortcut] of Object.entries(DIVISION_SHORTCUTS)) {
+        const solved = tasks.filter((t) => shortcut(t.choices as string[]) === t.correctAnswer).length;
+        assert.ok(
+          solved <= Math.ceil(tasks.length / 2),
+          `group ${group.id}: shortcut "${name}" hits the correct answer in ${solved}/${tasks.length} tasks — too reliable to be safe`,
+        );
+      }
+      for (let c = -9; c <= 9; c++) {
+        let solved = 0;
+        for (const task of tasks) {
+          const parsed = (task.choices as string[]).map(parseDivisionOption);
+          const matching = parsed.filter((p) => p.quotient - p.remainder === c);
+          if (matching.length === 1) {
+            const guess = `${matching[0].quotient} ост. ${matching[0].remainder}`;
+            if (guess === task.correctAnswer) solved += 1;
+          }
+        }
+        assert.ok(
+          solved <= Math.ceil(tasks.length / 2),
+          `group ${group.id}: constant q−r=${c} identifies the correct option in ${solved}/${tasks.length} tasks`,
+        );
+      }
+    }
+  }
+  assert.ok(checkedGroups > 0, 'expected at least one number_divide_remainder group to exist');
+});
+
+test('within "Кратные", taking the median of the three shown choices does not solve most tasks', () => {
+  let checkedGroups = 0;
+  for (const topic of WAVE2_TOPICS) {
+    for (const group of topic.groups) {
+      const tasks = group.tasks.filter((t) => t.typeId === 'number_multiple_check');
+      if (tasks.length < 4) continue;
+      checkedGroups += 1;
+      let solved = 0;
+      for (const t of tasks) {
+        const sorted = [...(t.choices as number[])].sort((a, b) => a - b);
+        if (sorted[1] === t.correctAnswer) solved += 1;
+      }
+      assert.ok(
+        solved <= Math.ceil(tasks.length / 2),
+        `group ${group.id}: "take the median" heuristic solves ${solved}/${tasks.length} tasks`,
+      );
+    }
+  }
+  assert.ok(checkedGroups > 0, 'expected at least one number_multiple_check group to exist');
 });
 
 test('every generated task has a correctAnswer consistent with its own params', () => {

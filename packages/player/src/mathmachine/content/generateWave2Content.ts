@@ -2,13 +2,19 @@
 // docs/superpowers/specs/2026-09-08-mathmachine-content-wave2-design.md).
 // Тот же принцип, что и в волне 1 (generateWave1Content.ts) — чистые
 // функции, детерминированное перечисление без RNG, файловый ввод-вывод
-// вынесен в отдельный runGenerateWave2.ts. В отличие от волны 1, вариация
-// позиции правильного ответа в группах с выбором заложена с первого
-// коммита (финальное ревью волны 1 нашло, что фиксированная позиция
-// позволяла решать задания без чтения условия — там это чинилось
-// отдельным фикс-раундом постфактум). Хелперы buildGroup/rotate
+// вынесен в отдельный runGenerateWave2.ts. Хелперы buildGroup/rotate
 // продублированы, а не импортированы из generateWave1Content.ts — каждый
 // скрипт волны самодостаточен.
+//
+// Переделка Эпика 12 (2026-09-09, реставрация): positionIndex-based
+// ротация (пришла из волны 1, скопирована сюда) заменена на хэш
+// содержания задания — иначе позиция образует тривиальный цикл. Тем же
+// проходом устранены две находки этой волны: (1) «Деление» — оба
+// дистрактора держали ЛИБО то же частное, ЛИБО тот же остаток, что и
+// верный ответ, поэтому «большинство по частному» + «большинство по
+// остатку» по отдельности решали задание на 100% без единого деления
+// (класс дефекта F2); (2) «Кратные» — дистракторы всегда были correct±1,
+// поэтому верный ответ всегда оказывался медианой трёх показанных чисел.
 
 import type { MathMachineContent, Task, Group, Topic } from '@kiosk/shared';
 
@@ -30,6 +36,31 @@ function buildGroup(idPrefix: string, name: string, tasks: Omit<Task, 'id'>[]): 
     id: i === 0 ? `${idPrefix}_intro` : `${idPrefix}_${i}`,
   }));
   return { id: `grp_${idPrefix}`, name, tasks: builtTasks };
+}
+
+// ─── Хэш содержания задания (см. generateWave1Content.ts — тот же приём,
+// продублирован намеренно, а не импортирован) ───────────────────────────
+
+function fnv1a(str: string): number {
+  let h = 0x811c9dc5;
+  for (let i = 0; i < str.length; i++) {
+    h ^= str.charCodeAt(i);
+    h = Math.imul(h, 0x01000193);
+  }
+  return h >>> 0;
+}
+
+function avalanche(h: number): number {
+  h ^= h >>> 16;
+  h = Math.imul(h, 0x85ebca6b);
+  h ^= h >>> 13;
+  h = Math.imul(h, 0xc2b2ae35);
+  h ^= h >>> 16;
+  return h >>> 0;
+}
+
+function contentHash(salt: string, parts: (number | string)[]): number {
+  return avalanche(fnv1a(salt + '|' + parts.join(',')));
 }
 
 function rotate<T>(arr: T[], shift: number): T[] {
@@ -64,25 +95,39 @@ function buildMultiplicationTopic(): TopicSpec {
 }
 
 // ─── Деление с остатком (16 заданий: 8 + 8) ────────────────────────────
-// correctAnswer — строка "частное ост. остаток", не число (составной
-// ответ не укладывается в единственное числовое поле ввода). Позиция
-// правильного варианта среди трёх вариантов-строк варьируется по
-// positionIndex С ПЕРВОГО КОММИТА. Пары (a,b) подобраны так, чтобы
-// частное было >= 1 (иначе вариант "частное-1" выглядел бы отрицательным)
-// и остаток был ненулевым (эта волна учит именно наличию остатка).
+// correctAnswer — строка "частное ост. остаток", не число. Раньше оба
+// дистрактора держали ЛИБО то же частное, ЛИБО тот же остаток, что верный
+// ответ — «большинство по частному» и «большинство по остатку» по
+// отдельности решали задание без единого деления (F2). Теперь схема
+// дистракторов циклически меняет ОБА смещения одновременно (частично
+// совпадающие, частично нет), выбор схемы и позиции — хэш содержания.
+
+const DIVISION_DECOY_SCHEMES: [number, number][][] = [
+  [[0, 1], [-1, 0]],
+  [[-1, 1], [-1, 2]],
+  [[0, 1], [1, 1]],
+  [[-1, 1], [1, 2]],
+];
 
 function formatDivision(quotient: number, remainder: number): string {
   return `${quotient} ост. ${remainder}`;
 }
 
-function divideTask(a: number, b: number, positionIndex: number): Omit<Task, 'id'> {
+function divideTask(a: number, b: number): Omit<Task, 'id'> {
   const quotient = Math.floor(a / b);
   const remainder = a % b;
   const correct = formatDivision(quotient, remainder);
-  const decoyRemainder = formatDivision(quotient, (remainder + 1) % b);
-  const decoyQuotient = formatDivision(quotient - 1, remainder);
-  const options = [correct, decoyRemainder, decoyQuotient];
-  const choices = rotate(options, positionIndex);
+  const schemeIdx = contentHash('w2-div-scheme-0', [a, b]) % DIVISION_DECOY_SCHEMES.length;
+  const scheme = DIVISION_DECOY_SCHEMES[schemeIdx];
+  if (scheme.some(([dq]) => quotient + dq < 1)) {
+    throw new Error(`Division decoy quotient would fall below 1 for ${a}:${b} — pick a pair with a bigger quotient`);
+  }
+  const options = [correct, ...scheme.map(([dq, dr]) => formatDivision(quotient + dq, ((remainder + dr) % b + b) % b))];
+  if (new Set(options).size !== 3) {
+    throw new Error(`Division decoys collided for ${a}:${b} — options: ${options.join(' | ')}`);
+  }
+  const posShift = contentHash('w2-div-position-0', [a, b]);
+  const choices = rotate(options, posShift);
   return {
     typeId: 'number_divide_remainder',
     text: `Сколько будет ${a} разделить на ${b}?`,
@@ -96,36 +141,37 @@ const DIVISION_PAIRS_23: [number, number][] = [
   [5, 2], [7, 2], [9, 2], [11, 2],
   [7, 3], [8, 3], [10, 3], [11, 3],
 ];
+// 7:5 и 8:5 (частное=1) заменены на 11:5/14:5 — все decoy-схемы Эпика 12
+// требуют частное ≥2 (иначе dq=-1 давал бы частное 0), не только 7:5/8:5.
 const DIVISION_PAIRS_45: [number, number][] = [
   [9, 4], [11, 4], [13, 4], [14, 4],
-  [7, 5], [8, 5], [12, 5], [13, 5],
+  [11, 5], [12, 5], [13, 5], [14, 5],
 ];
 
 function buildDivisionTopic(): TopicSpec {
-  const div23 = buildGroup(
-    'div_23',
-    'Деление на 2 и 3',
-    DIVISION_PAIRS_23.map(([a, b], i) => divideTask(a, b, i)),
-  );
-  const div45 = buildGroup(
-    'div_45',
-    'Деление на 4 и 5',
-    DIVISION_PAIRS_45.map(([a, b], i) => divideTask(a, b, i)),
-  );
+  const div23 = buildGroup('div_23', 'Деление на 2 и 3', DIVISION_PAIRS_23.map(([a, b]) => divideTask(a, b)));
+  const div45 = buildGroup('div_45', 'Деление на 4 и 5', DIVISION_PAIRS_45.map(([a, b]) => divideTask(a, b)));
   return { id: 'top_division', name: 'Деление', groups: [div23, div45] };
 }
 
 // ─── Кратные (16 заданий: 8 + 8) ────────────────────────────────────────
-// Дистракторы — correct±1: два соседних целых не могут оба делиться на
-// n>=2, поэтому дистракторы всегда корректны без отдельной проверки на
-// генерацию (но проверяются тестом всё равно — дешёвая перепроверка).
-// Позиция правильного варианта варьируется по positionIndex С ПЕРВОГО
-// КОММИТА.
+// Дистракторы больше не всегда correct±1 (что делало correct медианой
+// трёх показанных чисел) — выбираются хэшем из более широкого пула
+// смещений, отфильтрованных от значений, которые сами оказались бы
+// кратны n.
 
-function multipleTask(n: number, k: number, positionIndex: number): Omit<Task, 'id'> {
+const MULTIPLE_OFFSET_POOL = [-3, -2, -1, 1, 2, 3];
+
+function multipleTask(n: number, k: number): Omit<Task, 'id'> {
   const correct = n * k;
-  const options = [correct, correct + 1, correct - 1];
-  const choices = rotate(options, positionIndex);
+  const candidates = MULTIPLE_OFFSET_POOL.map((d) => correct + d).filter((v) => v > 0 && v % n !== 0);
+  const idx1 = contentHash('w2-mult-d1-0', [n, k]) % candidates.length;
+  const d1 = candidates[idx1];
+  const rest = candidates.filter((v) => v !== d1);
+  const idx2 = contentHash('w2-mult-d2-0', [n, k, d1]) % rest.length;
+  const d2 = rest[idx2];
+  const posShift = contentHash('w2-mult-position-0', [n, k]);
+  const choices = rotate([correct, d1, d2], posShift);
   return {
     typeId: 'number_multiple_check',
     text: `Какое из чисел делится на ${n} без остатка?`,
@@ -138,13 +184,13 @@ function multipleTask(n: number, k: number, positionIndex: number): Omit<Task, '
 function buildMultiplesTopic(): TopicSpec {
   const tasks23: Omit<Task, 'id'>[] = [];
   [2, 3].forEach((n) => {
-    for (let k = 2; k <= 5; k++) tasks23.push(multipleTask(n, k, tasks23.length));
+    for (let k = 2; k <= 5; k++) tasks23.push(multipleTask(n, k));
   });
   const group23 = buildGroup('kratn_23', 'Кратные 2 и 3', tasks23);
 
   const tasks45: Omit<Task, 'id'>[] = [];
   [4, 5].forEach((n) => {
-    for (let k = 2; k <= 5; k++) tasks45.push(multipleTask(n, k, tasks45.length));
+    for (let k = 2; k <= 5; k++) tasks45.push(multipleTask(n, k));
   });
   const group45 = buildGroup('kratn_45', 'Кратные 4 и 5', tasks45);
 
