@@ -3,6 +3,7 @@ import assert from 'node:assert/strict';
 import {
   MediaAssetSchema,
   TaskSchema,
+  TaskTypeIdSchema,
   GroupSchema,
   TopicSchema,
   SectionSchema,
@@ -84,4 +85,11 @@ test('SectionSchema and MathToolSchema accept minimal well-formed records', () =
 test('MathToolSchema accepts the two Этап 2a tool ids (chain, two_segments)', () => {
   assert.equal(MathToolSchema.safeParse({ id: 'chain', name: 'Цепочка' }).success, true);
   assert.equal(MathToolSchema.safeParse({ id: 'two_segments', name: 'Два отрезка' }).success, true);
+});
+
+test('TaskTypeIdSchema accepts the five Этап 2b wave 1 task types', () => {
+  const wave1Types = ['number_subtract_two', 'number_compare', 'digit_recognition', 'number_composition', 'number_ordering'];
+  for (const id of wave1Types) {
+    assert.equal(TaskTypeIdSchema.safeParse(id).success, true, `expected ${id} to be a valid TaskTypeId`);
+  }
 });

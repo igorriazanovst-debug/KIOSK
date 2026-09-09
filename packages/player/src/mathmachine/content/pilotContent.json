@@ -1,42 +1,1542 @@
 {
   "schemaVersion": 1,
   "sections": [
-    { "id": "sec_arithmetic", "name": "Арифметика", "topicIds": ["top_addition", "top_counting"] }
+    {
+      "id": "sec_arithmetic",
+      "name": "Арифметика",
+      "topicIds": [
+        "top_addition",
+        "top_counting",
+        "top_subtraction",
+        "top_comparison",
+        "top_digits",
+        "top_composition",
+        "top_ordering"
+      ]
+    }
   ],
   "topics": {
-    "top_addition": { "id": "top_addition", "name": "Сложение", "groupIds": ["grp_add_1", "grp_add_2"] },
-    "top_counting": { "id": "top_counting", "name": "Счёт", "groupIds": ["grp_count_1", "grp_count_2"] }
+    "top_addition": {
+      "id": "top_addition",
+      "name": "Сложение",
+      "groupIds": [
+        "grp_add_1",
+        "grp_add_2"
+      ]
+    },
+    "top_counting": {
+      "id": "top_counting",
+      "name": "Счёт",
+      "groupIds": [
+        "grp_count_1",
+        "grp_count_2"
+      ]
+    },
+    "top_subtraction": {
+      "id": "top_subtraction",
+      "name": "Вычитание",
+      "groupIds": [
+        "grp_sub_b1",
+        "grp_sub_b2"
+      ]
+    },
+    "top_comparison": {
+      "id": "top_comparison",
+      "name": "Сравнение чисел",
+      "groupIds": [
+        "grp_cmp_next",
+        "grp_cmp_gap"
+      ]
+    },
+    "top_digits": {
+      "id": "top_digits",
+      "name": "Цифры",
+      "groupIds": [
+        "grp_digit"
+      ]
+    },
+    "top_composition": {
+      "id": "top_composition",
+      "name": "Состав числа",
+      "groupIds": [
+        "grp_comp_5",
+        "grp_comp_10"
+      ]
+    },
+    "top_ordering": {
+      "id": "top_ordering",
+      "name": "Порядок чисел",
+      "groupIds": [
+        "grp_order_min",
+        "grp_order_max"
+      ]
+    }
   },
   "groups": {
-    "grp_add_1": { "id": "grp_add_1", "name": "Сложение до 10, шаг 1", "taskIds": ["add1_intro", "add1_1", "add1_2", "add1_3", "add1_4"] },
-    "grp_add_2": { "id": "grp_add_2", "name": "Сложение трёх чисел", "taskIds": ["add2_intro", "add2_1", "add2_2", "add2_3"] },
-    "grp_count_1": { "id": "grp_count_1", "name": "Посчитай предметы", "taskIds": ["count1_intro", "count1_1", "count1_2", "count1_3", "count1_4"] },
-    "grp_count_2": { "id": "grp_count_2", "name": "Найди пропущенное число", "taskIds": ["count2_intro", "count2_1", "count2_2", "count2_3"] }
+    "grp_add_1": {
+      "id": "grp_add_1",
+      "name": "Сложение до 10, шаг 1",
+      "taskIds": [
+        "add1_intro",
+        "add1_1",
+        "add1_2",
+        "add1_3",
+        "add1_4"
+      ]
+    },
+    "grp_add_2": {
+      "id": "grp_add_2",
+      "name": "Сложение трёх чисел",
+      "taskIds": [
+        "add2_intro",
+        "add2_1",
+        "add2_2",
+        "add2_3"
+      ]
+    },
+    "grp_count_1": {
+      "id": "grp_count_1",
+      "name": "Посчитай предметы",
+      "taskIds": [
+        "count1_intro",
+        "count1_1",
+        "count1_2",
+        "count1_3",
+        "count1_4"
+      ]
+    },
+    "grp_count_2": {
+      "id": "grp_count_2",
+      "name": "Найди пропущенное число",
+      "taskIds": [
+        "count2_intro",
+        "count2_1",
+        "count2_2",
+        "count2_3"
+      ]
+    },
+    "grp_sub_b1": {
+      "id": "grp_sub_b1",
+      "name": "Вычесть 1",
+      "taskIds": [
+        "sub_b1_intro",
+        "sub_b1_1",
+        "sub_b1_2",
+        "sub_b1_3",
+        "sub_b1_4",
+        "sub_b1_5",
+        "sub_b1_6",
+        "sub_b1_7",
+        "sub_b1_8"
+      ]
+    },
+    "grp_sub_b2": {
+      "id": "grp_sub_b2",
+      "name": "Вычесть 2",
+      "taskIds": [
+        "sub_b2_intro",
+        "sub_b2_1",
+        "sub_b2_2",
+        "sub_b2_3",
+        "sub_b2_4",
+        "sub_b2_5",
+        "sub_b2_6",
+        "sub_b2_7"
+      ]
+    },
+    "grp_cmp_next": {
+      "id": "grp_cmp_next",
+      "name": "Сравнение соседних чисел",
+      "taskIds": [
+        "cmp_next_intro",
+        "cmp_next_1",
+        "cmp_next_2",
+        "cmp_next_3",
+        "cmp_next_4",
+        "cmp_next_5",
+        "cmp_next_6",
+        "cmp_next_7",
+        "cmp_next_8"
+      ]
+    },
+    "grp_cmp_gap": {
+      "id": "grp_cmp_gap",
+      "name": "Сравнение через число",
+      "taskIds": [
+        "cmp_gap_intro",
+        "cmp_gap_1",
+        "cmp_gap_2",
+        "cmp_gap_3",
+        "cmp_gap_4",
+        "cmp_gap_5",
+        "cmp_gap_6",
+        "cmp_gap_7"
+      ]
+    },
+    "grp_digit": {
+      "id": "grp_digit",
+      "name": "Учим цифры 0-9",
+      "taskIds": [
+        "digit_intro",
+        "digit_1",
+        "digit_2",
+        "digit_3",
+        "digit_4",
+        "digit_5",
+        "digit_6",
+        "digit_7",
+        "digit_8",
+        "digit_9"
+      ]
+    },
+    "grp_comp_5": {
+      "id": "grp_comp_5",
+      "name": "Состав чисел до 5",
+      "taskIds": [
+        "comp_5_intro",
+        "comp_5_1",
+        "comp_5_2",
+        "comp_5_3",
+        "comp_5_4",
+        "comp_5_5",
+        "comp_5_6",
+        "comp_5_7",
+        "comp_5_8",
+        "comp_5_9"
+      ]
+    },
+    "grp_comp_10": {
+      "id": "grp_comp_10",
+      "name": "Состав чисел до 10",
+      "taskIds": [
+        "comp_10_intro",
+        "comp_10_1",
+        "comp_10_2",
+        "comp_10_3",
+        "comp_10_4",
+        "comp_10_5",
+        "comp_10_6",
+        "comp_10_7",
+        "comp_10_8",
+        "comp_10_9"
+      ]
+    },
+    "grp_order_min": {
+      "id": "grp_order_min",
+      "name": "Найди наименьшее",
+      "taskIds": [
+        "order_min_intro",
+        "order_min_1",
+        "order_min_2",
+        "order_min_3",
+        "order_min_4",
+        "order_min_5",
+        "order_min_6",
+        "order_min_7"
+      ]
+    },
+    "grp_order_max": {
+      "id": "grp_order_max",
+      "name": "Найди наибольшее",
+      "taskIds": [
+        "order_max_intro",
+        "order_max_1",
+        "order_max_2",
+        "order_max_3",
+        "order_max_4",
+        "order_max_5",
+        "order_max_6",
+        "order_max_7"
+      ]
+    }
   },
   "tasks": {
-    "add1_intro": { "id": "add1_intro", "typeId": "number_sum_two", "text": "Давай научимся складывать числа! Сколько будет 1 плюс 1?", "params": { "a": 1, "b": 1 }, "correctAnswer": 2 },
-    "add1_1": { "id": "add1_1", "typeId": "number_sum_two", "text": "Сколько будет 2 плюс 3?", "params": { "a": 2, "b": 3 }, "correctAnswer": 5 },
-    "add1_2": { "id": "add1_2", "typeId": "number_sum_two", "text": "Сколько будет 4 плюс 4?", "params": { "a": 4, "b": 4 }, "correctAnswer": 8 },
-    "add1_3": { "id": "add1_3", "typeId": "number_sum_two", "text": "Сколько будет 5 плюс 2?", "params": { "a": 5, "b": 2 }, "correctAnswer": 7 },
-    "add1_4": { "id": "add1_4", "typeId": "number_sum_two", "text": "Сколько будет 6 плюс 3?", "params": { "a": 6, "b": 3 }, "correctAnswer": 9 },
-    "add2_intro": { "id": "add2_intro", "typeId": "number_sum_three", "text": "Теперь сложим сразу три числа! Сколько будет 1 плюс 1 плюс 1?", "params": { "a": 1, "b": 1, "c": 1 }, "correctAnswer": 3 },
-    "add2_1": { "id": "add2_1", "typeId": "number_sum_three", "text": "Сколько будет 2 плюс 2 плюс 1?", "params": { "a": 2, "b": 2, "c": 1 }, "correctAnswer": 5 },
-    "add2_2": { "id": "add2_2", "typeId": "number_sum_three", "text": "Сколько будет 1 плюс 3 плюс 2?", "params": { "a": 1, "b": 3, "c": 2 }, "correctAnswer": 6 },
-    "add2_3": { "id": "add2_3", "typeId": "number_sum_three", "text": "Сколько будет 3 плюс 3 плюс 1?", "params": { "a": 3, "b": 3, "c": 1 }, "correctAnswer": 7 },
-    "count1_intro": { "id": "count1_intro", "typeId": "number_counting", "text": "Посчитай, сколько кружков ты видишь?", "params": { "count": 3 }, "correctAnswer": 3 },
-    "count1_1": { "id": "count1_1", "typeId": "number_counting", "text": "Сколько кружков на этот раз?", "params": { "count": 5 }, "correctAnswer": 5 },
-    "count1_2": { "id": "count1_2", "typeId": "number_counting", "text": "Посчитай кружки!", "params": { "count": 7 }, "correctAnswer": 7 },
-    "count1_3": { "id": "count1_3", "typeId": "number_counting", "text": "А теперь сколько?", "params": { "count": 4 }, "correctAnswer": 4 },
-    "count1_4": { "id": "count1_4", "typeId": "number_counting", "text": "Посчитай все кружки до одного!", "params": { "count": 9 }, "correctAnswer": 9 },
-    "count2_intro": { "id": "count2_intro", "typeId": "number_missing", "text": "Какое число пропущено в ряду 2, 4, ?, 8, 10?", "params": { "series": [2, 4, 6, 8, 10], "missingIndex": 2 }, "correctAnswer": 6 },
-    "count2_1": { "id": "count2_1", "typeId": "number_missing", "text": "Какое число пропущено в ряду 1, 2, 3, ?, 5?", "params": { "series": [1, 2, 3, 4, 5], "missingIndex": 3 }, "correctAnswer": 4 },
-    "count2_2": { "id": "count2_2", "typeId": "number_missing", "text": "Какое число пропущено в ряду 5, ?, 7, 8, 9?", "params": { "series": [5, 6, 7, 8, 9], "missingIndex": 1 }, "correctAnswer": 6 },
-    "count2_3": { "id": "count2_3", "typeId": "number_missing", "text": "Какое число пропущено в ряду 3, 4, 5, 6, ??", "params": { "series": [3, 4, 5, 6, 7], "missingIndex": 4 }, "correctAnswer": 7 }
+    "add1_intro": {
+      "id": "add1_intro",
+      "typeId": "number_sum_two",
+      "text": "Давай научимся складывать числа! Сколько будет 1 плюс 1?",
+      "params": {
+        "a": 1,
+        "b": 1
+      },
+      "correctAnswer": 2
+    },
+    "add1_1": {
+      "id": "add1_1",
+      "typeId": "number_sum_two",
+      "text": "Сколько будет 2 плюс 3?",
+      "params": {
+        "a": 2,
+        "b": 3
+      },
+      "correctAnswer": 5
+    },
+    "add1_2": {
+      "id": "add1_2",
+      "typeId": "number_sum_two",
+      "text": "Сколько будет 4 плюс 4?",
+      "params": {
+        "a": 4,
+        "b": 4
+      },
+      "correctAnswer": 8
+    },
+    "add1_3": {
+      "id": "add1_3",
+      "typeId": "number_sum_two",
+      "text": "Сколько будет 5 плюс 2?",
+      "params": {
+        "a": 5,
+        "b": 2
+      },
+      "correctAnswer": 7
+    },
+    "add1_4": {
+      "id": "add1_4",
+      "typeId": "number_sum_two",
+      "text": "Сколько будет 6 плюс 3?",
+      "params": {
+        "a": 6,
+        "b": 3
+      },
+      "correctAnswer": 9
+    },
+    "add2_intro": {
+      "id": "add2_intro",
+      "typeId": "number_sum_three",
+      "text": "Теперь сложим сразу три числа! Сколько будет 1 плюс 1 плюс 1?",
+      "params": {
+        "a": 1,
+        "b": 1,
+        "c": 1
+      },
+      "correctAnswer": 3
+    },
+    "add2_1": {
+      "id": "add2_1",
+      "typeId": "number_sum_three",
+      "text": "Сколько будет 2 плюс 2 плюс 1?",
+      "params": {
+        "a": 2,
+        "b": 2,
+        "c": 1
+      },
+      "correctAnswer": 5
+    },
+    "add2_2": {
+      "id": "add2_2",
+      "typeId": "number_sum_three",
+      "text": "Сколько будет 1 плюс 3 плюс 2?",
+      "params": {
+        "a": 1,
+        "b": 3,
+        "c": 2
+      },
+      "correctAnswer": 6
+    },
+    "add2_3": {
+      "id": "add2_3",
+      "typeId": "number_sum_three",
+      "text": "Сколько будет 3 плюс 3 плюс 1?",
+      "params": {
+        "a": 3,
+        "b": 3,
+        "c": 1
+      },
+      "correctAnswer": 7
+    },
+    "count1_intro": {
+      "id": "count1_intro",
+      "typeId": "number_counting",
+      "text": "Посчитай, сколько кружков ты видишь?",
+      "params": {
+        "count": 3
+      },
+      "correctAnswer": 3
+    },
+    "count1_1": {
+      "id": "count1_1",
+      "typeId": "number_counting",
+      "text": "Сколько кружков на этот раз?",
+      "params": {
+        "count": 5
+      },
+      "correctAnswer": 5
+    },
+    "count1_2": {
+      "id": "count1_2",
+      "typeId": "number_counting",
+      "text": "Посчитай кружки!",
+      "params": {
+        "count": 7
+      },
+      "correctAnswer": 7
+    },
+    "count1_3": {
+      "id": "count1_3",
+      "typeId": "number_counting",
+      "text": "А теперь сколько?",
+      "params": {
+        "count": 4
+      },
+      "correctAnswer": 4
+    },
+    "count1_4": {
+      "id": "count1_4",
+      "typeId": "number_counting",
+      "text": "Посчитай все кружки до одного!",
+      "params": {
+        "count": 9
+      },
+      "correctAnswer": 9
+    },
+    "count2_intro": {
+      "id": "count2_intro",
+      "typeId": "number_missing",
+      "text": "Какое число пропущено в ряду 2, 4, ?, 8, 10?",
+      "params": {
+        "series": [
+          2,
+          4,
+          6,
+          8,
+          10
+        ],
+        "missingIndex": 2
+      },
+      "correctAnswer": 6
+    },
+    "count2_1": {
+      "id": "count2_1",
+      "typeId": "number_missing",
+      "text": "Какое число пропущено в ряду 1, 2, 3, ?, 5?",
+      "params": {
+        "series": [
+          1,
+          2,
+          3,
+          4,
+          5
+        ],
+        "missingIndex": 3
+      },
+      "correctAnswer": 4
+    },
+    "count2_2": {
+      "id": "count2_2",
+      "typeId": "number_missing",
+      "text": "Какое число пропущено в ряду 5, ?, 7, 8, 9?",
+      "params": {
+        "series": [
+          5,
+          6,
+          7,
+          8,
+          9
+        ],
+        "missingIndex": 1
+      },
+      "correctAnswer": 6
+    },
+    "count2_3": {
+      "id": "count2_3",
+      "typeId": "number_missing",
+      "text": "Какое число пропущено в ряду 3, 4, 5, 6, ??",
+      "params": {
+        "series": [
+          3,
+          4,
+          5,
+          6,
+          7
+        ],
+        "missingIndex": 4
+      },
+      "correctAnswer": 7
+    },
+    "sub_b1_intro": {
+      "typeId": "number_subtract_two",
+      "text": "Сколько будет 2 минус 1?",
+      "params": {
+        "a": 2,
+        "b": 1
+      },
+      "correctAnswer": 1,
+      "id": "sub_b1_intro"
+    },
+    "sub_b1_1": {
+      "typeId": "number_subtract_two",
+      "text": "Сколько будет 3 минус 1?",
+      "params": {
+        "a": 3,
+        "b": 1
+      },
+      "correctAnswer": 2,
+      "id": "sub_b1_1"
+    },
+    "sub_b1_2": {
+      "typeId": "number_subtract_two",
+      "text": "Сколько будет 4 минус 1?",
+      "params": {
+        "a": 4,
+        "b": 1
+      },
+      "correctAnswer": 3,
+      "id": "sub_b1_2"
+    },
+    "sub_b1_3": {
+      "typeId": "number_subtract_two",
+      "text": "Сколько будет 5 минус 1?",
+      "params": {
+        "a": 5,
+        "b": 1
+      },
+      "correctAnswer": 4,
+      "id": "sub_b1_3"
+    },
+    "sub_b1_4": {
+      "typeId": "number_subtract_two",
+      "text": "Сколько будет 6 минус 1?",
+      "params": {
+        "a": 6,
+        "b": 1
+      },
+      "correctAnswer": 5,
+      "id": "sub_b1_4"
+    },
+    "sub_b1_5": {
+      "typeId": "number_subtract_two",
+      "text": "Сколько будет 7 минус 1?",
+      "params": {
+        "a": 7,
+        "b": 1
+      },
+      "correctAnswer": 6,
+      "id": "sub_b1_5"
+    },
+    "sub_b1_6": {
+      "typeId": "number_subtract_two",
+      "text": "Сколько будет 8 минус 1?",
+      "params": {
+        "a": 8,
+        "b": 1
+      },
+      "correctAnswer": 7,
+      "id": "sub_b1_6"
+    },
+    "sub_b1_7": {
+      "typeId": "number_subtract_two",
+      "text": "Сколько будет 9 минус 1?",
+      "params": {
+        "a": 9,
+        "b": 1
+      },
+      "correctAnswer": 8,
+      "id": "sub_b1_7"
+    },
+    "sub_b1_8": {
+      "typeId": "number_subtract_two",
+      "text": "Сколько будет 10 минус 1?",
+      "params": {
+        "a": 10,
+        "b": 1
+      },
+      "correctAnswer": 9,
+      "id": "sub_b1_8"
+    },
+    "sub_b2_intro": {
+      "typeId": "number_subtract_two",
+      "text": "Сколько будет 3 минус 2?",
+      "params": {
+        "a": 3,
+        "b": 2
+      },
+      "correctAnswer": 1,
+      "id": "sub_b2_intro"
+    },
+    "sub_b2_1": {
+      "typeId": "number_subtract_two",
+      "text": "Сколько будет 4 минус 2?",
+      "params": {
+        "a": 4,
+        "b": 2
+      },
+      "correctAnswer": 2,
+      "id": "sub_b2_1"
+    },
+    "sub_b2_2": {
+      "typeId": "number_subtract_two",
+      "text": "Сколько будет 5 минус 2?",
+      "params": {
+        "a": 5,
+        "b": 2
+      },
+      "correctAnswer": 3,
+      "id": "sub_b2_2"
+    },
+    "sub_b2_3": {
+      "typeId": "number_subtract_two",
+      "text": "Сколько будет 6 минус 2?",
+      "params": {
+        "a": 6,
+        "b": 2
+      },
+      "correctAnswer": 4,
+      "id": "sub_b2_3"
+    },
+    "sub_b2_4": {
+      "typeId": "number_subtract_two",
+      "text": "Сколько будет 7 минус 2?",
+      "params": {
+        "a": 7,
+        "b": 2
+      },
+      "correctAnswer": 5,
+      "id": "sub_b2_4"
+    },
+    "sub_b2_5": {
+      "typeId": "number_subtract_two",
+      "text": "Сколько будет 8 минус 2?",
+      "params": {
+        "a": 8,
+        "b": 2
+      },
+      "correctAnswer": 6,
+      "id": "sub_b2_5"
+    },
+    "sub_b2_6": {
+      "typeId": "number_subtract_two",
+      "text": "Сколько будет 9 минус 2?",
+      "params": {
+        "a": 9,
+        "b": 2
+      },
+      "correctAnswer": 7,
+      "id": "sub_b2_6"
+    },
+    "sub_b2_7": {
+      "typeId": "number_subtract_two",
+      "text": "Сколько будет 10 минус 2?",
+      "params": {
+        "a": 10,
+        "b": 2
+      },
+      "correctAnswer": 8,
+      "id": "sub_b2_7"
+    },
+    "cmp_next_intro": {
+      "typeId": "number_compare",
+      "text": "Какое число больше: 1 или 2?",
+      "params": {
+        "a": 1,
+        "b": 2,
+        "direction": 0
+      },
+      "correctAnswer": 2,
+      "choices": [
+        1,
+        2
+      ],
+      "id": "cmp_next_intro"
+    },
+    "cmp_next_1": {
+      "typeId": "number_compare",
+      "text": "Какое число больше: 2 или 3?",
+      "params": {
+        "a": 2,
+        "b": 3,
+        "direction": 0
+      },
+      "correctAnswer": 3,
+      "choices": [
+        2,
+        3
+      ],
+      "id": "cmp_next_1"
+    },
+    "cmp_next_2": {
+      "typeId": "number_compare",
+      "text": "Какое число больше: 3 или 4?",
+      "params": {
+        "a": 3,
+        "b": 4,
+        "direction": 0
+      },
+      "correctAnswer": 4,
+      "choices": [
+        3,
+        4
+      ],
+      "id": "cmp_next_2"
+    },
+    "cmp_next_3": {
+      "typeId": "number_compare",
+      "text": "Какое число больше: 4 или 5?",
+      "params": {
+        "a": 4,
+        "b": 5,
+        "direction": 0
+      },
+      "correctAnswer": 5,
+      "choices": [
+        4,
+        5
+      ],
+      "id": "cmp_next_3"
+    },
+    "cmp_next_4": {
+      "typeId": "number_compare",
+      "text": "Какое число больше: 5 или 6?",
+      "params": {
+        "a": 5,
+        "b": 6,
+        "direction": 0
+      },
+      "correctAnswer": 6,
+      "choices": [
+        5,
+        6
+      ],
+      "id": "cmp_next_4"
+    },
+    "cmp_next_5": {
+      "typeId": "number_compare",
+      "text": "Какое число больше: 6 или 7?",
+      "params": {
+        "a": 6,
+        "b": 7,
+        "direction": 0
+      },
+      "correctAnswer": 7,
+      "choices": [
+        6,
+        7
+      ],
+      "id": "cmp_next_5"
+    },
+    "cmp_next_6": {
+      "typeId": "number_compare",
+      "text": "Какое число больше: 7 или 8?",
+      "params": {
+        "a": 7,
+        "b": 8,
+        "direction": 0
+      },
+      "correctAnswer": 8,
+      "choices": [
+        7,
+        8
+      ],
+      "id": "cmp_next_6"
+    },
+    "cmp_next_7": {
+      "typeId": "number_compare",
+      "text": "Какое число больше: 8 или 9?",
+      "params": {
+        "a": 8,
+        "b": 9,
+        "direction": 0
+      },
+      "correctAnswer": 9,
+      "choices": [
+        8,
+        9
+      ],
+      "id": "cmp_next_7"
+    },
+    "cmp_next_8": {
+      "typeId": "number_compare",
+      "text": "Какое число больше: 9 или 10?",
+      "params": {
+        "a": 9,
+        "b": 10,
+        "direction": 0
+      },
+      "correctAnswer": 10,
+      "choices": [
+        9,
+        10
+      ],
+      "id": "cmp_next_8"
+    },
+    "cmp_gap_intro": {
+      "typeId": "number_compare",
+      "text": "Какое число меньше: 1 или 3?",
+      "params": {
+        "a": 1,
+        "b": 3,
+        "direction": 1
+      },
+      "correctAnswer": 1,
+      "choices": [
+        1,
+        3
+      ],
+      "id": "cmp_gap_intro"
+    },
+    "cmp_gap_1": {
+      "typeId": "number_compare",
+      "text": "Какое число меньше: 2 или 4?",
+      "params": {
+        "a": 2,
+        "b": 4,
+        "direction": 1
+      },
+      "correctAnswer": 2,
+      "choices": [
+        2,
+        4
+      ],
+      "id": "cmp_gap_1"
+    },
+    "cmp_gap_2": {
+      "typeId": "number_compare",
+      "text": "Какое число меньше: 3 или 5?",
+      "params": {
+        "a": 3,
+        "b": 5,
+        "direction": 1
+      },
+      "correctAnswer": 3,
+      "choices": [
+        3,
+        5
+      ],
+      "id": "cmp_gap_2"
+    },
+    "cmp_gap_3": {
+      "typeId": "number_compare",
+      "text": "Какое число меньше: 4 или 6?",
+      "params": {
+        "a": 4,
+        "b": 6,
+        "direction": 1
+      },
+      "correctAnswer": 4,
+      "choices": [
+        4,
+        6
+      ],
+      "id": "cmp_gap_3"
+    },
+    "cmp_gap_4": {
+      "typeId": "number_compare",
+      "text": "Какое число меньше: 5 или 7?",
+      "params": {
+        "a": 5,
+        "b": 7,
+        "direction": 1
+      },
+      "correctAnswer": 5,
+      "choices": [
+        5,
+        7
+      ],
+      "id": "cmp_gap_4"
+    },
+    "cmp_gap_5": {
+      "typeId": "number_compare",
+      "text": "Какое число меньше: 6 или 8?",
+      "params": {
+        "a": 6,
+        "b": 8,
+        "direction": 1
+      },
+      "correctAnswer": 6,
+      "choices": [
+        6,
+        8
+      ],
+      "id": "cmp_gap_5"
+    },
+    "cmp_gap_6": {
+      "typeId": "number_compare",
+      "text": "Какое число меньше: 7 или 9?",
+      "params": {
+        "a": 7,
+        "b": 9,
+        "direction": 1
+      },
+      "correctAnswer": 7,
+      "choices": [
+        7,
+        9
+      ],
+      "id": "cmp_gap_6"
+    },
+    "cmp_gap_7": {
+      "typeId": "number_compare",
+      "text": "Какое число меньше: 8 или 10?",
+      "params": {
+        "a": 8,
+        "b": 10,
+        "direction": 1
+      },
+      "correctAnswer": 8,
+      "choices": [
+        8,
+        10
+      ],
+      "id": "cmp_gap_7"
+    },
+    "digit_intro": {
+      "typeId": "digit_recognition",
+      "text": "Найди цифру 0",
+      "params": {
+        "target": 0
+      },
+      "correctAnswer": 0,
+      "choices": [
+        0,
+        1,
+        2
+      ],
+      "id": "digit_intro"
+    },
+    "digit_1": {
+      "typeId": "digit_recognition",
+      "text": "Найди цифру 1",
+      "params": {
+        "target": 1
+      },
+      "correctAnswer": 1,
+      "choices": [
+        1,
+        0,
+        2
+      ],
+      "id": "digit_1"
+    },
+    "digit_2": {
+      "typeId": "digit_recognition",
+      "text": "Найди цифру 2",
+      "params": {
+        "target": 2
+      },
+      "correctAnswer": 2,
+      "choices": [
+        2,
+        1,
+        3
+      ],
+      "id": "digit_2"
+    },
+    "digit_3": {
+      "typeId": "digit_recognition",
+      "text": "Найди цифру 3",
+      "params": {
+        "target": 3
+      },
+      "correctAnswer": 3,
+      "choices": [
+        3,
+        2,
+        4
+      ],
+      "id": "digit_3"
+    },
+    "digit_4": {
+      "typeId": "digit_recognition",
+      "text": "Найди цифру 4",
+      "params": {
+        "target": 4
+      },
+      "correctAnswer": 4,
+      "choices": [
+        4,
+        3,
+        5
+      ],
+      "id": "digit_4"
+    },
+    "digit_5": {
+      "typeId": "digit_recognition",
+      "text": "Найди цифру 5",
+      "params": {
+        "target": 5
+      },
+      "correctAnswer": 5,
+      "choices": [
+        5,
+        4,
+        6
+      ],
+      "id": "digit_5"
+    },
+    "digit_6": {
+      "typeId": "digit_recognition",
+      "text": "Найди цифру 6",
+      "params": {
+        "target": 6
+      },
+      "correctAnswer": 6,
+      "choices": [
+        6,
+        5,
+        7
+      ],
+      "id": "digit_6"
+    },
+    "digit_7": {
+      "typeId": "digit_recognition",
+      "text": "Найди цифру 7",
+      "params": {
+        "target": 7
+      },
+      "correctAnswer": 7,
+      "choices": [
+        7,
+        6,
+        8
+      ],
+      "id": "digit_7"
+    },
+    "digit_8": {
+      "typeId": "digit_recognition",
+      "text": "Найди цифру 8",
+      "params": {
+        "target": 8
+      },
+      "correctAnswer": 8,
+      "choices": [
+        8,
+        7,
+        9
+      ],
+      "id": "digit_8"
+    },
+    "digit_9": {
+      "typeId": "digit_recognition",
+      "text": "Найди цифру 9",
+      "params": {
+        "target": 9
+      },
+      "correctAnswer": 9,
+      "choices": [
+        9,
+        8,
+        1
+      ],
+      "id": "digit_9"
+    },
+    "comp_5_intro": {
+      "typeId": "number_composition",
+      "text": "2 = 1 + ?",
+      "params": {
+        "whole": 2,
+        "knownPart": 1
+      },
+      "correctAnswer": 1,
+      "id": "comp_5_intro"
+    },
+    "comp_5_1": {
+      "typeId": "number_composition",
+      "text": "3 = 1 + ?",
+      "params": {
+        "whole": 3,
+        "knownPart": 1
+      },
+      "correctAnswer": 2,
+      "id": "comp_5_1"
+    },
+    "comp_5_2": {
+      "typeId": "number_composition",
+      "text": "3 = 2 + ?",
+      "params": {
+        "whole": 3,
+        "knownPart": 2
+      },
+      "correctAnswer": 1,
+      "id": "comp_5_2"
+    },
+    "comp_5_3": {
+      "typeId": "number_composition",
+      "text": "4 = 1 + ?",
+      "params": {
+        "whole": 4,
+        "knownPart": 1
+      },
+      "correctAnswer": 3,
+      "id": "comp_5_3"
+    },
+    "comp_5_4": {
+      "typeId": "number_composition",
+      "text": "4 = 2 + ?",
+      "params": {
+        "whole": 4,
+        "knownPart": 2
+      },
+      "correctAnswer": 2,
+      "id": "comp_5_4"
+    },
+    "comp_5_5": {
+      "typeId": "number_composition",
+      "text": "4 = 3 + ?",
+      "params": {
+        "whole": 4,
+        "knownPart": 3
+      },
+      "correctAnswer": 1,
+      "id": "comp_5_5"
+    },
+    "comp_5_6": {
+      "typeId": "number_composition",
+      "text": "5 = 1 + ?",
+      "params": {
+        "whole": 5,
+        "knownPart": 1
+      },
+      "correctAnswer": 4,
+      "id": "comp_5_6"
+    },
+    "comp_5_7": {
+      "typeId": "number_composition",
+      "text": "5 = 2 + ?",
+      "params": {
+        "whole": 5,
+        "knownPart": 2
+      },
+      "correctAnswer": 3,
+      "id": "comp_5_7"
+    },
+    "comp_5_8": {
+      "typeId": "number_composition",
+      "text": "5 = 3 + ?",
+      "params": {
+        "whole": 5,
+        "knownPart": 3
+      },
+      "correctAnswer": 2,
+      "id": "comp_5_8"
+    },
+    "comp_5_9": {
+      "typeId": "number_composition",
+      "text": "5 = 4 + ?",
+      "params": {
+        "whole": 5,
+        "knownPart": 4
+      },
+      "correctAnswer": 1,
+      "id": "comp_5_9"
+    },
+    "comp_10_intro": {
+      "typeId": "number_composition",
+      "text": "6 = 1 + ?",
+      "params": {
+        "whole": 6,
+        "knownPart": 1
+      },
+      "correctAnswer": 5,
+      "id": "comp_10_intro"
+    },
+    "comp_10_1": {
+      "typeId": "number_composition",
+      "text": "6 = 5 + ?",
+      "params": {
+        "whole": 6,
+        "knownPart": 5
+      },
+      "correctAnswer": 1,
+      "id": "comp_10_1"
+    },
+    "comp_10_2": {
+      "typeId": "number_composition",
+      "text": "7 = 1 + ?",
+      "params": {
+        "whole": 7,
+        "knownPart": 1
+      },
+      "correctAnswer": 6,
+      "id": "comp_10_2"
+    },
+    "comp_10_3": {
+      "typeId": "number_composition",
+      "text": "7 = 6 + ?",
+      "params": {
+        "whole": 7,
+        "knownPart": 6
+      },
+      "correctAnswer": 1,
+      "id": "comp_10_3"
+    },
+    "comp_10_4": {
+      "typeId": "number_composition",
+      "text": "8 = 1 + ?",
+      "params": {
+        "whole": 8,
+        "knownPart": 1
+      },
+      "correctAnswer": 7,
+      "id": "comp_10_4"
+    },
+    "comp_10_5": {
+      "typeId": "number_composition",
+      "text": "8 = 7 + ?",
+      "params": {
+        "whole": 8,
+        "knownPart": 7
+      },
+      "correctAnswer": 1,
+      "id": "comp_10_5"
+    },
+    "comp_10_6": {
+      "typeId": "number_composition",
+      "text": "9 = 1 + ?",
+      "params": {
+        "whole": 9,
+        "knownPart": 1
+      },
+      "correctAnswer": 8,
+      "id": "comp_10_6"
+    },
+    "comp_10_7": {
+      "typeId": "number_composition",
+      "text": "9 = 8 + ?",
+      "params": {
+        "whole": 9,
+        "knownPart": 8
+      },
+      "correctAnswer": 1,
+      "id": "comp_10_7"
+    },
+    "comp_10_8": {
+      "typeId": "number_composition",
+      "text": "10 = 1 + ?",
+      "params": {
+        "whole": 10,
+        "knownPart": 1
+      },
+      "correctAnswer": 9,
+      "id": "comp_10_8"
+    },
+    "comp_10_9": {
+      "typeId": "number_composition",
+      "text": "10 = 9 + ?",
+      "params": {
+        "whole": 10,
+        "knownPart": 9
+      },
+      "correctAnswer": 1,
+      "id": "comp_10_9"
+    },
+    "order_min_intro": {
+      "typeId": "number_ordering",
+      "text": "Какое число самое маленькое?",
+      "params": {
+        "series": [
+          1,
+          4,
+          8
+        ],
+        "direction": 1
+      },
+      "correctAnswer": 1,
+      "choices": [
+        1,
+        4,
+        8
+      ],
+      "id": "order_min_intro"
+    },
+    "order_min_1": {
+      "typeId": "number_ordering",
+      "text": "Какое число самое маленькое?",
+      "params": {
+        "series": [
+          2,
+          5,
+          9
+        ],
+        "direction": 1
+      },
+      "correctAnswer": 2,
+      "choices": [
+        2,
+        5,
+        9
+      ],
+      "id": "order_min_1"
+    },
+    "order_min_2": {
+      "typeId": "number_ordering",
+      "text": "Какое число самое маленькое?",
+      "params": {
+        "series": [
+          3,
+          6,
+          10
+        ],
+        "direction": 1
+      },
+      "correctAnswer": 3,
+      "choices": [
+        3,
+        6,
+        10
+      ],
+      "id": "order_min_2"
+    },
+    "order_min_3": {
+      "typeId": "number_ordering",
+      "text": "Какое число самое маленькое?",
+      "params": {
+        "series": [
+          4,
+          7,
+          11
+        ],
+        "direction": 1
+      },
+      "correctAnswer": 4,
+      "choices": [
+        4,
+        7,
+        11
+      ],
+      "id": "order_min_3"
+    },
+    "order_min_4": {
+      "typeId": "number_ordering",
+      "text": "Какое число самое маленькое?",
+      "params": {
+        "series": [
+          5,
+          8,
+          12
+        ],
+        "direction": 1
+      },
+      "correctAnswer": 5,
+      "choices": [
+        5,
+        8,
+        12
+      ],
+      "id": "order_min_4"
+    },
+    "order_min_5": {
+      "typeId": "number_ordering",
+      "text": "Какое число самое маленькое?",
+      "params": {
+        "series": [
+          6,
+          9,
+          13
+        ],
+        "direction": 1
+      },
+      "correctAnswer": 6,
+      "choices": [
+        6,
+        9,
+        13
+      ],
+      "id": "order_min_5"
+    },
+    "order_min_6": {
+      "typeId": "number_ordering",
+      "text": "Какое число самое маленькое?",
+      "params": {
+        "series": [
+          7,
+          10,
+          14
+        ],
+        "direction": 1
+      },
+      "correctAnswer": 7,
+      "choices": [
+        7,
+        10,
+        14
+      ],
+      "id": "order_min_6"
+    },
+    "order_min_7": {
+      "typeId": "number_ordering",
+      "text": "Какое число самое маленькое?",
+      "params": {
+        "series": [
+          8,
+          11,
+          15
+        ],
+        "direction": 1
+      },
+      "correctAnswer": 8,
+      "choices": [
+        8,
+        11,
+        15
+      ],
+      "id": "order_min_7"
+    },
+    "order_max_intro": {
+      "typeId": "number_ordering",
+      "text": "Какое число самое большое?",
+      "params": {
+        "series": [
+          1,
+          3,
+          6
+        ],
+        "direction": 0
+      },
+      "correctAnswer": 6,
+      "choices": [
+        1,
+        3,
+        6
+      ],
+      "id": "order_max_intro"
+    },
+    "order_max_1": {
+      "typeId": "number_ordering",
+      "text": "Какое число самое большое?",
+      "params": {
+        "series": [
+          2,
+          4,
+          7
+        ],
+        "direction": 0
+      },
+      "correctAnswer": 7,
+      "choices": [
+        2,
+        4,
+        7
+      ],
+      "id": "order_max_1"
+    },
+    "order_max_2": {
+      "typeId": "number_ordering",
+      "text": "Какое число самое большое?",
+      "params": {
+        "series": [
+          3,
+          5,
+          8
+        ],
+        "direction": 0
+      },
+      "correctAnswer": 8,
+      "choices": [
+        3,
+        5,
+        8
+      ],
+      "id": "order_max_2"
+    },
+    "order_max_3": {
+      "typeId": "number_ordering",
+      "text": "Какое число самое большое?",
+      "params": {
+        "series": [
+          4,
+          6,
+          9
+        ],
+        "direction": 0
+      },
+      "correctAnswer": 9,
+      "choices": [
+        4,
+        6,
+        9
+      ],
+      "id": "order_max_3"
+    },
+    "order_max_4": {
+      "typeId": "number_ordering",
+      "text": "Какое число самое большое?",
+      "params": {
+        "series": [
+          5,
+          7,
+          10
+        ],
+        "direction": 0
+      },
+      "correctAnswer": 10,
+      "choices": [
+        5,
+        7,
+        10
+      ],
+      "id": "order_max_4"
+    },
+    "order_max_5": {
+      "typeId": "number_ordering",
+      "text": "Какое число самое большое?",
+      "params": {
+        "series": [
+          6,
+          8,
+          11
+        ],
+        "direction": 0
+      },
+      "correctAnswer": 11,
+      "choices": [
+        6,
+        8,
+        11
+      ],
+      "id": "order_max_5"
+    },
+    "order_max_6": {
+      "typeId": "number_ordering",
+      "text": "Какое число самое большое?",
+      "params": {
+        "series": [
+          7,
+          9,
+          12
+        ],
+        "direction": 0
+      },
+      "correctAnswer": 12,
+      "choices": [
+        7,
+        9,
+        12
+      ],
+      "id": "order_max_6"
+    },
+    "order_max_7": {
+      "typeId": "number_ordering",
+      "text": "Какое число самое большое?",
+      "params": {
+        "series": [
+          8,
+          10,
+          13
+        ],
+        "direction": 0
+      },
+      "correctAnswer": 13,
+      "choices": [
+        8,
+        10,
+        13
+      ],
+      "id": "order_max_7"
+    }
   },
   "mathTools": [
-    { "id": "weights", "name": "Весы" },
-    { "id": "chain", "name": "Цепочка" },
-    { "id": "two_segments", "name": "Два отрезка" }
+    {
+      "id": "weights",
+      "name": "Весы"
+    },
+    {
+      "id": "chain",
+      "name": "Цепочка"
+    },
+    {
+      "id": "two_segments",
+      "name": "Два отрезка"
+    }
   ],
   "media": {}
 }

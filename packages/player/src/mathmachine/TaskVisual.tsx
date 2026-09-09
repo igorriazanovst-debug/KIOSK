@@ -32,6 +32,21 @@ const TaskVisual: React.FC<{ task: Task }> = ({ task }) => {
         </div>
       );
     }
+    case 'number_subtract_two':
+      return <div style={equationStyle}>{String(task.params.a)} - {String(task.params.b)} = ?</div>;
+    case 'number_compare': {
+      const a = String(task.params.a);
+      const b = String(task.params.b);
+      return <div style={equationStyle}>{a} &nbsp;&nbsp;&nbsp; {b}</div>;
+    }
+    case 'digit_recognition':
+      return <div style={equationStyle}>{String(task.params.target)}</div>;
+    case 'number_composition':
+      return <div style={equationStyle}>{String(task.params.whole)} = {String(task.params.knownPart)} + ?</div>;
+    case 'number_ordering': {
+      const series = (task.params.series as unknown as number[]) ?? [];
+      return <div style={equationStyle}>{series.join('   ')}</div>;
+    }
     default:
       return null;
   }

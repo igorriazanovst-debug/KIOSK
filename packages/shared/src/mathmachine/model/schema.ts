@@ -25,6 +25,11 @@ export const TASK_TYPE_IDS = [
   'number_sum_three',
   'number_missing',
   'compare_length',
+  'number_subtract_two',
+  'number_compare',
+  'digit_recognition',
+  'number_composition',
+  'number_ordering',
 ] as const;
 export const TaskTypeIdSchema = z.enum(TASK_TYPE_IDS);
 export type TaskTypeId = z.infer<typeof TaskTypeIdSchema>;

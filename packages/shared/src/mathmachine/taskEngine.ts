@@ -28,6 +28,11 @@ export const TASK_TYPE_REGISTRY: Record<TaskTypeId, TaskTypeDefinition> = {
   number_sum_three: { id: 'number_sum_three', answerMode: 'numeric', checkAnswer: numericCheck },
   number_missing: { id: 'number_missing', answerMode: 'numeric', checkAnswer: numericCheck },
   compare_length: { id: 'compare_length', answerMode: 'choice', checkAnswer: choiceCheck },
+  number_subtract_two: { id: 'number_subtract_two', answerMode: 'numeric', checkAnswer: numericCheck },
+  number_compare: { id: 'number_compare', answerMode: 'choice', checkAnswer: choiceCheck },
+  digit_recognition: { id: 'digit_recognition', answerMode: 'choice', checkAnswer: choiceCheck },
+  number_composition: { id: 'number_composition', answerMode: 'numeric', checkAnswer: numericCheck },
+  number_ordering: { id: 'number_ordering', answerMode: 'choice', checkAnswer: choiceCheck },
 };
 
 export function checkTaskAnswer(task: Task, userAnswer: number | string): boolean {
