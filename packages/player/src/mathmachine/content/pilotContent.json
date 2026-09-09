@@ -136,7 +136,20 @@
         "top_time_season",
         "top_time_event",
         "top_measure_estimate",
-        "top_shares_fraction_compare"
+        "top_shares_fraction_compare",
+        "top_counting_add_combo",
+        "top_counting_subtract_combo",
+        "top_time_clock",
+        "top_measure_mass_scale",
+        "top_geometry_angle",
+        "top_geometry_shape_name",
+        "top_geometry_shape_properties",
+        "top_geometry_solid_name",
+        "top_geometry_solid_properties",
+        "top_space_position",
+        "top_space_direction",
+        "top_space_ordering",
+        "top_space_coordinates"
       ]
     }
   ],
@@ -1202,6 +1215,97 @@
       "name": "Доли целого: сравнение дробей",
       "groupIds": [
         "grp_shares_fraction_compare"
+      ]
+    },
+    "top_counting_add_combo": {
+      "id": "top_counting_add_combo",
+      "name": "Счёт: посчитай и сложи",
+      "groupIds": [
+        "grp_counting_add_combo"
+      ]
+    },
+    "top_counting_subtract_combo": {
+      "id": "top_counting_subtract_combo",
+      "name": "Счёт: посчитай и вычти",
+      "groupIds": [
+        "grp_counting_subtract_combo"
+      ]
+    },
+    "top_time_clock": {
+      "id": "top_time_clock",
+      "name": "Время: который час",
+      "groupIds": [
+        "grp_time_clock"
+      ]
+    },
+    "top_measure_mass_scale": {
+      "id": "top_measure_mass_scale",
+      "name": "Масса: измерение по весам",
+      "groupIds": [
+        "grp_measure_mass_scale"
+      ]
+    },
+    "top_geometry_angle": {
+      "id": "top_geometry_angle",
+      "name": "Углы: прямой угол",
+      "groupIds": [
+        "grp_geometry_angle"
+      ]
+    },
+    "top_geometry_shape_name": {
+      "id": "top_geometry_shape_name",
+      "name": "Плоские фигуры: названия",
+      "groupIds": [
+        "grp_geometry_shape_name"
+      ]
+    },
+    "top_geometry_shape_properties": {
+      "id": "top_geometry_shape_properties",
+      "name": "Плоские фигуры: свойства",
+      "groupIds": [
+        "grp_geometry_shape_properties"
+      ]
+    },
+    "top_geometry_solid_name": {
+      "id": "top_geometry_solid_name",
+      "name": "Объёмные тела: названия",
+      "groupIds": [
+        "grp_geometry_solid_name"
+      ]
+    },
+    "top_geometry_solid_properties": {
+      "id": "top_geometry_solid_properties",
+      "name": "Объёмные тела: свойства",
+      "groupIds": [
+        "grp_geometry_solid_properties"
+      ]
+    },
+    "top_space_position": {
+      "id": "top_space_position",
+      "name": "Пространство: где находится",
+      "groupIds": [
+        "grp_space_position"
+      ]
+    },
+    "top_space_direction": {
+      "id": "top_space_direction",
+      "name": "Пространство: куда движется",
+      "groupIds": [
+        "grp_space_direction"
+      ]
+    },
+    "top_space_ordering": {
+      "id": "top_space_ordering",
+      "name": "Пространство: по порядку",
+      "groupIds": [
+        "grp_space_ordering"
+      ]
+    },
+    "top_space_coordinates": {
+      "id": "top_space_coordinates",
+      "name": "Схемы и карты: координаты",
+      "groupIds": [
+        "grp_space_coordinates"
       ]
     }
   },
@@ -5734,6 +5838,195 @@
         "shares_fraction_compare_7",
         "shares_fraction_compare_8",
         "shares_fraction_compare_9"
+      ]
+    },
+    "grp_counting_add_combo": {
+      "id": "grp_counting_add_combo",
+      "name": "Посчитай и сложи",
+      "taskIds": [
+        "counting_add_combo_intro",
+        "counting_add_combo_1",
+        "counting_add_combo_2",
+        "counting_add_combo_3",
+        "counting_add_combo_4",
+        "counting_add_combo_5",
+        "counting_add_combo_6",
+        "counting_add_combo_7",
+        "counting_add_combo_8",
+        "counting_add_combo_9"
+      ]
+    },
+    "grp_counting_subtract_combo": {
+      "id": "grp_counting_subtract_combo",
+      "name": "Посчитай и вычти",
+      "taskIds": [
+        "counting_subtract_combo_intro",
+        "counting_subtract_combo_1",
+        "counting_subtract_combo_2",
+        "counting_subtract_combo_3",
+        "counting_subtract_combo_4",
+        "counting_subtract_combo_5",
+        "counting_subtract_combo_6",
+        "counting_subtract_combo_7",
+        "counting_subtract_combo_8",
+        "counting_subtract_combo_9"
+      ]
+    },
+    "grp_time_clock": {
+      "id": "grp_time_clock",
+      "name": "Который час",
+      "taskIds": [
+        "time_clock_intro",
+        "time_clock_1",
+        "time_clock_2",
+        "time_clock_3",
+        "time_clock_4",
+        "time_clock_5",
+        "time_clock_6",
+        "time_clock_7",
+        "time_clock_8",
+        "time_clock_9"
+      ]
+    },
+    "grp_measure_mass_scale": {
+      "id": "grp_measure_mass_scale",
+      "name": "Измерение массы",
+      "taskIds": [
+        "measure_mass_scale_intro",
+        "measure_mass_scale_1",
+        "measure_mass_scale_2",
+        "measure_mass_scale_3",
+        "measure_mass_scale_4",
+        "measure_mass_scale_5",
+        "measure_mass_scale_6",
+        "measure_mass_scale_7",
+        "measure_mass_scale_8",
+        "measure_mass_scale_9"
+      ]
+    },
+    "grp_geometry_angle": {
+      "id": "grp_geometry_angle",
+      "name": "Прямой угол",
+      "taskIds": [
+        "geometry_angle_intro",
+        "geometry_angle_1",
+        "geometry_angle_2",
+        "geometry_angle_3",
+        "geometry_angle_4",
+        "geometry_angle_5",
+        "geometry_angle_6",
+        "geometry_angle_7",
+        "geometry_angle_8",
+        "geometry_angle_9"
+      ]
+    },
+    "grp_geometry_shape_name": {
+      "id": "grp_geometry_shape_name",
+      "name": "Названия фигур",
+      "taskIds": [
+        "geometry_shape_name_intro",
+        "geometry_shape_name_1",
+        "geometry_shape_name_2",
+        "geometry_shape_name_3",
+        "geometry_shape_name_4",
+        "geometry_shape_name_5"
+      ]
+    },
+    "grp_geometry_shape_properties": {
+      "id": "grp_geometry_shape_properties",
+      "name": "Свойства фигур",
+      "taskIds": [
+        "geometry_shape_properties_intro",
+        "geometry_shape_properties_1",
+        "geometry_shape_properties_2",
+        "geometry_shape_properties_3",
+        "geometry_shape_properties_4"
+      ]
+    },
+    "grp_geometry_solid_name": {
+      "id": "grp_geometry_solid_name",
+      "name": "Названия объёмных тел",
+      "taskIds": [
+        "geometry_solid_name_intro",
+        "geometry_solid_name_1",
+        "geometry_solid_name_2",
+        "geometry_solid_name_3",
+        "geometry_solid_name_4"
+      ]
+    },
+    "grp_geometry_solid_properties": {
+      "id": "grp_geometry_solid_properties",
+      "name": "Свойства объёмных тел",
+      "taskIds": [
+        "geometry_solid_properties_intro",
+        "geometry_solid_properties_1",
+        "geometry_solid_properties_2",
+        "geometry_solid_properties_3",
+        "geometry_solid_properties_4"
+      ]
+    },
+    "grp_space_position": {
+      "id": "grp_space_position",
+      "name": "Где находится",
+      "taskIds": [
+        "space_position_intro",
+        "space_position_1",
+        "space_position_2",
+        "space_position_3",
+        "space_position_4",
+        "space_position_5",
+        "space_position_6",
+        "space_position_7",
+        "space_position_8",
+        "space_position_9"
+      ]
+    },
+    "grp_space_direction": {
+      "id": "grp_space_direction",
+      "name": "Куда указывает стрелка",
+      "taskIds": [
+        "space_direction_intro",
+        "space_direction_1",
+        "space_direction_2",
+        "space_direction_3",
+        "space_direction_4",
+        "space_direction_5",
+        "space_direction_6",
+        "space_direction_7",
+        "space_direction_8",
+        "space_direction_9"
+      ]
+    },
+    "grp_space_ordering": {
+      "id": "grp_space_ordering",
+      "name": "Разложи по порядку",
+      "taskIds": [
+        "space_ordering_intro",
+        "space_ordering_1",
+        "space_ordering_2",
+        "space_ordering_3",
+        "space_ordering_4",
+        "space_ordering_5",
+        "space_ordering_6",
+        "space_ordering_7",
+        "space_ordering_8",
+        "space_ordering_9"
+      ]
+    },
+    "grp_space_coordinates": {
+      "id": "grp_space_coordinates",
+      "name": "Координаты на сетке",
+      "taskIds": [
+        "space_coordinates_intro",
+        "space_coordinates_1",
+        "space_coordinates_2",
+        "space_coordinates_3",
+        "space_coordinates_4",
+        "space_coordinates_5",
+        "space_coordinates_6",
+        "space_coordinates_7",
+        "space_coordinates_8",
+        "space_coordinates_9"
       ]
     }
   },
@@ -48441,6 +48734,1691 @@
       ],
       "id": "shares_fraction_compare_9",
       "audioTaskTextId": "shares_fraction_compare_9"
+    },
+    "counting_add_combo_intro": {
+      "typeId": "count_then_add",
+      "text": "Посчитай кружки в первой группе, посчитай во второй, сложи вместе — сколько всего?",
+      "params": {
+        "groupA": 3,
+        "groupB": 8
+      },
+      "correctAnswer": 11,
+      "id": "counting_add_combo_intro",
+      "audioTaskTextId": "counting_add_combo_intro"
+    },
+    "counting_add_combo_1": {
+      "typeId": "count_then_add",
+      "text": "Посчитай кружки в первой группе, посчитай во второй, сложи вместе — сколько всего?",
+      "params": {
+        "groupA": 6,
+        "groupB": 7
+      },
+      "correctAnswer": 13,
+      "id": "counting_add_combo_1",
+      "audioTaskTextId": "counting_add_combo_1"
+    },
+    "counting_add_combo_2": {
+      "typeId": "count_then_add",
+      "text": "Посчитай кружки в первой группе, посчитай во второй, сложи вместе — сколько всего?",
+      "params": {
+        "groupA": 9,
+        "groupB": 6
+      },
+      "correctAnswer": 15,
+      "id": "counting_add_combo_2",
+      "audioTaskTextId": "counting_add_combo_2"
+    },
+    "counting_add_combo_3": {
+      "typeId": "count_then_add",
+      "text": "Посчитай кружки в первой группе, посчитай во второй, сложи вместе — сколько всего?",
+      "params": {
+        "groupA": 4,
+        "groupB": 5
+      },
+      "correctAnswer": 9,
+      "id": "counting_add_combo_3",
+      "audioTaskTextId": "counting_add_combo_3"
+    },
+    "counting_add_combo_4": {
+      "typeId": "count_then_add",
+      "text": "Посчитай кружки в первой группе, посчитай во второй, сложи вместе — сколько всего?",
+      "params": {
+        "groupA": 7,
+        "groupB": 4
+      },
+      "correctAnswer": 11,
+      "id": "counting_add_combo_4",
+      "audioTaskTextId": "counting_add_combo_4"
+    },
+    "counting_add_combo_5": {
+      "typeId": "count_then_add",
+      "text": "Посчитай кружки в первой группе, посчитай во второй, сложи вместе — сколько всего?",
+      "params": {
+        "groupA": 2,
+        "groupB": 3
+      },
+      "correctAnswer": 5,
+      "id": "counting_add_combo_5",
+      "audioTaskTextId": "counting_add_combo_5"
+    },
+    "counting_add_combo_6": {
+      "typeId": "count_then_add",
+      "text": "Посчитай кружки в первой группе, посчитай во второй, сложи вместе — сколько всего?",
+      "params": {
+        "groupA": 5,
+        "groupB": 2
+      },
+      "correctAnswer": 7,
+      "id": "counting_add_combo_6",
+      "audioTaskTextId": "counting_add_combo_6"
+    },
+    "counting_add_combo_7": {
+      "typeId": "count_then_add",
+      "text": "Посчитай кружки в первой группе, посчитай во второй, сложи вместе — сколько всего?",
+      "params": {
+        "groupA": 8,
+        "groupB": 9
+      },
+      "correctAnswer": 17,
+      "id": "counting_add_combo_7",
+      "audioTaskTextId": "counting_add_combo_7"
+    },
+    "counting_add_combo_8": {
+      "typeId": "count_then_add",
+      "text": "Посчитай кружки в первой группе, посчитай во второй, сложи вместе — сколько всего?",
+      "params": {
+        "groupA": 3,
+        "groupB": 8
+      },
+      "correctAnswer": 11,
+      "id": "counting_add_combo_8",
+      "audioTaskTextId": "counting_add_combo_8"
+    },
+    "counting_add_combo_9": {
+      "typeId": "count_then_add",
+      "text": "Посчитай кружки в первой группе, посчитай во второй, сложи вместе — сколько всего?",
+      "params": {
+        "groupA": 6,
+        "groupB": 7
+      },
+      "correctAnswer": 13,
+      "id": "counting_add_combo_9",
+      "audioTaskTextId": "counting_add_combo_9"
+    },
+    "counting_subtract_combo_intro": {
+      "typeId": "count_then_subtract",
+      "text": "Посчитай кружки в первой группе, посчитай во второй, вычти — на сколько первая группа больше?",
+      "params": {
+        "groupA": 6,
+        "groupB": 4
+      },
+      "correctAnswer": 2,
+      "id": "counting_subtract_combo_intro",
+      "audioTaskTextId": "counting_subtract_combo_intro"
+    },
+    "counting_subtract_combo_1": {
+      "typeId": "count_then_subtract",
+      "text": "Посчитай кружки в первой группе, посчитай во второй, вычти — на сколько первая группа больше?",
+      "params": {
+        "groupA": 12,
+        "groupB": 7
+      },
+      "correctAnswer": 5,
+      "id": "counting_subtract_combo_1",
+      "audioTaskTextId": "counting_subtract_combo_1"
+    },
+    "counting_subtract_combo_2": {
+      "typeId": "count_then_subtract",
+      "text": "Посчитай кружки в первой группе, посчитай во второй, вычти — на сколько первая группа больше?",
+      "params": {
+        "groupA": 6,
+        "groupB": 4
+      },
+      "correctAnswer": 2,
+      "id": "counting_subtract_combo_2",
+      "audioTaskTextId": "counting_subtract_combo_2"
+    },
+    "counting_subtract_combo_3": {
+      "typeId": "count_then_subtract",
+      "text": "Посчитай кружки в первой группе, посчитай во второй, вычти — на сколько первая группа больше?",
+      "params": {
+        "groupA": 12,
+        "groupB": 7
+      },
+      "correctAnswer": 5,
+      "id": "counting_subtract_combo_3",
+      "audioTaskTextId": "counting_subtract_combo_3"
+    },
+    "counting_subtract_combo_4": {
+      "typeId": "count_then_subtract",
+      "text": "Посчитай кружки в первой группе, посчитай во второй, вычти — на сколько первая группа больше?",
+      "params": {
+        "groupA": 6,
+        "groupB": 4
+      },
+      "correctAnswer": 2,
+      "id": "counting_subtract_combo_4",
+      "audioTaskTextId": "counting_subtract_combo_4"
+    },
+    "counting_subtract_combo_5": {
+      "typeId": "count_then_subtract",
+      "text": "Посчитай кружки в первой группе, посчитай во второй, вычти — на сколько первая группа больше?",
+      "params": {
+        "groupA": 12,
+        "groupB": 7
+      },
+      "correctAnswer": 5,
+      "id": "counting_subtract_combo_5",
+      "audioTaskTextId": "counting_subtract_combo_5"
+    },
+    "counting_subtract_combo_6": {
+      "typeId": "count_then_subtract",
+      "text": "Посчитай кружки в первой группе, посчитай во второй, вычти — на сколько первая группа больше?",
+      "params": {
+        "groupA": 6,
+        "groupB": 4
+      },
+      "correctAnswer": 2,
+      "id": "counting_subtract_combo_6",
+      "audioTaskTextId": "counting_subtract_combo_6"
+    },
+    "counting_subtract_combo_7": {
+      "typeId": "count_then_subtract",
+      "text": "Посчитай кружки в первой группе, посчитай во второй, вычти — на сколько первая группа больше?",
+      "params": {
+        "groupA": 12,
+        "groupB": 7
+      },
+      "correctAnswer": 5,
+      "id": "counting_subtract_combo_7",
+      "audioTaskTextId": "counting_subtract_combo_7"
+    },
+    "counting_subtract_combo_8": {
+      "typeId": "count_then_subtract",
+      "text": "Посчитай кружки в первой группе, посчитай во второй, вычти — на сколько первая группа больше?",
+      "params": {
+        "groupA": 6,
+        "groupB": 4
+      },
+      "correctAnswer": 2,
+      "id": "counting_subtract_combo_8",
+      "audioTaskTextId": "counting_subtract_combo_8"
+    },
+    "counting_subtract_combo_9": {
+      "typeId": "count_then_subtract",
+      "text": "Посчитай кружки в первой группе, посчитай во второй, вычти — на сколько первая группа больше?",
+      "params": {
+        "groupA": 12,
+        "groupB": 7
+      },
+      "correctAnswer": 5,
+      "id": "counting_subtract_combo_9",
+      "audioTaskTextId": "counting_subtract_combo_9"
+    },
+    "time_clock_intro": {
+      "typeId": "clock_reading",
+      "text": "Сколько времени показывают часы?",
+      "params": {
+        "hours": 3,
+        "minutes": 0
+      },
+      "correctAnswer": "3:00",
+      "choices": [
+        "3:00",
+        "5:00",
+        "7:30"
+      ],
+      "id": "time_clock_intro",
+      "audioTaskTextId": "time_clock_intro"
+    },
+    "time_clock_1": {
+      "typeId": "clock_reading",
+      "text": "Сколько времени показывают часы?",
+      "params": {
+        "hours": 7,
+        "minutes": 0
+      },
+      "correctAnswer": "7:00",
+      "choices": [
+        "5:00",
+        "7:00",
+        "10:00"
+      ],
+      "id": "time_clock_1",
+      "audioTaskTextId": "time_clock_1"
+    },
+    "time_clock_2": {
+      "typeId": "clock_reading",
+      "text": "Сколько времени показывают часы?",
+      "params": {
+        "hours": 12,
+        "minutes": 0
+      },
+      "correctAnswer": "12:00",
+      "choices": [
+        "12:00",
+        "3:00",
+        "7:00"
+      ],
+      "id": "time_clock_2",
+      "audioTaskTextId": "time_clock_2"
+    },
+    "time_clock_3": {
+      "typeId": "clock_reading",
+      "text": "Сколько времени показывают часы?",
+      "params": {
+        "hours": 5,
+        "minutes": 30
+      },
+      "correctAnswer": "5:30",
+      "choices": [
+        "7:00",
+        "4:30",
+        "5:30"
+      ],
+      "id": "time_clock_3",
+      "audioTaskTextId": "time_clock_3"
+    },
+    "time_clock_4": {
+      "typeId": "clock_reading",
+      "text": "Сколько времени показывают часы?",
+      "params": {
+        "hours": 9,
+        "minutes": 0
+      },
+      "correctAnswer": "9:00",
+      "choices": [
+        "8:00",
+        "7:30",
+        "9:00"
+      ],
+      "id": "time_clock_4",
+      "audioTaskTextId": "time_clock_4"
+    },
+    "time_clock_5": {
+      "typeId": "clock_reading",
+      "text": "Сколько времени показывают часы?",
+      "params": {
+        "hours": 1,
+        "minutes": 30
+      },
+      "correctAnswer": "1:30",
+      "choices": [
+        "6:00",
+        "1:30",
+        "8:00"
+      ],
+      "id": "time_clock_5",
+      "audioTaskTextId": "time_clock_5"
+    },
+    "time_clock_6": {
+      "typeId": "clock_reading",
+      "text": "Сколько времени показывают часы?",
+      "params": {
+        "hours": 6,
+        "minutes": 0
+      },
+      "correctAnswer": "6:00",
+      "choices": [
+        "7:30",
+        "4:30",
+        "6:00"
+      ],
+      "id": "time_clock_6",
+      "audioTaskTextId": "time_clock_6"
+    },
+    "time_clock_7": {
+      "typeId": "clock_reading",
+      "text": "Сколько времени показывают часы?",
+      "params": {
+        "hours": 10,
+        "minutes": 30
+      },
+      "correctAnswer": "10:30",
+      "choices": [
+        "10:30",
+        "4:00",
+        "1:30"
+      ],
+      "id": "time_clock_7",
+      "audioTaskTextId": "time_clock_7"
+    },
+    "time_clock_8": {
+      "typeId": "clock_reading",
+      "text": "Сколько времени показывают часы?",
+      "params": {
+        "hours": 4,
+        "minutes": 0
+      },
+      "correctAnswer": "4:00",
+      "choices": [
+        "6:00",
+        "4:30",
+        "4:00"
+      ],
+      "id": "time_clock_8",
+      "audioTaskTextId": "time_clock_8"
+    },
+    "time_clock_9": {
+      "typeId": "clock_reading",
+      "text": "Сколько времени показывают часы?",
+      "params": {
+        "hours": 8,
+        "minutes": 30
+      },
+      "correctAnswer": "8:30",
+      "choices": [
+        "10:30",
+        "8:30",
+        "1:00"
+      ],
+      "id": "time_clock_9",
+      "audioTaskTextId": "time_clock_9"
+    },
+    "measure_mass_scale_intro": {
+      "typeId": "mass_measurement",
+      "text": "Сколько килограммов показывают весы?",
+      "params": {
+        "value": 1
+      },
+      "correctAnswer": "1",
+      "choices": [
+        "4",
+        "6",
+        "1"
+      ],
+      "id": "measure_mass_scale_intro",
+      "audioTaskTextId": "measure_mass_scale_intro"
+    },
+    "measure_mass_scale_1": {
+      "typeId": "mass_measurement",
+      "text": "Сколько килограммов показывают весы?",
+      "params": {
+        "value": 2
+      },
+      "correctAnswer": "2",
+      "choices": [
+        "1",
+        "2",
+        "4"
+      ],
+      "id": "measure_mass_scale_1",
+      "audioTaskTextId": "measure_mass_scale_1"
+    },
+    "measure_mass_scale_2": {
+      "typeId": "mass_measurement",
+      "text": "Сколько килограммов показывают весы?",
+      "params": {
+        "value": 3
+      },
+      "correctAnswer": "3",
+      "choices": [
+        "8",
+        "6",
+        "3"
+      ],
+      "id": "measure_mass_scale_2",
+      "audioTaskTextId": "measure_mass_scale_2"
+    },
+    "measure_mass_scale_3": {
+      "typeId": "mass_measurement",
+      "text": "Сколько килограммов показывают весы?",
+      "params": {
+        "value": 4
+      },
+      "correctAnswer": "4",
+      "choices": [
+        "4",
+        "8",
+        "3"
+      ],
+      "id": "measure_mass_scale_3",
+      "audioTaskTextId": "measure_mass_scale_3"
+    },
+    "measure_mass_scale_4": {
+      "typeId": "mass_measurement",
+      "text": "Сколько килограммов показывают весы?",
+      "params": {
+        "value": 5
+      },
+      "correctAnswer": "5",
+      "choices": [
+        "7",
+        "1",
+        "5"
+      ],
+      "id": "measure_mass_scale_4",
+      "audioTaskTextId": "measure_mass_scale_4"
+    },
+    "measure_mass_scale_5": {
+      "typeId": "mass_measurement",
+      "text": "Сколько килограммов показывают весы?",
+      "params": {
+        "value": 6
+      },
+      "correctAnswer": "6",
+      "choices": [
+        "7",
+        "6",
+        "5"
+      ],
+      "id": "measure_mass_scale_5",
+      "audioTaskTextId": "measure_mass_scale_5"
+    },
+    "measure_mass_scale_6": {
+      "typeId": "mass_measurement",
+      "text": "Сколько килограммов показывают весы?",
+      "params": {
+        "value": 7
+      },
+      "correctAnswer": "7",
+      "choices": [
+        "10",
+        "8",
+        "7"
+      ],
+      "id": "measure_mass_scale_6",
+      "audioTaskTextId": "measure_mass_scale_6"
+    },
+    "measure_mass_scale_7": {
+      "typeId": "mass_measurement",
+      "text": "Сколько килограммов показывают весы?",
+      "params": {
+        "value": 8
+      },
+      "correctAnswer": "8",
+      "choices": [
+        "10",
+        "8",
+        "4"
+      ],
+      "id": "measure_mass_scale_7",
+      "audioTaskTextId": "measure_mass_scale_7"
+    },
+    "measure_mass_scale_8": {
+      "typeId": "mass_measurement",
+      "text": "Сколько килограммов показывают весы?",
+      "params": {
+        "value": 9
+      },
+      "correctAnswer": "9",
+      "choices": [
+        "9",
+        "10",
+        "4"
+      ],
+      "id": "measure_mass_scale_8",
+      "audioTaskTextId": "measure_mass_scale_8"
+    },
+    "measure_mass_scale_9": {
+      "typeId": "mass_measurement",
+      "text": "Сколько килограммов показывают весы?",
+      "params": {
+        "value": 10
+      },
+      "correctAnswer": "10",
+      "choices": [
+        "5",
+        "4",
+        "10"
+      ],
+      "id": "measure_mass_scale_9",
+      "audioTaskTextId": "measure_mass_scale_9"
+    },
+    "geometry_angle_intro": {
+      "typeId": "right_angle_recognition",
+      "text": "Какой из трёх углов — прямой?",
+      "params": {
+        "angles": [
+          45,
+          120,
+          90
+        ]
+      },
+      "correctAnswer": "В",
+      "choices": [
+        "А",
+        "Б",
+        "В"
+      ],
+      "id": "geometry_angle_intro",
+      "audioTaskTextId": "geometry_angle_intro"
+    },
+    "geometry_angle_1": {
+      "typeId": "right_angle_recognition",
+      "text": "Какой из трёх углов — прямой?",
+      "params": {
+        "angles": [
+          75,
+          90,
+          45
+        ]
+      },
+      "correctAnswer": "Б",
+      "choices": [
+        "А",
+        "Б",
+        "В"
+      ],
+      "id": "geometry_angle_1",
+      "audioTaskTextId": "geometry_angle_1"
+    },
+    "geometry_angle_2": {
+      "typeId": "right_angle_recognition",
+      "text": "Какой из трёх углов — прямой?",
+      "params": {
+        "angles": [
+          60,
+          90,
+          105
+        ]
+      },
+      "correctAnswer": "Б",
+      "choices": [
+        "А",
+        "Б",
+        "В"
+      ],
+      "id": "geometry_angle_2",
+      "audioTaskTextId": "geometry_angle_2"
+    },
+    "geometry_angle_3": {
+      "typeId": "right_angle_recognition",
+      "text": "Какой из трёх углов — прямой?",
+      "params": {
+        "angles": [
+          90,
+          60,
+          45
+        ]
+      },
+      "correctAnswer": "А",
+      "choices": [
+        "А",
+        "Б",
+        "В"
+      ],
+      "id": "geometry_angle_3",
+      "audioTaskTextId": "geometry_angle_3"
+    },
+    "geometry_angle_4": {
+      "typeId": "right_angle_recognition",
+      "text": "Какой из трёх углов — прямой?",
+      "params": {
+        "angles": [
+          90,
+          150,
+          135
+        ]
+      },
+      "correctAnswer": "А",
+      "choices": [
+        "А",
+        "Б",
+        "В"
+      ],
+      "id": "geometry_angle_4",
+      "audioTaskTextId": "geometry_angle_4"
+    },
+    "geometry_angle_5": {
+      "typeId": "right_angle_recognition",
+      "text": "Какой из трёх углов — прямой?",
+      "params": {
+        "angles": [
+          30,
+          90,
+          135
+        ]
+      },
+      "correctAnswer": "Б",
+      "choices": [
+        "А",
+        "Б",
+        "В"
+      ],
+      "id": "geometry_angle_5",
+      "audioTaskTextId": "geometry_angle_5"
+    },
+    "geometry_angle_6": {
+      "typeId": "right_angle_recognition",
+      "text": "Какой из трёх углов — прямой?",
+      "params": {
+        "angles": [
+          45,
+          30,
+          90
+        ]
+      },
+      "correctAnswer": "В",
+      "choices": [
+        "А",
+        "Б",
+        "В"
+      ],
+      "id": "geometry_angle_6",
+      "audioTaskTextId": "geometry_angle_6"
+    },
+    "geometry_angle_7": {
+      "typeId": "right_angle_recognition",
+      "text": "Какой из трёх углов — прямой?",
+      "params": {
+        "angles": [
+          105,
+          75,
+          90
+        ]
+      },
+      "correctAnswer": "В",
+      "choices": [
+        "А",
+        "Б",
+        "В"
+      ],
+      "id": "geometry_angle_7",
+      "audioTaskTextId": "geometry_angle_7"
+    },
+    "geometry_angle_8": {
+      "typeId": "right_angle_recognition",
+      "text": "Какой из трёх углов — прямой?",
+      "params": {
+        "angles": [
+          45,
+          105,
+          90
+        ]
+      },
+      "correctAnswer": "В",
+      "choices": [
+        "А",
+        "Б",
+        "В"
+      ],
+      "id": "geometry_angle_8",
+      "audioTaskTextId": "geometry_angle_8"
+    },
+    "geometry_angle_9": {
+      "typeId": "right_angle_recognition",
+      "text": "Какой из трёх углов — прямой?",
+      "params": {
+        "angles": [
+          90,
+          75,
+          150
+        ]
+      },
+      "correctAnswer": "А",
+      "choices": [
+        "А",
+        "Б",
+        "В"
+      ],
+      "id": "geometry_angle_9",
+      "audioTaskTextId": "geometry_angle_9"
+    },
+    "geometry_shape_name_intro": {
+      "typeId": "shape_naming",
+      "text": "Как называется эта фигура?",
+      "params": {
+        "shape": 0
+      },
+      "correctAnswer": "Круг",
+      "choices": [
+        "Треугольник",
+        "Пятиугольник",
+        "Круг"
+      ],
+      "id": "geometry_shape_name_intro",
+      "audioTaskTextId": "geometry_shape_name_intro"
+    },
+    "geometry_shape_name_1": {
+      "typeId": "shape_naming",
+      "text": "Как называется эта фигура?",
+      "params": {
+        "shape": 1
+      },
+      "correctAnswer": "Квадрат",
+      "choices": [
+        "Квадрат",
+        "Шестиугольник",
+        "Треугольник"
+      ],
+      "id": "geometry_shape_name_1",
+      "audioTaskTextId": "geometry_shape_name_1"
+    },
+    "geometry_shape_name_2": {
+      "typeId": "shape_naming",
+      "text": "Как называется эта фигура?",
+      "params": {
+        "shape": 2
+      },
+      "correctAnswer": "Треугольник",
+      "choices": [
+        "Треугольник",
+        "Пятиугольник",
+        "Прямоугольник"
+      ],
+      "id": "geometry_shape_name_2",
+      "audioTaskTextId": "geometry_shape_name_2"
+    },
+    "geometry_shape_name_3": {
+      "typeId": "shape_naming",
+      "text": "Как называется эта фигура?",
+      "params": {
+        "shape": 3
+      },
+      "correctAnswer": "Прямоугольник",
+      "choices": [
+        "Прямоугольник",
+        "Круг",
+        "Треугольник"
+      ],
+      "id": "geometry_shape_name_3",
+      "audioTaskTextId": "geometry_shape_name_3"
+    },
+    "geometry_shape_name_4": {
+      "typeId": "shape_naming",
+      "text": "Как называется эта фигура?",
+      "params": {
+        "shape": 4
+      },
+      "correctAnswer": "Пятиугольник",
+      "choices": [
+        "Пятиугольник",
+        "Прямоугольник",
+        "Треугольник"
+      ],
+      "id": "geometry_shape_name_4",
+      "audioTaskTextId": "geometry_shape_name_4"
+    },
+    "geometry_shape_name_5": {
+      "typeId": "shape_naming",
+      "text": "Как называется эта фигура?",
+      "params": {
+        "shape": 5
+      },
+      "correctAnswer": "Шестиугольник",
+      "choices": [
+        "Квадрат",
+        "Пятиугольник",
+        "Шестиугольник"
+      ],
+      "id": "geometry_shape_name_5",
+      "audioTaskTextId": "geometry_shape_name_5"
+    },
+    "geometry_shape_properties_intro": {
+      "typeId": "shape_properties",
+      "text": "Сколько сторон у фигуры «Квадрат»?",
+      "params": {
+        "shape": 1
+      },
+      "correctAnswer": "4",
+      "choices": [
+        "4",
+        "5",
+        "3"
+      ],
+      "id": "geometry_shape_properties_intro",
+      "audioTaskTextId": "geometry_shape_properties_intro"
+    },
+    "geometry_shape_properties_1": {
+      "typeId": "shape_properties",
+      "text": "Сколько сторон у фигуры «Треугольник»?",
+      "params": {
+        "shape": 2
+      },
+      "correctAnswer": "3",
+      "choices": [
+        "6",
+        "3",
+        "5"
+      ],
+      "id": "geometry_shape_properties_1",
+      "audioTaskTextId": "geometry_shape_properties_1"
+    },
+    "geometry_shape_properties_2": {
+      "typeId": "shape_properties",
+      "text": "Сколько сторон у фигуры «Прямоугольник»?",
+      "params": {
+        "shape": 3
+      },
+      "correctAnswer": "4",
+      "choices": [
+        "4",
+        "6",
+        "5"
+      ],
+      "id": "geometry_shape_properties_2",
+      "audioTaskTextId": "geometry_shape_properties_2"
+    },
+    "geometry_shape_properties_3": {
+      "typeId": "shape_properties",
+      "text": "Сколько сторон у фигуры «Пятиугольник»?",
+      "params": {
+        "shape": 4
+      },
+      "correctAnswer": "5",
+      "choices": [
+        "6",
+        "5",
+        "3"
+      ],
+      "id": "geometry_shape_properties_3",
+      "audioTaskTextId": "geometry_shape_properties_3"
+    },
+    "geometry_shape_properties_4": {
+      "typeId": "shape_properties",
+      "text": "Сколько сторон у фигуры «Шестиугольник»?",
+      "params": {
+        "shape": 5
+      },
+      "correctAnswer": "6",
+      "choices": [
+        "5",
+        "3",
+        "6"
+      ],
+      "id": "geometry_shape_properties_4",
+      "audioTaskTextId": "geometry_shape_properties_4"
+    },
+    "geometry_solid_name_intro": {
+      "typeId": "solid_naming",
+      "text": "Как называется это тело?",
+      "params": {
+        "solid": 0
+      },
+      "correctAnswer": "Куб",
+      "choices": [
+        "Шар",
+        "Куб",
+        "Конус"
+      ],
+      "id": "geometry_solid_name_intro",
+      "audioTaskTextId": "geometry_solid_name_intro"
+    },
+    "geometry_solid_name_1": {
+      "typeId": "solid_naming",
+      "text": "Как называется это тело?",
+      "params": {
+        "solid": 1
+      },
+      "correctAnswer": "Шар",
+      "choices": [
+        "Шар",
+        "Конус",
+        "Цилиндр"
+      ],
+      "id": "geometry_solid_name_1",
+      "audioTaskTextId": "geometry_solid_name_1"
+    },
+    "geometry_solid_name_2": {
+      "typeId": "solid_naming",
+      "text": "Как называется это тело?",
+      "params": {
+        "solid": 2
+      },
+      "correctAnswer": "Конус",
+      "choices": [
+        "Конус",
+        "Пирамида",
+        "Цилиндр"
+      ],
+      "id": "geometry_solid_name_2",
+      "audioTaskTextId": "geometry_solid_name_2"
+    },
+    "geometry_solid_name_3": {
+      "typeId": "solid_naming",
+      "text": "Как называется это тело?",
+      "params": {
+        "solid": 3
+      },
+      "correctAnswer": "Цилиндр",
+      "choices": [
+        "Шар",
+        "Цилиндр",
+        "Пирамида"
+      ],
+      "id": "geometry_solid_name_3",
+      "audioTaskTextId": "geometry_solid_name_3"
+    },
+    "geometry_solid_name_4": {
+      "typeId": "solid_naming",
+      "text": "Как называется это тело?",
+      "params": {
+        "solid": 4
+      },
+      "correctAnswer": "Пирамида",
+      "choices": [
+        "Пирамида",
+        "Конус",
+        "Шар"
+      ],
+      "id": "geometry_solid_name_4",
+      "audioTaskTextId": "geometry_solid_name_4"
+    },
+    "geometry_solid_properties_intro": {
+      "typeId": "solid_properties",
+      "text": "Сколько плоских граней у тела «Куб»?",
+      "params": {
+        "solid": 0
+      },
+      "correctAnswer": "6",
+      "choices": [
+        "6",
+        "1",
+        "2"
+      ],
+      "id": "geometry_solid_properties_intro",
+      "audioTaskTextId": "geometry_solid_properties_intro"
+    },
+    "geometry_solid_properties_1": {
+      "typeId": "solid_properties",
+      "text": "Сколько плоских граней у тела «Шар»?",
+      "params": {
+        "solid": 1
+      },
+      "correctAnswer": "0",
+      "choices": [
+        "5",
+        "2",
+        "0"
+      ],
+      "id": "geometry_solid_properties_1",
+      "audioTaskTextId": "geometry_solid_properties_1"
+    },
+    "geometry_solid_properties_2": {
+      "typeId": "solid_properties",
+      "text": "Сколько плоских граней у тела «Конус»?",
+      "params": {
+        "solid": 2
+      },
+      "correctAnswer": "1",
+      "choices": [
+        "1",
+        "5",
+        "2"
+      ],
+      "id": "geometry_solid_properties_2",
+      "audioTaskTextId": "geometry_solid_properties_2"
+    },
+    "geometry_solid_properties_3": {
+      "typeId": "solid_properties",
+      "text": "Сколько плоских граней у тела «Цилиндр»?",
+      "params": {
+        "solid": 3
+      },
+      "correctAnswer": "2",
+      "choices": [
+        "1",
+        "2",
+        "0"
+      ],
+      "id": "geometry_solid_properties_3",
+      "audioTaskTextId": "geometry_solid_properties_3"
+    },
+    "geometry_solid_properties_4": {
+      "typeId": "solid_properties",
+      "text": "Сколько плоских граней у тела «Пирамида»?",
+      "params": {
+        "solid": 4
+      },
+      "correctAnswer": "5",
+      "choices": [
+        "5",
+        "2",
+        "6"
+      ],
+      "id": "geometry_solid_properties_4",
+      "audioTaskTextId": "geometry_solid_properties_4"
+    },
+    "space_position_intro": {
+      "typeId": "spatial_position",
+      "text": "Где находится мяч относительно коробки?",
+      "params": {
+        "relation": 0
+      },
+      "correctAnswer": "Слева",
+      "choices": [
+        "Справа",
+        "Снизу",
+        "Слева"
+      ],
+      "id": "space_position_intro",
+      "audioTaskTextId": "space_position_intro"
+    },
+    "space_position_1": {
+      "typeId": "spatial_position",
+      "text": "Где находится мяч относительно коробки?",
+      "params": {
+        "relation": 1
+      },
+      "correctAnswer": "Справа",
+      "choices": [
+        "Слева",
+        "Справа",
+        "Снизу"
+      ],
+      "id": "space_position_1",
+      "audioTaskTextId": "space_position_1"
+    },
+    "space_position_2": {
+      "typeId": "spatial_position",
+      "text": "Где находится мяч относительно коробки?",
+      "params": {
+        "relation": 2
+      },
+      "correctAnswer": "Сверху",
+      "choices": [
+        "Сверху",
+        "Слева",
+        "Справа"
+      ],
+      "id": "space_position_2",
+      "audioTaskTextId": "space_position_2"
+    },
+    "space_position_3": {
+      "typeId": "spatial_position",
+      "text": "Где находится мяч относительно коробки?",
+      "params": {
+        "relation": 3
+      },
+      "correctAnswer": "Снизу",
+      "choices": [
+        "Слева",
+        "Сверху",
+        "Снизу"
+      ],
+      "id": "space_position_3",
+      "audioTaskTextId": "space_position_3"
+    },
+    "space_position_4": {
+      "typeId": "spatial_position",
+      "text": "Где находится мяч относительно коробки?",
+      "params": {
+        "relation": 0
+      },
+      "correctAnswer": "Слева",
+      "choices": [
+        "Сверху",
+        "Снизу",
+        "Слева"
+      ],
+      "id": "space_position_4",
+      "audioTaskTextId": "space_position_4"
+    },
+    "space_position_5": {
+      "typeId": "spatial_position",
+      "text": "Где находится мяч относительно коробки?",
+      "params": {
+        "relation": 1
+      },
+      "correctAnswer": "Справа",
+      "choices": [
+        "Справа",
+        "Снизу",
+        "Слева"
+      ],
+      "id": "space_position_5",
+      "audioTaskTextId": "space_position_5"
+    },
+    "space_position_6": {
+      "typeId": "spatial_position",
+      "text": "Где находится мяч относительно коробки?",
+      "params": {
+        "relation": 2
+      },
+      "correctAnswer": "Сверху",
+      "choices": [
+        "Справа",
+        "Снизу",
+        "Сверху"
+      ],
+      "id": "space_position_6",
+      "audioTaskTextId": "space_position_6"
+    },
+    "space_position_7": {
+      "typeId": "spatial_position",
+      "text": "Где находится мяч относительно коробки?",
+      "params": {
+        "relation": 3
+      },
+      "correctAnswer": "Снизу",
+      "choices": [
+        "Сверху",
+        "Слева",
+        "Снизу"
+      ],
+      "id": "space_position_7",
+      "audioTaskTextId": "space_position_7"
+    },
+    "space_position_8": {
+      "typeId": "spatial_position",
+      "text": "Где находится мяч относительно коробки?",
+      "params": {
+        "relation": 0
+      },
+      "correctAnswer": "Слева",
+      "choices": [
+        "Справа",
+        "Снизу",
+        "Слева"
+      ],
+      "id": "space_position_8",
+      "audioTaskTextId": "space_position_8"
+    },
+    "space_position_9": {
+      "typeId": "spatial_position",
+      "text": "Где находится мяч относительно коробки?",
+      "params": {
+        "relation": 1
+      },
+      "correctAnswer": "Справа",
+      "choices": [
+        "Справа",
+        "Сверху",
+        "Снизу"
+      ],
+      "id": "space_position_9",
+      "audioTaskTextId": "space_position_9"
+    },
+    "space_direction_intro": {
+      "typeId": "spatial_direction",
+      "text": "Куда указывает стрелка?",
+      "params": {
+        "direction": 0
+      },
+      "correctAnswer": "Вверх",
+      "choices": [
+        "Вверх",
+        "Влево",
+        "Вправо"
+      ],
+      "id": "space_direction_intro",
+      "audioTaskTextId": "space_direction_intro"
+    },
+    "space_direction_1": {
+      "typeId": "spatial_direction",
+      "text": "Куда указывает стрелка?",
+      "params": {
+        "direction": 1
+      },
+      "correctAnswer": "Вниз",
+      "choices": [
+        "Влево",
+        "Вниз",
+        "Вправо"
+      ],
+      "id": "space_direction_1",
+      "audioTaskTextId": "space_direction_1"
+    },
+    "space_direction_2": {
+      "typeId": "spatial_direction",
+      "text": "Куда указывает стрелка?",
+      "params": {
+        "direction": 2
+      },
+      "correctAnswer": "Влево",
+      "choices": [
+        "Влево",
+        "Вверх",
+        "Вправо"
+      ],
+      "id": "space_direction_2",
+      "audioTaskTextId": "space_direction_2"
+    },
+    "space_direction_3": {
+      "typeId": "spatial_direction",
+      "text": "Куда указывает стрелка?",
+      "params": {
+        "direction": 3
+      },
+      "correctAnswer": "Вправо",
+      "choices": [
+        "Влево",
+        "Вправо",
+        "Вниз"
+      ],
+      "id": "space_direction_3",
+      "audioTaskTextId": "space_direction_3"
+    },
+    "space_direction_4": {
+      "typeId": "spatial_direction",
+      "text": "Куда указывает стрелка?",
+      "params": {
+        "direction": 0
+      },
+      "correctAnswer": "Вверх",
+      "choices": [
+        "Влево",
+        "Вправо",
+        "Вверх"
+      ],
+      "id": "space_direction_4",
+      "audioTaskTextId": "space_direction_4"
+    },
+    "space_direction_5": {
+      "typeId": "spatial_direction",
+      "text": "Куда указывает стрелка?",
+      "params": {
+        "direction": 1
+      },
+      "correctAnswer": "Вниз",
+      "choices": [
+        "Вниз",
+        "Вправо",
+        "Влево"
+      ],
+      "id": "space_direction_5",
+      "audioTaskTextId": "space_direction_5"
+    },
+    "space_direction_6": {
+      "typeId": "spatial_direction",
+      "text": "Куда указывает стрелка?",
+      "params": {
+        "direction": 2
+      },
+      "correctAnswer": "Влево",
+      "choices": [
+        "Влево",
+        "Вверх",
+        "Вниз"
+      ],
+      "id": "space_direction_6",
+      "audioTaskTextId": "space_direction_6"
+    },
+    "space_direction_7": {
+      "typeId": "spatial_direction",
+      "text": "Куда указывает стрелка?",
+      "params": {
+        "direction": 3
+      },
+      "correctAnswer": "Вправо",
+      "choices": [
+        "Вправо",
+        "Вверх",
+        "Влево"
+      ],
+      "id": "space_direction_7",
+      "audioTaskTextId": "space_direction_7"
+    },
+    "space_direction_8": {
+      "typeId": "spatial_direction",
+      "text": "Куда указывает стрелка?",
+      "params": {
+        "direction": 0
+      },
+      "correctAnswer": "Вверх",
+      "choices": [
+        "Вниз",
+        "Влево",
+        "Вверх"
+      ],
+      "id": "space_direction_8",
+      "audioTaskTextId": "space_direction_8"
+    },
+    "space_direction_9": {
+      "typeId": "spatial_direction",
+      "text": "Куда указывает стрелка?",
+      "params": {
+        "direction": 1
+      },
+      "correctAnswer": "Вниз",
+      "choices": [
+        "Влево",
+        "Вниз",
+        "Вверх"
+      ],
+      "id": "space_direction_9",
+      "audioTaskTextId": "space_direction_9"
+    },
+    "space_ordering_intro": {
+      "typeId": "spatial_ordering",
+      "text": "Какой порядок правильный — от самой маленькой фигуры к самой большой?",
+      "params": {
+        "sizes": [
+          20,
+          40,
+          60
+        ]
+      },
+      "correctAnswer": "Первая, Вторая, Третья",
+      "choices": [
+        "Первая, Третья, Вторая",
+        "Первая, Вторая, Третья",
+        "Третья, Вторая, Первая"
+      ],
+      "id": "space_ordering_intro",
+      "audioTaskTextId": "space_ordering_intro"
+    },
+    "space_ordering_1": {
+      "typeId": "spatial_ordering",
+      "text": "Какой порядок правильный — от самой маленькой фигуры к самой большой?",
+      "params": {
+        "sizes": [
+          60,
+          20,
+          40
+        ]
+      },
+      "correctAnswer": "Вторая, Третья, Первая",
+      "choices": [
+        "Вторая, Третья, Первая",
+        "Первая, Третья, Вторая",
+        "Вторая, Первая, Третья"
+      ],
+      "id": "space_ordering_1",
+      "audioTaskTextId": "space_ordering_1"
+    },
+    "space_ordering_2": {
+      "typeId": "spatial_ordering",
+      "text": "Какой порядок правильный — от самой маленькой фигуры к самой большой?",
+      "params": {
+        "sizes": [
+          30,
+          70,
+          50
+        ]
+      },
+      "correctAnswer": "Первая, Третья, Вторая",
+      "choices": [
+        "Вторая, Третья, Первая",
+        "Первая, Вторая, Третья",
+        "Первая, Третья, Вторая"
+      ],
+      "id": "space_ordering_2",
+      "audioTaskTextId": "space_ordering_2"
+    },
+    "space_ordering_3": {
+      "typeId": "spatial_ordering",
+      "text": "Какой порядок правильный — от самой маленькой фигуры к самой большой?",
+      "params": {
+        "sizes": [
+          50,
+          30,
+          70
+        ]
+      },
+      "correctAnswer": "Вторая, Первая, Третья",
+      "choices": [
+        "Вторая, Третья, Первая",
+        "Вторая, Первая, Третья",
+        "Третья, Первая, Вторая"
+      ],
+      "id": "space_ordering_3",
+      "audioTaskTextId": "space_ordering_3"
+    },
+    "space_ordering_4": {
+      "typeId": "spatial_ordering",
+      "text": "Какой порядок правильный — от самой маленькой фигуры к самой большой?",
+      "params": {
+        "sizes": [
+          25,
+          55,
+          40
+        ]
+      },
+      "correctAnswer": "Первая, Третья, Вторая",
+      "choices": [
+        "Первая, Третья, Вторая",
+        "Вторая, Третья, Первая",
+        "Первая, Вторая, Третья"
+      ],
+      "id": "space_ordering_4",
+      "audioTaskTextId": "space_ordering_4"
+    },
+    "space_ordering_5": {
+      "typeId": "spatial_ordering",
+      "text": "Какой порядок правильный — от самой маленькой фигуры к самой большой?",
+      "params": {
+        "sizes": [
+          45,
+          25,
+          65
+        ]
+      },
+      "correctAnswer": "Вторая, Первая, Третья",
+      "choices": [
+        "Вторая, Первая, Третья",
+        "Третья, Первая, Вторая",
+        "Вторая, Третья, Первая"
+      ],
+      "id": "space_ordering_5",
+      "audioTaskTextId": "space_ordering_5"
+    },
+    "space_ordering_6": {
+      "typeId": "spatial_ordering",
+      "text": "Какой порядок правильный — от самой маленькой фигуры к самой большой?",
+      "params": {
+        "sizes": [
+          35,
+          65,
+          50
+        ]
+      },
+      "correctAnswer": "Первая, Третья, Вторая",
+      "choices": [
+        "Первая, Третья, Вторая",
+        "Вторая, Третья, Первая",
+        "Первая, Вторая, Третья"
+      ],
+      "id": "space_ordering_6",
+      "audioTaskTextId": "space_ordering_6"
+    },
+    "space_ordering_7": {
+      "typeId": "spatial_ordering",
+      "text": "Какой порядок правильный — от самой маленькой фигуры к самой большой?",
+      "params": {
+        "sizes": [
+          55,
+          35,
+          20
+        ]
+      },
+      "correctAnswer": "Третья, Вторая, Первая",
+      "choices": [
+        "Третья, Первая, Вторая",
+        "Третья, Вторая, Первая",
+        "Первая, Вторая, Третья"
+      ],
+      "id": "space_ordering_7",
+      "audioTaskTextId": "space_ordering_7"
+    },
+    "space_ordering_8": {
+      "typeId": "spatial_ordering",
+      "text": "Какой порядок правильный — от самой маленькой фигуры к самой большой?",
+      "params": {
+        "sizes": [
+          40,
+          60,
+          25
+        ]
+      },
+      "correctAnswer": "Третья, Первая, Вторая",
+      "choices": [
+        "Вторая, Первая, Третья",
+        "Третья, Вторая, Первая",
+        "Третья, Первая, Вторая"
+      ],
+      "id": "space_ordering_8",
+      "audioTaskTextId": "space_ordering_8"
+    },
+    "space_ordering_9": {
+      "typeId": "spatial_ordering",
+      "text": "Какой порядок правильный — от самой маленькой фигуры к самой большой?",
+      "params": {
+        "sizes": [
+          65,
+          45,
+          30
+        ]
+      },
+      "correctAnswer": "Третья, Вторая, Первая",
+      "choices": [
+        "Третья, Первая, Вторая",
+        "Третья, Вторая, Первая",
+        "Первая, Вторая, Третья"
+      ],
+      "id": "space_ordering_9",
+      "audioTaskTextId": "space_ordering_9"
+    },
+    "space_coordinates_intro": {
+      "typeId": "grid_coordinates",
+      "text": "Какие координаты у отмеченной клетки?",
+      "params": {
+        "col": 0,
+        "row": 0
+      },
+      "correctAnswer": "А1",
+      "choices": [
+        "В2",
+        "Б3",
+        "А1"
+      ],
+      "id": "space_coordinates_intro",
+      "audioTaskTextId": "space_coordinates_intro"
+    },
+    "space_coordinates_1": {
+      "typeId": "grid_coordinates",
+      "text": "Какие координаты у отмеченной клетки?",
+      "params": {
+        "col": 4,
+        "row": 4
+      },
+      "correctAnswer": "Д5",
+      "choices": [
+        "В4",
+        "В5",
+        "Д5"
+      ],
+      "id": "space_coordinates_1",
+      "audioTaskTextId": "space_coordinates_1"
+    },
+    "space_coordinates_2": {
+      "typeId": "grid_coordinates",
+      "text": "Какие координаты у отмеченной клетки?",
+      "params": {
+        "col": 2,
+        "row": 2
+      },
+      "correctAnswer": "В3",
+      "choices": [
+        "В3",
+        "Г2",
+        "А3"
+      ],
+      "id": "space_coordinates_2",
+      "audioTaskTextId": "space_coordinates_2"
+    },
+    "space_coordinates_3": {
+      "typeId": "grid_coordinates",
+      "text": "Какие координаты у отмеченной клетки?",
+      "params": {
+        "col": 1,
+        "row": 3
+      },
+      "correctAnswer": "Б4",
+      "choices": [
+        "Б1",
+        "Б4",
+        "Г3"
+      ],
+      "id": "space_coordinates_3",
+      "audioTaskTextId": "space_coordinates_3"
+    },
+    "space_coordinates_4": {
+      "typeId": "grid_coordinates",
+      "text": "Какие координаты у отмеченной клетки?",
+      "params": {
+        "col": 3,
+        "row": 1
+      },
+      "correctAnswer": "Г2",
+      "choices": [
+        "Г2",
+        "Д4",
+        "В3"
+      ],
+      "id": "space_coordinates_4",
+      "audioTaskTextId": "space_coordinates_4"
+    },
+    "space_coordinates_5": {
+      "typeId": "grid_coordinates",
+      "text": "Какие координаты у отмеченной клетки?",
+      "params": {
+        "col": 0,
+        "row": 4
+      },
+      "correctAnswer": "А5",
+      "choices": [
+        "Г5",
+        "А5",
+        "В2"
+      ],
+      "id": "space_coordinates_5",
+      "audioTaskTextId": "space_coordinates_5"
+    },
+    "space_coordinates_6": {
+      "typeId": "grid_coordinates",
+      "text": "Какие координаты у отмеченной клетки?",
+      "params": {
+        "col": 4,
+        "row": 0
+      },
+      "correctAnswer": "Д1",
+      "choices": [
+        "Б1",
+        "Д1",
+        "Г3"
+      ],
+      "id": "space_coordinates_6",
+      "audioTaskTextId": "space_coordinates_6"
+    },
+    "space_coordinates_7": {
+      "typeId": "grid_coordinates",
+      "text": "Какие координаты у отмеченной клетки?",
+      "params": {
+        "col": 2,
+        "row": 0
+      },
+      "correctAnswer": "В1",
+      "choices": [
+        "А3",
+        "В1",
+        "Д3"
+      ],
+      "id": "space_coordinates_7",
+      "audioTaskTextId": "space_coordinates_7"
+    },
+    "space_coordinates_8": {
+      "typeId": "grid_coordinates",
+      "text": "Какие координаты у отмеченной клетки?",
+      "params": {
+        "col": 0,
+        "row": 2
+      },
+      "correctAnswer": "А3",
+      "choices": [
+        "Г2",
+        "А3",
+        "Г4"
+      ],
+      "id": "space_coordinates_8",
+      "audioTaskTextId": "space_coordinates_8"
+    },
+    "space_coordinates_9": {
+      "typeId": "grid_coordinates",
+      "text": "Какие координаты у отмеченной клетки?",
+      "params": {
+        "col": 3,
+        "row": 3
+      },
+      "correctAnswer": "Г4",
+      "choices": [
+        "Г4",
+        "А3",
+        "Б2"
+      ],
+      "id": "space_coordinates_9",
+      "audioTaskTextId": "space_coordinates_9"
     }
   },
   "mathTools": [

@@ -16,18 +16,18 @@ test('pilotContent.json validates against MathMachineContentSchema', () => {
   assert.equal(result.success, true, result.success ? '' : JSON.stringify((result as any).error?.issues, null, 2));
 });
 
-test('pilotContent has exactly one hundred thirty-two topics (124 from Этап 1 + waves 1-12 + 8 from Этап 3 FR022 Group 1) with at least one group each', () => {
+test('pilotContent has exactly one hundred forty-five topics (132 through Этап 3 + 13 from Этап 4 FR022 Class A) with at least one group each', () => {
   const parsed = MathMachineContentSchema.parse(pilotContent);
   const topicIds = Object.keys(parsed.topics);
-  assert.equal(topicIds.length, 132);
+  assert.equal(topicIds.length, 145);
   for (const id of topicIds) {
     assert.ok(parsed.topics[id].groupIds.length >= 1);
   }
 });
 
-test('pilotContent has exactly 2904 tasks (2835 from Этап 1 + waves 1-12 + 69 from Этап 3 FR022 Group 1) — crosses the ТЗ FR-020 target of 2800+', () => {
+test('pilotContent has exactly 3015 tasks (2904 through Этап 3 + 111 from Этап 4 FR022 Class A) — crosses the ТЗ FR-020 target of 2800+', () => {
   const parsed = MathMachineContentSchema.parse(pilotContent);
-  assert.equal(Object.keys(parsed.tasks).length, 2904);
+  assert.equal(Object.keys(parsed.tasks).length, 3015);
 });
 
 test('every task referenced by a group actually exists in tasks', () => {
@@ -48,7 +48,7 @@ test('every task with an audioTaskTextId has a corresponding mp3 file on disk', 
     const mp3Path = path.join(MEDIA_DIR, `${task.audioTaskTextId}.mp3`);
     assert.ok(fs.existsSync(mp3Path), `missing audio file for task ${task.id}: ${mp3Path}`);
   }
-  assert.equal(checked, 2904, 'ТЗ FR-013 требует озвучку текста задания без оговорки объёма — все задания каталога должны иметь audioTaskTextId, включая Этап 3 (FR022 Group 1)');
+  assert.equal(checked, 3015, 'ТЗ FR-013 требует озвучку текста задания без оговорки объёма — все задания каталога должны иметь audioTaskTextId, включая Этап 4 (FR022 Class A)');
 });
 
 test('every real topic categorizes into exactly one catalog-screen category (no orphans)', () => {
