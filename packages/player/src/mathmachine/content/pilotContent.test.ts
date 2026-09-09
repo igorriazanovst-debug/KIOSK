@@ -15,18 +15,18 @@ test('pilotContent.json validates against MathMachineContentSchema', () => {
   assert.equal(result.success, true, result.success ? '' : JSON.stringify((result as any).error?.issues, null, 2));
 });
 
-test('pilotContent has exactly one hundred eleven topics (2 from Этап 1 + 5 from wave 1 + 5 from wave 2 + 13 from wave 3 + 6 from wave 4 + 6 from wave 5 + 6 from wave 6 + 13 from wave 7 + 14 from wave 8 + 14 from wave 9 + 14 from wave 10 + 13 from wave 11) with at least one group each', () => {
+test('pilotContent has exactly one hundred twenty-four topics (2 from Этап 1 + 5 from wave 1 + 5 from wave 2 + 13 from wave 3 + 6 from wave 4 + 6 from wave 5 + 6 from wave 6 + 13 from wave 7 + 14 from wave 8 + 14 from wave 9 + 14 from wave 10 + 13 from wave 11 + 13 from wave 12) with at least one group each', () => {
   const parsed = MathMachineContentSchema.parse(pilotContent);
   const topicIds = Object.keys(parsed.topics);
-  assert.equal(topicIds.length, 111);
+  assert.equal(topicIds.length, 124);
   for (const id of topicIds) {
     assert.ok(parsed.topics[id].groupIds.length >= 1);
   }
 });
 
-test('pilotContent has exactly 2461 tasks (18 from Этап 1 + 80 from wave 1 + 76 from wave 2 + 135 from wave 3 + 92 from wave 4 + 100 from wave 5 + 104 from wave 6 + 348 from wave 7 + 368 from wave 8 + 388 from wave 9 + 378 from wave 10 + 374 from wave 11)', () => {
+test('pilotContent has exactly 2835 tasks (18 from Этап 1 + 80 from wave 1 + 76 from wave 2 + 135 from wave 3 + 92 from wave 4 + 100 from wave 5 + 104 from wave 6 + 348 from wave 7 + 368 from wave 8 + 388 from wave 9 + 378 from wave 10 + 374 from wave 11 + 374 from wave 12) — crosses the ТЗ FR-020 target of 2800+', () => {
   const parsed = MathMachineContentSchema.parse(pilotContent);
-  assert.equal(Object.keys(parsed.tasks).length, 2461);
+  assert.equal(Object.keys(parsed.tasks).length, 2835);
 });
 
 test('every task referenced by a group actually exists in tasks', () => {

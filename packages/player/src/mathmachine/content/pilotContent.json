@@ -115,7 +115,20 @@
         "top_missing_7",
         "top_counting_7",
         "top_addition_three_wide6",
-        "top_rounding_thousands_4"
+        "top_rounding_thousands_4",
+        "top_subtraction_wide7",
+        "top_addition_wide7",
+        "top_composition_9",
+        "top_comparison_8",
+        "top_ordering_8",
+        "top_ordinal_10",
+        "top_multiplication_two_digit_2",
+        "top_division_36_40",
+        "top_multiples_9",
+        "top_missing_8",
+        "top_counting_8",
+        "top_addition_three_wide7",
+        "top_rounding_thousands_5"
       ]
     }
   ],
@@ -1015,6 +1028,116 @@
       "groupIds": [
         "grp_round_t4_g",
         "grp_round_t4_h"
+      ]
+    },
+    "top_subtraction_wide7": {
+      "id": "top_subtraction_wide7",
+      "name": "Вычитание: числа до 1000",
+      "groupIds": [
+        "grp_sub7_501_510",
+        "grp_sub7_751_760",
+        "grp_sub7_991_1000"
+      ]
+    },
+    "top_addition_wide7": {
+      "id": "top_addition_wide7",
+      "name": "Сложение: числа до 1000",
+      "groupIds": [
+        "grp_add9_501_512",
+        "grp_add9_741_752",
+        "grp_add9_981_992"
+      ]
+    },
+    "top_composition_9": {
+      "id": "top_composition_9",
+      "name": "Состав числа: числа 161-190",
+      "groupIds": [
+        "grp_comp9_170",
+        "grp_comp9_180",
+        "grp_comp9_190"
+      ]
+    },
+    "top_comparison_8": {
+      "id": "top_comparison_8",
+      "name": "Сравнение: числа до 5000",
+      "groupIds": [
+        "grp_cmp8_next",
+        "grp_cmp8_gap",
+        "grp_cmp8_fivethousand"
+      ]
+    },
+    "top_ordering_8": {
+      "id": "top_ordering_8",
+      "name": "Порядок чисел: десять чисел",
+      "groupIds": [
+        "grp_order10_min",
+        "grp_order10_max"
+      ]
+    },
+    "top_ordinal_10": {
+      "id": "top_ordinal_10",
+      "name": "Порядковые числительные: ряды по 21-22",
+      "groupIds": [
+        "grp_ordpos10_21",
+        "grp_ordpos10_22"
+      ]
+    },
+    "top_multiplication_two_digit_2": {
+      "id": "top_multiplication_two_digit_2",
+      "name": "Умножение: двузначное (21-30) на однозначное",
+      "groupIds": [
+        "grp_mult2d2_23",
+        "grp_mult2d2_456",
+        "grp_mult2d2_789"
+      ]
+    },
+    "top_division_36_40": {
+      "id": "top_division_36_40",
+      "name": "Деление: делители 36-40",
+      "groupIds": [
+        "grp_div9_36",
+        "grp_div9_3738",
+        "grp_div9_3940"
+      ]
+    },
+    "top_multiples_9": {
+      "id": "top_multiples_9",
+      "name": "Кратные: 41-45",
+      "groupIds": [
+        "grp_kratn9_414243",
+        "grp_kratn9_4445"
+      ]
+    },
+    "top_missing_8": {
+      "id": "top_missing_8",
+      "name": "Пропущенное число: шаг 14 и 15",
+      "groupIds": [
+        "grp_missing8_step14",
+        "grp_missing8_step15"
+      ]
+    },
+    "top_counting_8": {
+      "id": "top_counting_8",
+      "name": "Счёт: до 150",
+      "groupIds": [
+        "grp_count8_121135",
+        "grp_count8_136150"
+      ]
+    },
+    "top_addition_three_wide7": {
+      "id": "top_addition_three_wide7",
+      "name": "Сумма трёх чисел: числа до 150",
+      "groupIds": [
+        "grp_sum3g_low",
+        "grp_sum3g_high"
+      ]
+    },
+    "top_rounding_thousands_5": {
+      "id": "top_rounding_thousands_5",
+      "name": "Оценки: пятый набор примеров округления до тысяч",
+      "groupIds": [
+        "grp_round_t5_i",
+        "grp_round_t5_j"
       ]
     }
   },
@@ -4864,6 +4987,572 @@
         "round_t4_h_12",
         "round_t4_h_13",
         "round_t4_h_14"
+      ]
+    },
+    "grp_sub7_501_510": {
+      "id": "grp_sub7_501_510",
+      "name": "Вычитание: числа 501-510",
+      "taskIds": [
+        "sub7_501_510_intro",
+        "sub7_501_510_1",
+        "sub7_501_510_2",
+        "sub7_501_510_3",
+        "sub7_501_510_4",
+        "sub7_501_510_5",
+        "sub7_501_510_6",
+        "sub7_501_510_7",
+        "sub7_501_510_8",
+        "sub7_501_510_9"
+      ]
+    },
+    "grp_sub7_751_760": {
+      "id": "grp_sub7_751_760",
+      "name": "Вычитание: числа 751-760",
+      "taskIds": [
+        "sub7_751_760_intro",
+        "sub7_751_760_1",
+        "sub7_751_760_2",
+        "sub7_751_760_3",
+        "sub7_751_760_4",
+        "sub7_751_760_5",
+        "sub7_751_760_6",
+        "sub7_751_760_7",
+        "sub7_751_760_8",
+        "sub7_751_760_9"
+      ]
+    },
+    "grp_sub7_991_1000": {
+      "id": "grp_sub7_991_1000",
+      "name": "Вычитание: числа 991-1000",
+      "taskIds": [
+        "sub7_991_1000_intro",
+        "sub7_991_1000_1",
+        "sub7_991_1000_2",
+        "sub7_991_1000_3",
+        "sub7_991_1000_4",
+        "sub7_991_1000_5",
+        "sub7_991_1000_6",
+        "sub7_991_1000_7",
+        "sub7_991_1000_8",
+        "sub7_991_1000_9"
+      ]
+    },
+    "grp_add9_501_512": {
+      "id": "grp_add9_501_512",
+      "name": "Сложение: суммы 501-512",
+      "taskIds": [
+        "add9_501_512_intro",
+        "add9_501_512_1",
+        "add9_501_512_2",
+        "add9_501_512_3",
+        "add9_501_512_4",
+        "add9_501_512_5",
+        "add9_501_512_6",
+        "add9_501_512_7",
+        "add9_501_512_8",
+        "add9_501_512_9"
+      ]
+    },
+    "grp_add9_741_752": {
+      "id": "grp_add9_741_752",
+      "name": "Сложение: суммы 741-752",
+      "taskIds": [
+        "add9_741_752_intro",
+        "add9_741_752_1",
+        "add9_741_752_2",
+        "add9_741_752_3",
+        "add9_741_752_4",
+        "add9_741_752_5",
+        "add9_741_752_6",
+        "add9_741_752_7",
+        "add9_741_752_8",
+        "add9_741_752_9"
+      ]
+    },
+    "grp_add9_981_992": {
+      "id": "grp_add9_981_992",
+      "name": "Сложение: суммы 981-992",
+      "taskIds": [
+        "add9_981_992_intro",
+        "add9_981_992_1",
+        "add9_981_992_2",
+        "add9_981_992_3",
+        "add9_981_992_4",
+        "add9_981_992_5",
+        "add9_981_992_6",
+        "add9_981_992_7",
+        "add9_981_992_8",
+        "add9_981_992_9"
+      ]
+    },
+    "grp_comp9_170": {
+      "id": "grp_comp9_170",
+      "name": "Состав чисел 161-170",
+      "taskIds": [
+        "comp9_170_intro",
+        "comp9_170_1",
+        "comp9_170_2",
+        "comp9_170_3",
+        "comp9_170_4",
+        "comp9_170_5",
+        "comp9_170_6",
+        "comp9_170_7",
+        "comp9_170_8",
+        "comp9_170_9",
+        "comp9_170_10",
+        "comp9_170_11",
+        "comp9_170_12",
+        "comp9_170_13",
+        "comp9_170_14",
+        "comp9_170_15",
+        "comp9_170_16",
+        "comp9_170_17",
+        "comp9_170_18",
+        "comp9_170_19"
+      ]
+    },
+    "grp_comp9_180": {
+      "id": "grp_comp9_180",
+      "name": "Состав чисел 171-180",
+      "taskIds": [
+        "comp9_180_intro",
+        "comp9_180_1",
+        "comp9_180_2",
+        "comp9_180_3",
+        "comp9_180_4",
+        "comp9_180_5",
+        "comp9_180_6",
+        "comp9_180_7",
+        "comp9_180_8",
+        "comp9_180_9",
+        "comp9_180_10",
+        "comp9_180_11",
+        "comp9_180_12",
+        "comp9_180_13",
+        "comp9_180_14",
+        "comp9_180_15",
+        "comp9_180_16",
+        "comp9_180_17",
+        "comp9_180_18",
+        "comp9_180_19"
+      ]
+    },
+    "grp_comp9_190": {
+      "id": "grp_comp9_190",
+      "name": "Состав чисел 181-190",
+      "taskIds": [
+        "comp9_190_intro",
+        "comp9_190_1",
+        "comp9_190_2",
+        "comp9_190_3",
+        "comp9_190_4",
+        "comp9_190_5",
+        "comp9_190_6",
+        "comp9_190_7",
+        "comp9_190_8",
+        "comp9_190_9",
+        "comp9_190_10",
+        "comp9_190_11",
+        "comp9_190_12",
+        "comp9_190_13",
+        "comp9_190_14",
+        "comp9_190_15",
+        "comp9_190_16",
+        "comp9_190_17",
+        "comp9_190_18",
+        "comp9_190_19"
+      ]
+    },
+    "grp_cmp8_next": {
+      "id": "grp_cmp8_next",
+      "name": "Сравнение соседних чисел (3500-3515)",
+      "taskIds": [
+        "cmp8_next_intro",
+        "cmp8_next_1",
+        "cmp8_next_2",
+        "cmp8_next_3",
+        "cmp8_next_4",
+        "cmp8_next_5",
+        "cmp8_next_6",
+        "cmp8_next_7"
+      ]
+    },
+    "grp_cmp8_gap": {
+      "id": "grp_cmp8_gap",
+      "name": "Сравнение чисел вразброс (3800-4900)",
+      "taskIds": [
+        "cmp8_gap_intro",
+        "cmp8_gap_1",
+        "cmp8_gap_2",
+        "cmp8_gap_3",
+        "cmp8_gap_4",
+        "cmp8_gap_5",
+        "cmp8_gap_6",
+        "cmp8_gap_7"
+      ]
+    },
+    "grp_cmp8_fivethousand": {
+      "id": "grp_cmp8_fivethousand",
+      "name": "Сравнение чисел рядом с 5000",
+      "taskIds": [
+        "cmp8_fivethousand_intro",
+        "cmp8_fivethousand_1",
+        "cmp8_fivethousand_2",
+        "cmp8_fivethousand_3",
+        "cmp8_fivethousand_4",
+        "cmp8_fivethousand_5",
+        "cmp8_fivethousand_6",
+        "cmp8_fivethousand_7"
+      ]
+    },
+    "grp_order10_min": {
+      "id": "grp_order10_min",
+      "name": "Найди наименьшее среди десяти",
+      "taskIds": [
+        "order10_min_intro",
+        "order10_min_1",
+        "order10_min_2",
+        "order10_min_3",
+        "order10_min_4",
+        "order10_min_5",
+        "order10_min_6",
+        "order10_min_7",
+        "order10_min_8",
+        "order10_min_9"
+      ]
+    },
+    "grp_order10_max": {
+      "id": "grp_order10_max",
+      "name": "Найди наибольшее среди десяти",
+      "taskIds": [
+        "order10_max_intro",
+        "order10_max_1",
+        "order10_max_2",
+        "order10_max_3",
+        "order10_max_4",
+        "order10_max_5",
+        "order10_max_6",
+        "order10_max_7",
+        "order10_max_8",
+        "order10_max_9"
+      ]
+    },
+    "grp_ordpos10_21": {
+      "id": "grp_ordpos10_21",
+      "name": "Ряд из 21 числа",
+      "taskIds": [
+        "ordpos10_21_intro",
+        "ordpos10_21_1",
+        "ordpos10_21_2",
+        "ordpos10_21_3",
+        "ordpos10_21_4",
+        "ordpos10_21_5",
+        "ordpos10_21_6",
+        "ordpos10_21_7",
+        "ordpos10_21_8",
+        "ordpos10_21_9",
+        "ordpos10_21_10",
+        "ordpos10_21_11"
+      ]
+    },
+    "grp_ordpos10_22": {
+      "id": "grp_ordpos10_22",
+      "name": "Ряд из 22 чисел",
+      "taskIds": [
+        "ordpos10_22_intro",
+        "ordpos10_22_1",
+        "ordpos10_22_2",
+        "ordpos10_22_3",
+        "ordpos10_22_4",
+        "ordpos10_22_5",
+        "ordpos10_22_6",
+        "ordpos10_22_7",
+        "ordpos10_22_8",
+        "ordpos10_22_9",
+        "ordpos10_22_10",
+        "ordpos10_22_11"
+      ]
+    },
+    "grp_mult2d2_23": {
+      "id": "grp_mult2d2_23",
+      "name": "Двузначное на 2 и 3",
+      "taskIds": [
+        "mult2d2_23_intro",
+        "mult2d2_23_1",
+        "mult2d2_23_2",
+        "mult2d2_23_3",
+        "mult2d2_23_4",
+        "mult2d2_23_5",
+        "mult2d2_23_6",
+        "mult2d2_23_7",
+        "mult2d2_23_8",
+        "mult2d2_23_9"
+      ]
+    },
+    "grp_mult2d2_456": {
+      "id": "grp_mult2d2_456",
+      "name": "Двузначное на 4, 5 и 6",
+      "taskIds": [
+        "mult2d2_456_intro",
+        "mult2d2_456_1",
+        "mult2d2_456_2",
+        "mult2d2_456_3",
+        "mult2d2_456_4",
+        "mult2d2_456_5",
+        "mult2d2_456_6",
+        "mult2d2_456_7",
+        "mult2d2_456_8",
+        "mult2d2_456_9"
+      ]
+    },
+    "grp_mult2d2_789": {
+      "id": "grp_mult2d2_789",
+      "name": "Двузначное на 7, 8 и 9",
+      "taskIds": [
+        "mult2d2_789_intro",
+        "mult2d2_789_1",
+        "mult2d2_789_2",
+        "mult2d2_789_3",
+        "mult2d2_789_4",
+        "mult2d2_789_5",
+        "mult2d2_789_6",
+        "mult2d2_789_7",
+        "mult2d2_789_8",
+        "mult2d2_789_9"
+      ]
+    },
+    "grp_div9_36": {
+      "id": "grp_div9_36",
+      "name": "Деление на 36",
+      "taskIds": [
+        "div9_36_intro",
+        "div9_36_1",
+        "div9_36_2",
+        "div9_36_3",
+        "div9_36_4",
+        "div9_36_5",
+        "div9_36_6",
+        "div9_36_7"
+      ]
+    },
+    "grp_div9_3738": {
+      "id": "grp_div9_3738",
+      "name": "Деление на 37 и 38",
+      "taskIds": [
+        "div9_3738_intro",
+        "div9_3738_1",
+        "div9_3738_2",
+        "div9_3738_3",
+        "div9_3738_4",
+        "div9_3738_5",
+        "div9_3738_6",
+        "div9_3738_7"
+      ]
+    },
+    "grp_div9_3940": {
+      "id": "grp_div9_3940",
+      "name": "Деление на 39 и 40",
+      "taskIds": [
+        "div9_3940_intro",
+        "div9_3940_1",
+        "div9_3940_2",
+        "div9_3940_3",
+        "div9_3940_4",
+        "div9_3940_5",
+        "div9_3940_6",
+        "div9_3940_7"
+      ]
+    },
+    "grp_kratn9_414243": {
+      "id": "grp_kratn9_414243",
+      "name": "Кратные 41, 42 и 43",
+      "taskIds": [
+        "kratn9_414243_intro",
+        "kratn9_414243_1",
+        "kratn9_414243_2",
+        "kratn9_414243_3",
+        "kratn9_414243_4",
+        "kratn9_414243_5",
+        "kratn9_414243_6",
+        "kratn9_414243_7",
+        "kratn9_414243_8",
+        "kratn9_414243_9",
+        "kratn9_414243_10",
+        "kratn9_414243_11",
+        "kratn9_414243_12",
+        "kratn9_414243_13",
+        "kratn9_414243_14",
+        "kratn9_414243_15",
+        "kratn9_414243_16",
+        "kratn9_414243_17"
+      ]
+    },
+    "grp_kratn9_4445": {
+      "id": "grp_kratn9_4445",
+      "name": "Кратные 44 и 45",
+      "taskIds": [
+        "kratn9_4445_intro",
+        "kratn9_4445_1",
+        "kratn9_4445_2",
+        "kratn9_4445_3",
+        "kratn9_4445_4",
+        "kratn9_4445_5",
+        "kratn9_4445_6",
+        "kratn9_4445_7",
+        "kratn9_4445_8",
+        "kratn9_4445_9",
+        "kratn9_4445_10",
+        "kratn9_4445_11"
+      ]
+    },
+    "grp_missing8_step14": {
+      "id": "grp_missing8_step14",
+      "name": "Ряды с шагом 14",
+      "taskIds": [
+        "missing8_step14_intro",
+        "missing8_step14_1",
+        "missing8_step14_2",
+        "missing8_step14_3",
+        "missing8_step14_4",
+        "missing8_step14_5",
+        "missing8_step14_6",
+        "missing8_step14_7",
+        "missing8_step14_8",
+        "missing8_step14_9",
+        "missing8_step14_10",
+        "missing8_step14_11"
+      ]
+    },
+    "grp_missing8_step15": {
+      "id": "grp_missing8_step15",
+      "name": "Ряды с шагом 15",
+      "taskIds": [
+        "missing8_step15_intro",
+        "missing8_step15_1",
+        "missing8_step15_2",
+        "missing8_step15_3",
+        "missing8_step15_4",
+        "missing8_step15_5",
+        "missing8_step15_6",
+        "missing8_step15_7",
+        "missing8_step15_8",
+        "missing8_step15_9",
+        "missing8_step15_10",
+        "missing8_step15_11"
+      ]
+    },
+    "grp_count8_121135": {
+      "id": "grp_count8_121135",
+      "name": "Считаем предметы: 121-135",
+      "taskIds": [
+        "count8_121135_intro",
+        "count8_121135_1",
+        "count8_121135_2",
+        "count8_121135_3",
+        "count8_121135_4",
+        "count8_121135_5",
+        "count8_121135_6",
+        "count8_121135_7",
+        "count8_121135_8",
+        "count8_121135_9",
+        "count8_121135_10",
+        "count8_121135_11"
+      ]
+    },
+    "grp_count8_136150": {
+      "id": "grp_count8_136150",
+      "name": "Считаем предметы: 136-150",
+      "taskIds": [
+        "count8_136150_intro",
+        "count8_136150_1",
+        "count8_136150_2",
+        "count8_136150_3",
+        "count8_136150_4",
+        "count8_136150_5",
+        "count8_136150_6",
+        "count8_136150_7",
+        "count8_136150_8",
+        "count8_136150_9",
+        "count8_136150_10",
+        "count8_136150_11"
+      ]
+    },
+    "grp_sum3g_low": {
+      "id": "grp_sum3g_low",
+      "name": "Сумма трёх чисел: 128-139",
+      "taskIds": [
+        "sum3g_low_intro",
+        "sum3g_low_1",
+        "sum3g_low_2",
+        "sum3g_low_3",
+        "sum3g_low_4",
+        "sum3g_low_5",
+        "sum3g_low_6",
+        "sum3g_low_7",
+        "sum3g_low_8",
+        "sum3g_low_9",
+        "sum3g_low_10",
+        "sum3g_low_11"
+      ]
+    },
+    "grp_sum3g_high": {
+      "id": "grp_sum3g_high",
+      "name": "Сумма трёх чисел: 140-151",
+      "taskIds": [
+        "sum3g_high_intro",
+        "sum3g_high_1",
+        "sum3g_high_2",
+        "sum3g_high_3",
+        "sum3g_high_4",
+        "sum3g_high_5",
+        "sum3g_high_6",
+        "sum3g_high_7",
+        "sum3g_high_8",
+        "sum3g_high_9",
+        "sum3g_high_10",
+        "sum3g_high_11"
+      ]
+    },
+    "grp_round_t5_i": {
+      "id": "grp_round_t5_i",
+      "name": "Округление до тысяч: набор I",
+      "taskIds": [
+        "round_t5_i_intro",
+        "round_t5_i_1",
+        "round_t5_i_2",
+        "round_t5_i_3",
+        "round_t5_i_4",
+        "round_t5_i_5",
+        "round_t5_i_6",
+        "round_t5_i_7",
+        "round_t5_i_8",
+        "round_t5_i_9",
+        "round_t5_i_10",
+        "round_t5_i_11",
+        "round_t5_i_12",
+        "round_t5_i_13",
+        "round_t5_i_14"
+      ]
+    },
+    "grp_round_t5_j": {
+      "id": "grp_round_t5_j",
+      "name": "Округление до тысяч: набор J",
+      "taskIds": [
+        "round_t5_j_intro",
+        "round_t5_j_1",
+        "round_t5_j_2",
+        "round_t5_j_3",
+        "round_t5_j_4",
+        "round_t5_j_5",
+        "round_t5_j_6",
+        "round_t5_j_7",
+        "round_t5_j_8",
+        "round_t5_j_9",
+        "round_t5_j_10",
+        "round_t5_j_11",
+        "round_t5_j_12",
+        "round_t5_j_13",
+        "round_t5_j_14"
       ]
     }
   },
@@ -38323,6 +39012,5394 @@
       },
       "correctAnswer": 10000,
       "id": "round_t4_h_14"
+    },
+    "sub7_501_510_intro": {
+      "typeId": "number_subtract_two",
+      "text": "Сколько будет 501 минус 2?",
+      "params": {
+        "a": 501,
+        "b": 2
+      },
+      "correctAnswer": 499,
+      "id": "sub7_501_510_intro"
+    },
+    "sub7_501_510_1": {
+      "typeId": "number_subtract_two",
+      "text": "Сколько будет 502 минус 3?",
+      "params": {
+        "a": 502,
+        "b": 3
+      },
+      "correctAnswer": 499,
+      "id": "sub7_501_510_1"
+    },
+    "sub7_501_510_2": {
+      "typeId": "number_subtract_two",
+      "text": "Сколько будет 503 минус 4?",
+      "params": {
+        "a": 503,
+        "b": 4
+      },
+      "correctAnswer": 499,
+      "id": "sub7_501_510_2"
+    },
+    "sub7_501_510_3": {
+      "typeId": "number_subtract_two",
+      "text": "Сколько будет 504 минус 5?",
+      "params": {
+        "a": 504,
+        "b": 5
+      },
+      "correctAnswer": 499,
+      "id": "sub7_501_510_3"
+    },
+    "sub7_501_510_4": {
+      "typeId": "number_subtract_two",
+      "text": "Сколько будет 505 минус 6?",
+      "params": {
+        "a": 505,
+        "b": 6
+      },
+      "correctAnswer": 499,
+      "id": "sub7_501_510_4"
+    },
+    "sub7_501_510_5": {
+      "typeId": "number_subtract_two",
+      "text": "Сколько будет 506 минус 7?",
+      "params": {
+        "a": 506,
+        "b": 7
+      },
+      "correctAnswer": 499,
+      "id": "sub7_501_510_5"
+    },
+    "sub7_501_510_6": {
+      "typeId": "number_subtract_two",
+      "text": "Сколько будет 507 минус 8?",
+      "params": {
+        "a": 507,
+        "b": 8
+      },
+      "correctAnswer": 499,
+      "id": "sub7_501_510_6"
+    },
+    "sub7_501_510_7": {
+      "typeId": "number_subtract_two",
+      "text": "Сколько будет 508 минус 9?",
+      "params": {
+        "a": 508,
+        "b": 9
+      },
+      "correctAnswer": 499,
+      "id": "sub7_501_510_7"
+    },
+    "sub7_501_510_8": {
+      "typeId": "number_subtract_two",
+      "text": "Сколько будет 509 минус 2?",
+      "params": {
+        "a": 509,
+        "b": 2
+      },
+      "correctAnswer": 507,
+      "id": "sub7_501_510_8"
+    },
+    "sub7_501_510_9": {
+      "typeId": "number_subtract_two",
+      "text": "Сколько будет 510 минус 3?",
+      "params": {
+        "a": 510,
+        "b": 3
+      },
+      "correctAnswer": 507,
+      "id": "sub7_501_510_9"
+    },
+    "sub7_751_760_intro": {
+      "typeId": "number_subtract_two",
+      "text": "Сколько будет 751 минус 3?",
+      "params": {
+        "a": 751,
+        "b": 3
+      },
+      "correctAnswer": 748,
+      "id": "sub7_751_760_intro"
+    },
+    "sub7_751_760_1": {
+      "typeId": "number_subtract_two",
+      "text": "Сколько будет 752 минус 4?",
+      "params": {
+        "a": 752,
+        "b": 4
+      },
+      "correctAnswer": 748,
+      "id": "sub7_751_760_1"
+    },
+    "sub7_751_760_2": {
+      "typeId": "number_subtract_two",
+      "text": "Сколько будет 753 минус 5?",
+      "params": {
+        "a": 753,
+        "b": 5
+      },
+      "correctAnswer": 748,
+      "id": "sub7_751_760_2"
+    },
+    "sub7_751_760_3": {
+      "typeId": "number_subtract_two",
+      "text": "Сколько будет 754 минус 6?",
+      "params": {
+        "a": 754,
+        "b": 6
+      },
+      "correctAnswer": 748,
+      "id": "sub7_751_760_3"
+    },
+    "sub7_751_760_4": {
+      "typeId": "number_subtract_two",
+      "text": "Сколько будет 755 минус 7?",
+      "params": {
+        "a": 755,
+        "b": 7
+      },
+      "correctAnswer": 748,
+      "id": "sub7_751_760_4"
+    },
+    "sub7_751_760_5": {
+      "typeId": "number_subtract_two",
+      "text": "Сколько будет 756 минус 8?",
+      "params": {
+        "a": 756,
+        "b": 8
+      },
+      "correctAnswer": 748,
+      "id": "sub7_751_760_5"
+    },
+    "sub7_751_760_6": {
+      "typeId": "number_subtract_two",
+      "text": "Сколько будет 757 минус 9?",
+      "params": {
+        "a": 757,
+        "b": 9
+      },
+      "correctAnswer": 748,
+      "id": "sub7_751_760_6"
+    },
+    "sub7_751_760_7": {
+      "typeId": "number_subtract_two",
+      "text": "Сколько будет 758 минус 10?",
+      "params": {
+        "a": 758,
+        "b": 10
+      },
+      "correctAnswer": 748,
+      "id": "sub7_751_760_7"
+    },
+    "sub7_751_760_8": {
+      "typeId": "number_subtract_two",
+      "text": "Сколько будет 759 минус 3?",
+      "params": {
+        "a": 759,
+        "b": 3
+      },
+      "correctAnswer": 756,
+      "id": "sub7_751_760_8"
+    },
+    "sub7_751_760_9": {
+      "typeId": "number_subtract_two",
+      "text": "Сколько будет 760 минус 4?",
+      "params": {
+        "a": 760,
+        "b": 4
+      },
+      "correctAnswer": 756,
+      "id": "sub7_751_760_9"
+    },
+    "sub7_991_1000_intro": {
+      "typeId": "number_subtract_two",
+      "text": "Сколько будет 991 минус 4?",
+      "params": {
+        "a": 991,
+        "b": 4
+      },
+      "correctAnswer": 987,
+      "id": "sub7_991_1000_intro"
+    },
+    "sub7_991_1000_1": {
+      "typeId": "number_subtract_two",
+      "text": "Сколько будет 992 минус 5?",
+      "params": {
+        "a": 992,
+        "b": 5
+      },
+      "correctAnswer": 987,
+      "id": "sub7_991_1000_1"
+    },
+    "sub7_991_1000_2": {
+      "typeId": "number_subtract_two",
+      "text": "Сколько будет 993 минус 6?",
+      "params": {
+        "a": 993,
+        "b": 6
+      },
+      "correctAnswer": 987,
+      "id": "sub7_991_1000_2"
+    },
+    "sub7_991_1000_3": {
+      "typeId": "number_subtract_two",
+      "text": "Сколько будет 994 минус 7?",
+      "params": {
+        "a": 994,
+        "b": 7
+      },
+      "correctAnswer": 987,
+      "id": "sub7_991_1000_3"
+    },
+    "sub7_991_1000_4": {
+      "typeId": "number_subtract_two",
+      "text": "Сколько будет 995 минус 8?",
+      "params": {
+        "a": 995,
+        "b": 8
+      },
+      "correctAnswer": 987,
+      "id": "sub7_991_1000_4"
+    },
+    "sub7_991_1000_5": {
+      "typeId": "number_subtract_two",
+      "text": "Сколько будет 996 минус 9?",
+      "params": {
+        "a": 996,
+        "b": 9
+      },
+      "correctAnswer": 987,
+      "id": "sub7_991_1000_5"
+    },
+    "sub7_991_1000_6": {
+      "typeId": "number_subtract_two",
+      "text": "Сколько будет 997 минус 10?",
+      "params": {
+        "a": 997,
+        "b": 10
+      },
+      "correctAnswer": 987,
+      "id": "sub7_991_1000_6"
+    },
+    "sub7_991_1000_7": {
+      "typeId": "number_subtract_two",
+      "text": "Сколько будет 998 минус 11?",
+      "params": {
+        "a": 998,
+        "b": 11
+      },
+      "correctAnswer": 987,
+      "id": "sub7_991_1000_7"
+    },
+    "sub7_991_1000_8": {
+      "typeId": "number_subtract_two",
+      "text": "Сколько будет 999 минус 4?",
+      "params": {
+        "a": 999,
+        "b": 4
+      },
+      "correctAnswer": 995,
+      "id": "sub7_991_1000_8"
+    },
+    "sub7_991_1000_9": {
+      "typeId": "number_subtract_two",
+      "text": "Сколько будет 1000 минус 5?",
+      "params": {
+        "a": 1000,
+        "b": 5
+      },
+      "correctAnswer": 995,
+      "id": "sub7_991_1000_9"
+    },
+    "add9_501_512_intro": {
+      "typeId": "number_sum_two",
+      "text": "Сколько будет 251 плюс 250?",
+      "params": {
+        "a": 251,
+        "b": 250
+      },
+      "correctAnswer": 501,
+      "id": "add9_501_512_intro"
+    },
+    "add9_501_512_1": {
+      "typeId": "number_sum_two",
+      "text": "Сколько будет 252 плюс 251?",
+      "params": {
+        "a": 252,
+        "b": 251
+      },
+      "correctAnswer": 503,
+      "id": "add9_501_512_1"
+    },
+    "add9_501_512_2": {
+      "typeId": "number_sum_two",
+      "text": "Сколько будет 253 плюс 252?",
+      "params": {
+        "a": 253,
+        "b": 252
+      },
+      "correctAnswer": 505,
+      "id": "add9_501_512_2"
+    },
+    "add9_501_512_3": {
+      "typeId": "number_sum_two",
+      "text": "Сколько будет 254 плюс 250?",
+      "params": {
+        "a": 254,
+        "b": 250
+      },
+      "correctAnswer": 504,
+      "id": "add9_501_512_3"
+    },
+    "add9_501_512_4": {
+      "typeId": "number_sum_two",
+      "text": "Сколько будет 255 плюс 251?",
+      "params": {
+        "a": 255,
+        "b": 251
+      },
+      "correctAnswer": 506,
+      "id": "add9_501_512_4"
+    },
+    "add9_501_512_5": {
+      "typeId": "number_sum_two",
+      "text": "Сколько будет 256 плюс 252?",
+      "params": {
+        "a": 256,
+        "b": 252
+      },
+      "correctAnswer": 508,
+      "id": "add9_501_512_5"
+    },
+    "add9_501_512_6": {
+      "typeId": "number_sum_two",
+      "text": "Сколько будет 257 плюс 250?",
+      "params": {
+        "a": 257,
+        "b": 250
+      },
+      "correctAnswer": 507,
+      "id": "add9_501_512_6"
+    },
+    "add9_501_512_7": {
+      "typeId": "number_sum_two",
+      "text": "Сколько будет 258 плюс 251?",
+      "params": {
+        "a": 258,
+        "b": 251
+      },
+      "correctAnswer": 509,
+      "id": "add9_501_512_7"
+    },
+    "add9_501_512_8": {
+      "typeId": "number_sum_two",
+      "text": "Сколько будет 259 плюс 252?",
+      "params": {
+        "a": 259,
+        "b": 252
+      },
+      "correctAnswer": 511,
+      "id": "add9_501_512_8"
+    },
+    "add9_501_512_9": {
+      "typeId": "number_sum_two",
+      "text": "Сколько будет 260 плюс 250?",
+      "params": {
+        "a": 260,
+        "b": 250
+      },
+      "correctAnswer": 510,
+      "id": "add9_501_512_9"
+    },
+    "add9_741_752_intro": {
+      "typeId": "number_sum_two",
+      "text": "Сколько будет 376 плюс 365?",
+      "params": {
+        "a": 376,
+        "b": 365
+      },
+      "correctAnswer": 741,
+      "id": "add9_741_752_intro"
+    },
+    "add9_741_752_1": {
+      "typeId": "number_sum_two",
+      "text": "Сколько будет 377 плюс 366?",
+      "params": {
+        "a": 377,
+        "b": 366
+      },
+      "correctAnswer": 743,
+      "id": "add9_741_752_1"
+    },
+    "add9_741_752_2": {
+      "typeId": "number_sum_two",
+      "text": "Сколько будет 378 плюс 367?",
+      "params": {
+        "a": 378,
+        "b": 367
+      },
+      "correctAnswer": 745,
+      "id": "add9_741_752_2"
+    },
+    "add9_741_752_3": {
+      "typeId": "number_sum_two",
+      "text": "Сколько будет 379 плюс 365?",
+      "params": {
+        "a": 379,
+        "b": 365
+      },
+      "correctAnswer": 744,
+      "id": "add9_741_752_3"
+    },
+    "add9_741_752_4": {
+      "typeId": "number_sum_two",
+      "text": "Сколько будет 380 плюс 366?",
+      "params": {
+        "a": 380,
+        "b": 366
+      },
+      "correctAnswer": 746,
+      "id": "add9_741_752_4"
+    },
+    "add9_741_752_5": {
+      "typeId": "number_sum_two",
+      "text": "Сколько будет 381 плюс 367?",
+      "params": {
+        "a": 381,
+        "b": 367
+      },
+      "correctAnswer": 748,
+      "id": "add9_741_752_5"
+    },
+    "add9_741_752_6": {
+      "typeId": "number_sum_two",
+      "text": "Сколько будет 382 плюс 365?",
+      "params": {
+        "a": 382,
+        "b": 365
+      },
+      "correctAnswer": 747,
+      "id": "add9_741_752_6"
+    },
+    "add9_741_752_7": {
+      "typeId": "number_sum_two",
+      "text": "Сколько будет 383 плюс 366?",
+      "params": {
+        "a": 383,
+        "b": 366
+      },
+      "correctAnswer": 749,
+      "id": "add9_741_752_7"
+    },
+    "add9_741_752_8": {
+      "typeId": "number_sum_two",
+      "text": "Сколько будет 384 плюс 367?",
+      "params": {
+        "a": 384,
+        "b": 367
+      },
+      "correctAnswer": 751,
+      "id": "add9_741_752_8"
+    },
+    "add9_741_752_9": {
+      "typeId": "number_sum_two",
+      "text": "Сколько будет 385 плюс 365?",
+      "params": {
+        "a": 385,
+        "b": 365
+      },
+      "correctAnswer": 750,
+      "id": "add9_741_752_9"
+    },
+    "add9_981_992_intro": {
+      "typeId": "number_sum_two",
+      "text": "Сколько будет 496 плюс 485?",
+      "params": {
+        "a": 496,
+        "b": 485
+      },
+      "correctAnswer": 981,
+      "id": "add9_981_992_intro"
+    },
+    "add9_981_992_1": {
+      "typeId": "number_sum_two",
+      "text": "Сколько будет 497 плюс 486?",
+      "params": {
+        "a": 497,
+        "b": 486
+      },
+      "correctAnswer": 983,
+      "id": "add9_981_992_1"
+    },
+    "add9_981_992_2": {
+      "typeId": "number_sum_two",
+      "text": "Сколько будет 498 плюс 487?",
+      "params": {
+        "a": 498,
+        "b": 487
+      },
+      "correctAnswer": 985,
+      "id": "add9_981_992_2"
+    },
+    "add9_981_992_3": {
+      "typeId": "number_sum_two",
+      "text": "Сколько будет 499 плюс 485?",
+      "params": {
+        "a": 499,
+        "b": 485
+      },
+      "correctAnswer": 984,
+      "id": "add9_981_992_3"
+    },
+    "add9_981_992_4": {
+      "typeId": "number_sum_two",
+      "text": "Сколько будет 500 плюс 486?",
+      "params": {
+        "a": 500,
+        "b": 486
+      },
+      "correctAnswer": 986,
+      "id": "add9_981_992_4"
+    },
+    "add9_981_992_5": {
+      "typeId": "number_sum_two",
+      "text": "Сколько будет 501 плюс 487?",
+      "params": {
+        "a": 501,
+        "b": 487
+      },
+      "correctAnswer": 988,
+      "id": "add9_981_992_5"
+    },
+    "add9_981_992_6": {
+      "typeId": "number_sum_two",
+      "text": "Сколько будет 502 плюс 485?",
+      "params": {
+        "a": 502,
+        "b": 485
+      },
+      "correctAnswer": 987,
+      "id": "add9_981_992_6"
+    },
+    "add9_981_992_7": {
+      "typeId": "number_sum_two",
+      "text": "Сколько будет 503 плюс 486?",
+      "params": {
+        "a": 503,
+        "b": 486
+      },
+      "correctAnswer": 989,
+      "id": "add9_981_992_7"
+    },
+    "add9_981_992_8": {
+      "typeId": "number_sum_two",
+      "text": "Сколько будет 504 плюс 487?",
+      "params": {
+        "a": 504,
+        "b": 487
+      },
+      "correctAnswer": 991,
+      "id": "add9_981_992_8"
+    },
+    "add9_981_992_9": {
+      "typeId": "number_sum_two",
+      "text": "Сколько будет 505 плюс 485?",
+      "params": {
+        "a": 505,
+        "b": 485
+      },
+      "correctAnswer": 990,
+      "id": "add9_981_992_9"
+    },
+    "comp9_170_intro": {
+      "typeId": "number_composition",
+      "text": "161 = 1 + ?",
+      "params": {
+        "whole": 161,
+        "knownPart": 1
+      },
+      "correctAnswer": 160,
+      "id": "comp9_170_intro"
+    },
+    "comp9_170_1": {
+      "typeId": "number_composition",
+      "text": "161 = 80 + ?",
+      "params": {
+        "whole": 161,
+        "knownPart": 80
+      },
+      "correctAnswer": 81,
+      "id": "comp9_170_1"
+    },
+    "comp9_170_2": {
+      "typeId": "number_composition",
+      "text": "162 = 1 + ?",
+      "params": {
+        "whole": 162,
+        "knownPart": 1
+      },
+      "correctAnswer": 161,
+      "id": "comp9_170_2"
+    },
+    "comp9_170_3": {
+      "typeId": "number_composition",
+      "text": "162 = 81 + ?",
+      "params": {
+        "whole": 162,
+        "knownPart": 81
+      },
+      "correctAnswer": 81,
+      "id": "comp9_170_3"
+    },
+    "comp9_170_4": {
+      "typeId": "number_composition",
+      "text": "163 = 1 + ?",
+      "params": {
+        "whole": 163,
+        "knownPart": 1
+      },
+      "correctAnswer": 162,
+      "id": "comp9_170_4"
+    },
+    "comp9_170_5": {
+      "typeId": "number_composition",
+      "text": "163 = 81 + ?",
+      "params": {
+        "whole": 163,
+        "knownPart": 81
+      },
+      "correctAnswer": 82,
+      "id": "comp9_170_5"
+    },
+    "comp9_170_6": {
+      "typeId": "number_composition",
+      "text": "164 = 1 + ?",
+      "params": {
+        "whole": 164,
+        "knownPart": 1
+      },
+      "correctAnswer": 163,
+      "id": "comp9_170_6"
+    },
+    "comp9_170_7": {
+      "typeId": "number_composition",
+      "text": "164 = 82 + ?",
+      "params": {
+        "whole": 164,
+        "knownPart": 82
+      },
+      "correctAnswer": 82,
+      "id": "comp9_170_7"
+    },
+    "comp9_170_8": {
+      "typeId": "number_composition",
+      "text": "165 = 1 + ?",
+      "params": {
+        "whole": 165,
+        "knownPart": 1
+      },
+      "correctAnswer": 164,
+      "id": "comp9_170_8"
+    },
+    "comp9_170_9": {
+      "typeId": "number_composition",
+      "text": "165 = 82 + ?",
+      "params": {
+        "whole": 165,
+        "knownPart": 82
+      },
+      "correctAnswer": 83,
+      "id": "comp9_170_9"
+    },
+    "comp9_170_10": {
+      "typeId": "number_composition",
+      "text": "166 = 1 + ?",
+      "params": {
+        "whole": 166,
+        "knownPart": 1
+      },
+      "correctAnswer": 165,
+      "id": "comp9_170_10"
+    },
+    "comp9_170_11": {
+      "typeId": "number_composition",
+      "text": "166 = 83 + ?",
+      "params": {
+        "whole": 166,
+        "knownPart": 83
+      },
+      "correctAnswer": 83,
+      "id": "comp9_170_11"
+    },
+    "comp9_170_12": {
+      "typeId": "number_composition",
+      "text": "167 = 1 + ?",
+      "params": {
+        "whole": 167,
+        "knownPart": 1
+      },
+      "correctAnswer": 166,
+      "id": "comp9_170_12"
+    },
+    "comp9_170_13": {
+      "typeId": "number_composition",
+      "text": "167 = 83 + ?",
+      "params": {
+        "whole": 167,
+        "knownPart": 83
+      },
+      "correctAnswer": 84,
+      "id": "comp9_170_13"
+    },
+    "comp9_170_14": {
+      "typeId": "number_composition",
+      "text": "168 = 1 + ?",
+      "params": {
+        "whole": 168,
+        "knownPart": 1
+      },
+      "correctAnswer": 167,
+      "id": "comp9_170_14"
+    },
+    "comp9_170_15": {
+      "typeId": "number_composition",
+      "text": "168 = 84 + ?",
+      "params": {
+        "whole": 168,
+        "knownPart": 84
+      },
+      "correctAnswer": 84,
+      "id": "comp9_170_15"
+    },
+    "comp9_170_16": {
+      "typeId": "number_composition",
+      "text": "169 = 1 + ?",
+      "params": {
+        "whole": 169,
+        "knownPart": 1
+      },
+      "correctAnswer": 168,
+      "id": "comp9_170_16"
+    },
+    "comp9_170_17": {
+      "typeId": "number_composition",
+      "text": "169 = 84 + ?",
+      "params": {
+        "whole": 169,
+        "knownPart": 84
+      },
+      "correctAnswer": 85,
+      "id": "comp9_170_17"
+    },
+    "comp9_170_18": {
+      "typeId": "number_composition",
+      "text": "170 = 1 + ?",
+      "params": {
+        "whole": 170,
+        "knownPart": 1
+      },
+      "correctAnswer": 169,
+      "id": "comp9_170_18"
+    },
+    "comp9_170_19": {
+      "typeId": "number_composition",
+      "text": "170 = 85 + ?",
+      "params": {
+        "whole": 170,
+        "knownPart": 85
+      },
+      "correctAnswer": 85,
+      "id": "comp9_170_19"
+    },
+    "comp9_180_intro": {
+      "typeId": "number_composition",
+      "text": "171 = 1 + ?",
+      "params": {
+        "whole": 171,
+        "knownPart": 1
+      },
+      "correctAnswer": 170,
+      "id": "comp9_180_intro"
+    },
+    "comp9_180_1": {
+      "typeId": "number_composition",
+      "text": "171 = 85 + ?",
+      "params": {
+        "whole": 171,
+        "knownPart": 85
+      },
+      "correctAnswer": 86,
+      "id": "comp9_180_1"
+    },
+    "comp9_180_2": {
+      "typeId": "number_composition",
+      "text": "172 = 1 + ?",
+      "params": {
+        "whole": 172,
+        "knownPart": 1
+      },
+      "correctAnswer": 171,
+      "id": "comp9_180_2"
+    },
+    "comp9_180_3": {
+      "typeId": "number_composition",
+      "text": "172 = 86 + ?",
+      "params": {
+        "whole": 172,
+        "knownPart": 86
+      },
+      "correctAnswer": 86,
+      "id": "comp9_180_3"
+    },
+    "comp9_180_4": {
+      "typeId": "number_composition",
+      "text": "173 = 1 + ?",
+      "params": {
+        "whole": 173,
+        "knownPart": 1
+      },
+      "correctAnswer": 172,
+      "id": "comp9_180_4"
+    },
+    "comp9_180_5": {
+      "typeId": "number_composition",
+      "text": "173 = 86 + ?",
+      "params": {
+        "whole": 173,
+        "knownPart": 86
+      },
+      "correctAnswer": 87,
+      "id": "comp9_180_5"
+    },
+    "comp9_180_6": {
+      "typeId": "number_composition",
+      "text": "174 = 1 + ?",
+      "params": {
+        "whole": 174,
+        "knownPart": 1
+      },
+      "correctAnswer": 173,
+      "id": "comp9_180_6"
+    },
+    "comp9_180_7": {
+      "typeId": "number_composition",
+      "text": "174 = 87 + ?",
+      "params": {
+        "whole": 174,
+        "knownPart": 87
+      },
+      "correctAnswer": 87,
+      "id": "comp9_180_7"
+    },
+    "comp9_180_8": {
+      "typeId": "number_composition",
+      "text": "175 = 1 + ?",
+      "params": {
+        "whole": 175,
+        "knownPart": 1
+      },
+      "correctAnswer": 174,
+      "id": "comp9_180_8"
+    },
+    "comp9_180_9": {
+      "typeId": "number_composition",
+      "text": "175 = 87 + ?",
+      "params": {
+        "whole": 175,
+        "knownPart": 87
+      },
+      "correctAnswer": 88,
+      "id": "comp9_180_9"
+    },
+    "comp9_180_10": {
+      "typeId": "number_composition",
+      "text": "176 = 1 + ?",
+      "params": {
+        "whole": 176,
+        "knownPart": 1
+      },
+      "correctAnswer": 175,
+      "id": "comp9_180_10"
+    },
+    "comp9_180_11": {
+      "typeId": "number_composition",
+      "text": "176 = 88 + ?",
+      "params": {
+        "whole": 176,
+        "knownPart": 88
+      },
+      "correctAnswer": 88,
+      "id": "comp9_180_11"
+    },
+    "comp9_180_12": {
+      "typeId": "number_composition",
+      "text": "177 = 1 + ?",
+      "params": {
+        "whole": 177,
+        "knownPart": 1
+      },
+      "correctAnswer": 176,
+      "id": "comp9_180_12"
+    },
+    "comp9_180_13": {
+      "typeId": "number_composition",
+      "text": "177 = 88 + ?",
+      "params": {
+        "whole": 177,
+        "knownPart": 88
+      },
+      "correctAnswer": 89,
+      "id": "comp9_180_13"
+    },
+    "comp9_180_14": {
+      "typeId": "number_composition",
+      "text": "178 = 1 + ?",
+      "params": {
+        "whole": 178,
+        "knownPart": 1
+      },
+      "correctAnswer": 177,
+      "id": "comp9_180_14"
+    },
+    "comp9_180_15": {
+      "typeId": "number_composition",
+      "text": "178 = 89 + ?",
+      "params": {
+        "whole": 178,
+        "knownPart": 89
+      },
+      "correctAnswer": 89,
+      "id": "comp9_180_15"
+    },
+    "comp9_180_16": {
+      "typeId": "number_composition",
+      "text": "179 = 1 + ?",
+      "params": {
+        "whole": 179,
+        "knownPart": 1
+      },
+      "correctAnswer": 178,
+      "id": "comp9_180_16"
+    },
+    "comp9_180_17": {
+      "typeId": "number_composition",
+      "text": "179 = 89 + ?",
+      "params": {
+        "whole": 179,
+        "knownPart": 89
+      },
+      "correctAnswer": 90,
+      "id": "comp9_180_17"
+    },
+    "comp9_180_18": {
+      "typeId": "number_composition",
+      "text": "180 = 1 + ?",
+      "params": {
+        "whole": 180,
+        "knownPart": 1
+      },
+      "correctAnswer": 179,
+      "id": "comp9_180_18"
+    },
+    "comp9_180_19": {
+      "typeId": "number_composition",
+      "text": "180 = 90 + ?",
+      "params": {
+        "whole": 180,
+        "knownPart": 90
+      },
+      "correctAnswer": 90,
+      "id": "comp9_180_19"
+    },
+    "comp9_190_intro": {
+      "typeId": "number_composition",
+      "text": "181 = 1 + ?",
+      "params": {
+        "whole": 181,
+        "knownPart": 1
+      },
+      "correctAnswer": 180,
+      "id": "comp9_190_intro"
+    },
+    "comp9_190_1": {
+      "typeId": "number_composition",
+      "text": "181 = 90 + ?",
+      "params": {
+        "whole": 181,
+        "knownPart": 90
+      },
+      "correctAnswer": 91,
+      "id": "comp9_190_1"
+    },
+    "comp9_190_2": {
+      "typeId": "number_composition",
+      "text": "182 = 1 + ?",
+      "params": {
+        "whole": 182,
+        "knownPart": 1
+      },
+      "correctAnswer": 181,
+      "id": "comp9_190_2"
+    },
+    "comp9_190_3": {
+      "typeId": "number_composition",
+      "text": "182 = 91 + ?",
+      "params": {
+        "whole": 182,
+        "knownPart": 91
+      },
+      "correctAnswer": 91,
+      "id": "comp9_190_3"
+    },
+    "comp9_190_4": {
+      "typeId": "number_composition",
+      "text": "183 = 1 + ?",
+      "params": {
+        "whole": 183,
+        "knownPart": 1
+      },
+      "correctAnswer": 182,
+      "id": "comp9_190_4"
+    },
+    "comp9_190_5": {
+      "typeId": "number_composition",
+      "text": "183 = 91 + ?",
+      "params": {
+        "whole": 183,
+        "knownPart": 91
+      },
+      "correctAnswer": 92,
+      "id": "comp9_190_5"
+    },
+    "comp9_190_6": {
+      "typeId": "number_composition",
+      "text": "184 = 1 + ?",
+      "params": {
+        "whole": 184,
+        "knownPart": 1
+      },
+      "correctAnswer": 183,
+      "id": "comp9_190_6"
+    },
+    "comp9_190_7": {
+      "typeId": "number_composition",
+      "text": "184 = 92 + ?",
+      "params": {
+        "whole": 184,
+        "knownPart": 92
+      },
+      "correctAnswer": 92,
+      "id": "comp9_190_7"
+    },
+    "comp9_190_8": {
+      "typeId": "number_composition",
+      "text": "185 = 1 + ?",
+      "params": {
+        "whole": 185,
+        "knownPart": 1
+      },
+      "correctAnswer": 184,
+      "id": "comp9_190_8"
+    },
+    "comp9_190_9": {
+      "typeId": "number_composition",
+      "text": "185 = 92 + ?",
+      "params": {
+        "whole": 185,
+        "knownPart": 92
+      },
+      "correctAnswer": 93,
+      "id": "comp9_190_9"
+    },
+    "comp9_190_10": {
+      "typeId": "number_composition",
+      "text": "186 = 1 + ?",
+      "params": {
+        "whole": 186,
+        "knownPart": 1
+      },
+      "correctAnswer": 185,
+      "id": "comp9_190_10"
+    },
+    "comp9_190_11": {
+      "typeId": "number_composition",
+      "text": "186 = 93 + ?",
+      "params": {
+        "whole": 186,
+        "knownPart": 93
+      },
+      "correctAnswer": 93,
+      "id": "comp9_190_11"
+    },
+    "comp9_190_12": {
+      "typeId": "number_composition",
+      "text": "187 = 1 + ?",
+      "params": {
+        "whole": 187,
+        "knownPart": 1
+      },
+      "correctAnswer": 186,
+      "id": "comp9_190_12"
+    },
+    "comp9_190_13": {
+      "typeId": "number_composition",
+      "text": "187 = 93 + ?",
+      "params": {
+        "whole": 187,
+        "knownPart": 93
+      },
+      "correctAnswer": 94,
+      "id": "comp9_190_13"
+    },
+    "comp9_190_14": {
+      "typeId": "number_composition",
+      "text": "188 = 1 + ?",
+      "params": {
+        "whole": 188,
+        "knownPart": 1
+      },
+      "correctAnswer": 187,
+      "id": "comp9_190_14"
+    },
+    "comp9_190_15": {
+      "typeId": "number_composition",
+      "text": "188 = 94 + ?",
+      "params": {
+        "whole": 188,
+        "knownPart": 94
+      },
+      "correctAnswer": 94,
+      "id": "comp9_190_15"
+    },
+    "comp9_190_16": {
+      "typeId": "number_composition",
+      "text": "189 = 1 + ?",
+      "params": {
+        "whole": 189,
+        "knownPart": 1
+      },
+      "correctAnswer": 188,
+      "id": "comp9_190_16"
+    },
+    "comp9_190_17": {
+      "typeId": "number_composition",
+      "text": "189 = 94 + ?",
+      "params": {
+        "whole": 189,
+        "knownPart": 94
+      },
+      "correctAnswer": 95,
+      "id": "comp9_190_17"
+    },
+    "comp9_190_18": {
+      "typeId": "number_composition",
+      "text": "190 = 1 + ?",
+      "params": {
+        "whole": 190,
+        "knownPart": 1
+      },
+      "correctAnswer": 189,
+      "id": "comp9_190_18"
+    },
+    "comp9_190_19": {
+      "typeId": "number_composition",
+      "text": "190 = 95 + ?",
+      "params": {
+        "whole": 190,
+        "knownPart": 95
+      },
+      "correctAnswer": 95,
+      "id": "comp9_190_19"
+    },
+    "cmp8_next_intro": {
+      "typeId": "number_compare",
+      "text": "Какое число больше: 3500 или 3501?",
+      "params": {
+        "a": 3500,
+        "b": 3501,
+        "direction": 0
+      },
+      "correctAnswer": 3501,
+      "choices": [
+        3501,
+        3500
+      ],
+      "id": "cmp8_next_intro"
+    },
+    "cmp8_next_1": {
+      "typeId": "number_compare",
+      "text": "Какое число больше: 3502 или 3501?",
+      "params": {
+        "a": 3501,
+        "b": 3502,
+        "direction": 0
+      },
+      "correctAnswer": 3502,
+      "choices": [
+        3502,
+        3501
+      ],
+      "id": "cmp8_next_1"
+    },
+    "cmp8_next_2": {
+      "typeId": "number_compare",
+      "text": "Какое число больше: 3502 или 3503?",
+      "params": {
+        "a": 3502,
+        "b": 3503,
+        "direction": 0
+      },
+      "correctAnswer": 3503,
+      "choices": [
+        3502,
+        3503
+      ],
+      "id": "cmp8_next_2"
+    },
+    "cmp8_next_3": {
+      "typeId": "number_compare",
+      "text": "Какое число больше: 3504 или 3503?",
+      "params": {
+        "a": 3503,
+        "b": 3504,
+        "direction": 0
+      },
+      "correctAnswer": 3504,
+      "choices": [
+        3503,
+        3504
+      ],
+      "id": "cmp8_next_3"
+    },
+    "cmp8_next_4": {
+      "typeId": "number_compare",
+      "text": "Какое число больше: 3505 или 3504?",
+      "params": {
+        "a": 3504,
+        "b": 3505,
+        "direction": 0
+      },
+      "correctAnswer": 3505,
+      "choices": [
+        3504,
+        3505
+      ],
+      "id": "cmp8_next_4"
+    },
+    "cmp8_next_5": {
+      "typeId": "number_compare",
+      "text": "Какое число больше: 3506 или 3505?",
+      "params": {
+        "a": 3505,
+        "b": 3506,
+        "direction": 0
+      },
+      "correctAnswer": 3506,
+      "choices": [
+        3505,
+        3506
+      ],
+      "id": "cmp8_next_5"
+    },
+    "cmp8_next_6": {
+      "typeId": "number_compare",
+      "text": "Какое число больше: 3506 или 3507?",
+      "params": {
+        "a": 3506,
+        "b": 3507,
+        "direction": 0
+      },
+      "correctAnswer": 3507,
+      "choices": [
+        3507,
+        3506
+      ],
+      "id": "cmp8_next_6"
+    },
+    "cmp8_next_7": {
+      "typeId": "number_compare",
+      "text": "Какое число больше: 3507 или 3508?",
+      "params": {
+        "a": 3507,
+        "b": 3508,
+        "direction": 0
+      },
+      "correctAnswer": 3508,
+      "choices": [
+        3508,
+        3507
+      ],
+      "id": "cmp8_next_7"
+    },
+    "cmp8_gap_intro": {
+      "typeId": "number_compare",
+      "text": "Какое число меньше: 3850 или 3800?",
+      "params": {
+        "a": 3800,
+        "b": 3850,
+        "direction": 1
+      },
+      "correctAnswer": 3800,
+      "choices": [
+        3850,
+        3800
+      ],
+      "id": "cmp8_gap_intro"
+    },
+    "cmp8_gap_1": {
+      "typeId": "number_compare",
+      "text": "Какое число меньше: 4000 или 3950?",
+      "params": {
+        "a": 3950,
+        "b": 4000,
+        "direction": 1
+      },
+      "correctAnswer": 3950,
+      "choices": [
+        3950,
+        4000
+      ],
+      "id": "cmp8_gap_1"
+    },
+    "cmp8_gap_2": {
+      "typeId": "number_compare",
+      "text": "Какое число меньше: 4150 или 4100?",
+      "params": {
+        "a": 4100,
+        "b": 4150,
+        "direction": 1
+      },
+      "correctAnswer": 4100,
+      "choices": [
+        4100,
+        4150
+      ],
+      "id": "cmp8_gap_2"
+    },
+    "cmp8_gap_3": {
+      "typeId": "number_compare",
+      "text": "Какое число меньше: 4250 или 4300?",
+      "params": {
+        "a": 4250,
+        "b": 4300,
+        "direction": 1
+      },
+      "correctAnswer": 4250,
+      "choices": [
+        4250,
+        4300
+      ],
+      "id": "cmp8_gap_3"
+    },
+    "cmp8_gap_4": {
+      "typeId": "number_compare",
+      "text": "Какое число меньше: 4450 или 4400?",
+      "params": {
+        "a": 4400,
+        "b": 4450,
+        "direction": 1
+      },
+      "correctAnswer": 4400,
+      "choices": [
+        4450,
+        4400
+      ],
+      "id": "cmp8_gap_4"
+    },
+    "cmp8_gap_5": {
+      "typeId": "number_compare",
+      "text": "Какое число меньше: 4550 или 4600?",
+      "params": {
+        "a": 4550,
+        "b": 4600,
+        "direction": 1
+      },
+      "correctAnswer": 4550,
+      "choices": [
+        4600,
+        4550
+      ],
+      "id": "cmp8_gap_5"
+    },
+    "cmp8_gap_6": {
+      "typeId": "number_compare",
+      "text": "Какое число меньше: 4750 или 4700?",
+      "params": {
+        "a": 4700,
+        "b": 4750,
+        "direction": 1
+      },
+      "correctAnswer": 4700,
+      "choices": [
+        4700,
+        4750
+      ],
+      "id": "cmp8_gap_6"
+    },
+    "cmp8_gap_7": {
+      "typeId": "number_compare",
+      "text": "Какое число меньше: 4900 или 4850?",
+      "params": {
+        "a": 4850,
+        "b": 4900,
+        "direction": 1
+      },
+      "correctAnswer": 4850,
+      "choices": [
+        4900,
+        4850
+      ],
+      "id": "cmp8_gap_7"
+    },
+    "cmp8_fivethousand_intro": {
+      "typeId": "number_compare",
+      "text": "Какое число больше: 4985 или 4988?",
+      "params": {
+        "a": 4985,
+        "b": 4988,
+        "direction": 0
+      },
+      "correctAnswer": 4988,
+      "choices": [
+        4985,
+        4988
+      ],
+      "id": "cmp8_fivethousand_intro"
+    },
+    "cmp8_fivethousand_1": {
+      "typeId": "number_compare",
+      "text": "Какое число меньше: 4989 или 4986?",
+      "params": {
+        "a": 4986,
+        "b": 4989,
+        "direction": 1
+      },
+      "correctAnswer": 4986,
+      "choices": [
+        4989,
+        4986
+      ],
+      "id": "cmp8_fivethousand_1"
+    },
+    "cmp8_fivethousand_2": {
+      "typeId": "number_compare",
+      "text": "Какое число больше: 4987 или 4990?",
+      "params": {
+        "a": 4987,
+        "b": 4990,
+        "direction": 0
+      },
+      "correctAnswer": 4990,
+      "choices": [
+        4987,
+        4990
+      ],
+      "id": "cmp8_fivethousand_2"
+    },
+    "cmp8_fivethousand_3": {
+      "typeId": "number_compare",
+      "text": "Какое число меньше: 4991 или 4988?",
+      "params": {
+        "a": 4988,
+        "b": 4991,
+        "direction": 1
+      },
+      "correctAnswer": 4988,
+      "choices": [
+        4991,
+        4988
+      ],
+      "id": "cmp8_fivethousand_3"
+    },
+    "cmp8_fivethousand_4": {
+      "typeId": "number_compare",
+      "text": "Какое число больше: 4989 или 4992?",
+      "params": {
+        "a": 4989,
+        "b": 4992,
+        "direction": 0
+      },
+      "correctAnswer": 4992,
+      "choices": [
+        4992,
+        4989
+      ],
+      "id": "cmp8_fivethousand_4"
+    },
+    "cmp8_fivethousand_5": {
+      "typeId": "number_compare",
+      "text": "Какое число меньше: 4990 или 4993?",
+      "params": {
+        "a": 4990,
+        "b": 4993,
+        "direction": 1
+      },
+      "correctAnswer": 4990,
+      "choices": [
+        4990,
+        4993
+      ],
+      "id": "cmp8_fivethousand_5"
+    },
+    "cmp8_fivethousand_6": {
+      "typeId": "number_compare",
+      "text": "Какое число больше: 4991 или 4994?",
+      "params": {
+        "a": 4991,
+        "b": 4994,
+        "direction": 0
+      },
+      "correctAnswer": 4994,
+      "choices": [
+        4994,
+        4991
+      ],
+      "id": "cmp8_fivethousand_6"
+    },
+    "cmp8_fivethousand_7": {
+      "typeId": "number_compare",
+      "text": "Какое число меньше: 4995 или 4992?",
+      "params": {
+        "a": 4992,
+        "b": 4995,
+        "direction": 1
+      },
+      "correctAnswer": 4992,
+      "choices": [
+        4992,
+        4995
+      ],
+      "id": "cmp8_fivethousand_7"
+    },
+    "order10_min_intro": {
+      "typeId": "number_ordering",
+      "text": "Какое число самое маленькое?",
+      "params": {
+        "series": [
+          11,
+          14,
+          17,
+          20,
+          23,
+          26,
+          29,
+          1,
+          4,
+          8
+        ],
+        "direction": 1
+      },
+      "correctAnswer": 1,
+      "choices": [
+        11,
+        14,
+        17,
+        20,
+        23,
+        26,
+        29,
+        1,
+        4,
+        8
+      ],
+      "id": "order10_min_intro"
+    },
+    "order10_min_1": {
+      "typeId": "number_ordering",
+      "text": "Какое число самое маленькое?",
+      "params": {
+        "series": [
+          2,
+          5,
+          9,
+          12,
+          15,
+          18,
+          21,
+          24,
+          27,
+          30
+        ],
+        "direction": 1
+      },
+      "correctAnswer": 2,
+      "choices": [
+        2,
+        5,
+        9,
+        12,
+        15,
+        18,
+        21,
+        24,
+        27,
+        30
+      ],
+      "id": "order10_min_1"
+    },
+    "order10_min_2": {
+      "typeId": "number_ordering",
+      "text": "Какое число самое маленькое?",
+      "params": {
+        "series": [
+          25,
+          28,
+          31,
+          3,
+          6,
+          10,
+          13,
+          16,
+          19,
+          22
+        ],
+        "direction": 1
+      },
+      "correctAnswer": 3,
+      "choices": [
+        25,
+        28,
+        31,
+        3,
+        6,
+        10,
+        13,
+        16,
+        19,
+        22
+      ],
+      "id": "order10_min_2"
+    },
+    "order10_min_3": {
+      "typeId": "number_ordering",
+      "text": "Какое число самое маленькое?",
+      "params": {
+        "series": [
+          20,
+          23,
+          26,
+          29,
+          32,
+          4,
+          7,
+          11,
+          14,
+          17
+        ],
+        "direction": 1
+      },
+      "correctAnswer": 4,
+      "choices": [
+        20,
+        23,
+        26,
+        29,
+        32,
+        4,
+        7,
+        11,
+        14,
+        17
+      ],
+      "id": "order10_min_3"
+    },
+    "order10_min_4": {
+      "typeId": "number_ordering",
+      "text": "Какое число самое маленькое?",
+      "params": {
+        "series": [
+          24,
+          27,
+          30,
+          33,
+          5,
+          8,
+          12,
+          15,
+          18,
+          21
+        ],
+        "direction": 1
+      },
+      "correctAnswer": 5,
+      "choices": [
+        24,
+        27,
+        30,
+        33,
+        5,
+        8,
+        12,
+        15,
+        18,
+        21
+      ],
+      "id": "order10_min_4"
+    },
+    "order10_min_5": {
+      "typeId": "number_ordering",
+      "text": "Какое число самое маленькое?",
+      "params": {
+        "series": [
+          16,
+          19,
+          22,
+          25,
+          28,
+          31,
+          34,
+          6,
+          9,
+          13
+        ],
+        "direction": 1
+      },
+      "correctAnswer": 6,
+      "choices": [
+        16,
+        19,
+        22,
+        25,
+        28,
+        31,
+        34,
+        6,
+        9,
+        13
+      ],
+      "id": "order10_min_5"
+    },
+    "order10_min_6": {
+      "typeId": "number_ordering",
+      "text": "Какое число самое маленькое?",
+      "params": {
+        "series": [
+          20,
+          23,
+          26,
+          29,
+          32,
+          35,
+          7,
+          10,
+          14,
+          17
+        ],
+        "direction": 1
+      },
+      "correctAnswer": 7,
+      "choices": [
+        20,
+        23,
+        26,
+        29,
+        32,
+        35,
+        7,
+        10,
+        14,
+        17
+      ],
+      "id": "order10_min_6"
+    },
+    "order10_min_7": {
+      "typeId": "number_ordering",
+      "text": "Какое число самое маленькое?",
+      "params": {
+        "series": [
+          15,
+          18,
+          21,
+          24,
+          27,
+          30,
+          33,
+          36,
+          8,
+          11
+        ],
+        "direction": 1
+      },
+      "correctAnswer": 8,
+      "choices": [
+        15,
+        18,
+        21,
+        24,
+        27,
+        30,
+        33,
+        36,
+        8,
+        11
+      ],
+      "id": "order10_min_7"
+    },
+    "order10_min_8": {
+      "typeId": "number_ordering",
+      "text": "Какое число самое маленькое?",
+      "params": {
+        "series": [
+          12,
+          16,
+          19,
+          22,
+          25,
+          28,
+          31,
+          34,
+          37,
+          9
+        ],
+        "direction": 1
+      },
+      "correctAnswer": 9,
+      "choices": [
+        12,
+        16,
+        19,
+        22,
+        25,
+        28,
+        31,
+        34,
+        37,
+        9
+      ],
+      "id": "order10_min_8"
+    },
+    "order10_min_9": {
+      "typeId": "number_ordering",
+      "text": "Какое число самое маленькое?",
+      "params": {
+        "series": [
+          35,
+          38,
+          10,
+          13,
+          17,
+          20,
+          23,
+          26,
+          29,
+          32
+        ],
+        "direction": 1
+      },
+      "correctAnswer": 10,
+      "choices": [
+        35,
+        38,
+        10,
+        13,
+        17,
+        20,
+        23,
+        26,
+        29,
+        32
+      ],
+      "id": "order10_min_9"
+    },
+    "order10_max_intro": {
+      "typeId": "number_ordering",
+      "text": "Какое число самое большое?",
+      "params": {
+        "series": [
+          3,
+          6,
+          9,
+          12,
+          15,
+          18,
+          21,
+          24,
+          27,
+          1
+        ],
+        "direction": 0
+      },
+      "correctAnswer": 27,
+      "choices": [
+        3,
+        6,
+        9,
+        12,
+        15,
+        18,
+        21,
+        24,
+        27,
+        1
+      ],
+      "id": "order10_max_intro"
+    },
+    "order10_max_1": {
+      "typeId": "number_ordering",
+      "text": "Какое число самое большое?",
+      "params": {
+        "series": [
+          28,
+          2,
+          4,
+          7,
+          10,
+          13,
+          16,
+          19,
+          22,
+          25
+        ],
+        "direction": 0
+      },
+      "correctAnswer": 28,
+      "choices": [
+        28,
+        2,
+        4,
+        7,
+        10,
+        13,
+        16,
+        19,
+        22,
+        25
+      ],
+      "id": "order10_max_1"
+    },
+    "order10_max_2": {
+      "typeId": "number_ordering",
+      "text": "Какое число самое большое?",
+      "params": {
+        "series": [
+          23,
+          26,
+          29,
+          3,
+          5,
+          8,
+          11,
+          14,
+          17,
+          20
+        ],
+        "direction": 0
+      },
+      "correctAnswer": 29,
+      "choices": [
+        23,
+        26,
+        29,
+        3,
+        5,
+        8,
+        11,
+        14,
+        17,
+        20
+      ],
+      "id": "order10_max_2"
+    },
+    "order10_max_3": {
+      "typeId": "number_ordering",
+      "text": "Какое число самое большое?",
+      "params": {
+        "series": [
+          6,
+          9,
+          12,
+          15,
+          18,
+          21,
+          24,
+          27,
+          30,
+          4
+        ],
+        "direction": 0
+      },
+      "correctAnswer": 30,
+      "choices": [
+        6,
+        9,
+        12,
+        15,
+        18,
+        21,
+        24,
+        27,
+        30,
+        4
+      ],
+      "id": "order10_max_3"
+    },
+    "order10_max_4": {
+      "typeId": "number_ordering",
+      "text": "Какое число самое большое?",
+      "params": {
+        "series": [
+          28,
+          31,
+          5,
+          7,
+          10,
+          13,
+          16,
+          19,
+          22,
+          25
+        ],
+        "direction": 0
+      },
+      "correctAnswer": 31,
+      "choices": [
+        28,
+        31,
+        5,
+        7,
+        10,
+        13,
+        16,
+        19,
+        22,
+        25
+      ],
+      "id": "order10_max_4"
+    },
+    "order10_max_5": {
+      "typeId": "number_ordering",
+      "text": "Какое число самое большое?",
+      "params": {
+        "series": [
+          8,
+          11,
+          14,
+          17,
+          20,
+          23,
+          26,
+          29,
+          32,
+          6
+        ],
+        "direction": 0
+      },
+      "correctAnswer": 32,
+      "choices": [
+        8,
+        11,
+        14,
+        17,
+        20,
+        23,
+        26,
+        29,
+        32,
+        6
+      ],
+      "id": "order10_max_5"
+    },
+    "order10_max_6": {
+      "typeId": "number_ordering",
+      "text": "Какое число самое большое?",
+      "params": {
+        "series": [
+          30,
+          33,
+          7,
+          9,
+          12,
+          15,
+          18,
+          21,
+          24,
+          27
+        ],
+        "direction": 0
+      },
+      "correctAnswer": 33,
+      "choices": [
+        30,
+        33,
+        7,
+        9,
+        12,
+        15,
+        18,
+        21,
+        24,
+        27
+      ],
+      "id": "order10_max_6"
+    },
+    "order10_max_7": {
+      "typeId": "number_ordering",
+      "text": "Какое число самое большое?",
+      "params": {
+        "series": [
+          16,
+          19,
+          22,
+          25,
+          28,
+          31,
+          34,
+          8,
+          10,
+          13
+        ],
+        "direction": 0
+      },
+      "correctAnswer": 34,
+      "choices": [
+        16,
+        19,
+        22,
+        25,
+        28,
+        31,
+        34,
+        8,
+        10,
+        13
+      ],
+      "id": "order10_max_7"
+    },
+    "order10_max_8": {
+      "typeId": "number_ordering",
+      "text": "Какое число самое большое?",
+      "params": {
+        "series": [
+          29,
+          32,
+          35,
+          9,
+          11,
+          14,
+          17,
+          20,
+          23,
+          26
+        ],
+        "direction": 0
+      },
+      "correctAnswer": 35,
+      "choices": [
+        29,
+        32,
+        35,
+        9,
+        11,
+        14,
+        17,
+        20,
+        23,
+        26
+      ],
+      "id": "order10_max_8"
+    },
+    "order10_max_9": {
+      "typeId": "number_ordering",
+      "text": "Какое число самое большое?",
+      "params": {
+        "series": [
+          18,
+          21,
+          24,
+          27,
+          30,
+          33,
+          36,
+          10,
+          12,
+          15
+        ],
+        "direction": 0
+      },
+      "correctAnswer": 36,
+      "choices": [
+        18,
+        21,
+        24,
+        27,
+        30,
+        33,
+        36,
+        10,
+        12,
+        15
+      ],
+      "id": "order10_max_9"
+    },
+    "ordpos10_21_intro": {
+      "typeId": "ordinal_position",
+      "text": "Какое число стоит на 1-м месте: 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21?",
+      "params": {
+        "series": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16,
+          17,
+          18,
+          19,
+          20,
+          21
+        ],
+        "position": 1
+      },
+      "correctAnswer": 1,
+      "id": "ordpos10_21_intro"
+    },
+    "ordpos10_21_1": {
+      "typeId": "ordinal_position",
+      "text": "Какое число стоит на 2-м месте: 3, 5, 7, 9, 11, 13, 15, 17, 19, 21, 23, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22?",
+      "params": {
+        "series": [
+          3,
+          5,
+          7,
+          9,
+          11,
+          13,
+          15,
+          17,
+          19,
+          21,
+          23,
+          4,
+          6,
+          8,
+          10,
+          12,
+          14,
+          16,
+          18,
+          20,
+          22
+        ],
+        "position": 2
+      },
+      "correctAnswer": 5,
+      "id": "ordpos10_21_1"
+    },
+    "ordpos10_21_2": {
+      "typeId": "ordinal_position",
+      "text": "Какое число стоит на 3-м месте: 5, 9, 13, 17, 21, 25, 8, 12, 16, 20, 24, 7, 11, 15, 19, 23, 6, 10, 14, 18, 22?",
+      "params": {
+        "series": [
+          5,
+          9,
+          13,
+          17,
+          21,
+          25,
+          8,
+          12,
+          16,
+          20,
+          24,
+          7,
+          11,
+          15,
+          19,
+          23,
+          6,
+          10,
+          14,
+          18,
+          22
+        ],
+        "position": 3
+      },
+      "correctAnswer": 13,
+      "id": "ordpos10_21_2"
+    },
+    "ordpos10_21_3": {
+      "typeId": "ordinal_position",
+      "text": "Какое число стоит на 4-м месте: 7, 12, 17, 22, 27, 11, 16, 21, 26, 10, 15, 20, 25, 9, 14, 19, 24, 8, 13, 18, 23?",
+      "params": {
+        "series": [
+          7,
+          12,
+          17,
+          22,
+          27,
+          11,
+          16,
+          21,
+          26,
+          10,
+          15,
+          20,
+          25,
+          9,
+          14,
+          19,
+          24,
+          8,
+          13,
+          18,
+          23
+        ],
+        "position": 4
+      },
+      "correctAnswer": 22,
+      "id": "ordpos10_21_3"
+    },
+    "ordpos10_21_4": {
+      "typeId": "ordinal_position",
+      "text": "Какое число стоит на 5-м месте: 9, 17, 25, 12, 20, 28, 15, 23, 10, 18, 26, 13, 21, 29, 16, 24, 11, 19, 27, 14, 22?",
+      "params": {
+        "series": [
+          9,
+          17,
+          25,
+          12,
+          20,
+          28,
+          15,
+          23,
+          10,
+          18,
+          26,
+          13,
+          21,
+          29,
+          16,
+          24,
+          11,
+          19,
+          27,
+          14,
+          22
+        ],
+        "position": 5
+      },
+      "correctAnswer": 20,
+      "id": "ordpos10_21_4"
+    },
+    "ordpos10_21_5": {
+      "typeId": "ordinal_position",
+      "text": "Какое число стоит на 6-м месте: 11, 21, 31, 20, 30, 19, 29, 18, 28, 17, 27, 16, 26, 15, 25, 14, 24, 13, 23, 12, 22?",
+      "params": {
+        "series": [
+          11,
+          21,
+          31,
+          20,
+          30,
+          19,
+          29,
+          18,
+          28,
+          17,
+          27,
+          16,
+          26,
+          15,
+          25,
+          14,
+          24,
+          13,
+          23,
+          12,
+          22
+        ],
+        "position": 6
+      },
+      "correctAnswer": 19,
+      "id": "ordpos10_21_5"
+    },
+    "ordpos10_21_6": {
+      "typeId": "ordinal_position",
+      "text": "Какое число стоит на 7-м месте: 13, 24, 14, 25, 15, 26, 16, 27, 17, 28, 18, 29, 19, 30, 20, 31, 21, 32, 22, 33, 23?",
+      "params": {
+        "series": [
+          13,
+          24,
+          14,
+          25,
+          15,
+          26,
+          16,
+          27,
+          17,
+          28,
+          18,
+          29,
+          19,
+          30,
+          20,
+          31,
+          21,
+          32,
+          22,
+          33,
+          23
+        ],
+        "position": 7
+      },
+      "correctAnswer": 16,
+      "id": "ordpos10_21_6"
+    },
+    "ordpos10_21_7": {
+      "typeId": "ordinal_position",
+      "text": "Какое число стоит на 8-м месте: 15, 28, 20, 33, 25, 17, 30, 22, 35, 27, 19, 32, 24, 16, 29, 21, 34, 26, 18, 31, 23?",
+      "params": {
+        "series": [
+          15,
+          28,
+          20,
+          33,
+          25,
+          17,
+          30,
+          22,
+          35,
+          27,
+          19,
+          32,
+          24,
+          16,
+          29,
+          21,
+          34,
+          26,
+          18,
+          31,
+          23
+        ],
+        "position": 8
+      },
+      "correctAnswer": 22,
+      "id": "ordpos10_21_7"
+    },
+    "ordpos10_21_8": {
+      "typeId": "ordinal_position",
+      "text": "Какое число стоит на 9-м месте: 17, 33, 28, 23, 18, 34, 29, 24, 19, 35, 30, 25, 20, 36, 31, 26, 21, 37, 32, 27, 22?",
+      "params": {
+        "series": [
+          17,
+          33,
+          28,
+          23,
+          18,
+          34,
+          29,
+          24,
+          19,
+          35,
+          30,
+          25,
+          20,
+          36,
+          31,
+          26,
+          21,
+          37,
+          32,
+          27,
+          22
+        ],
+        "position": 9
+      },
+      "correctAnswer": 19,
+      "id": "ordpos10_21_8"
+    },
+    "ordpos10_21_9": {
+      "typeId": "ordinal_position",
+      "text": "Какое число стоит на 10-м месте: 19, 36, 32, 28, 24, 20, 37, 33, 29, 25, 21, 38, 34, 30, 26, 22, 39, 35, 31, 27, 23?",
+      "params": {
+        "series": [
+          19,
+          36,
+          32,
+          28,
+          24,
+          20,
+          37,
+          33,
+          29,
+          25,
+          21,
+          38,
+          34,
+          30,
+          26,
+          22,
+          39,
+          35,
+          31,
+          27,
+          23
+        ],
+        "position": 10
+      },
+      "correctAnswer": 25,
+      "id": "ordpos10_21_9"
+    },
+    "ordpos10_21_10": {
+      "typeId": "ordinal_position",
+      "text": "Какое число стоит на 11-м месте: 21, 40, 38, 36, 34, 32, 30, 28, 26, 24, 22, 41, 39, 37, 35, 33, 31, 29, 27, 25, 23?",
+      "params": {
+        "series": [
+          21,
+          40,
+          38,
+          36,
+          34,
+          32,
+          30,
+          28,
+          26,
+          24,
+          22,
+          41,
+          39,
+          37,
+          35,
+          33,
+          31,
+          29,
+          27,
+          25,
+          23
+        ],
+        "position": 11
+      },
+      "correctAnswer": 22,
+      "id": "ordpos10_21_10"
+    },
+    "ordpos10_21_11": {
+      "typeId": "ordinal_position",
+      "text": "Какое число стоит на 12-м месте: 23, 43, 42, 41, 40, 39, 38, 37, 36, 35, 34, 33, 32, 31, 30, 29, 28, 27, 26, 25, 24?",
+      "params": {
+        "series": [
+          23,
+          43,
+          42,
+          41,
+          40,
+          39,
+          38,
+          37,
+          36,
+          35,
+          34,
+          33,
+          32,
+          31,
+          30,
+          29,
+          28,
+          27,
+          26,
+          25,
+          24
+        ],
+        "position": 12
+      },
+      "correctAnswer": 33,
+      "id": "ordpos10_21_11"
+    },
+    "ordpos10_22_intro": {
+      "typeId": "ordinal_position",
+      "text": "Какое число стоит на 1-м месте: 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22?",
+      "params": {
+        "series": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16,
+          17,
+          18,
+          19,
+          20,
+          21,
+          22
+        ],
+        "position": 1
+      },
+      "correctAnswer": 1,
+      "id": "ordpos10_22_intro"
+    },
+    "ordpos10_22_1": {
+      "typeId": "ordinal_position",
+      "text": "Какое число стоит на 2-м месте: 3, 6, 9, 12, 15, 18, 21, 24, 5, 8, 11, 14, 17, 20, 23, 4, 7, 10, 13, 16, 19, 22?",
+      "params": {
+        "series": [
+          3,
+          6,
+          9,
+          12,
+          15,
+          18,
+          21,
+          24,
+          5,
+          8,
+          11,
+          14,
+          17,
+          20,
+          23,
+          4,
+          7,
+          10,
+          13,
+          16,
+          19,
+          22
+        ],
+        "position": 2
+      },
+      "correctAnswer": 6,
+      "id": "ordpos10_22_1"
+    },
+    "ordpos10_22_2": {
+      "typeId": "ordinal_position",
+      "text": "Какое число стоит на 3-м месте: 5, 10, 15, 20, 25, 8, 13, 18, 23, 6, 11, 16, 21, 26, 9, 14, 19, 24, 7, 12, 17, 22?",
+      "params": {
+        "series": [
+          5,
+          10,
+          15,
+          20,
+          25,
+          8,
+          13,
+          18,
+          23,
+          6,
+          11,
+          16,
+          21,
+          26,
+          9,
+          14,
+          19,
+          24,
+          7,
+          12,
+          17,
+          22
+        ],
+        "position": 3
+      },
+      "correctAnswer": 15,
+      "id": "ordpos10_22_2"
+    },
+    "ordpos10_22_3": {
+      "typeId": "ordinal_position",
+      "text": "Какое число стоит на 4-м месте: 7, 14, 21, 28, 13, 20, 27, 12, 19, 26, 11, 18, 25, 10, 17, 24, 9, 16, 23, 8, 15, 22?",
+      "params": {
+        "series": [
+          7,
+          14,
+          21,
+          28,
+          13,
+          20,
+          27,
+          12,
+          19,
+          26,
+          11,
+          18,
+          25,
+          10,
+          17,
+          24,
+          9,
+          16,
+          23,
+          8,
+          15,
+          22
+        ],
+        "position": 4
+      },
+      "correctAnswer": 28,
+      "id": "ordpos10_22_3"
+    },
+    "ordpos10_22_4": {
+      "typeId": "ordinal_position",
+      "text": "Какое число стоит на 5-м месте: 9, 18, 27, 14, 23, 10, 19, 28, 15, 24, 11, 20, 29, 16, 25, 12, 21, 30, 17, 26, 13, 22?",
+      "params": {
+        "series": [
+          9,
+          18,
+          27,
+          14,
+          23,
+          10,
+          19,
+          28,
+          15,
+          24,
+          11,
+          20,
+          29,
+          16,
+          25,
+          12,
+          21,
+          30,
+          17,
+          26,
+          13,
+          22
+        ],
+        "position": 5
+      },
+      "correctAnswer": 23,
+      "id": "ordpos10_22_4"
+    },
+    "ordpos10_22_5": {
+      "typeId": "ordinal_position",
+      "text": "Какое число стоит на 6-м месте: 11, 24, 15, 28, 19, 32, 23, 14, 27, 18, 31, 22, 13, 26, 17, 30, 21, 12, 25, 16, 29, 20?",
+      "params": {
+        "series": [
+          11,
+          24,
+          15,
+          28,
+          19,
+          32,
+          23,
+          14,
+          27,
+          18,
+          31,
+          22,
+          13,
+          26,
+          17,
+          30,
+          21,
+          12,
+          25,
+          16,
+          29,
+          20
+        ],
+        "position": 6
+      },
+      "correctAnswer": 32,
+      "id": "ordpos10_22_5"
+    },
+    "ordpos10_22_6": {
+      "typeId": "ordinal_position",
+      "text": "Какое число стоит на 7-м месте: 13, 28, 21, 14, 29, 22, 15, 30, 23, 16, 31, 24, 17, 32, 25, 18, 33, 26, 19, 34, 27, 20?",
+      "params": {
+        "series": [
+          13,
+          28,
+          21,
+          14,
+          29,
+          22,
+          15,
+          30,
+          23,
+          16,
+          31,
+          24,
+          17,
+          32,
+          25,
+          18,
+          33,
+          26,
+          19,
+          34,
+          27,
+          20
+        ],
+        "position": 7
+      },
+      "correctAnswer": 15,
+      "id": "ordpos10_22_6"
+    },
+    "ordpos10_22_7": {
+      "typeId": "ordinal_position",
+      "text": "Какое число стоит на 8-м месте: 15, 32, 27, 22, 17, 34, 29, 24, 19, 36, 31, 26, 21, 16, 33, 28, 23, 18, 35, 30, 25, 20?",
+      "params": {
+        "series": [
+          15,
+          32,
+          27,
+          22,
+          17,
+          34,
+          29,
+          24,
+          19,
+          36,
+          31,
+          26,
+          21,
+          16,
+          33,
+          28,
+          23,
+          18,
+          35,
+          30,
+          25,
+          20
+        ],
+        "position": 8
+      },
+      "correctAnswer": 24,
+      "id": "ordpos10_22_7"
+    },
+    "ordpos10_22_8": {
+      "typeId": "ordinal_position",
+      "text": "Какое число стоит на 9-м месте: 17, 36, 33, 30, 27, 24, 21, 18, 37, 34, 31, 28, 25, 22, 19, 38, 35, 32, 29, 26, 23, 20?",
+      "params": {
+        "series": [
+          17,
+          36,
+          33,
+          30,
+          27,
+          24,
+          21,
+          18,
+          37,
+          34,
+          31,
+          28,
+          25,
+          22,
+          19,
+          38,
+          35,
+          32,
+          29,
+          26,
+          23,
+          20
+        ],
+        "position": 9
+      },
+      "correctAnswer": 37,
+      "id": "ordpos10_22_8"
+    },
+    "ordpos10_22_9": {
+      "typeId": "ordinal_position",
+      "text": "Какое число стоит на 10-м месте: 19, 40, 39, 38, 37, 36, 35, 34, 33, 32, 31, 30, 29, 28, 27, 26, 25, 24, 23, 22, 21, 20?",
+      "params": {
+        "series": [
+          19,
+          40,
+          39,
+          38,
+          37,
+          36,
+          35,
+          34,
+          33,
+          32,
+          31,
+          30,
+          29,
+          28,
+          27,
+          26,
+          25,
+          24,
+          23,
+          22,
+          21,
+          20
+        ],
+        "position": 10
+      },
+      "correctAnswer": 32,
+      "id": "ordpos10_22_9"
+    },
+    "ordpos10_22_10": {
+      "typeId": "ordinal_position",
+      "text": "Какое число стоит на 11-м месте: 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42?",
+      "params": {
+        "series": [
+          21,
+          22,
+          23,
+          24,
+          25,
+          26,
+          27,
+          28,
+          29,
+          30,
+          31,
+          32,
+          33,
+          34,
+          35,
+          36,
+          37,
+          38,
+          39,
+          40,
+          41,
+          42
+        ],
+        "position": 11
+      },
+      "correctAnswer": 31,
+      "id": "ordpos10_22_10"
+    },
+    "ordpos10_22_11": {
+      "typeId": "ordinal_position",
+      "text": "Какое число стоит на 12-м месте: 23, 26, 29, 32, 35, 38, 41, 44, 25, 28, 31, 34, 37, 40, 43, 24, 27, 30, 33, 36, 39, 42?",
+      "params": {
+        "series": [
+          23,
+          26,
+          29,
+          32,
+          35,
+          38,
+          41,
+          44,
+          25,
+          28,
+          31,
+          34,
+          37,
+          40,
+          43,
+          24,
+          27,
+          30,
+          33,
+          36,
+          39,
+          42
+        ],
+        "position": 12
+      },
+      "correctAnswer": 34,
+      "id": "ordpos10_22_11"
+    },
+    "mult2d2_23_intro": {
+      "typeId": "number_multiply_two",
+      "text": "Сколько будет 21 умножить на 2?",
+      "params": {
+        "a": 21,
+        "b": 2
+      },
+      "correctAnswer": 42,
+      "id": "mult2d2_23_intro"
+    },
+    "mult2d2_23_1": {
+      "typeId": "number_multiply_two",
+      "text": "Сколько будет 22 умножить на 3?",
+      "params": {
+        "a": 22,
+        "b": 3
+      },
+      "correctAnswer": 66,
+      "id": "mult2d2_23_1"
+    },
+    "mult2d2_23_2": {
+      "typeId": "number_multiply_two",
+      "text": "Сколько будет 23 умножить на 2?",
+      "params": {
+        "a": 23,
+        "b": 2
+      },
+      "correctAnswer": 46,
+      "id": "mult2d2_23_2"
+    },
+    "mult2d2_23_3": {
+      "typeId": "number_multiply_two",
+      "text": "Сколько будет 24 умножить на 3?",
+      "params": {
+        "a": 24,
+        "b": 3
+      },
+      "correctAnswer": 72,
+      "id": "mult2d2_23_3"
+    },
+    "mult2d2_23_4": {
+      "typeId": "number_multiply_two",
+      "text": "Сколько будет 25 умножить на 2?",
+      "params": {
+        "a": 25,
+        "b": 2
+      },
+      "correctAnswer": 50,
+      "id": "mult2d2_23_4"
+    },
+    "mult2d2_23_5": {
+      "typeId": "number_multiply_two",
+      "text": "Сколько будет 26 умножить на 3?",
+      "params": {
+        "a": 26,
+        "b": 3
+      },
+      "correctAnswer": 78,
+      "id": "mult2d2_23_5"
+    },
+    "mult2d2_23_6": {
+      "typeId": "number_multiply_two",
+      "text": "Сколько будет 27 умножить на 2?",
+      "params": {
+        "a": 27,
+        "b": 2
+      },
+      "correctAnswer": 54,
+      "id": "mult2d2_23_6"
+    },
+    "mult2d2_23_7": {
+      "typeId": "number_multiply_two",
+      "text": "Сколько будет 28 умножить на 3?",
+      "params": {
+        "a": 28,
+        "b": 3
+      },
+      "correctAnswer": 84,
+      "id": "mult2d2_23_7"
+    },
+    "mult2d2_23_8": {
+      "typeId": "number_multiply_two",
+      "text": "Сколько будет 29 умножить на 2?",
+      "params": {
+        "a": 29,
+        "b": 2
+      },
+      "correctAnswer": 58,
+      "id": "mult2d2_23_8"
+    },
+    "mult2d2_23_9": {
+      "typeId": "number_multiply_two",
+      "text": "Сколько будет 30 умножить на 3?",
+      "params": {
+        "a": 30,
+        "b": 3
+      },
+      "correctAnswer": 90,
+      "id": "mult2d2_23_9"
+    },
+    "mult2d2_456_intro": {
+      "typeId": "number_multiply_two",
+      "text": "Сколько будет 21 умножить на 4?",
+      "params": {
+        "a": 21,
+        "b": 4
+      },
+      "correctAnswer": 84,
+      "id": "mult2d2_456_intro"
+    },
+    "mult2d2_456_1": {
+      "typeId": "number_multiply_two",
+      "text": "Сколько будет 22 умножить на 5?",
+      "params": {
+        "a": 22,
+        "b": 5
+      },
+      "correctAnswer": 110,
+      "id": "mult2d2_456_1"
+    },
+    "mult2d2_456_2": {
+      "typeId": "number_multiply_two",
+      "text": "Сколько будет 23 умножить на 6?",
+      "params": {
+        "a": 23,
+        "b": 6
+      },
+      "correctAnswer": 138,
+      "id": "mult2d2_456_2"
+    },
+    "mult2d2_456_3": {
+      "typeId": "number_multiply_two",
+      "text": "Сколько будет 24 умножить на 4?",
+      "params": {
+        "a": 24,
+        "b": 4
+      },
+      "correctAnswer": 96,
+      "id": "mult2d2_456_3"
+    },
+    "mult2d2_456_4": {
+      "typeId": "number_multiply_two",
+      "text": "Сколько будет 25 умножить на 5?",
+      "params": {
+        "a": 25,
+        "b": 5
+      },
+      "correctAnswer": 125,
+      "id": "mult2d2_456_4"
+    },
+    "mult2d2_456_5": {
+      "typeId": "number_multiply_two",
+      "text": "Сколько будет 26 умножить на 6?",
+      "params": {
+        "a": 26,
+        "b": 6
+      },
+      "correctAnswer": 156,
+      "id": "mult2d2_456_5"
+    },
+    "mult2d2_456_6": {
+      "typeId": "number_multiply_two",
+      "text": "Сколько будет 27 умножить на 4?",
+      "params": {
+        "a": 27,
+        "b": 4
+      },
+      "correctAnswer": 108,
+      "id": "mult2d2_456_6"
+    },
+    "mult2d2_456_7": {
+      "typeId": "number_multiply_two",
+      "text": "Сколько будет 28 умножить на 5?",
+      "params": {
+        "a": 28,
+        "b": 5
+      },
+      "correctAnswer": 140,
+      "id": "mult2d2_456_7"
+    },
+    "mult2d2_456_8": {
+      "typeId": "number_multiply_two",
+      "text": "Сколько будет 29 умножить на 6?",
+      "params": {
+        "a": 29,
+        "b": 6
+      },
+      "correctAnswer": 174,
+      "id": "mult2d2_456_8"
+    },
+    "mult2d2_456_9": {
+      "typeId": "number_multiply_two",
+      "text": "Сколько будет 30 умножить на 4?",
+      "params": {
+        "a": 30,
+        "b": 4
+      },
+      "correctAnswer": 120,
+      "id": "mult2d2_456_9"
+    },
+    "mult2d2_789_intro": {
+      "typeId": "number_multiply_two",
+      "text": "Сколько будет 21 умножить на 7?",
+      "params": {
+        "a": 21,
+        "b": 7
+      },
+      "correctAnswer": 147,
+      "id": "mult2d2_789_intro"
+    },
+    "mult2d2_789_1": {
+      "typeId": "number_multiply_two",
+      "text": "Сколько будет 22 умножить на 8?",
+      "params": {
+        "a": 22,
+        "b": 8
+      },
+      "correctAnswer": 176,
+      "id": "mult2d2_789_1"
+    },
+    "mult2d2_789_2": {
+      "typeId": "number_multiply_two",
+      "text": "Сколько будет 23 умножить на 9?",
+      "params": {
+        "a": 23,
+        "b": 9
+      },
+      "correctAnswer": 207,
+      "id": "mult2d2_789_2"
+    },
+    "mult2d2_789_3": {
+      "typeId": "number_multiply_two",
+      "text": "Сколько будет 24 умножить на 7?",
+      "params": {
+        "a": 24,
+        "b": 7
+      },
+      "correctAnswer": 168,
+      "id": "mult2d2_789_3"
+    },
+    "mult2d2_789_4": {
+      "typeId": "number_multiply_two",
+      "text": "Сколько будет 25 умножить на 8?",
+      "params": {
+        "a": 25,
+        "b": 8
+      },
+      "correctAnswer": 200,
+      "id": "mult2d2_789_4"
+    },
+    "mult2d2_789_5": {
+      "typeId": "number_multiply_two",
+      "text": "Сколько будет 26 умножить на 9?",
+      "params": {
+        "a": 26,
+        "b": 9
+      },
+      "correctAnswer": 234,
+      "id": "mult2d2_789_5"
+    },
+    "mult2d2_789_6": {
+      "typeId": "number_multiply_two",
+      "text": "Сколько будет 27 умножить на 7?",
+      "params": {
+        "a": 27,
+        "b": 7
+      },
+      "correctAnswer": 189,
+      "id": "mult2d2_789_6"
+    },
+    "mult2d2_789_7": {
+      "typeId": "number_multiply_two",
+      "text": "Сколько будет 28 умножить на 8?",
+      "params": {
+        "a": 28,
+        "b": 8
+      },
+      "correctAnswer": 224,
+      "id": "mult2d2_789_7"
+    },
+    "mult2d2_789_8": {
+      "typeId": "number_multiply_two",
+      "text": "Сколько будет 29 умножить на 9?",
+      "params": {
+        "a": 29,
+        "b": 9
+      },
+      "correctAnswer": 261,
+      "id": "mult2d2_789_8"
+    },
+    "mult2d2_789_9": {
+      "typeId": "number_multiply_two",
+      "text": "Сколько будет 30 умножить на 7?",
+      "params": {
+        "a": 30,
+        "b": 7
+      },
+      "correctAnswer": 210,
+      "id": "mult2d2_789_9"
+    },
+    "div9_36_intro": {
+      "typeId": "number_divide_remainder",
+      "text": "Сколько будет 74 разделить на 36?",
+      "params": {
+        "a": 74,
+        "b": 36
+      },
+      "correctAnswer": "2 ост. 2",
+      "choices": [
+        "1 ост. 4",
+        "2 ост. 2",
+        "1 ост. 3"
+      ],
+      "id": "div9_36_intro"
+    },
+    "div9_36_1": {
+      "typeId": "number_divide_remainder",
+      "text": "Сколько будет 80 разделить на 36?",
+      "params": {
+        "a": 80,
+        "b": 36
+      },
+      "correctAnswer": "2 ост. 8",
+      "choices": [
+        "2 ост. 8",
+        "1 ост. 9",
+        "3 ост. 10"
+      ],
+      "id": "div9_36_1"
+    },
+    "div9_36_2": {
+      "typeId": "number_divide_remainder",
+      "text": "Сколько будет 110 разделить на 36?",
+      "params": {
+        "a": 110,
+        "b": 36
+      },
+      "correctAnswer": "3 ост. 2",
+      "choices": [
+        "3 ост. 3",
+        "2 ост. 2",
+        "3 ост. 2"
+      ],
+      "id": "div9_36_2"
+    },
+    "div9_36_3": {
+      "typeId": "number_divide_remainder",
+      "text": "Сколько будет 119 разделить на 36?",
+      "params": {
+        "a": 119,
+        "b": 36
+      },
+      "correctAnswer": "3 ост. 11",
+      "choices": [
+        "2 ост. 13",
+        "3 ост. 11",
+        "2 ост. 12"
+      ],
+      "id": "div9_36_3"
+    },
+    "div9_36_4": {
+      "typeId": "number_divide_remainder",
+      "text": "Сколько будет 146 разделить на 36?",
+      "params": {
+        "a": 146,
+        "b": 36
+      },
+      "correctAnswer": "4 ост. 2",
+      "choices": [
+        "4 ост. 3",
+        "3 ост. 2",
+        "4 ост. 2"
+      ],
+      "id": "div9_36_4"
+    },
+    "div9_36_5": {
+      "typeId": "number_divide_remainder",
+      "text": "Сколько будет 155 разделить на 36?",
+      "params": {
+        "a": 155,
+        "b": 36
+      },
+      "correctAnswer": "4 ост. 11",
+      "choices": [
+        "5 ост. 13",
+        "4 ост. 11",
+        "3 ост. 12"
+      ],
+      "id": "div9_36_5"
+    },
+    "div9_36_6": {
+      "typeId": "number_divide_remainder",
+      "text": "Сколько будет 182 разделить на 36?",
+      "params": {
+        "a": 182,
+        "b": 36
+      },
+      "correctAnswer": "5 ост. 2",
+      "choices": [
+        "5 ост. 2",
+        "4 ост. 3",
+        "6 ост. 4"
+      ],
+      "id": "div9_36_6"
+    },
+    "div9_36_7": {
+      "typeId": "number_divide_remainder",
+      "text": "Сколько будет 191 разделить на 36?",
+      "params": {
+        "a": 191,
+        "b": 36
+      },
+      "correctAnswer": "5 ост. 11",
+      "choices": [
+        "6 ост. 13",
+        "5 ост. 11",
+        "4 ост. 12"
+      ],
+      "id": "div9_36_7"
+    },
+    "div9_3738_intro": {
+      "typeId": "number_divide_remainder",
+      "text": "Сколько будет 76 разделить на 37?",
+      "params": {
+        "a": 76,
+        "b": 37
+      },
+      "correctAnswer": "2 ост. 2",
+      "choices": [
+        "2 ост. 2",
+        "2 ост. 3",
+        "1 ост. 2"
+      ],
+      "id": "div9_3738_intro"
+    },
+    "div9_3738_1": {
+      "typeId": "number_divide_remainder",
+      "text": "Сколько будет 85 разделить на 37?",
+      "params": {
+        "a": 85,
+        "b": 37
+      },
+      "correctAnswer": "2 ост. 11",
+      "choices": [
+        "1 ост. 12",
+        "1 ост. 13",
+        "2 ост. 11"
+      ],
+      "id": "div9_3738_1"
+    },
+    "div9_3738_2": {
+      "typeId": "number_divide_remainder",
+      "text": "Сколько будет 113 разделить на 37?",
+      "params": {
+        "a": 113,
+        "b": 37
+      },
+      "correctAnswer": "3 ост. 2",
+      "choices": [
+        "3 ост. 3",
+        "2 ост. 2",
+        "3 ост. 2"
+      ],
+      "id": "div9_3738_2"
+    },
+    "div9_3738_3": {
+      "typeId": "number_divide_remainder",
+      "text": "Сколько будет 122 разделить на 37?",
+      "params": {
+        "a": 122,
+        "b": 37
+      },
+      "correctAnswer": "3 ост. 11",
+      "choices": [
+        "3 ост. 12",
+        "2 ост. 11",
+        "3 ост. 11"
+      ],
+      "id": "div9_3738_3"
+    },
+    "div9_3738_4": {
+      "typeId": "number_divide_remainder",
+      "text": "Сколько будет 78 разделить на 38?",
+      "params": {
+        "a": 78,
+        "b": 38
+      },
+      "correctAnswer": "2 ост. 2",
+      "choices": [
+        "2 ост. 2",
+        "1 ост. 3",
+        "1 ост. 4"
+      ],
+      "id": "div9_3738_4"
+    },
+    "div9_3738_5": {
+      "typeId": "number_divide_remainder",
+      "text": "Сколько будет 87 разделить на 38?",
+      "params": {
+        "a": 87,
+        "b": 38
+      },
+      "correctAnswer": "2 ост. 11",
+      "choices": [
+        "1 ост. 12",
+        "3 ост. 13",
+        "2 ост. 11"
+      ],
+      "id": "div9_3738_5"
+    },
+    "div9_3738_6": {
+      "typeId": "number_divide_remainder",
+      "text": "Сколько будет 116 разделить на 38?",
+      "params": {
+        "a": 116,
+        "b": 38
+      },
+      "correctAnswer": "3 ост. 2",
+      "choices": [
+        "4 ост. 4",
+        "3 ост. 2",
+        "2 ост. 3"
+      ],
+      "id": "div9_3738_6"
+    },
+    "div9_3738_7": {
+      "typeId": "number_divide_remainder",
+      "text": "Сколько будет 125 разделить на 38?",
+      "params": {
+        "a": 125,
+        "b": 38
+      },
+      "correctAnswer": "3 ост. 11",
+      "choices": [
+        "2 ост. 13",
+        "3 ост. 11",
+        "2 ост. 12"
+      ],
+      "id": "div9_3738_7"
+    },
+    "div9_3940_intro": {
+      "typeId": "number_divide_remainder",
+      "text": "Сколько будет 80 разделить на 39?",
+      "params": {
+        "a": 80,
+        "b": 39
+      },
+      "correctAnswer": "2 ост. 2",
+      "choices": [
+        "2 ост. 2",
+        "2 ост. 3",
+        "3 ост. 3"
+      ],
+      "id": "div9_3940_intro"
+    },
+    "div9_3940_1": {
+      "typeId": "number_divide_remainder",
+      "text": "Сколько будет 89 разделить на 39?",
+      "params": {
+        "a": 89,
+        "b": 39
+      },
+      "correctAnswer": "2 ост. 11",
+      "choices": [
+        "2 ост. 11",
+        "1 ост. 12",
+        "1 ост. 13"
+      ],
+      "id": "div9_3940_1"
+    },
+    "div9_3940_2": {
+      "typeId": "number_divide_remainder",
+      "text": "Сколько будет 119 разделить на 39?",
+      "params": {
+        "a": 119,
+        "b": 39
+      },
+      "correctAnswer": "3 ост. 2",
+      "choices": [
+        "4 ост. 3",
+        "3 ост. 2",
+        "3 ост. 3"
+      ],
+      "id": "div9_3940_2"
+    },
+    "div9_3940_3": {
+      "typeId": "number_divide_remainder",
+      "text": "Сколько будет 128 разделить на 39?",
+      "params": {
+        "a": 128,
+        "b": 39
+      },
+      "correctAnswer": "3 ост. 11",
+      "choices": [
+        "3 ост. 12",
+        "2 ост. 11",
+        "3 ост. 11"
+      ],
+      "id": "div9_3940_3"
+    },
+    "div9_3940_4": {
+      "typeId": "number_divide_remainder",
+      "text": "Сколько будет 82 разделить на 40?",
+      "params": {
+        "a": 82,
+        "b": 40
+      },
+      "correctAnswer": "2 ост. 2",
+      "choices": [
+        "1 ост. 4",
+        "2 ост. 2",
+        "1 ост. 3"
+      ],
+      "id": "div9_3940_4"
+    },
+    "div9_3940_5": {
+      "typeId": "number_divide_remainder",
+      "text": "Сколько будет 91 разделить на 40?",
+      "params": {
+        "a": 91,
+        "b": 40
+      },
+      "correctAnswer": "2 ост. 11",
+      "choices": [
+        "2 ост. 11",
+        "2 ост. 12",
+        "3 ост. 12"
+      ],
+      "id": "div9_3940_5"
+    },
+    "div9_3940_6": {
+      "typeId": "number_divide_remainder",
+      "text": "Сколько будет 122 разделить на 40?",
+      "params": {
+        "a": 122,
+        "b": 40
+      },
+      "correctAnswer": "3 ост. 2",
+      "choices": [
+        "3 ост. 2",
+        "3 ост. 3",
+        "2 ост. 2"
+      ],
+      "id": "div9_3940_6"
+    },
+    "div9_3940_7": {
+      "typeId": "number_divide_remainder",
+      "text": "Сколько будет 131 разделить на 40?",
+      "params": {
+        "a": 131,
+        "b": 40
+      },
+      "correctAnswer": "3 ост. 11",
+      "choices": [
+        "3 ост. 12",
+        "4 ост. 12",
+        "3 ост. 11"
+      ],
+      "id": "div9_3940_7"
+    },
+    "kratn9_414243_intro": {
+      "typeId": "number_multiple_check",
+      "text": "Какое из чисел делится на 41 без остатка?",
+      "params": {
+        "n": 41,
+        "options": [
+          81,
+          85,
+          82
+        ]
+      },
+      "correctAnswer": 82,
+      "choices": [
+        81,
+        85,
+        82
+      ],
+      "id": "kratn9_414243_intro"
+    },
+    "kratn9_414243_1": {
+      "typeId": "number_multiple_check",
+      "text": "Какое из чисел делится на 41 без остатка?",
+      "params": {
+        "n": 41,
+        "options": [
+          124,
+          121,
+          123
+        ]
+      },
+      "correctAnswer": 123,
+      "choices": [
+        124,
+        121,
+        123
+      ],
+      "id": "kratn9_414243_1"
+    },
+    "kratn9_414243_2": {
+      "typeId": "number_multiple_check",
+      "text": "Какое из чисел делится на 41 без остатка?",
+      "params": {
+        "n": 41,
+        "options": [
+          161,
+          162,
+          164
+        ]
+      },
+      "correctAnswer": 164,
+      "choices": [
+        161,
+        162,
+        164
+      ],
+      "id": "kratn9_414243_2"
+    },
+    "kratn9_414243_3": {
+      "typeId": "number_multiple_check",
+      "text": "Какое из чисел делится на 41 без остатка?",
+      "params": {
+        "n": 41,
+        "options": [
+          207,
+          205,
+          206
+        ]
+      },
+      "correctAnswer": 205,
+      "choices": [
+        207,
+        205,
+        206
+      ],
+      "id": "kratn9_414243_3"
+    },
+    "kratn9_414243_4": {
+      "typeId": "number_multiple_check",
+      "text": "Какое из чисел делится на 41 без остатка?",
+      "params": {
+        "n": 41,
+        "options": [
+          243,
+          247,
+          246
+        ]
+      },
+      "correctAnswer": 246,
+      "choices": [
+        243,
+        247,
+        246
+      ],
+      "id": "kratn9_414243_4"
+    },
+    "kratn9_414243_5": {
+      "typeId": "number_multiple_check",
+      "text": "Какое из чисел делится на 41 без остатка?",
+      "params": {
+        "n": 41,
+        "options": [
+          288,
+          290,
+          287
+        ]
+      },
+      "correctAnswer": 287,
+      "choices": [
+        288,
+        290,
+        287
+      ],
+      "id": "kratn9_414243_5"
+    },
+    "kratn9_414243_6": {
+      "typeId": "number_multiple_check",
+      "text": "Какое из чисел делится на 42 без остатка?",
+      "params": {
+        "n": 42,
+        "options": [
+          81,
+          84,
+          86
+        ]
+      },
+      "correctAnswer": 84,
+      "choices": [
+        81,
+        84,
+        86
+      ],
+      "id": "kratn9_414243_6"
+    },
+    "kratn9_414243_7": {
+      "typeId": "number_multiple_check",
+      "text": "Какое из чисел делится на 42 без остатка?",
+      "params": {
+        "n": 42,
+        "options": [
+          125,
+          126,
+          123
+        ]
+      },
+      "correctAnswer": 126,
+      "choices": [
+        125,
+        126,
+        123
+      ],
+      "id": "kratn9_414243_7"
+    },
+    "kratn9_414243_8": {
+      "typeId": "number_multiple_check",
+      "text": "Какое из чисел делится на 42 без остатка?",
+      "params": {
+        "n": 42,
+        "options": [
+          171,
+          169,
+          168
+        ]
+      },
+      "correctAnswer": 168,
+      "choices": [
+        171,
+        169,
+        168
+      ],
+      "id": "kratn9_414243_8"
+    },
+    "kratn9_414243_9": {
+      "typeId": "number_multiple_check",
+      "text": "Какое из чисел делится на 42 без остатка?",
+      "params": {
+        "n": 42,
+        "options": [
+          210,
+          212,
+          211
+        ]
+      },
+      "correctAnswer": 210,
+      "choices": [
+        210,
+        212,
+        211
+      ],
+      "id": "kratn9_414243_9"
+    },
+    "kratn9_414243_10": {
+      "typeId": "number_multiple_check",
+      "text": "Какое из чисел делится на 42 без остатка?",
+      "params": {
+        "n": 42,
+        "options": [
+          254,
+          249,
+          252
+        ]
+      },
+      "correctAnswer": 252,
+      "choices": [
+        254,
+        249,
+        252
+      ],
+      "id": "kratn9_414243_10"
+    },
+    "kratn9_414243_11": {
+      "typeId": "number_multiple_check",
+      "text": "Какое из чисел делится на 42 без остатка?",
+      "params": {
+        "n": 42,
+        "options": [
+          294,
+          296,
+          297
+        ]
+      },
+      "correctAnswer": 294,
+      "choices": [
+        294,
+        296,
+        297
+      ],
+      "id": "kratn9_414243_11"
+    },
+    "kratn9_414243_12": {
+      "typeId": "number_multiple_check",
+      "text": "Какое из чисел делится на 43 без остатка?",
+      "params": {
+        "n": 43,
+        "options": [
+          84,
+          86,
+          88
+        ]
+      },
+      "correctAnswer": 86,
+      "choices": [
+        84,
+        86,
+        88
+      ],
+      "id": "kratn9_414243_12"
+    },
+    "kratn9_414243_13": {
+      "typeId": "number_multiple_check",
+      "text": "Какое из чисел делится на 43 без остатка?",
+      "params": {
+        "n": 43,
+        "options": [
+          131,
+          129,
+          130
+        ]
+      },
+      "correctAnswer": 129,
+      "choices": [
+        131,
+        129,
+        130
+      ],
+      "id": "kratn9_414243_13"
+    },
+    "kratn9_414243_14": {
+      "typeId": "number_multiple_check",
+      "text": "Какое из чисел делится на 43 без остатка?",
+      "params": {
+        "n": 43,
+        "options": [
+          172,
+          170,
+          169
+        ]
+      },
+      "correctAnswer": 172,
+      "choices": [
+        172,
+        170,
+        169
+      ],
+      "id": "kratn9_414243_14"
+    },
+    "kratn9_414243_15": {
+      "typeId": "number_multiple_check",
+      "text": "Какое из чисел делится на 43 без остатка?",
+      "params": {
+        "n": 43,
+        "options": [
+          218,
+          214,
+          215
+        ]
+      },
+      "correctAnswer": 215,
+      "choices": [
+        218,
+        214,
+        215
+      ],
+      "id": "kratn9_414243_15"
+    },
+    "kratn9_414243_16": {
+      "typeId": "number_multiple_check",
+      "text": "Какое из чисел делится на 43 без остатка?",
+      "params": {
+        "n": 43,
+        "options": [
+          256,
+          258,
+          259
+        ]
+      },
+      "correctAnswer": 258,
+      "choices": [
+        256,
+        258,
+        259
+      ],
+      "id": "kratn9_414243_16"
+    },
+    "kratn9_414243_17": {
+      "typeId": "number_multiple_check",
+      "text": "Какое из чисел делится на 43 без остатка?",
+      "params": {
+        "n": 43,
+        "options": [
+          301,
+          300,
+          302
+        ]
+      },
+      "correctAnswer": 301,
+      "choices": [
+        301,
+        300,
+        302
+      ],
+      "id": "kratn9_414243_17"
+    },
+    "kratn9_4445_intro": {
+      "typeId": "number_multiple_check",
+      "text": "Какое из чисел делится на 44 без остатка?",
+      "params": {
+        "n": 44,
+        "options": [
+          90,
+          88,
+          91
+        ]
+      },
+      "correctAnswer": 88,
+      "choices": [
+        90,
+        88,
+        91
+      ],
+      "id": "kratn9_4445_intro"
+    },
+    "kratn9_4445_1": {
+      "typeId": "number_multiple_check",
+      "text": "Какое из чисел делится на 44 без остатка?",
+      "params": {
+        "n": 44,
+        "options": [
+          133,
+          134,
+          132
+        ]
+      },
+      "correctAnswer": 132,
+      "choices": [
+        133,
+        134,
+        132
+      ],
+      "id": "kratn9_4445_1"
+    },
+    "kratn9_4445_2": {
+      "typeId": "number_multiple_check",
+      "text": "Какое из чисел делится на 44 без остатка?",
+      "params": {
+        "n": 44,
+        "options": [
+          178,
+          179,
+          176
+        ]
+      },
+      "correctAnswer": 176,
+      "choices": [
+        178,
+        179,
+        176
+      ],
+      "id": "kratn9_4445_2"
+    },
+    "kratn9_4445_3": {
+      "typeId": "number_multiple_check",
+      "text": "Какое из чисел делится на 44 без остатка?",
+      "params": {
+        "n": 44,
+        "options": [
+          221,
+          222,
+          220
+        ]
+      },
+      "correctAnswer": 220,
+      "choices": [
+        221,
+        222,
+        220
+      ],
+      "id": "kratn9_4445_3"
+    },
+    "kratn9_4445_4": {
+      "typeId": "number_multiple_check",
+      "text": "Какое из чисел делится на 44 без остатка?",
+      "params": {
+        "n": 44,
+        "options": [
+          266,
+          264,
+          265
+        ]
+      },
+      "correctAnswer": 264,
+      "choices": [
+        266,
+        264,
+        265
+      ],
+      "id": "kratn9_4445_4"
+    },
+    "kratn9_4445_5": {
+      "typeId": "number_multiple_check",
+      "text": "Какое из чисел делится на 44 без остатка?",
+      "params": {
+        "n": 44,
+        "options": [
+          308,
+          310,
+          311
+        ]
+      },
+      "correctAnswer": 308,
+      "choices": [
+        308,
+        310,
+        311
+      ],
+      "id": "kratn9_4445_5"
+    },
+    "kratn9_4445_6": {
+      "typeId": "number_multiple_check",
+      "text": "Какое из чисел делится на 45 без остатка?",
+      "params": {
+        "n": 45,
+        "options": [
+          89,
+          90,
+          92
+        ]
+      },
+      "correctAnswer": 90,
+      "choices": [
+        89,
+        90,
+        92
+      ],
+      "id": "kratn9_4445_6"
+    },
+    "kratn9_4445_7": {
+      "typeId": "number_multiple_check",
+      "text": "Какое из чисел делится на 45 без остатка?",
+      "params": {
+        "n": 45,
+        "options": [
+          137,
+          135,
+          134
+        ]
+      },
+      "correctAnswer": 135,
+      "choices": [
+        137,
+        135,
+        134
+      ],
+      "id": "kratn9_4445_7"
+    },
+    "kratn9_4445_8": {
+      "typeId": "number_multiple_check",
+      "text": "Какое из чисел делится на 45 без остатка?",
+      "params": {
+        "n": 45,
+        "options": [
+          182,
+          177,
+          180
+        ]
+      },
+      "correctAnswer": 180,
+      "choices": [
+        182,
+        177,
+        180
+      ],
+      "id": "kratn9_4445_8"
+    },
+    "kratn9_4445_9": {
+      "typeId": "number_multiple_check",
+      "text": "Какое из чисел делится на 45 без остатка?",
+      "params": {
+        "n": 45,
+        "options": [
+          225,
+          226,
+          224
+        ]
+      },
+      "correctAnswer": 225,
+      "choices": [
+        225,
+        226,
+        224
+      ],
+      "id": "kratn9_4445_9"
+    },
+    "kratn9_4445_10": {
+      "typeId": "number_multiple_check",
+      "text": "Какое из чисел делится на 45 без остатка?",
+      "params": {
+        "n": 45,
+        "options": [
+          271,
+          273,
+          270
+        ]
+      },
+      "correctAnswer": 270,
+      "choices": [
+        271,
+        273,
+        270
+      ],
+      "id": "kratn9_4445_10"
+    },
+    "kratn9_4445_11": {
+      "typeId": "number_multiple_check",
+      "text": "Какое из чисел делится на 45 без остатка?",
+      "params": {
+        "n": 45,
+        "options": [
+          314,
+          315,
+          312
+        ]
+      },
+      "correctAnswer": 315,
+      "choices": [
+        314,
+        315,
+        312
+      ],
+      "id": "kratn9_4445_11"
+    },
+    "missing8_step14_intro": {
+      "typeId": "number_missing",
+      "text": "Какое число пропущено в ряду ?, 16, 30, 44, 58, 72?",
+      "params": {
+        "series": [
+          2,
+          16,
+          30,
+          44,
+          58,
+          72
+        ],
+        "missingIndex": 0
+      },
+      "correctAnswer": 2,
+      "id": "missing8_step14_intro"
+    },
+    "missing8_step14_1": {
+      "typeId": "number_missing",
+      "text": "Какое число пропущено в ряду 11, ?, 39, 53, 67, 81?",
+      "params": {
+        "series": [
+          11,
+          25,
+          39,
+          53,
+          67,
+          81
+        ],
+        "missingIndex": 1
+      },
+      "correctAnswer": 25,
+      "id": "missing8_step14_1"
+    },
+    "missing8_step14_2": {
+      "typeId": "number_missing",
+      "text": "Какое число пропущено в ряду 20, 34, ?, 62, 76, 90?",
+      "params": {
+        "series": [
+          20,
+          34,
+          48,
+          62,
+          76,
+          90
+        ],
+        "missingIndex": 2
+      },
+      "correctAnswer": 48,
+      "id": "missing8_step14_2"
+    },
+    "missing8_step14_3": {
+      "typeId": "number_missing",
+      "text": "Какое число пропущено в ряду 29, 43, 57, ?, 85, 99?",
+      "params": {
+        "series": [
+          29,
+          43,
+          57,
+          71,
+          85,
+          99
+        ],
+        "missingIndex": 3
+      },
+      "correctAnswer": 71,
+      "id": "missing8_step14_3"
+    },
+    "missing8_step14_4": {
+      "typeId": "number_missing",
+      "text": "Какое число пропущено в ряду 38, 52, 66, 80, ?, 108?",
+      "params": {
+        "series": [
+          38,
+          52,
+          66,
+          80,
+          94,
+          108
+        ],
+        "missingIndex": 4
+      },
+      "correctAnswer": 94,
+      "id": "missing8_step14_4"
+    },
+    "missing8_step14_5": {
+      "typeId": "number_missing",
+      "text": "Какое число пропущено в ряду 47, 61, 75, 89, 103, ??",
+      "params": {
+        "series": [
+          47,
+          61,
+          75,
+          89,
+          103,
+          117
+        ],
+        "missingIndex": 5
+      },
+      "correctAnswer": 117,
+      "id": "missing8_step14_5"
+    },
+    "missing8_step14_6": {
+      "typeId": "number_missing",
+      "text": "Какое число пропущено в ряду ?, 70, 84, 98, 112, 126?",
+      "params": {
+        "series": [
+          56,
+          70,
+          84,
+          98,
+          112,
+          126
+        ],
+        "missingIndex": 0
+      },
+      "correctAnswer": 56,
+      "id": "missing8_step14_6"
+    },
+    "missing8_step14_7": {
+      "typeId": "number_missing",
+      "text": "Какое число пропущено в ряду 65, ?, 93, 107, 121, 135?",
+      "params": {
+        "series": [
+          65,
+          79,
+          93,
+          107,
+          121,
+          135
+        ],
+        "missingIndex": 1
+      },
+      "correctAnswer": 79,
+      "id": "missing8_step14_7"
+    },
+    "missing8_step14_8": {
+      "typeId": "number_missing",
+      "text": "Какое число пропущено в ряду 74, 88, ?, 116, 130, 144?",
+      "params": {
+        "series": [
+          74,
+          88,
+          102,
+          116,
+          130,
+          144
+        ],
+        "missingIndex": 2
+      },
+      "correctAnswer": 102,
+      "id": "missing8_step14_8"
+    },
+    "missing8_step14_9": {
+      "typeId": "number_missing",
+      "text": "Какое число пропущено в ряду 83, 97, 111, ?, 139, 153?",
+      "params": {
+        "series": [
+          83,
+          97,
+          111,
+          125,
+          139,
+          153
+        ],
+        "missingIndex": 3
+      },
+      "correctAnswer": 125,
+      "id": "missing8_step14_9"
+    },
+    "missing8_step14_10": {
+      "typeId": "number_missing",
+      "text": "Какое число пропущено в ряду 92, 106, 120, 134, ?, 162?",
+      "params": {
+        "series": [
+          92,
+          106,
+          120,
+          134,
+          148,
+          162
+        ],
+        "missingIndex": 4
+      },
+      "correctAnswer": 148,
+      "id": "missing8_step14_10"
+    },
+    "missing8_step14_11": {
+      "typeId": "number_missing",
+      "text": "Какое число пропущено в ряду 101, 115, 129, 143, 157, ??",
+      "params": {
+        "series": [
+          101,
+          115,
+          129,
+          143,
+          157,
+          171
+        ],
+        "missingIndex": 5
+      },
+      "correctAnswer": 171,
+      "id": "missing8_step14_11"
+    },
+    "missing8_step15_intro": {
+      "typeId": "number_missing",
+      "text": "Какое число пропущено в ряду ?, 18, 33, 48, 63, 78?",
+      "params": {
+        "series": [
+          3,
+          18,
+          33,
+          48,
+          63,
+          78
+        ],
+        "missingIndex": 0
+      },
+      "correctAnswer": 3,
+      "id": "missing8_step15_intro"
+    },
+    "missing8_step15_1": {
+      "typeId": "number_missing",
+      "text": "Какое число пропущено в ряду 13, ?, 43, 58, 73, 88?",
+      "params": {
+        "series": [
+          13,
+          28,
+          43,
+          58,
+          73,
+          88
+        ],
+        "missingIndex": 1
+      },
+      "correctAnswer": 28,
+      "id": "missing8_step15_1"
+    },
+    "missing8_step15_2": {
+      "typeId": "number_missing",
+      "text": "Какое число пропущено в ряду 23, 38, ?, 68, 83, 98?",
+      "params": {
+        "series": [
+          23,
+          38,
+          53,
+          68,
+          83,
+          98
+        ],
+        "missingIndex": 2
+      },
+      "correctAnswer": 53,
+      "id": "missing8_step15_2"
+    },
+    "missing8_step15_3": {
+      "typeId": "number_missing",
+      "text": "Какое число пропущено в ряду 33, 48, 63, ?, 93, 108?",
+      "params": {
+        "series": [
+          33,
+          48,
+          63,
+          78,
+          93,
+          108
+        ],
+        "missingIndex": 3
+      },
+      "correctAnswer": 78,
+      "id": "missing8_step15_3"
+    },
+    "missing8_step15_4": {
+      "typeId": "number_missing",
+      "text": "Какое число пропущено в ряду 43, 58, 73, 88, ?, 118?",
+      "params": {
+        "series": [
+          43,
+          58,
+          73,
+          88,
+          103,
+          118
+        ],
+        "missingIndex": 4
+      },
+      "correctAnswer": 103,
+      "id": "missing8_step15_4"
+    },
+    "missing8_step15_5": {
+      "typeId": "number_missing",
+      "text": "Какое число пропущено в ряду 53, 68, 83, 98, 113, ??",
+      "params": {
+        "series": [
+          53,
+          68,
+          83,
+          98,
+          113,
+          128
+        ],
+        "missingIndex": 5
+      },
+      "correctAnswer": 128,
+      "id": "missing8_step15_5"
+    },
+    "missing8_step15_6": {
+      "typeId": "number_missing",
+      "text": "Какое число пропущено в ряду ?, 78, 93, 108, 123, 138?",
+      "params": {
+        "series": [
+          63,
+          78,
+          93,
+          108,
+          123,
+          138
+        ],
+        "missingIndex": 0
+      },
+      "correctAnswer": 63,
+      "id": "missing8_step15_6"
+    },
+    "missing8_step15_7": {
+      "typeId": "number_missing",
+      "text": "Какое число пропущено в ряду 73, ?, 103, 118, 133, 148?",
+      "params": {
+        "series": [
+          73,
+          88,
+          103,
+          118,
+          133,
+          148
+        ],
+        "missingIndex": 1
+      },
+      "correctAnswer": 88,
+      "id": "missing8_step15_7"
+    },
+    "missing8_step15_8": {
+      "typeId": "number_missing",
+      "text": "Какое число пропущено в ряду 83, 98, ?, 128, 143, 158?",
+      "params": {
+        "series": [
+          83,
+          98,
+          113,
+          128,
+          143,
+          158
+        ],
+        "missingIndex": 2
+      },
+      "correctAnswer": 113,
+      "id": "missing8_step15_8"
+    },
+    "missing8_step15_9": {
+      "typeId": "number_missing",
+      "text": "Какое число пропущено в ряду 93, 108, 123, ?, 153, 168?",
+      "params": {
+        "series": [
+          93,
+          108,
+          123,
+          138,
+          153,
+          168
+        ],
+        "missingIndex": 3
+      },
+      "correctAnswer": 138,
+      "id": "missing8_step15_9"
+    },
+    "missing8_step15_10": {
+      "typeId": "number_missing",
+      "text": "Какое число пропущено в ряду 103, 118, 133, 148, ?, 178?",
+      "params": {
+        "series": [
+          103,
+          118,
+          133,
+          148,
+          163,
+          178
+        ],
+        "missingIndex": 4
+      },
+      "correctAnswer": 163,
+      "id": "missing8_step15_10"
+    },
+    "missing8_step15_11": {
+      "typeId": "number_missing",
+      "text": "Какое число пропущено в ряду 113, 128, 143, 158, 173, ??",
+      "params": {
+        "series": [
+          113,
+          128,
+          143,
+          158,
+          173,
+          188
+        ],
+        "missingIndex": 5
+      },
+      "correctAnswer": 188,
+      "id": "missing8_step15_11"
+    },
+    "count8_121135_intro": {
+      "typeId": "number_counting",
+      "text": "Сколько предметов ты видишь?",
+      "params": {
+        "count": 121
+      },
+      "correctAnswer": 121,
+      "id": "count8_121135_intro"
+    },
+    "count8_121135_1": {
+      "typeId": "number_counting",
+      "text": "Сколько предметов ты видишь?",
+      "params": {
+        "count": 122
+      },
+      "correctAnswer": 122,
+      "id": "count8_121135_1"
+    },
+    "count8_121135_2": {
+      "typeId": "number_counting",
+      "text": "Сколько предметов ты видишь?",
+      "params": {
+        "count": 123
+      },
+      "correctAnswer": 123,
+      "id": "count8_121135_2"
+    },
+    "count8_121135_3": {
+      "typeId": "number_counting",
+      "text": "Сколько предметов ты видишь?",
+      "params": {
+        "count": 124
+      },
+      "correctAnswer": 124,
+      "id": "count8_121135_3"
+    },
+    "count8_121135_4": {
+      "typeId": "number_counting",
+      "text": "Сколько предметов ты видишь?",
+      "params": {
+        "count": 125
+      },
+      "correctAnswer": 125,
+      "id": "count8_121135_4"
+    },
+    "count8_121135_5": {
+      "typeId": "number_counting",
+      "text": "Сколько предметов ты видишь?",
+      "params": {
+        "count": 126
+      },
+      "correctAnswer": 126,
+      "id": "count8_121135_5"
+    },
+    "count8_121135_6": {
+      "typeId": "number_counting",
+      "text": "Сколько предметов ты видишь?",
+      "params": {
+        "count": 127
+      },
+      "correctAnswer": 127,
+      "id": "count8_121135_6"
+    },
+    "count8_121135_7": {
+      "typeId": "number_counting",
+      "text": "Сколько предметов ты видишь?",
+      "params": {
+        "count": 128
+      },
+      "correctAnswer": 128,
+      "id": "count8_121135_7"
+    },
+    "count8_121135_8": {
+      "typeId": "number_counting",
+      "text": "Сколько предметов ты видишь?",
+      "params": {
+        "count": 129
+      },
+      "correctAnswer": 129,
+      "id": "count8_121135_8"
+    },
+    "count8_121135_9": {
+      "typeId": "number_counting",
+      "text": "Сколько предметов ты видишь?",
+      "params": {
+        "count": 130
+      },
+      "correctAnswer": 130,
+      "id": "count8_121135_9"
+    },
+    "count8_121135_10": {
+      "typeId": "number_counting",
+      "text": "Сколько предметов ты видишь?",
+      "params": {
+        "count": 131
+      },
+      "correctAnswer": 131,
+      "id": "count8_121135_10"
+    },
+    "count8_121135_11": {
+      "typeId": "number_counting",
+      "text": "Сколько предметов ты видишь?",
+      "params": {
+        "count": 132
+      },
+      "correctAnswer": 132,
+      "id": "count8_121135_11"
+    },
+    "count8_136150_intro": {
+      "typeId": "number_counting",
+      "text": "Сколько предметов ты видишь?",
+      "params": {
+        "count": 136
+      },
+      "correctAnswer": 136,
+      "id": "count8_136150_intro"
+    },
+    "count8_136150_1": {
+      "typeId": "number_counting",
+      "text": "Сколько предметов ты видишь?",
+      "params": {
+        "count": 137
+      },
+      "correctAnswer": 137,
+      "id": "count8_136150_1"
+    },
+    "count8_136150_2": {
+      "typeId": "number_counting",
+      "text": "Сколько предметов ты видишь?",
+      "params": {
+        "count": 138
+      },
+      "correctAnswer": 138,
+      "id": "count8_136150_2"
+    },
+    "count8_136150_3": {
+      "typeId": "number_counting",
+      "text": "Сколько предметов ты видишь?",
+      "params": {
+        "count": 139
+      },
+      "correctAnswer": 139,
+      "id": "count8_136150_3"
+    },
+    "count8_136150_4": {
+      "typeId": "number_counting",
+      "text": "Сколько предметов ты видишь?",
+      "params": {
+        "count": 140
+      },
+      "correctAnswer": 140,
+      "id": "count8_136150_4"
+    },
+    "count8_136150_5": {
+      "typeId": "number_counting",
+      "text": "Сколько предметов ты видишь?",
+      "params": {
+        "count": 141
+      },
+      "correctAnswer": 141,
+      "id": "count8_136150_5"
+    },
+    "count8_136150_6": {
+      "typeId": "number_counting",
+      "text": "Сколько предметов ты видишь?",
+      "params": {
+        "count": 142
+      },
+      "correctAnswer": 142,
+      "id": "count8_136150_6"
+    },
+    "count8_136150_7": {
+      "typeId": "number_counting",
+      "text": "Сколько предметов ты видишь?",
+      "params": {
+        "count": 143
+      },
+      "correctAnswer": 143,
+      "id": "count8_136150_7"
+    },
+    "count8_136150_8": {
+      "typeId": "number_counting",
+      "text": "Сколько предметов ты видишь?",
+      "params": {
+        "count": 144
+      },
+      "correctAnswer": 144,
+      "id": "count8_136150_8"
+    },
+    "count8_136150_9": {
+      "typeId": "number_counting",
+      "text": "Сколько предметов ты видишь?",
+      "params": {
+        "count": 145
+      },
+      "correctAnswer": 145,
+      "id": "count8_136150_9"
+    },
+    "count8_136150_10": {
+      "typeId": "number_counting",
+      "text": "Сколько предметов ты видишь?",
+      "params": {
+        "count": 146
+      },
+      "correctAnswer": 146,
+      "id": "count8_136150_10"
+    },
+    "count8_136150_11": {
+      "typeId": "number_counting",
+      "text": "Сколько предметов ты видишь?",
+      "params": {
+        "count": 147
+      },
+      "correctAnswer": 147,
+      "id": "count8_136150_11"
+    },
+    "sum3g_low_intro": {
+      "typeId": "number_sum_three",
+      "text": "Сколько будет 60 плюс 50 плюс 18?",
+      "params": {
+        "a": 60,
+        "b": 50,
+        "c": 18
+      },
+      "correctAnswer": 128,
+      "id": "sum3g_low_intro"
+    },
+    "sum3g_low_1": {
+      "typeId": "number_sum_three",
+      "text": "Сколько будет 61 плюс 50 плюс 18?",
+      "params": {
+        "a": 61,
+        "b": 50,
+        "c": 18
+      },
+      "correctAnswer": 129,
+      "id": "sum3g_low_1"
+    },
+    "sum3g_low_2": {
+      "typeId": "number_sum_three",
+      "text": "Сколько будет 62 плюс 50 плюс 18?",
+      "params": {
+        "a": 62,
+        "b": 50,
+        "c": 18
+      },
+      "correctAnswer": 130,
+      "id": "sum3g_low_2"
+    },
+    "sum3g_low_3": {
+      "typeId": "number_sum_three",
+      "text": "Сколько будет 63 плюс 50 плюс 18?",
+      "params": {
+        "a": 63,
+        "b": 50,
+        "c": 18
+      },
+      "correctAnswer": 131,
+      "id": "sum3g_low_3"
+    },
+    "sum3g_low_4": {
+      "typeId": "number_sum_three",
+      "text": "Сколько будет 64 плюс 50 плюс 18?",
+      "params": {
+        "a": 64,
+        "b": 50,
+        "c": 18
+      },
+      "correctAnswer": 132,
+      "id": "sum3g_low_4"
+    },
+    "sum3g_low_5": {
+      "typeId": "number_sum_three",
+      "text": "Сколько будет 65 плюс 50 плюс 18?",
+      "params": {
+        "a": 65,
+        "b": 50,
+        "c": 18
+      },
+      "correctAnswer": 133,
+      "id": "sum3g_low_5"
+    },
+    "sum3g_low_6": {
+      "typeId": "number_sum_three",
+      "text": "Сколько будет 66 плюс 50 плюс 18?",
+      "params": {
+        "a": 66,
+        "b": 50,
+        "c": 18
+      },
+      "correctAnswer": 134,
+      "id": "sum3g_low_6"
+    },
+    "sum3g_low_7": {
+      "typeId": "number_sum_three",
+      "text": "Сколько будет 67 плюс 50 плюс 18?",
+      "params": {
+        "a": 67,
+        "b": 50,
+        "c": 18
+      },
+      "correctAnswer": 135,
+      "id": "sum3g_low_7"
+    },
+    "sum3g_low_8": {
+      "typeId": "number_sum_three",
+      "text": "Сколько будет 68 плюс 50 плюс 18?",
+      "params": {
+        "a": 68,
+        "b": 50,
+        "c": 18
+      },
+      "correctAnswer": 136,
+      "id": "sum3g_low_8"
+    },
+    "sum3g_low_9": {
+      "typeId": "number_sum_three",
+      "text": "Сколько будет 69 плюс 50 плюс 18?",
+      "params": {
+        "a": 69,
+        "b": 50,
+        "c": 18
+      },
+      "correctAnswer": 137,
+      "id": "sum3g_low_9"
+    },
+    "sum3g_low_10": {
+      "typeId": "number_sum_three",
+      "text": "Сколько будет 70 плюс 50 плюс 18?",
+      "params": {
+        "a": 70,
+        "b": 50,
+        "c": 18
+      },
+      "correctAnswer": 138,
+      "id": "sum3g_low_10"
+    },
+    "sum3g_low_11": {
+      "typeId": "number_sum_three",
+      "text": "Сколько будет 71 плюс 50 плюс 18?",
+      "params": {
+        "a": 71,
+        "b": 50,
+        "c": 18
+      },
+      "correctAnswer": 139,
+      "id": "sum3g_low_11"
+    },
+    "sum3g_high_intro": {
+      "typeId": "number_sum_three",
+      "text": "Сколько будет 65 плюс 55 плюс 20?",
+      "params": {
+        "a": 65,
+        "b": 55,
+        "c": 20
+      },
+      "correctAnswer": 140,
+      "id": "sum3g_high_intro"
+    },
+    "sum3g_high_1": {
+      "typeId": "number_sum_three",
+      "text": "Сколько будет 66 плюс 55 плюс 20?",
+      "params": {
+        "a": 66,
+        "b": 55,
+        "c": 20
+      },
+      "correctAnswer": 141,
+      "id": "sum3g_high_1"
+    },
+    "sum3g_high_2": {
+      "typeId": "number_sum_three",
+      "text": "Сколько будет 67 плюс 55 плюс 20?",
+      "params": {
+        "a": 67,
+        "b": 55,
+        "c": 20
+      },
+      "correctAnswer": 142,
+      "id": "sum3g_high_2"
+    },
+    "sum3g_high_3": {
+      "typeId": "number_sum_three",
+      "text": "Сколько будет 68 плюс 55 плюс 20?",
+      "params": {
+        "a": 68,
+        "b": 55,
+        "c": 20
+      },
+      "correctAnswer": 143,
+      "id": "sum3g_high_3"
+    },
+    "sum3g_high_4": {
+      "typeId": "number_sum_three",
+      "text": "Сколько будет 69 плюс 55 плюс 20?",
+      "params": {
+        "a": 69,
+        "b": 55,
+        "c": 20
+      },
+      "correctAnswer": 144,
+      "id": "sum3g_high_4"
+    },
+    "sum3g_high_5": {
+      "typeId": "number_sum_three",
+      "text": "Сколько будет 70 плюс 55 плюс 20?",
+      "params": {
+        "a": 70,
+        "b": 55,
+        "c": 20
+      },
+      "correctAnswer": 145,
+      "id": "sum3g_high_5"
+    },
+    "sum3g_high_6": {
+      "typeId": "number_sum_three",
+      "text": "Сколько будет 71 плюс 55 плюс 20?",
+      "params": {
+        "a": 71,
+        "b": 55,
+        "c": 20
+      },
+      "correctAnswer": 146,
+      "id": "sum3g_high_6"
+    },
+    "sum3g_high_7": {
+      "typeId": "number_sum_three",
+      "text": "Сколько будет 72 плюс 55 плюс 20?",
+      "params": {
+        "a": 72,
+        "b": 55,
+        "c": 20
+      },
+      "correctAnswer": 147,
+      "id": "sum3g_high_7"
+    },
+    "sum3g_high_8": {
+      "typeId": "number_sum_three",
+      "text": "Сколько будет 73 плюс 55 плюс 20?",
+      "params": {
+        "a": 73,
+        "b": 55,
+        "c": 20
+      },
+      "correctAnswer": 148,
+      "id": "sum3g_high_8"
+    },
+    "sum3g_high_9": {
+      "typeId": "number_sum_three",
+      "text": "Сколько будет 74 плюс 55 плюс 20?",
+      "params": {
+        "a": 74,
+        "b": 55,
+        "c": 20
+      },
+      "correctAnswer": 149,
+      "id": "sum3g_high_9"
+    },
+    "sum3g_high_10": {
+      "typeId": "number_sum_three",
+      "text": "Сколько будет 75 плюс 55 плюс 20?",
+      "params": {
+        "a": 75,
+        "b": 55,
+        "c": 20
+      },
+      "correctAnswer": 150,
+      "id": "sum3g_high_10"
+    },
+    "sum3g_high_11": {
+      "typeId": "number_sum_three",
+      "text": "Сколько будет 76 плюс 55 плюс 20?",
+      "params": {
+        "a": 76,
+        "b": 55,
+        "c": 20
+      },
+      "correctAnswer": 151,
+      "id": "sum3g_high_11"
+    },
+    "round_t5_i_intro": {
+      "typeId": "round_to_ten",
+      "text": "Округли 4300 до тысяч",
+      "params": {
+        "n": 4300
+      },
+      "correctAnswer": 4000,
+      "id": "round_t5_i_intro"
+    },
+    "round_t5_i_1": {
+      "typeId": "round_to_ten",
+      "text": "Округли 4511 до тысяч",
+      "params": {
+        "n": 4511
+      },
+      "correctAnswer": 5000,
+      "id": "round_t5_i_1"
+    },
+    "round_t5_i_2": {
+      "typeId": "round_to_ten",
+      "text": "Округли 4722 до тысяч",
+      "params": {
+        "n": 4722
+      },
+      "correctAnswer": 5000,
+      "id": "round_t5_i_2"
+    },
+    "round_t5_i_3": {
+      "typeId": "round_to_ten",
+      "text": "Округли 4933 до тысяч",
+      "params": {
+        "n": 4933
+      },
+      "correctAnswer": 5000,
+      "id": "round_t5_i_3"
+    },
+    "round_t5_i_4": {
+      "typeId": "round_to_ten",
+      "text": "Округли 5144 до тысяч",
+      "params": {
+        "n": 5144
+      },
+      "correctAnswer": 5000,
+      "id": "round_t5_i_4"
+    },
+    "round_t5_i_5": {
+      "typeId": "round_to_ten",
+      "text": "Округли 5355 до тысяч",
+      "params": {
+        "n": 5355
+      },
+      "correctAnswer": 5000,
+      "id": "round_t5_i_5"
+    },
+    "round_t5_i_6": {
+      "typeId": "round_to_ten",
+      "text": "Округли 5566 до тысяч",
+      "params": {
+        "n": 5566
+      },
+      "correctAnswer": 6000,
+      "id": "round_t5_i_6"
+    },
+    "round_t5_i_7": {
+      "typeId": "round_to_ten",
+      "text": "Округли 5777 до тысяч",
+      "params": {
+        "n": 5777
+      },
+      "correctAnswer": 6000,
+      "id": "round_t5_i_7"
+    },
+    "round_t5_i_8": {
+      "typeId": "round_to_ten",
+      "text": "Округли 5988 до тысяч",
+      "params": {
+        "n": 5988
+      },
+      "correctAnswer": 6000,
+      "id": "round_t5_i_8"
+    },
+    "round_t5_i_9": {
+      "typeId": "round_to_ten",
+      "text": "Округли 6199 до тысяч",
+      "params": {
+        "n": 6199
+      },
+      "correctAnswer": 6000,
+      "id": "round_t5_i_9"
+    },
+    "round_t5_i_10": {
+      "typeId": "round_to_ten",
+      "text": "Округли 6410 до тысяч",
+      "params": {
+        "n": 6410
+      },
+      "correctAnswer": 6000,
+      "id": "round_t5_i_10"
+    },
+    "round_t5_i_11": {
+      "typeId": "round_to_ten",
+      "text": "Округли 6621 до тысяч",
+      "params": {
+        "n": 6621
+      },
+      "correctAnswer": 7000,
+      "id": "round_t5_i_11"
+    },
+    "round_t5_i_12": {
+      "typeId": "round_to_ten",
+      "text": "Округли 6832 до тысяч",
+      "params": {
+        "n": 6832
+      },
+      "correctAnswer": 7000,
+      "id": "round_t5_i_12"
+    },
+    "round_t5_i_13": {
+      "typeId": "round_to_ten",
+      "text": "Округли 7043 до тысяч",
+      "params": {
+        "n": 7043
+      },
+      "correctAnswer": 7000,
+      "id": "round_t5_i_13"
+    },
+    "round_t5_i_14": {
+      "typeId": "round_to_ten",
+      "text": "Округли 7254 до тысяч",
+      "params": {
+        "n": 7254
+      },
+      "correctAnswer": 7000,
+      "id": "round_t5_i_14"
+    },
+    "round_t5_j_intro": {
+      "typeId": "round_to_ten",
+      "text": "Округли 9000 до тысяч",
+      "params": {
+        "n": 9000
+      },
+      "correctAnswer": 9000,
+      "id": "round_t5_j_intro"
+    },
+    "round_t5_j_1": {
+      "typeId": "round_to_ten",
+      "text": "Округли 9061 до тысяч",
+      "params": {
+        "n": 9061
+      },
+      "correctAnswer": 9000,
+      "id": "round_t5_j_1"
+    },
+    "round_t5_j_2": {
+      "typeId": "round_to_ten",
+      "text": "Округли 9122 до тысяч",
+      "params": {
+        "n": 9122
+      },
+      "correctAnswer": 9000,
+      "id": "round_t5_j_2"
+    },
+    "round_t5_j_3": {
+      "typeId": "round_to_ten",
+      "text": "Округли 9183 до тысяч",
+      "params": {
+        "n": 9183
+      },
+      "correctAnswer": 9000,
+      "id": "round_t5_j_3"
+    },
+    "round_t5_j_4": {
+      "typeId": "round_to_ten",
+      "text": "Округли 9244 до тысяч",
+      "params": {
+        "n": 9244
+      },
+      "correctAnswer": 9000,
+      "id": "round_t5_j_4"
+    },
+    "round_t5_j_5": {
+      "typeId": "round_to_ten",
+      "text": "Округли 9305 до тысяч",
+      "params": {
+        "n": 9305
+      },
+      "correctAnswer": 9000,
+      "id": "round_t5_j_5"
+    },
+    "round_t5_j_6": {
+      "typeId": "round_to_ten",
+      "text": "Округли 9366 до тысяч",
+      "params": {
+        "n": 9366
+      },
+      "correctAnswer": 9000,
+      "id": "round_t5_j_6"
+    },
+    "round_t5_j_7": {
+      "typeId": "round_to_ten",
+      "text": "Округли 9427 до тысяч",
+      "params": {
+        "n": 9427
+      },
+      "correctAnswer": 9000,
+      "id": "round_t5_j_7"
+    },
+    "round_t5_j_8": {
+      "typeId": "round_to_ten",
+      "text": "Округли 9488 до тысяч",
+      "params": {
+        "n": 9488
+      },
+      "correctAnswer": 9000,
+      "id": "round_t5_j_8"
+    },
+    "round_t5_j_9": {
+      "typeId": "round_to_ten",
+      "text": "Округли 9549 до тысяч",
+      "params": {
+        "n": 9549
+      },
+      "correctAnswer": 10000,
+      "id": "round_t5_j_9"
+    },
+    "round_t5_j_10": {
+      "typeId": "round_to_ten",
+      "text": "Округли 9610 до тысяч",
+      "params": {
+        "n": 9610
+      },
+      "correctAnswer": 10000,
+      "id": "round_t5_j_10"
+    },
+    "round_t5_j_11": {
+      "typeId": "round_to_ten",
+      "text": "Округли 9671 до тысяч",
+      "params": {
+        "n": 9671
+      },
+      "correctAnswer": 10000,
+      "id": "round_t5_j_11"
+    },
+    "round_t5_j_12": {
+      "typeId": "round_to_ten",
+      "text": "Округли 9732 до тысяч",
+      "params": {
+        "n": 9732
+      },
+      "correctAnswer": 10000,
+      "id": "round_t5_j_12"
+    },
+    "round_t5_j_13": {
+      "typeId": "round_to_ten",
+      "text": "Округли 9793 до тысяч",
+      "params": {
+        "n": 9793
+      },
+      "correctAnswer": 10000,
+      "id": "round_t5_j_13"
+    },
+    "round_t5_j_14": {
+      "typeId": "round_to_ten",
+      "text": "Округли 9854 до тысяч",
+      "params": {
+        "n": 9854
+      },
+      "correctAnswer": 10000,
+      "id": "round_t5_j_14"
     }
   },
   "mathTools": [
