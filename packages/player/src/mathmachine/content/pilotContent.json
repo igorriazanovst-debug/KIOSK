@@ -16,7 +16,20 @@
         "top_division",
         "top_multiples",
         "top_rounding",
-        "top_ordinal"
+        "top_ordinal",
+        "top_shares",
+        "top_multiplication_3",
+        "top_multiplication_4",
+        "top_multiplication_6",
+        "top_multiplication_7",
+        "top_multiplication_8",
+        "top_multiplication_9",
+        "top_multiplication_10",
+        "top_division_67",
+        "top_division_89",
+        "top_division_10",
+        "top_addition_carry",
+        "top_subtraction_wide"
       ]
     }
   ],
@@ -113,6 +126,99 @@
       "name": "Порядковые числительные",
       "groupIds": [
         "grp_ordpos"
+      ]
+    },
+    "top_shares": {
+      "id": "top_shares",
+      "name": "Доли целого",
+      "groupIds": [
+        "grp_share_half",
+        "grp_share_quarter"
+      ]
+    },
+    "top_multiplication_3": {
+      "id": "top_multiplication_3",
+      "name": "Умножение на 3",
+      "groupIds": [
+        "grp_mult_by3"
+      ]
+    },
+    "top_multiplication_4": {
+      "id": "top_multiplication_4",
+      "name": "Умножение на 4",
+      "groupIds": [
+        "grp_mult_by4"
+      ]
+    },
+    "top_multiplication_6": {
+      "id": "top_multiplication_6",
+      "name": "Умножение на 6",
+      "groupIds": [
+        "grp_mult_by6"
+      ]
+    },
+    "top_multiplication_7": {
+      "id": "top_multiplication_7",
+      "name": "Умножение на 7",
+      "groupIds": [
+        "grp_mult_by7"
+      ]
+    },
+    "top_multiplication_8": {
+      "id": "top_multiplication_8",
+      "name": "Умножение на 8",
+      "groupIds": [
+        "grp_mult_by8"
+      ]
+    },
+    "top_multiplication_9": {
+      "id": "top_multiplication_9",
+      "name": "Умножение на 9",
+      "groupIds": [
+        "grp_mult_by9"
+      ]
+    },
+    "top_multiplication_10": {
+      "id": "top_multiplication_10",
+      "name": "Умножение на 10",
+      "groupIds": [
+        "grp_mult_by10"
+      ]
+    },
+    "top_division_67": {
+      "id": "top_division_67",
+      "name": "Деление на 6 и 7",
+      "groupIds": [
+        "grp_div_67"
+      ]
+    },
+    "top_division_89": {
+      "id": "top_division_89",
+      "name": "Деление на 8 и 9",
+      "groupIds": [
+        "grp_div_89"
+      ]
+    },
+    "top_division_10": {
+      "id": "top_division_10",
+      "name": "Деление на 10",
+      "groupIds": [
+        "grp_div_10"
+      ]
+    },
+    "top_addition_carry": {
+      "id": "top_addition_carry",
+      "name": "Сложение: переход через десяток",
+      "groupIds": [
+        "grp_add_carry"
+      ]
+    },
+    "top_subtraction_wide": {
+      "id": "top_subtraction_wide",
+      "name": "Вычитание: числа побольше",
+      "groupIds": [
+        "grp_sub_wide_low",
+        "grp_sub_wide_high"
       ]
     }
   },
@@ -421,6 +527,231 @@
         "ordpos_5",
         "ordpos_6",
         "ordpos_7"
+      ]
+    },
+    "grp_share_half": {
+      "id": "grp_share_half",
+      "name": "Половина",
+      "taskIds": [
+        "share_half_intro",
+        "share_half_1",
+        "share_half_2",
+        "share_half_3",
+        "share_half_4",
+        "share_half_5",
+        "share_half_6",
+        "share_half_7"
+      ]
+    },
+    "grp_share_quarter": {
+      "id": "grp_share_quarter",
+      "name": "Четверть",
+      "taskIds": [
+        "share_quarter_intro",
+        "share_quarter_1",
+        "share_quarter_2",
+        "share_quarter_3",
+        "share_quarter_4",
+        "share_quarter_5",
+        "share_quarter_6",
+        "share_quarter_7"
+      ]
+    },
+    "grp_mult_by3": {
+      "id": "grp_mult_by3",
+      "name": "Таблица умножения на 3",
+      "taskIds": [
+        "mult_by3_intro",
+        "mult_by3_1",
+        "mult_by3_2",
+        "mult_by3_3",
+        "mult_by3_4",
+        "mult_by3_5",
+        "mult_by3_6",
+        "mult_by3_7",
+        "mult_by3_8",
+        "mult_by3_9"
+      ]
+    },
+    "grp_mult_by4": {
+      "id": "grp_mult_by4",
+      "name": "Таблица умножения на 4",
+      "taskIds": [
+        "mult_by4_intro",
+        "mult_by4_1",
+        "mult_by4_2",
+        "mult_by4_3",
+        "mult_by4_4",
+        "mult_by4_5",
+        "mult_by4_6",
+        "mult_by4_7",
+        "mult_by4_8",
+        "mult_by4_9"
+      ]
+    },
+    "grp_mult_by6": {
+      "id": "grp_mult_by6",
+      "name": "Таблица умножения на 6",
+      "taskIds": [
+        "mult_by6_intro",
+        "mult_by6_1",
+        "mult_by6_2",
+        "mult_by6_3",
+        "mult_by6_4",
+        "mult_by6_5",
+        "mult_by6_6",
+        "mult_by6_7",
+        "mult_by6_8",
+        "mult_by6_9"
+      ]
+    },
+    "grp_mult_by7": {
+      "id": "grp_mult_by7",
+      "name": "Таблица умножения на 7",
+      "taskIds": [
+        "mult_by7_intro",
+        "mult_by7_1",
+        "mult_by7_2",
+        "mult_by7_3",
+        "mult_by7_4",
+        "mult_by7_5",
+        "mult_by7_6",
+        "mult_by7_7",
+        "mult_by7_8",
+        "mult_by7_9"
+      ]
+    },
+    "grp_mult_by8": {
+      "id": "grp_mult_by8",
+      "name": "Таблица умножения на 8",
+      "taskIds": [
+        "mult_by8_intro",
+        "mult_by8_1",
+        "mult_by8_2",
+        "mult_by8_3",
+        "mult_by8_4",
+        "mult_by8_5",
+        "mult_by8_6",
+        "mult_by8_7",
+        "mult_by8_8",
+        "mult_by8_9"
+      ]
+    },
+    "grp_mult_by9": {
+      "id": "grp_mult_by9",
+      "name": "Таблица умножения на 9",
+      "taskIds": [
+        "mult_by9_intro",
+        "mult_by9_1",
+        "mult_by9_2",
+        "mult_by9_3",
+        "mult_by9_4",
+        "mult_by9_5",
+        "mult_by9_6",
+        "mult_by9_7",
+        "mult_by9_8",
+        "mult_by9_9"
+      ]
+    },
+    "grp_mult_by10": {
+      "id": "grp_mult_by10",
+      "name": "Таблица умножения на 10",
+      "taskIds": [
+        "mult_by10_intro",
+        "mult_by10_1",
+        "mult_by10_2",
+        "mult_by10_3",
+        "mult_by10_4",
+        "mult_by10_5",
+        "mult_by10_6",
+        "mult_by10_7",
+        "mult_by10_8",
+        "mult_by10_9"
+      ]
+    },
+    "grp_div_67": {
+      "id": "grp_div_67",
+      "name": "Деление на 6 и 7",
+      "taskIds": [
+        "div_67_intro",
+        "div_67_1",
+        "div_67_2",
+        "div_67_3",
+        "div_67_4",
+        "div_67_5",
+        "div_67_6",
+        "div_67_7"
+      ]
+    },
+    "grp_div_89": {
+      "id": "grp_div_89",
+      "name": "Деление на 8 и 9",
+      "taskIds": [
+        "div_89_intro",
+        "div_89_1",
+        "div_89_2",
+        "div_89_3",
+        "div_89_4",
+        "div_89_5",
+        "div_89_6",
+        "div_89_7"
+      ]
+    },
+    "grp_div_10": {
+      "id": "grp_div_10",
+      "name": "Деление на 10",
+      "taskIds": [
+        "div_10_intro",
+        "div_10_1",
+        "div_10_2",
+        "div_10_3",
+        "div_10_4",
+        "div_10_5",
+        "div_10_6",
+        "div_10_7"
+      ]
+    },
+    "grp_add_carry": {
+      "id": "grp_add_carry",
+      "name": "Сложение с переходом через десяток",
+      "taskIds": [
+        "add_carry_intro",
+        "add_carry_1",
+        "add_carry_2",
+        "add_carry_3",
+        "add_carry_4",
+        "add_carry_5",
+        "add_carry_6",
+        "add_carry_7",
+        "add_carry_8"
+      ]
+    },
+    "grp_sub_wide_low": {
+      "id": "grp_sub_wide_low",
+      "name": "Вычесть 3, 4, 5",
+      "taskIds": [
+        "sub_wide_low_intro",
+        "sub_wide_low_1",
+        "sub_wide_low_2",
+        "sub_wide_low_3",
+        "sub_wide_low_4",
+        "sub_wide_low_5",
+        "sub_wide_low_6",
+        "sub_wide_low_7"
+      ]
+    },
+    "grp_sub_wide_high": {
+      "id": "grp_sub_wide_high",
+      "name": "Вычесть 6, 7, 8, 9",
+      "taskIds": [
+        "sub_wide_high_intro",
+        "sub_wide_high_1",
+        "sub_wide_high_2",
+        "sub_wide_high_3",
+        "sub_wide_high_4",
+        "sub_wide_high_5",
+        "sub_wide_high_6",
+        "sub_wide_high_7"
       ]
     }
   },
@@ -2712,6 +3043,1476 @@
       },
       "correctAnswer": 19,
       "id": "ordpos_7"
+    },
+    "share_half_intro": {
+      "typeId": "share_of_whole",
+      "text": "У Матвея 4 яблок. Он разделил их поровну на две части — сколько досталось на одну часть?",
+      "params": {
+        "total": 4,
+        "parts": 2
+      },
+      "correctAnswer": 2,
+      "id": "share_half_intro"
+    },
+    "share_half_1": {
+      "typeId": "share_of_whole",
+      "text": "У Матвея 6 яблок. Он разделил их поровну на две части — сколько досталось на одну часть?",
+      "params": {
+        "total": 6,
+        "parts": 2
+      },
+      "correctAnswer": 3,
+      "id": "share_half_1"
+    },
+    "share_half_2": {
+      "typeId": "share_of_whole",
+      "text": "У Матвея 8 яблок. Он разделил их поровну на две части — сколько досталось на одну часть?",
+      "params": {
+        "total": 8,
+        "parts": 2
+      },
+      "correctAnswer": 4,
+      "id": "share_half_2"
+    },
+    "share_half_3": {
+      "typeId": "share_of_whole",
+      "text": "У Матвея 10 яблок. Он разделил их поровну на две части — сколько досталось на одну часть?",
+      "params": {
+        "total": 10,
+        "parts": 2
+      },
+      "correctAnswer": 5,
+      "id": "share_half_3"
+    },
+    "share_half_4": {
+      "typeId": "share_of_whole",
+      "text": "У Матвея 14 яблок. Он разделил их поровну на две части — сколько досталось на одну часть?",
+      "params": {
+        "total": 14,
+        "parts": 2
+      },
+      "correctAnswer": 7,
+      "id": "share_half_4"
+    },
+    "share_half_5": {
+      "typeId": "share_of_whole",
+      "text": "У Матвея 18 яблок. Он разделил их поровну на две части — сколько досталось на одну часть?",
+      "params": {
+        "total": 18,
+        "parts": 2
+      },
+      "correctAnswer": 9,
+      "id": "share_half_5"
+    },
+    "share_half_6": {
+      "typeId": "share_of_whole",
+      "text": "У Матвея 24 яблок. Он разделил их поровну на две части — сколько досталось на одну часть?",
+      "params": {
+        "total": 24,
+        "parts": 2
+      },
+      "correctAnswer": 12,
+      "id": "share_half_6"
+    },
+    "share_half_7": {
+      "typeId": "share_of_whole",
+      "text": "У Матвея 30 яблок. Он разделил их поровну на две части — сколько досталось на одну часть?",
+      "params": {
+        "total": 30,
+        "parts": 2
+      },
+      "correctAnswer": 15,
+      "id": "share_half_7"
+    },
+    "share_quarter_intro": {
+      "typeId": "share_of_whole",
+      "text": "У Матвея 8 яблок. Он разделил их поровну на четыре части — сколько досталось на одну часть?",
+      "params": {
+        "total": 8,
+        "parts": 4
+      },
+      "correctAnswer": 2,
+      "id": "share_quarter_intro"
+    },
+    "share_quarter_1": {
+      "typeId": "share_of_whole",
+      "text": "У Матвея 12 яблок. Он разделил их поровну на четыре части — сколько досталось на одну часть?",
+      "params": {
+        "total": 12,
+        "parts": 4
+      },
+      "correctAnswer": 3,
+      "id": "share_quarter_1"
+    },
+    "share_quarter_2": {
+      "typeId": "share_of_whole",
+      "text": "У Матвея 16 яблок. Он разделил их поровну на четыре части — сколько досталось на одну часть?",
+      "params": {
+        "total": 16,
+        "parts": 4
+      },
+      "correctAnswer": 4,
+      "id": "share_quarter_2"
+    },
+    "share_quarter_3": {
+      "typeId": "share_of_whole",
+      "text": "У Матвея 20 яблок. Он разделил их поровну на четыре части — сколько досталось на одну часть?",
+      "params": {
+        "total": 20,
+        "parts": 4
+      },
+      "correctAnswer": 5,
+      "id": "share_quarter_3"
+    },
+    "share_quarter_4": {
+      "typeId": "share_of_whole",
+      "text": "У Матвея 24 яблок. Он разделил их поровну на четыре части — сколько досталось на одну часть?",
+      "params": {
+        "total": 24,
+        "parts": 4
+      },
+      "correctAnswer": 6,
+      "id": "share_quarter_4"
+    },
+    "share_quarter_5": {
+      "typeId": "share_of_whole",
+      "text": "У Матвея 28 яблок. Он разделил их поровну на четыре части — сколько досталось на одну часть?",
+      "params": {
+        "total": 28,
+        "parts": 4
+      },
+      "correctAnswer": 7,
+      "id": "share_quarter_5"
+    },
+    "share_quarter_6": {
+      "typeId": "share_of_whole",
+      "text": "У Матвея 32 яблок. Он разделил их поровну на четыре части — сколько досталось на одну часть?",
+      "params": {
+        "total": 32,
+        "parts": 4
+      },
+      "correctAnswer": 8,
+      "id": "share_quarter_6"
+    },
+    "share_quarter_7": {
+      "typeId": "share_of_whole",
+      "text": "У Матвея 36 яблок. Он разделил их поровну на четыре части — сколько досталось на одну часть?",
+      "params": {
+        "total": 36,
+        "parts": 4
+      },
+      "correctAnswer": 9,
+      "id": "share_quarter_7"
+    },
+    "mult_by3_intro": {
+      "typeId": "number_multiply_two",
+      "text": "Сколько будет 1 умножить на 3?",
+      "params": {
+        "a": 1,
+        "b": 3
+      },
+      "correctAnswer": 3,
+      "id": "mult_by3_intro"
+    },
+    "mult_by3_1": {
+      "typeId": "number_multiply_two",
+      "text": "Сколько будет 2 умножить на 3?",
+      "params": {
+        "a": 2,
+        "b": 3
+      },
+      "correctAnswer": 6,
+      "id": "mult_by3_1"
+    },
+    "mult_by3_2": {
+      "typeId": "number_multiply_two",
+      "text": "Сколько будет 3 умножить на 3?",
+      "params": {
+        "a": 3,
+        "b": 3
+      },
+      "correctAnswer": 9,
+      "id": "mult_by3_2"
+    },
+    "mult_by3_3": {
+      "typeId": "number_multiply_two",
+      "text": "Сколько будет 4 умножить на 3?",
+      "params": {
+        "a": 4,
+        "b": 3
+      },
+      "correctAnswer": 12,
+      "id": "mult_by3_3"
+    },
+    "mult_by3_4": {
+      "typeId": "number_multiply_two",
+      "text": "Сколько будет 5 умножить на 3?",
+      "params": {
+        "a": 5,
+        "b": 3
+      },
+      "correctAnswer": 15,
+      "id": "mult_by3_4"
+    },
+    "mult_by3_5": {
+      "typeId": "number_multiply_two",
+      "text": "Сколько будет 6 умножить на 3?",
+      "params": {
+        "a": 6,
+        "b": 3
+      },
+      "correctAnswer": 18,
+      "id": "mult_by3_5"
+    },
+    "mult_by3_6": {
+      "typeId": "number_multiply_two",
+      "text": "Сколько будет 7 умножить на 3?",
+      "params": {
+        "a": 7,
+        "b": 3
+      },
+      "correctAnswer": 21,
+      "id": "mult_by3_6"
+    },
+    "mult_by3_7": {
+      "typeId": "number_multiply_two",
+      "text": "Сколько будет 8 умножить на 3?",
+      "params": {
+        "a": 8,
+        "b": 3
+      },
+      "correctAnswer": 24,
+      "id": "mult_by3_7"
+    },
+    "mult_by3_8": {
+      "typeId": "number_multiply_two",
+      "text": "Сколько будет 9 умножить на 3?",
+      "params": {
+        "a": 9,
+        "b": 3
+      },
+      "correctAnswer": 27,
+      "id": "mult_by3_8"
+    },
+    "mult_by3_9": {
+      "typeId": "number_multiply_two",
+      "text": "Сколько будет 10 умножить на 3?",
+      "params": {
+        "a": 10,
+        "b": 3
+      },
+      "correctAnswer": 30,
+      "id": "mult_by3_9"
+    },
+    "mult_by4_intro": {
+      "typeId": "number_multiply_two",
+      "text": "Сколько будет 1 умножить на 4?",
+      "params": {
+        "a": 1,
+        "b": 4
+      },
+      "correctAnswer": 4,
+      "id": "mult_by4_intro"
+    },
+    "mult_by4_1": {
+      "typeId": "number_multiply_two",
+      "text": "Сколько будет 2 умножить на 4?",
+      "params": {
+        "a": 2,
+        "b": 4
+      },
+      "correctAnswer": 8,
+      "id": "mult_by4_1"
+    },
+    "mult_by4_2": {
+      "typeId": "number_multiply_two",
+      "text": "Сколько будет 3 умножить на 4?",
+      "params": {
+        "a": 3,
+        "b": 4
+      },
+      "correctAnswer": 12,
+      "id": "mult_by4_2"
+    },
+    "mult_by4_3": {
+      "typeId": "number_multiply_two",
+      "text": "Сколько будет 4 умножить на 4?",
+      "params": {
+        "a": 4,
+        "b": 4
+      },
+      "correctAnswer": 16,
+      "id": "mult_by4_3"
+    },
+    "mult_by4_4": {
+      "typeId": "number_multiply_two",
+      "text": "Сколько будет 5 умножить на 4?",
+      "params": {
+        "a": 5,
+        "b": 4
+      },
+      "correctAnswer": 20,
+      "id": "mult_by4_4"
+    },
+    "mult_by4_5": {
+      "typeId": "number_multiply_two",
+      "text": "Сколько будет 6 умножить на 4?",
+      "params": {
+        "a": 6,
+        "b": 4
+      },
+      "correctAnswer": 24,
+      "id": "mult_by4_5"
+    },
+    "mult_by4_6": {
+      "typeId": "number_multiply_two",
+      "text": "Сколько будет 7 умножить на 4?",
+      "params": {
+        "a": 7,
+        "b": 4
+      },
+      "correctAnswer": 28,
+      "id": "mult_by4_6"
+    },
+    "mult_by4_7": {
+      "typeId": "number_multiply_two",
+      "text": "Сколько будет 8 умножить на 4?",
+      "params": {
+        "a": 8,
+        "b": 4
+      },
+      "correctAnswer": 32,
+      "id": "mult_by4_7"
+    },
+    "mult_by4_8": {
+      "typeId": "number_multiply_two",
+      "text": "Сколько будет 9 умножить на 4?",
+      "params": {
+        "a": 9,
+        "b": 4
+      },
+      "correctAnswer": 36,
+      "id": "mult_by4_8"
+    },
+    "mult_by4_9": {
+      "typeId": "number_multiply_two",
+      "text": "Сколько будет 10 умножить на 4?",
+      "params": {
+        "a": 10,
+        "b": 4
+      },
+      "correctAnswer": 40,
+      "id": "mult_by4_9"
+    },
+    "mult_by6_intro": {
+      "typeId": "number_multiply_two",
+      "text": "Сколько будет 1 умножить на 6?",
+      "params": {
+        "a": 1,
+        "b": 6
+      },
+      "correctAnswer": 6,
+      "id": "mult_by6_intro"
+    },
+    "mult_by6_1": {
+      "typeId": "number_multiply_two",
+      "text": "Сколько будет 2 умножить на 6?",
+      "params": {
+        "a": 2,
+        "b": 6
+      },
+      "correctAnswer": 12,
+      "id": "mult_by6_1"
+    },
+    "mult_by6_2": {
+      "typeId": "number_multiply_two",
+      "text": "Сколько будет 3 умножить на 6?",
+      "params": {
+        "a": 3,
+        "b": 6
+      },
+      "correctAnswer": 18,
+      "id": "mult_by6_2"
+    },
+    "mult_by6_3": {
+      "typeId": "number_multiply_two",
+      "text": "Сколько будет 4 умножить на 6?",
+      "params": {
+        "a": 4,
+        "b": 6
+      },
+      "correctAnswer": 24,
+      "id": "mult_by6_3"
+    },
+    "mult_by6_4": {
+      "typeId": "number_multiply_two",
+      "text": "Сколько будет 5 умножить на 6?",
+      "params": {
+        "a": 5,
+        "b": 6
+      },
+      "correctAnswer": 30,
+      "id": "mult_by6_4"
+    },
+    "mult_by6_5": {
+      "typeId": "number_multiply_two",
+      "text": "Сколько будет 6 умножить на 6?",
+      "params": {
+        "a": 6,
+        "b": 6
+      },
+      "correctAnswer": 36,
+      "id": "mult_by6_5"
+    },
+    "mult_by6_6": {
+      "typeId": "number_multiply_two",
+      "text": "Сколько будет 7 умножить на 6?",
+      "params": {
+        "a": 7,
+        "b": 6
+      },
+      "correctAnswer": 42,
+      "id": "mult_by6_6"
+    },
+    "mult_by6_7": {
+      "typeId": "number_multiply_two",
+      "text": "Сколько будет 8 умножить на 6?",
+      "params": {
+        "a": 8,
+        "b": 6
+      },
+      "correctAnswer": 48,
+      "id": "mult_by6_7"
+    },
+    "mult_by6_8": {
+      "typeId": "number_multiply_two",
+      "text": "Сколько будет 9 умножить на 6?",
+      "params": {
+        "a": 9,
+        "b": 6
+      },
+      "correctAnswer": 54,
+      "id": "mult_by6_8"
+    },
+    "mult_by6_9": {
+      "typeId": "number_multiply_two",
+      "text": "Сколько будет 10 умножить на 6?",
+      "params": {
+        "a": 10,
+        "b": 6
+      },
+      "correctAnswer": 60,
+      "id": "mult_by6_9"
+    },
+    "mult_by7_intro": {
+      "typeId": "number_multiply_two",
+      "text": "Сколько будет 1 умножить на 7?",
+      "params": {
+        "a": 1,
+        "b": 7
+      },
+      "correctAnswer": 7,
+      "id": "mult_by7_intro"
+    },
+    "mult_by7_1": {
+      "typeId": "number_multiply_two",
+      "text": "Сколько будет 2 умножить на 7?",
+      "params": {
+        "a": 2,
+        "b": 7
+      },
+      "correctAnswer": 14,
+      "id": "mult_by7_1"
+    },
+    "mult_by7_2": {
+      "typeId": "number_multiply_two",
+      "text": "Сколько будет 3 умножить на 7?",
+      "params": {
+        "a": 3,
+        "b": 7
+      },
+      "correctAnswer": 21,
+      "id": "mult_by7_2"
+    },
+    "mult_by7_3": {
+      "typeId": "number_multiply_two",
+      "text": "Сколько будет 4 умножить на 7?",
+      "params": {
+        "a": 4,
+        "b": 7
+      },
+      "correctAnswer": 28,
+      "id": "mult_by7_3"
+    },
+    "mult_by7_4": {
+      "typeId": "number_multiply_two",
+      "text": "Сколько будет 5 умножить на 7?",
+      "params": {
+        "a": 5,
+        "b": 7
+      },
+      "correctAnswer": 35,
+      "id": "mult_by7_4"
+    },
+    "mult_by7_5": {
+      "typeId": "number_multiply_two",
+      "text": "Сколько будет 6 умножить на 7?",
+      "params": {
+        "a": 6,
+        "b": 7
+      },
+      "correctAnswer": 42,
+      "id": "mult_by7_5"
+    },
+    "mult_by7_6": {
+      "typeId": "number_multiply_two",
+      "text": "Сколько будет 7 умножить на 7?",
+      "params": {
+        "a": 7,
+        "b": 7
+      },
+      "correctAnswer": 49,
+      "id": "mult_by7_6"
+    },
+    "mult_by7_7": {
+      "typeId": "number_multiply_two",
+      "text": "Сколько будет 8 умножить на 7?",
+      "params": {
+        "a": 8,
+        "b": 7
+      },
+      "correctAnswer": 56,
+      "id": "mult_by7_7"
+    },
+    "mult_by7_8": {
+      "typeId": "number_multiply_two",
+      "text": "Сколько будет 9 умножить на 7?",
+      "params": {
+        "a": 9,
+        "b": 7
+      },
+      "correctAnswer": 63,
+      "id": "mult_by7_8"
+    },
+    "mult_by7_9": {
+      "typeId": "number_multiply_two",
+      "text": "Сколько будет 10 умножить на 7?",
+      "params": {
+        "a": 10,
+        "b": 7
+      },
+      "correctAnswer": 70,
+      "id": "mult_by7_9"
+    },
+    "mult_by8_intro": {
+      "typeId": "number_multiply_two",
+      "text": "Сколько будет 1 умножить на 8?",
+      "params": {
+        "a": 1,
+        "b": 8
+      },
+      "correctAnswer": 8,
+      "id": "mult_by8_intro"
+    },
+    "mult_by8_1": {
+      "typeId": "number_multiply_two",
+      "text": "Сколько будет 2 умножить на 8?",
+      "params": {
+        "a": 2,
+        "b": 8
+      },
+      "correctAnswer": 16,
+      "id": "mult_by8_1"
+    },
+    "mult_by8_2": {
+      "typeId": "number_multiply_two",
+      "text": "Сколько будет 3 умножить на 8?",
+      "params": {
+        "a": 3,
+        "b": 8
+      },
+      "correctAnswer": 24,
+      "id": "mult_by8_2"
+    },
+    "mult_by8_3": {
+      "typeId": "number_multiply_two",
+      "text": "Сколько будет 4 умножить на 8?",
+      "params": {
+        "a": 4,
+        "b": 8
+      },
+      "correctAnswer": 32,
+      "id": "mult_by8_3"
+    },
+    "mult_by8_4": {
+      "typeId": "number_multiply_two",
+      "text": "Сколько будет 5 умножить на 8?",
+      "params": {
+        "a": 5,
+        "b": 8
+      },
+      "correctAnswer": 40,
+      "id": "mult_by8_4"
+    },
+    "mult_by8_5": {
+      "typeId": "number_multiply_two",
+      "text": "Сколько будет 6 умножить на 8?",
+      "params": {
+        "a": 6,
+        "b": 8
+      },
+      "correctAnswer": 48,
+      "id": "mult_by8_5"
+    },
+    "mult_by8_6": {
+      "typeId": "number_multiply_two",
+      "text": "Сколько будет 7 умножить на 8?",
+      "params": {
+        "a": 7,
+        "b": 8
+      },
+      "correctAnswer": 56,
+      "id": "mult_by8_6"
+    },
+    "mult_by8_7": {
+      "typeId": "number_multiply_two",
+      "text": "Сколько будет 8 умножить на 8?",
+      "params": {
+        "a": 8,
+        "b": 8
+      },
+      "correctAnswer": 64,
+      "id": "mult_by8_7"
+    },
+    "mult_by8_8": {
+      "typeId": "number_multiply_two",
+      "text": "Сколько будет 9 умножить на 8?",
+      "params": {
+        "a": 9,
+        "b": 8
+      },
+      "correctAnswer": 72,
+      "id": "mult_by8_8"
+    },
+    "mult_by8_9": {
+      "typeId": "number_multiply_two",
+      "text": "Сколько будет 10 умножить на 8?",
+      "params": {
+        "a": 10,
+        "b": 8
+      },
+      "correctAnswer": 80,
+      "id": "mult_by8_9"
+    },
+    "mult_by9_intro": {
+      "typeId": "number_multiply_two",
+      "text": "Сколько будет 1 умножить на 9?",
+      "params": {
+        "a": 1,
+        "b": 9
+      },
+      "correctAnswer": 9,
+      "id": "mult_by9_intro"
+    },
+    "mult_by9_1": {
+      "typeId": "number_multiply_two",
+      "text": "Сколько будет 2 умножить на 9?",
+      "params": {
+        "a": 2,
+        "b": 9
+      },
+      "correctAnswer": 18,
+      "id": "mult_by9_1"
+    },
+    "mult_by9_2": {
+      "typeId": "number_multiply_two",
+      "text": "Сколько будет 3 умножить на 9?",
+      "params": {
+        "a": 3,
+        "b": 9
+      },
+      "correctAnswer": 27,
+      "id": "mult_by9_2"
+    },
+    "mult_by9_3": {
+      "typeId": "number_multiply_two",
+      "text": "Сколько будет 4 умножить на 9?",
+      "params": {
+        "a": 4,
+        "b": 9
+      },
+      "correctAnswer": 36,
+      "id": "mult_by9_3"
+    },
+    "mult_by9_4": {
+      "typeId": "number_multiply_two",
+      "text": "Сколько будет 5 умножить на 9?",
+      "params": {
+        "a": 5,
+        "b": 9
+      },
+      "correctAnswer": 45,
+      "id": "mult_by9_4"
+    },
+    "mult_by9_5": {
+      "typeId": "number_multiply_two",
+      "text": "Сколько будет 6 умножить на 9?",
+      "params": {
+        "a": 6,
+        "b": 9
+      },
+      "correctAnswer": 54,
+      "id": "mult_by9_5"
+    },
+    "mult_by9_6": {
+      "typeId": "number_multiply_two",
+      "text": "Сколько будет 7 умножить на 9?",
+      "params": {
+        "a": 7,
+        "b": 9
+      },
+      "correctAnswer": 63,
+      "id": "mult_by9_6"
+    },
+    "mult_by9_7": {
+      "typeId": "number_multiply_two",
+      "text": "Сколько будет 8 умножить на 9?",
+      "params": {
+        "a": 8,
+        "b": 9
+      },
+      "correctAnswer": 72,
+      "id": "mult_by9_7"
+    },
+    "mult_by9_8": {
+      "typeId": "number_multiply_two",
+      "text": "Сколько будет 9 умножить на 9?",
+      "params": {
+        "a": 9,
+        "b": 9
+      },
+      "correctAnswer": 81,
+      "id": "mult_by9_8"
+    },
+    "mult_by9_9": {
+      "typeId": "number_multiply_two",
+      "text": "Сколько будет 10 умножить на 9?",
+      "params": {
+        "a": 10,
+        "b": 9
+      },
+      "correctAnswer": 90,
+      "id": "mult_by9_9"
+    },
+    "mult_by10_intro": {
+      "typeId": "number_multiply_two",
+      "text": "Сколько будет 1 умножить на 10?",
+      "params": {
+        "a": 1,
+        "b": 10
+      },
+      "correctAnswer": 10,
+      "id": "mult_by10_intro"
+    },
+    "mult_by10_1": {
+      "typeId": "number_multiply_two",
+      "text": "Сколько будет 2 умножить на 10?",
+      "params": {
+        "a": 2,
+        "b": 10
+      },
+      "correctAnswer": 20,
+      "id": "mult_by10_1"
+    },
+    "mult_by10_2": {
+      "typeId": "number_multiply_two",
+      "text": "Сколько будет 3 умножить на 10?",
+      "params": {
+        "a": 3,
+        "b": 10
+      },
+      "correctAnswer": 30,
+      "id": "mult_by10_2"
+    },
+    "mult_by10_3": {
+      "typeId": "number_multiply_two",
+      "text": "Сколько будет 4 умножить на 10?",
+      "params": {
+        "a": 4,
+        "b": 10
+      },
+      "correctAnswer": 40,
+      "id": "mult_by10_3"
+    },
+    "mult_by10_4": {
+      "typeId": "number_multiply_two",
+      "text": "Сколько будет 5 умножить на 10?",
+      "params": {
+        "a": 5,
+        "b": 10
+      },
+      "correctAnswer": 50,
+      "id": "mult_by10_4"
+    },
+    "mult_by10_5": {
+      "typeId": "number_multiply_two",
+      "text": "Сколько будет 6 умножить на 10?",
+      "params": {
+        "a": 6,
+        "b": 10
+      },
+      "correctAnswer": 60,
+      "id": "mult_by10_5"
+    },
+    "mult_by10_6": {
+      "typeId": "number_multiply_two",
+      "text": "Сколько будет 7 умножить на 10?",
+      "params": {
+        "a": 7,
+        "b": 10
+      },
+      "correctAnswer": 70,
+      "id": "mult_by10_6"
+    },
+    "mult_by10_7": {
+      "typeId": "number_multiply_two",
+      "text": "Сколько будет 8 умножить на 10?",
+      "params": {
+        "a": 8,
+        "b": 10
+      },
+      "correctAnswer": 80,
+      "id": "mult_by10_7"
+    },
+    "mult_by10_8": {
+      "typeId": "number_multiply_two",
+      "text": "Сколько будет 9 умножить на 10?",
+      "params": {
+        "a": 9,
+        "b": 10
+      },
+      "correctAnswer": 90,
+      "id": "mult_by10_8"
+    },
+    "mult_by10_9": {
+      "typeId": "number_multiply_two",
+      "text": "Сколько будет 10 умножить на 10?",
+      "params": {
+        "a": 10,
+        "b": 10
+      },
+      "correctAnswer": 100,
+      "id": "mult_by10_9"
+    },
+    "div_67_intro": {
+      "typeId": "number_divide_remainder",
+      "text": "Сколько будет 13 разделить на 6?",
+      "params": {
+        "a": 13,
+        "b": 6
+      },
+      "correctAnswer": "2 ост. 1",
+      "choices": [
+        "2 ост. 1",
+        "2 ост. 2",
+        "1 ост. 1"
+      ],
+      "id": "div_67_intro"
+    },
+    "div_67_1": {
+      "typeId": "number_divide_remainder",
+      "text": "Сколько будет 19 разделить на 6?",
+      "params": {
+        "a": 19,
+        "b": 6
+      },
+      "correctAnswer": "3 ост. 1",
+      "choices": [
+        "2 ост. 2",
+        "2 ост. 3",
+        "3 ост. 1"
+      ],
+      "id": "div_67_1"
+    },
+    "div_67_2": {
+      "typeId": "number_divide_remainder",
+      "text": "Сколько будет 25 разделить на 6?",
+      "params": {
+        "a": 25,
+        "b": 6
+      },
+      "correctAnswer": "4 ост. 1",
+      "choices": [
+        "5 ост. 2",
+        "4 ост. 1",
+        "4 ост. 2"
+      ],
+      "id": "div_67_2"
+    },
+    "div_67_3": {
+      "typeId": "number_divide_remainder",
+      "text": "Сколько будет 31 разделить на 6?",
+      "params": {
+        "a": 31,
+        "b": 6
+      },
+      "correctAnswer": "5 ост. 1",
+      "choices": [
+        "5 ост. 1",
+        "4 ост. 2",
+        "6 ост. 3"
+      ],
+      "id": "div_67_3"
+    },
+    "div_67_4": {
+      "typeId": "number_divide_remainder",
+      "text": "Сколько будет 15 разделить на 7?",
+      "params": {
+        "a": 15,
+        "b": 7
+      },
+      "correctAnswer": "2 ост. 1",
+      "choices": [
+        "2 ост. 2",
+        "1 ост. 1",
+        "2 ост. 1"
+      ],
+      "id": "div_67_4"
+    },
+    "div_67_5": {
+      "typeId": "number_divide_remainder",
+      "text": "Сколько будет 22 разделить на 7?",
+      "params": {
+        "a": 22,
+        "b": 7
+      },
+      "correctAnswer": "3 ост. 1",
+      "choices": [
+        "2 ост. 3",
+        "3 ост. 1",
+        "2 ост. 2"
+      ],
+      "id": "div_67_5"
+    },
+    "div_67_6": {
+      "typeId": "number_divide_remainder",
+      "text": "Сколько будет 29 разделить на 7?",
+      "params": {
+        "a": 29,
+        "b": 7
+      },
+      "correctAnswer": "4 ост. 1",
+      "choices": [
+        "4 ост. 1",
+        "4 ост. 2",
+        "5 ост. 2"
+      ],
+      "id": "div_67_6"
+    },
+    "div_67_7": {
+      "typeId": "number_divide_remainder",
+      "text": "Сколько будет 36 разделить на 7?",
+      "params": {
+        "a": 36,
+        "b": 7
+      },
+      "correctAnswer": "5 ост. 1",
+      "choices": [
+        "4 ост. 2",
+        "6 ост. 3",
+        "5 ост. 1"
+      ],
+      "id": "div_67_7"
+    },
+    "div_89_intro": {
+      "typeId": "number_divide_remainder",
+      "text": "Сколько будет 17 разделить на 8?",
+      "params": {
+        "a": 17,
+        "b": 8
+      },
+      "correctAnswer": "2 ост. 1",
+      "choices": [
+        "2 ост. 1",
+        "2 ост. 2",
+        "1 ост. 1"
+      ],
+      "id": "div_89_intro"
+    },
+    "div_89_1": {
+      "typeId": "number_divide_remainder",
+      "text": "Сколько будет 25 разделить на 8?",
+      "params": {
+        "a": 25,
+        "b": 8
+      },
+      "correctAnswer": "3 ост. 1",
+      "choices": [
+        "2 ост. 2",
+        "2 ост. 3",
+        "3 ост. 1"
+      ],
+      "id": "div_89_1"
+    },
+    "div_89_2": {
+      "typeId": "number_divide_remainder",
+      "text": "Сколько будет 33 разделить на 8?",
+      "params": {
+        "a": 33,
+        "b": 8
+      },
+      "correctAnswer": "4 ост. 1",
+      "choices": [
+        "5 ост. 2",
+        "4 ост. 1",
+        "4 ост. 2"
+      ],
+      "id": "div_89_2"
+    },
+    "div_89_3": {
+      "typeId": "number_divide_remainder",
+      "text": "Сколько будет 41 разделить на 8?",
+      "params": {
+        "a": 41,
+        "b": 8
+      },
+      "correctAnswer": "5 ост. 1",
+      "choices": [
+        "5 ост. 1",
+        "4 ост. 2",
+        "6 ост. 3"
+      ],
+      "id": "div_89_3"
+    },
+    "div_89_4": {
+      "typeId": "number_divide_remainder",
+      "text": "Сколько будет 19 разделить на 9?",
+      "params": {
+        "a": 19,
+        "b": 9
+      },
+      "correctAnswer": "2 ост. 1",
+      "choices": [
+        "2 ост. 2",
+        "1 ост. 1",
+        "2 ост. 1"
+      ],
+      "id": "div_89_4"
+    },
+    "div_89_5": {
+      "typeId": "number_divide_remainder",
+      "text": "Сколько будет 28 разделить на 9?",
+      "params": {
+        "a": 28,
+        "b": 9
+      },
+      "correctAnswer": "3 ост. 1",
+      "choices": [
+        "2 ост. 3",
+        "3 ост. 1",
+        "2 ост. 2"
+      ],
+      "id": "div_89_5"
+    },
+    "div_89_6": {
+      "typeId": "number_divide_remainder",
+      "text": "Сколько будет 37 разделить на 9?",
+      "params": {
+        "a": 37,
+        "b": 9
+      },
+      "correctAnswer": "4 ост. 1",
+      "choices": [
+        "4 ост. 1",
+        "4 ост. 2",
+        "5 ост. 2"
+      ],
+      "id": "div_89_6"
+    },
+    "div_89_7": {
+      "typeId": "number_divide_remainder",
+      "text": "Сколько будет 46 разделить на 9?",
+      "params": {
+        "a": 46,
+        "b": 9
+      },
+      "correctAnswer": "5 ост. 1",
+      "choices": [
+        "4 ост. 2",
+        "6 ост. 3",
+        "5 ост. 1"
+      ],
+      "id": "div_89_7"
+    },
+    "div_10_intro": {
+      "typeId": "number_divide_remainder",
+      "text": "Сколько будет 21 разделить на 10?",
+      "params": {
+        "a": 21,
+        "b": 10
+      },
+      "correctAnswer": "2 ост. 1",
+      "choices": [
+        "2 ост. 1",
+        "2 ост. 2",
+        "1 ост. 1"
+      ],
+      "id": "div_10_intro"
+    },
+    "div_10_1": {
+      "typeId": "number_divide_remainder",
+      "text": "Сколько будет 24 разделить на 10?",
+      "params": {
+        "a": 24,
+        "b": 10
+      },
+      "correctAnswer": "2 ост. 4",
+      "choices": [
+        "1 ост. 5",
+        "1 ост. 6",
+        "2 ост. 4"
+      ],
+      "id": "div_10_1"
+    },
+    "div_10_2": {
+      "typeId": "number_divide_remainder",
+      "text": "Сколько будет 27 разделить на 10?",
+      "params": {
+        "a": 27,
+        "b": 10
+      },
+      "correctAnswer": "2 ост. 7",
+      "choices": [
+        "3 ост. 8",
+        "2 ост. 7",
+        "2 ост. 8"
+      ],
+      "id": "div_10_2"
+    },
+    "div_10_3": {
+      "typeId": "number_divide_remainder",
+      "text": "Сколько будет 33 разделить на 10?",
+      "params": {
+        "a": 33,
+        "b": 10
+      },
+      "correctAnswer": "3 ост. 3",
+      "choices": [
+        "3 ост. 3",
+        "2 ост. 4",
+        "4 ост. 5"
+      ],
+      "id": "div_10_3"
+    },
+    "div_10_4": {
+      "typeId": "number_divide_remainder",
+      "text": "Сколько будет 36 разделить на 10?",
+      "params": {
+        "a": 36,
+        "b": 10
+      },
+      "correctAnswer": "3 ост. 6",
+      "choices": [
+        "3 ост. 7",
+        "2 ост. 6",
+        "3 ост. 6"
+      ],
+      "id": "div_10_4"
+    },
+    "div_10_5": {
+      "typeId": "number_divide_remainder",
+      "text": "Сколько будет 38 разделить на 10?",
+      "params": {
+        "a": 38,
+        "b": 10
+      },
+      "correctAnswer": "3 ост. 8",
+      "choices": [
+        "2 ост. 0",
+        "3 ост. 8",
+        "2 ост. 9"
+      ],
+      "id": "div_10_5"
+    },
+    "div_10_6": {
+      "typeId": "number_divide_remainder",
+      "text": "Сколько будет 41 разделить на 10?",
+      "params": {
+        "a": 41,
+        "b": 10
+      },
+      "correctAnswer": "4 ост. 1",
+      "choices": [
+        "4 ост. 1",
+        "4 ост. 2",
+        "5 ост. 2"
+      ],
+      "id": "div_10_6"
+    },
+    "div_10_7": {
+      "typeId": "number_divide_remainder",
+      "text": "Сколько будет 47 разделить на 10?",
+      "params": {
+        "a": 47,
+        "b": 10
+      },
+      "correctAnswer": "4 ост. 7",
+      "choices": [
+        "3 ост. 8",
+        "5 ост. 9",
+        "4 ост. 7"
+      ],
+      "id": "div_10_7"
+    },
+    "add_carry_intro": {
+      "typeId": "number_sum_two",
+      "text": "Сколько будет 2 плюс 9?",
+      "params": {
+        "a": 2,
+        "b": 9
+      },
+      "correctAnswer": 11,
+      "id": "add_carry_intro"
+    },
+    "add_carry_1": {
+      "typeId": "number_sum_two",
+      "text": "Сколько будет 3 плюс 9?",
+      "params": {
+        "a": 3,
+        "b": 9
+      },
+      "correctAnswer": 12,
+      "id": "add_carry_1"
+    },
+    "add_carry_2": {
+      "typeId": "number_sum_two",
+      "text": "Сколько будет 4 плюс 9?",
+      "params": {
+        "a": 4,
+        "b": 9
+      },
+      "correctAnswer": 13,
+      "id": "add_carry_2"
+    },
+    "add_carry_3": {
+      "typeId": "number_sum_two",
+      "text": "Сколько будет 5 плюс 9?",
+      "params": {
+        "a": 5,
+        "b": 9
+      },
+      "correctAnswer": 14,
+      "id": "add_carry_3"
+    },
+    "add_carry_4": {
+      "typeId": "number_sum_two",
+      "text": "Сколько будет 6 плюс 9?",
+      "params": {
+        "a": 6,
+        "b": 9
+      },
+      "correctAnswer": 15,
+      "id": "add_carry_4"
+    },
+    "add_carry_5": {
+      "typeId": "number_sum_two",
+      "text": "Сколько будет 7 плюс 9?",
+      "params": {
+        "a": 7,
+        "b": 9
+      },
+      "correctAnswer": 16,
+      "id": "add_carry_5"
+    },
+    "add_carry_6": {
+      "typeId": "number_sum_two",
+      "text": "Сколько будет 8 плюс 9?",
+      "params": {
+        "a": 8,
+        "b": 9
+      },
+      "correctAnswer": 17,
+      "id": "add_carry_6"
+    },
+    "add_carry_7": {
+      "typeId": "number_sum_two",
+      "text": "Сколько будет 9 плюс 9?",
+      "params": {
+        "a": 9,
+        "b": 9
+      },
+      "correctAnswer": 18,
+      "id": "add_carry_7"
+    },
+    "add_carry_8": {
+      "typeId": "number_sum_two",
+      "text": "Сколько будет 9 плюс 8?",
+      "params": {
+        "a": 9,
+        "b": 8
+      },
+      "correctAnswer": 17,
+      "id": "add_carry_8"
+    },
+    "sub_wide_low_intro": {
+      "typeId": "number_subtract_two",
+      "text": "Сколько будет 4 минус 3?",
+      "params": {
+        "a": 4,
+        "b": 3
+      },
+      "correctAnswer": 1,
+      "id": "sub_wide_low_intro"
+    },
+    "sub_wide_low_1": {
+      "typeId": "number_subtract_two",
+      "text": "Сколько будет 12 минус 3?",
+      "params": {
+        "a": 12,
+        "b": 3
+      },
+      "correctAnswer": 9,
+      "id": "sub_wide_low_1"
+    },
+    "sub_wide_low_2": {
+      "typeId": "number_subtract_two",
+      "text": "Сколько будет 19 минус 3?",
+      "params": {
+        "a": 19,
+        "b": 3
+      },
+      "correctAnswer": 16,
+      "id": "sub_wide_low_2"
+    },
+    "sub_wide_low_3": {
+      "typeId": "number_subtract_two",
+      "text": "Сколько будет 5 минус 4?",
+      "params": {
+        "a": 5,
+        "b": 4
+      },
+      "correctAnswer": 1,
+      "id": "sub_wide_low_3"
+    },
+    "sub_wide_low_4": {
+      "typeId": "number_subtract_two",
+      "text": "Сколько будет 14 минус 4?",
+      "params": {
+        "a": 14,
+        "b": 4
+      },
+      "correctAnswer": 10,
+      "id": "sub_wide_low_4"
+    },
+    "sub_wide_low_5": {
+      "typeId": "number_subtract_two",
+      "text": "Сколько будет 20 минус 4?",
+      "params": {
+        "a": 20,
+        "b": 4
+      },
+      "correctAnswer": 16,
+      "id": "sub_wide_low_5"
+    },
+    "sub_wide_low_6": {
+      "typeId": "number_subtract_two",
+      "text": "Сколько будет 6 минус 5?",
+      "params": {
+        "a": 6,
+        "b": 5
+      },
+      "correctAnswer": 1,
+      "id": "sub_wide_low_6"
+    },
+    "sub_wide_low_7": {
+      "typeId": "number_subtract_two",
+      "text": "Сколько будет 17 минус 5?",
+      "params": {
+        "a": 17,
+        "b": 5
+      },
+      "correctAnswer": 12,
+      "id": "sub_wide_low_7"
+    },
+    "sub_wide_high_intro": {
+      "typeId": "number_subtract_two",
+      "text": "Сколько будет 7 минус 6?",
+      "params": {
+        "a": 7,
+        "b": 6
+      },
+      "correctAnswer": 1,
+      "id": "sub_wide_high_intro"
+    },
+    "sub_wide_high_1": {
+      "typeId": "number_subtract_two",
+      "text": "Сколько будет 18 минус 6?",
+      "params": {
+        "a": 18,
+        "b": 6
+      },
+      "correctAnswer": 12,
+      "id": "sub_wide_high_1"
+    },
+    "sub_wide_high_2": {
+      "typeId": "number_subtract_two",
+      "text": "Сколько будет 8 минус 7?",
+      "params": {
+        "a": 8,
+        "b": 7
+      },
+      "correctAnswer": 1,
+      "id": "sub_wide_high_2"
+    },
+    "sub_wide_high_3": {
+      "typeId": "number_subtract_two",
+      "text": "Сколько будет 19 минус 7?",
+      "params": {
+        "a": 19,
+        "b": 7
+      },
+      "correctAnswer": 12,
+      "id": "sub_wide_high_3"
+    },
+    "sub_wide_high_4": {
+      "typeId": "number_subtract_two",
+      "text": "Сколько будет 9 минус 8?",
+      "params": {
+        "a": 9,
+        "b": 8
+      },
+      "correctAnswer": 1,
+      "id": "sub_wide_high_4"
+    },
+    "sub_wide_high_5": {
+      "typeId": "number_subtract_two",
+      "text": "Сколько будет 20 минус 8?",
+      "params": {
+        "a": 20,
+        "b": 8
+      },
+      "correctAnswer": 12,
+      "id": "sub_wide_high_5"
+    },
+    "sub_wide_high_6": {
+      "typeId": "number_subtract_two",
+      "text": "Сколько будет 10 минус 9?",
+      "params": {
+        "a": 10,
+        "b": 9
+      },
+      "correctAnswer": 1,
+      "id": "sub_wide_high_6"
+    },
+    "sub_wide_high_7": {
+      "typeId": "number_subtract_two",
+      "text": "Сколько будет 19 минус 9?",
+      "params": {
+        "a": 19,
+        "b": 9
+      },
+      "correctAnswer": 10,
+      "id": "sub_wide_high_7"
     }
   },
   "mathTools": [

@@ -59,6 +59,8 @@ const TaskVisual: React.FC<{ task: Task }> = ({ task }) => {
       const series = (task.params.series as unknown as number[]) ?? [];
       return <div style={equationStyle}>{series.join('   ')}</div>;
     }
+    case 'share_of_whole':
+      return <div style={equationStyle}>{String(task.params.total)} : {String(task.params.parts)} = ?</div>;
     default:
       return null;
   }

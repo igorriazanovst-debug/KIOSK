@@ -121,3 +121,19 @@ test('checkTaskAnswer validates each Этап 2b wave 2 type correctly', () => {
   assert.equal(checkTaskAnswer(ordinalTask, 2), true);
   assert.equal(checkTaskAnswer(ordinalTask, 8), false);
 });
+
+const shareTask: Task = {
+  id: 'w3t1', typeId: 'share_of_whole',
+  text: 'У Матвея 8 яблок. Он разделил их поровну на две части — сколько досталось на одну часть?',
+  params: { total: 8, parts: 2 }, correctAnswer: 4,
+};
+
+test('getAnswerMode returns numeric for the Этап 2b wave 3 type (share_of_whole)', () => {
+  assert.equal(getAnswerMode('share_of_whole'), 'numeric');
+});
+
+test('checkTaskAnswer validates share_of_whole correctly', () => {
+  assert.equal(checkTaskAnswer(shareTask, 4), true);
+  assert.equal(checkTaskAnswer(shareTask, 8), false);
+  assert.equal(checkTaskAnswer(shareTask, '4'), true);
+});

@@ -18,7 +18,7 @@ export const MediaAssetSchema = z.object({
 });
 export type MediaAsset = z.infer<typeof MediaAssetSchema>;
 
-/** Типы заданий Этапа 1 + Этапа 2b, волны 1-2 (спеки 2026-09-08). */
+/** Типы заданий Этапа 1 + Этапа 2b, волны 1-3 (спеки 2026-09-08). */
 export const TASK_TYPE_IDS = [
   'number_counting',
   'number_sum_two',
@@ -35,6 +35,7 @@ export const TASK_TYPE_IDS = [
   'number_multiple_check',
   'round_to_ten',
   'ordinal_position',
+  'share_of_whole',
 ] as const;
 export const TaskTypeIdSchema = z.enum(TASK_TYPE_IDS);
 export type TaskTypeId = z.infer<typeof TaskTypeIdSchema>;

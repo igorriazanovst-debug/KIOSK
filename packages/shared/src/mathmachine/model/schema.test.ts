@@ -100,3 +100,7 @@ test('TaskTypeIdSchema accepts the five Этап 2b wave 2 task types', () => {
     assert.equal(TaskTypeIdSchema.safeParse(id).success, true, `expected ${id} to be a valid TaskTypeId`);
   }
 });
+
+test('TaskTypeIdSchema accepts the Этап 2b wave 3 task type (share_of_whole)', () => {
+  assert.equal(TaskTypeIdSchema.safeParse('share_of_whole').success, true);
+});
