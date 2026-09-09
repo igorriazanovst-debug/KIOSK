@@ -55,8 +55,8 @@
     "wait-on": "^7.2.0"
   },
   "build": {
-    "appId": "com.kiosk.player",
-    "productName": "Музей СВО",
+    "appId": "com.kiosk.player.localdev",
+    "productName": "Kiosk Player",
     "directories": {
       "output": "dist-electron",
       "buildResources": "assets"
@@ -125,7 +125,7 @@
       "createDesktopShortcut": true,
       "createStartMenuShortcut": true,
       "runAfterFinish": false,
-      "shortcutName": "Музей СВО",
+      "shortcutName": "Kiosk Player",
       "artifactName": "${productName}-Setup-${version}.${ext}"
     },
     "portable": {
