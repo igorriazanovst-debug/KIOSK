@@ -28,8 +28,14 @@ const TaskVisual: React.FC<{ task: Task }> = ({ task }) => {
       const right = Number(task.params.rightLength ?? 1);
       return (
         <div style={barsColumnStyle}>
-          <div style={{ ...barStyle, width: left * 20 }} />
-          <div style={{ ...barStyle, width: right * 20, background: COLOR.amber }} />
+          <div style={barRowStyle}>
+            <span style={barLabelStyle}>Первый</span>
+            <div style={{ ...barStyle, width: left * 20 }} />
+          </div>
+          <div style={barRowStyle}>
+            <span style={barLabelStyle}>Второй</span>
+            <div style={{ ...barStyle, width: right * 20, background: COLOR.amber }} />
+          </div>
         </div>
       );
     }
@@ -62,6 +68,36 @@ const TaskVisual: React.FC<{ task: Task }> = ({ task }) => {
     }
     case 'share_of_whole':
       return <div style={equationStyle}>{String(task.params.total)} : {String(task.params.parts)} = ?</div>;
+    case 'compare_mass': {
+      const left = Number(task.params.leftMass ?? 1);
+      const right = Number(task.params.rightMass ?? 1);
+      return (
+        <div style={barsColumnStyle}>
+          <div style={{ ...barStyle, width: Math.max(20, Math.log2(left + 1) * 30) }} />
+          <div style={{ ...barStyle, width: Math.max(20, Math.log2(right + 1) * 30), background: COLOR.amber }} />
+        </div>
+      );
+    }
+    case 'compare_volume': {
+      const left = Number(task.params.leftVolume ?? 1);
+      const right = Number(task.params.rightVolume ?? 1);
+      return (
+        <div style={barsColumnStyle}>
+          <div style={{ ...barStyle, width: Math.max(20, Math.log2(left + 1) * 30) }} />
+          <div style={{ ...barStyle, width: Math.max(20, Math.log2(right + 1) * 30), background: COLOR.amber }} />
+        </div>
+      );
+    }
+    case 'weekday_order':
+    case 'season_order':
+    case 'event_order':
+    case 'estimate_mass_volume':
+    case 'estimate_fraction':
+      // Верно-качественные типы (нет численного соотношения, которое имело
+      // бы смысл рисовать графически) — сам вопрос уже полностью в
+      // task.text, дополнительный визуал не нужен (та же логика, что и у
+      // number_multiple_check).
+      return null;
     default:
       return null;
   }
@@ -71,6 +107,8 @@ const dotsRowStyle: React.CSSProperties = { display: 'flex', gap: 8, flexWrap: '
 const dotStyle: React.CSSProperties = { width: 28, height: 28, borderRadius: '50%', background: COLOR.amber, border: `2px solid ${COLOR.amberDark}` };
 const equationStyle: React.CSSProperties = { fontFamily: FONT.ui, fontSize: 36, fontWeight: 800, color: COLOR.indigoDark };
 const barsColumnStyle: React.CSSProperties = { display: 'flex', flexDirection: 'column', gap: 12, alignItems: 'flex-start' };
+const barRowStyle: React.CSSProperties = { display: 'flex', alignItems: 'center', gap: 12 };
+const barLabelStyle: React.CSSProperties = { fontFamily: FONT.ui, fontSize: 16, fontWeight: 700, color: COLOR.text, width: 68, flexShrink: 0 };
 const barStyle: React.CSSProperties = { height: 24, background: COLOR.mint, borderRadius: 4 };
 
 export default TaskVisual;

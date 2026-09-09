@@ -36,6 +36,10 @@ export const TOPIC_CATEGORIES: TopicCategoryDef[] = [
   { key: 'rounding', name: 'Оценки', matchesTopicId: byPrefix('rounding') },
   { key: 'ordinal', name: 'Порядковые числительные', matchesTopicId: byPrefix('ordinal') },
   { key: 'shares', name: 'Доли целого', matchesTopicId: byPrefix('shares') },
+  // Этап 3 (2026-09-09) — Группа 1 покрытия FR-022 ТЗ (величины, время) —
+  // см. Тип6_бэклог.md, Эпик 30.
+  { key: 'measure', name: 'Величины', matchesTopicId: byPrefix('measure') },
+  { key: 'time', name: 'Время', matchesTopicId: byPrefix('time') },
 ];
 
 export function categorizeTopicId(topicId: string): TopicCategoryDef | undefined {
