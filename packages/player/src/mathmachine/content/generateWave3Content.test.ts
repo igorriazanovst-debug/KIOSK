@@ -110,6 +110,38 @@ test('within every number_divide_remainder group, no structural shortcut solves 
   assert.ok(checkedGroups > 0, 'expected at least one number_divide_remainder group to exist');
 });
 
+// Найдено вживую (R1): в grp_div_67 частное-минус-остаток правильного
+// ответа было константой (=1) для всех заданий группы — эвристика
+// «единственный вариант с q−r=c» решала группу без деления. Проверяем,
+// что ни одна константа c не выделяет правильный вариант больше чем в
+// половине заданий ни в одной группе деления.
+test('within every number_divide_remainder group, no single q-minus-r constant identifies the correct option too often', () => {
+  let checkedGroups = 0;
+  for (const topic of WAVE3_TOPICS) {
+    for (const group of topic.groups) {
+      const tasks = group.tasks.filter((t) => t.typeId === 'number_divide_remainder');
+      if (tasks.length < 2) continue;
+      checkedGroups += 1;
+      for (let c = -9; c <= 9; c++) {
+        let solved = 0;
+        for (const task of tasks) {
+          const parsed = (task.choices as string[]).map(parseDivisionOption);
+          const matching = parsed.filter((p) => p.quotient - p.remainder === c);
+          if (matching.length === 1) {
+            const guess = `${matching[0].quotient} ост. ${matching[0].remainder}`;
+            if (guess === task.correctAnswer) solved += 1;
+          }
+        }
+        assert.ok(
+          solved <= Math.floor(tasks.length / 2),
+          `group ${group.id}: constant q−r=${c} identifies the correct option in ${solved}/${tasks.length} tasks — too reliable to be safe`,
+        );
+      }
+    }
+  }
+  assert.ok(checkedGroups > 0, 'expected at least one number_divide_remainder group to exist');
+});
+
 test('share_of_whole tasks never have a choices field (numeric-only type)', () => {
   let checked = 0;
   for (const topic of WAVE3_TOPICS) {
