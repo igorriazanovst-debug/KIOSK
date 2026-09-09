@@ -8,6 +8,7 @@ import UpdateBanner from './components/UpdateBanner';
 import NavigationRuntime from './NavigationRuntime';
 import ChronolineRuntime from './chrono/ChronolineRuntime.tsx';
 import NatComRuntime from './natcom/NatComRuntime.tsx';
+import MathMachineRuntime from './mathmachine/MathMachineRuntime';
 
 interface Project {
   name: string;
@@ -557,6 +558,17 @@ const Player: React.FC<PlayerProps> = ({ embedded = false }) => {
             style={{ ...commonStyle, left: 0, top: 0, width: viewportSize.width, height: viewportSize.height, overflow: 'hidden' }}
           >
             <NatComRuntime properties={widget.properties as any} />
+          </div>
+        );
+      case 'mathmachine':
+        // Тот же принцип, что "naturalcommunities"/"chronoline" выше —
+        // заполняет реальный размер окна/экрана целиком.
+        return (
+          <div
+            key={widget.id}
+            style={{ ...commonStyle, left: 0, top: 0, width: viewportSize.width, height: viewportSize.height, overflow: 'hidden' }}
+          >
+            <MathMachineRuntime properties={widget.properties as any} />
           </div>
         );
       default:

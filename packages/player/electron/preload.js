@@ -89,3 +89,10 @@ contextBridge.exposeInMainWorld('natcomAPI', {
   listTemplates: () => ipcRenderer.invoke('natcom:list-templates'),
   useTemplate: (templateId, context) => ipcRenderer.invoke('natcom:use-template', templateId, context)
 });
+
+// Пользовательские данные (прогресс/настройки) виджета «Матемашка» —
+// отдельный namespace, не смешивается с остальными API.
+contextBridge.exposeInMainWorld('mathmachineAPI', {
+  loadUserData: () => ipcRenderer.invoke('mathmachine:load-user-data'),
+  saveUserData: (data) => ipcRenderer.invoke('mathmachine:save-user-data', data)
+});

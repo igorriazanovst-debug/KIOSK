@@ -5,6 +5,7 @@ import ActionEditor from './ActionEditor';
 import NavigationPropertiesSection from './NavigationPropertiesSection';
 import ChronolinePropertiesSection from './ChronolinePropertiesSection';
 import NatComPropertiesSection from './NatComPropertiesSection';
+import MathMachinePropertiesSection from './MathMachinePropertiesSection';
 import './PropertiesPanel.css';
 import RichTextEditor from './RichTextEditor';
 
@@ -69,6 +70,12 @@ const PropertiesPanel: React.FC = () => {
 
         {/* Секция виджета «Конструктор природных сообществ» */}
         <NatComPropertiesSection
+          widget={selectedWidget}
+          onPropertiesChange={handlePropertiesChange}
+        />
+
+        {/* Секция виджета «Матемашка» */}
+        <MathMachinePropertiesSection
           widget={selectedWidget}
           onPropertiesChange={handlePropertiesChange}
         />

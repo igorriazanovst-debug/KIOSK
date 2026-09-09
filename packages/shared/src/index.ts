@@ -35,3 +35,9 @@ export * from './naturalCommunities/model/schema';
 export * from './naturalCommunities/model/project';
 export * from './naturalCommunities/model/geometry';
 export * from './naturalCommunities/roles';
+
+// Матемашка (Тип 6)
+export * from './mathmachine/model/schema';
+export * from './mathmachine/widgetProperties';
+export * from './mathmachine/taskEngine';
+export * from './mathmachine/catalog';

@@ -6,6 +6,7 @@ import { createAuditLog } from '../services/AuditService';
 import { ProjectAccessService } from '../services/ProjectAccessService';
 import { isEmailAllowedForChronoline, projectDataHasChronolineWidget } from '../config/chronolineAccess';
 import { isEmailAllowedForNatcom, projectDataHasNatcomWidget } from '../config/natcomAccess';
+import { isEmailAllowedForMathMachine, projectDataHasMathMachineWidget } from '../config/mathmachineAccess';
 import multer from 'multer';
 import path from 'path';
 
@@ -207,6 +208,13 @@ export class ProjectController {
         });
       }
 
+      if (projectDataHasMathMachineWidget(projectData) && !isEmailAllowedForMathMachine(req.client.email)) {
+        return res.status(403).json({
+          error: 'MathMachine widget not allowed',
+          message: 'Виджет «Матемашка» пока недоступен для этого аккаунта'
+        });
+      }
+
       const project = await ProjectService.createProject({
         name,
         description,
@@ -359,6 +367,17 @@ export class ProjectController {
         return res.status(403).json({
           error: 'NatCom widget not allowed',
           message: 'Виджет «Конструктор природных сообществ» пока недоступен для этого аккаунта'
+        });
+      }
+
+      if (
+        Object.prototype.hasOwnProperty.call(updates, 'projectData') &&
+        projectDataHasMathMachineWidget(updates.projectData) &&
+        !isEmailAllowedForMathMachine(req.client.email)
+      ) {
+        return res.status(403).json({
+          error: 'MathMachine widget not allowed',
+          message: 'Виджет «Матемашка» пока недоступен для этого аккаунта'
         });
       }
 

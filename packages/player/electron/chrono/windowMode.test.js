@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { buildBrowserWindowOptions, hasChronolineWidget, hasNaturalCommunitiesWidget, hasStandaloneAppWidget, BASE_WINDOW_OPTIONS } from './windowMode.js';
+import { buildBrowserWindowOptions, hasChronolineWidget, hasNaturalCommunitiesWidget, hasMathMachineWidget, hasStandaloneAppWidget, BASE_WINDOW_OPTIONS } from './windowMode.js';
 
 // ─── The regression-safety guarantee ────────────────────────────────────────
 // Every one of these MUST deep-equal BASE_WINDOW_OPTIONS exactly - this is
@@ -97,9 +97,28 @@ test('hasNaturalCommunitiesWidget does not fire for chronoline and vice versa', 
   assert.equal(hasChronolineWidget({ widgets: [{ type: 'naturalcommunities' }] }), false);
 });
 
-test('hasStandaloneAppWidget fires for either type, and for neither when absent', () => {
+// ─── mathmachine - third standalone-app widget type ────────────────────────
+
+test('a mathmachine widget switches on window chrome, same as chronoline/naturalcommunities', () => {
+  const result = buildBrowserWindowOptions({ widgets: [{ id: '1', type: 'mathmachine', properties: {} }] });
+
+  assert.equal(result.fullscreen, false);
+  assert.equal(result.kiosk, false);
+  assert.equal(result.frame, true);
+  assert.equal(result.autoHideMenuBar, false);
+  assert.equal(result.useContentSize, true);
+});
+
+test('hasMathMachineWidget does not fire for the other standalone-app types and vice versa', () => {
+  assert.equal(hasMathMachineWidget({ widgets: [{ type: 'chronoline' }] }), false);
+  assert.equal(hasMathMachineWidget({ widgets: [{ type: 'naturalcommunities' }] }), false);
+  assert.equal(hasNaturalCommunitiesWidget({ widgets: [{ type: 'mathmachine' }] }), false);
+});
+
+test('hasStandaloneAppWidget fires for any of the three types, and for none when absent', () => {
   assert.equal(hasStandaloneAppWidget({ widgets: [{ type: 'chronoline' }] }), true);
   assert.equal(hasStandaloneAppWidget({ widgets: [{ type: 'naturalcommunities' }] }), true);
+  assert.equal(hasStandaloneAppWidget({ widgets: [{ type: 'mathmachine' }] }), true);
   assert.equal(hasStandaloneAppWidget({ widgets: [{ type: 'image' }] }), false);
   assert.equal(hasStandaloneAppWidget({}), false);
 });
