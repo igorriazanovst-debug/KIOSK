@@ -15,18 +15,18 @@ test('pilotContent.json validates against MathMachineContentSchema', () => {
   assert.equal(result.success, true, result.success ? '' : JSON.stringify((result as any).error?.issues, null, 2));
 });
 
-test('pilotContent has exactly thirty-one topics (2 from Этап 1 + 5 from wave 1 + 5 from wave 2 + 13 from wave 3 + 6 from wave 4) with at least one group each', () => {
+test('pilotContent has exactly thirty-seven topics (2 from Этап 1 + 5 from wave 1 + 5 from wave 2 + 13 from wave 3 + 6 from wave 4 + 6 from wave 5) with at least one group each', () => {
   const parsed = MathMachineContentSchema.parse(pilotContent);
   const topicIds = Object.keys(parsed.topics);
-  assert.equal(topicIds.length, 31);
+  assert.equal(topicIds.length, 37);
   for (const id of topicIds) {
     assert.ok(parsed.topics[id].groupIds.length >= 1);
   }
 });
 
-test('pilotContent has exactly 401 tasks (18 from Этап 1 + 80 from wave 1 + 76 from wave 2 + 135 from wave 3 + 92 from wave 4)', () => {
+test('pilotContent has exactly 501 tasks (18 from Этап 1 + 80 from wave 1 + 76 from wave 2 + 135 from wave 3 + 92 from wave 4 + 100 from wave 5)', () => {
   const parsed = MathMachineContentSchema.parse(pilotContent);
-  assert.equal(Object.keys(parsed.tasks).length, 401);
+  assert.equal(Object.keys(parsed.tasks).length, 501);
 });
 
 test('every task referenced by a group actually exists in tasks', () => {
