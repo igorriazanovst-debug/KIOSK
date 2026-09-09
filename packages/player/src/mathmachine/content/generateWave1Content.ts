@@ -16,62 +16,19 @@
 // правильный ответ медианой трёх показанных чисел; (3) «Упорядочение» —
 // ряд всегда строился по возрастанию, поэтому минимум/максимум всегда
 // стоял на одном и том же (первом/последнем) месте.
+//
+// Рефакторинг дублирования (2026-09-09): buildGroup/rotate/contentHash/
+// mergeIntoContent раньше дублировались по себе в каждой из трёх волн
+// (осознанное решение спеки волны 2, разд. 3 — «каждый скрипт волны
+// самодостаточен» — но при переделке Эпика 12 правки приходилось вносить
+// в 2-3 местах одновременно, см. Тип6_бэклог.md). Вынесены в
+// generatorShared.ts — только чистая инфраструктура, сама волна (какие
+// задания/темы/диапазоны) остаётся здесь.
 
-import type { MathMachineContent, Task, Group, Topic } from '@kiosk/shared';
+import type { MathMachineContent, Task } from '@kiosk/shared';
+import { buildGroup, rotate, contentHash, mergeWaveIntoContent, type GroupSpec, type TopicSpec } from './generatorShared.ts';
 
-export interface GroupSpec {
-  id: string;
-  name: string;
-  tasks: Task[];
-}
-
-export interface TopicSpec {
-  id: string;
-  name: string;
-  groups: GroupSpec[];
-}
-
-function buildGroup(idPrefix: string, name: string, tasks: Omit<Task, 'id'>[]): GroupSpec {
-  const builtTasks: Task[] = tasks.map((t, i) => ({
-    ...t,
-    id: i === 0 ? `${idPrefix}_intro` : `${idPrefix}_${i}`,
-  }));
-  return { id: `grp_${idPrefix}`, name, tasks: builtTasks };
-}
-
-// ─── Хэш содержания задания (FNV-1a + avalanche-перемешивание) ──────────
-// Не криптографический — единственная цель: разные (соль, params) должны
-// давать разные, невыводимые из номера-задания-в-группе значения. Соль
-// разделяет назначение хэша (позиция кнопки / порядок слов в тексте /
-// выбор дистрактора), чтобы эти оси не совпадали друг с другом.
-
-function fnv1a(str: string): number {
-  let h = 0x811c9dc5;
-  for (let i = 0; i < str.length; i++) {
-    h ^= str.charCodeAt(i);
-    h = Math.imul(h, 0x01000193);
-  }
-  return h >>> 0;
-}
-
-function avalanche(h: number): number {
-  h ^= h >>> 16;
-  h = Math.imul(h, 0x85ebca6b);
-  h ^= h >>> 13;
-  h = Math.imul(h, 0xc2b2ae35);
-  h ^= h >>> 16;
-  return h >>> 0;
-}
-
-function contentHash(salt: string, parts: (number | string)[]): number {
-  return avalanche(fnv1a(salt + '|' + parts.join(',')));
-}
-
-function rotate<T>(arr: T[], shift: number): T[] {
-  const n = arr.length;
-  const s = ((shift % n) + n) % n;
-  return [...arr.slice(s), ...arr.slice(0, s)];
-}
+export type { GroupSpec, TopicSpec };
 
 // ─── Вычитание (17 заданий: 9 + 8) ────────────────────────────────────
 
@@ -252,41 +209,5 @@ export function countWave1Tasks(): number {
 const ARITHMETIC_SECTION_ID = 'sec_arithmetic';
 
 export function mergeIntoContent(content: MathMachineContent): MathMachineContent {
-  const newTopics: Record<string, Topic> = { ...content.topics };
-  const newGroups: Record<string, Group> = { ...content.groups };
-  const newTasks: Record<string, Task> = { ...content.tasks };
-  const newTopicIds: string[] = [];
-
-  for (const topic of WAVE1_TOPICS) {
-    if (newTopics[topic.id]) {
-      throw new Error(`Topic id already exists, refusing to overwrite: ${topic.id}`);
-    }
-    const groupIds: string[] = [];
-    for (const group of topic.groups) {
-      if (newGroups[group.id]) {
-        throw new Error(`Group id already exists, refusing to overwrite: ${group.id}`);
-      }
-      for (const task of group.tasks) {
-        if (newTasks[task.id]) {
-          throw new Error(`Task id already exists, refusing to overwrite: ${task.id}`);
-        }
-        newTasks[task.id] = task;
-      }
-      newGroups[group.id] = { id: group.id, name: group.name, taskIds: group.tasks.map((t) => t.id) };
-      groupIds.push(group.id);
-    }
-    newTopics[topic.id] = { id: topic.id, name: topic.name, groupIds };
-    newTopicIds.push(topic.id);
-  }
-
-  if (!content.sections.some((s) => s.id === ARITHMETIC_SECTION_ID)) {
-    throw new Error(`Section ${ARITHMETIC_SECTION_ID} not found — cannot attach wave 1 topics`);
-  }
-  const newSections = content.sections.map((section) =>
-    section.id === ARITHMETIC_SECTION_ID
-      ? { ...section, topicIds: [...section.topicIds, ...newTopicIds] }
-      : section,
-  );
-
-  return { ...content, sections: newSections, topics: newTopics, groups: newGroups, tasks: newTasks };
+  return mergeWaveIntoContent(content, WAVE1_TOPICS, ARITHMETIC_SECTION_ID);
 }
