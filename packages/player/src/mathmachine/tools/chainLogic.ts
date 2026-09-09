@@ -6,9 +6,13 @@
 
 export type ChainCategory = 'number' | 'shape' | 'letter' | 'toy';
 
-export const SHAPE_POOL = ['circle', 'square', 'triangle'] as const;
+// Найдено вживую при ручном тестировании: раньше здесь были английские
+// слова ('circle'/'ball' и т.д.), отображавшиеся как текст в детском
+// приложении на русском языке. Значки — универсальный визуальный язык,
+// не требующий перевода вообще.
+export const SHAPE_POOL = ['●', '■', '▲'] as const;
 export const LETTER_POOL = ['А', 'Б', 'В'] as const;
-export const TOY_POOL = ['ball', 'car', 'flower'] as const;
+export const TOY_POOL = ['⚽', '🚗', '🌼'] as const;
 
 const CHAIN_LENGTH_MIN = 5;
 const CHAIN_LENGTH_MAX = 7;
