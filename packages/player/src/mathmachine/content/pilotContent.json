@@ -34,7 +34,9 @@
     "count2_3": { "id": "count2_3", "typeId": "number_missing", "text": "Какое число пропущено в ряду 3, 4, 5, 6, ??", "params": { "series": [3, 4, 5, 6, 7], "missingIndex": 4 }, "correctAnswer": 7 }
   },
   "mathTools": [
-    { "id": "weights", "name": "Весы" }
+    { "id": "weights", "name": "Весы" },
+    { "id": "chain", "name": "Цепочка" },
+    { "id": "two_segments", "name": "Два отрезка" }
   ],
   "media": {}
 }

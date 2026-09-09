@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import type { MathMachineWidgetProperties, MathMachineContent, MathMachineUserData, GroupProgress } from '@kiosk/shared';
 import { MATHMACHINE_USERDATA_SCHEMA_VERSION } from '@kiosk/shared';
 import CatalogScreen from './CatalogScreen';
-import WeightsTool from './tools/WeightsTool';
+import LabScreen from './LabScreen';
 import { loadUserData, saveUserData } from './userDataStorage';
 import pilotContentJson from './content/pilotContent.json';
 
@@ -10,7 +10,7 @@ interface Props {
   properties: MathMachineWidgetProperties;
 }
 
-type Screen = 'catalog' | 'weights';
+type Screen = 'catalog' | 'lab';
 
 const INITIAL_USER_DATA: MathMachineUserData = { schemaVersion: MATHMACHINE_USERDATA_SCHEMA_VERSION, progress: {}, soundOn: true };
 
@@ -49,7 +49,7 @@ const MathMachineRuntime: React.FC<Props> = ({ properties }) => {
         <span>{properties.title}</span>
         <div style={{ display: 'flex', gap: 8 }}>
           <button onClick={() => setScreen('catalog')}>Задания</button>
-          <button onClick={() => setScreen('weights')}>Лаборатория: Весы</button>
+          <button onClick={() => setScreen('lab')}>Лаборатория</button>
           <button onClick={() => setUserData((prev) => ({ ...prev, soundOn: !prev.soundOn }))}>
             {userData.soundOn ? '🔊 Звук вкл' : '🔇 Звук выкл'}
           </button>
@@ -64,7 +64,7 @@ const MathMachineRuntime: React.FC<Props> = ({ properties }) => {
           onProgressChange={handleProgressChange}
         />
       )}
-      {screen === 'weights' && <WeightsTool onClose={() => setScreen('catalog')} />}
+      {screen === 'lab' && <LabScreen onExit={() => setScreen('catalog')} />}
     </div>
   );
 };

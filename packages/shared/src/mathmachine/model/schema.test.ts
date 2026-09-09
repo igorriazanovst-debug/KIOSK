@@ -80,3 +80,8 @@ test('SectionSchema and MathToolSchema accept minimal well-formed records', () =
   assert.equal(MathToolSchema.safeParse({ id: 'weights', name: 'Весы' }).success, true);
   assert.equal(MathToolSchema.safeParse({ id: 'not_a_tool', name: 'X' }).success, false);
 });
+
+test('MathToolSchema accepts the two Этап 2a tool ids (chain, two_segments)', () => {
+  assert.equal(MathToolSchema.safeParse({ id: 'chain', name: 'Цепочка' }).success, true);
+  assert.equal(MathToolSchema.safeParse({ id: 'two_segments', name: 'Два отрезка' }).success, true);
+});

@@ -69,8 +69,8 @@ export const SectionSchema = z.object({
 });
 export type Section = z.infer<typeof SectionSchema>;
 
-/** Этап 1 — только «Весы»; Этап 2 добавит 'chain'/'two_segments' (ТЗ FR-024). */
-export const MATH_TOOL_IDS = ['weights'] as const;
+/** Этап 1 — «Весы»; Этап 2a добавил 'chain'/'two_segments' (ТЗ FR-024). */
+export const MATH_TOOL_IDS = ['weights', 'chain', 'two_segments'] as const;
 export const MathToolSchema = z.object({
   id: z.enum(MATH_TOOL_IDS),
   name: z.string().min(1),
