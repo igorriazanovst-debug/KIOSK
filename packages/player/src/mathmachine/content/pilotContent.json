@@ -1,0 +1,40 @@
+{
+  "schemaVersion": 1,
+  "sections": [
+    { "id": "sec_arithmetic", "name": "Арифметика", "topicIds": ["top_addition", "top_counting"] }
+  ],
+  "topics": {
+    "top_addition": { "id": "top_addition", "name": "Сложение", "groupIds": ["grp_add_1", "grp_add_2"] },
+    "top_counting": { "id": "top_counting", "name": "Счёт", "groupIds": ["grp_count_1", "grp_count_2"] }
+  },
+  "groups": {
+    "grp_add_1": { "id": "grp_add_1", "name": "Сложение до 10, шаг 1", "taskIds": ["add1_intro", "add1_1", "add1_2", "add1_3", "add1_4"] },
+    "grp_add_2": { "id": "grp_add_2", "name": "Сложение трёх чисел", "taskIds": ["add2_intro", "add2_1", "add2_2", "add2_3"] },
+    "grp_count_1": { "id": "grp_count_1", "name": "Посчитай предметы", "taskIds": ["count1_intro", "count1_1", "count1_2", "count1_3", "count1_4"] },
+    "grp_count_2": { "id": "grp_count_2", "name": "Найди пропущенное число", "taskIds": ["count2_intro", "count2_1", "count2_2", "count2_3"] }
+  },
+  "tasks": {
+    "add1_intro": { "id": "add1_intro", "typeId": "number_sum_two", "text": "Давай научимся складывать числа! Сколько будет 1 плюс 1?", "params": { "a": 1, "b": 1 }, "correctAnswer": 2 },
+    "add1_1": { "id": "add1_1", "typeId": "number_sum_two", "text": "Сколько будет 2 плюс 3?", "params": { "a": 2, "b": 3 }, "correctAnswer": 5 },
+    "add1_2": { "id": "add1_2", "typeId": "number_sum_two", "text": "Сколько будет 4 плюс 4?", "params": { "a": 4, "b": 4 }, "correctAnswer": 8 },
+    "add1_3": { "id": "add1_3", "typeId": "number_sum_two", "text": "Сколько будет 5 плюс 2?", "params": { "a": 5, "b": 2 }, "correctAnswer": 7 },
+    "add1_4": { "id": "add1_4", "typeId": "number_sum_two", "text": "Сколько будет 6 плюс 3?", "params": { "a": 6, "b": 3 }, "correctAnswer": 9 },
+    "add2_intro": { "id": "add2_intro", "typeId": "number_sum_three", "text": "Теперь сложим сразу три числа! Сколько будет 1 плюс 1 плюс 1?", "params": { "a": 1, "b": 1, "c": 1 }, "correctAnswer": 3 },
+    "add2_1": { "id": "add2_1", "typeId": "number_sum_three", "text": "Сколько будет 2 плюс 2 плюс 1?", "params": { "a": 2, "b": 2, "c": 1 }, "correctAnswer": 5 },
+    "add2_2": { "id": "add2_2", "typeId": "number_sum_three", "text": "Сколько будет 1 плюс 3 плюс 2?", "params": { "a": 1, "b": 3, "c": 2 }, "correctAnswer": 6 },
+    "add2_3": { "id": "add2_3", "typeId": "number_sum_three", "text": "Сколько будет 3 плюс 3 плюс 1?", "params": { "a": 3, "b": 3, "c": 1 }, "correctAnswer": 7 },
+    "count1_intro": { "id": "count1_intro", "typeId": "number_counting", "text": "Посчитай, сколько кружков ты видишь?", "params": { "count": 3 }, "correctAnswer": 3 },
+    "count1_1": { "id": "count1_1", "typeId": "number_counting", "text": "Сколько кружков на этот раз?", "params": { "count": 5 }, "correctAnswer": 5 },
+    "count1_2": { "id": "count1_2", "typeId": "number_counting", "text": "Посчитай кружки!", "params": { "count": 7 }, "correctAnswer": 7 },
+    "count1_3": { "id": "count1_3", "typeId": "number_counting", "text": "А теперь сколько?", "params": { "count": 4 }, "correctAnswer": 4 },
+    "count1_4": { "id": "count1_4", "typeId": "number_counting", "text": "Посчитай все кружки до одного!", "params": { "count": 9 }, "correctAnswer": 9 },
+    "count2_intro": { "id": "count2_intro", "typeId": "number_missing", "text": "Какое число пропущено в ряду 2, 4, ?, 8, 10?", "params": { "series": [2, 4, 6, 8, 10], "missingIndex": 2 }, "correctAnswer": 6 },
+    "count2_1": { "id": "count2_1", "typeId": "number_missing", "text": "Какое число пропущено в ряду 1, 2, 3, ?, 5?", "params": { "series": [1, 2, 3, 4, 5], "missingIndex": 3 }, "correctAnswer": 4 },
+    "count2_2": { "id": "count2_2", "typeId": "number_missing", "text": "Какое число пропущено в ряду 5, ?, 7, 8, 9?", "params": { "series": [5, 6, 7, 8, 9], "missingIndex": 1 }, "correctAnswer": 6 },
+    "count2_3": { "id": "count2_3", "typeId": "number_missing", "text": "Какое число пропущено в ряду 3, 4, 5, 6, ??", "params": { "series": [3, 4, 5, 6, 7], "missingIndex": 4 }, "correctAnswer": 7 }
+  },
+  "mathTools": [
+    { "id": "weights", "name": "Весы" }
+  ],
+  "media": {}
+}
