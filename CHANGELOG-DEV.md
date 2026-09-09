@@ -5,6 +5,17 @@
 
 ---
 
+## 2026-09-09 (продолжение)
+
+### FEATURE — офлайн-озвучка 18 пилотных заданий Этапа 1
+- **Что сделано:** реализован Task 16 исходного плана (Windows System.Speech SAPI + ffmpeg → mp3) — оригинальные аудиофайлы восстановить было нельзя (бинарные, не в JSONL-транскрипте), сгенерированы заново тем же механизмом.
+- **Найдено по пути:** (1) `./media/${id}.mp3` в `TaskRunner.tsx` резолвится относительно `dist/index.html` — файлы должны лежать в `packages/player/public/media/` (vite копирует `public/*` в `dist/*`), а не в `src/mathmachine/media/`, откуда vite их не подхватит для production-сборки (динамический путь недоступен статическому анализу Rollup); (2) служба Windows Audio (`AudioSrv`) была зависшей на машине — SAPI тихо отдавал 46-байтовые пустые WAV без единой ошибки, независимо от текста; `Restart-Service AudioSrv` устранило полностью, добавлена защита (порог размера WAV + до 3 повторных попыток) на случай повтора.
+- **Способ исправления:** `generate_pilot_audio.ps1` (только TTS+ffmpeg, не трогает JSON) + `fill_pilot_audio_ids.mjs` (точечно проставляет `audioTaskTextId`, безопасным `JSON.parse`/`stringify`, не PowerShell `ConvertTo-Json`, которая переформатировала бы весь 309-задачный файл).
+- **Файлы:** `packages/player/public/media/*.mp3` (18 файлов), `packages/player/src/mathmachine/content/{generate_pilot_audio.ps1,fill_pilot_audio_ids.mjs,pilotContent.json,pilotContent.test.ts}`.
+- **Проверка:** живьём через packaged Electron — `Audio()` успешно загружает файл изнутри упакованного `.exe` (asar-прозрачность), длительность точно совпадает с ffprobe. Новый тест: каждое задание с `audioTaskTextId` имеет существующий mp3 на диске. player 259/259, `tsc --noEmit` чист. Коммит `a40df66`.
+
+---
+
 ## 2026-09-09
 
 ### CHORE — восстановление ветки `feat/mathmachine-widget` после потери локального клона
