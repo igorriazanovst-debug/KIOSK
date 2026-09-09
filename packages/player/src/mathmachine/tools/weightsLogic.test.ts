@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { computeBalance } from './weightsLogic';
+import { computeBalance } from './weightsLogic.ts';
 
 test('computeBalance sums placed weights per pan and ignores unplaced ones', () => {
   const result = computeBalance([

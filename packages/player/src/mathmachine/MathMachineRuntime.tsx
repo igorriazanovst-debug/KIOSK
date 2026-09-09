@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import type { MathMachineWidgetProperties, MathMachineContent, MathMachineUserData, GroupProgress } from '@kiosk/shared';
+import { MATHMACHINE_USERDATA_SCHEMA_VERSION } from '@kiosk/shared';
 import CatalogScreen from './CatalogScreen';
 import WeightsTool from './tools/WeightsTool';
 import { loadUserData, saveUserData } from './userDataStorage';
@@ -11,14 +12,32 @@ interface Props {
 
 type Screen = 'catalog' | 'weights';
 
+const INITIAL_USER_DATA: MathMachineUserData = { schemaVersion: MATHMACHINE_USERDATA_SCHEMA_VERSION, progress: {}, soundOn: true };
+
 const MathMachineRuntime: React.FC<Props> = ({ properties }) => {
   const content = pilotContentJson as unknown as MathMachineContent;
-  const [userData, setUserData] = useState<MathMachineUserData>(() => loadUserData());
+  const [userData, setUserData] = useState<MathMachineUserData>(INITIAL_USER_DATA);
+  const [loaded, setLoaded] = useState(false);
   const [screen, setScreen] = useState<Screen>('catalog');
 
   useEffect(() => {
+    let cancelled = false;
+    loadUserData().then((data) => {
+      if (!cancelled) {
+        setUserData(data);
+        setLoaded(true);
+      }
+    });
+    return () => {
+      cancelled = true;
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
+    if (!loaded) return; // не перезаписывать сохранённый прогресс дефолтом до завершения первой загрузки
     saveUserData(userData);
-  }, [userData]);
+  }, [userData, loaded]);
 
   function handleProgressChange(groupId: string, groupProgress: GroupProgress) {
     setUserData((prev) => ({ ...prev, progress: { ...prev.progress, [groupId]: groupProgress } }));

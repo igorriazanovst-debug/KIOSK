@@ -3,6 +3,7 @@ const path = require('path');
 const fs = require('fs');
 const { registerChronoIpc } = require('./chrono/ipc');
 const { registerNatComIpc } = require('./natcom/ipc');
+const { registerMathmachineIpc } = require('./mathmachine/ipc');
 const { buildBrowserWindowOptions, hasStandaloneAppWidget, hasNaturalCommunitiesWidget, NATCOM_WIDGET_TYPE } = require('./chrono/windowMode');
 const { mediaDir: chronoMediaDir } = require('./chrono/mediaStore');
 const { resolveWithinRoot: chronoResolveWithinRoot } = require('./chrono/pathGuard');
@@ -1175,6 +1176,17 @@ app.whenReady().then(() => {
     if (!libraryLoaded) fileLog('[natcom] WARNING: library (natcom-library/index.json) not found - Home screen will be empty');
   } catch (err) {
     fileLog('[natcom] failed to initialize local storage:', err && err.message);
+  }
+
+  // Пользовательские данные (прогресс/настройки) виджета «Матемашка» —
+  // канал 'mathmachine:*', используется только этим виджетом. Раньше
+  // рендерер читал/писал файл напрямую через node:fs, что давало чёрный
+  // экран в песочнице Electron — теперь только через этот IPC-мост.
+  try {
+    const { baseDir, isFallback: mathmachineIsFallback } = registerMathmachineIpc({ ipcMain, app });
+    fileLog('[mathmachine] storage dir:', baseDir, mathmachineIsFallback ? '(fallback: no write access to shared dir)' : '');
+  } catch (err) {
+    fileLog('[mathmachine] failed to initialize local storage:', err && err.message);
   }
 
   const { session } = require('electron');

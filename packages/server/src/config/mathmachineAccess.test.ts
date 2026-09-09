@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { isEmailAllowedForMathMachine, projectDataHasMathMachineWidget } from './mathmachineAccess';
+import { isEmailAllowedForMathMachine, projectDataHasMathMachineWidget } from './mathmachineAccess.ts';
 
 test('isEmailAllowedForMathMachine allows the designated email, case-insensitively', () => {
   assert.equal(isEmailAllowedForMathMachine('mokretcov.m@poznaikino.ru'), true);

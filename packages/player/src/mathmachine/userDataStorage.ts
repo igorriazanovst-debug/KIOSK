@@ -1,23 +1,13 @@
 // Хранение пользовательских данных (прогресс/настройки), отдельно от
 // контента (спека, разд. 3). Атомарная запись — временный файл + rename
-// (спека, разд. 9), чтобы обрыв записи не портил файл. `baseDir` — только
-// для тестируемости; в бою всегда берётся системный каталог пользователя.
+// (спека, разд. 9) — но само чтение/запись файла происходит в
+// main-процессе Electron, не здесь: рендерер-процесс в песочнице Electron
+// не имеет доступа к node:fs напрямую (найдено вживую при первом запуске —
+// давало полностью чёрный экран). Этот модуль — тонкая обёртка над
+// window.mathmachineAPI (packages/player/electron/preload.js), тем же
+// способом, что уже устоялся у chronoAPI/natcomAPI.
 
-import fs from 'node:fs';
-import path from 'node:path';
-import os from 'node:os';
 import { MathMachineUserDataSchema, MATHMACHINE_USERDATA_SCHEMA_VERSION, type MathMachineUserData } from '@kiosk/shared';
-
-function defaultBaseDir(): string {
-  const base = process.env.APPDATA || path.join(os.homedir(), '.config');
-  return path.join(base, 'kiosk-mathmachine');
-}
-
-function userDataPath(baseDir?: string): string {
-  const dir = baseDir ?? defaultBaseDir();
-  fs.mkdirSync(dir, { recursive: true });
-  return path.join(dir, 'userdata.json');
-}
 
 const FALLBACK: MathMachineUserData = {
   schemaVersion: MATHMACHINE_USERDATA_SCHEMA_VERSION,
@@ -25,20 +15,31 @@ const FALLBACK: MathMachineUserData = {
   soundOn: true,
 };
 
-export function loadUserData(baseDir?: string): MathMachineUserData {
-  const filePath = userDataPath(baseDir);
+declare global {
+  interface Window {
+    mathmachineAPI?: {
+      loadUserData: () => Promise<unknown>;
+      saveUserData: (data: MathMachineUserData) => Promise<{ ok: boolean }>;
+    };
+  }
+}
+
+export async function loadUserData(): Promise<MathMachineUserData> {
+  if (!window.mathmachineAPI) return FALLBACK;
   try {
-    const raw = fs.readFileSync(filePath, 'utf-8');
-    const parsed = MathMachineUserDataSchema.safeParse(JSON.parse(raw));
+    const raw = await window.mathmachineAPI.loadUserData();
+    const parsed = MathMachineUserDataSchema.safeParse(raw);
     return parsed.success ? parsed.data : FALLBACK;
   } catch {
     return FALLBACK;
   }
 }
 
-export function saveUserData(data: MathMachineUserData, baseDir?: string): void {
-  const filePath = userDataPath(baseDir);
-  const tmpPath = `${filePath}.tmp`;
-  fs.writeFileSync(tmpPath, JSON.stringify(data), 'utf-8');
-  fs.renameSync(tmpPath, filePath);
+export function saveUserData(data: MathMachineUserData): void {
+  if (!window.mathmachineAPI) return;
+  window.mathmachineAPI.saveUserData(data).catch(() => {
+    // Ошибка записи не должна ронять UI — прогресс просто не сохранится
+    // на этот раз, следующий saveUserData (после следующего ответа
+    // ребёнка) попробует снова.
+  });
 }

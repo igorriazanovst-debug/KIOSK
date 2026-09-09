@@ -26,7 +26,13 @@ const WeightsTool: React.FC<Props> = ({ onClose }) => {
 
       <Stage width={640} height={220}>
         <Layer>
-          <Line points={[220, 100, 420, 100]} stroke="#555" strokeWidth={6} rotation={balance.tiltDegrees} x={0} y={0} offsetX={320} offsetY={100} />
+          {/* Найдено вживую (Задача 15): offsetX/offsetY задают точку поворота
+              внутри координат самой фигуры, но Konva ТАКЖЕ сдвигает рендер
+              фигуры на -offset от x/y — без компенсации x/y тем же значением
+              луч уезжал почти за пределы холста. x/y здесь равны offsetX/offsetY,
+              чтобы видимая позиция луча не сдвинулась, а вращение шло вокруг
+              его середины (320, 100). */}
+          <Line points={[220, 100, 420, 100]} stroke="#555" strokeWidth={6} rotation={balance.tiltDegrees} x={320} y={100} offsetX={320} offsetY={100} />
           <Text x={160} y={140} text={`Слева: ${balance.leftMass}`} fontSize={18} />
           <Text x={420} y={140} text={`Справа: ${balance.rightMass}`} fontSize={18} />
         </Layer>
