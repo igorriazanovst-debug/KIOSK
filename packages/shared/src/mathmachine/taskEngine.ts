@@ -39,6 +39,13 @@ export const TASK_TYPE_REGISTRY: Record<TaskTypeId, TaskTypeDefinition> = {
   round_to_ten: { id: 'round_to_ten', answerMode: 'numeric', checkAnswer: numericCheck },
   ordinal_position: { id: 'ordinal_position', answerMode: 'numeric', checkAnswer: numericCheck },
   share_of_whole: { id: 'share_of_whole', answerMode: 'numeric', checkAnswer: numericCheck },
+  compare_mass: { id: 'compare_mass', answerMode: 'choice', checkAnswer: choiceCheck },
+  compare_volume: { id: 'compare_volume', answerMode: 'choice', checkAnswer: choiceCheck },
+  weekday_order: { id: 'weekday_order', answerMode: 'choice', checkAnswer: choiceCheck },
+  season_order: { id: 'season_order', answerMode: 'choice', checkAnswer: choiceCheck },
+  event_order: { id: 'event_order', answerMode: 'choice', checkAnswer: choiceCheck },
+  estimate_mass_volume: { id: 'estimate_mass_volume', answerMode: 'choice', checkAnswer: choiceCheck },
+  estimate_fraction: { id: 'estimate_fraction', answerMode: 'choice', checkAnswer: choiceCheck },
 };
 
 export function checkTaskAnswer(task: Task, userAnswer: number | string): boolean {

@@ -36,6 +36,17 @@ export const TASK_TYPE_IDS = [
   'round_to_ten',
   'ordinal_position',
   'share_of_whole',
+  // Этап 3 (2026-09-09) — Группа 1 покрытия FR-022: виды тем ТЗ за
+  // пределами арифметики (величины/время/дроби-оценки), найденные при
+  // сверке кода с полным текстом ТЗ_06_Матемашка.docx — см.
+  // Тип6_бэклог.md, Эпик 30.
+  'compare_mass',
+  'compare_volume',
+  'weekday_order',
+  'season_order',
+  'event_order',
+  'estimate_mass_volume',
+  'estimate_fraction',
 ] as const;
 export const TaskTypeIdSchema = z.enum(TASK_TYPE_IDS);
 export type TaskTypeId = z.infer<typeof TaskTypeIdSchema>;
