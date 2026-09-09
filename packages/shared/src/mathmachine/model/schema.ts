@@ -47,6 +47,23 @@ export const TASK_TYPE_IDS = [
   'event_order',
   'estimate_mass_volume',
   'estimate_fraction',
+  // Этап 4 (2026-09-10) — Класс А покрытия FR-022: 13 категорий,
+  // ложащихся на существующий choice/numeric движок новыми визуалами
+  // (без новой парадигмы взаимодействия) — см. Тип6_бэклог.md, Эпик 32,
+  // и docs/superpowers/specs/2026-09-10-mathmachine-fr022-groups23-design.md.
+  'count_then_add',
+  'count_then_subtract',
+  'clock_reading',
+  'mass_measurement',
+  'right_angle_recognition',
+  'shape_naming',
+  'shape_properties',
+  'solid_naming',
+  'solid_properties',
+  'spatial_position',
+  'spatial_direction',
+  'spatial_ordering',
+  'grid_coordinates',
 ] as const;
 export const TaskTypeIdSchema = z.enum(TASK_TYPE_IDS);
 export type TaskTypeId = z.infer<typeof TaskTypeIdSchema>;
@@ -92,7 +109,14 @@ export const SectionSchema = z.object({
 export type Section = z.infer<typeof SectionSchema>;
 
 /** Этап 1 — «Весы»; Этап 2a добавил 'chain'/'two_segments' (ТЗ FR-024). */
-export const MATH_TOOL_IDS = ['weights', 'chain', 'two_segments'] as const;
+// Этап 4 (2026-09-10) — Класс Б покрытия FR-022: новая парадигма
+// взаимодействия (перетаскивание/конструирование/деформация/вращение),
+// не choice/numeric — см. docs/superpowers/specs/2026-09-10-mathmachine-fr022-groups23-design.md.
+export const MATH_TOOL_IDS = [
+  'weights', 'chain', 'two_segments',
+  'shape_construction', 'movement', 'deformation',
+  'seriation', 'rotation_full_turn', 'symmetry',
+] as const;
 export const MathToolSchema = z.object({
   id: z.enum(MATH_TOOL_IDS),
   name: z.string().min(1),

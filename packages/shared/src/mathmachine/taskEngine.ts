@@ -46,6 +46,19 @@ export const TASK_TYPE_REGISTRY: Record<TaskTypeId, TaskTypeDefinition> = {
   event_order: { id: 'event_order', answerMode: 'choice', checkAnswer: choiceCheck },
   estimate_mass_volume: { id: 'estimate_mass_volume', answerMode: 'choice', checkAnswer: choiceCheck },
   estimate_fraction: { id: 'estimate_fraction', answerMode: 'choice', checkAnswer: choiceCheck },
+  count_then_add: { id: 'count_then_add', answerMode: 'numeric', checkAnswer: numericCheck },
+  count_then_subtract: { id: 'count_then_subtract', answerMode: 'numeric', checkAnswer: numericCheck },
+  clock_reading: { id: 'clock_reading', answerMode: 'choice', checkAnswer: choiceCheck },
+  mass_measurement: { id: 'mass_measurement', answerMode: 'choice', checkAnswer: choiceCheck },
+  right_angle_recognition: { id: 'right_angle_recognition', answerMode: 'choice', checkAnswer: choiceCheck },
+  shape_naming: { id: 'shape_naming', answerMode: 'choice', checkAnswer: choiceCheck },
+  shape_properties: { id: 'shape_properties', answerMode: 'choice', checkAnswer: choiceCheck },
+  solid_naming: { id: 'solid_naming', answerMode: 'choice', checkAnswer: choiceCheck },
+  solid_properties: { id: 'solid_properties', answerMode: 'choice', checkAnswer: choiceCheck },
+  spatial_position: { id: 'spatial_position', answerMode: 'choice', checkAnswer: choiceCheck },
+  spatial_direction: { id: 'spatial_direction', answerMode: 'choice', checkAnswer: choiceCheck },
+  spatial_ordering: { id: 'spatial_ordering', answerMode: 'choice', checkAnswer: choiceCheck },
+  grid_coordinates: { id: 'grid_coordinates', answerMode: 'choice', checkAnswer: choiceCheck },
 };
 
 export function checkTaskAnswer(task: Task, userAnswer: number | string): boolean {

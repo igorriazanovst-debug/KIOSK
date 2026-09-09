@@ -137,3 +137,36 @@ test('checkTaskAnswer validates share_of_whole correctly', () => {
   assert.equal(checkTaskAnswer(shareTask, 8), false);
   assert.equal(checkTaskAnswer(shareTask, '4'), true);
 });
+
+const countAddTask: Task = {
+  id: 'e4t1', typeId: 'count_then_add',
+  text: 'Посчитай кружки в первой группе, посчитай во второй, сложи вместе — сколько всего?',
+  params: { groupA: 3, groupB: 4 }, correctAnswer: 7,
+};
+const clockTask: Task = {
+  id: 'e4t2', typeId: 'clock_reading', text: 'Сколько времени показывают часы?',
+  params: { hours: 3, minutes: 0 }, correctAnswer: '3:00', choices: ['3:00', '9:00', '6:00'],
+};
+
+test('getAnswerMode returns the right mode for each Этап 4 Class A type', () => {
+  assert.equal(getAnswerMode('count_then_add'), 'numeric');
+  assert.equal(getAnswerMode('count_then_subtract'), 'numeric');
+  assert.equal(getAnswerMode('clock_reading'), 'choice');
+  assert.equal(getAnswerMode('mass_measurement'), 'choice');
+  assert.equal(getAnswerMode('right_angle_recognition'), 'choice');
+  assert.equal(getAnswerMode('shape_naming'), 'choice');
+  assert.equal(getAnswerMode('shape_properties'), 'choice');
+  assert.equal(getAnswerMode('solid_naming'), 'choice');
+  assert.equal(getAnswerMode('solid_properties'), 'choice');
+  assert.equal(getAnswerMode('spatial_position'), 'choice');
+  assert.equal(getAnswerMode('spatial_direction'), 'choice');
+  assert.equal(getAnswerMode('spatial_ordering'), 'choice');
+  assert.equal(getAnswerMode('grid_coordinates'), 'choice');
+});
+
+test('checkTaskAnswer validates Этап 4 Class A types correctly', () => {
+  assert.equal(checkTaskAnswer(countAddTask, 7), true);
+  assert.equal(checkTaskAnswer(countAddTask, 6), false);
+  assert.equal(checkTaskAnswer(clockTask, '3:00'), true);
+  assert.equal(checkTaskAnswer(clockTask, '9:00'), false);
+});
