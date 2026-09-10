@@ -56,6 +56,13 @@ const GameSetupScreen: React.FC<Props> = ({ quiz, onComplete }) => {
   }
 
   if (step === 'names') {
+    // Находка 5 финального ревью: пустое/пробельное имя, дошедшее до
+    // сохранения, ломает RusiqPlayerResultSchema.name (min(1)) при
+    // следующей загрузке и молча стирает ВСЮ историю игр (safeParse
+    // схемы падает целиком, не по одной записи). Правильное место фикса —
+    // источник, не приёмник: не пускать пустое имя дальше этого экрана.
+    const hasEmptyName = names.some((name) => name.trim().length === 0);
+
     return (
       <div style={{ maxWidth: 400, margin: '60px auto', fontFamily: 'sans-serif' }}>
         <h2>Имена игроков</h2>
@@ -67,7 +74,18 @@ const GameSetupScreen: React.FC<Props> = ({ quiz, onComplete }) => {
             style={{ display: 'block', width: '100%', fontSize: 16, padding: 8, marginBottom: 8 }}
           />
         ))}
-        <button onClick={handleNamesConfirmed} style={{ fontSize: 16, padding: '8px 20px' }}>Далее</button>
+        {hasEmptyName && (
+          <p style={{ color: '#c0392b', fontSize: 14, marginTop: -4, marginBottom: 8 }}>
+            Введите имя для каждого игрока — пустых имён быть не может.
+          </p>
+        )}
+        <button
+          onClick={handleNamesConfirmed}
+          disabled={hasEmptyName}
+          style={{ fontSize: 16, padding: '8px 20px', opacity: hasEmptyName ? 0.5 : 1, cursor: hasEmptyName ? 'not-allowed' : 'pointer' }}
+        >
+          Далее
+        </button>
       </div>
     );
   }
