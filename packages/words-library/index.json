@@ -1,0 +1,176 @@
+{
+  "schemaVersion": 1,
+  "audioScheme": {
+    "voices": [],
+    "phrasesPerVoice": 0,
+    "neutral": false
+  },
+  "themes": [
+    {
+      "id": "digits",
+      "title": "Цифры",
+      "wordIds": [
+        "0000",
+        "0001",
+        "0002",
+        "0003",
+        "0004"
+      ]
+    },
+    {
+      "id": "my_room",
+      "title": "Моя комната",
+      "wordIds": [
+        "0100",
+        "0101",
+        "0102",
+        "0103",
+        "0104"
+      ]
+    },
+    {
+      "id": "transport",
+      "title": "Транспорт",
+      "wordIds": [
+        "0200",
+        "0201",
+        "0202",
+        "0203",
+        "0204"
+      ]
+    },
+    {
+      "id": "food",
+      "title": "Еда",
+      "wordIds": [
+        "0300",
+        "0301",
+        "0302",
+        "0303",
+        "0304"
+      ]
+    }
+  ],
+  "words": [
+    {
+      "id": "0000",
+      "name": "Один",
+      "themeId": "digits",
+      "level": 0
+    },
+    {
+      "id": "0001",
+      "name": "Два",
+      "themeId": "digits",
+      "level": 0
+    },
+    {
+      "id": "0002",
+      "name": "Три",
+      "themeId": "digits",
+      "level": 0
+    },
+    {
+      "id": "0003",
+      "name": "Четыре",
+      "themeId": "digits",
+      "level": 1
+    },
+    {
+      "id": "0004",
+      "name": "Пять",
+      "themeId": "digits",
+      "level": 1
+    },
+    {
+      "id": "0100",
+      "name": "Кровать",
+      "themeId": "my_room",
+      "level": 0
+    },
+    {
+      "id": "0101",
+      "name": "Стол",
+      "themeId": "my_room",
+      "level": 0
+    },
+    {
+      "id": "0102",
+      "name": "Стул",
+      "themeId": "my_room",
+      "level": 1
+    },
+    {
+      "id": "0103",
+      "name": "Лампа",
+      "themeId": "my_room",
+      "level": 1
+    },
+    {
+      "id": "0104",
+      "name": "Окно",
+      "themeId": "my_room",
+      "level": 2
+    },
+    {
+      "id": "0200",
+      "name": "Автобус",
+      "themeId": "transport",
+      "level": 0
+    },
+    {
+      "id": "0201",
+      "name": "Велосипед",
+      "themeId": "transport",
+      "level": 1
+    },
+    {
+      "id": "0202",
+      "name": "Самолёт",
+      "themeId": "transport",
+      "level": 1
+    },
+    {
+      "id": "0203",
+      "name": "Кораблик",
+      "themeId": "transport",
+      "level": 2
+    },
+    {
+      "id": "0204",
+      "name": "Поезд",
+      "themeId": "transport",
+      "level": 2
+    },
+    {
+      "id": "0300",
+      "name": "Яблоко",
+      "themeId": "food",
+      "level": 0
+    },
+    {
+      "id": "0301",
+      "name": "Хлеб",
+      "themeId": "food",
+      "level": 0
+    },
+    {
+      "id": "0302",
+      "name": "Молоко",
+      "themeId": "food",
+      "level": 1
+    },
+    {
+      "id": "0303",
+      "name": "Морковь",
+      "themeId": "food",
+      "level": 1
+    },
+    {
+      "id": "0304",
+      "name": "Сыр",
+      "themeId": "food",
+      "level": 2
+    }
+  ]
+}

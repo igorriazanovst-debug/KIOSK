@@ -10,6 +10,7 @@ import ChronolineRuntime from './chrono/ChronolineRuntime.tsx';
 import NatComRuntime from './natcom/NatComRuntime.tsx';
 import MathMachineRuntime from './mathmachine/MathMachineRuntime';
 import PeriodicTableRuntime from './periodictable/PeriodicTableRuntime';
+import WordsRuntime from './words/WordsRuntime.tsx';
 
 interface Project {
   name: string;
@@ -583,6 +584,21 @@ const Player: React.FC<PlayerProps> = ({ embedded = false }) => {
             <PeriodicTableRuntime properties={widget.properties as any} />
           </div>
         );
+      case 'words':
+        // Тот же принцип, что "chronoline"/"naturalcommunities" выше —
+        // полноэкранное учебное приложение, а не элемент на канвасе.
+        return (
+          <div
+            key={widget.id}
+            style={{ ...commonStyle, left: 0, top: 0, width: viewportSize.width, height: viewportSize.height, overflow: 'hidden' }}
+          >
+            <WordsRuntime
+              properties={widget.properties as any}
+              width={viewportSize.width}
+              height={viewportSize.height}
+            />
+          </div>
+        );
       default:
         return null;
     }
@@ -1123,7 +1139,7 @@ const Player: React.FC<PlayerProps> = ({ embedded = false }) => {
   // по project.canvas.* и получается больше окна → двойной скролл и обрезка
   // контента (найдено вживую при ручном тестировании «Матемашки»).
   const isStandaloneAppProject = project.widgets.some(
-    (w) => w.type === 'chronoline' || w.type === 'naturalcommunities' || w.type === 'mathmachine' || w.type === 'periodictable'
+    (w) => w.type === 'chronoline' || w.type === 'naturalcommunities' || w.type === 'mathmachine' || w.type === 'periodictable' || w.type === 'words'
   );
 
   // Letterbox-масштаб для НЕ-standalone проектов: канвас проектировался под

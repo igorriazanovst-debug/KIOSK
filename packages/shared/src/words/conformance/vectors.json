@@ -1,0 +1,410 @@
+{
+  "note": "Сверочные векторы виджета «Я знаю много слов». Обе реализации — Electron (TypeScript) и нативная Android — обязаны давать ровно эти результаты. См. docs/words-cross-platform-contract.md",
+  "generatedFrom": "packages/shared/src/words",
+  "resources": {
+    "wordImage": [
+      {
+        "wordId": "0000",
+        "path": "img/words/0000.svg"
+      },
+      {
+        "wordId": "0204",
+        "path": "img/words/0204.svg"
+      },
+      {
+        "wordId": "1419",
+        "path": "img/words/1419.svg"
+      }
+    ],
+    "themeCover": [
+      {
+        "themeId": "digits",
+        "path": "img/themes/digits.svg"
+      },
+      {
+        "themeId": "transport",
+        "path": "img/themes/transport.svg"
+      }
+    ],
+    "themeIntro": [
+      {
+        "themeId": "digits",
+        "voice": "girl",
+        "path": "media/themes/digits/girl.mp3"
+      }
+    ],
+    "themeFinal": [
+      {
+        "themeId": "digits",
+        "path": "media/scenes-final/digits.mp3"
+      }
+    ],
+    "audioBySchema": [
+      {
+        "scheme": "reference",
+        "definition": {
+          "voices": [
+            "boy",
+            "girl"
+          ],
+          "phrasesPerVoice": 5,
+          "neutral": true
+        },
+        "hasAudio": true,
+        "filesPerWord": 11,
+        "pathsFor0000": [
+          "media/words/0000/neutral.mp3",
+          "media/words/0000/boy/0.mp3",
+          "media/words/0000/boy/1.mp3",
+          "media/words/0000/boy/2.mp3",
+          "media/words/0000/boy/3.mp3",
+          "media/words/0000/boy/4.mp3",
+          "media/words/0000/girl/0.mp3",
+          "media/words/0000/girl/1.mp3",
+          "media/words/0000/girl/2.mp3",
+          "media/words/0000/girl/3.mp3",
+          "media/words/0000/girl/4.mp3"
+        ]
+      },
+      {
+        "scheme": "mvp",
+        "definition": {
+          "voices": [
+            "girl"
+          ],
+          "phrasesPerVoice": 2,
+          "neutral": true
+        },
+        "hasAudio": true,
+        "filesPerWord": 3,
+        "pathsFor0000": [
+          "media/words/0000/neutral.mp3",
+          "media/words/0000/girl/0.mp3",
+          "media/words/0000/girl/1.mp3"
+        ]
+      },
+      {
+        "scheme": "silent",
+        "definition": {
+          "voices": [],
+          "phrasesPerVoice": 0,
+          "neutral": false
+        },
+        "hasAudio": false,
+        "filesPerWord": 0,
+        "pathsFor0000": []
+      }
+    ]
+  },
+  "awards": {
+    "thresholds": [
+      {
+        "tier": "gold",
+        "minAccuracy": 0.9
+      },
+      {
+        "tier": "silver",
+        "minAccuracy": 0.7
+      },
+      {
+        "tier": "wooden",
+        "minAccuracy": 0
+      }
+    ],
+    "byTally": [
+      {
+        "tally": {
+          "completed": 10,
+          "flawless": 10,
+          "errors": 0
+        },
+        "accuracy": 1,
+        "tier": "gold"
+      },
+      {
+        "tally": {
+          "completed": 10,
+          "flawless": 9,
+          "errors": 1
+        },
+        "accuracy": 0.9,
+        "tier": "gold"
+      },
+      {
+        "tally": {
+          "completed": 10,
+          "flawless": 8,
+          "errors": 2
+        },
+        "accuracy": 0.8,
+        "tier": "silver"
+      },
+      {
+        "tally": {
+          "completed": 10,
+          "flawless": 7,
+          "errors": 4
+        },
+        "accuracy": 0.7,
+        "tier": "silver"
+      },
+      {
+        "tally": {
+          "completed": 10,
+          "flawless": 6,
+          "errors": 9
+        },
+        "accuracy": 0.6,
+        "tier": "wooden"
+      },
+      {
+        "tally": {
+          "completed": 10,
+          "flawless": 0,
+          "errors": 30
+        },
+        "accuracy": 0,
+        "tier": "wooden"
+      },
+      {
+        "tally": {
+          "completed": 0,
+          "flawless": 0,
+          "errors": 0
+        },
+        "accuracy": 0,
+        "tier": null
+      },
+      {
+        "tally": {
+          "completed": 3,
+          "flawless": 3,
+          "errors": 0
+        },
+        "accuracy": 1,
+        "tier": "gold"
+      }
+    ],
+    "monotonicUpgrade": [
+      {
+        "current": null,
+        "earned": null,
+        "result": null
+      },
+      {
+        "current": null,
+        "earned": "wooden",
+        "result": "wooden"
+      },
+      {
+        "current": null,
+        "earned": "silver",
+        "result": "silver"
+      },
+      {
+        "current": null,
+        "earned": "gold",
+        "result": "gold"
+      },
+      {
+        "current": "wooden",
+        "earned": null,
+        "result": null
+      },
+      {
+        "current": "wooden",
+        "earned": "wooden",
+        "result": null
+      },
+      {
+        "current": "wooden",
+        "earned": "silver",
+        "result": "silver"
+      },
+      {
+        "current": "wooden",
+        "earned": "gold",
+        "result": "gold"
+      },
+      {
+        "current": "silver",
+        "earned": null,
+        "result": null
+      },
+      {
+        "current": "silver",
+        "earned": "wooden",
+        "result": null
+      },
+      {
+        "current": "silver",
+        "earned": "silver",
+        "result": null
+      },
+      {
+        "current": "silver",
+        "earned": "gold",
+        "result": "gold"
+      },
+      {
+        "current": "gold",
+        "earned": null,
+        "result": null
+      },
+      {
+        "current": "gold",
+        "earned": "wooden",
+        "result": null
+      },
+      {
+        "current": "gold",
+        "earned": "silver",
+        "result": null
+      },
+      {
+        "current": "gold",
+        "earned": "gold",
+        "result": null
+      }
+    ]
+  },
+  "rules": {
+    "profileName": [
+      {
+        "name": "Аня",
+        "accepted": true,
+        "storedName": "Аня"
+      },
+      {
+        "name": "  Боря  ",
+        "accepted": true,
+        "storedName": "Боря"
+      },
+      {
+        "name": "",
+        "accepted": false,
+        "error": "Имя игрока не может быть пустым"
+      },
+      {
+        "name": "   ",
+        "accepted": false,
+        "error": "Имя игрока не может быть пустым"
+      },
+      {
+        "name": "яяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяя",
+        "accepted": false,
+        "error": "Имя игрока длиннее 40 символов"
+      },
+      {
+        "name": "яяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяя",
+        "accepted": true,
+        "storedName": "яяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяяя"
+      },
+      {
+        "name": "аня",
+        "accepted": false,
+        "error": "Игрок «аня» уже есть в списке"
+      },
+      {
+        "name": "АНЯ",
+        "accepted": false,
+        "error": "Игрок «АНЯ» уже есть в списке"
+      }
+    ],
+    "saveScore": [
+      {
+        "from": {},
+        "profileId": "p1",
+        "themeId": "digits",
+        "tier": "wooden",
+        "changed": true,
+        "resultingTier": "wooden"
+      },
+      {
+        "from": {
+          "p1": {
+            "digits": "wooden"
+          }
+        },
+        "profileId": "p1",
+        "themeId": "digits",
+        "tier": "gold",
+        "changed": true,
+        "resultingTier": "gold"
+      },
+      {
+        "from": {
+          "p1": {
+            "digits": "gold"
+          }
+        },
+        "profileId": "p1",
+        "themeId": "digits",
+        "tier": "wooden",
+        "changed": false,
+        "resultingTier": "gold"
+      },
+      {
+        "from": {
+          "p1": {
+            "digits": "silver"
+          }
+        },
+        "profileId": "p1",
+        "themeId": "digits",
+        "tier": "silver",
+        "changed": false,
+        "resultingTier": "silver"
+      }
+    ]
+  },
+  "libraryValidation": [
+    {
+      "label": "корректный пакет",
+      "accepted": true
+    },
+    {
+      "label": "нет версии схемы",
+      "accepted": false,
+      "issues": [
+        "schemaVersion: Invalid input: expected 1"
+      ]
+    },
+    {
+      "label": "чужая версия схемы",
+      "accepted": false,
+      "issues": [
+        "schemaVersion: Invalid input: expected 1"
+      ]
+    },
+    {
+      "label": "идентификатор слова не из четырёх цифр",
+      "accepted": false,
+      "issues": [
+        "themes.0.wordIds.0: library word id must be exactly 4 digits",
+        "words.0.id: library word id must be exactly 4 digits"
+      ]
+    },
+    {
+      "label": "дублирующиеся названия тем",
+      "accepted": false,
+      "issues": [
+        "theme title \"Домашние животные\" is used by both \"pets\" and \"pets2\""
+      ]
+    },
+    {
+      "label": "тема ссылается на несуществующее слово",
+      "accepted": false,
+      "issues": [
+        "theme \"digits\" references unknown word \"9999\""
+      ]
+    },
+    {
+      "label": "слово не перечислено в своей теме",
+      "accepted": false,
+      "issues": [
+        "word \"0000\" is not listed in its theme \"digits\""
+      ]
+    }
+  ]
+}

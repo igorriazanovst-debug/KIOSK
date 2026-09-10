@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <rect width="512" height="512" rx="32" fill="#f4f1ea"/>
+  <rect x="136" y="108" width="240" height="240" rx="24" fill="#8a5a3b"/>
+  <text x="256" y="440" text-anchor="middle" font-family="system-ui, sans-serif" font-size="46" fill="#3a3a3a">Стол</text>
+  <text x="256" y="480" text-anchor="middle" font-family="system-ui, sans-serif" font-size="22" fill="#9b9b9b">заглушка</text>
+</svg>

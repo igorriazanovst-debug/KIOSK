@@ -4,6 +4,8 @@ const fs = require('fs');
 const { registerChronoIpc } = require('./chrono/ipc');
 const { registerNatComIpc } = require('./natcom/ipc');
 const { registerMathmachineIpc } = require('./mathmachine/ipc');
+const { registerWordsIpc } = require('./words/ipc');
+const wordsMediaFiles = require('./words/mediaFiles');
 const { buildBrowserWindowOptions, hasStandaloneAppWidget, hasNaturalCommunitiesWidget, NATCOM_WIDGET_TYPE } = require('./chrono/windowMode');
 const { mediaDir: chronoMediaDir } = require('./chrono/mediaStore');
 const { resolveWithinRoot: chronoResolveWithinRoot } = require('./chrono/pathGuard');
@@ -51,7 +53,16 @@ try {
     // природных сообществ» (packages/natcom-library/assets/), тот же
     // принцип, что chronomedia - без bypassCSP, схема явно добавлена в
     // CSP-заголовок ниже.
-    { scheme: 'natcomlib', privileges: { standard: true, secure: true, supportFetchAPI: true, stream: true } }
+    { scheme: 'natcomlib', privileges: { standard: true, secure: true, supportFetchAPI: true, stream: true } },
+    // wordslib - поставочная (read-only) библиотека виджета «Я знаю много
+    // слов» (packages/words-library/assets/): иллюстрации и озвучка. Тот же
+    // принцип, что chronomedia/natcomlib - без bypassCSP, схема явно
+    // добавлена в CSP-заголовок ниже.
+    { scheme: 'wordslib', privileges: { standard: true, secure: true, supportFetchAPI: true, stream: true } },
+    // wordsuser - картинки и записи, добавленные педагогом на устройстве
+    // (Фаза 5). Отдельная схема от wordslib: поставочный контент read-only и
+    // общий, пользовательский - изменяемый и лежит в каталоге данных
+    { scheme: 'wordsuser', privileges: { standard: true, secure: true, supportFetchAPI: true, stream: true } }
   ]);
 } catch (e) { fileLog('protocol register error', e.message); }
 // ─────────────────────────────────────────────────────────────────────────────
@@ -62,6 +73,8 @@ let allowActivationClose = false;
 let currentProject = null;
 let chronoBaseDir = null;
 let natcomBaseDir = null;
+let wordsAssetsDir = null;
+let wordsBaseDir = null;
 let natcomAssetsDir = null;
 let natcomLibrary = null;
 
@@ -1189,6 +1202,26 @@ app.whenReady().then(() => {
     fileLog('[mathmachine] failed to initialize local storage:', err && err.message);
   }
 
+  // Локальное хранилище виджета «Я знаю много слов» (Тип 2). Как и у natcom,
+  // регистрация безусловная и на существующих клиентов не влияет: канал
+  // 'words:*' используется только виджетом words.
+  try {
+    const { baseDir: wordsDir, isFallback: wordsIsFallback, assetsDir, completeness } =
+      registerWordsIpc({ ipcMain, app, dialog });
+    wordsAssetsDir = assetsDir;
+    wordsBaseDir = wordsDir;
+    fileLog('[words] storage dir:', wordsDir, wordsIsFallback ? '(fallback: no write access to shared dir)' : '');
+    if (!assetsDir) {
+      fileLog('[words] WARNING: content library (words-library/index.json) not found - map will be empty');
+    } else if (completeness && !completeness.complete) {
+      // Не роняем занятие из-за недостающего файла: жёсткая проверка - на
+      // сборке пакета контента, здесь только сигнал в лог.
+      fileLog('[words] WARNING: content package incomplete, missing files:', completeness.missing.length);
+    }
+  } catch (err) {
+    fileLog('[words] failed to initialize local storage:', err && err.message);
+  }
+
   const { session } = require('electron');
   session.defaultSession.webRequest.onHeadersReceived((details, callback) => {
     callback({
@@ -1196,7 +1229,7 @@ app.whenReady().then(() => {
         ...details.responseHeaders,
         // chronomedia:/natcomlib: добавлены явно (не полагаемся на bypassCSP
         // этих схем - его нет, см. registerSchemesAsPrivileged выше).
-        'Content-Security-Policy': ["default-src 'self' 'unsafe-inline' 'unsafe-eval' data: file: blob: chronomedia: natcomlib: http: https: ws: wss:"]
+        'Content-Security-Policy': ["default-src 'self' 'unsafe-inline' 'unsafe-eval' data: file: blob: chronomedia: natcomlib: wordslib: wordsuser: http: https: ws: wss:"]
       }
     });
   });
@@ -1330,6 +1363,59 @@ app.whenReady().then(() => {
   // одна на всё приложение, read-only, поэтому используется пустой host
   // (три слэша) - имя файла целиком в pathname, не рискуем лишиться
   // регистра в имени файла (URL-хосты лаункейзятся).
+  // Обработчик протокола wordsuser://<имя файла> -> картинка или запись,
+  // добавленная педагогом. Имя файла всегда наше (хеш содержимого), проверка
+  // формы имени внутри mediaFilePath, произвольный путь сюда не пройдёт.
+  protocol.handle('wordsuser', async (request) => {
+    try {
+      if (!wordsBaseDir) return new Response('Storage not initialized', { status: 503 });
+
+      const u = new URL(request.url);
+      const fileName = decodeURIComponent(u.pathname.replace(/^\/+/, ''));
+      const filePath = wordsMediaFiles.mediaFilePath(wordsBaseDir, fileName);
+
+      if (!fs.existsSync(filePath) || !fs.statSync(filePath).isFile()) {
+        return new Response('Not found', { status: 404 });
+      }
+
+      const stat = fs.statSync(filePath);
+      const stream = fs.createReadStream(filePath);
+      return new Response(nodeStreamToWeb(stream), {
+        status: 200,
+        headers: { 'Content-Type': guessMime(fileName, filePath), 'Content-Length': String(stat.size) }
+      });
+    } catch {
+      return new Response('Not found', { status: 404 });
+    }
+  });
+
+  // Обработчик протокола wordslib://<путь внутри assets> -> файл поставочной
+  // библиотеки виджета «Я знаю много слов». Путь резолвится через тот же
+  // guard, что у chronomedia/natcomlib - выход за корень невозможен.
+  protocol.handle('wordslib', async (request) => {
+    try {
+      if (!wordsAssetsDir) return new Response('Library not initialized', { status: 503 });
+
+      const u = new URL(request.url);
+      const fileName = decodeURIComponent(u.pathname.replace(/^\/+/, ''));
+      const filePath = chronoResolveWithinRoot(wordsAssetsDir, fileName);
+
+      if (!fs.existsSync(filePath) || !fs.statSync(filePath).isFile()) {
+        return new Response('Not found', { status: 404 });
+      }
+
+      const stat = fs.statSync(filePath);
+      const mime = guessMime(fileName, filePath);
+      const stream = fs.createReadStream(filePath);
+      return new Response(nodeStreamToWeb(stream), {
+        status: 200,
+        headers: { 'Content-Type': mime, 'Content-Length': String(stat.size) }
+      });
+    } catch {
+      return new Response('Not found', { status: 404 });
+    }
+  });
+
   protocol.handle('natcomlib', async (request) => {
     try {
       if (!natcomAssetsDir) return new Response('Library not initialized', { status: 503 });
