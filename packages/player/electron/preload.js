@@ -96,3 +96,10 @@ contextBridge.exposeInMainWorld('mathmachineAPI', {
   loadUserData: () => ipcRenderer.invoke('mathmachine:load-user-data'),
   saveUserData: (data) => ipcRenderer.invoke('mathmachine:save-user-data', data)
 });
+
+// Пользовательские данные (история результатов/настройки) виджета «РусIQ» —
+// отдельный namespace, не смешивается с остальными API.
+contextBridge.exposeInMainWorld('rusiqAPI', {
+  loadUserData: () => ipcRenderer.invoke('rusiq:load-user-data'),
+  saveUserData: (data) => ipcRenderer.invoke('rusiq:save-user-data', data)
+});
