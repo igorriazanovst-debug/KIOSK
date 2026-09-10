@@ -10,13 +10,20 @@ test('rusiqContent.json parses against RusiqQuizSchema without errors', () => {
   assert.equal(RusiqQuizSchema.safeParse(rusiqContentJson).success, true);
 });
 
-test('base content has at least 450 questions (FR-021)', () => {
-  assert.ok(quiz.questions.length >= 450, `expected >=450, got ${quiz.questions.length}`);
+test('content has at least 600 questions (project target, above FR-021 minimum of 450)', () => {
+  assert.ok(quiz.questions.length >= 600, `expected >=600, got ${quiz.questions.length}`);
 });
 
-test('base content has at least 12 unique themes (FR-022)', () => {
+test('content has at least 15 unique themes (project target, above FR-022 minimum of 12)', () => {
   const themes = new Set(quiz.questions.map((q) => q.theme));
-  assert.ok(themes.size >= 12, `expected >=12, got ${themes.size}`);
+  assert.ok(themes.size >= 15, `expected >=15, got ${themes.size}`);
+});
+
+test('no single theme accounts for more than 40% of all questions (balance check)', () => {
+  const counts = new Map<string, number>();
+  for (const q of quiz.questions) counts.set(q.theme, (counts.get(q.theme) ?? 0) + 1);
+  const max = Math.max(...counts.values());
+  assert.ok(max / quiz.questions.length <= 0.4, `largest theme is ${((max / quiz.questions.length) * 100).toFixed(1)}% of all questions`);
 });
 
 test('every question belongs to a valid level with a non-empty pool', () => {
