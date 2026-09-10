@@ -7,11 +7,11 @@ import { CHRONOLINE_WIDGET_TYPE, CHRONOLINE_DEFAULT_PROPS, CHRONOLINE_DEFAULT_SI
 import { apiClient } from '../services/api-client';
 import './WidgetLibrary.css';
 
-// Временно: виджеты «Хронолиния», «Конструктор природных сообществ» и
-// «Матемашка» доступны только этому аккаунту (реальный запрет — на сервере,
-// см. packages/server/src/config/chronolineAccess.ts, natcomAccess.ts,
-// mathmachineAccess.ts; здесь только скрываем пункт для остальных, чтобы не
-// путать).
+// Временно: виджеты «Хронолиния», «Конструктор природных сообществ»,
+// «Матемашка» и «Таблица Менделеева» доступны только этому аккаунту (реальный
+// запрет — на сервере, см. packages/server/src/config/chronolineAccess.ts,
+// natcomAccess.ts, mathmachineAccess.ts; здесь только скрываем пункт для
+// остальных, чтобы не путать).
 const CHRONOLINE_ALLOWED_EMAILS = ['mokretcov.m@poznaikino.ru'];
 const NATCOM_ALLOWED_EMAILS = ['mokretcov.m@poznaikino.ru'];
 const MATHMACHINE_ALLOWED_EMAILS = ['mokretcov.m@poznaikino.ru'];
