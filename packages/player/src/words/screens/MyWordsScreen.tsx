@@ -28,6 +28,10 @@ interface Props {
   onNewSet: () => void;
   onEditSet: (setId: string) => void;
   onDeleteSet: (setId: string) => void;
+  onExportSet: (setId: string) => void;
+  onImportSet: () => void;
+  /** Итог последней операции с архивом — показывается до следующего действия */
+  notice: string | null;
 }
 
 const MyWordsScreen: React.FC<Props> = ({
@@ -43,6 +47,9 @@ const MyWordsScreen: React.FC<Props> = ({
   onNewSet,
   onEditSet,
   onDeleteSet,
+  onExportSet,
+  onImportSet,
+  notice,
 }) => {
   const [confirm, setConfirm] = useState<{ kind: 'word' | 'set'; id: string; title: string } | null>(
     null
@@ -163,9 +170,14 @@ const MyWordsScreen: React.FC<Props> = ({
         <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 12, minWidth: 0 }}>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
             <span style={{ fontSize: 26 }}>Комплекты ({sets.length})</span>
-            <BigButton onClick={onNewSet} testId="new-set">
-              + Комплект
-            </BigButton>
+            <div style={{ display: 'flex', gap: 10 }}>
+              <BigButton onClick={onImportSet} tone="secondary" disabled={busy} testId="import-set">
+                Импорт
+              </BigButton>
+              <BigButton onClick={onNewSet} testId="new-set">
+                + Комплект
+              </BigButton>
+            </div>
           </div>
 
           <ScrollArea style={{ flex: 1 }}>
@@ -199,6 +211,14 @@ const MyWordsScreen: React.FC<Props> = ({
                     Правка
                   </BigButton>
                   <BigButton
+                    onClick={() => onExportSet(set.id)}
+                    tone="secondary"
+                    disabled={busy}
+                    testId={`export-set-${set.title}`}
+                  >
+                    Экспорт
+                  </BigButton>
+                  <BigButton
                     onClick={() => setConfirm({ kind: 'set', id: set.id, title: set.title })}
                     tone="danger"
                     disabled={busy}
@@ -212,6 +232,12 @@ const MyWordsScreen: React.FC<Props> = ({
           </ScrollArea>
         </div>
       </div>
+
+      {notice && (
+        <span data-testid="set-archive-notice" style={{ fontSize: 20, color: palette.accent }}>
+          {notice}
+        </span>
+      )}
 
       {library && (
         <span style={{ fontSize: 18, color: palette.textMuted }}>

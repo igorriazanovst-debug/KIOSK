@@ -42,6 +42,8 @@ import type {
   SetDraft,
   PickedMedia,
   StoredMedia,
+  ExportedSet,
+  ImportedSet,
 } from '../types.ts';
 
 /** Куда сборка кладёт пакет контента относительно index.html */
@@ -331,6 +333,17 @@ export function createWebPlatform(options: WebPlatformOptions = {}): WordsPlatfo
 
     async saveRecording(): Promise<IpcResult<StoredMedia>> {
       return { ok: false, error: 'Запись доступна только в приложении на устройстве' };
+    },
+
+    // Экспорт и импорт идут через системные диалоги главного процесса —
+    // в отладочном браузерном режиме их нет. Отказ явный, а не тихий: иначе
+    // отладка покажет работающую кнопку, которой на самом деле нет.
+    async exportSet(): Promise<IpcResult<ExportedSet>> {
+      return { ok: false, error: 'Экспорт комплекта доступен только в приложении на устройстве' };
+    },
+
+    async importSet(): Promise<IpcResult<ImportedSet>> {
+      return { ok: false, error: 'Импорт комплекта доступен только в приложении на устройстве' };
     },
   };
 }

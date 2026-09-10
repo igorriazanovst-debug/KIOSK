@@ -1,10 +1,18 @@
 // packages/player/src/words/screens/MenuScreen.tsx
 // Главное меню. Состав пунктов — как у эталона: одиночная игра,
 // многопользовательская игра, игроки, настройки.
+//
+// РАЗДЕЛЫ ПЕДАГОГА ЗА УДЕРЖАНИЕМ. «Мои слова» и «Настройки» меняют материалы
+// занятия и параметры приложения, и по ТЗ (раздел 3) ребёнок не должен
+// попадать туда случайно. Пароля нет намеренно — профили детей не учётные
+// записи, — поэтому рубеж другой: удержать кнопку две секунды и подтвердить.
+// Случайный шлепок ладонью по столу этого не проходит, а педагог у доски не
+// тратит время на ввод.
 
-import React from 'react';
+import React, { useState } from 'react';
 import { BigButton, ErrorBanner, palette } from '../ui';
 import Character from '../components/Character';
+import HoldButton from '../components/HoldButton';
 import type { Profile } from '../types';
 
 interface Props {
@@ -33,6 +41,14 @@ const MenuScreen: React.FC<Props> = ({
   const enoughForMulti = profiles.length >= 2;
   const chosen = profiles.filter((p) => selectedProfileIds.includes(p.id));
 
+  /** Какой раздел педагога ждёт подтверждения после удержания */
+  const [gate, setGate] = useState<null | 'myWords' | 'settings'>(null);
+
+  const gateText =
+    gate === 'myWords'
+      ? 'Это раздел педагога: здесь меняют слова и комплекты. Дети могут случайно удалить материалы. Продолжить?'
+      : 'Это раздел педагога: здесь меняют настройки занятия. Продолжить?';
+
   return (
     <div
       style={{
@@ -46,8 +62,55 @@ const MenuScreen: React.FC<Props> = ({
         color: palette.text,
         padding: 36,
         boxSizing: 'border-box',
+        position: 'relative',
       }}
     >
+      {gate && (
+        <div
+          data-testid="teacher-gate"
+          style={{
+            position: 'absolute',
+            inset: 0,
+            background: 'rgba(0,0,0,0.55)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            zIndex: 10,
+            padding: 36,
+          }}
+        >
+          <div
+            style={{
+              background: palette.panel,
+              borderRadius: 16,
+              padding: 32,
+              maxWidth: 680,
+              display: 'flex',
+              flexDirection: 'column',
+              gap: 20,
+            }}
+          >
+            <span style={{ fontSize: 26 }}>{gateText}</span>
+            <div style={{ display: 'flex', gap: 12, justifyContent: 'flex-end' }}>
+              <BigButton onClick={() => setGate(null)} tone="secondary" testId="teacher-gate-no">
+                Отмена
+              </BigButton>
+              <BigButton
+                onClick={() => {
+                  const target = gate;
+                  setGate(null);
+                  if (target === 'myWords') onMyWords();
+                  else onSettings();
+                }}
+                testId="teacher-gate-yes"
+              >
+                Да, я педагог
+              </BigButton>
+            </div>
+          </div>
+        </div>
+      )}
+
       <h1 style={{ margin: 0, fontSize: 52 }}>{title}</h1>
 
       <div style={{ display: 'flex', alignItems: 'flex-end', gap: 40 }}>
@@ -73,13 +136,23 @@ const MenuScreen: React.FC<Props> = ({
             Игроки ({profiles.length})
           </BigButton>
 
-          <BigButton onClick={onMyWords} wide tone="secondary" testId="menu-my-words">
-            Мои слова
-          </BigButton>
+          <HoldButton
+            onHoldComplete={() => setGate('myWords')}
+            wide
+            hint="раздел педагога — удерживайте 2 секунды"
+            testId="menu-my-words"
+          >
+            🔒 Мои слова
+          </HoldButton>
 
-          <BigButton onClick={onSettings} wide tone="secondary" testId="menu-settings">
-            Настройки
-          </BigButton>
+          <HoldButton
+            onHoldComplete={() => setGate('settings')}
+            wide
+            hint="раздел педагога — удерживайте 2 секунды"
+            testId="menu-settings"
+          >
+            🔒 Настройки
+          </HoldButton>
 
           <div data-testid="chosen-players" style={{ fontSize: 20, color: palette.textMuted }}>
             {chosen.length > 0

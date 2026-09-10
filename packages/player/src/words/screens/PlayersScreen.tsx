@@ -4,10 +4,17 @@
 // Имя вводится экранной клавиатурой: физической на доске и столе нет.
 // Профили без паролей — это не учётные записи ОС, а способ персонифицировать
 // статистику ребёнка (строка 52).
+//
+// Удаление игрока уносит его статистику и достижения безвозвратно, поэтому
+// оно за удержанием (ТЗ раздел 3, «не должны СЛУЧАЙНО изменяться»): нажать
+// на «Удалить» вместо соседнего имени легко, продержать две секунды — нет.
+// Добавление и выбор игрока не защищаем: это обычное действие ребёнка в
+// начале занятия, и ошибка в нём обратима.
 
 import React, { useState } from 'react';
 import { BigButton, ErrorBanner, ScreenFrame, ScrollArea, palette, TOUCH_TARGET_PX } from '../ui';
 import Keyboard from '../components/Keyboard';
+import HoldButton from '../components/HoldButton';
 import type { Profile } from '../types';
 import { WORDS_MAX_PLAYERS } from '@kiosk/shared';
 
@@ -100,14 +107,15 @@ const PlayersScreen: React.FC<Props> = ({
                       {selected ? '✓ ' : ''}
                       {profile.name}
                     </button>
-                    <BigButton
-                      onClick={() => onDelete(profile.id)}
+                    <HoldButton
+                      onHoldComplete={() => onDelete(profile.id)}
                       tone="danger"
                       disabled={busy}
+                      hint="удерживайте"
                       testId={`delete-${profile.name}`}
                     >
                       Удалить
-                    </BigButton>
+                    </HoldButton>
                   </div>
                 );
               })}

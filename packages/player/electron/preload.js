@@ -121,5 +121,10 @@ contextBridge.exposeInMainWorld('wordsAPI', {
   updateSet: (id, draft) => ipcRenderer.invoke('words:update-set', id, draft),
   deleteSet: (id) => ipcRenderer.invoke('words:delete-set', id),
   pickMediaFile: (kind) => ipcRenderer.invoke('words:pick-media-file', kind),
-  saveRecording: (bytes) => ipcRenderer.invoke('words:save-recording', bytes)
+  saveRecording: (bytes) => ipcRenderer.invoke('words:save-recording', bytes),
+
+  // Экспорт и импорт комплекта (ТЗ строка 56). Путь к файлу не пересекает
+  // границу: и сохранение, и открытие идут через системный диалог в main.
+  exportSet: (setId) => ipcRenderer.invoke('words:export-set', setId),
+  importSet: () => ipcRenderer.invoke('words:import-set')
 });

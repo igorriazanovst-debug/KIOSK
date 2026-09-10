@@ -15,8 +15,27 @@ const { WordsRulesError } = require('@kiosk/shared');
 const { loadLibrarySync } = require('./contentLibrary');
 const wordStore = require('./wordStore');
 const mediaFiles = require('./mediaFiles');
+const setArchive = require('./setArchive');
 
 const WORDS_APP_DIR_NAME = store.WORDS_APP_DIR_NAME;
+
+/** Своё расширение, чтобы файл комплекта было видно среди прочих */
+const SET_FILE_EXTENSION = '.kwset';
+
+/**
+ * Основа имени файла из названия комплекта. Название задаёт педагог, и в
+ * нём может оказаться что угодно — в имя файла попадают только буквы,
+ * цифры, пробел, дефис и подчёркивание. Это подсказка в диалоге сохранения,
+ * а не путь: итоговый путь всё равно выбирает пользователь в системном
+ * диалоге.
+ */
+function safeFileStem(title) {
+  const cleaned = String(title || '')
+    .replace(/[^\p{L}\p{N} _-]/gu, '')
+    .trim()
+    .slice(0, 60);
+  return cleaned || 'Комплект';
+}
 
 /**
  * Превращает ошибку файловой системы в текст, понятный педагогу у доски.
@@ -58,13 +77,19 @@ function guarded(handler) {
 }
 
 /**
- * @param {{ ipcMain: Electron.IpcMain, app: Electron.App, dialog?: Electron.Dialog }} deps
+ * @param {{ ipcMain: Electron.IpcMain, app: Electron.App, dialog?: Electron.Dialog,
+ *   sharedDirOverride?: string }} deps
+ *   sharedDirOverride — только для тестов: каталог данных общий на машину
+ *   (%ProgramData%\kiosk-words), и без подмены тест IPC писал бы в РЕАЛЬНЫЕ
+ *   данные педагога на этой машине. Тот же параметр и с тем же назначением
+ *   есть у resolveStorageDir. В проде не передаётся.
  */
-function registerWordsIpc({ ipcMain, app, dialog }) {
+function registerWordsIpc({ ipcMain, app, dialog, sharedDirOverride }) {
   let libraryError = null;
   const { dir: baseDir, isFallback } = resolveStorageDir({
     platform: process.platform,
     userDataDir: app.getPath('userData'),
+    sharedDirOverride,
     appDirName: WORDS_APP_DIR_NAME,
     fallbackSubdir: 'words',
   });
@@ -158,6 +183,61 @@ function registerWordsIpc({ ipcMain, app, dialog }) {
       const buffer = Buffer.from(bytes);
       const stored = mediaFiles.storeMediaBuffer(baseDir, buffer, 'audio');
       return { fileName: stored.fileName, type: stored.type, bytes: stored.bytes };
+    })
+  );
+
+  // ── Экспорт и импорт комплекта (ТЗ строка 56) ────────────────────────
+  //
+  // Путь к файлу рендерер не передаёт и не получает: и сохранение, и
+  // открытие идут через системный диалог в main-процессе — тот же принцип,
+  // что и у выбора картинки выше.
+
+  ipcMain.handle(
+    'words:export-set',
+    guarded(async (_e, setId) => {
+      if (!dialog) throw new setArchive.SetArchiveError('Диалог сохранения недоступен');
+
+      const set = wordStore.listSets(baseDir).find((s) => s.id === setId);
+      if (!set) throw new setArchive.SetArchiveError('Такого комплекта нет');
+
+      const result = await dialog.showSaveDialog({
+        title: 'Сохранить комплект',
+        defaultPath: `${safeFileStem(set.title)}${SET_FILE_EXTENSION}`,
+        filters: [{ name: 'Комплект слов', extensions: [SET_FILE_EXTENSION.slice(1)] }],
+      });
+      if (result.canceled || !result.filePath) return { canceled: true };
+
+      const report = await setArchive.exportSetToZip(baseDir, setId, result.filePath);
+      return { canceled: false, filePath: result.filePath, ...report };
+    })
+  );
+
+  ipcMain.handle(
+    'words:import-set',
+    guarded(async () => {
+      if (!dialog) throw new setArchive.SetArchiveError('Диалог выбора файла недоступен');
+
+      const result = await dialog.showOpenDialog({
+        title: 'Выберите файл комплекта',
+        properties: ['openFile'],
+        filters: [{ name: 'Комплект слов', extensions: [SET_FILE_EXTENSION.slice(1)] }],
+      });
+      if (result.canceled || result.filePaths.length === 0) return { canceled: true };
+
+      const imported = await setArchive.importSetFromZip(
+        baseDir,
+        result.filePaths[0],
+        libraryWordIds()
+      );
+      return {
+        canceled: false,
+        set: imported.set,
+        addedWords: imported.addedWords,
+        reusedWords: imported.reusedWords,
+        skippedWords: imported.skippedWords,
+        words: wordStore.listUserWords(baseDir),
+        sets: wordStore.listSets(baseDir),
+      };
     })
   );
 
