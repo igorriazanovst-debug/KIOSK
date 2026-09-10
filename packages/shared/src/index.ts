@@ -41,3 +41,6 @@ export * from './mathmachine/model/schema';
 export * from './mathmachine/widgetProperties';
 export * from './mathmachine/taskEngine';
 export * from './mathmachine/catalog';
+
+// РусIQ (Тип 7)
+export * from './rusiq/widgetProperties';
