@@ -20,7 +20,7 @@
 - `packages/player/package.json`'s `test` script is an explicit file-glob list, not a wildcard directory scan — every new `*.test.ts` directory added by this plan MUST be appended to that glob or the tests silently never run (Task 1, Step 8).
 - Widget registration is a three-file operation that must land together: `packages/player/src/Player.tsx` (import + switch case + `isStandaloneAppProject` list), `packages/player/electron/chrono/windowMode.js` (`STANDALONE_APP_WIDGET_TYPES`), `packages/shared/src/periodictable/widgetProperties.ts` (type + defaults). Forgetting one produces a working-looking but broken standalone window (playbook §4 finding, repeated twice in Тип6 history).
 - Allow-list is `mokretcov.m@poznaikino.ru`, same pattern as chronoline/naturalcommunities/mathmachine/rusiq — duplicated client-side (`WidgetLibrary.tsx`, cosmetic hide) and server-side (`periodicTableAccess.ts`, the actual enforcement).
-- Work happens on branch `feat/periodictable-widget` (already created, pushed) in the persistent clone `C:\recovery_work\kiosk-repo` — commit and push at the end of every task (playbook §7).
+- Work happens on branch `feat/periodictable-widget` (already created, pushed) in the isolated worktree `C:\recovery_work\worktrees\periodictable-widget` (set up 2026-09-10 to stop this branch colliding with a parallel session sharing `C:\recovery_work\kiosk-repo`) — commit and push at the end of every task (playbook §7). The shared clone `C:\recovery_work\kiosk-repo` is parked on `main` and must not be touched by this plan's execution.
 
 ---
 
