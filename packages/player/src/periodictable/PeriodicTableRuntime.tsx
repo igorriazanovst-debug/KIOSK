@@ -7,6 +7,7 @@ import ElementSummaryCard from './screens/ElementSummaryCard.tsx';
 import ElementDetailCard from './screens/ElementDetailCard.tsx';
 import SearchTab from './screens/SearchTab.tsx';
 import ViewSettingsTab from './screens/ViewSettingsTab.tsx';
+import LegendTab from './screens/LegendTab.tsx';
 import TeacherPinModal from './screens/TeacherPinModal.tsx';
 import { loadViewSettings, saveViewSettings, DEFAULT_VIEW_SETTINGS, type ViewSettings } from './viewSettingsStorage.ts';
 import elementsJson from './content/elements.json' with { type: 'json' };
@@ -90,7 +91,11 @@ const PeriodicTableRuntime: React.FC<Props> = ({ properties }) => {
           <ViewSettingsTab settings={viewSettings} onChange={updateViewSettings} />
         </div>
       )}
-      {/* activeTab === 'legend' — заполняется Задачей 10 */}
+      {activeTab === 'legend' && (
+        <div style={{ maxHeight: '40vh', overflow: 'auto', borderTop: '1px solid #ccc' }}>
+          <LegendTab colorIndication={viewSettings.colorIndication} />
+        </div>
+      )}
 
       {showPinModal && (
         <TeacherPinModal
