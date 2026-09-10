@@ -40,7 +40,7 @@ export type RusiqLevel = z.infer<typeof RusiqLevelSchema>;
 
 export const RUSIQ_QUIZ_SCHEMA_VERSION = 1 as const;
 
-export const RusiqQuizSchema = z.object({
+const RusiqQuizShapeSchema = z.object({
   schemaVersion: z.literal(RUSIQ_QUIZ_SCHEMA_VERSION),
   id: z.string().min(1),
   title: z.string().min(1),
@@ -56,7 +56,51 @@ export const RusiqQuizSchema = z.object({
   questions: z.array(RusiqQuestionSchema).min(1),
   genericDecoyPoints: z.array(RusiqPointSchema).default([]),
 });
-export type RusiqQuiz = z.infer<typeof RusiqQuizSchema>;
+
+// Проверяет одну точку (x, y) на попадание в границы [0, width] x [0, height]
+// заявленного изображения, добавляя zod issue с точным путём к полю при
+// нарушении. Вынесено в helper, т.к. проверяется несколько источников точек
+// (вопросы, decoyPoints каждого вопроса, genericDecoyPoints) — находка 1
+// финального ревью: несоответствие заявленных image.width/height реальному
+// пиксельному пространству координат один раз уже сделало ~20% вопросов
+// некликабельными и осталось незамеченным до целенаправленной проверки.
+function checkPointInBounds(
+  point: { x: number; y: number },
+  bounds: { width: number; height: number },
+  path: (string | number)[],
+  ctx: z.RefinementCtx,
+): void {
+  if (point.x < 0 || point.x > bounds.width) {
+    ctx.addIssue({
+      code: z.ZodIssueCode.custom,
+      path: [...path, 'x'],
+      message: `x=${point.x} выходит за границы изображения [0, ${bounds.width}]`,
+    });
+  }
+  if (point.y < 0 || point.y > bounds.height) {
+    ctx.addIssue({
+      code: z.ZodIssueCode.custom,
+      path: [...path, 'y'],
+      message: `y=${point.y} выходит за границы изображения [0, ${bounds.height}]`,
+    });
+  }
+}
+
+export const RusiqQuizSchema = RusiqQuizShapeSchema.superRefine((quiz, ctx) => {
+  const bounds = { width: quiz.image.width, height: quiz.image.height };
+
+  quiz.questions.forEach((question, qIndex) => {
+    checkPointInBounds(question, bounds, ['questions', qIndex], ctx);
+    question.decoyPoints.forEach((point, pIndex) => {
+      checkPointInBounds(point, bounds, ['questions', qIndex, 'decoyPoints', pIndex], ctx);
+    });
+  });
+
+  quiz.genericDecoyPoints.forEach((point, pIndex) => {
+    checkPointInBounds(point, bounds, ['genericDecoyPoints', pIndex], ctx);
+  });
+});
+export type RusiqQuiz = z.infer<typeof RusiqQuizShapeSchema>;
 
 // ─── Пользовательские данные — отдельно от контента ────────────────────────
 
