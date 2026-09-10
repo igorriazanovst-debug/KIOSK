@@ -26,7 +26,9 @@
       "boilingPointK": 20.28,
       "oxidationStates": "+1, -1",
       "electronegativityPauling": 2.2,
-      "photo": null
+      "photo": {
+        "fileName": "h.jpg"
+      }
     },
     {
       "atomicNumber": 2,
@@ -53,7 +55,9 @@
       "boilingPointK": 4.22,
       "oxidationStates": "0 (соединений не образует)",
       "electronegativityPauling": null,
-      "photo": null
+      "photo": {
+        "fileName": "he.jpg"
+      }
     },
     {
       "atomicNumber": 3,
@@ -80,7 +84,9 @@
       "boilingPointK": 1615,
       "oxidationStates": "+1",
       "electronegativityPauling": 0.98,
-      "photo": null
+      "photo": {
+        "fileName": "li.jpg"
+      }
     },
     {
       "atomicNumber": 4,
@@ -107,7 +113,9 @@
       "boilingPointK": 2742,
       "oxidationStates": "+2",
       "electronegativityPauling": 1.57,
-      "photo": null
+      "photo": {
+        "fileName": "be.jpg"
+      }
     },
     {
       "atomicNumber": 5,
@@ -134,7 +142,9 @@
       "boilingPointK": 4200,
       "oxidationStates": "+3",
       "electronegativityPauling": 2.04,
-      "photo": null
+      "photo": {
+        "fileName": "b.jpg"
+      }
     },
     {
       "atomicNumber": 6,
@@ -161,7 +171,9 @@
       "boilingPointK": 4098,
       "oxidationStates": "+4, +2, -4",
       "electronegativityPauling": 2.55,
-      "photo": null
+      "photo": {
+        "fileName": "c.jpg"
+      }
     },
     {
       "atomicNumber": 7,
@@ -188,7 +200,9 @@
       "boilingPointK": 77.36,
       "oxidationStates": "+5, +4, +3, +2, +1, -3",
       "electronegativityPauling": 3.04,
-      "photo": null
+      "photo": {
+        "fileName": "n.jpg"
+      }
     },
     {
       "atomicNumber": 8,
@@ -215,7 +229,9 @@
       "boilingPointK": 90.2,
       "oxidationStates": "-2, -1 (в пероксидах), +2 (в OF₂)",
       "electronegativityPauling": 3.44,
-      "photo": null
+      "photo": {
+        "fileName": "o.jpg"
+      }
     },
     {
       "atomicNumber": 9,
@@ -242,7 +258,9 @@
       "boilingPointK": 85.03,
       "oxidationStates": "-1",
       "electronegativityPauling": 3.98,
-      "photo": null
+      "photo": {
+        "fileName": "f.jpg"
+      }
     },
     {
       "atomicNumber": 10,
@@ -269,7 +287,9 @@
       "boilingPointK": 27.07,
       "oxidationStates": "0 (соединений не образует)",
       "electronegativityPauling": null,
-      "photo": null
+      "photo": {
+        "fileName": "ne.jpg"
+      }
     },
     {
       "atomicNumber": 11,
@@ -296,7 +316,9 @@
       "boilingPointK": 1156,
       "oxidationStates": "+1",
       "electronegativityPauling": 0.93,
-      "photo": null
+      "photo": {
+        "fileName": "na.jpg"
+      }
     },
     {
       "atomicNumber": 12,
@@ -323,7 +345,9 @@
       "boilingPointK": 1363,
       "oxidationStates": "+2",
       "electronegativityPauling": 1.31,
-      "photo": null
+      "photo": {
+        "fileName": "mg.jpg"
+      }
     },
     {
       "atomicNumber": 13,
@@ -350,7 +374,9 @@
       "boilingPointK": 2792,
       "oxidationStates": "+3",
       "electronegativityPauling": 1.61,
-      "photo": null
+      "photo": {
+        "fileName": "al.jpg"
+      }
     },
     {
       "atomicNumber": 14,
@@ -377,7 +403,9 @@
       "boilingPointK": 3538,
       "oxidationStates": "+4, -4",
       "electronegativityPauling": 1.9,
-      "photo": null
+      "photo": {
+        "fileName": "si.jpg"
+      }
     },
     {
       "atomicNumber": 15,
@@ -404,7 +432,9 @@
       "boilingPointK": 553,
       "oxidationStates": "+5, +3, -3",
       "electronegativityPauling": 2.19,
-      "photo": null
+      "photo": {
+        "fileName": "p.jpg"
+      }
     },
     {
       "atomicNumber": 16,
@@ -431,7 +461,9 @@
       "boilingPointK": 717.8,
       "oxidationStates": "+6, +4, -2",
       "electronegativityPauling": 2.58,
-      "photo": null
+      "photo": {
+        "fileName": "s.jpg"
+      }
     },
     {
       "atomicNumber": 17,
@@ -458,7 +490,9 @@
       "boilingPointK": 239.11,
       "oxidationStates": "+7, +5, +3, +1, -1",
       "electronegativityPauling": 3.16,
-      "photo": null
+      "photo": {
+        "fileName": "cl.jpg"
+      }
     },
     {
       "atomicNumber": 18,
@@ -485,7 +519,9 @@
       "boilingPointK": 87.3,
       "oxidationStates": "0 (устойчивых соединений не образует)",
       "electronegativityPauling": null,
-      "photo": null
+      "photo": {
+        "fileName": "ar.jpg"
+      }
     },
     {
       "atomicNumber": 19,
@@ -512,7 +548,9 @@
       "boilingPointK": 1032,
       "oxidationStates": "+1",
       "electronegativityPauling": 0.82,
-      "photo": null
+      "photo": {
+        "fileName": "k.jpg"
+      }
     },
     {
       "atomicNumber": 20,
@@ -539,7 +577,9 @@
       "boilingPointK": 1757,
       "oxidationStates": "+2",
       "electronegativityPauling": 1,
-      "photo": null
+      "photo": {
+        "fileName": "ca.jpg"
+      }
     },
     {
       "atomicNumber": 21,
@@ -566,7 +606,9 @@
       "boilingPointK": 3109,
       "oxidationStates": "+3",
       "electronegativityPauling": 1.36,
-      "photo": null
+      "photo": {
+        "fileName": "sc.jpg"
+      }
     },
     {
       "atomicNumber": 22,
@@ -593,7 +635,9 @@
       "boilingPointK": 3560,
       "oxidationStates": "+4, +3, +2",
       "electronegativityPauling": 1.54,
-      "photo": null
+      "photo": {
+        "fileName": "ti.jpg"
+      }
     },
     {
       "atomicNumber": 23,
@@ -620,7 +664,9 @@
       "boilingPointK": 3680,
       "oxidationStates": "+5, +4, +3, +2",
       "electronegativityPauling": 1.63,
-      "photo": null
+      "photo": {
+        "fileName": "v.jpg"
+      }
     },
     {
       "atomicNumber": 24,
@@ -647,7 +693,9 @@
       "boilingPointK": 2944,
       "oxidationStates": "+6, +3, +2",
       "electronegativityPauling": 1.66,
-      "photo": null
+      "photo": {
+        "fileName": "cr.jpg"
+      }
     },
     {
       "atomicNumber": 25,
@@ -674,7 +722,9 @@
       "boilingPointK": 2334,
       "oxidationStates": "+7, +6, +4, +3, +2",
       "electronegativityPauling": 1.55,
-      "photo": null
+      "photo": {
+        "fileName": "mn.jpg"
+      }
     },
     {
       "atomicNumber": 26,
@@ -701,7 +751,9 @@
       "boilingPointK": 3134,
       "oxidationStates": "+2, +3, +6",
       "electronegativityPauling": 1.83,
-      "photo": null
+      "photo": {
+        "fileName": "fe.jpg"
+      }
     },
     {
       "atomicNumber": 27,
@@ -728,7 +780,9 @@
       "boilingPointK": 3200,
       "oxidationStates": "+2, +3",
       "electronegativityPauling": 1.88,
-      "photo": null
+      "photo": {
+        "fileName": "co.jpg"
+      }
     },
     {
       "atomicNumber": 28,
@@ -755,7 +809,9 @@
       "boilingPointK": 3186,
       "oxidationStates": "+2, +3",
       "electronegativityPauling": 1.91,
-      "photo": null
+      "photo": {
+        "fileName": "ni.jpg"
+      }
     },
     {
       "atomicNumber": 29,
@@ -782,7 +838,9 @@
       "boilingPointK": 2835,
       "oxidationStates": "+2, +1",
       "electronegativityPauling": 1.9,
-      "photo": null
+      "photo": {
+        "fileName": "cu.jpg"
+      }
     },
     {
       "atomicNumber": 30,
@@ -809,7 +867,9 @@
       "boilingPointK": 1180,
       "oxidationStates": "+2",
       "electronegativityPauling": 1.65,
-      "photo": null
+      "photo": {
+        "fileName": "zn.jpg"
+      }
     },
     {
       "atomicNumber": 31,
@@ -836,7 +896,9 @@
       "boilingPointK": 2477,
       "oxidationStates": "+3, +1",
       "electronegativityPauling": 1.81,
-      "photo": null
+      "photo": {
+        "fileName": "ga.jpg"
+      }
     },
     {
       "atomicNumber": 32,
@@ -863,7 +925,9 @@
       "boilingPointK": 3106,
       "oxidationStates": "+4, +2",
       "electronegativityPauling": 2.01,
-      "photo": null
+      "photo": {
+        "fileName": "ge.jpg"
+      }
     },
     {
       "atomicNumber": 33,
@@ -890,7 +954,9 @@
       "boilingPointK": 887,
       "oxidationStates": "+5, +3, -3",
       "electronegativityPauling": 2.18,
-      "photo": null
+      "photo": {
+        "fileName": "as.jpg"
+      }
     },
     {
       "atomicNumber": 34,
@@ -917,7 +983,9 @@
       "boilingPointK": 958,
       "oxidationStates": "+6, +4, -2",
       "electronegativityPauling": 2.55,
-      "photo": null
+      "photo": {
+        "fileName": "se.jpg"
+      }
     },
     {
       "atomicNumber": 35,
@@ -944,7 +1012,9 @@
       "boilingPointK": 332,
       "oxidationStates": "+7, +5, +1, -1",
       "electronegativityPauling": 2.96,
-      "photo": null
+      "photo": {
+        "fileName": "br.jpg"
+      }
     },
     {
       "atomicNumber": 36,
@@ -971,7 +1041,9 @@
       "boilingPointK": 119.93,
       "oxidationStates": "+2 (только во фторидах), 0",
       "electronegativityPauling": 3,
-      "photo": null
+      "photo": {
+        "fileName": "kr.jpg"
+      }
     },
     {
       "atomicNumber": 37,
@@ -998,7 +1070,9 @@
       "boilingPointK": 961,
       "oxidationStates": "+1",
       "electronegativityPauling": 0.82,
-      "photo": null
+      "photo": {
+        "fileName": "rb.jpg"
+      }
     },
     {
       "atomicNumber": 38,
@@ -1025,7 +1099,9 @@
       "boilingPointK": 1655,
       "oxidationStates": "+2",
       "electronegativityPauling": 0.95,
-      "photo": null
+      "photo": {
+        "fileName": "sr.jpg"
+      }
     },
     {
       "atomicNumber": 39,
@@ -1052,7 +1128,9 @@
       "boilingPointK": 3609,
       "oxidationStates": "+3",
       "electronegativityPauling": 1.22,
-      "photo": null
+      "photo": {
+        "fileName": "y.jpg"
+      }
     },
     {
       "atomicNumber": 40,
@@ -1079,7 +1157,9 @@
       "boilingPointK": 4682,
       "oxidationStates": "+4",
       "electronegativityPauling": 1.33,
-      "photo": null
+      "photo": {
+        "fileName": "zr.jpg"
+      }
     },
     {
       "atomicNumber": 41,
@@ -1106,7 +1186,9 @@
       "boilingPointK": 5017,
       "oxidationStates": "+5, +3",
       "electronegativityPauling": 1.6,
-      "photo": null
+      "photo": {
+        "fileName": "nb.jpg"
+      }
     },
     {
       "atomicNumber": 42,
@@ -1133,7 +1215,9 @@
       "boilingPointK": 4912,
       "oxidationStates": "+6, +5, +4, +3, +2",
       "electronegativityPauling": 2.16,
-      "photo": null
+      "photo": {
+        "fileName": "mo.jpg"
+      }
     },
     {
       "atomicNumber": 43,
@@ -1160,7 +1244,9 @@
       "boilingPointK": 4538,
       "oxidationStates": "+7, +6, +4",
       "electronegativityPauling": 1.9,
-      "photo": null
+      "photo": {
+        "fileName": "tc.jpg"
+      }
     },
     {
       "atomicNumber": 44,
@@ -1187,7 +1273,9 @@
       "boilingPointK": 4423,
       "oxidationStates": "+8, +6, +4, +3, +2",
       "electronegativityPauling": 2.2,
-      "photo": null
+      "photo": {
+        "fileName": "ru.jpg"
+      }
     },
     {
       "atomicNumber": 45,
@@ -1214,7 +1302,9 @@
       "boilingPointK": 3968,
       "oxidationStates": "+3, +4",
       "electronegativityPauling": 2.28,
-      "photo": null
+      "photo": {
+        "fileName": "rh.jpg"
+      }
     },
     {
       "atomicNumber": 46,
@@ -1241,7 +1331,9 @@
       "boilingPointK": 3236,
       "oxidationStates": "+2, +4",
       "electronegativityPauling": 2.2,
-      "photo": null
+      "photo": {
+        "fileName": "pd.jpg"
+      }
     },
     {
       "atomicNumber": 47,
@@ -1268,7 +1360,9 @@
       "boilingPointK": 2435,
       "oxidationStates": "+1",
       "electronegativityPauling": 1.93,
-      "photo": null
+      "photo": {
+        "fileName": "ag.jpg"
+      }
     },
     {
       "atomicNumber": 48,
@@ -1295,7 +1389,9 @@
       "boilingPointK": 1040,
       "oxidationStates": "+2",
       "electronegativityPauling": 1.69,
-      "photo": null
+      "photo": {
+        "fileName": "cd.jpg"
+      }
     },
     {
       "atomicNumber": 49,
@@ -1322,7 +1418,9 @@
       "boilingPointK": 2345,
       "oxidationStates": "+3, +1",
       "electronegativityPauling": 1.78,
-      "photo": null
+      "photo": {
+        "fileName": "in.jpg"
+      }
     },
     {
       "atomicNumber": 50,
@@ -1349,7 +1447,9 @@
       "boilingPointK": 2875,
       "oxidationStates": "+4, +2",
       "electronegativityPauling": 1.96,
-      "photo": null
+      "photo": {
+        "fileName": "sn.jpg"
+      }
     },
     {
       "atomicNumber": 51,
@@ -1376,7 +1476,9 @@
       "boilingPointK": 1860,
       "oxidationStates": "+5, +3, -3",
       "electronegativityPauling": 2.05,
-      "photo": null
+      "photo": {
+        "fileName": "sb.jpg"
+      }
     },
     {
       "atomicNumber": 52,
@@ -1403,7 +1505,9 @@
       "boilingPointK": 1261,
       "oxidationStates": "+6, +4, -2",
       "electronegativityPauling": 2.1,
-      "photo": null
+      "photo": {
+        "fileName": "te.jpg"
+      }
     },
     {
       "atomicNumber": 53,
@@ -1430,7 +1534,9 @@
       "boilingPointK": 457.4,
       "oxidationStates": "+7, +5, +1, -1",
       "electronegativityPauling": 2.66,
-      "photo": null
+      "photo": {
+        "fileName": "i.jpg"
+      }
     },
     {
       "atomicNumber": 54,
@@ -1457,7 +1563,9 @@
       "boilingPointK": 165.03,
       "oxidationStates": "+8, +6, +4, +2",
       "electronegativityPauling": 2.6,
-      "photo": null
+      "photo": {
+        "fileName": "xe.jpg"
+      }
     },
     {
       "atomicNumber": 55,
@@ -1484,7 +1592,9 @@
       "boilingPointK": 944,
       "oxidationStates": "+1",
       "electronegativityPauling": 0.79,
-      "photo": null
+      "photo": {
+        "fileName": "cs.jpg"
+      }
     },
     {
       "atomicNumber": 56,
@@ -1511,7 +1621,9 @@
       "boilingPointK": 2170,
       "oxidationStates": "+2",
       "electronegativityPauling": 0.89,
-      "photo": null
+      "photo": {
+        "fileName": "ba.jpg"
+      }
     },
     {
       "atomicNumber": 57,
@@ -1538,7 +1650,9 @@
       "boilingPointK": 3737,
       "oxidationStates": "+3",
       "electronegativityPauling": 1.1,
-      "photo": null
+      "photo": {
+        "fileName": "la.jpg"
+      }
     },
     {
       "atomicNumber": 58,
@@ -1565,7 +1679,9 @@
       "boilingPointK": 3716,
       "oxidationStates": "+3, +4",
       "electronegativityPauling": 1.12,
-      "photo": null
+      "photo": {
+        "fileName": "ce.jpg"
+      }
     },
     {
       "atomicNumber": 59,
@@ -1592,7 +1708,9 @@
       "boilingPointK": 3793,
       "oxidationStates": "+3, +4",
       "electronegativityPauling": 1.13,
-      "photo": null
+      "photo": {
+        "fileName": "pr.jpg"
+      }
     },
     {
       "atomicNumber": 60,
@@ -1619,7 +1737,9 @@
       "boilingPointK": 3347,
       "oxidationStates": "+3",
       "electronegativityPauling": 1.14,
-      "photo": null
+      "photo": {
+        "fileName": "nd.jpg"
+      }
     },
     {
       "atomicNumber": 61,
@@ -1646,7 +1766,9 @@
       "boilingPointK": 3273,
       "oxidationStates": "+3",
       "electronegativityPauling": 1.13,
-      "photo": null
+      "photo": {
+        "fileName": "pm.jpg"
+      }
     },
     {
       "atomicNumber": 62,
@@ -1673,7 +1795,9 @@
       "boilingPointK": 2067,
       "oxidationStates": "+3, +2",
       "electronegativityPauling": 1.17,
-      "photo": null
+      "photo": {
+        "fileName": "sm.jpg"
+      }
     },
     {
       "atomicNumber": 63,
@@ -1700,7 +1824,9 @@
       "boilingPointK": 1802,
       "oxidationStates": "+3, +2",
       "electronegativityPauling": 1.2,
-      "photo": null
+      "photo": {
+        "fileName": "eu.jpg"
+      }
     },
     {
       "atomicNumber": 64,
@@ -1727,7 +1853,9 @@
       "boilingPointK": 3546,
       "oxidationStates": "+3",
       "electronegativityPauling": 1.2,
-      "photo": null
+      "photo": {
+        "fileName": "gd.jpg"
+      }
     },
     {
       "atomicNumber": 65,
@@ -1754,7 +1882,9 @@
       "boilingPointK": 3503,
       "oxidationStates": "+3, +4",
       "electronegativityPauling": 1.2,
-      "photo": null
+      "photo": {
+        "fileName": "tb.jpg"
+      }
     },
     {
       "atomicNumber": 66,
@@ -1781,7 +1911,9 @@
       "boilingPointK": 2840,
       "oxidationStates": "+3",
       "electronegativityPauling": 1.22,
-      "photo": null
+      "photo": {
+        "fileName": "dy.jpg"
+      }
     },
     {
       "atomicNumber": 67,
@@ -1808,7 +1940,9 @@
       "boilingPointK": 2993,
       "oxidationStates": "+3",
       "electronegativityPauling": 1.23,
-      "photo": null
+      "photo": {
+        "fileName": "ho.jpg"
+      }
     },
     {
       "atomicNumber": 68,
@@ -1835,7 +1969,9 @@
       "boilingPointK": 3141,
       "oxidationStates": "+3",
       "electronegativityPauling": 1.24,
-      "photo": null
+      "photo": {
+        "fileName": "er.jpg"
+      }
     },
     {
       "atomicNumber": 69,
@@ -1862,7 +1998,9 @@
       "boilingPointK": 2223,
       "oxidationStates": "+3",
       "electronegativityPauling": 1.25,
-      "photo": null
+      "photo": {
+        "fileName": "tm.jpg"
+      }
     },
     {
       "atomicNumber": 70,
@@ -1889,7 +2027,9 @@
       "boilingPointK": 1469,
       "oxidationStates": "+3, +2",
       "electronegativityPauling": 1.1,
-      "photo": null
+      "photo": {
+        "fileName": "yb.jpg"
+      }
     },
     {
       "atomicNumber": 71,
@@ -1916,7 +2056,9 @@
       "boilingPointK": 3675,
       "oxidationStates": "+3",
       "electronegativityPauling": 1.27,
-      "photo": null
+      "photo": {
+        "fileName": "lu.jpg"
+      }
     },
     {
       "atomicNumber": 72,
@@ -1943,7 +2085,9 @@
       "boilingPointK": 4876,
       "oxidationStates": "+4",
       "electronegativityPauling": 1.3,
-      "photo": null
+      "photo": {
+        "fileName": "hf.jpg"
+      }
     },
     {
       "atomicNumber": 73,
@@ -1970,7 +2114,9 @@
       "boilingPointK": 5731,
       "oxidationStates": "+5",
       "electronegativityPauling": 1.5,
-      "photo": null
+      "photo": {
+        "fileName": "ta.jpg"
+      }
     },
     {
       "atomicNumber": 74,
@@ -1997,7 +2143,9 @@
       "boilingPointK": 5828,
       "oxidationStates": "+6, +5, +4",
       "electronegativityPauling": 2.36,
-      "photo": null
+      "photo": {
+        "fileName": "w.jpg"
+      }
     },
     {
       "atomicNumber": 75,
@@ -2024,7 +2172,9 @@
       "boilingPointK": 5869,
       "oxidationStates": "+7, +6, +4",
       "electronegativityPauling": 1.9,
-      "photo": null
+      "photo": {
+        "fileName": "re.jpg"
+      }
     },
     {
       "atomicNumber": 76,
@@ -2051,7 +2201,9 @@
       "boilingPointK": 5285,
       "oxidationStates": "+8, +6, +4, +3",
       "electronegativityPauling": 2.2,
-      "photo": null
+      "photo": {
+        "fileName": "os.jpg"
+      }
     },
     {
       "atomicNumber": 77,
@@ -2078,7 +2230,9 @@
       "boilingPointK": 4403,
       "oxidationStates": "+4, +3",
       "electronegativityPauling": 2.2,
-      "photo": null
+      "photo": {
+        "fileName": "ir.jpg"
+      }
     },
     {
       "atomicNumber": 78,
@@ -2105,7 +2259,9 @@
       "boilingPointK": 4098,
       "oxidationStates": "+4, +2",
       "electronegativityPauling": 2.28,
-      "photo": null
+      "photo": {
+        "fileName": "pt.jpg"
+      }
     },
     {
       "atomicNumber": 79,
@@ -2132,7 +2288,9 @@
       "boilingPointK": 3129,
       "oxidationStates": "+3, +1",
       "electronegativityPauling": 2.54,
-      "photo": null
+      "photo": {
+        "fileName": "au.jpg"
+      }
     },
     {
       "atomicNumber": 80,
@@ -2159,7 +2317,9 @@
       "boilingPointK": 629.88,
       "oxidationStates": "+2, +1",
       "electronegativityPauling": 2,
-      "photo": null
+      "photo": {
+        "fileName": "hg.jpg"
+      }
     },
     {
       "atomicNumber": 81,
@@ -2186,7 +2346,9 @@
       "boilingPointK": 1746,
       "oxidationStates": "+1, +3",
       "electronegativityPauling": 1.62,
-      "photo": null
+      "photo": {
+        "fileName": "tl.jpg"
+      }
     },
     {
       "atomicNumber": 82,
@@ -2213,7 +2375,9 @@
       "boilingPointK": 2022,
       "oxidationStates": "+2, +4",
       "electronegativityPauling": 2.33,
-      "photo": null
+      "photo": {
+        "fileName": "pb.jpg"
+      }
     },
     {
       "atomicNumber": 83,
@@ -2240,7 +2404,9 @@
       "boilingPointK": 1837,
       "oxidationStates": "+3, +5",
       "electronegativityPauling": 2.02,
-      "photo": null
+      "photo": {
+        "fileName": "bi.jpg"
+      }
     },
     {
       "atomicNumber": 84,
@@ -2294,7 +2460,9 @@
       "boilingPointK": 610,
       "oxidationStates": "+5, +1, -1",
       "electronegativityPauling": 2.2,
-      "photo": null
+      "photo": {
+        "fileName": "at.jpg"
+      }
     },
     {
       "atomicNumber": 86,
@@ -2402,7 +2570,9 @@
       "boilingPointK": 3471,
       "oxidationStates": "+3",
       "electronegativityPauling": 1.1,
-      "photo": null
+      "photo": {
+        "fileName": "ac.jpg"
+      }
     },
     {
       "atomicNumber": 90,
@@ -2429,7 +2599,9 @@
       "boilingPointK": 5061,
       "oxidationStates": "+4",
       "electronegativityPauling": 1.3,
-      "photo": null
+      "photo": {
+        "fileName": "th.jpg"
+      }
     },
     {
       "atomicNumber": 91,
@@ -2456,7 +2628,9 @@
       "boilingPointK": 4300,
       "oxidationStates": "+5, +4",
       "electronegativityPauling": 1.5,
-      "photo": null
+      "photo": {
+        "fileName": "pa.jpg"
+      }
     },
     {
       "atomicNumber": 92,
@@ -2483,7 +2657,9 @@
       "boilingPointK": 4404,
       "oxidationStates": "+6, +5, +4, +3",
       "electronegativityPauling": 1.38,
-      "photo": null
+      "photo": {
+        "fileName": "u.jpg"
+      }
     },
     {
       "atomicNumber": 93,
@@ -2510,7 +2686,9 @@
       "boilingPointK": 4273,
       "oxidationStates": "+7, +6, +5, +4, +3",
       "electronegativityPauling": 1.36,
-      "photo": null
+      "photo": {
+        "fileName": "np.jpg"
+      }
     },
     {
       "atomicNumber": 94,
@@ -2537,7 +2715,9 @@
       "boilingPointK": 3505,
       "oxidationStates": "+7, +6, +5, +4, +3",
       "electronegativityPauling": 1.28,
-      "photo": null
+      "photo": {
+        "fileName": "pu.jpg"
+      }
     },
     {
       "atomicNumber": 95,
@@ -2564,7 +2744,9 @@
       "boilingPointK": 2880,
       "oxidationStates": "+6, +5, +4, +3",
       "electronegativityPauling": 1.13,
-      "photo": null
+      "photo": {
+        "fileName": "am.jpg"
+      }
     },
     {
       "atomicNumber": 96,
@@ -2591,7 +2773,9 @@
       "boilingPointK": 3383,
       "oxidationStates": "+3, +4",
       "electronegativityPauling": 1.28,
-      "photo": null
+      "photo": {
+        "fileName": "cm.jpg"
+      }
     },
     {
       "atomicNumber": 97,
@@ -2618,7 +2802,9 @@
       "boilingPointK": 2900,
       "oxidationStates": "+3, +4",
       "electronegativityPauling": 1.3,
-      "photo": null
+      "photo": {
+        "fileName": "bk.jpg"
+      }
     },
     {
       "atomicNumber": 98,
@@ -2645,7 +2831,9 @@
       "boilingPointK": 1743,
       "oxidationStates": "+3",
       "electronegativityPauling": 1.3,
-      "photo": null
+      "photo": {
+        "fileName": "cf.jpg"
+      }
     },
     {
       "atomicNumber": 99,
@@ -2672,7 +2860,9 @@
       "boilingPointK": 1269,
       "oxidationStates": "+3",
       "electronegativityPauling": 1.3,
-      "photo": null
+      "photo": {
+        "fileName": "es.jpg"
+      }
     },
     {
       "atomicNumber": 100,
