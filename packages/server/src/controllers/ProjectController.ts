@@ -7,6 +7,7 @@ import { ProjectAccessService } from '../services/ProjectAccessService';
 import { isEmailAllowedForChronoline, projectDataHasChronolineWidget } from '../config/chronolineAccess';
 import { isEmailAllowedForNatcom, projectDataHasNatcomWidget } from '../config/natcomAccess';
 import { isEmailAllowedForMathMachine, projectDataHasMathMachineWidget } from '../config/mathmachineAccess';
+import { isEmailAllowedForRusiq, projectDataHasRusiqWidget } from '../config/rusiqAccess';
 import multer from 'multer';
 import path from 'path';
 
@@ -215,6 +216,13 @@ export class ProjectController {
         });
       }
 
+      if (projectDataHasRusiqWidget(projectData) && !isEmailAllowedForRusiq(req.client.email)) {
+        return res.status(403).json({
+          error: 'RusIQ widget not allowed',
+          message: 'Виджет «РусIQ» пока недоступен для этого аккаунта'
+        });
+      }
+
       const project = await ProjectService.createProject({
         name,
         description,
@@ -378,6 +386,17 @@ export class ProjectController {
         return res.status(403).json({
           error: 'MathMachine widget not allowed',
           message: 'Виджет «Матемашка» пока недоступен для этого аккаунта'
+        });
+      }
+
+      if (
+        Object.prototype.hasOwnProperty.call(updates, 'projectData') &&
+        projectDataHasRusiqWidget(updates.projectData) &&
+        !isEmailAllowedForRusiq(req.client.email)
+      ) {
+        return res.status(403).json({
+          error: 'RusIQ widget not allowed',
+          message: 'Виджет «РусIQ» пока недоступен для этого аккаунта'
         });
       }
 
