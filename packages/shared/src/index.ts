@@ -47,3 +47,13 @@ export * from './periodictable/widgetProperties';
 
 // РусIQ (Тип 7)
 export * from './rusiq/widgetProperties';
+
+// Words («Я знаю много слов», Тип 2)
+export * from './words/widgetProperties';
+export * from './words/model/schema';
+export * from './words/model/resources';
+export * from './words/game/session';
+export * from './words/game/achievements';
+export * from './words/game/stats';
+export * from './words/store/rules';
+export * from './words/store/contentRules';

@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { buildBrowserWindowOptions, hasChronolineWidget, hasNaturalCommunitiesWidget, hasMathMachineWidget, hasPeriodicTableWidget, hasRusiqWidget, hasStandaloneAppWidget, BASE_WINDOW_OPTIONS } from './windowMode.js';
+import { buildBrowserWindowOptions, hasChronolineWidget, hasNaturalCommunitiesWidget, hasMathMachineWidget, hasPeriodicTableWidget, hasRusiqWidget, hasStandaloneAppWidget, BASE_WINDOW_OPTIONS, hasWordsWidget } from './windowMode.js';
 
 // ─── The regression-safety guarantee ────────────────────────────────────────
 // Every one of these MUST deep-equal BASE_WINDOW_OPTIONS exactly - this is
@@ -179,4 +179,44 @@ test('buildBrowserWindowOptions never returns the frozen singleton itself (calle
   assert.doesNotThrow(() => {
     result.webPreferences = {};
   });
+});
+
+// ─── Тип 2, «Я знаю много слов» ─────────────────────────────────────────────
+// Третий standalone-тип. Регрессионная гарантия та же: проект без него не
+// должен заметить его появления вообще.
+
+test('words widget -> windowed mode, same shape as the other standalone types', () => {
+  const withWords = buildBrowserWindowOptions({ widgets: [{ type: 'words' }] });
+  assert.equal(withWords.kiosk, false);
+  assert.equal(withWords.fullscreen, false);
+  assert.equal(withWords.frame, true);
+  assert.equal(withWords.resizable, true);
+  assert.equal(withWords.useContentSize, true);
+  assert.deepEqual(withWords, buildBrowserWindowOptions({ widgets: [{ type: 'chronoline' }] }));
+});
+
+test('hasWordsWidget does not confuse the type with the other two', () => {
+  assert.equal(hasWordsWidget({ widgets: [{ type: 'words' }] }), true);
+  assert.equal(hasWordsWidget({ widgets: [{ type: 'chronoline' }] }), false);
+  assert.equal(hasWordsWidget({ widgets: [{ type: 'naturalcommunities' }] }), false);
+  assert.equal(hasChronolineWidget({ widgets: [{ type: 'words' }] }), false);
+  assert.equal(hasNaturalCommunitiesWidget({ widgets: [{ type: 'words' }] }), false);
+});
+
+test('hasStandaloneAppWidget now fires for words too', () => {
+  assert.equal(hasStandaloneAppWidget({ widgets: [{ type: 'words' }] }), true);
+});
+
+test('a project mixing ordinary widgets with words still goes windowed', () => {
+  const mixed = buildBrowserWindowOptions({
+    widgets: [{ type: 'image' }, { type: 'navigation' }, { type: 'words' }],
+  });
+  assert.equal(mixed.kiosk, false);
+});
+
+test('adding the words type did not change anything for projects without it', () => {
+  // Побайтовая гарантия для всех существующих клиентов - музеи, навигация
+  assert.deepEqual(buildBrowserWindowOptions({ widgets: [{ type: 'image' }] }), BASE_WINDOW_OPTIONS);
+  assert.deepEqual(buildBrowserWindowOptions({ widgets: [{ type: 'wordsy' }] }), BASE_WINDOW_OPTIONS);
+  assert.deepEqual(buildBrowserWindowOptions({ widgets: [{ type: 'WORDS' }] }), BASE_WINDOW_OPTIONS);
 });

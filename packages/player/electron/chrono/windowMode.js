@@ -24,7 +24,12 @@ const NATCOM_WIDGET_TYPE = 'naturalcommunities';
 const MATHMACHINE_WIDGET_TYPE = 'mathmachine';
 const PERIODICTABLE_WIDGET_TYPE = 'periodictable';
 const RUSIQ_WIDGET_TYPE = 'rusiq';
-const STANDALONE_APP_WIDGET_TYPES = [CHRONOLINE_WIDGET_TYPE, NATCOM_WIDGET_TYPE, MATHMACHINE_WIDGET_TYPE, PERIODICTABLE_WIDGET_TYPE, RUSIQ_WIDGET_TYPE];
+// "words" (Тип 2, «Я знаю много слов») — очередной виджет того же рода:
+// полноэкранное учебное приложение с собственным рантаймом, а не
+// позиционируемый на канвасе элемент. Добавлен в общий список, а не
+// отдельной веткой, ровно как natcom, mathmachine и periodictable до него.
+const WORDS_WIDGET_TYPE = 'words';
+const STANDALONE_APP_WIDGET_TYPES = [CHRONOLINE_WIDGET_TYPE, NATCOM_WIDGET_TYPE, MATHMACHINE_WIDGET_TYPE, PERIODICTABLE_WIDGET_TYPE, RUSIQ_WIDGET_TYPE, WORDS_WIDGET_TYPE];
 
 const BASE_WINDOW_OPTIONS = Object.freeze({
   width: 1280,
@@ -134,6 +139,14 @@ function buildBrowserWindowOptions(projectData) {
   };
 }
 
+/**
+ * @param {unknown} projectData
+ * @returns {boolean}
+ */
+function hasWordsWidget(projectData) {
+  return hasWidgetOfType(projectData, WORDS_WIDGET_TYPE);
+}
+
 module.exports = {
   buildBrowserWindowOptions,
   hasChronolineWidget,
@@ -141,6 +154,7 @@ module.exports = {
   hasMathMachineWidget,
   hasPeriodicTableWidget,
   hasRusiqWidget,
+  hasWordsWidget,
   hasStandaloneAppWidget,
   BASE_WINDOW_OPTIONS,
   CHRONOLINE_WIDGET_TYPE,
@@ -148,4 +162,5 @@ module.exports = {
   MATHMACHINE_WIDGET_TYPE,
   PERIODICTABLE_WIDGET_TYPE,
   RUSIQ_WIDGET_TYPE,
+  WORDS_WIDGET_TYPE,
 };

@@ -117,3 +117,30 @@ contextBridge.exposeInMainWorld('rusiqAPI', {
   exportQuiz: (fileContentJson, suggestedFileName) => ipcRenderer.invoke('rusiq:export-quiz', fileContentJson, suggestedFileName),
   importQuiz: () => ipcRenderer.invoke('rusiq:import-quiz')
 });
+
+// Локальное хранилище виджета «Я знаю много слов» (Тип 2) — профили детей,
+// настройки занятия и достижения. Отдельный namespace, используется только
+// виджетом words.
+contextBridge.exposeInMainWorld('wordsAPI', {
+  getContext: () => ipcRenderer.invoke('words:get-context'),
+  getLibrary: () => ipcRenderer.invoke('words:get-library'),
+  listProfiles: () => ipcRenderer.invoke('words:list-profiles'),
+  createProfile: (name) => ipcRenderer.invoke('words:create-profile', name),
+  deleteProfile: (profileId) => ipcRenderer.invoke('words:delete-profile', profileId),
+  getSettings: () => ipcRenderer.invoke('words:get-settings'),
+  saveSettings: (settings) => ipcRenderer.invoke('words:save-settings', settings),
+  getScores: () => ipcRenderer.invoke('words:get-scores'),
+  saveScore: (profileId, themeId, tier) => ipcRenderer.invoke('words:save-score', profileId, themeId, tier),
+
+  // Контент педагога (ТЗ строки 55-57)
+  listUserWords: () => ipcRenderer.invoke('words:list-user-words'),
+  createUserWord: (draft) => ipcRenderer.invoke('words:create-user-word', draft),
+  updateUserWord: (id, draft) => ipcRenderer.invoke('words:update-user-word', id, draft),
+  deleteUserWord: (id) => ipcRenderer.invoke('words:delete-user-word', id),
+  listSets: () => ipcRenderer.invoke('words:list-sets'),
+  createSet: (draft) => ipcRenderer.invoke('words:create-set', draft),
+  updateSet: (id, draft) => ipcRenderer.invoke('words:update-set', id, draft),
+  deleteSet: (id) => ipcRenderer.invoke('words:delete-set', id),
+  pickMediaFile: (kind) => ipcRenderer.invoke('words:pick-media-file', kind),
+  saveRecording: (bytes) => ipcRenderer.invoke('words:save-recording', bytes)
+});

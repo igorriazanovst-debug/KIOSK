@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 320" width="512" height="320">
+  <rect width="512" height="320" rx="24" fill="#8a5a3b"/>
+  <circle cx="96" cy="88" r="44" fill="#ffffff" opacity="0.22"/>
+  <circle cx="430" cy="250" r="72" fill="#ffffff" opacity="0.14"/>
+  <text x="256" y="176" text-anchor="middle" font-family="system-ui, sans-serif" font-size="44" fill="#ffffff">Моя комната</text>
+  <text x="256" y="216" text-anchor="middle" font-family="system-ui, sans-serif" font-size="20" fill="#ffffff" opacity="0.7">заглушка</text>
+</svg>
