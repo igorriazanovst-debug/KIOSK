@@ -1,12 +1,14 @@
-import React, { useState } from 'react';
+// packages/player/src/periodictable/PeriodicTableRuntime.tsx
+import React, { useEffect, useState } from 'react';
 import type { PeriodicTableWidgetProperties } from '@kiosk/shared';
 import { PeriodicTableContentSchema, type PeriodicElement } from './model/schema.ts';
 import TableScreen from './screens/TableScreen.tsx';
-import type { ColorIndicationMode, HighlightMode } from './viewTypes.ts';
 import ElementSummaryCard from './screens/ElementSummaryCard.tsx';
 import ElementDetailCard from './screens/ElementDetailCard.tsx';
 import SearchTab from './screens/SearchTab.tsx';
-import type { TableForm } from './tableLayout.ts';
+import ViewSettingsTab from './screens/ViewSettingsTab.tsx';
+import TeacherPinModal from './screens/TeacherPinModal.tsx';
+import { loadViewSettings, saveViewSettings, DEFAULT_VIEW_SETTINGS, type ViewSettings } from './viewSettingsStorage.ts';
 import elementsJson from './content/elements.json' with { type: 'json' };
 
 interface Props {
@@ -19,13 +21,22 @@ type CardMode = 'none' | 'summary' | 'detail';
 type BottomTab = 'none' | 'search' | 'viewSettings' | 'legend';
 
 const PeriodicTableRuntime: React.FC<Props> = ({ properties }) => {
-  const [form, setForm] = useState<TableForm>('short');
-  const [colorIndication, setColorIndication] = useState<ColorIndicationMode>('class');
-  const [highlight, setHighlight] = useState<HighlightMode>('none');
+  const [viewSettings, setViewSettings] = useState<ViewSettings>(DEFAULT_VIEW_SETTINGS);
   const [selected, setSelected] = useState<PeriodicElement | null>(null);
   const [cardMode, setCardMode] = useState<CardMode>('none');
   const [activeTab, setActiveTab] = useState<BottomTab>('none');
   const [highlightedSymbol, setHighlightedSymbol] = useState<string | null>(null);
+  const [viewSettingsUnlocked, setViewSettingsUnlocked] = useState(false);
+  const [showPinModal, setShowPinModal] = useState(false);
+
+  useEffect(() => {
+    setViewSettings(loadViewSettings());
+  }, []);
+
+  function updateViewSettings(next: ViewSettings) {
+    setViewSettings(next);
+    saveViewSettings(next);
+  }
 
   function selectElement(el: PeriodicElement) {
     setSelected(el);
@@ -37,14 +48,27 @@ const PeriodicTableRuntime: React.FC<Props> = ({ properties }) => {
     setSelected(null);
   }
 
+  function handleViewSettingsTabClick() {
+    if (activeTab === 'viewSettings') {
+      setActiveTab('none');
+      return;
+    }
+    const pin = properties.teacherPin ?? '0000';
+    if (viewSettingsUnlocked || !pin) {
+      setActiveTab('viewSettings');
+    } else {
+      setShowPinModal(true);
+    }
+  }
+
   return (
     <div style={{ width: '100%', height: '100%', display: 'flex', flexDirection: 'column', fontFamily: 'sans-serif' }}>
       <div style={{ flex: 1, overflow: 'auto' }}>
         <TableScreen
           elements={elements}
-          form={form}
-          colorIndication={colorIndication}
-          highlight={highlight}
+          form={viewSettings.tableForm}
+          colorIndication={viewSettings.colorIndication}
+          highlight={viewSettings.highlight}
           highlightedSymbol={highlightedSymbol}
           onSelectElement={selectElement}
         />
@@ -52,7 +76,7 @@ const PeriodicTableRuntime: React.FC<Props> = ({ properties }) => {
 
       <div style={{ display: 'flex', borderTop: '1px solid #ccc' }}>
         <button onClick={() => setActiveTab(activeTab === 'search' ? 'none' : 'search')} style={{ flex: 1, padding: 12 }}>Поиск</button>
-        <button onClick={() => setActiveTab(activeTab === 'viewSettings' ? 'none' : 'viewSettings')} style={{ flex: 1, padding: 12 }}>Настройки вида</button>
+        <button onClick={handleViewSettingsTabClick} style={{ flex: 1, padding: 12 }}>Настройки вида {!viewSettingsUnlocked ? '🔒' : ''}</button>
         <button onClick={() => setActiveTab(activeTab === 'legend' ? 'none' : 'legend')} style={{ flex: 1, padding: 12 }}>Легенда</button>
       </div>
 
@@ -61,8 +85,20 @@ const PeriodicTableRuntime: React.FC<Props> = ({ properties }) => {
           <SearchTab elements={elements} onSelectElement={selectElement} onHighlightChange={setHighlightedSymbol} />
         </div>
       )}
-      {/* activeTab === 'viewSettings' — заполняется Задачей 9 */}
+      {activeTab === 'viewSettings' && viewSettingsUnlocked && (
+        <div style={{ maxHeight: '40vh', overflow: 'auto', borderTop: '1px solid #ccc' }}>
+          <ViewSettingsTab settings={viewSettings} onChange={updateViewSettings} />
+        </div>
+      )}
       {/* activeTab === 'legend' — заполняется Задачей 10 */}
+
+      {showPinModal && (
+        <TeacherPinModal
+          expectedPin={properties.teacherPin ?? '0000'}
+          onSuccess={() => { setViewSettingsUnlocked(true); setShowPinModal(false); setActiveTab('viewSettings'); }}
+          onCancel={() => setShowPinModal(false)}
+        />
+      )}
 
       {selected && cardMode !== 'none' && (
         <div
