@@ -8,7 +8,7 @@ interface Props {
 }
 
 const ROW: React.FC<{ label: string; value: React.ReactNode }> = ({ label, value }) => (
-  <tr><td style={{ fontWeight: 'bold', paddingRight: 12, verticalAlign: 'top' }}>{label}</td><td>{value ?? '—'}</td></tr>
+  <tr><td style={{ fontWeight: 'bold', paddingRight: 12, verticalAlign: 'top', maxWidth: 260 }}>{label}</td><td>{value ?? '—'}</td></tr>
 );
 
 const ElementDetailCard: React.FC<Props> = ({ element, onClose }) => (
@@ -26,21 +26,21 @@ const ElementDetailCard: React.FC<Props> = ({ element, onClose }) => (
         <ROW label="Символ элемента" value={element.symbol} />
         <ROW label="Номер элемента" value={element.atomicNumber} />
         <ROW label="Относительная атомная масса" value={element.atomicMass} />
-        <ROW label="Название на русском" value={element.nameRu} />
-        <ROW label="Название на латыни" value={element.nameLatin} />
+        <ROW label="Название элемента на русском языке" value={element.nameRu} />
+        <ROW label="Название элемента на латыни" value={element.nameLatin} />
         <ROW label="Электронный тип" value={element.electronType} />
         <ROW label="Нахождение в природе" value={element.naturalOccurrence} />
-        <ROW label="Агрегатное состояние при н.у." value={element.physicalStateNormal} />
-        <ROW label="Тип кристаллической решётки" value={element.crystalLattice} />
+        <ROW label="Агрегатное состояние при нормальных условиях" value={element.physicalStateNormal} />
+        <ROW label="Тип кристаллической решётки простого вещества" value={element.crystalLattice} />
         <ROW label="Аллотропные модификации" value={element.allotropes || '—'} />
         <ROW label="Стабильные изотопы" value={element.stableIsotopes || '—'} />
-        <ROW label="Положение в ряду электрохимического напряжения" value={element.electrochemicalSeriesPosition} />
-        <ROW label="Характер оксидов и гидроксидов" value={element.oxideCharacter} />
+        <ROW label="Положение в ряду электрохимического напряжения относительно водорода (для металлов)" value={element.electrochemicalSeriesPosition} />
+        <ROW label="Характер свойств оксидов и гидроксидов" value={element.oxideCharacter} />
         <ROW label="Плотность (г/см³)" value={element.density} />
         <ROW label="Температура плавления (К)" value={element.meltingPointK} />
         <ROW label="Температура кипения (К)" value={element.boilingPointK} />
-        <ROW label="Характерные степени окисления" value={element.oxidationStates} />
-        <ROW label="Электроотрицательность по Полингу" value={element.electronegativityPauling} />
+        <ROW label="Характерные степени окисления в неорганических соединениях" value={element.oxidationStates} />
+        <ROW label="Электроотрицательность по шкале Полинга" value={element.electronegativityPauling} />
       </tbody>
     </table>
     <button onClick={onClose} style={{ marginTop: 16 }}>Закрыть</button>
