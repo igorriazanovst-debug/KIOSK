@@ -86,13 +86,13 @@ const MovementTool: React.FC<Props> = ({ onClose }) => {
             <React.Fragment key={i}>
               <Line
                 points={[GRID_ORIGIN_X, GRID_ORIGIN_Y + i * CELL, GRID_ORIGIN_X + gridPixels, GRID_ORIGIN_Y + i * CELL]}
-                stroke={COLOR.border}
-                strokeWidth={2}
+                stroke={COLOR.textMuted}
+                strokeWidth={3}
               />
               <Line
                 points={[GRID_ORIGIN_X + i * CELL, GRID_ORIGIN_Y, GRID_ORIGIN_X + i * CELL, GRID_ORIGIN_Y + gridPixels]}
-                stroke={COLOR.border}
-                strokeWidth={2}
+                stroke={COLOR.textMuted}
+                strokeWidth={3}
               />
             </React.Fragment>
           ))}

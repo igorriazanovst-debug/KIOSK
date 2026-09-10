@@ -136,8 +136,8 @@ const DeformationTool: React.FC<Props> = ({ onClose }) => {
 
           <Line
             points={[CENTER_X - RULER_MAX_OFFSET_PX, RULER_Y, CENTER_X + RULER_MAX_OFFSET_PX, RULER_Y]}
-            stroke={COLOR.border}
-            strokeWidth={2}
+            stroke={COLOR.textMuted}
+            strokeWidth={3}
           />
           {Array.from({ length: Math.floor(RULER_MAX_OFFSET_PX / RULER_TICK_STEP_PX) * 2 + 1 }).map((_, i) => {
             const offset = -RULER_MAX_OFFSET_PX + i * RULER_TICK_STEP_PX;
@@ -146,9 +146,9 @@ const DeformationTool: React.FC<Props> = ({ onClose }) => {
             return (
               <React.Fragment key={i}>
                 <Line
-                  points={[CENTER_X + offset, RULER_Y - (isWholeUnit ? 8 : 4), CENTER_X + offset, RULER_Y + (isWholeUnit ? 8 : 4)]}
+                  points={[CENTER_X + offset, RULER_Y - (isWholeUnit ? 10 : 5), CENTER_X + offset, RULER_Y + (isWholeUnit ? 10 : 5)]}
                   stroke={COLOR.textMuted}
-                  strokeWidth={isWholeUnit ? 2 : 1}
+                  strokeWidth={isWholeUnit ? 3 : 2}
                 />
                 {isWholeUnit && (
                   <Text

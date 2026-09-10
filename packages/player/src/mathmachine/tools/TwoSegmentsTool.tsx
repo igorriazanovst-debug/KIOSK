@@ -87,8 +87,8 @@ const TwoSegmentsTool: React.FC<Props> = ({ onClose }) => {
             <Line
               key={cm}
               points={[cmToPx(cm), REFERENCE_Y - 10, cmToPx(cm), DRAGGED_Y + BAR_HEIGHT + 10]}
-              stroke={COLOR.border}
-              strokeWidth={1}
+              stroke={COLOR.textMuted}
+              strokeWidth={2}
             />
           ))}
 

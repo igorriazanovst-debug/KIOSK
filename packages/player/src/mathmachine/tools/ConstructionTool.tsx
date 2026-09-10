@@ -91,9 +91,9 @@ const ConstructionTool: React.FC<Props> = ({ onClose }) => {
               SILHOUETTE_X - puzzle.halfSide, SILHOUETTE_Y + puzzle.halfSide,
             ]}
             closed
-            stroke={isCorrect === true ? COLOR.mint : COLOR.border}
-            strokeWidth={3}
-            dash={isCorrect === true ? undefined : [8, 6]}
+            stroke={isCorrect === true ? COLOR.mint : COLOR.textMuted}
+            strokeWidth={5}
+            dash={isCorrect === true ? undefined : [10, 7]}
           />
 
           {puzzle.pieces.map((piece, i) => {

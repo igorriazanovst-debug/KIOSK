@@ -97,7 +97,7 @@ const SymmetryTool: React.FC<Props> = ({ onClose }) => {
 
       <Stage width={CANVAS_WIDTH} height={CANVAS_HEIGHT}>
         <Layer>
-          <Line points={[AXIS_X, CONTENT_TOP - 10, AXIS_X, CONTENT_TOP + CONTENT_HEIGHT + 10]} stroke={COLOR.border} strokeWidth={2} dash={[6, 6]} />
+          <Line points={[AXIS_X, CONTENT_TOP - 10, AXIS_X, CONTENT_TOP + CONTENT_HEIGHT + 10]} stroke={COLOR.textMuted} strokeWidth={4} dash={[9, 7]} />
 
           {puzzle.features.map((feature, i) => (
             <Circle
@@ -118,9 +118,9 @@ const SymmetryTool: React.FC<Props> = ({ onClose }) => {
               y={featureY(feature.y)}
               radius={feature.radius + 6}
               fill="transparent"
-              stroke={isCorrect === true ? COLOR.mint : isCorrect === false ? COLOR.amberDark : COLOR.border}
-              strokeWidth={2}
-              dash={slotAssignment[i] === null ? [5, 4] : undefined}
+              stroke={isCorrect === true ? COLOR.mint : isCorrect === false ? COLOR.amberDark : COLOR.textMuted}
+              strokeWidth={4}
+              dash={slotAssignment[i] === null ? [7, 5] : undefined}
             />
           ))}
 

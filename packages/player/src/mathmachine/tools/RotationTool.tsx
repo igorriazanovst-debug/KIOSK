@@ -108,7 +108,7 @@ const RotationTool: React.FC<Props> = ({ onClose }) => {
             fill={COLOR.indigoDark}
           />
 
-          <Circle x={CENTER} y={CENTER} radius={HANDLE_RADIUS} stroke={COLOR.border} strokeWidth={2} dash={[6, 6]} />
+          <Circle x={CENTER} y={CENTER} radius={HANDLE_RADIUS} stroke={COLOR.textMuted} strokeWidth={4} dash={[9, 7]} />
 
           <Group x={CENTER} y={CENTER} rotation={currentAngle}>
             <ShapeRender shapeId={puzzle.shapeId} />

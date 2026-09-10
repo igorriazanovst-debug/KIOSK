@@ -160,8 +160,8 @@ const ChainTool: React.FC<Props> = ({ onClose }) => {
                   radius={30}
                   fill={shown ? '#fff' : 'transparent'}
                   stroke={strokeColor}
-                  strokeWidth={isCorrect === undefined ? 3 : 5}
-                  dash={shown ? undefined : [6, 4]}
+                  strokeWidth={isCorrect === undefined ? 4 : 5}
+                  dash={shown ? undefined : [8, 6]}
                 />
                 {shown && (
                   <Text

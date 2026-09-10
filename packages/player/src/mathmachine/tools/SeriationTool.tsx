@@ -112,9 +112,9 @@ const SeriationTool: React.FC<Props> = ({ onClose }) => {
                   y={SLOT_Y}
                   radius={38}
                   fill="transparent"
-                  stroke={isCorrect === true ? COLOR.mint : isCorrect === false ? COLOR.amberDark : COLOR.border}
-                  strokeWidth={filled ? 3 : 2}
-                  dash={filled ? undefined : [6, 4]}
+                  stroke={isCorrect === true ? COLOR.mint : isCorrect === false ? COLOR.amberDark : COLOR.textMuted}
+                  strokeWidth={filled ? 5 : 4}
+                  dash={filled ? undefined : [8, 6]}
                 />
                 <Text
                   text={String(slot + 1)}
