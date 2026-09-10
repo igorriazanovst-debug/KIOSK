@@ -39,5 +39,7 @@ export function createElectronPlatform(api: WordsApi): WordsPlatform {
     deleteSet: (id) => api.deleteSet(id),
     pickMediaFile: (kind) => api.pickMediaFile(kind),
     saveRecording: (bytes) => api.saveRecording(bytes),
+    exportSet: (setId) => api.exportSet(setId),
+    importSet: () => api.importSet(),
   };
 }

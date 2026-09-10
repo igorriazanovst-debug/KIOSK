@@ -107,6 +107,8 @@ const WordsRuntime: React.FC<Props> = ({ properties, width, height }) => {
 
   const [error, setError] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
+  /** Итог экспорта/импорта комплекта — текст под списками, до следующего действия */
+  const [archiveNotice, setArchiveNotice] = useState<string | null>(null);
 
   const busRef = useRef<AudioBus | null>(null);
   if (!busRef.current) busRef.current = new AudioBus(createHtmlAudioPlayer());
@@ -206,6 +208,7 @@ const WordsRuntime: React.FC<Props> = ({ properties, width, height }) => {
   const runContentAction = useCallback(
     async (action: () => Promise<{ ok: boolean; error?: string }>, onSuccess?: () => void) => {
       setBusy(true);
+      setArchiveNotice(null);
       const res = await action();
       setBusy(false);
       if (!res.ok) {
@@ -218,6 +221,58 @@ const WordsRuntime: React.FC<Props> = ({ properties, width, height }) => {
     },
     [reloadContent]
   );
+
+  /**
+   * Экспорт комплекта. Диалог сохранения открывает главный процесс, сюда
+   * возвращается только отчёт — что уехало. Отказ от диалога не считается
+   * ошибкой и ничего не пишет на экран.
+   */
+  const exportSet = useCallback(
+    async (setId: string) => {
+      if (!api) return;
+      setBusy(true);
+      const res = await api.exportSet(setId);
+      setBusy(false);
+      if (!res.ok) {
+        setError(res.error ?? 'Не удалось сохранить комплект');
+        return;
+      }
+      setError(null);
+      const data = res.data;
+      if (!data || data.canceled) return;
+      setArchiveNotice(
+        `Комплект «${data.title}» сохранён: слов ${data.words}, из них своих ${data.ownWords}, файлов ${data.files}.`
+      );
+    },
+    [api]
+  );
+
+  /**
+   * Импорт комплекта. Слова, которых нет на этом устройстве, перечисляются
+   * явно: молча укоротившийся комплект педагог заметит только на занятии.
+   */
+  const importSet = useCallback(async () => {
+    if (!api) return;
+    setBusy(true);
+    const res = await api.importSet();
+    setBusy(false);
+    if (!res.ok) {
+      setError(res.error ?? 'Не удалось прочитать файл комплекта');
+      return;
+    }
+    setError(null);
+    const data = res.data;
+    if (!data || data.canceled) return;
+
+    await reloadContent();
+    const parts = [`Комплект «${data.set.title}» добавлен`];
+    if (data.addedWords > 0) parts.push(`новых слов: ${data.addedWords}`);
+    if (data.reusedWords > 0) parts.push(`уже было: ${data.reusedWords}`);
+    if (data.skippedWords.length > 0) {
+      parts.push(`не найдено на устройстве: ${data.skippedWords.join(', ')}`);
+    }
+    setArchiveNotice(`${parts.join('. ')}.`);
+  }, [api, reloadContent]);
 
   // ── партия ────────────────────────────────────────────────────────────
   const players: Profile[] = useMemo(() => {
@@ -489,6 +544,9 @@ const WordsRuntime: React.FC<Props> = ({ properties, width, height }) => {
         onNewSet={() => setScreen({ name: 'setEditor', setId: null })}
         onEditSet={(setId) => setScreen({ name: 'setEditor', setId })}
         onDeleteSet={(setId) => void runContentAction(() => api.deleteSet(setId))}
+        onExportSet={(setId) => void exportSet(setId)}
+        onImportSet={() => void importSet()}
+        notice={archiveNotice}
       />
     );
   } else if (screen.name === 'wordEditor') {

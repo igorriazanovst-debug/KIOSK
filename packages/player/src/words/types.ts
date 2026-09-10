@@ -54,7 +54,40 @@ export interface WordsApi {
   pickMediaFile(kind: 'image' | 'audio'): Promise<IpcResult<PickedMedia>>;
   /** Запись с микрофона: байты, а не путь */
   saveRecording(bytes: Uint8Array): Promise<IpcResult<StoredMedia>>;
+
+  // ── Экспорт и импорт комплекта (ТЗ строка 56) ───────────────────────
+  /** Системный диалог сохранения; файл пишет главный процесс */
+  exportSet(setId: string): Promise<IpcResult<ExportedSet>>;
+  /** Системный диалог открытия; архив разбирает главный процесс */
+  importSet(): Promise<IpcResult<ImportedSet>>;
 }
+
+export type ExportedSet =
+  | { canceled: true }
+  | {
+      canceled: false;
+      filePath: string;
+      title: string;
+      /** Слов в комплекте всего */
+      words: number;
+      /** Из них своих — они уехали вместе с файлами */
+      ownWords: number;
+      /** Файлов медиа в архиве */
+      files: number;
+    };
+
+export type ImportedSet =
+  | { canceled: true }
+  | {
+      canceled: false;
+      set: UserSet;
+      addedWords: number;
+      reusedWords: number;
+      /** Слова, не найденные на этом устройстве, — по названию или идентификатору */
+      skippedWords: string[];
+      words: UserWord[];
+      sets: UserSet[];
+    };
 
 export interface UserWordDraft {
   name: string;
