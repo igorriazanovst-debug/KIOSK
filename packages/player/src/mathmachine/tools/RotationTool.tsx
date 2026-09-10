@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Stage, Layer, Circle, Group, Line, RegularPolygon, Arrow } from 'react-konva';
+import { Stage, Layer, Circle, Group, Line, RegularPolygon, Arrow, Text } from 'react-konva';
 import {
   generateRotationPuzzle, accumulateRotation, checkFullTurn,
 } from './rotationLogic.ts';
@@ -97,6 +97,17 @@ const RotationTool: React.FC<Props> = ({ onClose }) => {
 
       <Stage width={CANVAS_SIZE} height={CANVAS_SIZE}>
         <Layer>
+          <Text
+            x={0}
+            y={4}
+            width={CANVAS_SIZE}
+            align="center"
+            text={`Пройдено: ${Math.round(Math.abs(accumulated))}° из 360°`}
+            fontSize={16}
+            fontStyle="800"
+            fill={COLOR.indigoDark}
+          />
+
           <Circle x={CENTER} y={CENTER} radius={HANDLE_RADIUS} stroke={COLOR.border} strokeWidth={2} dash={[6, 6]} />
 
           <Group x={CENTER} y={CENTER} rotation={currentAngle}>
