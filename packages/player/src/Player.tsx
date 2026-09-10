@@ -1113,22 +1113,48 @@ const Player: React.FC<PlayerProps> = ({ embedded = false }) => {
     (w) => w.type === 'chronoline' || w.type === 'naturalcommunities' || w.type === 'mathmachine'
   );
 
+  // Letterbox-масштаб для НЕ-standalone проектов: канвас проектировался под
+  // project.canvas.width/height, но реальное окно/экран плеера может быть
+  // другого разрешения — без этого правая (и нижняя) часть канвасa
+  // обрезалась overflow:hidden, если окно уже холста (найдено вживую на
+  // проекте «Навигация», виджет "navigation" не входит в standalone-список).
+  const canvasScale = isStandaloneAppProject
+    ? 1
+    : Math.min(
+        viewportSize.width / (project.canvas.width || 1),
+        viewportSize.height / (project.canvas.height || 1)
+      );
+
   return (
     <div className="player-container">
       <div
-        className="player-canvas"
-        style={{
-          width: isStandaloneAppProject ? viewportSize.width : project.canvas.width,
-          height: isStandaloneAppProject ? viewportSize.height : project.canvas.height,
-          backgroundColor: project.canvas.backgroundColor || '#ffffff',
-          position: 'relative',
-          overflow: 'hidden'
-        }}
+        style={
+          isStandaloneAppProject
+            ? undefined
+            : {
+                width: project.canvas.width * canvasScale,
+                height: project.canvas.height * canvasScale,
+                overflow: 'hidden',
+              }
+        }
       >
-        {project.widgets
-          .slice()
-          .sort((a, b) => (a.zIndex || 0) - (b.zIndex || 0))
-          .map(widget => renderWidget(widget))}
+        <div
+          className="player-canvas"
+          style={{
+            width: isStandaloneAppProject ? viewportSize.width : project.canvas.width,
+            height: isStandaloneAppProject ? viewportSize.height : project.canvas.height,
+            backgroundColor: project.canvas.backgroundColor || '#ffffff',
+            position: 'relative',
+            overflow: 'hidden',
+            transform: isStandaloneAppProject ? undefined : `scale(${canvasScale})`,
+            transformOrigin: 'top left',
+          }}
+        >
+          {project.widgets
+            .slice()
+            .sort((a, b) => (a.zIndex || 0) - (b.zIndex || 0))
+            .map(widget => renderWidget(widget))}
+        </div>
       </div>
 
       {/* Popup */}
