@@ -98,17 +98,64 @@ function normalizeAngle(deg: number): number {
   return ((deg % 360) + 360) % 360;
 }
 
+// Куски идут по кругу («вертушкой») вокруг центра квадрата — локальный
+// контур каждого следующего куска (север→восток→юг→запад) есть локальный
+// контур предыдущего, повёрнутый на +90° вокруг его же центроида (это
+// свойство самой геометрии ABSOLUTE_TRIANGLES, проверено аналитически).
+// Поэтому чтобы кусок №i, оказавшись в слоте №j, реально дорисовал контур
+// без дырок и наложений, его локальный контур нужно довернуть ровно на
+// (j - i) * 90° — а не на 0°, как если бы место можно было занять "как
+// есть". targetRotation куска всегда 0 ровно потому, что 0 = "довернуть
+// на (i - i) * 90 = 0" для его СОБСТВЕННОГО слота; при переносе в чужой
+// слот это должно пересчитываться.
+function requiredRotationDeg(pieceId: number, targetIndex: number, pieceCount: number): number {
+  return (((targetIndex - pieceId) % pieceCount) + pieceCount) % pieceCount * (360 / pieceCount);
+}
+
+function fitsTarget(
+  state: PieceState,
+  piece: ConstructionPiece,
+  target: { x: number; y: number },
+  targetIndex: number,
+  pieceCount: number,
+): boolean {
+  const dx = state.x - target.x;
+  const dy = state.y - target.y;
+  const distance = Math.sqrt(dx * dx + dy * dy);
+  const required = requiredRotationDeg(piece.id, targetIndex, pieceCount);
+  const angleDiff = Math.min(
+    Math.abs(normalizeAngle(state.rotationDeg) - required),
+    360 - Math.abs(normalizeAngle(state.rotationDeg) - required),
+  );
+  return distance <= POSITION_TOLERANCE && angleDiff <= ROTATION_TOLERANCE;
+}
+
+/**
+ * Все 4 куска — конгруэнтные треугольники (один и тот же силуэт,
+ * повёрнутый на 0/90/180/270° вокруг центра квадрата) — у ребёнка нет
+ * визуальной подсказки, какой конкретно кусок должен попасть в какой
+ * слот (силуэт — просто пунктирный квадрат без цветовой разметки по
+ * четвертям). Поэтому проверка НЕ привязывает кусок №i к слоту №i по
+ * индексу (это и было исходным багом — верно собранный квадрат с
+ * переставленными кусками отклонялся) — вместо этого для КАЖДОГО из 4
+ * целевых слотов ищется ещё не использованный кусок, который в него
+ * подходит С УЧЁТОМ довёрнутого на нужный угол контура (см.
+ * requiredRotationDeg выше) — иначе кусок, просто перенесённый в чужой
+ * слот без довёрнутого угла, засчитывался бы как влезший, хотя реально
+ * оставлял бы дыру и наложение на силуэте.
+ */
 export function checkConstructionAnswer(puzzle: ConstructionPuzzle, states: PieceState[]): boolean {
   if (states.length !== puzzle.pieces.length) return false;
-  return puzzle.pieces.every((piece, i) => {
-    const state = states[i];
-    const dx = state.x - piece.targetX;
-    const dy = state.y - piece.targetY;
-    const distance = Math.sqrt(dx * dx + dy * dy);
-    const angleDiff = Math.min(
-      Math.abs(normalizeAngle(state.rotationDeg) - piece.targetRotation),
-      360 - Math.abs(normalizeAngle(state.rotationDeg) - piece.targetRotation),
-    );
-    return distance <= POSITION_TOLERANCE && angleDiff <= ROTATION_TOLERANCE;
+  const pieceCount = puzzle.pieces.length;
+  const targets = puzzle.pieces.map((p) => ({ x: p.targetX, y: p.targetY }));
+  const usedStateIndices = new Set<number>();
+  return targets.every((target, targetIndex) => {
+    const matchIndex = states.findIndex((state, i) => {
+      if (usedStateIndices.has(i)) return false;
+      return fitsTarget(state, puzzle.pieces[i], target, targetIndex, pieceCount);
+    });
+    if (matchIndex === -1) return false;
+    usedStateIndices.add(matchIndex);
+    return true;
   });
 }
