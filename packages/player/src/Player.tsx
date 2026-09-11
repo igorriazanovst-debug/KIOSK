@@ -9,6 +9,7 @@ import NavigationRuntime from './NavigationRuntime';
 import ChronolineRuntime from './chrono/ChronolineRuntime.tsx';
 import NatComRuntime from './natcom/NatComRuntime.tsx';
 import MathMachineRuntime from './mathmachine/MathMachineRuntime';
+import RusiqRuntime from './rusiq/RusiqRuntime';
 
 interface Project {
   name: string;
@@ -571,6 +572,17 @@ const Player: React.FC<PlayerProps> = ({ embedded = false }) => {
             <MathMachineRuntime properties={widget.properties as any} />
           </div>
         );
+      case 'rusiq':
+        // Тот же принцип, что "mathmachine"/"naturalcommunities"/"chronoline" выше —
+        // заполняет реальный размер окна/экрана целиком.
+        return (
+          <div
+            key={widget.id}
+            style={{ ...commonStyle, left: 0, top: 0, width: viewportSize.width, height: viewportSize.height, overflow: 'hidden' }}
+          >
+            <RusiqRuntime properties={widget.properties as any} />
+          </div>
+        );
       default:
         return null;
     }
@@ -1110,7 +1122,7 @@ const Player: React.FC<PlayerProps> = ({ embedded = false }) => {
   // по project.canvas.* и получается больше окна → двойной скролл и обрезка
   // контента (найдено вживую при ручном тестировании «Матемашки»).
   const isStandaloneAppProject = project.widgets.some(
-    (w) => w.type === 'chronoline' || w.type === 'naturalcommunities' || w.type === 'mathmachine'
+    (w) => w.type === 'chronoline' || w.type === 'naturalcommunities' || w.type === 'mathmachine' || w.type === 'rusiq'
   );
 
   return (

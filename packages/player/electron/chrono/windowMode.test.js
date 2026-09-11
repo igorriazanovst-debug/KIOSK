@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { buildBrowserWindowOptions, hasChronolineWidget, hasNaturalCommunitiesWidget, hasMathMachineWidget, hasStandaloneAppWidget, BASE_WINDOW_OPTIONS } from './windowMode.js';
+import { buildBrowserWindowOptions, hasChronolineWidget, hasNaturalCommunitiesWidget, hasMathMachineWidget, hasRusiqWidget, hasStandaloneAppWidget, BASE_WINDOW_OPTIONS } from './windowMode.js';
 
 // ─── The regression-safety guarantee ────────────────────────────────────────
 // Every one of these MUST deep-equal BASE_WINDOW_OPTIONS exactly - this is
@@ -121,6 +121,29 @@ test('hasStandaloneAppWidget fires for any of the three types, and for none when
   assert.equal(hasStandaloneAppWidget({ widgets: [{ type: 'mathmachine' }] }), true);
   assert.equal(hasStandaloneAppWidget({ widgets: [{ type: 'image' }] }), false);
   assert.equal(hasStandaloneAppWidget({}), false);
+});
+
+// ─── rusiq - fourth standalone-app widget type ─────────────────────────────
+
+test('a rusiq widget switches on window chrome, same as the other standalone-app types', () => {
+  const result = buildBrowserWindowOptions({ widgets: [{ id: '1', type: 'rusiq', properties: {} }] });
+
+  assert.equal(result.fullscreen, false);
+  assert.equal(result.kiosk, false);
+  assert.equal(result.frame, true);
+  assert.equal(result.autoHideMenuBar, false);
+  assert.equal(result.useContentSize, true);
+});
+
+test('hasRusiqWidget does not fire for the other standalone-app types and vice versa', () => {
+  assert.equal(hasRusiqWidget({ widgets: [{ type: 'chronoline' }] }), false);
+  assert.equal(hasRusiqWidget({ widgets: [{ type: 'naturalcommunities' }] }), false);
+  assert.equal(hasRusiqWidget({ widgets: [{ type: 'mathmachine' }] }), false);
+  assert.equal(hasMathMachineWidget({ widgets: [{ type: 'rusiq' }] }), false);
+});
+
+test('hasStandaloneAppWidget fires for rusiq too', () => {
+  assert.equal(hasStandaloneAppWidget({ widgets: [{ type: 'rusiq' }] }), true);
 });
 
 test('BASE_WINDOW_OPTIONS is frozen and cannot be mutated by callers', () => {

@@ -4,6 +4,7 @@ const fs = require('fs');
 const { registerChronoIpc } = require('./chrono/ipc');
 const { registerNatComIpc } = require('./natcom/ipc');
 const { registerMathmachineIpc } = require('./mathmachine/ipc');
+const { registerRusiqIpc } = require('./rusiq/ipc');
 const { buildBrowserWindowOptions, hasStandaloneAppWidget, hasNaturalCommunitiesWidget, NATCOM_WIDGET_TYPE } = require('./chrono/windowMode');
 const { mediaDir: chronoMediaDir } = require('./chrono/mediaStore');
 const { resolveWithinRoot: chronoResolveWithinRoot } = require('./chrono/pathGuard');
@@ -1187,6 +1188,16 @@ app.whenReady().then(() => {
     fileLog('[mathmachine] storage dir:', baseDir, mathmachineIsFallback ? '(fallback: no write access to shared dir)' : '');
   } catch (err) {
     fileLog('[mathmachine] failed to initialize local storage:', err && err.message);
+  }
+
+  // Пользовательские данные (история результатов/настройки) виджета «РусIQ» —
+  // канал 'rusiq:*', используется только этим виджетом. Тот же принцип, что
+  // и у mathmachine выше — файловая работа только через этот IPC-мост.
+  try {
+    const { baseDir: rusiqBaseDir, isFallback: rusiqIsFallback } = registerRusiqIpc({ ipcMain, app });
+    fileLog('[rusiq] storage dir:', rusiqBaseDir, rusiqIsFallback ? '(fallback: no write access to shared dir)' : '');
+  } catch (err) {
+    fileLog('[rusiq] failed to initialize local storage:', err && err.message);
   }
 
   const { session } = require('electron');

@@ -22,7 +22,8 @@
 const CHRONOLINE_WIDGET_TYPE = 'chronoline';
 const NATCOM_WIDGET_TYPE = 'naturalcommunities';
 const MATHMACHINE_WIDGET_TYPE = 'mathmachine';
-const STANDALONE_APP_WIDGET_TYPES = [CHRONOLINE_WIDGET_TYPE, NATCOM_WIDGET_TYPE, MATHMACHINE_WIDGET_TYPE];
+const RUSIQ_WIDGET_TYPE = 'rusiq';
+const STANDALONE_APP_WIDGET_TYPES = [CHRONOLINE_WIDGET_TYPE, NATCOM_WIDGET_TYPE, MATHMACHINE_WIDGET_TYPE, RUSIQ_WIDGET_TYPE];
 
 const BASE_WINDOW_OPTIONS = Object.freeze({
   width: 1280,
@@ -76,6 +77,14 @@ function hasMathMachineWidget(projectData) {
 }
 
 /**
+ * @param {unknown} projectData
+ * @returns {boolean}
+ */
+function hasRusiqWidget(projectData) {
+  return hasWidgetOfType(projectData, RUSIQ_WIDGET_TYPE);
+}
+
+/**
  * Любой widget-тип "отдельного standalone-приложения" (не позиционируемый
  * widget на канвасе) - на сегодня chronoline и naturalcommunities.
  * @param {unknown} projectData
@@ -121,9 +130,11 @@ module.exports = {
   hasChronolineWidget,
   hasNaturalCommunitiesWidget,
   hasMathMachineWidget,
+  hasRusiqWidget,
   hasStandaloneAppWidget,
   BASE_WINDOW_OPTIONS,
   CHRONOLINE_WIDGET_TYPE,
   NATCOM_WIDGET_TYPE,
   MATHMACHINE_WIDGET_TYPE,
+  RUSIQ_WIDGET_TYPE,
 };
