@@ -101,5 +101,10 @@ contextBridge.exposeInMainWorld('mathmachineAPI', {
 // отдельный namespace, не смешивается с остальными API.
 contextBridge.exposeInMainWorld('rusiqAPI', {
   loadUserData: () => ipcRenderer.invoke('rusiq:load-user-data'),
-  saveUserData: (data) => ipcRenderer.invoke('rusiq:save-user-data', data)
+  saveUserData: (data) => ipcRenderer.invoke('rusiq:save-user-data', data),
+  listQuizzes: () => ipcRenderer.invoke('rusiq:list-quizzes'),
+  loadQuiz: (quizId) => ipcRenderer.invoke('rusiq:load-quiz', quizId),
+  saveQuiz: (quiz) => ipcRenderer.invoke('rusiq:save-quiz', quiz),
+  deleteQuiz: (quizId) => ipcRenderer.invoke('rusiq:delete-quiz', quizId),
+  saveQuizBackground: (quizId, arrayBuffer, mimeType) => ipcRenderer.invoke('rusiq:save-quiz-background', quizId, arrayBuffer, mimeType)
 });
