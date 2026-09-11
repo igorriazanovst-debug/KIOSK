@@ -8,6 +8,7 @@ import { RusiqQuizSchema, type RusiqQuestion, type RusiqQuiz, type RusiqUserData
 import { assignQuestions, summarizeResults, type RusiqAnswerEvent } from './gameLogic.ts';
 import { loadUserData, saveUserData } from './userDataStorage.ts';
 import { loadQuiz } from './editor/quizStore.ts';
+import TeacherGateScreen from './editor/TeacherGateScreen.tsx';
 import rusiqContentJson from './content/rusiqContent.json' with { type: 'json' };
 
 // Изображение сцены НЕ импортируется как JS-модуль (ни плоским `import`, ни
@@ -26,7 +27,7 @@ interface Props {
   properties: { title?: string };
 }
 
-type Phase = 'loading' | 'intro' | 'setup' | 'board' | 'results';
+type Phase = 'loading' | 'intro' | 'setup' | 'board' | 'results' | 'teacherGate' | 'catalog';
 
 // Встроенная методическая викторина "Обучение грамоте" - фолбэк, когда
 // activeQuizId === null или пользовательская викторина не грузится
@@ -100,8 +101,28 @@ const RusiqRuntime: React.FC<Props> = () => {
     setFinalAnswers([]);
   }
 
+  async function handleTeacherUnlocked(newPinHash?: string) {
+    if (newPinHash) {
+      const updated: RusiqUserData = { ...userData, teacherPinHash: newPinHash };
+      setUserData(updated);
+      saveUserData(updated);
+    }
+    setPhase('catalog');
+  }
+
   if (phase === 'loading') return null;
-  if (phase === 'intro') return <IntroScreen quiz={activeQuiz} onPlay={() => setPhase('setup')} />;
+  if (phase === 'intro') {
+    return <IntroScreen quiz={activeQuiz} onPlay={() => setPhase('setup')} onTeacherMode={() => setPhase('teacherGate')} />;
+  }
+  if (phase === 'teacherGate') {
+    return (
+      <TeacherGateScreen
+        teacherPinHash={userData.teacherPinHash}
+        onUnlocked={handleTeacherUnlocked}
+        onCancel={() => setPhase('intro')}
+      />
+    );
+  }
   if (phase === 'setup') return <GameSetupScreen quiz={activeQuiz} onComplete={handleSetupComplete} />;
   if (phase === 'board' && setup) {
     return (
@@ -126,6 +147,7 @@ const RusiqRuntime: React.FC<Props> = () => {
       />
     );
   }
+  if (phase === 'catalog') return null; // экран добавит Задача 8
   return null;
 };
 

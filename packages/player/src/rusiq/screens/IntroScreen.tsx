@@ -5,10 +5,17 @@ import type { RusiqQuiz } from '../model/schema.ts';
 interface Props {
   quiz: RusiqQuiz;
   onPlay: () => void;
+  onTeacherMode: () => void;
 }
 
-const IntroScreen: React.FC<Props> = ({ quiz, onPlay }) => (
-  <div style={{ maxWidth: 640, margin: '60px auto', textAlign: 'center', fontFamily: 'sans-serif' }}>
+const IntroScreen: React.FC<Props> = ({ quiz, onPlay, onTeacherMode }) => (
+  <div style={{ maxWidth: 640, margin: '60px auto', textAlign: 'center', fontFamily: 'sans-serif', position: 'relative' }}>
+    <button
+      onClick={onTeacherMode}
+      style={{ position: 'absolute', top: 0, right: 0, fontSize: 12, padding: '4px 10px', opacity: 0.6 }}
+    >
+      Режим учителя
+    </button>
     <h1>{quiz.title}</h1>
     <p>{quiz.intro}</p>
     <ul style={{ textAlign: 'left', display: 'inline-block' }}>
