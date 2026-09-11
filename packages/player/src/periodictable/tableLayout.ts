@@ -23,9 +23,13 @@
 // объединить колонки.
 
 import type { PeriodicElement } from './model/schema.ts';
-import { isFooterElement } from './model/schema.ts';
 
-export type TableForm = 'short' | 'iupac';
+// Единственный источник значений формы таблицы — viewSettingsStorage.ts
+// строит свою zod-схему из этого же массива вместо параллельного
+// `z.enum(['short', 'iupac'])`, чтобы два файла не могли разойтись, если
+// когда-нибудь появится третья форма.
+export const TABLE_FORM_VALUES = ['short', 'iupac'] as const;
+export type TableForm = (typeof TABLE_FORM_VALUES)[number];
 
 export interface CellPosition {
   row: number; // 1-7 основная сетка; 9 = подвал лантаноидов; 10 = подвал актиноидов
@@ -70,5 +74,3 @@ export function formatGroupLabel(groupIupac: number, form: TableForm): string {
   if (form === 'iupac') return String(groupIupac);
   return ROMAN_BY_SHORT_LABEL_INDEX[IUPAC_TO_SHORT_LABEL_INDEX[groupIupac]];
 }
-
-export { isFooterElement };

@@ -10,6 +10,7 @@ import ViewSettingsTab from './screens/ViewSettingsTab.tsx';
 import LegendTab from './screens/LegendTab.tsx';
 import TeacherPinModal from './screens/TeacherPinModal.tsx';
 import { loadViewSettings, saveViewSettings, DEFAULT_VIEW_SETTINGS, type ViewSettings } from './viewSettingsStorage.ts';
+import { toggleTab, shouldClearHighlight, decideViewSettingsClick, type BottomTab } from './tabState.ts';
 import elementsJson from './content/elements.json' with { type: 'json' };
 
 interface Props {
@@ -17,7 +18,6 @@ interface Props {
 }
 
 type CardMode = 'none' | 'summary' | 'detail';
-type BottomTab = 'none' | 'search' | 'viewSettings' | 'legend';
 
 const PeriodicTableRuntime: React.FC<Props> = ({ properties }) => {
   // Разбор справочника ВНУТРИ компонента и через safeParse. Раньше это был
@@ -36,6 +36,12 @@ const PeriodicTableRuntime: React.FC<Props> = ({ properties }) => {
   const [highlightedSymbol, setHighlightedSymbol] = useState<string | null>(null);
   const [viewSettingsUnlocked, setViewSettingsUnlocked] = useState(false);
   const [showPinModal, setShowPinModal] = useState(false);
+
+  // Единое место, откуда берётся действующий PIN — раньше `properties.
+  // teacherPin ?? '0000'` повторялся в трёх разных местах компонента
+  // (обработчик клика, проверка модалки, значок замка), с риском разойтись
+  // при будущей правке одного из мест без остальных.
+  const effectivePin = properties.teacherPin ?? '0000';
 
   useEffect(() => {
     setViewSettings(loadViewSettings());
@@ -59,22 +65,23 @@ const PeriodicTableRuntime: React.FC<Props> = ({ properties }) => {
   // Подсветка найденного элемента живёт только пока открыт Поиск: иначе
   // ученик, сузивший выдачу до одного элемента и закрывший вкладку, остаётся
   // с намертво обведённой ячейкой и без единого видимого способа её снять.
+  // Решение вынесено в tabState.ts (shouldClearHighlight) и покрыто
+  // юнит-тестами — раньше это проверялось только живым прогоном.
   function openTab(tab: BottomTab) {
-    if (tab !== 'search') setHighlightedSymbol(null);
+    if (shouldClearHighlight(tab)) setHighlightedSymbol(null);
     setActiveTab(tab);
   }
 
+  // Логика решения (открыть/показать PIN/закрыть) вынесена в чистую функцию
+  // decideViewSettingsClick (tabState.ts) — именно в ней финальное ревью
+  // всей ветки нашло дефект: пустой teacherPin («блокировка отключена»,
+  // спека разд. 5) раньше оставлял вкладку «мёртвой» — клик не делал
+  // видимого ничего. Теперь эта ветка покрыта юнит-тестом отдельно от React.
   function handleViewSettingsTabClick() {
-    if (activeTab === 'viewSettings') {
-      openTab('none');
-      return;
-    }
-    const pin = properties.teacherPin ?? '0000';
-    if (viewSettingsUnlocked || !pin) {
-      openTab('viewSettings');
-    } else {
-      setShowPinModal(true);
-    }
+    const result = decideViewSettingsClick(activeTab, viewSettingsUnlocked, effectivePin);
+    if (result.action === 'close') openTab('none');
+    else if (result.action === 'openDirectly') openTab('viewSettings');
+    else setShowPinModal(true);
   }
 
   // Все хуки выше уже вызваны — ранний возврат ниже не нарушает порядок хуков.
@@ -118,9 +125,18 @@ const PeriodicTableRuntime: React.FC<Props> = ({ properties }) => {
       </div>
 
       <div style={{ display: 'flex', borderTop: '1px solid #ccc' }}>
-        <button onClick={() => openTab(activeTab === 'search' ? 'none' : 'search')} style={{ flex: 1, padding: 12 }}>Поиск</button>
-        <button onClick={handleViewSettingsTabClick} style={{ flex: 1, padding: 12 }}>Настройки вида {!viewSettingsUnlocked ? '🔒' : ''}</button>
-        <button onClick={() => openTab(activeTab === 'legend' ? 'none' : 'legend')} style={{ flex: 1, padding: 12 }}>Легенда</button>
+        <button onClick={() => openTab(toggleTab(activeTab, 'search'))} aria-label="Поиск" style={{ flex: 1, padding: 12 }}>Поиск</button>
+        <button
+          onClick={handleViewSettingsTabClick}
+          aria-label={`Настройки вида${!viewSettingsUnlocked && effectivePin ? ', заблокировано PIN учителя' : ''}`}
+          style={{ flex: 1, padding: 12 }}
+        >
+          {/* Замок показывается, только если защита реально активна: раньше
+              условие не учитывало пустой teacherPin («блокировка отключена»)
+              — значок оставался, хотя вкладка уже открывалась в один клик. */}
+          Настройки вида {!viewSettingsUnlocked && effectivePin ? '🔒' : ''}
+        </button>
+        <button onClick={() => openTab(toggleTab(activeTab, 'legend'))} aria-label="Легенда" style={{ flex: 1, padding: 12 }}>Легенда</button>
       </div>
 
       {activeTab === 'search' && (
@@ -147,7 +163,7 @@ const PeriodicTableRuntime: React.FC<Props> = ({ properties }) => {
 
       {showPinModal && (
         <TeacherPinModal
-          expectedPin={properties.teacherPin ?? '0000'}
+          expectedPin={effectivePin}
           onSuccess={() => { setViewSettingsUnlocked(true); setShowPinModal(false); openTab('viewSettings'); }}
           onCancel={() => setShowPinModal(false)}
         />

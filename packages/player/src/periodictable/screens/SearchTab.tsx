@@ -26,6 +26,7 @@ const SearchTab: React.FC<Props> = ({ elements, onSelectElement, onHighlightChan
         value={query}
         onChange={(e) => handleChange(e.target.value)}
         placeholder="Название, номер, символ или масса"
+        aria-label="Поиск химического элемента"
         style={{ fontSize: 18, padding: 8, width: '100%', boxSizing: 'border-box' }}
       />
       <ul style={{ listStyle: 'none', padding: 0 }}>

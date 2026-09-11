@@ -10,15 +10,23 @@ interface Props {
 const ViewSettingsTab: React.FC<Props> = ({ settings, onChange }) => (
   <div style={{ padding: 16, display: 'flex', flexDirection: 'column', gap: 16 }}>
     <div>
-      <label>Форма таблицы: </label>
-      <select value={settings.tableForm} onChange={(e) => onChange({ ...settings, tableForm: e.target.value as ViewSettings['tableForm'] })}>
+      <label htmlFor="periodictable-view-settings-form">Форма таблицы: </label>
+      <select
+        id="periodictable-view-settings-form"
+        value={settings.tableForm}
+        onChange={(e) => onChange({ ...settings, tableForm: e.target.value as ViewSettings['tableForm'] })}
+      >
         <option value="short">Короткопериодная</option>
         <option value="iupac">Длиннопериодная (IUPAC)</option>
       </select>
     </div>
     <div>
-      <label>Цветовая индикация: </label>
-      <select value={settings.colorIndication} onChange={(e) => onChange({ ...settings, colorIndication: e.target.value as ViewSettings['colorIndication'] })}>
+      <label htmlFor="periodictable-view-settings-color">Цветовая индикация: </label>
+      <select
+        id="periodictable-view-settings-color"
+        value={settings.colorIndication}
+        onChange={(e) => onChange({ ...settings, colorIndication: e.target.value as ViewSettings['colorIndication'] })}
+      >
         <option value="none">Отсутствует</option>
         <option value="class">Классы элементов</option>
         <option value="electronType">Электронный тип</option>
@@ -26,8 +34,12 @@ const ViewSettingsTab: React.FC<Props> = ({ settings, onChange }) => (
       </select>
     </div>
     <div>
-      <label>Подсветка: </label>
-      <select value={settings.highlight} onChange={(e) => onChange({ ...settings, highlight: e.target.value as ViewSettings['highlight'] })}>
+      <label htmlFor="periodictable-view-settings-highlight">Подсветка: </label>
+      <select
+        id="periodictable-view-settings-highlight"
+        value={settings.highlight}
+        onChange={(e) => onChange({ ...settings, highlight: e.target.value as ViewSettings['highlight'] })}
+      >
         <option value="none">Нет</option>
         <option value="metal">Металлы</option>
         <option value="nonmetal">Неметаллы</option>

@@ -12,10 +12,16 @@
 
 import { z } from 'zod';
 import { ColorIndicationSchema, HighlightModeSchema } from './viewTypes.ts';
+import { TABLE_FORM_VALUES } from './tableLayout.ts';
 
 const STORAGE_KEY = 'periodictable.viewSettings.v1';
 
-export const TableFormSchema = z.enum(['short', 'iupac']);
+// Built from tableLayout.ts's TABLE_FORM_VALUES, not a parallel
+// `z.enum(['short', 'iupac'])` literal — the same single-source-of-truth
+// principle already applied to ColorIndicationSchema/HighlightModeSchema
+// below, extended to close the one remaining literal duplication found by
+// the final whole-branch review.
+export const TableFormSchema = z.enum(TABLE_FORM_VALUES);
 // ColorIndicationSchema/HighlightModeSchema imported from viewTypes.ts
 // (Task 6) — do NOT redeclare them here, that was the exact duplication
 // this plan's Type Consistency self-review caught and fixed before Task 9

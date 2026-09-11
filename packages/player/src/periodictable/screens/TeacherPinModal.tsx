@@ -29,6 +29,7 @@ const TeacherPinModal: React.FC<Props> = ({ expectedPin, onSuccess, onCancel }) 
           maxLength={4}
           value={value}
           onChange={(e) => { setValue(e.target.value.replace(/\D/g, '').slice(0, 4)); setError(false); }}
+          aria-label="PIN учителя, 4 цифры"
           style={{ fontSize: 24, padding: 8, width: 120, textAlign: 'center' }}
         />
         {error && <p style={{ color: '#d32f2f' }}>Неверный PIN</p>}

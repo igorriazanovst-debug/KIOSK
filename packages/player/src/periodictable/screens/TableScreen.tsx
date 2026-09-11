@@ -2,6 +2,7 @@ import React from 'react';
 import type { PeriodicElement } from '../model/schema.ts';
 import { getCellPosition, formatGroupLabel, type TableForm } from '../tableLayout.ts';
 import type { ColorIndicationMode, HighlightMode } from '../viewTypes.ts';
+import { CLASS_COLOR, ELECTRON_TYPE_COLOR, OXIDE_COLOR } from '../colorPalette.ts';
 
 interface Props {
   elements: PeriodicElement[];
@@ -11,10 +12,6 @@ interface Props {
   highlightedSymbol?: string | null; // подсветка найденного элемента (Задача 8, Поиск)
   onSelectElement: (el: PeriodicElement) => void;
 }
-
-const CLASS_COLOR: Record<string, string> = { metal: '#e3f2fd', metalloid: '#fff3e0', nonmetal: '#e8f5e9' };
-const ELECTRON_TYPE_COLOR: Record<string, string> = { s: '#ffebee', p: '#e8f5e9', d: '#e3f2fd', f: '#f3e5f5' };
-const OXIDE_COLOR: Record<string, string> = { acidic: '#ffebee', basic: '#e3f2fd', amphoteric: '#fff3e0', none: '#f5f5f5' };
 
 function cellBackground(el: PeriodicElement, mode: ColorIndicationMode): string {
   if (mode === 'class') return CLASS_COLOR[el.elementClass];
@@ -28,6 +25,21 @@ function isHighlighted(el: PeriodicElement, highlight: HighlightMode): boolean {
   if (highlight === 'metal' || highlight === 'nonmetal' || highlight === 'metalloid') return el.elementClass === highlight;
   if (highlight === 's' || highlight === 'p' || highlight === 'd' || highlight === 'f') return el.electronType === highlight;
   return el.oxideCharacter === highlight;
+}
+
+// Явные значения по всем четырём сторонам через ЧЕТЫРЕ отдельных longhand
+// (borderTop/Right/Bottom/Left), без shorthand `border` — на варианте,
+// смешивавшем `border: ...` и точечный `borderTop: highlighted ? ... :
+// undefined` в одном объекте стилей, нормальные (не подсвеченные, не
+// подвальные) ячейки живьём отрисовывались с ЧЁРНОЙ рамкой вместо #ccc
+// (найдено CDP-проверкой при финальной доработке): назначение `border`,
+// а следом `borderTop: undefined` в одном React-стиле не гарантированно
+// откатывается к тому, что уже выставил `border`. Явные значения на каждой
+// из четырёх сторон при каждом рендере — предсказуемо в любом браузере.
+function cellBorderSide(highlighted: boolean, isFooterTopEdge: boolean): string {
+  if (highlighted) return '3px solid #d32f2f';
+  if (isFooterTopEdge) return '2px solid #90a4ae';
+  return '1px solid #ccc';
 }
 
 const TableScreen: React.FC<Props> = ({ elements, form, colorIndication, highlight, highlightedSymbol, onSelectElement }) => {
@@ -58,6 +70,8 @@ const TableScreen: React.FC<Props> = ({ elements, form, colorIndication, highlig
         {groupColumns.map((col) => (
           <div
             key={col}
+            role="columnheader"
+            aria-label={`Группа ${formatGroupLabel(col, form)}`}
             style={{
               boxSizing: 'border-box',
               minWidth: 56,
@@ -84,7 +98,10 @@ const TableScreen: React.FC<Props> = ({ elements, form, colorIndication, highlig
           // Строка 8 физически пуста (подвал лантаноидов/актиноидов живёт в
           // строках 9 и 10) — задаём ей явную высоту как визуальному разрыву
           // после 7-го периода, иначе подвал читается как «периоды 8 и 9».
-          gridTemplateRows: 'repeat(7, auto) 20px auto auto',
+          // 28px (не 20px) + верхняя рамка у первой строки подвала (ниже) —
+          // разрыв виднее, ближе к тому, как разрыв смотрится на бумажных
+          // изданиях короткой формы.
+          gridTemplateRows: 'repeat(7, auto) 28px auto auto',
           gap: 2,
           padding: 8,
           touchAction: 'manipulation',
@@ -93,6 +110,7 @@ const TableScreen: React.FC<Props> = ({ elements, form, colorIndication, highlig
       {elements.map((el) => {
         const pos = getCellPosition(el, form);
         const highlighted = isHighlighted(el, highlight) || el.symbol === highlightedSymbol;
+        const isFooterRow = pos.row === 9 || pos.row === 10;
         // У лантаноидов/актиноидов groupIupac === null — номера группы у них
         // нет, и подставлять запасную «группу I» нельзя: это не косметика, а
         // фактическая ошибка в химическом справочнике (группа 1 — щелочные
@@ -101,16 +119,25 @@ const TableScreen: React.FC<Props> = ({ elements, form, colorIndication, highlig
           el.groupIupac === null
             ? el.nameRu
             : `${el.nameRu} — группа ${formatGroupLabel(el.groupIupac, form)}`;
+        const sideBorder = cellBorderSide(highlighted, false);
         return (
           <button
             key={el.atomicNumber}
             onClick={() => onSelectElement(el)}
+            aria-label={cellTitle}
             style={{
               boxSizing: 'border-box',
               gridRow: pos.row,
               gridColumn: pos.col,
               background: cellBackground(el, colorIndication),
-              border: highlighted ? '3px solid #d32f2f' : '1px solid #ccc',
+              // Верхняя сторона отдельно: у первой строки подвала она толще
+              // и другого цвета — дополнительный (к пустой строке 8 выше)
+              // визуальный сигнал «это отдельный блок ниже основной таблицы»,
+              // не просто «периоды 8/9». Три остальные стороны — как обычно.
+              borderTop: cellBorderSide(highlighted, isFooterRow),
+              borderRight: sideBorder,
+              borderBottom: sideBorder,
+              borderLeft: sideBorder,
               borderRadius: 4,
               padding: 4,
               minHeight: 56,
