@@ -126,5 +126,10 @@ export const RusiqUserDataSchema = z.object({
   schemaVersion: z.literal(RUSIQ_USERDATA_SCHEMA_VERSION),
   sessions: z.array(RusiqSessionSchema).default([]),
   soundOn: z.boolean().default(true),
+  // null = играется встроенная "Обучение грамоте", не magic-id — переживает
+  // будущие правки id встроенного контента (Фаза 2a, спека разд. 2.4/1.1).
+  activeQuizId: z.string().nullable().default(null),
+  // null = PIN режима учителя ещё не задан (Фаза 2a, спека разд. 2.4/3).
+  teacherPinHash: z.string().nullable().default(null),
 });
 export type RusiqUserData = z.infer<typeof RusiqUserDataSchema>;

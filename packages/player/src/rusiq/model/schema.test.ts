@@ -82,3 +82,26 @@ test('RusiqUserDataSchema accepts a completed session record', () => {
   });
   assert.equal(result.success, true);
 });
+
+test('RusiqUserDataSchema defaults activeQuizId and teacherPinHash to null', () => {
+  const result = RusiqUserDataSchema.safeParse({ schemaVersion: RUSIQ_USERDATA_SCHEMA_VERSION, sessions: [] });
+  assert.equal(result.success, true);
+  if (result.success) {
+    assert.equal(result.data.activeQuizId, null);
+    assert.equal(result.data.teacherPinHash, null);
+  }
+});
+
+test('RusiqUserDataSchema accepts an explicit activeQuizId and teacherPinHash', () => {
+  const result = RusiqUserDataSchema.safeParse({
+    schemaVersion: RUSIQ_USERDATA_SCHEMA_VERSION,
+    sessions: [],
+    activeQuizId: 'quiz-custom-1',
+    teacherPinHash: 'abc123',
+  });
+  assert.equal(result.success, true);
+  if (result.success) {
+    assert.equal(result.data.activeQuizId, 'quiz-custom-1');
+    assert.equal(result.data.teacherPinHash, 'abc123');
+  }
+});

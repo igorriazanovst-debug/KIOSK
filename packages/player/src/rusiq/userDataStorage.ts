@@ -10,6 +10,8 @@ const FALLBACK: RusiqUserData = {
   schemaVersion: RUSIQ_USERDATA_SCHEMA_VERSION,
   sessions: [],
   soundOn: true,
+  activeQuizId: null,
+  teacherPinHash: null,
 };
 
 declare global {
