@@ -7,7 +7,7 @@ import ResultsScreen from './screens/ResultsScreen.tsx';
 import { RusiqQuizSchema, type RusiqQuestion, type RusiqQuiz, type RusiqUserData, RUSIQ_USERDATA_SCHEMA_VERSION } from './model/schema.ts';
 import { assignQuestions, summarizeResults, type RusiqAnswerEvent } from './gameLogic.ts';
 import { loadUserData, saveUserData } from './userDataStorage.ts';
-import { loadQuiz, saveQuiz } from './editor/quizStore.ts';
+import { loadQuiz, saveQuiz, saveQuizBackground } from './editor/quizStore.ts';
 import TeacherGateScreen from './editor/TeacherGateScreen.tsx';
 import QuizCatalogScreen from './editor/QuizCatalogScreen.tsx';
 import EditorScreen from './editor/EditorScreen.tsx';
@@ -114,8 +114,26 @@ const RusiqRuntime: React.FC<Props> = () => {
   }
 
   async function handleDuplicateBuiltin() {
+    // Встроенная викторина рендерится из бандлового ALPHABET_IMAGE_URL
+    // (спецкейс по id ниже, в phase === 'board') - у дубликата новый id,
+    // поэтому без явного копирования файла фона он падает на
+    // `rusiqmedia:///alphabet.png`, которого не существует в папке
+    // пользовательских викторин: дубликат (608 вопросов, 476 ложных точек)
+    // рендерился бы на пустой серой заглушке и в редакторе, и в игре
+    // (найдено ревью Задачи 11, Important) - копируем сам файл через уже
+    // существующий IPC saveQuizBackground ДО сохранения самой викторины.
     const newId = crypto.randomUUID();
-    const duplicated: RusiqQuiz = { ...BUILTIN_QUIZ, id: newId, title: `${BUILTIN_QUIZ.title} (копия)`, passwordHash: null };
+    const response = await fetch(ALPHABET_IMAGE_URL);
+    const buffer = await response.arrayBuffer();
+    const bgResult = await saveQuizBackground(newId, buffer, 'image/png');
+    if (!bgResult.ok || !bgResult.fileName) return;
+    const duplicated: RusiqQuiz = {
+      ...BUILTIN_QUIZ,
+      id: newId,
+      title: `${BUILTIN_QUIZ.title} (копия)`,
+      passwordHash: null,
+      image: { ...BUILTIN_QUIZ.image, fileName: bgResult.fileName },
+    };
     await saveQuiz(duplicated);
   }
 
@@ -180,7 +198,10 @@ const RusiqRuntime: React.FC<Props> = () => {
       <EditorScreen
         initialQuiz={editingQuiz.quiz}
         pendingBackground={editingQuiz.pendingBackground}
-        onExit={() => {
+        onExit={(savedQuiz) => {
+          if (savedQuiz && userData.activeQuizId === savedQuiz.id) {
+            setActiveQuiz(savedQuiz);
+          }
           setEditingQuiz(null);
           setPhase('catalog');
         }}

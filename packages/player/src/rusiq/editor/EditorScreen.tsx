@@ -4,18 +4,18 @@
 // к конкретному типу), сохранение (с отложенной записью фонового
 // изображения для только что созданных викторин) и пароль викторины.
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { initHistory, pushHistory, undo, redo, canUndo, canRedo, type History } from '../../chrono/history.ts';
 import QuizCanvas, { type QuizCanvasAddMode } from './QuizCanvas.tsx';
 import PointEditForm from './PointEditForm.tsx';
 import { hashSecret } from './pinAuth.ts';
 import { saveQuiz, saveQuizBackground } from './quizStore.ts';
-import type { RusiqPoint, RusiqQuestion, RusiqQuiz } from '../model/schema.ts';
+import { RusiqQuizSchema, type RusiqPoint, type RusiqQuestion, type RusiqQuiz } from '../model/schema.ts';
 
 interface Props {
   initialQuiz: RusiqQuiz;
   pendingBackground: { buffer: ArrayBuffer; mimeType: string } | null;
-  onExit: () => void;
+  onExit: (savedQuiz: RusiqQuiz | null) => void;
 }
 
 type Selection = { kind: 'question'; questionId: string } | { kind: 'decoy-of-question'; questionId: string; decoyIndex: number } | { kind: 'generic-decoy'; index: number } | null;
@@ -48,7 +48,22 @@ const EditorScreen: React.FC<Props> = ({ initialQuiz, pendingBackground, onExit 
 
   const quiz = history.present;
   const hasUnsavedChanges = lastSavedQuiz === null || JSON.stringify(lastSavedQuiz) !== JSON.stringify(quiz);
-  const backgroundUrl = pendingBg ? URL.createObjectURL(new Blob([pendingBg.buffer], { type: pendingBg.mimeType })) : `rusiqmedia:///${quiz.image.fileName}`;
+  const [backgroundUrl, setBackgroundUrl] = useState('');
+
+  // Не создавать blob URL прямо в теле рендера: без этого каждый ре-рендер
+  // (любое движение точки, любая правка формы вопроса) заново копировал бы
+  // pendingBg.buffer в новый Blob и плодил бы объектные URL, ни один из
+  // которых никогда не освобождался - утечка памяти на всё время сессии
+  // редактирования новой викторины (найдено ревью Задачи 11, Important).
+  useEffect(() => {
+    if (pendingBg) {
+      const url = URL.createObjectURL(new Blob([pendingBg.buffer], { type: pendingBg.mimeType }));
+      setBackgroundUrl(url);
+      return () => URL.revokeObjectURL(url);
+    }
+    setBackgroundUrl(`rusiqmedia:///${quiz.image.fileName}`);
+    return undefined;
+  }, [pendingBg, quiz.image.fileName]);
 
   function update(next: RusiqQuiz) {
     setHistory((h) => pushHistory(h, next));
@@ -125,22 +140,33 @@ const EditorScreen: React.FC<Props> = ({ initialQuiz, pendingBackground, onExit 
   }
 
   async function handleSave() {
-    if (quiz.title.trim().length === 0) {
-      setSaveError('Укажите название викторины');
-      return;
-    }
     // RusiqQuizSchema.questions требует .min(1) (packages/player/src/rusiq/
     // model/schema.ts) - без этой проверки только что созданная викторина
     // (0 вопросов) успешно пишется на диск (главный процесс не валидирует
     // схемой), но становится НЕОТКРЫВАЕМОЙ насовсем: quizStore.loadQuiz()
     // проверяет RusiqQuizSchema.safeParse и вернёт null, каталог покажет
     // «файл повреждён» для викторины, которая на самом деле просто пуста.
-    // Найдено ревью Задачи 8 (Important, помечено как унаследованное из
-    // текста плана) - проверка здесь, а не в buildBlankQuiz (Задача 8),
-    // т.к. 0 вопросов - валидное ПРОМЕЖУТОЧНОЕ состояние во время
-    // редактирования, невалидно только для СОХРАНЕНИЯ.
+    // Найдено ревью Задачи 8 (Important). Оставлено как отдельная быстрая
+    // проверка (самый частый случай) ПЕРЕД полной проверкой схемой ниже.
     if (quiz.questions.length === 0) {
       setSaveError('Добавьте хотя бы один вопрос перед сохранением');
+      return;
+    }
+    // Полная валидация СХЕМОЙ, а не вручную выбранным подмножеством полей:
+    // RusiqQuestionSchema дополнительно требует непустые text/answer/theme и
+    // положительные price/timeSeconds, а RusiqQuizSchema.superRefine отвергает
+    // точки за пределами [0,width]x[0,height] изображения. makeBlankQuestion
+    // создаёт вопрос именно с пустыми text/answer/theme - обычный сценарий
+    // "добавили несколько точек, заполнили не все, сохранили" писал на диск
+    // файл, который затем НАВСЕГДА не открывался (loadQuiz -> safeParse ->
+    // null -> "файл повреждён"). Проверка вручную дублировала бы схему и
+    // неизбежно разошлась бы с ней со временем - используем саму схему
+    // (найдено ревью Задачи 11, Critical).
+    const parsed = RusiqQuizSchema.safeParse(quiz);
+    if (!parsed.success) {
+      setSaveError(
+        'Заполните текст, ответ и тему для всех вопросов, укажите положительные вес и время, и убедитесь, что все точки находятся внутри изображения',
+      );
       return;
     }
     setSaving(true);
@@ -165,7 +191,7 @@ const EditorScreen: React.FC<Props> = ({ initialQuiz, pendingBackground, onExit 
 
   function handleExit() {
     if (hasUnsavedChanges && !confirm('Выйти без сохранения?')) return;
-    onExit();
+    onExit(lastSavedQuiz);
   }
 
   const selectedQuestion = selection?.kind === 'question' ? quiz.questions.find((q) => q.id === selection.questionId) ?? null : null;
