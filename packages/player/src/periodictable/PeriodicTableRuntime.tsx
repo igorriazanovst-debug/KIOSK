@@ -111,8 +111,26 @@ const PeriodicTableRuntime: React.FC<Props> = ({ properties }) => {
     );
   }
 
+  // Стиль кнопки нижней панели вкладок зависит от того, открыта ли именно
+  // эта вкладка сейчас: раньше все три кнопки выглядели одинаково всегда —
+  // нажатие визуально ничем не отличалось от ненажатого состояния, поэтому
+  // пользователю было не разобрать, что вкладка вообще открылась/закрылась.
+  function tabButtonStyle(isActive: boolean): React.CSSProperties {
+    return {
+      flex: 1,
+      padding: '14px 8px',
+      border: 'none',
+      borderTop: isActive ? '3px solid #1565c0' : '3px solid transparent',
+      background: isActive ? '#e3f2fd' : '#fafafa',
+      color: isActive ? '#0d47a1' : '#37474f',
+      fontWeight: isActive ? 'bold' : 'normal',
+      fontSize: 14,
+      cursor: 'pointer',
+    };
+  }
+
   return (
-    <div style={{ width: '100%', height: '100%', display: 'flex', flexDirection: 'column', fontFamily: 'sans-serif' }}>
+    <div style={{ width: '100%', height: '100%', display: 'flex', flexDirection: 'column', fontFamily: 'sans-serif', background: '#f5f7fa' }}>
       <div style={{ flex: 1, overflow: 'auto' }}>
         <TableScreen
           elements={elements}
@@ -124,23 +142,27 @@ const PeriodicTableRuntime: React.FC<Props> = ({ properties }) => {
         />
       </div>
 
-      <div style={{ display: 'flex', borderTop: '1px solid #ccc' }}>
-        <button onClick={() => openTab(toggleTab(activeTab, 'search'))} aria-label="Поиск" style={{ flex: 1, padding: 12 }}>Поиск</button>
+      <div style={{ display: 'flex', borderTop: '1px solid #cfd8dc', boxShadow: '0 -2px 6px rgba(0,0,0,0.06)' }}>
+        <button onClick={() => openTab(toggleTab(activeTab, 'search'))} aria-label="Поиск" style={tabButtonStyle(activeTab === 'search')}>
+          🔍 Поиск
+        </button>
         <button
           onClick={handleViewSettingsTabClick}
           aria-label={`Настройки вида${!viewSettingsUnlocked && effectivePin ? ', заблокировано PIN учителя' : ''}`}
-          style={{ flex: 1, padding: 12 }}
+          style={tabButtonStyle(activeTab === 'viewSettings')}
         >
           {/* Замок показывается, только если защита реально активна: раньше
               условие не учитывало пустой teacherPin («блокировка отключена»)
               — значок оставался, хотя вкладка уже открывалась в один клик. */}
-          Настройки вида {!viewSettingsUnlocked && effectivePin ? '🔒' : ''}
+          ⚙️ Настройки вида {!viewSettingsUnlocked && effectivePin ? '🔒' : ''}
         </button>
-        <button onClick={() => openTab(toggleTab(activeTab, 'legend'))} aria-label="Легенда" style={{ flex: 1, padding: 12 }}>Легенда</button>
+        <button onClick={() => openTab(toggleTab(activeTab, 'legend'))} aria-label="Легенда" style={tabButtonStyle(activeTab === 'legend')}>
+          🎨 Легенда
+        </button>
       </div>
 
       {activeTab === 'search' && (
-        <div style={{ maxHeight: '40vh', overflow: 'auto', borderTop: '1px solid #ccc' }}>
+        <div style={{ maxHeight: '40vh', overflow: 'auto', borderTop: '1px solid #cfd8dc', background: '#ffffff' }}>
           <SearchTab elements={elements} onSelectElement={selectElement} onHighlightChange={setHighlightedSymbol} />
         </div>
       )}
@@ -151,12 +173,12 @@ const PeriodicTableRuntime: React.FC<Props> = ({ properties }) => {
           Со старым условием пустой teacherPin («замок отключён») делал вкладку
           мёртвой: клик открывал таб, но панель не рендерилась никогда. */}
       {activeTab === 'viewSettings' && (
-        <div style={{ maxHeight: '40vh', overflow: 'auto', borderTop: '1px solid #ccc' }}>
+        <div style={{ maxHeight: '40vh', overflow: 'auto', borderTop: '1px solid #cfd8dc', background: '#ffffff' }}>
           <ViewSettingsTab settings={viewSettings} onChange={updateViewSettings} />
         </div>
       )}
       {activeTab === 'legend' && (
-        <div style={{ maxHeight: '40vh', overflow: 'auto', borderTop: '1px solid #ccc' }}>
+        <div style={{ maxHeight: '40vh', overflow: 'auto', borderTop: '1px solid #cfd8dc', background: '#ffffff' }}>
           <LegendTab colorIndication={viewSettings.colorIndication} />
         </div>
       )}

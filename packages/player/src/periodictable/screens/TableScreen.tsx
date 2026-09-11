@@ -52,6 +52,21 @@ const TableScreen: React.FC<Props> = ({ elements, form, colorIndication, highlig
 
   return (
     <div>
+      {/* Один общий <style> на весь экран таблицы, а не хук состояния
+          hover на каждую из ~118 кнопок: :hover — обычное CSS-псевдо-
+          состояние, оно не требует перерисовки React-дерева при наведении.
+          Класс специфичен для виджета (periodictable-cell), чтобы не
+          зацепить стили других виджетов плеера на том же экране. */}
+      <style>{`
+        .periodictable-cell {
+          transition: transform 0.12s ease, box-shadow 0.12s ease;
+        }
+        .periodictable-cell:hover {
+          transform: scale(1.05);
+          box-shadow: 0 2px 8px rgba(0,0,0,0.25);
+          z-index: 1;
+        }
+      `}</style>
       {/* Видимая строка подписей групп. Раньше отличие короткой формы от
           IUPAC жило ТОЛЬКО в атрибуте title (всплывающая подсказка мыши) —
           на сенсорном киоске, где мыши нет, переключение формы не давало
@@ -76,13 +91,13 @@ const TableScreen: React.FC<Props> = ({ elements, form, colorIndication, highlig
               boxSizing: 'border-box',
               minWidth: 56,
               padding: 4,
-              background: '#eceff1',
-              border: '1px solid #b0bec5',
-              borderRadius: 4,
+              background: '#37474f',
+              border: '1px solid #263238',
+              borderRadius: 6,
               textAlign: 'center',
               fontWeight: 'bold',
               fontSize: 13,
-              color: '#263238',
+              color: '#ffffff',
             }}
             title={`Группа ${formatGroupLabel(col, form)}`}
           >
@@ -123,6 +138,7 @@ const TableScreen: React.FC<Props> = ({ elements, form, colorIndication, highlig
         return (
           <button
             key={el.atomicNumber}
+            className="periodictable-cell"
             onClick={() => onSelectElement(el)}
             aria-label={cellTitle}
             style={{
@@ -138,7 +154,7 @@ const TableScreen: React.FC<Props> = ({ elements, form, colorIndication, highlig
               borderRight: sideBorder,
               borderBottom: sideBorder,
               borderLeft: sideBorder,
-              borderRadius: 4,
+              borderRadius: 8,
               padding: 4,
               minHeight: 56,
               minWidth: 56,
