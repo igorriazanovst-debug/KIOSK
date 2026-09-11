@@ -48,15 +48,16 @@ const NewQuizModal: React.FC<Props> = ({ onCreate, onCancel }) => {
     }
     setBusy(true);
     setError(null);
+    const objectUrl = URL.createObjectURL(file);
     try {
-      const objectUrl = URL.createObjectURL(file);
       const { width, height } = await readImageDimensions(objectUrl);
-      URL.revokeObjectURL(objectUrl);
       const imageBuffer = await file.arrayBuffer();
       onCreate({ title: title.trim(), imageBuffer, imageMimeType: file.type, imageWidth: width, imageHeight: height });
     } catch {
       setError('Не удалось прочитать изображение');
       setBusy(false);
+    } finally {
+      URL.revokeObjectURL(objectUrl);
     }
   }
 
