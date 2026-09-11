@@ -49,14 +49,22 @@ const PeriodicTableRuntime: React.FC<Props> = ({ properties }) => {
     setSelected(null);
   }
 
+  // Подсветка найденного элемента живёт только пока открыт Поиск: иначе
+  // ученик, сузивший выдачу до одного элемента и закрывший вкладку, остаётся
+  // с намертво обведённой ячейкой и без единого видимого способа её снять.
+  function openTab(tab: BottomTab) {
+    if (tab !== 'search') setHighlightedSymbol(null);
+    setActiveTab(tab);
+  }
+
   function handleViewSettingsTabClick() {
     if (activeTab === 'viewSettings') {
-      setActiveTab('none');
+      openTab('none');
       return;
     }
     const pin = properties.teacherPin ?? '0000';
     if (viewSettingsUnlocked || !pin) {
-      setActiveTab('viewSettings');
+      openTab('viewSettings');
     } else {
       setShowPinModal(true);
     }
@@ -76,9 +84,9 @@ const PeriodicTableRuntime: React.FC<Props> = ({ properties }) => {
       </div>
 
       <div style={{ display: 'flex', borderTop: '1px solid #ccc' }}>
-        <button onClick={() => setActiveTab(activeTab === 'search' ? 'none' : 'search')} style={{ flex: 1, padding: 12 }}>Поиск</button>
+        <button onClick={() => openTab(activeTab === 'search' ? 'none' : 'search')} style={{ flex: 1, padding: 12 }}>Поиск</button>
         <button onClick={handleViewSettingsTabClick} style={{ flex: 1, padding: 12 }}>Настройки вида {!viewSettingsUnlocked ? '🔒' : ''}</button>
-        <button onClick={() => setActiveTab(activeTab === 'legend' ? 'none' : 'legend')} style={{ flex: 1, padding: 12 }}>Легенда</button>
+        <button onClick={() => openTab(activeTab === 'legend' ? 'none' : 'legend')} style={{ flex: 1, padding: 12 }}>Легенда</button>
       </div>
 
       {activeTab === 'search' && (
@@ -100,7 +108,7 @@ const PeriodicTableRuntime: React.FC<Props> = ({ properties }) => {
       {showPinModal && (
         <TeacherPinModal
           expectedPin={properties.teacherPin ?? '0000'}
-          onSuccess={() => { setViewSettingsUnlocked(true); setShowPinModal(false); setActiveTab('viewSettings'); }}
+          onSuccess={() => { setViewSettingsUnlocked(true); setShowPinModal(false); openTab('viewSettings'); }}
           onCancel={() => setShowPinModal(false)}
         />
       )}

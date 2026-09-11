@@ -41,6 +41,14 @@ const TableScreen: React.FC<Props> = ({ elements, form, colorIndication, highlig
       {elements.map((el) => {
         const pos = getCellPosition(el, form);
         const highlighted = isHighlighted(el, highlight) || el.symbol === highlightedSymbol;
+        // У лантаноидов/актиноидов groupIupac === null — номера группы у них
+        // нет, и подставлять запасную «группу I» нельзя: это не косметика, а
+        // фактическая ошибка в химическом справочнике (группа 1 — щелочные
+        // металлы). В таком случае в подсказке остаётся только название.
+        const cellTitle =
+          el.groupIupac === null
+            ? el.nameRu
+            : `${el.nameRu} — группа ${formatGroupLabel(el.groupIupac, form)}`;
         return (
           <button
             key={el.atomicNumber}
@@ -57,7 +65,7 @@ const TableScreen: React.FC<Props> = ({ elements, form, colorIndication, highlig
               cursor: 'pointer',
               fontFamily: 'sans-serif',
             }}
-            title={`${el.nameRu} — группа ${formatGroupLabel(el.groupIupac ?? 1, form)}`}
+            title={cellTitle}
           >
             <div style={{ fontSize: 11, textAlign: 'left' }}>{el.atomicNumber}</div>
             <div style={{ fontSize: 18, fontWeight: 'bold' }}>{el.symbol}</div>

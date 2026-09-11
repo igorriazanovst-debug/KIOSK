@@ -1,11 +1,21 @@
 // packages/player/src/periodictable/screens/ElementDetailCard.tsx
 import React from 'react';
-import type { PeriodicElement } from '../model/schema.ts';
+import type { PeriodicElement, OxideCharacter } from '../model/schema.ts';
 
 interface Props {
   element: PeriodicElement;
   onClose: () => void;
 }
+
+// Карточка — русскоязычный справочник для ученика: машинные значения
+// схемы ('basic'/'acidic'/...) показывать нельзя. Формулировки те же, что
+// в LegendTab.tsx, чтобы легенда и карточка называли характер одинаково.
+const OXIDE_CHARACTER_RU: Record<OxideCharacter, string> = {
+  acidic: 'кислотный',
+  basic: 'основной',
+  amphoteric: 'амфотерный',
+  none: 'не выражен',
+};
 
 const ROW: React.FC<{ label: string; value: React.ReactNode }> = ({ label, value }) => (
   <tr><td style={{ fontWeight: 'bold', paddingRight: 12, verticalAlign: 'top', maxWidth: 260 }}>{label}</td><td>{value ?? '—'}</td></tr>
@@ -35,7 +45,7 @@ const ElementDetailCard: React.FC<Props> = ({ element, onClose }) => (
         <ROW label="Аллотропные модификации" value={element.allotropes || '—'} />
         <ROW label="Стабильные изотопы" value={element.stableIsotopes || '—'} />
         <ROW label="Положение в ряду электрохимического напряжения относительно водорода (для металлов)" value={element.electrochemicalSeriesPosition} />
-        <ROW label="Характер свойств оксидов и гидроксидов" value={element.oxideCharacter} />
+        <ROW label="Характер свойств оксидов и гидроксидов" value={OXIDE_CHARACTER_RU[element.oxideCharacter]} />
         <ROW label="Плотность (г/см³)" value={element.density} />
         <ROW label="Температура плавления (К)" value={element.meltingPointK} />
         <ROW label="Температура кипения (К)" value={element.boilingPointK} />

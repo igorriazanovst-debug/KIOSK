@@ -31,7 +31,10 @@ const SearchTab: React.FC<Props> = ({ elements, onSelectElement, onHighlightChan
       <ul style={{ listStyle: 'none', padding: 0 }}>
         {results.map((el) => (
           <li key={el.atomicNumber}>
-            <button onClick={() => onSelectElement(el)} style={{ width: '100%', textAlign: 'left', padding: 8 }}>
+            <button
+              onClick={() => { onHighlightChange(el.symbol); onSelectElement(el); }}
+              style={{ width: '100%', textAlign: 'left', padding: 8 }}
+            >
               № {el.atomicNumber} — {el.nameRu} ({el.symbol})
             </button>
           </li>
