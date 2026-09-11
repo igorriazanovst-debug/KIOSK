@@ -120,6 +120,10 @@ const QuizCanvas: React.FC<Props> = ({
                 stroke={isSelected ? '#fff' : undefined}
                 strokeWidth={isSelected ? 2 : 0}
                 draggable
+                dragBoundFunc={(pos) => ({
+                  x: Math.max(0, Math.min(CANVAS_WIDTH, pos.x)),
+                  y: Math.max(0, Math.min(canvasHeight, pos.y)),
+                })}
                 onClick={() => onSelectQuestion(question.id)}
                 onTap={() => onSelectQuestion(question.id)}
                 onDragEnd={(e) => onMoveQuestionPoint(question.id, toImageSpace(e.target.x(), e.target.y()))}
@@ -134,6 +138,10 @@ const QuizCanvas: React.FC<Props> = ({
                     radius={POINT_RADIUS}
                     fill={COLOR_DECOY_OF_QUESTION}
                     draggable
+                    dragBoundFunc={(pos) => ({
+                      x: Math.max(0, Math.min(CANVAS_WIDTH, pos.x)),
+                      y: Math.max(0, Math.min(canvasHeight, pos.y)),
+                    })}
                     onClick={() => onSelectDecoyOfQuestion(question.id, decoyIndex)}
                     onTap={() => onSelectDecoyOfQuestion(question.id, decoyIndex)}
                     onDragEnd={(e) => onMoveDecoyOfQuestion(question.id, decoyIndex, toImageSpace(e.target.x(), e.target.y()))}
@@ -154,6 +162,10 @@ const QuizCanvas: React.FC<Props> = ({
               radius={POINT_RADIUS}
               fill={COLOR_GENERIC_DECOY}
               draggable
+              dragBoundFunc={(pos) => ({
+                x: Math.max(0, Math.min(CANVAS_WIDTH, pos.x)),
+                y: Math.max(0, Math.min(canvasHeight, pos.y)),
+              })}
               onClick={() => onSelectGenericDecoy(index)}
               onTap={() => onSelectGenericDecoy(index)}
               onDragEnd={(e) => onMoveGenericDecoy(index, toImageSpace(e.target.x(), e.target.y()))}

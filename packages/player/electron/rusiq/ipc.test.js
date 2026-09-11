@@ -185,3 +185,14 @@ test('registerRusiqIpc save-quiz-background handler round-trips through IPC', as
   assert.deepEqual(result, { ok: true, fileName: 'quiz-bg-3-background.jpg' });
   assert.equal(fs.existsSync(path.join(quizzesDir, 'quiz-bg-3-background.jpg')), true);
 });
+
+test('loadQuizFile and deleteQuizFile reject a path-traversal quiz id instead of touching files outside quizzesDir', () => {
+  const tmp = fs.mkdtempSync(path.join(os.tmpdir(), 'rusiq-quizzes-traversal-'));
+  const dir = resolveQuizzesDir(tmp);
+  const outsideFile = path.join(tmp, 'outside.json');
+  fs.writeFileSync(outsideFile, JSON.stringify({ secret: true }));
+  const maliciousId = '../outside';
+  assert.equal(loadQuizFile(dir, maliciousId), null);
+  assert.equal(deleteQuizFile(dir, maliciousId), false);
+  assert.equal(fs.existsSync(outsideFile), true);
+});

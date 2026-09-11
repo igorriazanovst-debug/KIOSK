@@ -55,16 +55,18 @@ const RusiqRuntime: React.FC<Props> = () => {
   const [editingQuiz, setEditingQuiz] = useState<{ quiz: RusiqQuiz; pendingBackground: { buffer: ArrayBuffer; mimeType: string } | null } | null>(null);
 
   useEffect(() => {
-    loadUserData().then(async (loaded) => {
-      setUserData(loaded);
-      if (loaded.activeQuizId !== null) {
-        const custom = await loadQuiz(loaded.activeQuizId);
-        setActiveQuiz(custom ?? BUILTIN_QUIZ);
-      } else {
-        setActiveQuiz(BUILTIN_QUIZ);
-      }
-      setPhase('intro');
-    });
+    loadUserData()
+      .then(async (loaded) => {
+        setUserData(loaded);
+        if (loaded.activeQuizId !== null) {
+          const custom = await loadQuiz(loaded.activeQuizId);
+          setActiveQuiz(custom ?? BUILTIN_QUIZ);
+        } else {
+          setActiveQuiz(BUILTIN_QUIZ);
+        }
+        setPhase('intro');
+      })
+      .catch(() => setPhase('intro'));
   }, []);
 
   function handleSetupComplete(result: GameSetupResult) {
@@ -122,22 +124,31 @@ const RusiqRuntime: React.FC<Props> = () => {
     // рендерился бы на пустой серой заглушке и в редакторе, и в игре
     // (найдено ревью Задачи 11, Important) - копируем сам файл через уже
     // существующий IPC saveQuizBackground ДО сохранения самой викторины.
-    const newId = crypto.randomUUID();
-    const response = await fetch(ALPHABET_IMAGE_URL);
-    const buffer = await response.arrayBuffer();
-    const bgResult = await saveQuizBackground(newId, buffer, 'image/png');
-    if (!bgResult.ok || !bgResult.fileName) return;
-    const duplicated: RusiqQuiz = {
-      ...BUILTIN_QUIZ,
-      id: newId,
-      title: `${BUILTIN_QUIZ.title} (копия)`,
-      passwordHash: null,
-      image: { ...BUILTIN_QUIZ.image, fileName: bgResult.fileName },
-    };
-    await saveQuiz(duplicated);
+    // try/catch и явное сообщение об ошибке - находка финального ревью:
+    // fetch/saveQuizBackground/saveQuiz могли молча ничего не делать при
+    // сбое, без единого следа для учителя.
+    try {
+      const newId = crypto.randomUUID();
+      const response = await fetch(ALPHABET_IMAGE_URL);
+      if (!response.ok) throw new Error('fetch failed');
+      const buffer = await response.arrayBuffer();
+      const bgResult = await saveQuizBackground(newId, buffer, 'image/png');
+      if (!bgResult.ok || !bgResult.fileName) throw new Error('saveQuizBackground failed');
+      const duplicated: RusiqQuiz = {
+        ...BUILTIN_QUIZ,
+        id: newId,
+        title: `${BUILTIN_QUIZ.title} (копия)`,
+        passwordHash: null,
+        image: { ...BUILTIN_QUIZ.image, fileName: bgResult.fileName },
+      };
+      const ok = await saveQuiz(duplicated);
+      if (!ok) throw new Error('saveQuiz failed');
+    } catch {
+      alert('Не удалось продублировать встроенную викторину — попробуйте ещё раз.');
+    }
   }
 
-  if (phase === 'loading') return null;
+  if (phase === 'loading') return <p style={{ textAlign: 'center', marginTop: 60, fontFamily: 'sans-serif' }}>Загрузка…</p>;
   if (phase === 'intro') {
     return <IntroScreen quiz={activeQuiz} onPlay={() => setPhase('setup')} onTeacherMode={() => setPhase('teacherGate')} />;
   }
@@ -217,6 +228,12 @@ const RusiqRuntime: React.FC<Props> = () => {
         }}
       />
     );
+  }
+  if (phase === 'editor') {
+    // editingQuiz null здесь недостижимо в норме (оба выставляются вместе
+    // в onEditQuiz), но явный фолбэк лучше немого экрана, если когда-то
+    // перестанет быть так - находка финального ревью.
+    return null;
   }
   return null;
 };

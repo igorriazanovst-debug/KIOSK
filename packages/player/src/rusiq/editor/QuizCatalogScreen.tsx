@@ -39,10 +39,12 @@ async function buildBlankQuiz(result: NewQuizResult): Promise<{ quiz: RusiqQuiz;
   return { quiz, pendingBackground: { buffer: result.imageBuffer, mimeType: result.imageMimeType } };
 }
 
+type PendingAction = 'edit' | 'delete' | 'duplicate';
+
 const QuizCatalogScreen: React.FC<Props> = ({ builtinQuizTitle, activeQuizId, onSetActiveQuiz, onEditQuiz, onDuplicateBuiltin, onExit }) => {
   const [entries, setEntries] = useState<QuizListEntry[]>([]);
   const [showNewQuizModal, setShowNewQuizModal] = useState(false);
-  const [passwordPromptFor, setPasswordPromptFor] = useState<{ id: string; passwordHash: string } | null>(null);
+  const [passwordPromptFor, setPasswordPromptFor] = useState<{ id: string; passwordHash: string; action: PendingAction } | null>(null);
   const [passwordInput, setPasswordInput] = useState('');
   const [passwordError, setPasswordError] = useState<string | null>(null);
 
@@ -54,37 +56,48 @@ const QuizCatalogScreen: React.FC<Props> = ({ builtinQuizTitle, activeQuizId, on
     refresh();
   }, []);
 
-  async function handleEdit(entry: QuizListEntry) {
+  // Требует пароль конкретной викторины (если он задан) перед выполнением
+  // ЛЮБОГО из трёх изменяющих/раскрывающих содержимое действий -
+  // редактировать/удалить/дублировать. До финального ревью пароль
+  // защищал только "Редактировать": второй педагог на одном киоске, уже
+  // прошедший PIN устройства, мог безвозвратно удалить чужую защищённую
+  // викторину или получить её полностью редактируемую копию простым
+  // "Дублировать" (found by final whole-branch review, Important).
+  async function requirePasswordThen(entry: QuizListEntry, action: PendingAction) {
+    if (!entry.hasPassword) {
+      await performAction(entry.id, action, entry.title);
+      return;
+    }
     const quiz = await loadQuiz(entry.id);
     if (!quiz) {
       alert('Не удалось открыть викторину — файл повреждён или удалён.');
       await refresh();
       return;
     }
-    if (quiz.passwordHash) {
-      setPasswordPromptFor({ id: entry.id, passwordHash: quiz.passwordHash });
-      setPasswordInput('');
-      setPasswordError(null);
+    if (!quiz.passwordHash) {
+      await performAction(entry.id, action, entry.title);
       return;
     }
-    onEditQuiz(quiz, null);
+    setPasswordPromptFor({ id: entry.id, passwordHash: quiz.passwordHash, action });
+    setPasswordInput('');
+    setPasswordError(null);
   }
 
-  async function handlePasswordSubmit(e: React.FormEvent) {
-    e.preventDefault();
-    if (!passwordPromptFor) return;
-    const ok = await verifySecret(passwordInput, passwordPromptFor.passwordHash);
-    if (!ok) {
-      setPasswordError('Неверный пароль');
+  async function performAction(quizId: string, action: PendingAction, titleForConfirm?: string) {
+    if (action === 'edit') {
+      const quiz = await loadQuiz(quizId);
+      if (quiz) onEditQuiz(quiz, null);
       return;
     }
-    const quiz = await loadQuiz(passwordPromptFor.id);
-    setPasswordPromptFor(null);
-    if (quiz) onEditQuiz(quiz, null);
-  }
-
-  async function handleDuplicate(entry: QuizListEntry) {
-    const quiz = await loadQuiz(entry.id);
+    if (action === 'delete') {
+      if (!confirm(`Удалить викторину «${titleForConfirm ?? quizId}»? Это необратимо.`)) return;
+      await deleteQuiz(quizId);
+      if (activeQuizId === quizId) onSetActiveQuiz(null);
+      await refresh();
+      return;
+    }
+    // action === 'duplicate'
+    const quiz = await loadQuiz(quizId);
     if (!quiz) {
       await refresh();
       return;
@@ -95,11 +108,18 @@ const QuizCatalogScreen: React.FC<Props> = ({ builtinQuizTitle, activeQuizId, on
     await refresh();
   }
 
-  async function handleDelete(entry: QuizListEntry) {
-    if (!confirm(`Удалить викторину «${entry.title}»? Это необратимо.`)) return;
-    await deleteQuiz(entry.id);
-    if (activeQuizId === entry.id) onSetActiveQuiz(null);
-    await refresh();
+  async function handlePasswordSubmit(e: React.FormEvent) {
+    e.preventDefault();
+    if (!passwordPromptFor) return;
+    const ok = await verifySecret(passwordInput, passwordPromptFor.passwordHash);
+    if (!ok) {
+      setPasswordError('Неверный пароль');
+      return;
+    }
+    const { id, action } = passwordPromptFor;
+    const entry = entries.find((e2) => e2.id === id);
+    setPasswordPromptFor(null);
+    await performAction(id, action, entry?.title);
   }
 
   async function handleCreate(result: NewQuizResult) {
@@ -127,9 +147,9 @@ const QuizCatalogScreen: React.FC<Props> = ({ builtinQuizTitle, activeQuizId, on
               {entry.title} {entry.hasPassword ? '🔒' : ''}
             </span>
             <button onClick={() => onSetActiveQuiz(entry.id)}>Играть эту</button>
-            <button onClick={() => handleEdit(entry)}>Редактировать</button>
-            <button onClick={() => handleDuplicate(entry)}>Дублировать</button>
-            <button onClick={() => handleDelete(entry)}>Удалить</button>
+            <button onClick={() => requirePasswordThen(entry, 'edit')}>Редактировать</button>
+            <button onClick={() => requirePasswordThen(entry, 'duplicate')}>Дублировать</button>
+            <button onClick={() => requirePasswordThen(entry, 'delete')}>Удалить</button>
           </li>
         ))}
       </ul>

@@ -130,7 +130,9 @@ function saveQuizBackground(quizzesDir, quizId, bufferLike, mimeType) {
   const fileName = `${quizId}-background${ext}`;
   const filePath = resolveWithinRoot(quizzesDir, fileName);
   const buffer = Buffer.isBuffer(bufferLike) ? bufferLike : Buffer.from(bufferLike);
-  fs.writeFileSync(filePath, buffer);
+  const tmpPath = `${filePath}.tmp`;
+  fs.writeFileSync(tmpPath, buffer);
+  fs.renameSync(tmpPath, filePath);
   return { ok: true, fileName };
 }
 

@@ -171,22 +171,40 @@ const EditorScreen: React.FC<Props> = ({ initialQuiz, pendingBackground, onExit 
     }
     setSaving(true);
     setSaveError(null);
+    let quizToSave = quiz;
     if (pendingBg) {
       const bgResult = await saveQuizBackground(quiz.id, pendingBg.buffer, pendingBg.mimeType);
-      if (!bgResult.ok) {
+      if (!bgResult.ok || !bgResult.fileName) {
         setSaveError('Не удалось сохранить фоновое изображение');
         setSaving(false);
         return;
       }
+      // Имя файла в quiz.image.fileName на этот момент - лишь ПРЕДСКАЗАНИЕ,
+      // сделанное buildBlankQuiz заранее (по таблице MIME->расширение) ещё
+      // до того, как файл реально записан. saveQuizBackground возвращает
+      // АВТОРИТЕТНОЕ имя - используем именно его, не полагаясь на то, что
+      // обе таблицы MIME->расширение (эта и в electron/rusiq/ipc.js)
+      // никогда не разойдутся (найдено финальным ревью).
+      quizToSave = { ...quiz, image: { ...quiz.image, fileName: bgResult.fileName } };
       setPendingBg(null);
+      // Синхронизируем history.present с авторитетным именем файла напрямую
+      // (не через update(), чтобы не плодить лишнюю запись в undo/redo для
+      // чисто технической коррекции). Без этого при следующем сохранении
+      // (когда pendingBg уже null) на диск снова уйдёт ПРЕДСКАЗАННОЕ имя из
+      // старого quiz.image.fileName - сейчас оно совпадает с авторитетным
+      // только потому что обе таблицы MIME->расширение идентичны; если они
+      // когда-нибудь разойдутся, эффект, показывающий фон
+      // (rusiqmedia:///${quiz.image.fileName}), начнёт указывать на
+      // несуществующий файл сразу после первого сохранения.
+      setHistory((h) => ({ ...h, present: quizToSave }));
     }
-    const ok = await saveQuiz(quiz);
+    const ok = await saveQuiz(quizToSave);
     setSaving(false);
     if (!ok) {
       setSaveError('Не удалось сохранить викторину — попробуйте ещё раз');
       return;
     }
-    setLastSavedQuiz(quiz);
+    setLastSavedQuiz(quizToSave);
   }
 
   function handleExit() {
