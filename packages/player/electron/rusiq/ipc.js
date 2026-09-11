@@ -9,8 +9,11 @@
 const fs = require('fs');
 const path = require('path');
 
+const { resolveWithinRoot } = require('../chrono/pathGuard');
+
 const RUSIQ_APP_DIR_NAME = 'kiosk-rusiq';
 const USERDATA_FILE_NAME = 'userdata.json';
+const QUIZZES_DIR_NAME = 'quizzes';
 
 const FALLBACK_USER_DATA = { schemaVersion: 1, sessions: [], soundOn: true };
 
@@ -47,12 +50,80 @@ function writeUserDataAtomic(filePath, data) {
   fs.renameSync(tmpPath, filePath);
 }
 
+function resolveQuizzesDir(baseDir) {
+  const dir = path.join(baseDir, QUIZZES_DIR_NAME);
+  fs.mkdirSync(dir, { recursive: true });
+  return dir;
+}
+
+function quizFilePath(quizzesDir, quizId) {
+  return resolveWithinRoot(quizzesDir, `${quizId}.json`);
+}
+
+// Главный процесс НЕ валидирует структуру викторины схемой (zod живёт
+// только в рендерере, см. Global Constraints плана) - здесь только
+// duck-typing минимума, нужного для отображения списка, и защита от
+// одного битого файла, роняющего весь каталог (ТЗ §9).
+function listQuizMetadata(quizzesDir) {
+  let fileNames;
+  try {
+    fileNames = fs.readdirSync(quizzesDir).filter((name) => name.endsWith('.json'));
+  } catch {
+    return [];
+  }
+  const result = [];
+  for (const fileName of fileNames) {
+    try {
+      const filePath = path.join(quizzesDir, fileName);
+      const raw = JSON.parse(fs.readFileSync(filePath, 'utf-8'));
+      if (!isPlainRecord(raw) || typeof raw.title !== 'string') continue;
+      const id = fileName.slice(0, -'.json'.length);
+      const stat = fs.statSync(filePath);
+      result.push({
+        id,
+        title: raw.title,
+        hasPassword: typeof raw.passwordHash === 'string' && raw.passwordHash.length > 0,
+        updatedAt: stat.mtime.toISOString(),
+      });
+    } catch {
+      // Битый файл - пропускаем, не роняем весь список.
+    }
+  }
+  return result;
+}
+
+function loadQuizFile(quizzesDir, quizId) {
+  try {
+    const filePath = quizFilePath(quizzesDir, quizId);
+    return JSON.parse(fs.readFileSync(filePath, 'utf-8'));
+  } catch {
+    return null;
+  }
+}
+
+function saveQuizFile(quizzesDir, quiz) {
+  const filePath = quizFilePath(quizzesDir, quiz.id);
+  const tmpPath = `${filePath}.tmp`;
+  fs.writeFileSync(tmpPath, JSON.stringify(quiz), 'utf-8');
+  fs.renameSync(tmpPath, filePath);
+}
+
+function deleteQuizFile(quizzesDir, quizId) {
+  try {
+    fs.unlinkSync(quizFilePath(quizzesDir, quizId));
+    return true;
+  } catch {
+    return false;
+  }
+}
+
 /**
  * @param {{ ipcMain: import('electron').IpcMain, app: import('electron').App }} deps
  */
 function registerRusiqIpc({ ipcMain, app }) {
   const { baseDir, isFallback } = resolveBaseDir(app);
   const filePath = path.join(baseDir, USERDATA_FILE_NAME);
+  const quizzesDir = resolveQuizzesDir(baseDir);
 
   ipcMain.handle('rusiq:load-user-data', () => readUserData(filePath));
   ipcMain.handle('rusiq:save-user-data', (_event, data) => {
@@ -61,7 +132,36 @@ function registerRusiqIpc({ ipcMain, app }) {
     return { ok: true };
   });
 
-  return { baseDir, isFallback };
+  ipcMain.handle('rusiq:list-quizzes', () => listQuizMetadata(quizzesDir));
+  ipcMain.handle('rusiq:load-quiz', (_event, quizId) => {
+    if (typeof quizId !== 'string' || quizId.length === 0) return null;
+    return loadQuizFile(quizzesDir, quizId);
+  });
+  ipcMain.handle('rusiq:save-quiz', (_event, quiz) => {
+    if (!isPlainRecord(quiz) || typeof quiz.id !== 'string' || quiz.id.length === 0) return { ok: false };
+    try {
+      saveQuizFile(quizzesDir, quiz);
+      return { ok: true };
+    } catch {
+      return { ok: false };
+    }
+  });
+  ipcMain.handle('rusiq:delete-quiz', (_event, quizId) => {
+    if (typeof quizId !== 'string' || quizId.length === 0) return { ok: false };
+    return { ok: deleteQuizFile(quizzesDir, quizId) };
+  });
+
+  return { baseDir, isFallback, quizzesDir };
 }
 
-module.exports = { registerRusiqIpc, readUserData, writeUserDataAtomic, resolveBaseDir };
+module.exports = {
+  registerRusiqIpc,
+  readUserData,
+  writeUserDataAtomic,
+  resolveBaseDir,
+  listQuizMetadata,
+  loadQuizFile,
+  saveQuizFile,
+  deleteQuizFile,
+  resolveQuizzesDir,
+};
