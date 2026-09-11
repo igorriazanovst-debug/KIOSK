@@ -4,7 +4,7 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
-import { registerRusiqIpc, readUserData, writeUserDataAtomic, resolveBaseDir, listQuizMetadata, loadQuizFile, saveQuizFile, deleteQuizFile, resolveQuizzesDir } from './ipc.js';
+import { registerRusiqIpc, readUserData, writeUserDataAtomic, resolveBaseDir, listQuizMetadata, loadQuizFile, saveQuizFile, deleteQuizFile, resolveQuizzesDir, saveQuizBackground } from './ipc.js';
 
 function fakeIpcMain() {
   const handlers = new Map();
@@ -157,4 +157,31 @@ test('registerRusiqIpc save-quiz handler rejects a payload without a string id',
   registerRusiqIpc({ ipcMain, app });
   const result = await ipcMain.invoke('rusiq:save-quiz', { title: 'Без id' });
   assert.deepEqual(result, { ok: false });
+});
+
+test('saveQuizBackground writes a file named "<quizId>-background.<ext>" and returns its fileName', () => {
+  const tmp = fs.mkdtempSync(path.join(os.tmpdir(), 'rusiq-bg-'));
+  const dir = resolveQuizzesDir(tmp);
+  const buffer = Buffer.from([0x89, 0x50, 0x4e, 0x47]); // PNG-сигнатура, содержимое не проверяется
+  const result = saveQuizBackground(dir, 'quiz-bg-1', buffer, 'image/png');
+  assert.deepEqual(result, { ok: true, fileName: 'quiz-bg-1-background.png' });
+  assert.equal(fs.existsSync(path.join(dir, 'quiz-bg-1-background.png')), true);
+});
+
+test('saveQuizBackground rejects an unsupported mime type', () => {
+  const tmp = fs.mkdtempSync(path.join(os.tmpdir(), 'rusiq-bg-reject-'));
+  const dir = resolveQuizzesDir(tmp);
+  const result = saveQuizBackground(dir, 'quiz-bg-2', Buffer.from([1, 2, 3]), 'application/pdf');
+  assert.deepEqual(result, { ok: false });
+});
+
+test('registerRusiqIpc save-quiz-background handler round-trips through IPC', async () => {
+  const tmp = fs.mkdtempSync(path.join(os.tmpdir(), 'rusiq-bg-ipc-'));
+  const app = { getPath: () => tmp };
+  const ipcMain = fakeIpcMain();
+  const { quizzesDir } = registerRusiqIpc({ ipcMain, app });
+  const buffer = new Uint8Array([0xff, 0xd8, 0xff]).buffer; // JPEG-сигнатура
+  const result = await ipcMain.invoke('rusiq:save-quiz-background', 'quiz-bg-3', buffer, 'image/jpeg');
+  assert.deepEqual(result, { ok: true, fileName: 'quiz-bg-3-background.jpg' });
+  assert.equal(fs.existsSync(path.join(quizzesDir, 'quiz-bg-3-background.jpg')), true);
 });

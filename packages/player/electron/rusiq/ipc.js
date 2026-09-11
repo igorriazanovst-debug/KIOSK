@@ -117,6 +117,23 @@ function deleteQuizFile(quizzesDir, quizId) {
   }
 }
 
+const BACKGROUND_EXT_BY_MIME = {
+  'image/png': '.png',
+  'image/jpeg': '.jpg',
+  'image/gif': '.gif',
+  'image/webp': '.webp',
+};
+
+function saveQuizBackground(quizzesDir, quizId, bufferLike, mimeType) {
+  const ext = BACKGROUND_EXT_BY_MIME[mimeType];
+  if (!ext) return { ok: false };
+  const fileName = `${quizId}-background${ext}`;
+  const filePath = resolveWithinRoot(quizzesDir, fileName);
+  const buffer = Buffer.isBuffer(bufferLike) ? bufferLike : Buffer.from(bufferLike);
+  fs.writeFileSync(filePath, buffer);
+  return { ok: true, fileName };
+}
+
 /**
  * @param {{ ipcMain: import('electron').IpcMain, app: import('electron').App }} deps
  */
@@ -151,6 +168,15 @@ function registerRusiqIpc({ ipcMain, app }) {
     return { ok: deleteQuizFile(quizzesDir, quizId) };
   });
 
+  ipcMain.handle('rusiq:save-quiz-background', (_event, quizId, arrayBuffer, mimeType) => {
+    if (typeof quizId !== 'string' || quizId.length === 0) return { ok: false };
+    try {
+      return saveQuizBackground(quizzesDir, quizId, arrayBuffer, mimeType);
+    } catch {
+      return { ok: false };
+    }
+  });
+
   return { baseDir, isFallback, quizzesDir };
 }
 
@@ -164,4 +190,5 @@ module.exports = {
   saveQuizFile,
   deleteQuizFile,
   resolveQuizzesDir,
+  saveQuizBackground,
 };

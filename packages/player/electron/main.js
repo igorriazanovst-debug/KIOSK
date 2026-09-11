@@ -52,7 +52,11 @@ try {
     // природных сообществ» (packages/natcom-library/assets/), тот же
     // принцип, что chronomedia - без bypassCSP, схема явно добавлена в
     // CSP-заголовок ниже.
-    { scheme: 'natcomlib', privileges: { standard: true, secure: true, supportFetchAPI: true, stream: true } }
+    { scheme: 'natcomlib', privileges: { standard: true, secure: true, supportFetchAPI: true, stream: true } },
+    // rusiqmedia - пользовательские фоновые изображения викторин виджета
+    // «РусIQ» (Фаза 2a), тот же принцип, что chronomedia/natcomlib - без
+    // bypassCSP, схема явно добавлена в CSP-заголовок ниже.
+    { scheme: 'rusiqmedia', privileges: { standard: true, secure: true, supportFetchAPI: true, stream: true } }
   ]);
 } catch (e) { fileLog('protocol register error', e.message); }
 // ─────────────────────────────────────────────────────────────────────────────
@@ -64,6 +68,7 @@ let currentProject = null;
 let chronoBaseDir = null;
 let natcomBaseDir = null;
 let natcomAssetsDir = null;
+let rusiqQuizzesDir = null;
 let natcomLibrary = null;
 
 // ═══ OFFLINE-CACHE-MODULE-V1 — Офлайн-кэш медиафайлов ═══════════════════════════
@@ -1194,7 +1199,8 @@ app.whenReady().then(() => {
   // канал 'rusiq:*', используется только этим виджетом. Тот же принцип, что
   // и у mathmachine выше — файловая работа только через этот IPC-мост.
   try {
-    const { baseDir: rusiqBaseDir, isFallback: rusiqIsFallback } = registerRusiqIpc({ ipcMain, app });
+    const { baseDir: rusiqBaseDir, isFallback: rusiqIsFallback, quizzesDir: rusiqQuizzesDirResult } = registerRusiqIpc({ ipcMain, app });
+    rusiqQuizzesDir = rusiqQuizzesDirResult;
     fileLog('[rusiq] storage dir:', rusiqBaseDir, rusiqIsFallback ? '(fallback: no write access to shared dir)' : '');
   } catch (err) {
     fileLog('[rusiq] failed to initialize local storage:', err && err.message);
@@ -1207,7 +1213,7 @@ app.whenReady().then(() => {
         ...details.responseHeaders,
         // chronomedia:/natcomlib: добавлены явно (не полагаемся на bypassCSP
         // этих схем - его нет, см. registerSchemesAsPrivileged выше).
-        'Content-Security-Policy': ["default-src 'self' 'unsafe-inline' 'unsafe-eval' data: file: blob: chronomedia: natcomlib: http: https: ws: wss:"]
+        'Content-Security-Policy': ["default-src 'self' 'unsafe-inline' 'unsafe-eval' data: file: blob: chronomedia: natcomlib: rusiqmedia: http: https: ws: wss:"]
       }
     });
   });
@@ -1348,6 +1354,34 @@ app.whenReady().then(() => {
       const u = new URL(request.url);
       const fileName = decodeURIComponent(u.pathname.replace(/^\/+/, ''));
       const filePath = chronoResolveWithinRoot(natcomAssetsDir, fileName);
+
+      if (!fs.existsSync(filePath) || !fs.statSync(filePath).isFile()) {
+        return new Response('Not found', { status: 404 });
+      }
+
+      const stat = fs.statSync(filePath);
+      const mime = guessMime(fileName, filePath);
+      const stream = fs.createReadStream(filePath);
+      return new Response(nodeStreamToWeb(stream), {
+        status: 200,
+        headers: { 'Content-Type': mime, 'Content-Length': String(stat.size) }
+      });
+    } catch {
+      return new Response('Not found', { status: 404 });
+    }
+  });
+
+  // Обработчик протокола rusiqmedia:///<fileName> → фоновое изображение
+  // пользовательской викторины «РусIQ» (Фаза 2a), packages/player/electron/
+  // rusiq/ipc.js resolveQuizzesDir. Пустой host, как у natcomlib - имя
+  // файла целиком в pathname.
+  protocol.handle('rusiqmedia', async (request) => {
+    try {
+      if (!rusiqQuizzesDir) return new Response('Not initialized', { status: 503 });
+
+      const u = new URL(request.url);
+      const fileName = decodeURIComponent(u.pathname.replace(/^\/+/, ''));
+      const filePath = chronoResolveWithinRoot(rusiqQuizzesDir, fileName);
 
       if (!fs.existsSync(filePath) || !fs.statSync(filePath).isFile()) {
         return new Response('Not found', { status: 404 });
