@@ -28,7 +28,7 @@ interface Props {
 type Phase = 'intro' | 'setup' | 'board' | 'results';
 
 const quiz = RusiqQuizSchema.parse(rusiqContentJson);
-const INITIAL_USER_DATA: RusiqUserData = { schemaVersion: RUSIQ_USERDATA_SCHEMA_VERSION, sessions: [], soundOn: true };
+const INITIAL_USER_DATA: RusiqUserData = { schemaVersion: RUSIQ_USERDATA_SCHEMA_VERSION, sessions: [], soundOn: true, activeQuizId: null, teacherPinHash: null };
 
 const RusiqRuntime: React.FC<Props> = () => {
   const [phase, setPhase] = useState<Phase>('intro');
