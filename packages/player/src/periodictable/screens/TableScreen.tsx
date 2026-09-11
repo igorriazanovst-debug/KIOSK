@@ -33,11 +33,63 @@ function isHighlighted(el: PeriodicElement, highlight: HighlightMode): boolean {
 const TableScreen: React.FC<Props> = ({ elements, form, colorIndication, highlight, highlightedSymbol, onSelectElement }) => {
   // 18 колонок для ОБЕИХ форм — короткая форма не схлопывает колонки
   // (см. tableLayout.ts, исправлено по находке Задачи 5), различается
-  // только подпись колонки через formatGroupLabel в самой ячейке.
+  // только подпись колонки через formatGroupLabel — в видимой строке шапки
+  // ниже и (дополнительно) в подсказке title самой ячейки.
   const maxCol = 18;
+  const groupColumns = Array.from({ length: maxCol }, (_, i) => i + 1);
 
   return (
-    <div style={{ display: 'grid', gridTemplateColumns: `repeat(${maxCol}, 1fr)`, gap: 2, padding: 8, touchAction: 'manipulation' }}>
+    <div>
+      {/* Видимая строка подписей групп. Раньше отличие короткой формы от
+          IUPAC жило ТОЛЬКО в атрибуте title (всплывающая подсказка мыши) —
+          на сенсорном киоске, где мыши нет, переключение формы не давало
+          пользователю вообще никакого видимого эффекта. Это отдельная
+          сетка-сосед, а не строка внутри сетки элементов: так позиционирование
+          элементов (getCellPosition) остаётся нетронутым. */}
+      <div
+        style={{
+          display: 'grid',
+          gridTemplateColumns: `repeat(${maxCol}, 1fr)`,
+          gap: 2,
+          padding: '8px 8px 0 8px',
+          fontFamily: 'sans-serif',
+        }}
+      >
+        {groupColumns.map((col) => (
+          <div
+            key={col}
+            style={{
+              boxSizing: 'border-box',
+              minWidth: 56,
+              padding: 4,
+              background: '#eceff1',
+              border: '1px solid #b0bec5',
+              borderRadius: 4,
+              textAlign: 'center',
+              fontWeight: 'bold',
+              fontSize: 13,
+              color: '#263238',
+            }}
+            title={`Группа ${formatGroupLabel(col, form)}`}
+          >
+            {formatGroupLabel(col, form)}
+          </div>
+        ))}
+      </div>
+
+      <div
+        style={{
+          display: 'grid',
+          gridTemplateColumns: `repeat(${maxCol}, 1fr)`,
+          // Строка 8 физически пуста (подвал лантаноидов/актиноидов живёт в
+          // строках 9 и 10) — задаём ей явную высоту как визуальному разрыву
+          // после 7-го периода, иначе подвал читается как «периоды 8 и 9».
+          gridTemplateRows: 'repeat(7, auto) 20px auto auto',
+          gap: 2,
+          padding: 8,
+          touchAction: 'manipulation',
+        }}
+      >
       {elements.map((el) => {
         const pos = getCellPosition(el, form);
         const highlighted = isHighlighted(el, highlight) || el.symbol === highlightedSymbol;
@@ -54,6 +106,7 @@ const TableScreen: React.FC<Props> = ({ elements, form, colorIndication, highlig
             key={el.atomicNumber}
             onClick={() => onSelectElement(el)}
             style={{
+              boxSizing: 'border-box',
               gridRow: pos.row,
               gridColumn: pos.col,
               background: cellBackground(el, colorIndication),
@@ -73,6 +126,7 @@ const TableScreen: React.FC<Props> = ({ elements, form, colorIndication, highlig
           </button>
         );
       })}
+      </div>
     </div>
   );
 };

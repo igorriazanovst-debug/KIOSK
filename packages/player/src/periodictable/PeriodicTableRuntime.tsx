@@ -1,5 +1,5 @@
 // packages/player/src/periodictable/PeriodicTableRuntime.tsx
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import type { PeriodicTableWidgetProperties } from '@kiosk/shared';
 import { PeriodicTableContentSchema, type PeriodicElement } from './model/schema.ts';
 import TableScreen from './screens/TableScreen.tsx';
@@ -16,12 +16,19 @@ interface Props {
   properties: PeriodicTableWidgetProperties;
 }
 
-const { elements } = PeriodicTableContentSchema.parse(elementsJson);
-
 type CardMode = 'none' | 'summary' | 'detail';
 type BottomTab = 'none' | 'search' | 'viewSettings' | 'legend';
 
 const PeriodicTableRuntime: React.FC<Props> = ({ properties }) => {
+  // Разбор справочника ВНУТРИ компонента и через safeParse. Раньше это был
+  // `PeriodicTableContentSchema.parse(...)` на уровне модуля: Player.tsx
+  // импортирует этот модуль статически, поэтому повреждённый elements.json
+  // ронял бы весь Player целиком — во всех проектах, даже там, где виджета
+  // «Таблица Менделеева» вообще нет. Теперь радиус поражения ограничен самим
+  // виджетом, а пользователь видит понятное сообщение вместо пустого экрана.
+  const parsedContent = useMemo(() => PeriodicTableContentSchema.safeParse(elementsJson), []);
+  const elements: PeriodicElement[] = parsedContent.success ? parsedContent.data.elements : [];
+
   const [viewSettings, setViewSettings] = useState<ViewSettings>(DEFAULT_VIEW_SETTINGS);
   const [selected, setSelected] = useState<PeriodicElement | null>(null);
   const [cardMode, setCardMode] = useState<CardMode>('none');
@@ -70,6 +77,33 @@ const PeriodicTableRuntime: React.FC<Props> = ({ properties }) => {
     }
   }
 
+  // Все хуки выше уже вызваны — ранний возврат ниже не нарушает порядок хуков.
+  if (!parsedContent.success) {
+    return (
+      <div
+        style={{
+          width: '100%',
+          height: '100%',
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          justifyContent: 'center',
+          padding: 24,
+          textAlign: 'center',
+          fontFamily: 'sans-serif',
+          color: '#b71c1c',
+        }}
+      >
+        <h2 style={{ margin: 0 }}>Данные справочника повреждены</h2>
+        <p style={{ maxWidth: 520, color: '#37474f' }}>
+          Таблицу Менделеева показать не удалось: файл с данными об элементах не прошёл проверку.
+          Остальные материалы киоска работают как обычно. Сообщите администратору — нужно
+          переустановить проект или обновить содержимое виджета.
+        </p>
+      </div>
+    );
+  }
+
   return (
     <div style={{ width: '100%', height: '100%', display: 'flex', flexDirection: 'column', fontFamily: 'sans-serif' }}>
       <div style={{ flex: 1, overflow: 'auto' }}>
@@ -94,7 +128,13 @@ const PeriodicTableRuntime: React.FC<Props> = ({ properties }) => {
           <SearchTab elements={elements} onSelectElement={selectElement} onHighlightChange={setHighlightedSymbol} />
         </div>
       )}
-      {activeTab === 'viewSettings' && viewSettingsUnlocked && (
+      {/* Условие НЕ включает viewSettingsUnlocked намеренно: activeTab может
+          стать 'viewSettings' только двумя путями — через
+          handleViewSettingsTabClick (он сам проверяет viewSettingsUnlocked ||
+          !pin) и через onSuccess PIN-модалки (она сама ставит unlocked=true).
+          Со старым условием пустой teacherPin («замок отключён») делал вкладку
+          мёртвой: клик открывал таб, но панель не рендерилась никогда. */}
+      {activeTab === 'viewSettings' && (
         <div style={{ maxHeight: '40vh', overflow: 'auto', borderTop: '1px solid #ccc' }}>
           <ViewSettingsTab settings={viewSettings} onChange={updateViewSettings} />
         </div>
@@ -120,7 +160,12 @@ const PeriodicTableRuntime: React.FC<Props> = ({ properties }) => {
         >
           <div onClick={(e) => e.stopPropagation()}>
             {cardMode === 'summary' && (
-              <ElementSummaryCard element={selected} onMoreDetails={() => setCardMode('detail')} onClose={closeCard} />
+              <ElementSummaryCard
+                element={selected}
+                form={viewSettings.tableForm}
+                onMoreDetails={() => setCardMode('detail')}
+                onClose={closeCard}
+              />
             )}
             {cardMode === 'detail' && <ElementDetailCard element={selected} onClose={closeCard} />}
           </div>

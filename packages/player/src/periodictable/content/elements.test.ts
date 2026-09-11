@@ -1,10 +1,25 @@
 // packages/player/src/periodictable/content/elements.test.ts
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
+import fs from 'node:fs';
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
 import { PeriodicTableContentSchema, isFooterElement } from '../model/schema.ts';
 import elementsJson from './elements.json' with { type: 'json' };
 
 const parsed = PeriodicTableContentSchema.parse(elementsJson);
+
+// public/periodictable/photos, не src/... — vite копирует public/* в dist/*
+// без изменений при сборке (та же конвенция, что у media в mathmachine).
+const PHOTOS_DIR = path.join(
+  path.dirname(fileURLToPath(import.meta.url)),
+  '..',
+  '..',
+  '..',
+  'public',
+  'periodictable',
+  'photos'
+);
 
 test('elements.json parses against PeriodicTableContentSchema without errors', () => {
   assert.equal(PeriodicTableContentSchema.safeParse(elementsJson).success, true);
@@ -62,4 +77,17 @@ test('every element with a photo reference points to a file name, not a full URL
       assert.ok(!el.photo.fileName.startsWith('http'), `${el.symbol}: photo.fileName should be a local file name, not a URL`);
     }
   }
+});
+
+test('every referenced photo file actually exists in public/periodictable/photos', () => {
+  const withPhoto = parsed.elements.filter((e) => e.photo);
+  assert.ok(withPhoto.length > 0, 'no element references a photo at all — content regression');
+  const missing: string[] = [];
+  for (const el of withPhoto) {
+    const fileName = el.photo!.fileName;
+    if (!fs.existsSync(path.join(PHOTOS_DIR, fileName))) {
+      missing.push(`${el.symbol} -> ${fileName}`);
+    }
+  }
+  assert.deepEqual(missing, [], `missing photo files in ${PHOTOS_DIR}: ${missing.join(', ')}`);
 });
