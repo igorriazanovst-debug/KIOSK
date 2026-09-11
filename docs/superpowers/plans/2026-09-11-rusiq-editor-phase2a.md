@@ -2205,6 +2205,20 @@ const EditorScreen: React.FC<Props> = ({ initialQuiz, pendingBackground, onExit 
       setSaveError('Укажите название викторины');
       return;
     }
+    // RusiqQuizSchema.questions требует .min(1) (packages/player/src/rusiq/
+    // model/schema.ts) - без этой проверки только что созданная викторина
+    // (0 вопросов) успешно пишется на диск (главный процесс не валидирует
+    // схемой), но становится НЕОТКРЫВАЕМОЙ насовсем: quizStore.loadQuiz()
+    // проверяет RusiqQuizSchema.safeParse и вернёт null, каталог покажет
+    // «файл повреждён» для викторины, которая на самом деле просто пуста.
+    // Найдено ревью Задачи 8 (Important, помечено как унаследованное из
+    // текста плана) - проверка здесь, а не в buildBlankQuiz (Задача 8),
+    // т.к. 0 вопросов - валидное ПРОМЕЖУТОЧНОЕ состояние во время
+    // редактирования, невалидно только для СОХРАНЕНИЯ.
+    if (quiz.questions.length === 0) {
+      setSaveError('Добавьте хотя бы один вопрос перед сохранением');
+      return;
+    }
     setSaving(true);
     setSaveError(null);
     if (pendingBg) {
