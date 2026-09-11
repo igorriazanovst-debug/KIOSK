@@ -41,6 +41,25 @@ test('no question text is empty and every question has a non-empty answer', () =
   }
 });
 
+// FR-005: помимо начисления баллов, ТЗ требует возможность добавить к
+// вопросу подсказку — до этого теста helpText был пустой строкой у ВСЕХ
+// 608 вопросов (найдено приёмочной сверкой), см. Тип7_трассировочная_матрица.md.
+test('every question has a non-empty hint (helpText) that does not spell out a multi-letter answer verbatim', () => {
+  for (const q of quiz.questions) {
+    assert.ok(q.helpText.trim().length > 0, `question ${q.id} has empty helpText`);
+    if (q.answer.trim().length > 1) {
+      const hintWords = q.helpText
+        .toLowerCase()
+        .replace(/[«».,:;!?]/g, '')
+        .split(/\s+/);
+      assert.ok(
+        !hintWords.includes(q.answer.trim().toLowerCase()),
+        `question ${q.id} hint leaks the full answer word "${q.answer}"`,
+      );
+    }
+  }
+});
+
 // Геометрический тест-инвариант (спека, разд. 5): правильная точка не должна
 // систематически лежать дальше от центра изображения, чем ложные точки того
 // же вопроса — иначе "выбери точку ближе к центру" была бы работающей

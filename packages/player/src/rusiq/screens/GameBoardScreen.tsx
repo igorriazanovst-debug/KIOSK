@@ -33,6 +33,7 @@ const GameBoardScreen: React.FC<Props> = ({ imageUrl, imageWidth, imageHeight, p
   const [questionIndexByPlayer, setQuestionIndexByPlayer] = useState<number[]>(() => playerNames.map(() => 0));
   const [elapsed, setElapsed] = useState(0);
   const [answers, setAnswers] = useState<RusiqAnswerEvent[]>([]);
+  const [hintShown, setHintShown] = useState(false);
 
   // Защита от двойного advance() на один и тот же вопрос — единственная
   // точка входа для "истёк таймер"/"клик по точке"/"сдался", см. advance().
@@ -47,6 +48,7 @@ const GameBoardScreen: React.FC<Props> = ({ imageUrl, imageWidth, imageHeight, p
   // текущего рендера, без риска устаревшего замыкания внутри setInterval.
   useEffect(() => {
     setElapsed(0);
+    setHintShown(false);
     hasAnsweredRef.current = false;
     const interval = setInterval(() => setElapsed((prev) => prev + 1), 1000);
     return () => clearInterval(interval);
@@ -98,6 +100,10 @@ const GameBoardScreen: React.FC<Props> = ({ imageUrl, imageWidth, imageHeight, p
     advance({ playerIndex: currentPlayer, score: 0, correct: false });
   }
 
+  function handleShowHint() {
+    setHintShown(true);
+  }
+
   const remainingSeconds = Math.max(0, currentQuestion.timeSeconds - elapsed);
   const liveScore = scoreForAnswer(currentQuestion.price, currentQuestion.timeSeconds, elapsed, true);
 
@@ -130,6 +136,15 @@ const GameBoardScreen: React.FC<Props> = ({ imageUrl, imageWidth, imageHeight, p
         <button onClick={handleGiveUp}>Сдаюсь</button>
       </div>
       <p style={{ textAlign: 'center', fontSize: 20 }}>{currentQuestion.text}</p>
+      {currentQuestion.helpText.length > 0 && (
+        <div style={{ textAlign: 'center', marginBottom: 8 }}>
+          {hintShown ? (
+            <p style={{ color: '#555', fontStyle: 'italic' }}>Подсказка: {currentQuestion.helpText}</p>
+          ) : (
+            <button onClick={handleShowHint}>Показать подсказку</button>
+          )}
+        </div>
+      )}
       <div
         style={{
           position: 'relative',
