@@ -179,10 +179,20 @@ const RusiqRuntime: React.FC<Props> = () => {
       <QuizCatalogScreen
         builtinQuizTitle={BUILTIN_QUIZ.title}
         activeQuizId={userData.activeQuizId}
-        onSetActiveQuiz={(quizId) => {
+        onSetActiveQuiz={async (quizId) => {
           const updated: RusiqUserData = { ...userData, activeQuizId: quizId };
           setUserData(updated);
           saveUserData(updated);
+          // Без этого "Играть эту" меняет только activeQuizId на диске/в
+          // userData, а реально показываемая activeQuiz остаётся прежней
+          // до перезапуска приложения (activeQuiz иначе выставляется только
+          // в эффекте монтирования) - найдено живой проверкой Задачи 12.
+          if (quizId !== null) {
+            const custom = await loadQuiz(quizId);
+            setActiveQuiz(custom ?? BUILTIN_QUIZ);
+          } else {
+            setActiveQuiz(BUILTIN_QUIZ);
+          }
         }}
         onEditQuiz={(quiz, pendingBackground) => {
           setEditingQuiz({ quiz, pendingBackground });
