@@ -9,6 +9,7 @@ import NavigationRuntime from './NavigationRuntime';
 import ChronolineRuntime from './chrono/ChronolineRuntime.tsx';
 import NatComRuntime from './natcom/NatComRuntime.tsx';
 import MathMachineRuntime from './mathmachine/MathMachineRuntime';
+import PeriodicTableRuntime from './periodictable/PeriodicTableRuntime';
 
 interface Project {
   name: string;
@@ -571,6 +572,17 @@ const Player: React.FC<PlayerProps> = ({ embedded = false }) => {
             <MathMachineRuntime properties={widget.properties as any} />
           </div>
         );
+      case 'periodictable':
+        // Тот же принцип, что "mathmachine"/"naturalcommunities"/"chronoline"
+        // выше — заполняет реальный размер окна/экрана целиком.
+        return (
+          <div
+            key={widget.id}
+            style={{ ...commonStyle, left: 0, top: 0, width: viewportSize.width, height: viewportSize.height, overflow: 'hidden' }}
+          >
+            <PeriodicTableRuntime properties={widget.properties as any} />
+          </div>
+        );
       default:
         return null;
     }
@@ -1100,8 +1112,9 @@ const Player: React.FC<PlayerProps> = ({ embedded = false }) => {
     return <ActivationScreen onActivated={() => setShowActivation(false)} />;
   }
 
-  // Standalone-app виджеты ("chronoline", "naturalcommunities", "mathmachine")
-  // заполняют реальный размер окна/экрана (см. viewportSize выше) - без этого
+  // Standalone-app виджеты ("chronoline", "naturalcommunities", "mathmachine",
+  // "periodictable") заполняют реальный размер окна/экрана (см. viewportSize
+  // выше) - без этого
   // канвас оставался бы фиксированным на project.canvas.*, заданном при
   // проектировании, и не совпадал бы с фактическим окном. Список должен
   // совпадать с STANDALONE_APP_WIDGET_TYPES в electron/chrono/windowMode.js
@@ -1110,7 +1123,7 @@ const Player: React.FC<PlayerProps> = ({ embedded = false }) => {
   // по project.canvas.* и получается больше окна → двойной скролл и обрезка
   // контента (найдено вживую при ручном тестировании «Матемашки»).
   const isStandaloneAppProject = project.widgets.some(
-    (w) => w.type === 'chronoline' || w.type === 'naturalcommunities' || w.type === 'mathmachine'
+    (w) => w.type === 'chronoline' || w.type === 'naturalcommunities' || w.type === 'mathmachine' || w.type === 'periodictable'
   );
 
   // Letterbox-масштаб для НЕ-standalone проектов: канвас проектировался под

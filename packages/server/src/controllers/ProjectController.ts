@@ -7,6 +7,7 @@ import { ProjectAccessService } from '../services/ProjectAccessService';
 import { isEmailAllowedForChronoline, projectDataHasChronolineWidget } from '../config/chronolineAccess';
 import { isEmailAllowedForNatcom, projectDataHasNatcomWidget } from '../config/natcomAccess';
 import { isEmailAllowedForMathMachine, projectDataHasMathMachineWidget } from '../config/mathmachineAccess';
+import { isEmailAllowedForPeriodicTable, projectDataHasPeriodicTableWidget } from '../config/periodicTableAccess';
 import multer from 'multer';
 import path from 'path';
 
@@ -215,6 +216,13 @@ export class ProjectController {
         });
       }
 
+      if (projectDataHasPeriodicTableWidget(projectData) && !isEmailAllowedForPeriodicTable(req.client.email)) {
+        return res.status(403).json({
+          error: 'PeriodicTable widget not allowed',
+          message: 'Виджет «Таблица Менделеева» пока недоступен для этого аккаунта'
+        });
+      }
+
       const project = await ProjectService.createProject({
         name,
         description,
@@ -378,6 +386,17 @@ export class ProjectController {
         return res.status(403).json({
           error: 'MathMachine widget not allowed',
           message: 'Виджет «Матемашка» пока недоступен для этого аккаунта'
+        });
+      }
+
+      if (
+        Object.prototype.hasOwnProperty.call(updates, 'projectData') &&
+        projectDataHasPeriodicTableWidget(updates.projectData) &&
+        !isEmailAllowedForPeriodicTable(req.client.email)
+      ) {
+        return res.status(403).json({
+          error: 'PeriodicTable widget not allowed',
+          message: 'Виджет «Таблица Менделеева» пока недоступен для этого аккаунта'
         });
       }
 
