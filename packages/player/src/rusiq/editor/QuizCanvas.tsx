@@ -96,7 +96,16 @@ const QuizCanvas: React.FC<Props> = ({
   return (
     <Stage ref={stageRef} width={CANVAS_WIDTH} height={canvasHeight} onClick={handleStageClick}>
       <Layer>
-        {backgroundImage && <KonvaImage image={backgroundImage} x={0} y={0} width={CANVAS_WIDTH} height={canvasHeight} listening={false} />}
+        {backgroundImage ? (
+          <KonvaImage image={backgroundImage} x={0} y={0} width={CANVAS_WIDTH} height={canvasHeight} listening={false} />
+        ) : (
+          // Заглушка, пока фон не загружен (или не загрузился вовсе) - только
+          // визуальная, listening={false}: клик по пустому канвасу должен
+          // попадать на сам Stage (e.target === e.target.getStage()), а не
+          // на эту заглушку, иначе весь workflow добавления точки замирает
+          // до окончания загрузки картинки (найдено ревью Задачи 9).
+          <Rect x={0} y={0} width={CANVAS_WIDTH} height={canvasHeight} fill="#eee" listening={false} />
+        )}
 
         {questions.map((question) => {
           const isSelected = question.id === selectedQuestionId;
@@ -151,12 +160,6 @@ const QuizCanvas: React.FC<Props> = ({
             />
           );
         })}
-
-        {/* Невидимый прямоугольник-перехватчик по всей площади канваса -
-            без него, пока фон ещё не загружен, клик по пустому месту не
-            находит цели под курсором (тот же паттерн, что Workspace.tsx
-            Тип5 использует для отдельных объектов). */}
-        {!backgroundImage && <Rect x={0} y={0} width={CANVAS_WIDTH} height={canvasHeight} fill="#eee" listening />}
       </Layer>
     </Stage>
   );
