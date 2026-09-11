@@ -7,9 +7,10 @@ import ResultsScreen from './screens/ResultsScreen.tsx';
 import { RusiqQuizSchema, type RusiqQuestion, type RusiqQuiz, type RusiqUserData, RUSIQ_USERDATA_SCHEMA_VERSION } from './model/schema.ts';
 import { assignQuestions, summarizeResults, type RusiqAnswerEvent } from './gameLogic.ts';
 import { loadUserData, saveUserData } from './userDataStorage.ts';
-import { loadQuiz } from './editor/quizStore.ts';
+import { loadQuiz, saveQuiz } from './editor/quizStore.ts';
 import TeacherGateScreen from './editor/TeacherGateScreen.tsx';
 import QuizCatalogScreen from './editor/QuizCatalogScreen.tsx';
+import EditorScreen from './editor/EditorScreen.tsx';
 import rusiqContentJson from './content/rusiqContent.json' with { type: 'json' };
 
 // Изображение сцены НЕ импортируется как JS-модуль (ни плоским `import`, ни
@@ -112,6 +113,12 @@ const RusiqRuntime: React.FC<Props> = () => {
     setPhase('catalog');
   }
 
+  async function handleDuplicateBuiltin() {
+    const newId = crypto.randomUUID();
+    const duplicated: RusiqQuiz = { ...BUILTIN_QUIZ, id: newId, title: `${BUILTIN_QUIZ.title} (копия)`, passwordHash: null };
+    await saveQuiz(duplicated);
+  }
+
   if (phase === 'loading') return null;
   if (phase === 'intro') {
     return <IntroScreen quiz={activeQuiz} onPlay={() => setPhase('setup')} onTeacherMode={() => setPhase('teacherGate')} />;
@@ -163,11 +170,23 @@ const RusiqRuntime: React.FC<Props> = () => {
           setEditingQuiz({ quiz, pendingBackground });
           setPhase('editor');
         }}
+        onDuplicateBuiltin={handleDuplicateBuiltin}
         onExit={() => setPhase('intro')}
       />
     );
   }
-  if (phase === 'editor') return null; // экран добавит Задача 11
+  if (phase === 'editor' && editingQuiz) {
+    return (
+      <EditorScreen
+        initialQuiz={editingQuiz.quiz}
+        pendingBackground={editingQuiz.pendingBackground}
+        onExit={() => {
+          setEditingQuiz(null);
+          setPhase('catalog');
+        }}
+      />
+    );
+  }
   return null;
 };
 

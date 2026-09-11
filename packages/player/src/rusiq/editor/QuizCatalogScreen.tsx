@@ -10,6 +10,7 @@ interface Props {
   activeQuizId: string | null;
   onSetActiveQuiz: (quizId: string | null) => void;
   onEditQuiz: (quiz: RusiqQuiz, pendingBackground: { buffer: ArrayBuffer; mimeType: string } | null) => void;
+  onDuplicateBuiltin: () => Promise<void>;
   onExit: () => void;
 }
 
@@ -38,7 +39,7 @@ async function buildBlankQuiz(result: NewQuizResult): Promise<{ quiz: RusiqQuiz;
   return { quiz, pendingBackground: { buffer: result.imageBuffer, mimeType: result.imageMimeType } };
 }
 
-const QuizCatalogScreen: React.FC<Props> = ({ builtinQuizTitle, activeQuizId, onSetActiveQuiz, onEditQuiz, onExit }) => {
+const QuizCatalogScreen: React.FC<Props> = ({ builtinQuizTitle, activeQuizId, onSetActiveQuiz, onEditQuiz, onDuplicateBuiltin, onExit }) => {
   const [entries, setEntries] = useState<QuizListEntry[]>([]);
   const [showNewQuizModal, setShowNewQuizModal] = useState(false);
   const [passwordPromptFor, setPasswordPromptFor] = useState<{ id: string; passwordHash: string } | null>(null);
@@ -82,15 +83,6 @@ const QuizCatalogScreen: React.FC<Props> = ({ builtinQuizTitle, activeQuizId, on
     if (quiz) onEditQuiz(quiz, null);
   }
 
-  async function handleDuplicateBuiltin() {
-    // Дублирование встроенной "Обучение грамоте" требует её полного объекта
-    // (все 608 вопросов) - но RusiqRuntime хранит его как модульную
-    // константу BUILTIN_QUIZ, недоступную отсюда напрямую. Проще и надёжнее
-    // передать колбэк, который делает дублирование средствами родителя -
-    // см. Задачу 11, где RusiqRuntime прокидывает готовую функцию через
-    // проп onDuplicateBuiltin вместо прямого доступа к константе.
-  }
-
   async function handleDuplicate(entry: QuizListEntry) {
     const quiz = await loadQuiz(entry.id);
     if (!quiz) {
@@ -126,9 +118,7 @@ const QuizCatalogScreen: React.FC<Props> = ({ builtinQuizTitle, activeQuizId, on
             {builtinQuizTitle} <em style={{ opacity: 0.6 }}>(встроенная)</em>
           </span>
           <button onClick={() => onSetActiveQuiz(null)}>Играть эту</button>
-          <button onClick={() => alert('Дублирование встроенной викторины доступно из этого экрана в полной сборке — см. Задачу 11.')}>
-            Дублировать
-          </button>
+          <button onClick={() => onDuplicateBuiltin().then(refresh)}>Дублировать</button>
         </li>
         {entries.map((entry) => (
           <li key={entry.id} style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '8px 0', borderBottom: '1px solid #ddd' }}>
