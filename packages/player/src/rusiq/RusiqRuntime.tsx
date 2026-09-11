@@ -4,9 +4,10 @@ import IntroScreen from './screens/IntroScreen.tsx';
 import GameSetupScreen, { type GameSetupResult } from './screens/GameSetupScreen.tsx';
 import GameBoardScreen from './screens/GameBoardScreen.tsx';
 import ResultsScreen from './screens/ResultsScreen.tsx';
-import { RusiqQuizSchema, type RusiqQuestion, type RusiqUserData, RUSIQ_USERDATA_SCHEMA_VERSION } from './model/schema.ts';
+import { RusiqQuizSchema, type RusiqQuestion, type RusiqQuiz, type RusiqUserData, RUSIQ_USERDATA_SCHEMA_VERSION } from './model/schema.ts';
 import { assignQuestions, summarizeResults, type RusiqAnswerEvent } from './gameLogic.ts';
 import { loadUserData, saveUserData } from './userDataStorage.ts';
+import { loadQuiz } from './editor/quizStore.ts';
 import rusiqContentJson from './content/rusiqContent.json' with { type: 'json' };
 
 // Изображение сцены НЕ импортируется как JS-модуль (ни плоским `import`, ни
@@ -25,24 +26,45 @@ interface Props {
   properties: { title?: string };
 }
 
-type Phase = 'intro' | 'setup' | 'board' | 'results';
+type Phase = 'loading' | 'intro' | 'setup' | 'board' | 'results';
 
-const quiz = RusiqQuizSchema.parse(rusiqContentJson);
-const INITIAL_USER_DATA: RusiqUserData = { schemaVersion: RUSIQ_USERDATA_SCHEMA_VERSION, sessions: [], soundOn: true, activeQuizId: null, teacherPinHash: null };
+// Встроенная методическая викторина "Обучение грамоте" - фолбэк, когда
+// activeQuizId === null или пользовательская викторина не грузится
+// (удалена/битый файл). Больше не модульная константа "quiz" - см. спеку
+// Фазы 2a, разд. 1.1: реальная активная викторина определяется динамически.
+const BUILTIN_QUIZ: RusiqQuiz = RusiqQuizSchema.parse(rusiqContentJson);
+
+const INITIAL_USER_DATA: RusiqUserData = {
+  schemaVersion: RUSIQ_USERDATA_SCHEMA_VERSION,
+  sessions: [],
+  soundOn: true,
+  activeQuizId: null,
+  teacherPinHash: null,
+};
 
 const RusiqRuntime: React.FC<Props> = () => {
-  const [phase, setPhase] = useState<Phase>('intro');
+  const [phase, setPhase] = useState<Phase>('loading');
+  const [activeQuiz, setActiveQuiz] = useState<RusiqQuiz>(BUILTIN_QUIZ);
   const [setup, setSetup] = useState<GameSetupResult | null>(null);
   const [questionsByPlayer, setQuestionsByPlayer] = useState<RusiqQuestion[][]>([]);
   const [finalAnswers, setFinalAnswers] = useState<RusiqAnswerEvent[]>([]);
   const [userData, setUserData] = useState<RusiqUserData>(INITIAL_USER_DATA);
 
   useEffect(() => {
-    loadUserData().then(setUserData);
+    loadUserData().then(async (loaded) => {
+      setUserData(loaded);
+      if (loaded.activeQuizId !== null) {
+        const custom = await loadQuiz(loaded.activeQuizId);
+        setActiveQuiz(custom ?? BUILTIN_QUIZ);
+      } else {
+        setActiveQuiz(BUILTIN_QUIZ);
+      }
+      setPhase('intro');
+    });
   }, []);
 
   function handleSetupComplete(result: GameSetupResult) {
-    const pool = quiz.questions.filter((q) => q.level === result.level);
+    const pool = activeQuiz.questions.filter((q) => q.level === result.level);
     const assigned = assignQuestions(pool, result.playerNames.length, result.questionsPerPlayer);
     setSetup(result);
     setQuestionsByPlayer(assigned);
@@ -60,7 +82,7 @@ const RusiqRuntime: React.FC<Props> = () => {
           ...userData.sessions,
           {
             id: `session-${Date.now()}`,
-            quizId: quiz.id,
+            quizId: activeQuiz.id,
             playedAtIso: new Date().toISOString(),
             players: summaries,
           },
@@ -78,17 +100,18 @@ const RusiqRuntime: React.FC<Props> = () => {
     setFinalAnswers([]);
   }
 
-  if (phase === 'intro') return <IntroScreen quiz={quiz} onPlay={() => setPhase('setup')} />;
-  if (phase === 'setup') return <GameSetupScreen quiz={quiz} onComplete={handleSetupComplete} />;
+  if (phase === 'loading') return null;
+  if (phase === 'intro') return <IntroScreen quiz={activeQuiz} onPlay={() => setPhase('setup')} />;
+  if (phase === 'setup') return <GameSetupScreen quiz={activeQuiz} onComplete={handleSetupComplete} />;
   if (phase === 'board' && setup) {
     return (
       <GameBoardScreen
-        imageUrl={ALPHABET_IMAGE_URL}
-        imageWidth={quiz.image.width}
-        imageHeight={quiz.image.height}
+        imageUrl={activeQuiz.id === BUILTIN_QUIZ.id ? ALPHABET_IMAGE_URL : `rusiqmedia:///${activeQuiz.image.fileName}`}
+        imageWidth={activeQuiz.image.width}
+        imageHeight={activeQuiz.image.height}
         playerNames={setup.playerNames}
         questionsByPlayer={questionsByPlayer}
-        genericDecoyPoints={quiz.genericDecoyPoints}
+        genericDecoyPoints={activeQuiz.genericDecoyPoints}
         onFinished={handleGameFinished}
       />
     );
