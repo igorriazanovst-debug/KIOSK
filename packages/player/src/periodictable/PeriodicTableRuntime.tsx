@@ -131,7 +131,35 @@ const PeriodicTableRuntime: React.FC<Props> = ({ properties }) => {
 
   return (
     <div style={{ width: '100%', height: '100%', display: 'flex', flexDirection: 'column', fontFamily: 'sans-serif', background: '#f5f7fa' }}>
-      <div style={{ flex: 1, overflow: 'auto' }}>
+      {/* Один общий <style> на весь виджет, а не хук hover-состояния на
+          каждую интерактивную плитку (~118 в таблице + строки поиска):
+          :hover — обычное CSS-псевдосостояние, не требует перерисовки
+          React-дерева. Класс специфичен для виджета (periodictable-cell),
+          чтобы не зацепить стили других виджетов плеера на том же экране.
+          Живёт здесь (а не в TableScreen.tsx, где был раньше), потому что
+          этот компонент — единственный, что смонтирован всегда, пока
+          виджет открыт, независимо от того, какая вкладка активна: и
+          TableScreen, и SearchTab используют этот класс. */}
+      <style>{`
+        .periodictable-cell {
+          transition: transform 0.12s ease, box-shadow 0.12s ease;
+        }
+        .periodictable-cell:hover {
+          transform: scale(1.03);
+          box-shadow: 0 2px 8px rgba(0,0,0,0.25);
+          z-index: 1;
+        }
+      `}</style>
+      {/* minHeight: 0 — без него флекс-элемент в колонке по умолчанию не
+          сжимается меньше высоты своего контента (min-height: auto),
+          `overflow: auto` тогда не срабатывает вообще: таблица (десять
+          строк, ~650px) выталкивает нижнюю панель вкладок за пределы окна
+          вместо того чтобы скроллиться сама внутри своей области. Найдено
+          живой проверкой в реальном (не file://) собранном приложении —
+          с этим багом вкладки Поиск/Настройки вида/Легенда физически не
+          помещались на экране ни при какой высоте окна, включая
+          развёрнутое на весь экран. */}
+      <div style={{ flex: 1, minHeight: 0, overflow: 'auto' }}>
         <TableScreen
           elements={elements}
           form={viewSettings.tableForm}
