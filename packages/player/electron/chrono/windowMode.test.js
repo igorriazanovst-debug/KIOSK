@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { buildBrowserWindowOptions, hasChronolineWidget, hasNaturalCommunitiesWidget, hasMathMachineWidget, hasStandaloneAppWidget, BASE_WINDOW_OPTIONS } from './windowMode.js';
+import { buildBrowserWindowOptions, hasChronolineWidget, hasNaturalCommunitiesWidget, hasMathMachineWidget, hasPeriodicTableWidget, hasStandaloneAppWidget, BASE_WINDOW_OPTIONS } from './windowMode.js';
 
 // ─── The regression-safety guarantee ────────────────────────────────────────
 // Every one of these MUST deep-equal BASE_WINDOW_OPTIONS exactly - this is
@@ -115,10 +115,30 @@ test('hasMathMachineWidget does not fire for the other standalone-app types and 
   assert.equal(hasNaturalCommunitiesWidget({ widgets: [{ type: 'mathmachine' }] }), false);
 });
 
-test('hasStandaloneAppWidget fires for any of the three types, and for none when absent', () => {
+// ─── periodictable - fourth standalone-app widget type ─────────────────────
+
+test('a periodictable widget switches on window chrome, same as chronoline/naturalcommunities/mathmachine', () => {
+  const result = buildBrowserWindowOptions({ widgets: [{ id: '1', type: 'periodictable', properties: {} }] });
+
+  assert.equal(result.fullscreen, false);
+  assert.equal(result.kiosk, false);
+  assert.equal(result.frame, true);
+  assert.equal(result.autoHideMenuBar, false);
+  assert.equal(result.useContentSize, true);
+});
+
+test('hasPeriodicTableWidget does not fire for the other standalone-app types and vice versa', () => {
+  assert.equal(hasPeriodicTableWidget({ widgets: [{ type: 'chronoline' }] }), false);
+  assert.equal(hasPeriodicTableWidget({ widgets: [{ type: 'naturalcommunities' }] }), false);
+  assert.equal(hasPeriodicTableWidget({ widgets: [{ type: 'mathmachine' }] }), false);
+  assert.equal(hasMathMachineWidget({ widgets: [{ type: 'periodictable' }] }), false);
+});
+
+test('hasStandaloneAppWidget fires for any of the four types, and for none when absent', () => {
   assert.equal(hasStandaloneAppWidget({ widgets: [{ type: 'chronoline' }] }), true);
   assert.equal(hasStandaloneAppWidget({ widgets: [{ type: 'naturalcommunities' }] }), true);
   assert.equal(hasStandaloneAppWidget({ widgets: [{ type: 'mathmachine' }] }), true);
+  assert.equal(hasStandaloneAppWidget({ widgets: [{ type: 'periodictable' }] }), true);
   assert.equal(hasStandaloneAppWidget({ widgets: [{ type: 'image' }] }), false);
   assert.equal(hasStandaloneAppWidget({}), false);
 });
