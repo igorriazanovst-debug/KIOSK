@@ -9,6 +9,7 @@ import { assignQuestions, summarizeResults, type RusiqAnswerEvent } from './game
 import { loadUserData, saveUserData } from './userDataStorage.ts';
 import { loadQuiz } from './editor/quizStore.ts';
 import TeacherGateScreen from './editor/TeacherGateScreen.tsx';
+import QuizCatalogScreen from './editor/QuizCatalogScreen.tsx';
 import rusiqContentJson from './content/rusiqContent.json' with { type: 'json' };
 
 // Изображение сцены НЕ импортируется как JS-модуль (ни плоским `import`, ни
@@ -27,7 +28,7 @@ interface Props {
   properties: { title?: string };
 }
 
-type Phase = 'loading' | 'intro' | 'setup' | 'board' | 'results' | 'teacherGate' | 'catalog';
+type Phase = 'loading' | 'intro' | 'setup' | 'board' | 'results' | 'teacherGate' | 'catalog' | 'editor';
 
 // Встроенная методическая викторина "Обучение грамоте" - фолбэк, когда
 // activeQuizId === null или пользовательская викторина не грузится
@@ -50,6 +51,7 @@ const RusiqRuntime: React.FC<Props> = () => {
   const [questionsByPlayer, setQuestionsByPlayer] = useState<RusiqQuestion[][]>([]);
   const [finalAnswers, setFinalAnswers] = useState<RusiqAnswerEvent[]>([]);
   const [userData, setUserData] = useState<RusiqUserData>(INITIAL_USER_DATA);
+  const [editingQuiz, setEditingQuiz] = useState<{ quiz: RusiqQuiz; pendingBackground: { buffer: ArrayBuffer; mimeType: string } | null } | null>(null);
 
   useEffect(() => {
     loadUserData().then(async (loaded) => {
@@ -147,7 +149,25 @@ const RusiqRuntime: React.FC<Props> = () => {
       />
     );
   }
-  if (phase === 'catalog') return null; // экран добавит Задача 8
+  if (phase === 'catalog') {
+    return (
+      <QuizCatalogScreen
+        builtinQuizTitle={BUILTIN_QUIZ.title}
+        activeQuizId={userData.activeQuizId}
+        onSetActiveQuiz={(quizId) => {
+          const updated: RusiqUserData = { ...userData, activeQuizId: quizId };
+          setUserData(updated);
+          saveUserData(updated);
+        }}
+        onEditQuiz={(quiz, pendingBackground) => {
+          setEditingQuiz({ quiz, pendingBackground });
+          setPhase('editor');
+        }}
+        onExit={() => setPhase('intro')}
+      />
+    );
+  }
+  if (phase === 'editor') return null; // экран добавит Задача 11
   return null;
 };
 
