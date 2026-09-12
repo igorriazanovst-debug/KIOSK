@@ -1,9 +1,11 @@
 {
   "schemaVersion": 1,
   "audioScheme": {
-    "voices": [],
-    "phrasesPerVoice": 0,
-    "neutral": false
+    "voices": [
+      "irina"
+    ],
+    "phrasesPerVoice": 2,
+    "neutral": true
   },
   "themes": [
     {
