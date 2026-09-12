@@ -59,6 +59,15 @@ const TableScreen: React.FC<Props> = ({ elements, form, colorIndication, trendPr
   // цикле рендера ~118 плиток.
   const trendRange = useMemo(() => computeTrendRange(elements, trendProperty), [elements, trendProperty]);
 
+  // Первая колонка сетки — узкая, под номер периода (1-7 сбоку от строк
+  // таблицы), не под элемент. Реальные печатные таблицы Менделеева всегда
+  // подписывают периоды по левому краю — раньше их не было вообще, только
+  // номера групп сверху. Ширина фиксированная (не 1fr, как у остальных 18
+  // колонок группы) — иначе колонка периодов растягивалась бы наравне с
+  // колонками элементов и съедала непропорционально много места.
+  const PERIOD_COLUMN_WIDTH = '28px';
+  const periodRows = [1, 2, 3, 4, 5, 6, 7];
+
   return (
     <div>
       {/* Видимая строка подписей групп. Раньше отличие короткой формы от
@@ -66,16 +75,19 @@ const TableScreen: React.FC<Props> = ({ elements, form, colorIndication, trendPr
           на сенсорном киоске, где мыши нет, переключение формы не давало
           пользователю вообще никакого видимого эффекта. Это отдельная
           сетка-сосед, а не строка внутри сетки элементов: так позиционирование
-          элементов (getCellPosition) остаётся нетронутым. */}
+          элементов (getCellPosition) остаётся нетронутым. Первая ячейка —
+          пустой спейсер под колонку периодов слева, чтобы подписи групп
+          выше визуально совпадали со своими колонками элементов ниже. */}
       <div
         style={{
           display: 'grid',
-          gridTemplateColumns: `repeat(${maxCol}, 1fr)`,
+          gridTemplateColumns: `${PERIOD_COLUMN_WIDTH} repeat(${maxCol}, 1fr)`,
           gap: 2,
           padding: '8px 8px 0 8px',
           fontFamily: 'sans-serif',
         }}
       >
+        <div aria-hidden="true" />
         {groupColumns.map((col) => (
           <div
             key={col}
@@ -103,7 +115,7 @@ const TableScreen: React.FC<Props> = ({ elements, form, colorIndication, trendPr
       <div
         style={{
           display: 'grid',
-          gridTemplateColumns: `repeat(${maxCol}, 1fr)`,
+          gridTemplateColumns: `${PERIOD_COLUMN_WIDTH} repeat(${maxCol}, 1fr)`,
           // Строка 8 физически пуста (подвал лантаноидов/актиноидов живёт в
           // строках 9 и 10) — задаём ей явную высоту как визуальному разрыву
           // после 7-го периода, иначе подвал читается как «периоды 8 и 9».
@@ -116,6 +128,26 @@ const TableScreen: React.FC<Props> = ({ elements, form, colorIndication, trendPr
           touchAction: 'manipulation',
         }}
       >
+      {periodRows.map((period) => (
+        <div
+          key={`period-${period}`}
+          role="rowheader"
+          aria-label={`Период ${period}`}
+          style={{
+            gridRow: period,
+            gridColumn: 1,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            fontWeight: 'bold',
+            fontSize: 13,
+            color: '#37474f',
+          }}
+          title={`Период ${period}`}
+        >
+          {period}
+        </div>
+      ))}
       {elements.map((el) => {
         const pos = getCellPosition(el, form);
         const highlighted = isHighlighted(el, highlight) || el.symbol === highlightedSymbol;
@@ -138,7 +170,10 @@ const TableScreen: React.FC<Props> = ({ elements, form, colorIndication, trendPr
             style={{
               boxSizing: 'border-box',
               gridRow: pos.row,
-              gridColumn: pos.col,
+              // +1: первая колонка сетки теперь занята подписями периодов
+              // (см. periodRows выше) — позиции из getCellPosition (1-18)
+              // остаются нетронутыми, сдвиг чисто на уровне CSS grid.
+              gridColumn: pos.col + 1,
               background: cellBackground(el, colorIndication, trendProperty, trendRange),
               // Верхняя сторона отдельно: у первой строки подвала она толще
               // и другого цвета — дополнительный (к пустой строке 8 выше)
