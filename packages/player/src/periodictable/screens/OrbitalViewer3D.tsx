@@ -21,6 +21,7 @@ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import type { PeriodicElement } from '../model/schema.ts';
 import { computeShellOccupancy } from '../shellModel.ts';
 import { buildShellVisualization } from '../shellGeometry.ts';
+import { buildNucleus } from '../nucleusGeometry.ts';
 
 interface Props {
   element: PeriodicElement;
@@ -55,15 +56,15 @@ const OrbitalViewer3D: React.FC<Props> = ({ element }) => {
     key.position.set(4, 6, 5);
     scene.add(key);
 
-    // Ядро — простая точка-ориентир в центре, не физически точная модель
-    // ядра (протоны/нейтроны не визуализируются, не задача этого вида).
-    const nucleus = new THREE.Mesh(
-      new THREE.SphereGeometry(0.22, 16, 12),
-      new THREE.MeshStandardMaterial({ color: 0xffca28, emissive: 0x442a00, roughness: 0.4 })
-    );
-    scene.add(nucleus);
-
     const { group: atom, electrons } = buildShellVisualization(shells);
+
+    // Ядро — кластер протонов/нейтронов (см. nucleusGeometry.ts), не одна
+    // маленькая точка: раньше центр практически не читался на экране.
+    // Добавляется В ГРУППУ АТОМА (не отдельно в сцену), чтобы вращаться
+    // вместе с оболочками одним связным объектом.
+    const { group: nucleusGroup } = buildNucleus(element.atomicNumber, element.atomicMass);
+    atom.add(nucleusGroup);
+
     scene.add(atom);
 
     // Кольца лежат в одной плоскости (см. shellGeometry.ts) — камера
