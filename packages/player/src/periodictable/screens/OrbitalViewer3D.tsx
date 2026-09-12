@@ -7,14 +7,20 @@
 // через `file://`). Плеер — устанавливаемое приложение, не веб-страница:
 // разовый рост инсталлятора — приемлемая цена за то, чтобы не трогать
 // общий для всех виджетов workaround.
+//
+// Модель — кольца-оболочки (см. shellGeometry.ts), не лепестковые формы
+// s/p/d/f: смена по прямому замечанию пользователя ("в источнике будто
+// по-другому и более понятно построено") — сверка с реальным открытым
+// кодом источника (github.com/zhilips/zperiod) показала, что там при
+// обычном просмотре элемента тоже просто кольца, не облака орбиталей.
 import React, { useEffect, useRef, useState } from 'react';
 import * as THREE from 'three';
 // examples/jsm — часть пакета three, тот же паттерн подключения, что в
 // официальной документации/большинстве интеграций (не отдельный npm-пакет).
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import type { PeriodicElement } from '../model/schema.ts';
-import { parseElectronConfiguration } from '../orbitalModel.ts';
-import { buildAtomOrbitals, orbitalGroupColor } from '../orbitalGeometry.ts';
+import { computeShellOccupancy } from '../shellModel.ts';
+import { buildShellVisualization } from '../shellGeometry.ts';
 
 interface Props {
   element: PeriodicElement;
@@ -24,17 +30,16 @@ const OrbitalViewer3D: React.FC<Props> = ({ element }) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const resetViewRef = useRef<() => void>(() => {});
   const [rotating, setRotating] = useState(true);
-  const parsed = parseElectronConfiguration(element.electronConfiguration);
+  const shells = computeShellOccupancy(element.electronConfiguration);
 
   useEffect(() => {
     const container = containerRef.current;
-    if (!container || parsed.valenceGroups.length === 0) return;
+    if (!container || shells.length === 0) return;
 
     const scene = new THREE.Scene();
     scene.background = new THREE.Color(0x0b1220);
 
     const camera = new THREE.PerspectiveCamera(50, container.clientWidth / container.clientHeight, 0.1, 100);
-    camera.position.set(0, 2, 6);
 
     const renderer = new THREE.WebGLRenderer({ antialias: true });
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
@@ -44,38 +49,30 @@ const OrbitalViewer3D: React.FC<Props> = ({ element }) => {
     const controls = new OrbitControls(camera, renderer.domElement);
     controls.enableDamping = true;
     controls.dampingFactor = 0.08;
-    // min/maxDistance выставляются ниже, после построения атома — по его
-    // реальному размеру (см. комментарий у fitDistance).
 
-    scene.add(new THREE.AmbientLight(0xffffff, 0.6));
-    const key = new THREE.DirectionalLight(0xffffff, 0.9);
+    scene.add(new THREE.AmbientLight(0xffffff, 0.7));
+    const key = new THREE.DirectionalLight(0xffffff, 0.8);
     key.position.set(4, 6, 5);
     scene.add(key);
-    const rim = new THREE.DirectionalLight(0x88aaff, 0.4);
-    rim.position.set(-4, -2, -5);
-    scene.add(rim);
 
     // Ядро — простая точка-ориентир в центре, не физически точная модель
     // ядра (протоны/нейтроны не визуализируются, не задача этого вида).
     const nucleus = new THREE.Mesh(
-      new THREE.SphereGeometry(0.18, 16, 12),
+      new THREE.SphereGeometry(0.22, 16, 12),
       new THREE.MeshStandardMaterial({ color: 0xffca28, emissive: 0x442a00, roughness: 0.4 })
     );
     scene.add(nucleus);
 
-    const atom = buildAtomOrbitals(parsed.valenceGroups);
+    const { group: atom, electrons } = buildShellVisualization(shells);
     scene.add(atom);
 
-    // Камера кадрируется по РЕАЛЬНОМУ размеру построенной геометрии, а не
-    // по фиксированной позиции: радиус орбиталей растёт с номером оболочки
-    // (shellScale в orbitalGeometry.ts), и для тяжёлых элементов с
-    // валентными группами на n=6-7 (например Og) фиксированная камера
-    // обрезала бы атом по краям экрана — живая проверка на Церии (n=4-6)
-    // уже показала обрезание при жёстко заданной позиции.
+    // Кольца лежат в одной плоскости (см. shellGeometry.ts) — камера
+    // ставится с наклоном сразу, иначе при первом взгляде "сверху" плоская
+    // модель читалась бы как один круг, а не как 3D-объект.
     const boundingSphere = new THREE.Box3().setFromObject(atom).getBoundingSphere(new THREE.Sphere());
     const radius = Math.max(boundingSphere.radius, 1);
-    const fitDistance = (radius / Math.sin((camera.fov * Math.PI) / 180 / 2)) * 1.35;
-    camera.position.set(0, radius * 0.4, fitDistance);
+    const fitDistance = (radius / Math.sin((camera.fov * Math.PI) / 180 / 2)) * 1.5;
+    camera.position.set(0, radius * 0.85, fitDistance);
     camera.lookAt(0, 0, 0);
     controls.target.set(0, 0, 0);
     controls.minDistance = radius * 0.6;
@@ -85,12 +82,9 @@ const OrbitalViewer3D: React.FC<Props> = ({ element }) => {
     const initialCameraPos = camera.position.clone();
     const initialTarget = controls.target.clone();
 
-    // Автовращение ТОЛЬКО пока пользователь не тронул вид сам — раньше
-    // фигура вращалась каждый кадр ВНЕ зависимости от того, крутит ли
-    // пользователь камеру через OrbitControls: два независимых вращения
-    // одновременно (само вращение атома + ручной поворот камеры) мешали
-    // друг другу и не давали "поймать" ракурс, чтобы рассмотреть форму —
-    // ровно то, что стояло за жалобой "не понятно, как построено".
+    // Автовращение ТОЛЬКО пока пользователь не тронул вид сам — иначе
+    // собственное вращение атома и ручной поворот камеры мешают друг
+    // другу и не дают "поймать" ракурс.
     let autoRotate = true;
     controls.addEventListener('start', () => {
       autoRotate = false;
@@ -111,13 +105,21 @@ const OrbitalViewer3D: React.FC<Props> = ({ element }) => {
     };
 
     let frameId = 0;
-    const animate = () => {
+    const animate = (time: number) => {
       if (autoRotate) atom.rotation.y += 0.0015;
+      // Электроны бегут по своему кольцу независимо от вращения всей
+      // сцены — так даже неподвижный (после ручного поворота) вид
+      // остаётся "живым" и явно читается как движение по орбите, а не
+      // статичная картинка.
+      for (const e of electrons) {
+        const a = e.angle + time * 0.001 * e.speed;
+        e.mesh.position.set(e.radius * Math.cos(a), 0, e.radius * Math.sin(a));
+      }
       controls.update();
       renderer.render(scene, camera);
       frameId = requestAnimationFrame(animate);
     };
-    animate();
+    frameId = requestAnimationFrame(animate);
 
     const resizeObserver = new ResizeObserver(() => {
       const { clientWidth, clientHeight } = container;
@@ -150,7 +152,7 @@ const OrbitalViewer3D: React.FC<Props> = ({ element }) => {
     };
   }, [element.atomicNumber]);
 
-  if (parsed.valenceGroups.length === 0) {
+  if (shells.length === 0) {
     return (
       <div style={{ padding: 20, textAlign: 'center', color: '#78909c' }}>
         3D-модель для этого элемента построить не удалось — не распознана электронная конфигурация.
@@ -164,7 +166,7 @@ const OrbitalViewer3D: React.FC<Props> = ({ element }) => {
         <div
           ref={containerRef}
           style={{ width: '100%', height: 320, borderRadius: 10, overflow: 'hidden', touchAction: 'none' }}
-          aria-label={`3D-модель орбиталей элемента ${element.nameRu}`}
+          aria-label={`3D-модель электронных оболочек элемента ${element.nameRu}`}
         />
         {!rotating && (
           <button
@@ -190,10 +192,9 @@ const OrbitalViewer3D: React.FC<Props> = ({ element }) => {
         Потяните пальцем или мышью, чтобы повернуть; колесо/щипок — приблизить.
       </p>
       <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', marginTop: 10, fontSize: 13, color: '#607d8b' }}>
-        {parsed.coreLabel && <span>Остов: [{parsed.coreLabel}]</span>}
-        {parsed.valenceGroups.map((g) => (
+        {shells.map((s) => (
           <span
-            key={`${g.n}${g.subshell}`}
+            key={s.n}
             style={{
               display: 'inline-flex',
               alignItems: 'center',
@@ -204,15 +205,13 @@ const OrbitalViewer3D: React.FC<Props> = ({ element }) => {
               border: '1px solid #eceff1',
             }}
           >
-            <span style={{ width: 10, height: 10, borderRadius: '50%', background: orbitalGroupColor(g.subshell) }} />
-            {g.n}
-            {g.subshell}
-            {g.electronCount}
+            <span style={{ width: 10, height: 10, borderRadius: '50%', background: '#4fc3f7' }} />
+            n={s.n}: {s.electronCount} e⁻
           </span>
         ))}
       </div>
       <p style={{ fontSize: 12, color: '#90a4ae', marginTop: 8 }}>
-        Показаны валентные орбитали (за скобками остова инертного газа). Формы приближённые, f-орбитали упрощены.
+        Каждое кольцо — электронная оболочка, точки на нём — электроны на этой оболочке.
       </p>
     </div>
   );
