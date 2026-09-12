@@ -18,8 +18,7 @@ import type {
   WordsLibrary,
   WordsSettings,
   GameSession,
-  AwardTier,
-} from '@kiosk/shared';
+  AwardTier, WordImageOverrides } from '@kiosk/shared';
 import {
   buildSession,
   answer as answerStep,
@@ -50,6 +49,7 @@ import ArrangementScreen from './screens/ArrangementScreen';
 import PlayScreen from './screens/PlayScreen';
 import ScoreScreen from './screens/ScoreScreen';
 import MyWordsScreen from './screens/MyWordsScreen';
+import WordImagesScreen from './screens/WordImagesScreen';
 import WordEditorScreen from './screens/WordEditorScreen';
 import SetEditorScreen from './screens/SetEditorScreen';
 
@@ -109,6 +109,8 @@ const WordsRuntime: React.FC<Props> = ({ properties, width, height }) => {
   const [busy, setBusy] = useState(false);
   /** Итог экспорта/импорта комплекта — текст под списками, до следующего действия */
   const [archiveNotice, setArchiveNotice] = useState<string | null>(null);
+  /** Свои картинки педагога для поставочных слов (ТЗ строка 42) */
+  const [wordImages, setWordImages] = useState<WordImageOverrides>({});
 
   const busRef = useRef<AudioBus | null>(null);
   if (!busRef.current) busRef.current = new AudioBus(createHtmlAudioPlayer());
@@ -188,16 +190,24 @@ const WordsRuntime: React.FC<Props> = ({ properties, width, height }) => {
     (wordId: string): string | null => {
       const own = userWordById.get(wordId);
       if (own) return own.imageFile ? userMediaUrl(own.imageFile) : null;
+      // Подмена педагога важнее поставочной картинки — в этом весь смысл
+      const replaced = wordImages[wordId];
+      if (replaced) return userMediaUrl(replaced);
       return wordImageUrl(wordId);
     },
-    [userWordById]
+    [userWordById, wordImages]
   );
 
   const reloadContent = useCallback(async () => {
     if (!api) return;
-    const [uw, us] = await Promise.all([api.listUserWords(), api.listSets()]);
+    const [uw, us, wi] = await Promise.all([
+      api.listUserWords(),
+      api.listSets(),
+      api.listWordImages(),
+    ]);
     if (uw.ok) setUserWords(uw.data ?? []);
     if (us.ok) setSets(us.data ?? []);
+    if (wi.ok) setWordImages(wi.data ?? {});
   }, [api]);
 
   /**
@@ -220,6 +230,59 @@ const WordsRuntime: React.FC<Props> = ({ properties, width, height }) => {
       onSuccess?.();
     },
     [reloadContent]
+  );
+
+  /**
+   * Произнести слово вне партии — чтобы педагог слышал, к чему подбирает
+   * картинку. Раунд заводится свой: очередь отбрасывает запоздалую озвучку по
+   * roundId, и без нового раунда предпросмотр глушился бы прошлой партией.
+   */
+  const speakWordNow = useCallback(
+    (wordId: string) => {
+      if (!library || !hasAudio) return;
+      const paths = wordAudioPaths(wordId, library.audioScheme);
+      if (paths.length === 0) return;
+      const roundId = `preview-${Date.now()}`;
+      bus.startRound(roundId);
+      void bus.say([libraryAssetUrl(paths[0])], roundId);
+    },
+    [bus, hasAudio, library]
+  );
+
+  /** Поставить поставочному слову свою картинку */
+  const pickWordImage = useCallback(
+    async (wordId: string) => {
+      if (!api) return;
+      setBusy(true);
+      const res = await api.pickWordImage(wordId);
+      setBusy(false);
+      if (!res.ok) {
+        setError(res.error ?? 'Не удалось заменить картинку');
+        return;
+      }
+      setError(null);
+      const data = res.data;
+      if (!data || data.canceled) return;
+      setWordImages(data.overrides);
+    },
+    [api]
+  );
+
+  /** Вернуть слову картинку из поставки */
+  const clearWordImage = useCallback(
+    async (wordId: string) => {
+      if (!api) return;
+      setBusy(true);
+      const res = await api.clearWordImage(wordId);
+      setBusy(false);
+      if (!res.ok) {
+        setError(res.error ?? 'Не удалось вернуть поставочную картинку');
+        return;
+      }
+      setError(null);
+      setWordImages(res.data ?? {});
+    },
+    [api]
   );
 
   /**
@@ -546,7 +609,22 @@ const WordsRuntime: React.FC<Props> = ({ properties, width, height }) => {
         onDeleteSet={(setId) => void runContentAction(() => api.deleteSet(setId))}
         onExportSet={(setId) => void exportSet(setId)}
         onImportSet={() => void importSet()}
+        onWordImages={() => setScreen({ name: 'wordImages' })}
         notice={archiveNotice}
+      />
+    );
+  } else if (screen.name === 'wordImages') {
+    content = (
+      <WordImagesScreen
+        library={library}
+        overrides={wordImages}
+        error={error}
+        busy={busy}
+        imageUrlFor={imageUrlFor}
+        onBack={() => setScreen({ name: 'myWords' })}
+        onPick={(wordId) => void pickWordImage(wordId)}
+        onClear={(wordId) => void clearWordImage(wordId)}
+        onSpeak={(wordId) => speakWordNow(wordId)}
       />
     );
   } else if (screen.name === 'wordEditor') {

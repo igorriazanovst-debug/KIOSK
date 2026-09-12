@@ -13,7 +13,7 @@
 // и висячих ссылок после удаления не остаётся. Комплект, ссылающийся на
 // удалённое слово, — это партия, которая падает посреди урока.
 
-import type { UserSet, UserWord } from '../model/schema';
+import type { UserSet, UserWord, WordImageOverrides } from '../model/schema';
 import { WordsRulesError } from './rules';
 
 export const MAX_USER_WORD_NAME_LENGTH = 64;
@@ -218,4 +218,52 @@ export function applyDeleteSet(sets: readonly UserSet[], setId: string): UserSet
   const remaining = sets.filter((s) => s.id !== setId);
   if (remaining.length === sets.length) throw new WordsRulesError('Такого комплекта нет');
   return remaining;
+}
+
+// ─── Свои картинки для поставочных слов (ТЗ строка 42) ──────────────────
+
+/**
+ * Ставит свою картинку поставочному слову.
+ *
+ * Возвращает и осиротевший файл — тот, который это слово использовало раньше
+ * и который больше никому не нужен. Вызывающий код удаляет его с диска ПОСЛЕ
+ * записи списка: оборвись процесс между этими шагами, останется лишний файл,
+ * а не битая ссылка.
+ */
+export function applySetWordImage(
+  overrides: Readonly<WordImageOverrides>,
+  wordId: string,
+  fileName: string
+): { overrides: WordImageOverrides; orphanedFile: string | null } {
+  const previous = overrides[wordId] ?? null;
+  const next: WordImageOverrides = { ...overrides, [wordId]: fileName };
+  return { overrides: next, orphanedFile: orphanIfUnused(next, previous) };
+}
+
+/** Возвращает слову картинку из поставки, убирая переопределение */
+export function applyClearWordImage(
+  overrides: Readonly<WordImageOverrides>,
+  wordId: string
+): { overrides: WordImageOverrides; orphanedFile: string | null } {
+  if (!(wordId in overrides)) {
+    throw new WordsRulesError('У этого слова нет своей картинки');
+  }
+  const previous = overrides[wordId];
+  const next: WordImageOverrides = { ...overrides };
+  delete next[wordId];
+  return { overrides: next, orphanedFile: orphanIfUnused(next, previous) };
+}
+
+/**
+ * Файл осиротел, только если на него больше никто не ссылается: одну и ту же
+ * картинку можно поставить нескольким словам, и удаление её у одного не должно
+ * ломать остальных. Имена файлов — хеши содержимого, так что совпадение имени
+ * означает совпадение картинки.
+ */
+function orphanIfUnused(
+  overrides: Readonly<WordImageOverrides>,
+  file: string | null
+): string | null {
+  if (!file) return null;
+  return Object.values(overrides).includes(file) ? null : file;
 }

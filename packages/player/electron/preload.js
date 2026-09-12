@@ -126,5 +126,10 @@ contextBridge.exposeInMainWorld('wordsAPI', {
   // Экспорт и импорт комплекта (ТЗ строка 56). Путь к файлу не пересекает
   // границу: и сохранение, и открытие идут через системный диалог в main.
   exportSet: (setId) => ipcRenderer.invoke('words:export-set', setId),
-  importSet: () => ipcRenderer.invoke('words:import-set')
+  importSet: () => ipcRenderer.invoke('words:import-set'),
+
+  // Свои картинки для поставочных слов (ТЗ строка 42)
+  listWordImages: () => ipcRenderer.invoke('words:list-word-images'),
+  pickWordImage: (wordId) => ipcRenderer.invoke('words:pick-word-image', wordId),
+  clearWordImage: (wordId) => ipcRenderer.invoke('words:clear-word-image', wordId)
 });

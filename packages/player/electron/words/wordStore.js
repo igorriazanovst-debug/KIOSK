@@ -21,11 +21,20 @@ const {
   applyCreateSet,
   applyUpdateSet,
   applyDeleteSet,
+  applySetWordImage,
+  applyClearWordImage,
+  parseWordImageOverrides,
 } = require('@kiosk/shared');
 const mediaFiles = require('./mediaFiles');
 
 const USER_WORDS_FILE = 'my_words.json';
 const SETS_FILE = 'my_sets.json';
+/**
+ * Свои картинки педагога для ПОСТАВОЧНЫХ слов. Отдельный файл, а не правка
+ * пакета контента: пакет read-only и приезжает в дистрибутиве, его замена при
+ * обновлении снесла бы работу педагога.
+ */
+const WORD_IMAGES_FILE = 'word_images.json';
 
 class WordStoreError extends Error {
   constructor(message) {
@@ -163,11 +172,42 @@ function deleteSet(baseDir, setId) {
   return sets;
 }
 
+// ─── Свои картинки для поставочных слов (ТЗ строка 42) ──────────────────
+
+function listWordImages(baseDir) {
+  const status = readJsonStatus(filePath(baseDir, WORD_IMAGES_FILE));
+  if (!status.exists) return {};
+  if (!status.valid) throw new WordStoreError('Файл своих картинок повреждён');
+  return parseWordImageOverrides(status.data);
+}
+
+/**
+ * Порядок важен: сначала список на диск, потом удаление осиротевшего файла.
+ * Оборвись процесс между шагами — останется лишний файл, а не битая ссылка.
+ */
+function setWordImage(baseDir, wordId, fileName) {
+  const { overrides, orphanedFile } = applySetWordImage(listWordImages(baseDir), wordId, fileName);
+  writeList(baseDir, WORD_IMAGES_FILE, overrides);
+  if (orphanedFile) mediaFiles.deleteMediaFile(baseDir, orphanedFile);
+  return overrides;
+}
+
+function clearWordImage(baseDir, wordId) {
+  const { overrides, orphanedFile } = applyClearWordImage(listWordImages(baseDir), wordId);
+  writeList(baseDir, WORD_IMAGES_FILE, overrides);
+  if (orphanedFile) mediaFiles.deleteMediaFile(baseDir, orphanedFile);
+  return overrides;
+}
+
 module.exports = {
   WordStoreError,
   USER_WORDS_FILE,
   SETS_FILE,
+  WORD_IMAGES_FILE,
   listUserWords,
+  listWordImages,
+  setWordImage,
+  clearWordImage,
   listSets,
   createUserWord,
   updateUserWord,

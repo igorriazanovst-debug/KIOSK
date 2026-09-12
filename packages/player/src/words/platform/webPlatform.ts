@@ -18,7 +18,7 @@
 // ОГРАНИЧЕНИЕ: localStorage может быть очищен браузером. Для отладочного
 // режима это приемлемо; в продакшене этот файл не используется.
 
-import type { WordsLibrary, WordsSettings, AwardTier, UserWord, UserSet } from '@kiosk/shared';
+import type { WordsLibrary, WordsSettings, AwardTier, UserWord, UserSet, WordImageOverrides } from '@kiosk/shared';
 import {
   parseWordsLibrary,
   sanitizeProfiles,
@@ -44,6 +44,7 @@ import type {
   StoredMedia,
   ExportedSet,
   ImportedSet,
+  PickedWordImage,
 } from '../types.ts';
 
 /** Куда сборка кладёт пакет контента относительно index.html */
@@ -344,6 +345,18 @@ export function createWebPlatform(options: WebPlatformOptions = {}): WordsPlatfo
 
     async importSet(): Promise<IpcResult<ImportedSet>> {
       return { ok: false, error: 'Импорт комплекта доступен только в приложении на устройстве' };
+    },
+
+    async listWordImages(): Promise<IpcResult<WordImageOverrides>> {
+      return ok({});
+    },
+
+    async pickWordImage(): Promise<IpcResult<PickedWordImage>> {
+      return { ok: false, error: 'Замена картинки доступна только в приложении на устройстве' };
+    },
+
+    async clearWordImage(): Promise<IpcResult<WordImageOverrides>> {
+      return { ok: false, error: 'Замена картинки доступна только в приложении на устройстве' };
     },
   };
 }
