@@ -12,6 +12,7 @@ import { hashSecret } from './pinAuth.ts';
 import { saveQuiz, saveQuizBackground } from './quizStore.ts';
 import { rusiqBackgroundMediaUrl } from '../rusiqMediaUrl.ts';
 import { RusiqQuizSchema, type RusiqPoint, type RusiqQuestion, type RusiqQuiz } from '../model/schema.ts';
+import '../rusiqTheme.css';
 
 interface Props {
   initialQuiz: RusiqQuiz;
@@ -216,56 +217,67 @@ const EditorScreen: React.FC<Props> = ({ initialQuiz, pendingBackground, onExit 
   const selectedQuestion = selection?.kind === 'question' ? quiz.questions.find((q) => q.id === selection.questionId) ?? null : null;
   const existingThemes = Array.from(new Set(quiz.questions.map((q) => q.theme).filter((t) => t.length > 0)));
 
+  function addModeButtonClass(mode: QuizCanvasAddMode) {
+    return `riq-btn riq-btn-small ${addMode === mode ? '' : 'riq-btn-muted'}`;
+  }
+
   return (
-    <div style={{ display: 'flex', gap: 16, padding: 16, fontFamily: 'sans-serif' }}>
+    <div className="riq-page" style={{ display: 'flex', gap: 20, alignItems: 'flex-start' }}>
       <div>
-        <div style={{ marginBottom: 8, display: 'flex', gap: 8 }}>
-          <button onClick={() => setAddMode(addMode === 'question' ? 'none' : 'question')} style={{ fontWeight: addMode === 'question' ? 'bold' : 'normal' }}>
+        <h2 className="riq-heading riq-heading-section" style={{ marginBottom: 16 }}>
+          Редактор викторины
+        </h2>
+        <div style={{ marginBottom: 10, display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+          <button onClick={() => setAddMode(addMode === 'question' ? 'none' : 'question')} className={addModeButtonClass('question')}>
             Добавить вопрос
           </button>
           <button
             onClick={() => setAddMode(addMode === 'decoy-of-selected' ? 'none' : 'decoy-of-selected')}
             disabled={selection?.kind !== 'question'}
-            style={{ fontWeight: addMode === 'decoy-of-selected' ? 'bold' : 'normal' }}
+            className={addModeButtonClass('decoy-of-selected')}
           >
             Добавить ложную точку к вопросу
           </button>
-          <button onClick={() => setAddMode(addMode === 'generic-decoy' ? 'none' : 'generic-decoy')} style={{ fontWeight: addMode === 'generic-decoy' ? 'bold' : 'normal' }}>
+          <button onClick={() => setAddMode(addMode === 'generic-decoy' ? 'none' : 'generic-decoy')} className={addModeButtonClass('generic-decoy')}>
             Добавить общую ложную точку
           </button>
         </div>
-        <p style={{ fontSize: 12, opacity: 0.7 }}>Общих ложных точек: {quiz.genericDecoyPoints.length} из рекомендуемых 10</p>
-        <QuizCanvas
-          imageUrl={backgroundUrl}
-          imageWidth={quiz.image.width}
-          imageHeight={quiz.image.height}
-          questions={quiz.questions}
-          genericDecoyPoints={quiz.genericDecoyPoints}
-          selectedQuestionId={selection?.kind === 'question' ? selection.questionId : null}
-          addMode={addMode}
-          onSelectQuestion={(id) => setSelection(id ? { kind: 'question', questionId: id } : null)}
-          onAddQuestionPoint={handleAddQuestionPoint}
-          onAddDecoyToSelected={handleAddDecoyToSelected}
-          onAddGenericDecoy={handleAddGenericDecoy}
-          onMoveQuestionPoint={handleMoveQuestionPoint}
-          onMoveDecoyOfQuestion={handleMoveDecoyOfQuestion}
-          onMoveGenericDecoy={handleMoveGenericDecoy}
-          onSelectDecoyOfQuestion={(questionId, decoyIndex) => setSelection({ kind: 'decoy-of-question', questionId, decoyIndex })}
-          onSelectGenericDecoy={(index) => setSelection({ kind: 'generic-decoy', index })}
-        />
-        <div style={{ marginTop: 8, display: 'flex', gap: 8 }}>
-          <button onClick={() => setHistory(undo)} disabled={!canUndo(history)}>
+        <p style={{ fontSize: 13, color: 'var(--riq-text-muted)' }}>
+          Общих ложных точек: {quiz.genericDecoyPoints.length} из рекомендуемых 10
+        </p>
+        <div style={{ borderRadius: 10, overflow: 'hidden', border: '2px solid var(--riq-border)', display: 'inline-block' }}>
+          <QuizCanvas
+            imageUrl={backgroundUrl}
+            imageWidth={quiz.image.width}
+            imageHeight={quiz.image.height}
+            questions={quiz.questions}
+            genericDecoyPoints={quiz.genericDecoyPoints}
+            selectedQuestionId={selection?.kind === 'question' ? selection.questionId : null}
+            addMode={addMode}
+            onSelectQuestion={(id) => setSelection(id ? { kind: 'question', questionId: id } : null)}
+            onAddQuestionPoint={handleAddQuestionPoint}
+            onAddDecoyToSelected={handleAddDecoyToSelected}
+            onAddGenericDecoy={handleAddGenericDecoy}
+            onMoveQuestionPoint={handleMoveQuestionPoint}
+            onMoveDecoyOfQuestion={handleMoveDecoyOfQuestion}
+            onMoveGenericDecoy={handleMoveGenericDecoy}
+            onSelectDecoyOfQuestion={(questionId, decoyIndex) => setSelection({ kind: 'decoy-of-question', questionId, decoyIndex })}
+            onSelectGenericDecoy={(index) => setSelection({ kind: 'generic-decoy', index })}
+          />
+        </div>
+        <div style={{ marginTop: 10, display: 'flex', gap: 8 }}>
+          <button onClick={() => setHistory(undo)} disabled={!canUndo(history)} className="riq-btn riq-btn-muted riq-btn-small">
             Отменить
           </button>
-          <button onClick={() => setHistory(redo)} disabled={!canRedo(history)}>
+          <button onClick={() => setHistory(redo)} disabled={!canRedo(history)} className="riq-btn riq-btn-muted riq-btn-small">
             Повторить
           </button>
         </div>
       </div>
-      <div style={{ width: 320 }}>
-        <label style={{ display: 'block', marginBottom: 8 }}>
+      <div style={{ width: 340 }}>
+        <label className="riq-field">
           Название викторины
-          <input value={quiz.title} onChange={(e) => update({ ...quiz, title: e.target.value })} style={{ display: 'block', width: '100%', padding: 6 }} />
+          <input value={quiz.title} onChange={(e) => update({ ...quiz, title: e.target.value })} className="riq-input" />
         </label>
         {selectedQuestion && (
           <PointEditForm
@@ -277,43 +289,49 @@ const EditorScreen: React.FC<Props> = ({ initialQuiz, pendingBackground, onExit 
           />
         )}
         {selection?.kind === 'decoy-of-question' && (
-          <div style={{ border: '1px solid #ccc', padding: 16, borderRadius: 8 }}>
-            <p>Ложная точка вопроса</p>
-            <button onClick={() => handleDeleteDecoyOfQuestion(selection.questionId, selection.decoyIndex)}>Удалить эту точку</button>
+          <div className="riq-card" style={{ marginTop: 16 }}>
+            <p style={{ margin: '0 0 10px' }}>Ложная точка вопроса</p>
+            <button onClick={() => handleDeleteDecoyOfQuestion(selection.questionId, selection.decoyIndex)} className="riq-btn riq-btn-danger riq-btn-small">
+              Удалить эту точку
+            </button>
           </div>
         )}
         {selection?.kind === 'generic-decoy' && (
-          <div style={{ border: '1px solid #ccc', padding: 16, borderRadius: 8 }}>
-            <p>Общая ложная точка</p>
-            <button onClick={() => handleDeleteGenericDecoy(selection.index)}>Удалить эту точку</button>
+          <div className="riq-card" style={{ marginTop: 16 }}>
+            <p style={{ margin: '0 0 10px' }}>Общая ложная точка</p>
+            <button onClick={() => handleDeleteGenericDecoy(selection.index)} className="riq-btn riq-btn-danger riq-btn-small">
+              Удалить эту точку
+            </button>
           </div>
         )}
-        <div style={{ marginTop: 16, border: '1px solid #ccc', padding: 16, borderRadius: 8 }}>
-          <p style={{ margin: 0 }}>Пароль викторины: {quiz.passwordHash ? 'установлен' : 'не установлен'}</p>
+        <div className="riq-card" style={{ marginTop: 16 }}>
+          <p style={{ margin: '0 0 10px', color: 'var(--riq-text-muted)' }}>
+            Пароль викторины: <strong style={{ color: 'var(--riq-text)' }}>{quiz.passwordHash ? 'установлен' : 'не установлен'}</strong>
+          </p>
           <input
             type="password"
             placeholder="Новый пароль"
             value={passwordDraft}
             onChange={(e) => setPasswordDraft(e.target.value)}
-            style={{ display: 'block', width: '100%', padding: 6, marginTop: 8 }}
+            className="riq-input"
           />
-          <div style={{ marginTop: 8 }}>
-            <button onClick={handleSetPassword} disabled={passwordDraft.trim().length === 0}>
+          <div style={{ marginTop: 10, display: 'flex', gap: 8 }}>
+            <button onClick={handleSetPassword} disabled={passwordDraft.trim().length === 0} className="riq-btn riq-btn-small">
               Задать пароль
             </button>
             {quiz.passwordHash && (
-              <button onClick={handleClearPassword} style={{ marginLeft: 8 }}>
+              <button onClick={handleClearPassword} className="riq-btn riq-btn-muted riq-btn-small">
                 Снять пароль
               </button>
             )}
           </div>
         </div>
-        {saveError && <p style={{ color: '#c0392b' }}>{saveError}</p>}
-        <div style={{ marginTop: 16 }}>
-          <button onClick={handleSave} disabled={saving}>
+        {saveError && <p className="riq-error">{saveError}</p>}
+        <div style={{ marginTop: 16, display: 'flex', gap: 8 }}>
+          <button onClick={handleSave} disabled={saving} className="riq-btn">
             Сохранить
           </button>
-          <button onClick={handleExit} style={{ marginLeft: 8 }}>
+          <button onClick={handleExit} className="riq-btn riq-btn-muted">
             Назад к каталогу
           </button>
         </div>

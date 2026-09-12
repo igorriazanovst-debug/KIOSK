@@ -44,13 +44,18 @@ const GameSetupScreen: React.FC<Props> = ({ quiz, onComplete }) => {
 
   if (step === 'count') {
     return (
-      <div style={{ textAlign: 'center', marginTop: 60, fontFamily: 'sans-serif' }}>
-        <h2>Сколько игроков?</h2>
-        {[1, 2, 3].map((count) => (
-          <button key={count} onClick={() => handlePlayerCount(count)} style={{ margin: 8, fontSize: 18, padding: '10px 24px' }}>
-            {count}
-          </button>
-        ))}
+      <div className="riq-page">
+        <div className="riq-page-narrow" style={{ textAlign: 'center' }}>
+          <h2 className="riq-heading riq-heading-section">Сколько игроков?</h2>
+          <div className="riq-divider" />
+          <div style={{ display: 'flex', justifyContent: 'center', gap: 12 }}>
+            {[1, 2, 3].map((count) => (
+              <button key={count} onClick={() => handlePlayerCount(count)} className="riq-btn riq-btn-lg riq-btn-tile">
+                {count}
+              </button>
+            ))}
+          </div>
+        </div>
       </div>
     );
   }
@@ -64,41 +69,46 @@ const GameSetupScreen: React.FC<Props> = ({ quiz, onComplete }) => {
     const hasEmptyName = names.some((name) => name.trim().length === 0);
 
     return (
-      <div style={{ maxWidth: 400, margin: '60px auto', fontFamily: 'sans-serif' }}>
-        <h2>Имена игроков</h2>
-        {names.map((name, i) => (
-          <input
-            key={i}
-            value={name}
-            onChange={(e) => setNames((prev) => prev.map((n, j) => (j === i ? e.target.value : n)))}
-            style={{ display: 'block', width: '100%', fontSize: 16, padding: 8, marginBottom: 8 }}
-          />
-        ))}
-        {hasEmptyName && (
-          <p style={{ color: '#c0392b', fontSize: 14, marginTop: -4, marginBottom: 8 }}>
-            Введите имя для каждого игрока — пустых имён быть не может.
-          </p>
-        )}
-        <button
-          onClick={handleNamesConfirmed}
-          disabled={hasEmptyName}
-          style={{ fontSize: 16, padding: '8px 20px', opacity: hasEmptyName ? 0.5 : 1, cursor: hasEmptyName ? 'not-allowed' : 'pointer' }}
-        >
-          Далее
-        </button>
+      <div className="riq-page">
+        <div className="riq-page-narrow">
+          <h2 className="riq-heading riq-heading-section" style={{ textAlign: 'center' }}>
+            Имена игроков
+          </h2>
+          <div className="riq-divider" />
+          {names.map((name, i) => (
+            <input
+              key={i}
+              value={name}
+              onChange={(e) => setNames((prev) => prev.map((n, j) => (j === i ? e.target.value : n)))}
+              className="riq-input"
+              style={{ marginBottom: 10, fontSize: 16 }}
+            />
+          ))}
+          {hasEmptyName && <p className="riq-error">Введите имя для каждого игрока — пустых имён быть не может.</p>}
+          <div style={{ textAlign: 'center', marginTop: 16 }}>
+            <button onClick={handleNamesConfirmed} disabled={hasEmptyName} className="riq-btn">
+              Далее
+            </button>
+          </div>
+        </div>
       </div>
     );
   }
 
   if (step === 'level') {
     return (
-      <div style={{ textAlign: 'center', marginTop: 60, fontFamily: 'sans-serif' }}>
-        <h2>Уровень сложности</h2>
-        {quiz.levels.map((lvl) => (
-          <button key={lvl.id} onClick={() => handleLevelChosen(lvl.id)} style={{ margin: 8, fontSize: 18, padding: '10px 24px' }}>
-            {lvl.label}
-          </button>
-        ))}
+      <div className="riq-page">
+        <div className="riq-page-narrow" style={{ textAlign: 'center' }}>
+          <h2 className="riq-heading riq-heading-section">Уровень сложности</h2>
+          <div className="riq-divider" />
+          <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: 12 }}>
+            {quiz.levels.map((lvl) => (
+              <button key={lvl.id} onClick={() => handleLevelChosen(lvl.id)} className="riq-btn riq-btn-lg">
+                {lvl.label}
+              </button>
+            ))}
+          </div>
+        </div>
       </div>
     );
   }
@@ -117,19 +127,24 @@ const GameSetupScreen: React.FC<Props> = ({ quiz, onComplete }) => {
   const options = availableOptions.length > 0 ? availableOptions : maxAffordable > 0 ? [maxAffordable] : [];
 
   return (
-    <div style={{ textAlign: 'center', marginTop: 60, fontFamily: 'sans-serif' }}>
-      <h2>Сколько вопросов на игрока?</h2>
-      {options.length === 0 ? (
-        <p style={{ color: '#c0392b' }}>
-          В викторине недостаточно вопросов уровня «{quiz.levels.find((lvl) => lvl.id === level)?.label ?? level}» для {playerCount} игрок(ов).
-        </p>
-      ) : (
-        options.map((count) => (
-          <button key={count} onClick={() => handleQuestionCountChosen(count)} style={{ margin: 8, fontSize: 18, padding: '10px 24px' }}>
-            {count}
-          </button>
-        ))
-      )}
+    <div className="riq-page">
+      <div className="riq-page-narrow" style={{ textAlign: 'center' }}>
+        <h2 className="riq-heading riq-heading-section">Сколько вопросов на игрока?</h2>
+        <div className="riq-divider" />
+        {options.length === 0 ? (
+          <p className="riq-error">
+            В викторине недостаточно вопросов уровня «{quiz.levels.find((lvl) => lvl.id === level)?.label ?? level}» для {playerCount} игрок(ов).
+          </p>
+        ) : (
+          <div style={{ display: 'flex', justifyContent: 'center', gap: 12 }}>
+            {options.map((count) => (
+              <button key={count} onClick={() => handleQuestionCountChosen(count)} className="riq-btn riq-btn-lg riq-btn-tile">
+                {count}
+              </button>
+            ))}
+          </div>
+        )}
+      </div>
     </div>
   );
 };

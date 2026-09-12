@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import type { RusiqAnswerEvent } from '../gameLogic.ts';
 import { summarizeResults } from '../gameLogic.ts';
 import type { RusiqQuestion } from '../model/schema.ts';
+import '../rusiqTheme.css';
 
 interface Props {
   playerNames: string[];
@@ -19,39 +20,66 @@ const ResultsScreen: React.FC<Props> = ({ playerNames, answers, questionsByPlaye
     const playerAnswers = answers.filter((a) => a.playerIndex === detailPlayer);
     const playerQuestions = questionsByPlayer[detailPlayer];
     return (
-      <div style={{ maxWidth: 600, margin: '40px auto', fontFamily: 'sans-serif' }}>
-        <h2>Детализация: {playerNames[detailPlayer]}</h2>
-        <ul>
-          {playerAnswers.map((a, i) => (
-            <li key={i} style={{ color: a.correct ? 'green' : 'red' }}>
-              {playerQuestions[i]?.text} — {a.correct ? `верно, ${a.score} очков` : 'неверно'}
-            </li>
-          ))}
-        </ul>
-        <button onClick={() => setDetailPlayer(null)}>Назад к результатам</button>
+      <div className="riq-page">
+        <div className="riq-page-medium">
+          <h2 className="riq-heading riq-heading-section" style={{ textAlign: 'center' }}>
+            Детализация: {playerNames[detailPlayer]}
+          </h2>
+          <div className="riq-divider" />
+          <ul style={{ listStyle: 'none', padding: 0 }}>
+            {playerAnswers.map((a, i) => (
+              <li key={i} className={a.correct ? 'riq-result-correct' : 'riq-result-wrong'} style={{ padding: '8px 0', borderBottom: '1px solid var(--riq-border-soft)' }}>
+                {playerQuestions[i]?.text} — {a.correct ? `верно, ${a.score} очков` : 'неверно'}
+              </li>
+            ))}
+          </ul>
+          <div style={{ textAlign: 'center', marginTop: 16 }}>
+            <button onClick={() => setDetailPlayer(null)} className="riq-btn riq-btn-muted">
+              Назад к результатам
+            </button>
+          </div>
+        </div>
       </div>
     );
   }
 
   return (
-    <div style={{ maxWidth: 600, margin: '40px auto', fontFamily: 'sans-serif', textAlign: 'center' }}>
-      <h2>Результаты</h2>
-      <table style={{ margin: '0 auto', width: '100%' }}>
-        <thead>
-          <tr><th>Игрок</th><th>Очки</th><th>Верных</th><th></th></tr>
-        </thead>
-        <tbody>
-          {summaries.map((s, i) => (
-            <tr key={s.name}>
-              <td>{s.name}</td>
-              <td>{s.score}</td>
-              <td>{s.correctCount}/{s.totalCount}</td>
-              <td><button onClick={() => setDetailPlayer(i)}>Подробнее</button></td>
+    <div className="riq-page">
+      <div className="riq-page-medium" style={{ textAlign: 'center' }}>
+        <h2 className="riq-heading riq-heading-hero">Результаты</h2>
+        <div className="riq-divider" />
+        <table className="riq-table">
+          <thead>
+            <tr>
+              <th>Игрок</th>
+              <th>Очки</th>
+              <th>Верных</th>
+              <th></th>
             </tr>
-          ))}
-        </tbody>
-      </table>
-      <button onClick={onRestart} style={{ marginTop: 24, fontSize: 18, padding: '10px 24px' }}>Новая игра</button>
+          </thead>
+          <tbody>
+            {summaries.map((s, i) => (
+              <tr key={s.name}>
+                <td>{s.name}</td>
+                <td>
+                  <strong style={{ color: 'var(--riq-gold-strong)' }}>{s.score}</strong>
+                </td>
+                <td>
+                  {s.correctCount}/{s.totalCount}
+                </td>
+                <td>
+                  <button onClick={() => setDetailPlayer(i)} className="riq-btn riq-btn-muted riq-btn-small">
+                    Подробнее
+                  </button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+        <button onClick={onRestart} className="riq-btn riq-btn-lg">
+          Новая игра
+        </button>
+      </div>
     </div>
   );
 };

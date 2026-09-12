@@ -2,6 +2,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import type { RusiqPoint, RusiqQuestion } from '../model/schema.ts';
 import { scoreForAnswer, nextTurn, type RusiqAnswerEvent } from '../gameLogic.ts';
+import '../rusiqTheme.css';
 
 interface Props {
   imageUrl: string;
@@ -27,6 +28,7 @@ const DISPLAY_MAX_WIDTH_CSS = 'min(1200px, 92vw)';
 // иначе цвет точки сам по себе становится подсказкой правильного ответа.
 const POINT_SIZE = 22;
 const POINT_COLOR = 'rgba(90, 90, 90, 0.55)';
+const POINT_RING = '2px solid rgba(255, 255, 255, 0.5)';
 
 const GameBoardScreen: React.FC<Props> = ({ imageUrl, imageWidth, imageHeight, playerNames, questionsByPlayer, genericDecoyPoints, onFinished }) => {
   const [currentPlayer, setCurrentPlayer] = useState(0);
@@ -114,7 +116,8 @@ const GameBoardScreen: React.FC<Props> = ({ imageUrl, imageWidth, imageHeight, p
     transform: 'translate(-50%, -50%)',
     borderRadius: '50%',
     background: POINT_COLOR,
-    border: 'none',
+    border: POINT_RING,
+    boxShadow: '0 0 6px rgba(0, 0, 0, 0.4)',
     padding: 0,
     cursor: 'pointer',
   };
@@ -127,21 +130,33 @@ const GameBoardScreen: React.FC<Props> = ({ imageUrl, imageWidth, imageHeight, p
   }
 
   return (
-    <div style={{ fontFamily: 'sans-serif' }}>
-      <div style={{ display: 'flex', justifyContent: 'space-between', padding: 12, background: '#eee' }}>
-        <span>Вопрос {questionIndexByPlayer[currentPlayer] + 1}/{questionsByPlayer[currentPlayer].length}</span>
-        <span>Ходит: {playerNames[currentPlayer]}</span>
-        <span>Таймер: {remainingSeconds}с</span>
-        <span>Очки за верный ответ сейчас: {liveScore}</span>
-        <button onClick={handleGiveUp}>Сдаюсь</button>
+    <div className="riq-page" style={{ padding: 0 }}>
+      <div className="riq-scoreboard">
+        <span className="riq-scoreboard-item">
+          Вопрос <strong>{questionIndexByPlayer[currentPlayer] + 1}</strong>/{questionsByPlayer[currentPlayer].length}
+        </span>
+        <span className="riq-scoreboard-item">
+          Ходит: <strong>{playerNames[currentPlayer]}</strong>
+        </span>
+        <span className={`riq-scoreboard-item ${remainingSeconds <= 5 ? 'riq-scoreboard-timer-urgent' : 'riq-scoreboard-timer'}`}>
+          Таймер: <strong>{remainingSeconds}с</strong>
+        </span>
+        <span className="riq-scoreboard-item">
+          Очки сейчас: <strong>{liveScore}</strong>
+        </span>
+        <button onClick={handleGiveUp} className="riq-btn riq-btn-danger riq-btn-small">
+          Сдаюсь
+        </button>
       </div>
-      <p style={{ textAlign: 'center', fontSize: 20 }}>{currentQuestion.text}</p>
+      <p className="riq-question-text">{currentQuestion.text}</p>
       {currentQuestion.helpText.length > 0 && (
-        <div style={{ textAlign: 'center', marginBottom: 8 }}>
+        <div className="riq-hint">
           {hintShown ? (
-            <p style={{ color: '#555', fontStyle: 'italic' }}>Подсказка: {currentQuestion.helpText}</p>
+            <p className="riq-hint-text">Подсказка: {currentQuestion.helpText}</p>
           ) : (
-            <button onClick={handleShowHint}>Показать подсказку</button>
+            <button onClick={handleShowHint} className="riq-btn riq-btn-ghost riq-btn-small">
+              Показать подсказку
+            </button>
           )}
         </div>
       )}
@@ -150,7 +165,11 @@ const GameBoardScreen: React.FC<Props> = ({ imageUrl, imageWidth, imageHeight, p
           position: 'relative',
           width: DISPLAY_MAX_WIDTH_CSS,
           aspectRatio: `${imageWidth} / ${imageHeight}`,
-          margin: '0 auto',
+          margin: '20px auto 0',
+          borderRadius: 10,
+          overflow: 'hidden',
+          boxShadow: '0 12px 32px rgba(0, 0, 0, 0.5)',
+          border: '2px solid var(--riq-border)',
         }}
       >
         <img src={imageUrl} alt="" style={{ width: '100%', height: '100%', display: 'block' }} />

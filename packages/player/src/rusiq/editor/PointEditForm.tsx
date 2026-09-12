@@ -16,78 +16,67 @@ const PointEditForm: React.FC<Props> = ({ question, existingThemes, onChange, on
   }
 
   return (
-    <div style={{ border: '1px solid #ccc', padding: 16, borderRadius: 8, background: '#fafafa', fontFamily: 'sans-serif' }}>
-      <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-        <h4 style={{ margin: 0 }}>Вопрос</h4>
-        <button onClick={onClose}>×</button>
+    <div className="riq-card" style={{ marginTop: 16 }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+        <h4 className="riq-heading" style={{ margin: 0, fontSize: 16 }}>
+          Вопрос
+        </h4>
+        <button onClick={onClose} className="riq-btn riq-btn-ghost riq-btn-small" style={{ padding: '2px 10px' }}>
+          ×
+        </button>
       </div>
-      <label style={{ display: 'block', marginTop: 8 }}>
+      <label className="riq-field">
         Текст вопроса
-        <textarea
-          value={question.text}
-          onChange={(e) => set('text', e.target.value)}
-          style={{ display: 'block', width: '100%', padding: 6 }}
-          rows={2}
-        />
+        <textarea value={question.text} onChange={(e) => set('text', e.target.value)} className="riq-input" rows={2} />
       </label>
-      <label style={{ display: 'block', marginTop: 8 }}>
+      <label className="riq-field">
         Ответ
-        <input value={question.answer} onChange={(e) => set('answer', e.target.value)} style={{ display: 'block', width: '100%', padding: 6 }} />
+        <input value={question.answer} onChange={(e) => set('answer', e.target.value)} className="riq-input" />
       </label>
-      <label style={{ display: 'block', marginTop: 8 }}>
+      <label className="riq-field">
         Тема
-        <input
-          value={question.theme}
-          onChange={(e) => set('theme', e.target.value)}
-          list="rusiq-editor-themes"
-          style={{ display: 'block', width: '100%', padding: 6 }}
-        />
+        <input value={question.theme} onChange={(e) => set('theme', e.target.value)} list="rusiq-editor-themes" className="riq-input" />
         <datalist id="rusiq-editor-themes">
           {existingThemes.map((theme) => (
             <option key={theme} value={theme} />
           ))}
         </datalist>
       </label>
-      <div style={{ display: 'flex', gap: 8, marginTop: 8 }}>
-        <label style={{ flex: 1 }}>
+      <div style={{ display: 'flex', gap: 10 }}>
+        <label className="riq-field" style={{ flex: 1 }}>
           Уровень
-          <select value={question.level} onChange={(e) => set('level', Number(e.target.value) as RusiqLevelId)} style={{ display: 'block', width: '100%', padding: 6 }}>
+          <select value={question.level} onChange={(e) => set('level', Number(e.target.value) as RusiqLevelId)} className="riq-input">
             <option value={1}>1</option>
             <option value={2}>2</option>
             <option value={3}>3</option>
           </select>
         </label>
-        <label style={{ flex: 1 }}>
+        <label className="riq-field" style={{ flex: 1 }}>
           Вес (баллы)
           <input
             type="number"
             min={1}
             value={question.price}
             onChange={(e) => set('price', Math.max(1, Number(e.target.value)))}
-            style={{ display: 'block', width: '100%', padding: 6 }}
+            className="riq-input"
           />
         </label>
-        <label style={{ flex: 1 }}>
+        <label className="riq-field" style={{ flex: 1 }}>
           Время (сек)
           <input
             type="number"
             min={1}
             value={question.timeSeconds}
             onChange={(e) => set('timeSeconds', Math.max(1, Number(e.target.value)))}
-            style={{ display: 'block', width: '100%', padding: 6 }}
+            className="riq-input"
           />
         </label>
       </div>
-      <label style={{ display: 'block', marginTop: 8 }}>
+      <label className="riq-field">
         Подсказка (необязательно)
-        <textarea
-          value={question.helpText}
-          onChange={(e) => set('helpText', e.target.value)}
-          style={{ display: 'block', width: '100%', padding: 6 }}
-          rows={2}
-        />
+        <textarea value={question.helpText} onChange={(e) => set('helpText', e.target.value)} className="riq-input" rows={2} />
       </label>
-      <button onClick={onDelete} style={{ marginTop: 12, color: '#c0392b' }}>
+      <button onClick={onDelete} className="riq-btn riq-btn-danger riq-btn-small" style={{ marginTop: 4 }}>
         Удалить этот вопрос
       </button>
     </div>

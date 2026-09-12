@@ -55,39 +55,42 @@ const TeacherGateScreen: React.FC<Props> = ({ teacherPinHash, onUnlocked, onCanc
   const canSubmit = isFirstSetup ? pin.length > 0 && pinConfirm.length > 0 && !busy : pin.trim().length > 0 && !busy;
 
   return (
-    <div style={{ maxWidth: 360, margin: '80px auto', textAlign: 'center', fontFamily: 'sans-serif' }}>
-      <h2>{isFirstSetup ? 'Задайте PIN режима учителя' : 'Режим учителя'}</h2>
-      <form onSubmit={handleSubmit}>
-        <input
-          autoFocus
-          type="password"
-          inputMode="numeric"
-          maxLength={isFirstSetup ? 4 : undefined}
-          value={pin}
-          onChange={(e) => setPin(e.target.value)}
-          style={{ fontSize: 24, textAlign: 'center', width: '100%', padding: 8, letterSpacing: 4 }}
-        />
-        {isFirstSetup && (
+    <div className="riq-page">
+      <div className="riq-page-narrow riq-card" style={{ textAlign: 'center' }}>
+        <h2 className="riq-heading riq-heading-section">{isFirstSetup ? 'Задайте PIN режима учителя' : 'Режим учителя'}</h2>
+        <form onSubmit={handleSubmit}>
           <input
+            autoFocus
             type="password"
             inputMode="numeric"
-            maxLength={4}
-            placeholder="Повторите PIN"
-            value={pinConfirm}
-            onChange={(e) => setPinConfirm(e.target.value)}
-            style={{ fontSize: 24, textAlign: 'center', width: '100%', padding: 8, letterSpacing: 4, marginTop: 8 }}
+            maxLength={isFirstSetup ? 4 : undefined}
+            value={pin}
+            onChange={(e) => setPin(e.target.value)}
+            className="riq-input riq-input-pin"
           />
-        )}
-        {error && <p style={{ color: '#c0392b' }}>{error}</p>}
-        <div style={{ marginTop: 16 }}>
-          <button type="button" onClick={onCancel} style={{ marginRight: 8 }}>
-            Отмена
-          </button>
-          <button type="submit" disabled={!canSubmit}>
-            {isFirstSetup ? 'Задать' : 'Войти'}
-          </button>
-        </div>
-      </form>
+          {isFirstSetup && (
+            <input
+              type="password"
+              inputMode="numeric"
+              maxLength={4}
+              placeholder="••••"
+              value={pinConfirm}
+              onChange={(e) => setPinConfirm(e.target.value)}
+              className="riq-input riq-input-pin"
+              style={{ marginTop: 10 }}
+            />
+          )}
+          {error && <p className="riq-error">{error}</p>}
+          <div style={{ marginTop: 20, display: 'flex', justifyContent: 'center', gap: 10 }}>
+            <button type="button" onClick={onCancel} className="riq-btn riq-btn-muted">
+              Отмена
+            </button>
+            <button type="submit" disabled={!canSubmit} className="riq-btn">
+              {isFirstSetup ? 'Задать' : 'Войти'}
+            </button>
+          </div>
+        </form>
+      </div>
     </div>
   );
 };

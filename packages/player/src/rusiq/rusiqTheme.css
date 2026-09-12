@@ -1,0 +1,415 @@
+/* packages/player/src/rusiq/rusiqTheme.css
+   Визуальная идентичность «РусIQ» — стиль телевикторины (по образцу
+   вечерних интеллектуальных шоу: тёмная студийная сцена, золотой акцент
+   на баллах/кнопках, крупный конденсированный заголовочный шрифт).
+   Используются уже забандленные глобально шрифты (fonts.css) — Oswald для
+   заголовков/очков/кнопок, PT Sans для текста вопросов/форм/таблиц, ноль
+   новых байт шрифтов.
+
+   Единственный источник токенов и переиспользуемых классов для всех
+   экранов виджета — тот же принцип, что colorPalette.ts у periodictable
+   (единый типизированный/централизованный источник вместо разбросанных
+   по компонентам хардкодов). */
+
+:root {
+  --riq-bg: #050c16;
+  --riq-surface: #0e1f33;
+  --riq-surface-raised: #16304c;
+  --riq-border: #24486b;
+  --riq-border-soft: #1a3450;
+  --riq-gold: #f4b93e;
+  --riq-gold-strong: #ffd166;
+  --riq-gold-dark: #b9860f;
+  --riq-blue: #4db8ff;
+  --riq-text: #f4f7fb;
+  --riq-text-muted: #90a9c2;
+  --riq-text-on-gold: #21150a;
+  --riq-success: #3ecf7e;
+  --riq-danger: #ff6b6b;
+  --riq-modal-bg: #fffaf0;
+  --riq-modal-text: #201a10;
+  --riq-modal-border: #e7d6a8;
+  --riq-font-display: 'Oswald', 'Arial Narrow', sans-serif;
+  --riq-font-body: 'PT Sans', 'Segoe UI', sans-serif;
+}
+
+.riq-page {
+  min-height: 100%;
+  background: radial-gradient(ellipse at top, var(--riq-surface) 0%, var(--riq-bg) 65%);
+  color: var(--riq-text);
+  font-family: var(--riq-font-body);
+  padding: 32px 24px 48px;
+  box-sizing: border-box;
+}
+
+.riq-page-narrow {
+  max-width: 480px;
+  margin: 0 auto;
+}
+
+.riq-page-medium {
+  max-width: 760px;
+  margin: 0 auto;
+}
+
+.riq-heading {
+  font-family: var(--riq-font-display);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--riq-gold-strong);
+  margin: 0 0 8px;
+}
+
+.riq-heading-hero {
+  font-size: clamp(28px, 4vw, 44px);
+  text-align: center;
+}
+
+.riq-heading-section {
+  font-size: 22px;
+}
+
+.riq-subtitle {
+  color: var(--riq-text-muted);
+  text-align: center;
+  margin: 0 0 24px;
+  font-size: 15px;
+  line-height: 1.5;
+}
+
+.riq-divider {
+  height: 3px;
+  width: 64px;
+  margin: 0 auto 24px;
+  background: linear-gradient(90deg, transparent, var(--riq-gold), transparent);
+  border-radius: 2px;
+}
+
+/* ---- Кнопки ---- */
+
+.riq-btn {
+  font-family: var(--riq-font-display);
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  font-size: 15px;
+  font-weight: 700;
+  border-radius: 6px;
+  padding: 10px 22px;
+  border: 2px solid var(--riq-gold);
+  background: var(--riq-gold);
+  color: var(--riq-text-on-gold);
+  cursor: pointer;
+  transition: transform 120ms ease, box-shadow 120ms ease, background 120ms ease, opacity 120ms ease;
+  box-shadow: 0 2px 0 var(--riq-gold-dark);
+}
+
+.riq-btn:hover:not(:disabled) {
+  background: var(--riq-gold-strong);
+  transform: translateY(-1px);
+  box-shadow: 0 3px 0 var(--riq-gold-dark);
+}
+
+.riq-btn:active:not(:disabled) {
+  transform: translateY(1px);
+  box-shadow: 0 1px 0 var(--riq-gold-dark);
+}
+
+.riq-btn:focus-visible {
+  outline: 3px solid var(--riq-blue);
+  outline-offset: 2px;
+}
+
+.riq-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+.riq-btn-lg {
+  font-size: 20px;
+  padding: 16px 40px;
+}
+
+.riq-btn-ghost {
+  background: transparent;
+  color: var(--riq-gold-strong);
+  box-shadow: none;
+}
+
+.riq-btn-ghost:hover:not(:disabled) {
+  background: rgba(244, 185, 62, 0.12);
+  transform: none;
+  box-shadow: none;
+}
+
+.riq-btn-muted {
+  background: var(--riq-surface-raised);
+  border-color: var(--riq-border);
+  color: var(--riq-text);
+  box-shadow: 0 2px 0 rgba(0, 0, 0, 0.35);
+}
+
+.riq-btn-muted:hover:not(:disabled) {
+  background: #1c3d5e;
+  box-shadow: 0 3px 0 rgba(0, 0, 0, 0.35);
+}
+
+.riq-btn-danger {
+  background: transparent;
+  border-color: var(--riq-danger);
+  color: var(--riq-danger);
+  box-shadow: none;
+}
+
+.riq-btn-danger:hover:not(:disabled) {
+  background: rgba(255, 107, 107, 0.12);
+  transform: none;
+}
+
+.riq-btn-small {
+  font-size: 12px;
+  padding: 5px 12px;
+}
+
+.riq-btn-tile {
+  min-width: 64px;
+  font-size: 22px;
+}
+
+/* ---- Карточки / поверхности ---- */
+
+.riq-card {
+  background: var(--riq-surface);
+  border: 1px solid var(--riq-border-soft);
+  border-radius: 10px;
+  padding: 20px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+}
+
+.riq-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 16px;
+  background: var(--riq-surface);
+  border: 1px solid var(--riq-border-soft);
+  border-radius: 8px;
+  margin-bottom: 10px;
+}
+
+.riq-row-active {
+  border-color: var(--riq-gold);
+  box-shadow: 0 0 0 1px var(--riq-gold);
+}
+
+.riq-row-title {
+  flex: 1;
+  font-family: var(--riq-font-display);
+  font-size: 16px;
+  letter-spacing: 0.02em;
+}
+
+.riq-row-title-badge {
+  color: var(--riq-text-muted);
+  font-size: 13px;
+  font-style: italic;
+  margin-left: 6px;
+}
+
+/* ---- Поля ввода ---- */
+
+.riq-field {
+  display: block;
+  margin-bottom: 14px;
+  font-size: 13px;
+  color: var(--riq-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.riq-input {
+  display: block;
+  width: 100%;
+  box-sizing: border-box;
+  margin-top: 6px;
+  padding: 10px 12px;
+  font-family: var(--riq-font-body);
+  font-size: 15px;
+  color: var(--riq-text);
+  background: var(--riq-surface-raised);
+  border: 1px solid var(--riq-border);
+  border-radius: 6px;
+  transition: border-color 120ms ease, box-shadow 120ms ease;
+}
+
+.riq-input:focus {
+  outline: none;
+  border-color: var(--riq-blue);
+  box-shadow: 0 0 0 3px rgba(77, 184, 255, 0.25);
+}
+
+.riq-input-pin {
+  text-align: center;
+  font-size: 28px;
+  letter-spacing: 10px;
+  font-family: var(--riq-font-display);
+}
+
+.riq-error {
+  color: var(--riq-danger);
+  font-size: 14px;
+  margin: 6px 0 0;
+}
+
+/* ---- Модалки (светлая поверхность на тёмной подложке) ---- */
+
+.riq-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(2, 6, 12, 0.72);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 50;
+}
+
+.riq-modal {
+  background: var(--riq-modal-bg);
+  color: var(--riq-modal-text);
+  border: 1px solid var(--riq-modal-border);
+  border-radius: 10px;
+  padding: 24px;
+  width: 380px;
+  max-width: 92vw;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+  font-family: var(--riq-font-body);
+}
+
+.riq-modal h3 {
+  font-family: var(--riq-font-display);
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  margin: 0 0 16px;
+  color: #6b4a04;
+}
+
+.riq-modal .riq-field {
+  color: #7a6a45;
+}
+
+.riq-modal .riq-input {
+  background: #fff;
+  color: var(--riq-modal-text);
+  border-color: #d9c68d;
+}
+
+.riq-modal .riq-input:focus {
+  border-color: var(--riq-gold-dark);
+  box-shadow: 0 0 0 3px rgba(185, 134, 15, 0.25);
+}
+
+.riq-modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: 18px;
+}
+
+.riq-modal .riq-btn-ghost {
+  color: #6b4a04;
+}
+
+.riq-modal .riq-btn-ghost:hover:not(:disabled) {
+  background: rgba(185, 134, 15, 0.1);
+}
+
+/* ---- Игровое поле ---- */
+
+.riq-scoreboard {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  padding: 14px 20px;
+  background: var(--riq-surface);
+  border-bottom: 3px solid var(--riq-gold);
+}
+
+.riq-scoreboard-item {
+  font-family: var(--riq-font-display);
+  font-size: 15px;
+  letter-spacing: 0.02em;
+  color: var(--riq-text);
+}
+
+.riq-scoreboard-item strong {
+  color: var(--riq-gold-strong);
+  font-size: 18px;
+}
+
+.riq-scoreboard-timer {
+  color: var(--riq-gold-strong);
+}
+
+.riq-scoreboard-timer-urgent {
+  color: var(--riq-danger);
+}
+
+.riq-question-text {
+  text-align: center;
+  font-size: clamp(18px, 2.4vw, 24px);
+  padding: 20px 24px 6px;
+  color: var(--riq-text);
+  font-weight: 600;
+}
+
+.riq-hint {
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+.riq-hint-text {
+  color: var(--riq-gold-strong);
+  font-style: italic;
+  font-size: 15px;
+  padding: 0 24px;
+}
+
+/* ---- Таблица результатов ---- */
+
+.riq-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 0 auto 24px;
+  font-family: var(--riq-font-body);
+}
+
+.riq-table th {
+  font-family: var(--riq-font-display);
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  font-size: 13px;
+  color: var(--riq-text-muted);
+  padding: 8px 12px;
+  border-bottom: 2px solid var(--riq-gold);
+  text-align: left;
+}
+
+.riq-table td {
+  padding: 12px;
+  border-bottom: 1px solid var(--riq-border-soft);
+  font-size: 16px;
+}
+
+.riq-table tr:last-child td {
+  border-bottom: none;
+}
+
+.riq-result-correct {
+  color: var(--riq-success);
+}
+
+.riq-result-wrong {
+  color: var(--riq-danger);
+}

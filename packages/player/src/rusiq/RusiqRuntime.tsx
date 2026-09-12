@@ -1,5 +1,6 @@
 // packages/player/src/rusiq/RusiqRuntime.tsx
 import React, { useEffect, useState } from 'react';
+import './rusiqTheme.css';
 import IntroScreen from './screens/IntroScreen.tsx';
 import GameSetupScreen, { type GameSetupResult } from './screens/GameSetupScreen.tsx';
 import GameBoardScreen from './screens/GameBoardScreen.tsx';

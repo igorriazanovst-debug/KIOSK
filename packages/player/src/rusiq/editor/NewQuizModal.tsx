@@ -62,40 +62,29 @@ const NewQuizModal: React.FC<Props> = ({ onCreate, onCancel }) => {
   }
 
   return (
-    <div
-      onClick={onCancel}
-      style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.5)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
-    >
-      <form
-        onClick={(e) => e.stopPropagation()}
-        onSubmit={handleSubmit}
-        style={{ background: '#fff', padding: 24, borderRadius: 8, width: 360, fontFamily: 'sans-serif' }}
-      >
+    <div className="riq-modal-backdrop" onClick={onCancel}>
+      <form className="riq-modal" onClick={(e) => e.stopPropagation()} onSubmit={handleSubmit}>
         <h3>Новая викторина</h3>
-        <label style={{ display: 'block', marginBottom: 12 }}>
+        <label className="riq-field">
           Название
-          <input
-            autoFocus
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-            style={{ display: 'block', width: '100%', padding: 8, marginTop: 4 }}
-          />
+          <input autoFocus value={title} onChange={(e) => setTitle(e.target.value)} className="riq-input" />
         </label>
-        <label style={{ display: 'block', marginBottom: 12 }}>
+        <label className="riq-field">
           Фоновое изображение
           <input
             type="file"
             accept="image/png,image/jpeg,image/gif,image/webp"
             onChange={(e) => setFile(e.target.files?.[0] ?? null)}
-            style={{ display: 'block', width: '100%', marginTop: 4 }}
+            className="riq-input"
+            style={{ padding: '8px 6px' }}
           />
         </label>
-        {error && <p style={{ color: '#c0392b' }}>{error}</p>}
-        <div style={{ textAlign: 'right', marginTop: 16 }}>
-          <button type="button" onClick={onCancel} style={{ marginRight: 8 }}>
+        {error && <p className="riq-error">{error}</p>}
+        <div className="riq-modal-actions">
+          <button type="button" onClick={onCancel} className="riq-btn riq-btn-ghost">
             Отмена
           </button>
-          <button type="submit" disabled={!canSubmit}>
+          <button type="submit" disabled={!canSubmit} className="riq-btn">
             Создать
           </button>
         </div>

@@ -129,61 +129,74 @@ const QuizCatalogScreen: React.FC<Props> = ({ builtinQuizTitle, activeQuizId, on
   }
 
   return (
-    <div style={{ maxWidth: 640, margin: '40px auto', fontFamily: 'sans-serif' }}>
-      <h2>Каталог викторин</h2>
-      <ul style={{ listStyle: 'none', padding: 0 }}>
-        <li style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '8px 0', borderBottom: '1px solid #ddd' }}>
-          <span style={{ flex: 1 }}>
-            {activeQuizId === null ? '✓ ' : ''}
-            {builtinQuizTitle} <em style={{ opacity: 0.6 }}>(встроенная)</em>
+    <div className="riq-page">
+      <div className="riq-page-medium">
+        <h2 className="riq-heading riq-heading-section" style={{ textAlign: 'center' }}>
+          Каталог викторин
+        </h2>
+        <div className="riq-divider" />
+        <div className={`riq-row ${activeQuizId === null ? 'riq-row-active' : ''}`}>
+          <span className="riq-row-title">
+            {activeQuizId === null ? '★ ' : ''}
+            {builtinQuizTitle}
+            <span className="riq-row-title-badge">(встроенная)</span>
           </span>
-          <button onClick={() => onSetActiveQuiz(null)}>Играть эту</button>
-          <button onClick={() => onDuplicateBuiltin().then(refresh)}>Дублировать</button>
-        </li>
+          <button onClick={() => onSetActiveQuiz(null)} className="riq-btn riq-btn-small">
+            Играть эту
+          </button>
+          <button onClick={() => onDuplicateBuiltin().then(refresh)} className="riq-btn riq-btn-muted riq-btn-small">
+            Дублировать
+          </button>
+        </div>
         {entries.map((entry) => (
-          <li key={entry.id} style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '8px 0', borderBottom: '1px solid #ddd' }}>
-            <span style={{ flex: 1 }}>
-              {activeQuizId === entry.id ? '✓ ' : ''}
+          <div key={entry.id} className={`riq-row ${activeQuizId === entry.id ? 'riq-row-active' : ''}`}>
+            <span className="riq-row-title">
+              {activeQuizId === entry.id ? '★ ' : ''}
               {entry.title} {entry.hasPassword ? '🔒' : ''}
             </span>
-            <button onClick={() => onSetActiveQuiz(entry.id)}>Играть эту</button>
-            <button onClick={() => requirePasswordThen(entry, 'edit')}>Редактировать</button>
-            <button onClick={() => requirePasswordThen(entry, 'duplicate')}>Дублировать</button>
-            <button onClick={() => requirePasswordThen(entry, 'delete')}>Удалить</button>
-          </li>
+            <button onClick={() => onSetActiveQuiz(entry.id)} className="riq-btn riq-btn-small">
+              Играть эту
+            </button>
+            <button onClick={() => requirePasswordThen(entry, 'edit')} className="riq-btn riq-btn-muted riq-btn-small">
+              Редактировать
+            </button>
+            <button onClick={() => requirePasswordThen(entry, 'duplicate')} className="riq-btn riq-btn-muted riq-btn-small">
+              Дублировать
+            </button>
+            <button onClick={() => requirePasswordThen(entry, 'delete')} className="riq-btn riq-btn-danger riq-btn-small">
+              Удалить
+            </button>
+          </div>
         ))}
-      </ul>
-      <div style={{ marginTop: 16 }}>
-        <button onClick={() => setShowNewQuizModal(true)}>Создать новую</button>
-        <button onClick={onExit} style={{ marginLeft: 8 }}>
-          Выйти
-        </button>
+        <div style={{ marginTop: 20, display: 'flex', justifyContent: 'center', gap: 10 }}>
+          <button onClick={() => setShowNewQuizModal(true)} className="riq-btn">
+            Создать новую
+          </button>
+          <button onClick={onExit} className="riq-btn riq-btn-muted">
+            Выйти
+          </button>
+        </div>
       </div>
       {showNewQuizModal && <NewQuizModal onCreate={handleCreate} onCancel={() => setShowNewQuizModal(false)} />}
       {passwordPromptFor && (
-        <div
-          onClick={() => setPasswordPromptFor(null)}
-          style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.5)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
-        >
-          <form
-            onClick={(e) => e.stopPropagation()}
-            onSubmit={handlePasswordSubmit}
-            style={{ background: '#fff', padding: 24, borderRadius: 8, fontFamily: 'sans-serif' }}
-          >
+        <div className="riq-modal-backdrop" onClick={() => setPasswordPromptFor(null)}>
+          <form className="riq-modal" onClick={(e) => e.stopPropagation()} onSubmit={handlePasswordSubmit}>
             <h3>Пароль викторины</h3>
             <input
               autoFocus
               type="password"
               value={passwordInput}
               onChange={(e) => setPasswordInput(e.target.value)}
-              style={{ display: 'block', width: '100%', padding: 8 }}
+              className="riq-input"
             />
-            {passwordError && <p style={{ color: '#c0392b' }}>{passwordError}</p>}
-            <div style={{ textAlign: 'right', marginTop: 12 }}>
-              <button type="button" onClick={() => setPasswordPromptFor(null)} style={{ marginRight: 8 }}>
+            {passwordError && <p className="riq-error">{passwordError}</p>}
+            <div className="riq-modal-actions">
+              <button type="button" onClick={() => setPasswordPromptFor(null)} className="riq-btn riq-btn-ghost">
                 Отмена
               </button>
-              <button type="submit">Открыть</button>
+              <button type="submit" className="riq-btn">
+                Открыть
+              </button>
             </div>
           </form>
         </div>
