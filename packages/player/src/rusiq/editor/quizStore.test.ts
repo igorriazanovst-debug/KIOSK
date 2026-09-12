@@ -1,7 +1,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { listQuizzes, loadQuiz, saveQuiz, deleteQuiz, saveQuizBackground } from './quizStore.ts';
-import { RUSIQ_QUIZ_SCHEMA_VERSION, type RusiqQuiz } from '../model/schema.ts';
+import { RUSIQ_QUIZ_SCHEMA_VERSION, RUSIQ_DEFAULT_POINT_SIZE, type RusiqQuiz } from '../model/schema.ts';
 
 function validQuiz(overrides: Partial<RusiqQuiz> = {}): RusiqQuiz {
   return {
@@ -13,7 +13,9 @@ function validQuiz(overrides: Partial<RusiqQuiz> = {}): RusiqQuiz {
     passwordHash: null,
     image: { fileName: 'bg.png', width: 100, height: 100 },
     levels: [{ id: 1, label: 'Начинающий' }, { id: 2, label: 'Опытный' }, { id: 3, label: 'Профессионал' }],
-    questions: [{ id: 'q1', text: 'Вопрос?', answer: 'а', helpText: '', x: 10, y: 10, decoyPoints: [], price: 100, timeSeconds: 20, level: 1, theme: 'Тема' }],
+    questions: [
+      { id: 'q1', text: 'Вопрос?', answer: 'а', helpText: '', x: 10, y: 10, width: RUSIQ_DEFAULT_POINT_SIZE, height: RUSIQ_DEFAULT_POINT_SIZE, decoyPoints: [], price: 100, timeSeconds: 20, level: 1, theme: 'Тема' },
+    ],
     genericDecoyPoints: [],
     ...overrides,
   };

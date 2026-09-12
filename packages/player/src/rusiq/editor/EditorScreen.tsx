@@ -11,7 +11,7 @@ import PointEditForm from './PointEditForm.tsx';
 import { hashSecret } from './pinAuth.ts';
 import { saveQuiz, saveQuizBackground } from './quizStore.ts';
 import { rusiqBackgroundMediaUrl } from '../rusiqMediaUrl.ts';
-import { RusiqQuizSchema, type RusiqPoint, type RusiqQuestion, type RusiqQuiz } from '../model/schema.ts';
+import { RusiqQuizSchema, RUSIQ_DEFAULT_POINT_SIZE, type RusiqPoint, type RusiqQuestion, type RusiqQuiz } from '../model/schema.ts';
 import '../rusiqTheme.css';
 
 interface Props {
@@ -30,6 +30,8 @@ function makeBlankQuestion(point: RusiqPoint): RusiqQuestion {
     helpText: '',
     x: point.x,
     y: point.y,
+    width: RUSIQ_DEFAULT_POINT_SIZE,
+    height: RUSIQ_DEFAULT_POINT_SIZE,
     decoyPoints: [],
     price: 100,
     timeSeconds: 30,
@@ -90,7 +92,7 @@ const EditorScreen: React.FC<Props> = ({ initialQuiz, pendingBackground, onExit 
     update({ ...quiz, genericDecoyPoints: [...quiz.genericDecoyPoints, point] });
   }
 
-  function handleMoveQuestionPoint(id: string, point: RusiqPoint) {
+  function handleMoveQuestionPoint(id: string, point: { x: number; y: number }) {
     update({ ...quiz, questions: quiz.questions.map((q) => (q.id === id ? { ...q, x: point.x, y: point.y } : q)) });
   }
 
@@ -128,6 +130,23 @@ const EditorScreen: React.FC<Props> = ({ initialQuiz, pendingBackground, onExit 
   function handleDeleteGenericDecoy(index: number) {
     update({ ...quiz, genericDecoyPoints: quiz.genericDecoyPoints.filter((_, i) => i !== index) });
     setSelection(null);
+  }
+
+  function handleResizeQuestionPoint(id: string, size: { width: number; height: number }) {
+    update({ ...quiz, questions: quiz.questions.map((q) => (q.id === id ? { ...q, ...size } : q)) });
+  }
+
+  function handleResizeDecoyOfQuestion(questionId: string, decoyIndex: number, size: { width: number; height: number }) {
+    update({
+      ...quiz,
+      questions: quiz.questions.map((q) =>
+        q.id === questionId ? { ...q, decoyPoints: q.decoyPoints.map((d, i) => (i === decoyIndex ? { ...d, ...size } : d)) } : q,
+      ),
+    });
+  }
+
+  function handleResizeGenericDecoy(index: number, size: { width: number; height: number }) {
+    update({ ...quiz, genericDecoyPoints: quiz.genericDecoyPoints.map((d, i) => (i === index ? { ...d, ...size } : d)) });
   }
 
   async function handleSetPassword() {
@@ -215,6 +234,9 @@ const EditorScreen: React.FC<Props> = ({ initialQuiz, pendingBackground, onExit 
   }
 
   const selectedQuestion = selection?.kind === 'question' ? quiz.questions.find((q) => q.id === selection.questionId) ?? null : null;
+  const selectedDecoyOfQuestion =
+    selection?.kind === 'decoy-of-question' ? quiz.questions.find((q) => q.id === selection.questionId)?.decoyPoints[selection.decoyIndex] ?? null : null;
+  const selectedGenericDecoy = selection?.kind === 'generic-decoy' ? quiz.genericDecoyPoints[selection.index] ?? null : null;
   const existingThemes = Array.from(new Set(quiz.questions.map((q) => q.theme).filter((t) => t.length > 0)));
 
   function addModeButtonClass(mode: QuizCanvasAddMode) {
@@ -253,6 +275,7 @@ const EditorScreen: React.FC<Props> = ({ initialQuiz, pendingBackground, onExit 
             questions={quiz.questions}
             genericDecoyPoints={quiz.genericDecoyPoints}
             selectedQuestionId={selection?.kind === 'question' ? selection.questionId : null}
+            selection={selection}
             addMode={addMode}
             onSelectQuestion={(id) => setSelection(id ? { kind: 'question', questionId: id } : null)}
             onAddQuestionPoint={handleAddQuestionPoint}
@@ -261,6 +284,9 @@ const EditorScreen: React.FC<Props> = ({ initialQuiz, pendingBackground, onExit 
             onMoveQuestionPoint={handleMoveQuestionPoint}
             onMoveDecoyOfQuestion={handleMoveDecoyOfQuestion}
             onMoveGenericDecoy={handleMoveGenericDecoy}
+            onResizeQuestionPoint={handleResizeQuestionPoint}
+            onResizeDecoyOfQuestion={handleResizeDecoyOfQuestion}
+            onResizeGenericDecoy={handleResizeGenericDecoy}
             onSelectDecoyOfQuestion={(questionId, decoyIndex) => setSelection({ kind: 'decoy-of-question', questionId, decoyIndex })}
             onSelectGenericDecoy={(index) => setSelection({ kind: 'generic-decoy', index })}
           />
@@ -288,17 +314,71 @@ const EditorScreen: React.FC<Props> = ({ initialQuiz, pendingBackground, onExit 
             onClose={() => setSelection(null)}
           />
         )}
-        {selection?.kind === 'decoy-of-question' && (
+        {selection?.kind === 'decoy-of-question' && selectedDecoyOfQuestion && (
           <div className="riq-card" style={{ marginTop: 16 }}>
             <p style={{ margin: '0 0 10px' }}>Ложная точка вопроса</p>
+            <div style={{ display: 'flex', gap: 10 }}>
+              <label className="riq-field" style={{ flex: 1 }}>
+                Ширина области
+                <input
+                  type="number"
+                  min={1}
+                  value={selectedDecoyOfQuestion.width}
+                  onChange={(e) =>
+                    handleResizeDecoyOfQuestion(selection.questionId, selection.decoyIndex, {
+                      width: Math.max(1, Number(e.target.value)),
+                      height: selectedDecoyOfQuestion.height,
+                    })
+                  }
+                  className="riq-input"
+                />
+              </label>
+              <label className="riq-field" style={{ flex: 1 }}>
+                Высота области
+                <input
+                  type="number"
+                  min={1}
+                  value={selectedDecoyOfQuestion.height}
+                  onChange={(e) =>
+                    handleResizeDecoyOfQuestion(selection.questionId, selection.decoyIndex, {
+                      width: selectedDecoyOfQuestion.width,
+                      height: Math.max(1, Number(e.target.value)),
+                    })
+                  }
+                  className="riq-input"
+                />
+              </label>
+            </div>
             <button onClick={() => handleDeleteDecoyOfQuestion(selection.questionId, selection.decoyIndex)} className="riq-btn riq-btn-danger riq-btn-small">
               Удалить эту точку
             </button>
           </div>
         )}
-        {selection?.kind === 'generic-decoy' && (
+        {selection?.kind === 'generic-decoy' && selectedGenericDecoy && (
           <div className="riq-card" style={{ marginTop: 16 }}>
             <p style={{ margin: '0 0 10px' }}>Общая ложная точка</p>
+            <div style={{ display: 'flex', gap: 10 }}>
+              <label className="riq-field" style={{ flex: 1 }}>
+                Ширина области
+                <input
+                  type="number"
+                  min={1}
+                  value={selectedGenericDecoy.width}
+                  onChange={(e) => handleResizeGenericDecoy(selection.index, { width: Math.max(1, Number(e.target.value)), height: selectedGenericDecoy.height })}
+                  className="riq-input"
+                />
+              </label>
+              <label className="riq-field" style={{ flex: 1 }}>
+                Высота области
+                <input
+                  type="number"
+                  min={1}
+                  value={selectedGenericDecoy.height}
+                  onChange={(e) => handleResizeGenericDecoy(selection.index, { width: selectedGenericDecoy.width, height: Math.max(1, Number(e.target.value)) })}
+                  className="riq-input"
+                />
+              </label>
+            </div>
             <button onClick={() => handleDeleteGenericDecoy(selection.index)} className="riq-btn riq-btn-danger riq-btn-small">
               Удалить эту точку
             </button>

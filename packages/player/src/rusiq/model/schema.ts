@@ -8,9 +8,25 @@
 
 import { z } from 'zod';
 
+// Прямоугольная кликабельная область точки в пространстве изображения (те же
+// единицы, что x/y) — x/y это ЦЕНТР прямоугольника, width/height — его
+// полные размеры. Найдено живьём (2026-09-12, по прямому наблюдению
+// пользователя, дважды): у встроенной викторины genericDecoyPoints были
+// настолько плотно скучены (медианное расстояние до ближайшего соседа —
+// единицы пикселей), что в пределах одной видимой картинки-ответа могло
+// лежать больше десятка точек с разным исходом клика. Первая попытка фикса
+// (просто увеличенный РАДИУС — круг побольше) не решила суть проблемы:
+// пользователь верно указал, что нужна не точка покрупнее, а область,
+// связанная именно с силуэтом/иконкой ответа — прямоугольник, размер и
+// форма которого author может подогнать под конкретную картинку, а не
+// абстрактный круг произвольного радиуса.
+export const RUSIQ_DEFAULT_POINT_SIZE = 100;
+
 export const RusiqPointSchema = z.object({
   x: z.number(),
   y: z.number(),
+  width: z.number().positive().default(RUSIQ_DEFAULT_POINT_SIZE),
+  height: z.number().positive().default(RUSIQ_DEFAULT_POINT_SIZE),
 });
 export type RusiqPoint = z.infer<typeof RusiqPointSchema>;
 
@@ -24,6 +40,8 @@ export const RusiqQuestionSchema = z.object({
   helpText: z.string().default(''),
   x: z.number(),
   y: z.number(),
+  width: z.number().positive().default(RUSIQ_DEFAULT_POINT_SIZE),
+  height: z.number().positive().default(RUSIQ_DEFAULT_POINT_SIZE),
   decoyPoints: z.array(RusiqPointSchema).default([]),
   price: z.number().int().positive(),
   timeSeconds: z.number().int().positive(),

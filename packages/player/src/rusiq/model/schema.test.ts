@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { RusiqQuizSchema, RusiqUserDataSchema, RUSIQ_QUIZ_SCHEMA_VERSION, RUSIQ_USERDATA_SCHEMA_VERSION } from './schema.ts';
+import { RusiqQuizSchema, RusiqUserDataSchema, RUSIQ_QUIZ_SCHEMA_VERSION, RUSIQ_USERDATA_SCHEMA_VERSION, RUSIQ_DEFAULT_POINT_SIZE } from './schema.ts';
 
 function validQuestion(overrides: Partial<Record<string, unknown>> = {}) {
   return {
@@ -61,6 +61,51 @@ test('RusiqQuizSchema defaults genericDecoyPoints to an empty array when absent'
   const result = RusiqQuizSchema.safeParse(quiz);
   assert.equal(result.success, true);
   if (result.success) assert.deepEqual(result.data.genericDecoyPoints, []);
+});
+
+// Найдено живьём (2026-09-12): у старых сохранённых викторин (созданных до
+// введения прямоугольных областей) точки не имеют полей width/height вообще
+// - safeParse должен подставлять дефолт для всех трёх мест, где встречается
+// точка (собственный x/y вопроса, decoyPoints вопроса, genericDecoyPoints),
+// а не только для верхнеуровневого genericDecoyPoints. Первая версия этого
+// фикса вводила единственное число radius (круг) - по прямому указанию
+// пользователя после живой проверки заменено на width/height (прямоугольная
+// область, привязанная к силуэту/иконке ответа, а не абстрактный круг).
+test('RusiqQuizSchema defaults width/height to RUSIQ_DEFAULT_POINT_SIZE on a question point without them (backward compat with pre-size quizzes)', () => {
+  const question = validQuestion();
+  delete (question as Record<string, unknown>).width;
+  delete (question as Record<string, unknown>).height;
+  const result = RusiqQuizSchema.safeParse(validQuiz({ questions: [question] }));
+  assert.equal(result.success, true);
+  if (result.success) {
+    assert.equal(result.data.questions[0].width, RUSIQ_DEFAULT_POINT_SIZE);
+    assert.equal(result.data.questions[0].height, RUSIQ_DEFAULT_POINT_SIZE);
+  }
+});
+
+test('RusiqQuizSchema defaults width/height on a decoyPoints entry without them', () => {
+  const question = validQuestion({ decoyPoints: [{ x: 458, y: 526 }] });
+  const result = RusiqQuizSchema.safeParse(validQuiz({ questions: [question] }));
+  assert.equal(result.success, true);
+  if (result.success) {
+    assert.equal(result.data.questions[0].decoyPoints[0].width, RUSIQ_DEFAULT_POINT_SIZE);
+    assert.equal(result.data.questions[0].decoyPoints[0].height, RUSIQ_DEFAULT_POINT_SIZE);
+  }
+});
+
+test('RusiqQuizSchema defaults width/height on a genericDecoyPoints entry without them', () => {
+  const result = RusiqQuizSchema.safeParse(validQuiz({ genericDecoyPoints: [{ x: 10, y: 20 }] }));
+  assert.equal(result.success, true);
+  if (result.success) {
+    assert.equal(result.data.genericDecoyPoints[0].width, RUSIQ_DEFAULT_POINT_SIZE);
+    assert.equal(result.data.genericDecoyPoints[0].height, RUSIQ_DEFAULT_POINT_SIZE);
+  }
+});
+
+test('RusiqQuizSchema rejects a non-positive width or height', () => {
+  const question = validQuestion({ width: 0 });
+  const result = RusiqQuizSchema.safeParse(validQuiz({ questions: [question] }));
+  assert.equal(result.success, false);
 });
 
 test('RusiqUserDataSchema accepts empty history and defaults soundOn to true', () => {

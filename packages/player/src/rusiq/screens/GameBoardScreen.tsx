@@ -26,7 +26,6 @@ const DISPLAY_MAX_WIDTH_CSS = 'min(1200px, 92vw)';
 // ложные точки текущего вопроса (`decoyPoints`) и общие ложные точки поля
 // (`genericDecoyPoints`) визуально неотличимы (находка 6 финального ревью):
 // иначе цвет точки сам по себе становится подсказкой правильного ответа.
-const POINT_SIZE = 22;
 const POINT_COLOR = 'rgba(90, 90, 90, 0.55)';
 const POINT_RING = '2px solid rgba(255, 255, 255, 0.5)';
 
@@ -109,18 +108,32 @@ const GameBoardScreen: React.FC<Props> = ({ imageUrl, imageWidth, imageHeight, p
   const remainingSeconds = Math.max(0, currentQuestion.timeSeconds - elapsed);
   const liveScore = scoreForAnswer(currentQuestion.price, currentQuestion.timeSeconds, elapsed, true);
 
-  const pointStyle: React.CSSProperties = {
-    position: 'absolute',
-    width: POINT_SIZE,
-    height: POINT_SIZE,
-    transform: 'translate(-50%, -50%)',
-    borderRadius: '50%',
-    background: POINT_COLOR,
-    border: POINT_RING,
-    boxShadow: '0 0 6px rgba(0, 0, 0, 0.4)',
-    padding: 0,
-    cursor: 'pointer',
-  };
+  // Кликабельная область — прямоугольник со своими width/height у каждой
+  // точки (то же пространство координат, что x/y), выражен в % от контейнера
+  // (не в px): контейнер задан через aspect-ratio, поэтому % ширины/высоты
+  // масштабируется ровно так же, как x/y в pointPosition ниже, при любом
+  // фактическом размере показа. Раньше все точки были фиксированным 22px
+  // КРУГОМ вне зависимости от точного пикселя клика — при высокой плотности
+  // decoy-точек на одной видимой картинке-ответе (найдено живьём 2026-09-12)
+  // это делало результат клика "куда-то в правильный ответ" непредсказуемым.
+  // Первая попытка (просто увеличенный радиус круга) не решила суть: нужна
+  // именно область, привязанная к силуэту/иконке конкретного ответа (обычно
+  // прямоугольная плитка), а не абстрактный круг любого размера — обратная
+  // связь пользователя после первой попытки.
+  function pointStyle(point: { width: number; height: number }): React.CSSProperties {
+    return {
+      position: 'absolute',
+      width: `${(point.width / imageWidth) * 100}%`,
+      height: `${(point.height / imageHeight) * 100}%`,
+      transform: 'translate(-50%, -50%)',
+      borderRadius: 6,
+      background: POINT_COLOR,
+      border: POINT_RING,
+      boxShadow: '0 0 6px rgba(0, 0, 0, 0.4)',
+      padding: 0,
+      cursor: 'pointer',
+    };
+  }
 
   function pointPosition(point: RusiqPoint): React.CSSProperties {
     return {
@@ -178,7 +191,7 @@ const GameBoardScreen: React.FC<Props> = ({ imageUrl, imageWidth, imageHeight, p
           <button
             key={`generic-${i}`}
             onClick={handleDecoyPointClick}
-            style={{ ...pointStyle, ...pointPosition(point) }}
+            style={{ ...pointStyle(point), ...pointPosition(point) }}
             aria-label={`generic-decoy-${i}`}
           />
         ))}
@@ -187,7 +200,7 @@ const GameBoardScreen: React.FC<Props> = ({ imageUrl, imageWidth, imageHeight, p
           <button
             key={`decoy-${i}`}
             onClick={handleDecoyPointClick}
-            style={{ ...pointStyle, ...pointPosition(point) }}
+            style={{ ...pointStyle(point), ...pointPosition(point) }}
             aria-label={`decoy-${i}`}
           />
         ))}
@@ -196,7 +209,7 @@ const GameBoardScreen: React.FC<Props> = ({ imageUrl, imageWidth, imageHeight, p
             от ложных точек до клика (находка 6 финального ревью). */}
         <button
           onClick={handleCorrectPointClick}
-          style={{ ...pointStyle, ...pointPosition(currentQuestion) }}
+          style={{ ...pointStyle(currentQuestion), ...pointPosition(currentQuestion) }}
           aria-label="correct-point"
         />
       </div>

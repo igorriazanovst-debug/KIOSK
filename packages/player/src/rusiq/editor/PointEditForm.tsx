@@ -44,6 +44,16 @@ const PointEditForm: React.FC<Props> = ({ question, existingThemes, onChange, on
       </label>
       <div style={{ display: 'flex', gap: 10 }}>
         <label className="riq-field" style={{ flex: 1 }}>
+          Ширина области клика
+          <input type="number" min={1} value={question.width} onChange={(e) => set('width', Math.max(1, Number(e.target.value)))} className="riq-input" />
+        </label>
+        <label className="riq-field" style={{ flex: 1 }}>
+          Высота области клика
+          <input type="number" min={1} value={question.height} onChange={(e) => set('height', Math.max(1, Number(e.target.value)))} className="riq-input" />
+        </label>
+      </div>
+      <div style={{ display: 'flex', gap: 10 }}>
+        <label className="riq-field" style={{ flex: 1 }}>
           Уровень
           <select value={question.level} onChange={(e) => set('level', Number(e.target.value) as RusiqLevelId)} className="riq-input">
             <option value={1}>1</option>
