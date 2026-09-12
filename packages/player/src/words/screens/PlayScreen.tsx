@@ -94,8 +94,15 @@ const PlayScreen: React.FC<Props> = ({
       onPointerUp={(e) => dragging && finishDrag(e.clientX, e.clientY, dragging.wordId)}
     >
       {/* Табло и выход вне поворачиваемого поля: они для педагога, а не для
-          ребёнка, и вертеться вместе с полем им незачем */}
-      <div style={{ position: 'absolute', top: 16, left: 24, right: 24, display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 16 }}>
+          ребёнка, и вертеться вместе с полем им незачем.
+
+          zIndex ОБЯЗАТЕЛЕН. Поле идёт ниже по разметке и имеет transform, из-за
+          чего создаёт свой контекст наложения и рисуется ПОВЕРХ этой шапки.
+          Без явного zIndex кнопка «Озвучить слово» и табло видны, но нажать их
+          нельзя — касание перехватывает поле. В окне 1280×800 кнопка была
+          закрыта целиком, в 1920 — наполовину, поэтому дефект легко принять за
+          случайное «не сработало». Найдено сквозным прогоном 13.09.2026. */}
+      <div style={{ position: 'absolute', top: 16, left: 24, right: 24, zIndex: 5, display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 16 }}>
         <div data-testid="scoreboard" style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
           <span style={{ fontSize: 30 }}>
             Ходит: <b data-testid="current-player">{player?.name ?? 'Гость'}</b>
@@ -107,7 +114,7 @@ const PlayScreen: React.FC<Props> = ({
         </div>
         <div style={{ display: 'flex', gap: 12 }}>
           <BigButton onClick={onRepeat} tone="secondary" testId="repeat">
-            ↻ Повторить
+            🔊 Озвучить слово
           </BigButton>
           <BigButton onClick={onExit} tone="danger" testId="exit-game">
             Выйти
@@ -214,12 +221,22 @@ const PlayScreen: React.FC<Props> = ({
           ))}
         </div>
 
-        {/* Сова-помощник. Подсказка появляется только по нажатию на неё:
-            облако не должно закрывать карточки, пока ребёнок сам не спросил. */}
-        <div style={{ display: 'flex', gap: 40, alignItems: 'flex-end' }}>
+        {/* Сова-помощник — В УГЛУ ПОЛЯ, А НЕ В КОЛОНКЕ.
+            Колонка поля вместе с совой перерастала свои 700px, и при повороте
+            на 180° (игрок с противоположной стороны стола) сова выезжала за
+            границу поля прямо на полосу прогресса. Абсолютное положение в углу
+            решает сразу оба: из потока она больше не растит колонку, а угол
+            поля при любом из четырёх поворотов остаётся внутри поля и не
+            пересекается ни с табло, ни с кнопками — они лежат вне поворота.
+            Поворачивается вместе с полем намеренно: помощник должен смотреть
+            на того игрока, чей сейчас ход. */}
+        <div
+          data-testid="owl-corner"
+          style={{ position: 'absolute', left: 16, bottom: 16, display: 'flex', alignItems: 'flex-end' }}
+        >
           <OwlHelper
             mood={lastOutcome === 'wrong' ? 'pointing' : solved ? 'happy' : 'idle'}
-            size={130}
+            size={110}
             hintOnDemand
             hint={
               solved

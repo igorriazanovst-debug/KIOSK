@@ -30,6 +30,8 @@ interface Props {
   onDeleteSet: (setId: string) => void;
   onExportSet: (setId: string) => void;
   onImportSet: () => void;
+  /** Переход к замене картинок поставочных слов */
+  onWordImages: () => void;
   /** Итог последней операции с архивом — показывается до следующего действия */
   notice: string | null;
 }
@@ -49,6 +51,7 @@ const MyWordsScreen: React.FC<Props> = ({
   onDeleteSet,
   onExportSet,
   onImportSet,
+  onWordImages,
   notice,
 }) => {
   const [confirm, setConfirm] = useState<{ kind: 'word' | 'set'; id: string; title: string } | null>(
@@ -113,9 +116,16 @@ const MyWordsScreen: React.FC<Props> = ({
         <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 12, minWidth: 0 }}>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
             <span style={{ fontSize: 26 }}>Слова ({words.length})</span>
-            <BigButton onClick={onNewWord} testId="new-word">
-              + Слово
-            </BigButton>
+            <div style={{ display: 'flex', gap: 10 }}>
+              {/* Поставочные слова правятся на своём экране: там меняют чужую
+                  картинку, а здесь заводят свои слова — операции разные */}
+              <BigButton onClick={onWordImages} tone="secondary" testId="word-images">
+                Картинки слов
+              </BigButton>
+              <BigButton onClick={onNewWord} testId="new-word">
+                + Слово
+              </BigButton>
+            </div>
           </div>
 
           <ScrollArea style={{ flex: 1 }}>

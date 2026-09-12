@@ -186,6 +186,41 @@ function registerWordsIpc({ ipcMain, app, dialog, sharedDirOverride }) {
     })
   );
 
+  // ── Свои картинки для поставочных слов (ТЗ строка 42) ────────────────
+  //
+  // Путь к выбранному файлу рендерер не передаёт и не получает: диалог
+  // открывает главный процесс, файл проходит ту же проверку по сигнатуре
+  // содержимого, что и любое другое медиа, и в хранилище попадает под именем
+  // из хеша.
+
+  ipcMain.handle('words:list-word-images', guarded(async () => wordStore.listWordImages(baseDir)));
+
+  ipcMain.handle(
+    'words:pick-word-image',
+    guarded(async (_e, wordId) => {
+      if (!dialog) throw new mediaFiles.MediaError('Диалог выбора файла недоступен');
+      if (!libraryWordIds().includes(wordId)) {
+        throw new mediaFiles.MediaError('Такого слова нет в поставке');
+      }
+
+      const result = await dialog.showOpenDialog({
+        title: 'Выберите картинку для слова',
+        properties: ['openFile'],
+        filters: [{ name: 'Изображения', extensions: mediaFiles.IMAGE_EXTENSIONS.map((e) => e.replace('.', '')) }],
+      });
+      if (result.canceled || result.filePaths.length === 0) return { canceled: true };
+
+      const stored = mediaFiles.importMediaFile(baseDir, result.filePaths[0], 'image');
+      const overrides = wordStore.setWordImage(baseDir, wordId, stored.fileName);
+      return { canceled: false, fileName: stored.fileName, overrides };
+    })
+  );
+
+  ipcMain.handle(
+    'words:clear-word-image',
+    guarded(async (_e, wordId) => wordStore.clearWordImage(baseDir, wordId))
+  );
+
   // ── Экспорт и импорт комплекта (ТЗ строка 56) ────────────────────────
   //
   // Путь к файлу рендерер не передаёт и не получает: и сохранение, и

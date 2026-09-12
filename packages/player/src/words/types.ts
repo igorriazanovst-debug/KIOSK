@@ -2,7 +2,14 @@
 // Контракт между рантаймом виджета и главным процессом (namespace wordsAPI,
 // см. electron/preload.js) плюс описание экранов.
 
-import type { WordsLibrary, WordsSettings, AwardTier, UserWord, UserSet } from '@kiosk/shared';
+import type {
+  WordsLibrary,
+  WordsSettings,
+  AwardTier,
+  UserWord,
+  UserSet,
+  WordImageOverrides,
+} from '@kiosk/shared';
 
 export interface Profile {
   id: string;
@@ -60,7 +67,18 @@ export interface WordsApi {
   exportSet(setId: string): Promise<IpcResult<ExportedSet>>;
   /** Системный диалог открытия; архив разбирает главный процесс */
   importSet(): Promise<IpcResult<ImportedSet>>;
+
+  // ── Свои картинки для поставочных слов (ТЗ строка 42) ────────────────
+  listWordImages(): Promise<IpcResult<WordImageOverrides>>;
+  /** Системный диалог выбора картинки; путь в рендерер не возвращается */
+  pickWordImage(wordId: string): Promise<IpcResult<PickedWordImage>>;
+  /** Вернуть слову картинку из поставки */
+  clearWordImage(wordId: string): Promise<IpcResult<WordImageOverrides>>;
 }
+
+export type PickedWordImage =
+  | { canceled: true }
+  | { canceled: false; fileName: string; overrides: WordImageOverrides };
 
 export type ExportedSet =
   | { canceled: true }
@@ -129,7 +147,8 @@ export type Screen =
   | { name: 'score'; themeId: string }
   | { name: 'myWords' }
   | { name: 'wordEditor'; wordId: string | null }
-  | { name: 'setEditor'; setId: string | null };
+  | { name: 'setEditor'; setId: string | null }
+  | { name: 'wordImages' };
 
 /**
  * Места вокруг интерактивного стола и поворот интерфейса для каждого.

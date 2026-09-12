@@ -146,6 +146,22 @@ export const UserSetSchema = z.object({
 });
 export type UserSet = z.infer<typeof UserSetSchema>;
 
+/**
+ * Своя картинка педагога для ПОСТАВОЧНОГО слова (ТЗ строка 42 —
+ * «редактировать материалы»).
+ *
+ * Почему отдельная сущность, а не поле у слова: поставочная библиотека
+ * доступна только на чтение и приезжает в дистрибутиве, переписывать её на
+ * устройстве нельзя — обновление пакета контента снесло бы правки педагога.
+ * Переопределения живут отдельным файлом в данных устройства и переживают
+ * замену пакета.
+ *
+ * Ключ — идентификатор поставочного слова, значение — имя файла в каталоге
+ * медиа устройства. Отсутствие записи означает «картинка из поставки».
+ */
+export const WordImageOverridesSchema = z.record(LibraryWordIdSchema, FileNameSchema);
+export type WordImageOverrides = z.infer<typeof WordImageOverridesSchema>;
+
 /** Профиль ребёнка (ТЗ строка 47). Без пароля — это не учётная запись ОС */
 export const ProfileSchema = z.object({
   id: z.string().min(1).max(64),
@@ -294,6 +310,21 @@ export function parseWordsSettings(input: unknown): WordsSettings {
   const parsed = WordsSettingsSchema.safeParse(input);
   if (!parsed.success) throw new WordsValidationError('words settings', issueLines(parsed.error));
   return parsed.data;
+}
+
+/**
+ * Разбор переопределений картинок с диска. Битая запись отбрасывается
+ * поштучно: из-за одной испорченной ссылки педагог не должен терять все
+ * остальные свои картинки.
+ */
+export function parseWordImageOverrides(input: unknown): WordImageOverrides {
+  if (!input || typeof input !== 'object' || Array.isArray(input)) return {};
+  const out: WordImageOverrides = {};
+  for (const [key, value] of Object.entries(input as Record<string, unknown>)) {
+    const parsed = WordImageOverridesSchema.safeParse({ [key]: value });
+    if (parsed.success) Object.assign(out, parsed.data);
+  }
+  return out;
 }
 
 export const DEFAULT_WORDS_SETTINGS: WordsSettings = {

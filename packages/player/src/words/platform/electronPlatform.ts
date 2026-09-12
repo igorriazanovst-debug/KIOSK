@@ -41,5 +41,8 @@ export function createElectronPlatform(api: WordsApi): WordsPlatform {
     saveRecording: (bytes) => api.saveRecording(bytes),
     exportSet: (setId) => api.exportSet(setId),
     importSet: () => api.importSet(),
+    listWordImages: () => api.listWordImages(),
+    pickWordImage: (wordId) => api.pickWordImage(wordId),
+    clearWordImage: (wordId) => api.clearWordImage(wordId),
   };
 }
