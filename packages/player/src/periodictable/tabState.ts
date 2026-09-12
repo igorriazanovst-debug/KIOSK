@@ -8,11 +8,12 @@
 // состояния. См. Тип8_трассировочная_матрица.md, раздел «Дефекты, найденные
 // этой приёмочной сверкой».
 
-export type BottomTab = 'none' | 'search' | 'viewSettings' | 'legend';
+export type BottomTab = 'none' | 'search' | 'viewSettings' | 'legend' | 'progress' | 'compare' | 'quiz';
 
-// Клик по вкладке «Поиск»/«Легенда»: повторный клик по уже открытой
-// закрывает её, клик по другой — переключает.
-export function toggleTab(current: BottomTab, clicked: 'search' | 'legend'): BottomTab {
+// Клик по вкладке без отдельной логики (в отличие от «Настройки вида» —
+// у неё своя PIN-развилка, decideViewSettingsClick ниже): повторный клик
+// по уже открытой закрывает её, клик по другой — переключает.
+export function toggleTab(current: BottomTab, clicked: 'search' | 'legend' | 'progress' | 'compare' | 'quiz'): BottomTab {
   return current === clicked ? 'none' : clicked;
 }
 

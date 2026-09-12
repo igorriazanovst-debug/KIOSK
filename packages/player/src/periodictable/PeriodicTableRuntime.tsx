@@ -9,7 +9,12 @@ import SearchTab from './screens/SearchTab.tsx';
 import ViewSettingsTab from './screens/ViewSettingsTab.tsx';
 import LegendTab from './screens/LegendTab.tsx';
 import TeacherPinModal from './screens/TeacherPinModal.tsx';
+import ProgressTab from './screens/ProgressTab.tsx';
+import CompareTab from './screens/CompareTab.tsx';
+import QuizTab from './screens/QuizTab.tsx';
 import { loadViewSettings, saveViewSettings, DEFAULT_VIEW_SETTINGS, type ViewSettings } from './viewSettingsStorage.ts';
+import { loadExploredSet, saveExploredSet, withExplored } from './explorationStorage.ts';
+import { addToCompare, removeFromCompare } from './compareSelection.ts';
 import { toggleTab, shouldClearHighlight, decideViewSettingsClick, type BottomTab } from './tabState.ts';
 import elementsJson from './content/elements.json' with { type: 'json' };
 
@@ -36,6 +41,8 @@ const PeriodicTableRuntime: React.FC<Props> = ({ properties }) => {
   const [highlightedSymbol, setHighlightedSymbol] = useState<string | null>(null);
   const [viewSettingsUnlocked, setViewSettingsUnlocked] = useState(false);
   const [showPinModal, setShowPinModal] = useState(false);
+  const [explored, setExplored] = useState<Set<number>>(new Set());
+  const [compareSelection, setCompareSelection] = useState<PeriodicElement[]>([]);
 
   // Единое место, откуда берётся действующий PIN — раньше `properties.
   // teacherPin ?? '0000'` повторялся в трёх разных местах компонента
@@ -45,6 +52,7 @@ const PeriodicTableRuntime: React.FC<Props> = ({ properties }) => {
 
   useEffect(() => {
     setViewSettings(loadViewSettings());
+    setExplored(loadExploredSet());
   }, []);
 
   function updateViewSettings(next: ViewSettings) {
@@ -55,6 +63,15 @@ const PeriodicTableRuntime: React.FC<Props> = ({ properties }) => {
   function selectElement(el: PeriodicElement) {
     setSelected(el);
     setCardMode('summary');
+    // Открытие карточки — сигнал "ученик посмотрел этот элемент", тот же
+    // момент для обеих карточек (сводной и подробной), т.к. подробная
+    // открывается только ИЗ уже открытой сводной — двойной отметки не
+    // будет благодаря withExplored (no-op, если номер уже отмечен).
+    setExplored((prev) => {
+      const next = withExplored(prev, el.atomicNumber);
+      if (next !== prev) saveExploredSet(next);
+      return next;
+    });
   }
 
   function closeCard() {
@@ -164,6 +181,7 @@ const PeriodicTableRuntime: React.FC<Props> = ({ properties }) => {
           elements={elements}
           form={viewSettings.tableForm}
           colorIndication={viewSettings.colorIndication}
+          trendProperty={viewSettings.trendProperty}
           highlight={viewSettings.highlight}
           highlightedSymbol={highlightedSymbol}
           onSelectElement={selectElement}
@@ -187,6 +205,15 @@ const PeriodicTableRuntime: React.FC<Props> = ({ properties }) => {
         <button onClick={() => openTab(toggleTab(activeTab, 'legend'))} aria-label="Легенда" style={tabButtonStyle(activeTab === 'legend')}>
           🎨 Легенда
         </button>
+        <button onClick={() => openTab(toggleTab(activeTab, 'progress'))} aria-label="Прогресс" style={tabButtonStyle(activeTab === 'progress')}>
+          📈 Прогресс
+        </button>
+        <button onClick={() => openTab(toggleTab(activeTab, 'compare'))} aria-label="Сравнение" style={tabButtonStyle(activeTab === 'compare')}>
+          ⚖️ Сравнение
+        </button>
+        <button onClick={() => openTab(toggleTab(activeTab, 'quiz'))} aria-label="Викторина" style={tabButtonStyle(activeTab === 'quiz')}>
+          ❓ Викторина
+        </button>
       </div>
 
       {activeTab === 'search' && (
@@ -207,7 +234,27 @@ const PeriodicTableRuntime: React.FC<Props> = ({ properties }) => {
       )}
       {activeTab === 'legend' && (
         <div style={{ maxHeight: '40vh', overflow: 'auto', borderTop: '1px solid #cfd8dc', background: '#ffffff' }}>
-          <LegendTab colorIndication={viewSettings.colorIndication} />
+          <LegendTab colorIndication={viewSettings.colorIndication} elements={elements} trendProperty={viewSettings.trendProperty} />
+        </div>
+      )}
+      {activeTab === 'progress' && (
+        <div style={{ maxHeight: '40vh', overflow: 'auto', borderTop: '1px solid #cfd8dc', background: '#ffffff' }}>
+          <ProgressTab elements={elements} explored={explored} />
+        </div>
+      )}
+      {activeTab === 'compare' && (
+        <div style={{ maxHeight: '50vh', overflow: 'auto', borderTop: '1px solid #cfd8dc', background: '#ffffff' }}>
+          <CompareTab
+            elements={elements}
+            selected={compareSelection}
+            onAdd={(el) => setCompareSelection((prev) => addToCompare(prev, el))}
+            onRemove={(atomicNumber) => setCompareSelection((prev) => removeFromCompare(prev, atomicNumber))}
+          />
+        </div>
+      )}
+      {activeTab === 'quiz' && (
+        <div style={{ maxHeight: '50vh', overflow: 'auto', borderTop: '1px solid #cfd8dc', background: '#ffffff' }}>
+          <QuizTab elements={elements} />
         </div>
       )}
 

@@ -7,8 +7,17 @@
 
 import { z } from 'zod';
 
-export const ColorIndicationSchema = z.enum(['none', 'class', 'electronType', 'oxideCharacter']);
+export const ColorIndicationSchema = z.enum(['none', 'class', 'electronType', 'oxideCharacter', 'trend']);
 export type ColorIndicationMode = z.infer<typeof ColorIndicationSchema>;
+
+// Какое числовое свойство красит таблицу градиентом в режиме 'trend' —
+// отдельное поле, а не 5 разных значений ColorIndicationSchema
+// ('trendDensity', 'trendMass', ...), потому что все пять рендерятся
+// ОДНИМ и тем же кодом (только диапазон и подпись разные) — 5 отдельных
+// enum-значений размножили бы одинаковую логику на TableScreen/LegendTab
+// без всякой пользы.
+export const TrendPropertySchema = z.enum(['atomicMass', 'density', 'meltingPointK', 'boilingPointK', 'electronegativityPauling']);
+export type TrendProperty = z.infer<typeof TrendPropertySchema>;
 
 export const HighlightModeSchema = z.enum(['none', 'metal', 'nonmetal', 'metalloid', 's', 'p', 'd', 'f', 'acidic', 'basic', 'amphoteric']);
 export type HighlightMode = z.infer<typeof HighlightModeSchema>;

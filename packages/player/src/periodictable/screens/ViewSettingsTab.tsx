@@ -1,6 +1,8 @@
 // packages/player/src/periodictable/screens/ViewSettingsTab.tsx
 import React from 'react';
 import type { ViewSettings } from '../viewSettingsStorage.ts';
+import { TREND_PROPERTY_LABEL_RU } from '../trendColor.ts';
+import type { TrendProperty } from '../viewTypes.ts';
 
 interface Props {
   settings: ViewSettings;
@@ -47,8 +49,25 @@ const ViewSettingsTab: React.FC<Props> = ({ settings, onChange }) => (
         <option value="class">Классы элементов</option>
         <option value="electronType">Электронный тип</option>
         <option value="oxideCharacter">Характер оксидов и гидроксидов</option>
+        <option value="trend">Тренды (числовой градиент)</option>
       </select>
     </ROW>
+    {settings.colorIndication === 'trend' && (
+      <ROW htmlFor="periodictable-view-settings-trend-property" label="Какое свойство">
+        <select
+          id="periodictable-view-settings-trend-property"
+          value={settings.trendProperty}
+          onChange={(e) => onChange({ ...settings, trendProperty: e.target.value as TrendProperty })}
+          style={selectStyle}
+        >
+          {(Object.keys(TREND_PROPERTY_LABEL_RU) as TrendProperty[]).map((prop) => (
+            <option key={prop} value={prop}>
+              {TREND_PROPERTY_LABEL_RU[prop]}
+            </option>
+          ))}
+        </select>
+      </ROW>
+    )}
     <ROW htmlFor="periodictable-view-settings-highlight" label="Подсветка">
       <select
         id="periodictable-view-settings-highlight"

@@ -1,22 +1,25 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import type { PeriodicElement } from '../model/schema.ts';
 import { getCellPosition, formatGroupLabel, type TableForm } from '../tableLayout.ts';
-import type { ColorIndicationMode, HighlightMode } from '../viewTypes.ts';
+import type { ColorIndicationMode, HighlightMode, TrendProperty } from '../viewTypes.ts';
 import { CLASS_COLOR, ELECTRON_TYPE_COLOR, OXIDE_COLOR } from '../colorPalette.ts';
+import { computeTrendRange, trendColorFor, type TrendRange } from '../trendColor.ts';
 
 interface Props {
   elements: PeriodicElement[];
   form: TableForm;
   colorIndication: ColorIndicationMode;
+  trendProperty: TrendProperty;
   highlight: HighlightMode;
   highlightedSymbol?: string | null; // подсветка найденного элемента (Задача 8, Поиск)
   onSelectElement: (el: PeriodicElement) => void;
 }
 
-function cellBackground(el: PeriodicElement, mode: ColorIndicationMode): string {
+function cellBackground(el: PeriodicElement, mode: ColorIndicationMode, trendProperty: TrendProperty, trendRange: TrendRange): string {
   if (mode === 'class') return CLASS_COLOR[el.elementClass];
   if (mode === 'electronType') return ELECTRON_TYPE_COLOR[el.electronType];
   if (mode === 'oxideCharacter') return OXIDE_COLOR[el.oxideCharacter];
+  if (mode === 'trend') return trendColorFor(el[trendProperty], trendRange);
   return '#ffffff';
 }
 
@@ -42,13 +45,19 @@ function cellBorderSide(highlighted: boolean, isFooterTopEdge: boolean): string 
   return '1px solid #ccc';
 }
 
-const TableScreen: React.FC<Props> = ({ elements, form, colorIndication, highlight, highlightedSymbol, onSelectElement }) => {
+const TableScreen: React.FC<Props> = ({ elements, form, colorIndication, trendProperty, highlight, highlightedSymbol, onSelectElement }) => {
   // 18 колонок для ОБЕИХ форм — короткая форма не схлопывает колонки
   // (см. tableLayout.ts, исправлено по находке Задачи 5), различается
   // только подпись колонки через formatGroupLabel — в видимой строке шапки
   // ниже и (дополнительно) в подсказке title самой ячейки.
   const maxCol = 18;
   const groupColumns = Array.from({ length: maxCol }, (_, i) => i + 1);
+
+  // Диапазон градиента считается один раз на смену свойства/набора
+  // элементов, не при каждом рендере — по 118 элементам это дёшево, но
+  // useMemo всё равно правильная гигиена для значения, используемого в
+  // цикле рендера ~118 плиток.
+  const trendRange = useMemo(() => computeTrendRange(elements, trendProperty), [elements, trendProperty]);
 
   return (
     <div>
@@ -130,7 +139,7 @@ const TableScreen: React.FC<Props> = ({ elements, form, colorIndication, highlig
               boxSizing: 'border-box',
               gridRow: pos.row,
               gridColumn: pos.col,
-              background: cellBackground(el, colorIndication),
+              background: cellBackground(el, colorIndication, trendProperty, trendRange),
               // Верхняя сторона отдельно: у первой строки подвала она толще
               // и другого цвета — дополнительный (к пустой строке 8 выше)
               // визуальный сигнал «это отдельный блок ниже основной таблицы»,
