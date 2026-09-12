@@ -8,7 +8,7 @@
 
 import React from 'react';
 import { BigButton, palette, TIER_LABEL } from '../ui';
-import Character from '../components/Character';
+import OwlHelper from '../components/OwlHelper';
 import type { GameSession, AwardTier, WordsLibrary } from '@kiosk/shared';
 import { summarizeSession, awardForPlayer } from '@kiosk/shared';
 import type { Profile } from '../types';
@@ -45,7 +45,7 @@ const ScoreScreen: React.FC<Props> = ({ session, library, players, savedAwards, 
       <h1 style={{ margin: 0, fontSize: 44 }}>Тема пройдена: {themeTitle}</h1>
 
       <div style={{ display: 'flex', alignItems: 'flex-end', gap: 32 }}>
-        <Character kind="girl" mood="speaking" size={120} />
+        <OwlHelper mood="happy" size={130} hint="Молодец! Вот чего ты добился." testId="owl-score" />
 
         <div style={{ display: 'flex', flexDirection: 'column', gap: 12, minWidth: 560 }}>
           {rows.map((row) => {
@@ -84,7 +84,6 @@ const ScoreScreen: React.FC<Props> = ({ session, library, players, savedAwards, 
           })}
         </div>
 
-        <Character kind="boy" mood="idle" size={120} />
       </div>
 
       <div style={{ display: 'flex', gap: 16 }}>

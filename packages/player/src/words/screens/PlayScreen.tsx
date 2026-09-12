@@ -17,7 +17,7 @@
 
 import React, { useRef, useState } from 'react';
 import { palette, BigButton, Stars } from '../ui';
-import Character from '../components/Character';
+import OwlHelper from '../components/OwlHelper';
 import { SEAT_ROTATIONS, seatsFor } from '../types';
 import type { Profile } from '../types';
 import type { GameSession } from '@kiosk/shared';
@@ -214,14 +214,22 @@ const PlayScreen: React.FC<Props> = ({
           ))}
         </div>
 
+        {/* Сова-помощник. Подсказка появляется только по нажатию на неё:
+            облако не должно закрывать карточки, пока ребёнок сам не спросил. */}
         <div style={{ display: 'flex', gap: 40, alignItems: 'flex-end' }}>
-          <Character
-            kind="girl"
-            mood={lastOutcome === 'wrong' ? 'pointing' : solved ? 'speaking' : 'idle'}
-            handDirection="right"
-            size={110}
+          <OwlHelper
+            mood={lastOutcome === 'wrong' ? 'pointing' : solved ? 'happy' : 'idle'}
+            size={130}
+            hintOnDemand
+            hint={
+              solved
+                ? 'Верно! Слушай следующее слово.'
+                : lastOutcome === 'wrong'
+                  ? 'Не угадал — ничего страшного. Послушай слово ещё раз и попробуй другую картинку.'
+                  : 'Послушай слово и нажми картинку, которая ему подходит. Нажми на меня, если нужна подсказка.'
+            }
+            testId="owl-play"
           />
-          <Character kind="boy" mood={solved ? 'speaking' : 'idle'} size={110} />
         </div>
       </div>
 

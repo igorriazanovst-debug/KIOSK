@@ -11,7 +11,7 @@
 
 import React, { useState } from 'react';
 import { BigButton, ErrorBanner, palette } from '../ui';
-import Character from '../components/Character';
+import OwlHelper from '../components/OwlHelper';
 import HoldButton from '../components/HoldButton';
 import type { Profile } from '../types';
 
@@ -114,7 +114,17 @@ const MenuScreen: React.FC<Props> = ({
       <h1 style={{ margin: 0, fontSize: 52 }}>{title}</h1>
 
       <div style={{ display: 'flex', alignItems: 'flex-end', gap: 40 }}>
-        <Character kind="girl" mood="idle" size={150} />
+        <OwlHelper
+          mood="idle"
+          size={170}
+          hint={
+            enoughForMulti
+              ? 'Привет! Выбери, кто играет, и нажми «Играть вместе». Или начни одиночную игру.'
+              : 'Привет! Нажми «Одиночная игра», чтобы начать. А чтобы играть вдвоём, сначала добавь игроков.'
+          }
+          bubbleSide="right"
+          testId="owl-menu"
+        />
 
         <div style={{ display: 'flex', flexDirection: 'column', gap: 16, minWidth: 420 }}>
           <ErrorBanner text={error} />
@@ -161,7 +171,6 @@ const MenuScreen: React.FC<Props> = ({
           </div>
         </div>
 
-        <Character kind="boy" mood="idle" size={150} />
       </div>
     </div>
   );

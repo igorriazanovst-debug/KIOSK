@@ -10,7 +10,7 @@
 
 import React from 'react';
 import { BigButton, palette } from '../ui';
-import Character from '../components/Character';
+import OwlHelper from '../components/OwlHelper';
 import { themeCoverUrl, wordImageUrl } from '../mediaUrl';
 import type { WordsLibrary } from '@kiosk/shared';
 
@@ -51,7 +51,13 @@ const PreviewScreen: React.FC<Props> = ({ library, themeId, onBack, onStart }) =
       />
 
       <div style={{ display: 'flex', alignItems: 'flex-end', gap: 20 }}>
-        <Character kind="girl" mood="speaking" size={130} />
+        <OwlHelper
+          mood="speaking"
+          size={140}
+          hint={`Сейчас будем искать слова темы «${theme?.title ?? ''}». Слушай внимательно.`}
+          bubbleSide="left"
+          testId="owl-preview"
+        />
         <div style={{ display: 'flex', gap: 14 }}>
           {preview.map((wordId) => (
             <img
@@ -62,7 +68,6 @@ const PreviewScreen: React.FC<Props> = ({ library, themeId, onBack, onStart }) =
             />
           ))}
         </div>
-        <Character kind="boy" mood="idle" size={130} />
       </div>
 
       <div style={{ display: 'flex', gap: 16 }}>
