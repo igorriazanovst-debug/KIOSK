@@ -127,6 +127,48 @@ test('deleteQuizFile returns false for a missing quiz id', () => {
   assert.equal(deleteQuizFile(dir, 'does-not-exist'), false);
 });
 
+test('deleteQuizFile also removes the quiz background image named in quiz.image.fileName', () => {
+  const tmp = fs.mkdtempSync(path.join(os.tmpdir(), 'rusiq-quizzes-delete-bg-'));
+  const dir = resolveQuizzesDir(tmp);
+  const bgResult = saveQuizBackground(dir, 'quiz-with-bg', Buffer.from([0x89, 0x50, 0x4e, 0x47]), 'image/png');
+  saveQuizFile(dir, {
+    id: 'quiz-with-bg',
+    title: 'С фоном',
+    passwordHash: null,
+    image: { fileName: bgResult.fileName, width: 100, height: 100 },
+    questions: [],
+  });
+  assert.equal(fs.existsSync(path.join(dir, bgResult.fileName)), true);
+
+  assert.equal(deleteQuizFile(dir, 'quiz-with-bg'), true);
+
+  assert.equal(loadQuizFile(dir, 'quiz-with-bg'), null);
+  assert.equal(fs.existsSync(path.join(dir, bgResult.fileName)), false);
+});
+
+test('deleteQuizFile still removes the quiz JSON when its background file is already missing from disk', () => {
+  const tmp = fs.mkdtempSync(path.join(os.tmpdir(), 'rusiq-quizzes-delete-bg-missing-'));
+  const dir = resolveQuizzesDir(tmp);
+  saveQuizFile(dir, {
+    id: 'quiz-orphan-ref',
+    title: 'Ссылка на отсутствующий фон',
+    passwordHash: null,
+    image: { fileName: 'quiz-orphan-ref-background.png', width: 100, height: 100 },
+    questions: [],
+  });
+
+  assert.equal(deleteQuizFile(dir, 'quiz-orphan-ref'), true);
+  assert.equal(loadQuizFile(dir, 'quiz-orphan-ref'), null);
+});
+
+test('deleteQuizFile removes only the JSON when the quiz has no background image', () => {
+  const tmp = fs.mkdtempSync(path.join(os.tmpdir(), 'rusiq-quizzes-delete-no-bg-'));
+  const dir = resolveQuizzesDir(tmp);
+  saveQuizFile(dir, { id: 'quiz-no-bg', title: 'Без фона', passwordHash: null, questions: [] });
+  assert.equal(deleteQuizFile(dir, 'quiz-no-bg'), true);
+  assert.equal(loadQuizFile(dir, 'quiz-no-bg'), null);
+});
+
 test('registerRusiqIpc wires quiz catalog handlers end-to-end', async () => {
   const tmp = fs.mkdtempSync(path.join(os.tmpdir(), 'rusiq-quizzes-e2e-'));
   const app = { getPath: () => tmp };

@@ -108,9 +108,36 @@ function saveQuizFile(quizzesDir, quiz) {
   fs.renameSync(tmpPath, filePath);
 }
 
+// Найдено при пересчёте соответствия ТЗ (2026-09-13): раньше удаляла
+// только JSON викторины, файл фонового изображения оставался осиротевшим
+// на диске - нарушение ТЗ §7 "удаление должно контролировать связанные
+// объекты". Перед удалением JSON читаем его же, чтобы узнать реальное имя
+// файла фона (quiz.image.fileName) - только оно, а не угаданное по
+// шаблону, гарантированно совпадает с тем, что реально лежит на диске
+// (та же дисциплина, что уже применена в EditorScreen.tsx - Не полагаться
+// на предугаданное имя, использовать just авторитетное). Удаление фона -
+// best-effort: отсутствие/ошибка удаления фона не должны блокировать
+// удаление самой викторины.
 function deleteQuizFile(quizzesDir, quizId) {
+  let filePath;
   try {
-    fs.unlinkSync(quizFilePath(quizzesDir, quizId));
+    filePath = quizFilePath(quizzesDir, quizId);
+  } catch {
+    return false;
+  }
+
+  const quiz = loadQuizFile(quizzesDir, quizId);
+  const backgroundFileName = quiz && isPlainRecord(quiz.image) ? quiz.image.fileName : null;
+  if (typeof backgroundFileName === 'string' && backgroundFileName.length > 0) {
+    try {
+      fs.unlinkSync(resolveWithinRoot(quizzesDir, backgroundFileName));
+    } catch {
+      // Фон уже отсутствует/не читается - не блокирует удаление самой викторины.
+    }
+  }
+
+  try {
+    fs.unlinkSync(filePath);
     return true;
   } catch {
     return false;
