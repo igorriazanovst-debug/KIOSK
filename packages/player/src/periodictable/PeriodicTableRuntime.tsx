@@ -9,7 +9,12 @@ import SearchTab from './screens/SearchTab.tsx';
 import ViewSettingsTab from './screens/ViewSettingsTab.tsx';
 import LegendTab from './screens/LegendTab.tsx';
 import TeacherPinModal from './screens/TeacherPinModal.tsx';
+import ProgressTab from './screens/ProgressTab.tsx';
+import CompareTab from './screens/CompareTab.tsx';
+import QuizTab from './screens/QuizTab.tsx';
 import { loadViewSettings, saveViewSettings, DEFAULT_VIEW_SETTINGS, type ViewSettings } from './viewSettingsStorage.ts';
+import { loadExploredSet, saveExploredSet, withExplored } from './explorationStorage.ts';
+import { addToCompare, removeFromCompare } from './compareSelection.ts';
 import { toggleTab, shouldClearHighlight, decideViewSettingsClick, type BottomTab } from './tabState.ts';
 import elementsJson from './content/elements.json' with { type: 'json' };
 
@@ -36,6 +41,8 @@ const PeriodicTableRuntime: React.FC<Props> = ({ properties }) => {
   const [highlightedSymbol, setHighlightedSymbol] = useState<string | null>(null);
   const [viewSettingsUnlocked, setViewSettingsUnlocked] = useState(false);
   const [showPinModal, setShowPinModal] = useState(false);
+  const [explored, setExplored] = useState<Set<number>>(new Set());
+  const [compareSelection, setCompareSelection] = useState<PeriodicElement[]>([]);
 
   // Единое место, откуда берётся действующий PIN — раньше `properties.
   // teacherPin ?? '0000'` повторялся в трёх разных местах компонента
@@ -45,6 +52,7 @@ const PeriodicTableRuntime: React.FC<Props> = ({ properties }) => {
 
   useEffect(() => {
     setViewSettings(loadViewSettings());
+    setExplored(loadExploredSet());
   }, []);
 
   function updateViewSettings(next: ViewSettings) {
@@ -55,6 +63,15 @@ const PeriodicTableRuntime: React.FC<Props> = ({ properties }) => {
   function selectElement(el: PeriodicElement) {
     setSelected(el);
     setCardMode('summary');
+    // Открытие карточки — сигнал "ученик посмотрел этот элемент", тот же
+    // момент для обеих карточек (сводной и подробной), т.к. подробная
+    // открывается только ИЗ уже открытой сводной — двойной отметки не
+    // будет благодаря withExplored (no-op, если номер уже отмечен).
+    setExplored((prev) => {
+      const next = withExplored(prev, el.atomicNumber);
+      if (next !== prev) saveExploredSet(next);
+      return next;
+    });
   }
 
   function closeCard() {
@@ -111,36 +128,96 @@ const PeriodicTableRuntime: React.FC<Props> = ({ properties }) => {
     );
   }
 
+  // Стиль кнопки нижней панели вкладок зависит от того, открыта ли именно
+  // эта вкладка сейчас: раньше все три кнопки выглядели одинаково всегда —
+  // нажатие визуально ничем не отличалось от ненажатого состояния, поэтому
+  // пользователю было не разобрать, что вкладка вообще открылась/закрылась.
+  function tabButtonStyle(isActive: boolean): React.CSSProperties {
+    return {
+      flex: 1,
+      padding: '14px 8px',
+      border: 'none',
+      borderTop: isActive ? '3px solid #1565c0' : '3px solid transparent',
+      background: isActive ? '#e3f2fd' : '#fafafa',
+      color: isActive ? '#0d47a1' : '#37474f',
+      fontWeight: isActive ? 'bold' : 'normal',
+      fontSize: 14,
+      cursor: 'pointer',
+    };
+  }
+
   return (
-    <div style={{ width: '100%', height: '100%', display: 'flex', flexDirection: 'column', fontFamily: 'sans-serif' }}>
-      <div style={{ flex: 1, overflow: 'auto' }}>
+    <div style={{ width: '100%', height: '100%', display: 'flex', flexDirection: 'column', fontFamily: 'sans-serif', background: '#f5f7fa' }}>
+      {/* Один общий <style> на весь виджет, а не хук hover-состояния на
+          каждую интерактивную плитку (~118 в таблице + строки поиска):
+          :hover — обычное CSS-псевдосостояние, не требует перерисовки
+          React-дерева. Класс специфичен для виджета (periodictable-cell),
+          чтобы не зацепить стили других виджетов плеера на том же экране.
+          Живёт здесь (а не в TableScreen.tsx, где был раньше), потому что
+          этот компонент — единственный, что смонтирован всегда, пока
+          виджет открыт, независимо от того, какая вкладка активна: и
+          TableScreen, и SearchTab используют этот класс. */}
+      <style>{`
+        .periodictable-cell {
+          transition: transform 0.12s ease, box-shadow 0.12s ease;
+        }
+        .periodictable-cell:hover {
+          transform: scale(1.03);
+          box-shadow: 0 2px 8px rgba(0,0,0,0.25);
+          z-index: 1;
+        }
+      `}</style>
+      {/* minHeight: 0 — без него флекс-элемент в колонке по умолчанию не
+          сжимается меньше высоты своего контента (min-height: auto),
+          `overflow: auto` тогда не срабатывает вообще: таблица (десять
+          строк, ~650px) выталкивает нижнюю панель вкладок за пределы окна
+          вместо того чтобы скроллиться сама внутри своей области. Найдено
+          живой проверкой в реальном (не file://) собранном приложении —
+          с этим багом вкладки Поиск/Настройки вида/Легенда физически не
+          помещались на экране ни при какой высоте окна, включая
+          развёрнутое на весь экран. */}
+      <div style={{ flex: 1, minHeight: 0, overflow: 'auto' }}>
         <TableScreen
           elements={elements}
           form={viewSettings.tableForm}
           colorIndication={viewSettings.colorIndication}
+          trendProperty={viewSettings.trendProperty}
           highlight={viewSettings.highlight}
           highlightedSymbol={highlightedSymbol}
           onSelectElement={selectElement}
         />
       </div>
 
-      <div style={{ display: 'flex', borderTop: '1px solid #ccc' }}>
-        <button onClick={() => openTab(toggleTab(activeTab, 'search'))} aria-label="Поиск" style={{ flex: 1, padding: 12 }}>Поиск</button>
+      <div style={{ display: 'flex', borderTop: '1px solid #cfd8dc', boxShadow: '0 -2px 6px rgba(0,0,0,0.06)' }}>
+        <button onClick={() => openTab(toggleTab(activeTab, 'search'))} aria-label="Поиск" style={tabButtonStyle(activeTab === 'search')}>
+          🔍 Поиск
+        </button>
         <button
           onClick={handleViewSettingsTabClick}
           aria-label={`Настройки вида${!viewSettingsUnlocked && effectivePin ? ', заблокировано PIN учителя' : ''}`}
-          style={{ flex: 1, padding: 12 }}
+          style={tabButtonStyle(activeTab === 'viewSettings')}
         >
           {/* Замок показывается, только если защита реально активна: раньше
               условие не учитывало пустой teacherPin («блокировка отключена»)
               — значок оставался, хотя вкладка уже открывалась в один клик. */}
-          Настройки вида {!viewSettingsUnlocked && effectivePin ? '🔒' : ''}
+          ⚙️ Настройки вида {!viewSettingsUnlocked && effectivePin ? '🔒' : ''}
         </button>
-        <button onClick={() => openTab(toggleTab(activeTab, 'legend'))} aria-label="Легенда" style={{ flex: 1, padding: 12 }}>Легенда</button>
+        <button onClick={() => openTab(toggleTab(activeTab, 'legend'))} aria-label="Легенда" style={tabButtonStyle(activeTab === 'legend')}>
+          🎨 Легенда
+        </button>
+        <button onClick={() => openTab(toggleTab(activeTab, 'progress'))} aria-label="Прогресс" style={tabButtonStyle(activeTab === 'progress')}>
+          📈 Прогресс
+        </button>
+        <button onClick={() => openTab(toggleTab(activeTab, 'compare'))} aria-label="Сравнение" style={tabButtonStyle(activeTab === 'compare')}>
+          ⚖️ Сравнение
+        </button>
+        <button onClick={() => openTab(toggleTab(activeTab, 'quiz'))} aria-label="Викторина" style={tabButtonStyle(activeTab === 'quiz')}>
+          ❓ Викторина
+        </button>
       </div>
 
       {activeTab === 'search' && (
-        <div style={{ maxHeight: '40vh', overflow: 'auto', borderTop: '1px solid #ccc' }}>
+        <div style={{ maxHeight: '40vh', overflow: 'auto', borderTop: '1px solid #cfd8dc', background: '#ffffff' }}>
           <SearchTab elements={elements} onSelectElement={selectElement} onHighlightChange={setHighlightedSymbol} />
         </div>
       )}
@@ -151,13 +228,33 @@ const PeriodicTableRuntime: React.FC<Props> = ({ properties }) => {
           Со старым условием пустой teacherPin («замок отключён») делал вкладку
           мёртвой: клик открывал таб, но панель не рендерилась никогда. */}
       {activeTab === 'viewSettings' && (
-        <div style={{ maxHeight: '40vh', overflow: 'auto', borderTop: '1px solid #ccc' }}>
+        <div style={{ maxHeight: '40vh', overflow: 'auto', borderTop: '1px solid #cfd8dc', background: '#ffffff' }}>
           <ViewSettingsTab settings={viewSettings} onChange={updateViewSettings} />
         </div>
       )}
       {activeTab === 'legend' && (
-        <div style={{ maxHeight: '40vh', overflow: 'auto', borderTop: '1px solid #ccc' }}>
-          <LegendTab colorIndication={viewSettings.colorIndication} />
+        <div style={{ maxHeight: '40vh', overflow: 'auto', borderTop: '1px solid #cfd8dc', background: '#ffffff' }}>
+          <LegendTab colorIndication={viewSettings.colorIndication} elements={elements} trendProperty={viewSettings.trendProperty} />
+        </div>
+      )}
+      {activeTab === 'progress' && (
+        <div style={{ maxHeight: '40vh', overflow: 'auto', borderTop: '1px solid #cfd8dc', background: '#ffffff' }}>
+          <ProgressTab elements={elements} explored={explored} />
+        </div>
+      )}
+      {activeTab === 'compare' && (
+        <div style={{ maxHeight: '50vh', overflow: 'auto', borderTop: '1px solid #cfd8dc', background: '#ffffff' }}>
+          <CompareTab
+            elements={elements}
+            selected={compareSelection}
+            onAdd={(el) => setCompareSelection((prev) => addToCompare(prev, el))}
+            onRemove={(atomicNumber) => setCompareSelection((prev) => removeFromCompare(prev, atomicNumber))}
+          />
+        </div>
+      )}
+      {activeTab === 'quiz' && (
+        <div style={{ maxHeight: '50vh', overflow: 'auto', borderTop: '1px solid #cfd8dc', background: '#ffffff' }}>
+          <QuizTab elements={elements} />
         </div>
       )}
 

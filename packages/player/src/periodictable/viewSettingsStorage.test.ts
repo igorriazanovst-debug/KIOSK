@@ -8,5 +8,5 @@ test('loadViewSettings returns the default when window/localStorage is unavailab
 });
 
 test('saveViewSettings does not throw when window/localStorage is unavailable', () => {
-  assert.doesNotThrow(() => saveViewSettings({ tableForm: 'iupac', colorIndication: 'none', highlight: 'metal' }));
+  assert.doesNotThrow(() => saveViewSettings({ tableForm: 'iupac', colorIndication: 'none', highlight: 'metal', trendProperty: 'atomicMass' }));
 });
