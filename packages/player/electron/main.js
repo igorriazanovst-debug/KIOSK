@@ -1371,10 +1371,15 @@ app.whenReady().then(() => {
     }
   });
 
-  // Обработчик протокола rusiqmedia:///<fileName> → фоновое изображение
+  // Обработчик протокола rusiqmedia://bg/<fileName> → фоновое изображение
   // пользовательской викторины «РусIQ» (Фаза 2a), packages/player/electron/
-  // rusiq/ipc.js resolveQuizzesDir. Пустой host, как у natcomlib - имя
-  // файла целиком в pathname.
+  // rusiq/ipc.js resolveQuizzesDir. Непустой host ("bg") - тот же паттерн,
+  // что уже рабочий natcomlib://asset/<fileName> (см. natcom/mediaUrl.ts):
+  // для standard-схемы с ПУСТЫМ host (`rusiqmedia:///file.png`) имя файла
+  // реально "проваливается" в host, а pathname становится '/' - main.js
+  // всегда получал бы пустой fileName и отдавал 404 молча (найдено живьём
+  // 2026-09-12, см. rusiqMediaUrl.ts). Хендлер как был - читает только
+  // pathname, "bg" в host просто отбрасывается парсером URL.
   protocol.handle('rusiqmedia', async (request) => {
     try {
       if (!rusiqQuizzesDir) return new Response('Not initialized', { status: 503 });

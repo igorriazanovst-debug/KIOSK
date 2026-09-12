@@ -11,6 +11,7 @@ import { loadQuiz, saveQuiz, saveQuizBackground } from './editor/quizStore.ts';
 import TeacherGateScreen from './editor/TeacherGateScreen.tsx';
 import QuizCatalogScreen from './editor/QuizCatalogScreen.tsx';
 import EditorScreen from './editor/EditorScreen.tsx';
+import { rusiqBackgroundMediaUrl } from './rusiqMediaUrl.ts';
 import rusiqContentJson from './content/rusiqContent.json' with { type: 'json' };
 
 // Изображение сцены НЕ импортируется как JS-модуль (ни плоским `import`, ни
@@ -165,7 +166,7 @@ const RusiqRuntime: React.FC<Props> = () => {
   if (phase === 'board' && setup) {
     return (
       <GameBoardScreen
-        imageUrl={activeQuiz.id === BUILTIN_QUIZ.id ? ALPHABET_IMAGE_URL : `rusiqmedia:///${activeQuiz.image.fileName}`}
+        imageUrl={activeQuiz.id === BUILTIN_QUIZ.id ? ALPHABET_IMAGE_URL : rusiqBackgroundMediaUrl(activeQuiz.image.fileName)}
         imageWidth={activeQuiz.image.width}
         imageHeight={activeQuiz.image.height}
         playerNames={setup.playerNames}

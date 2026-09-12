@@ -10,6 +10,7 @@ import QuizCanvas, { type QuizCanvasAddMode } from './QuizCanvas.tsx';
 import PointEditForm from './PointEditForm.tsx';
 import { hashSecret } from './pinAuth.ts';
 import { saveQuiz, saveQuizBackground } from './quizStore.ts';
+import { rusiqBackgroundMediaUrl } from '../rusiqMediaUrl.ts';
 import { RusiqQuizSchema, type RusiqPoint, type RusiqQuestion, type RusiqQuiz } from '../model/schema.ts';
 
 interface Props {
@@ -61,7 +62,7 @@ const EditorScreen: React.FC<Props> = ({ initialQuiz, pendingBackground, onExit 
       setBackgroundUrl(url);
       return () => URL.revokeObjectURL(url);
     }
-    setBackgroundUrl(`rusiqmedia:///${quiz.image.fileName}`);
+    setBackgroundUrl(rusiqBackgroundMediaUrl(quiz.image.fileName));
     return undefined;
   }, [pendingBg, quiz.image.fileName]);
 
@@ -194,7 +195,7 @@ const EditorScreen: React.FC<Props> = ({ initialQuiz, pendingBackground, onExit 
       // старого quiz.image.fileName - сейчас оно совпадает с авторитетным
       // только потому что обе таблицы MIME->расширение идентичны; если они
       // когда-нибудь разойдутся, эффект, показывающий фон
-      // (rusiqmedia:///${quiz.image.fileName}), начнёт указывать на
+      // (rusiqBackgroundMediaUrl(quiz.image.fileName)), начнёт указывать на
       // несуществующий файл сразу после первого сохранения.
       setHistory((h) => ({ ...h, present: quizToSave }));
     }
