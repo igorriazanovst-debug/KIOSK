@@ -6,41 +6,97 @@
 // r(θ,φ) = |f(θ,φ)| в сферических координатах, где f — реальная (не
 // комплексная) угловая часть волновой функции.
 //
-// Исключение — f-орбитали: используется ОДНА настоящая формула (f_z³,
-// физически корректна сама по себе) в нескольких поворотах вместо всех 7
-// разных реальных форм f-подоболочки. Разбирать оставшиеся 6 — того не
-// стоит для музейного экспоната: сознательное упрощение, зафиксировано и
-// в design-обсуждении, и здесь.
+// ВАЖНО (найдено по живому замечанию пользователя "чувство что построено
+// неправильно", проверено численно — см. orbitalGeometry.formulas.test.ts):
+// первая версия строила p/d-орбитали ОДНОЙ формулой + поворотами меша
+// (THREE.Object3D.rotation). Для p-орбитали, симметричной вокруг своей же
+// оси (см. p ниже — фигура вращения, инвариантна к повороту вокруг
+// собственной оси), поворот вокруг ЭТОЙ ЖЕ оси на 90° был буквально
+// no-op: одна из трёх p-орбиталей дублировалась, другая не строилась
+// вовсе. Сейчас КАЖДАЯ орбиталь — отдельная, независимо verified замкнутая
+// формула, без поворотов существующего меша. Корректность всего набора
+// подтверждена математическим инвариантом (см. тест): сумма квадратов всех
+// орбиталей одной подоболочки — константа при любых (θ,φ), это стандартное
+// свойство полного набора вещественных сферических гармоник одного l —
+// если бы формулы были неполными/задублированными, сумма плавала бы.
+//
+// Исключение — f-орбитали: используются 3 настоящие (не все 7) формы
+// f-подоболочки, каждая — своя независимая формула, не поворот одной.
+// Разбирать оставшиеся 4 — того не стоит для музейного экспоната;
+// зафиксировано в design-обсуждении и в подписи под 3D-видом
+// (OrbitalViewer3D.tsx: "формы приближённые, f-орбитали упрощены").
 
 import * as THREE from 'three';
 import type { ElectronType } from './model/schema.ts';
 import type { OrbitalGroup, Subshell } from './orbitalModel.ts';
 import { ELECTRON_TYPE_COLOR } from './colorPalette.ts';
 
-type AngularFn = (theta: number, phi: number) => number;
+export type AngularFn = (theta: number, phi: number) => number;
 
-const ANGULAR_FN: Record<'s' | 'p' | 'dCloverleaf' | 'dz2' | 'fApprox', AngularFn> = {
-  s: () => 1,
-  p: (theta) => Math.cos(theta),
-  dCloverleaf: (theta, phi) => Math.sin(theta) ** 2 * Math.sin(2 * phi),
-  dz2: (theta) => 3 * Math.cos(theta) ** 2 - 1,
-  fApprox: (theta) => Math.cos(theta) * (5 * Math.cos(theta) ** 2 - 3),
-};
+// Ось θ=0 — локальная "полярная" ось построения (в коде помечена как Y —
+// см. buildLobeMesh); физически это не более чем выбор системы координат
+// для рисования, три p/пять d-орбиталей всё равно образуют полный
+// корректный набор независимо от того, какую ось назвать "полюсом".
+export const S_ANGULAR: AngularFn = () => 1;
 
-const POSITIVE_LOBE_COLOR = new THREE.Color(0x4fc3f7);
-const NEGATIVE_LOBE_COLOR = new THREE.Color(0xff8a65);
+// Три p-орбитали — каждая своей формулой (НЕ поворотом одного меша, см.
+// комментарий в шапке файла). Сумма квадратов ≡ 1 — доказано в тесте.
+export const P_POLE_ANGULAR: AngularFn = (theta) => Math.cos(theta);
+export const P_A_ANGULAR: AngularFn = (theta, phi) => Math.sin(theta) * Math.cos(phi);
+export const P_B_ANGULAR: AngularFn = (theta, phi) => Math.sin(theta) * Math.sin(phi);
+
+// Пять d-орбиталей — коэффициенты 2 и 1/√3 подобраны так, чтобы сумма
+// квадратов всех пяти была константой (тот же инвариант, что у p) —
+// это и есть численная проверка, что набор из пяти формул действительно
+// полный и взаимно согласованный, а не "5 похожих на вид функций".
+export const D_POLE2_ANGULAR: AngularFn = (theta) => (3 * Math.cos(theta) ** 2 - 1) / Math.sqrt(3);
+export const D_A_POLE_ANGULAR: AngularFn = (theta, phi) => 2 * Math.sin(theta) * Math.cos(theta) * Math.cos(phi);
+export const D_B_POLE_ANGULAR: AngularFn = (theta, phi) => 2 * Math.sin(theta) * Math.cos(theta) * Math.sin(phi);
+export const D_EQUATOR_1_ANGULAR: AngularFn = (theta, phi) => Math.sin(theta) ** 2 * Math.sin(2 * phi);
+export const D_EQUATOR_2_ANGULAR: AngularFn = (theta, phi) => Math.sin(theta) ** 2 * Math.cos(2 * phi);
+
+// f: 3 из 7 реальных форм f-подоболочки (см. шапку файла) — каждая своя
+// формула, тоже без поворотов одного меша.
+export const F_POLE3_ANGULAR: AngularFn = (theta) => Math.cos(theta) * (5 * Math.cos(theta) ** 2 - 3);
+export const F_A_ANGULAR: AngularFn = (theta, phi) => Math.sin(theta) * (5 * Math.cos(theta) ** 2 - 1) * Math.cos(phi);
+export const F_B_ANGULAR: AngularFn = (theta, phi) => Math.sin(theta) * (5 * Math.cos(theta) ** 2 - 1) * Math.sin(phi);
+
+function hexToRgb(hex: string): [number, number, number] {
+  const n = parseInt(hex.replace('#', ''), 16);
+  return [(n >> 16) & 255, (n >> 8) & 255, n & 255];
+}
+
+// Доля лепестка не окрашивается по знаку синим/оранжевым (это красило бы
+// ВСЕ подоболочки одинаково — ровно то, из-за чего пользователь не мог
+// понять, какая фигура какой подоболочке принадлежит: цвет на 3D-фигуре
+// не совпадал с цветом точки в подписи под ней). Вместо этого — цвет
+// самой подоболочки (та же карта ELECTRON_TYPE_COLOR, что красит плитки в
+// режиме «Электронный тип» и легенду ниже холста), а знак фазы — светлее/
+// темнее ТОГО ЖЕ цвета, а не другой цвет вовсе.
+function phaseShade(base: [number, number, number], positive: boolean): THREE.Color {
+  const [r, g, b] = base;
+  const t = positive ? 0.55 : -0.25; // светлее для +, темнее для -
+  const mix = (c: number) => {
+    const target = t >= 0 ? 255 : 0;
+    return Math.round(c + (target - c) * Math.abs(t));
+  };
+  return new THREE.Color(mix(r) / 255, mix(g) / 255, mix(b) / 255);
+}
 
 /**
  * Строит один "лепестковый" меш по угловой функции: сфера-развёртка (UV),
  * где радиус каждой вершины — |f(θ,φ)|, отмасштабированный под номер
- * оболочки n. Вершины красятся по знаку f — тот же приём, что в любом
- * учебном изображении орбиталей (две доли разного "цвета фазы").
+ * оболочки n. Вершины красятся по знаку f (светлее/темнее цвета
+ * подоболочки) — та же идея "две доли разного оттенка", что в учебных
+ * изображениях орбиталей, но привязана к цвету подоболочки, не к
+ * произвольной сине-оранжевой паре.
  */
-function buildLobeMesh(fn: AngularFn, scale: number, segments = 40): THREE.Mesh {
+export function buildLobeMesh(fn: AngularFn, scale: number, baseColorHex: string, segments = 40): THREE.Mesh {
   const geometry = new THREE.BufferGeometry();
   const positions: number[] = [];
   const colors: number[] = [];
   const indices: number[] = [];
+  const baseRgb = hexToRgb(baseColorHex);
 
   const thetaSteps = segments;
   const phiSteps = segments * 2;
@@ -55,7 +111,7 @@ function buildLobeMesh(fn: AngularFn, scale: number, segments = 40): THREE.Mesh 
       const y = r * Math.cos(theta);
       const z = r * Math.sin(theta) * Math.sin(phi);
       positions.push(x, y, z);
-      const color = value >= 0 ? POSITIVE_LOBE_COLOR : NEGATIVE_LOBE_COLOR;
+      const color = phaseShade(baseRgb, value >= 0);
       colors.push(color.r, color.g, color.b);
     }
   }
@@ -76,7 +132,7 @@ function buildLobeMesh(fn: AngularFn, scale: number, segments = 40): THREE.Mesh 
   const material = new THREE.MeshStandardMaterial({
     vertexColors: true,
     transparent: true,
-    opacity: 0.85,
+    opacity: 0.88,
     side: THREE.DoubleSide,
     roughness: 0.35,
     metalness: 0.05,
@@ -85,70 +141,57 @@ function buildLobeMesh(fn: AngularFn, scale: number, segments = 40): THREE.Mesh 
   return new THREE.Mesh(geometry, material);
 }
 
-// Радиус растёт с номером оболочки — выше n визуально дальше от ядра,
-// та же логика, что в любой школьной модели атома, только тут это ещё и
-// разносит несколько валентных групп друг от друга без перекрытия.
+// Разнесение оболочек по радиусу сделано заметно шире прежнего
+// (0.9+n*0.35 → 1.2+n*0.9): у элементов с несколькими валентными группами
+// близких n (например Ce: 4f/5d/6s) прежний шаг был меньше самого размаха
+// лепестков — оболочки визуально сливались в одно пятно вместо
+// различимых концентрических слоёв. Слово "чувство, что построено
+// непонятно" (дословная формулировка пользователя) — во многом именно
+// об этом перекрытии, не только о цвете.
 function shellScale(n: number): number {
-  return 0.9 + n * 0.35;
+  return 1.2 + n * 0.9;
+}
+
+/** Цвет по типу подоболочки — та же карта, что красит плитки в режиме
+ *  «Электронный тип» (colorPalette.ts) и подпись-чип под 3D-видом. Теперь
+ *  ЭТОТ ЖЕ цвет идёт и в саму 3D-геометрию (buildSubshellGroup ниже) —
+ *  раньше фигуры красились отдельной сине-оранжевой парой, не совпадавшей
+ *  с чипом легенды. */
+export function orbitalGroupColor(subshell: Subshell): string {
+  return ELECTRON_TYPE_COLOR[subshell as ElectronType];
 }
 
 function buildSubshellGroup(subshell: Subshell, n: number): THREE.Group {
   const group = new THREE.Group();
   const scale = shellScale(n);
+  const color = orbitalGroupColor(subshell);
 
   if (subshell === 's') {
-    group.add(buildLobeMesh(ANGULAR_FN.s, scale * 0.6));
+    group.add(buildLobeMesh(S_ANGULAR, scale * 0.55, color));
     return group;
   }
 
   if (subshell === 'p') {
-    const base = buildLobeMesh(ANGULAR_FN.p, scale);
-    group.add(base);
-    const py = base.clone();
-    py.rotation.x = Math.PI / 2;
-    group.add(py);
-    const px = base.clone();
-    px.rotation.y = Math.PI / 2;
-    group.add(px);
+    group.add(buildLobeMesh(P_POLE_ANGULAR, scale, color));
+    group.add(buildLobeMesh(P_A_ANGULAR, scale, color));
+    group.add(buildLobeMesh(P_B_ANGULAR, scale, color));
     return group;
   }
 
   if (subshell === 'd') {
-    const cloverleaf = buildLobeMesh(ANGULAR_FN.dCloverleaf, scale);
-    // dxy (как есть), dx2-y2 (поворот на 45° вокруг z), dxz и dyz (тот же
-    // лепесток, повёрнутый в плоскости xz/yz) — 4 геометрически одинаковых
-    // орбитали этой подоболочки, различающихся только ориентацией.
-    const dxy = cloverleaf;
-    group.add(dxy);
-    const dx2y2 = cloverleaf.clone();
-    dx2y2.rotation.z = Math.PI / 4;
-    group.add(dx2y2);
-    const dxz = cloverleaf.clone();
-    dxz.rotation.x = Math.PI / 2;
-    group.add(dxz);
-    const dyz = cloverleaf.clone();
-    dyz.rotation.y = Math.PI / 2;
-    group.add(dyz);
-    group.add(buildLobeMesh(ANGULAR_FN.dz2, scale));
+    group.add(buildLobeMesh(D_POLE2_ANGULAR, scale, color));
+    group.add(buildLobeMesh(D_A_POLE_ANGULAR, scale, color));
+    group.add(buildLobeMesh(D_B_POLE_ANGULAR, scale, color));
+    group.add(buildLobeMesh(D_EQUATOR_1_ANGULAR, scale, color));
+    group.add(buildLobeMesh(D_EQUATOR_2_ANGULAR, scale, color));
     return group;
   }
 
-  // f: см. комментарий в шапке файла — упрощение, не 7 разных форм.
-  const fBase = buildLobeMesh(ANGULAR_FN.fApprox, scale);
-  group.add(fBase);
-  for (const angle of [Math.PI / 3, (2 * Math.PI) / 3, Math.PI]) {
-    const copy = fBase.clone();
-    copy.rotation.x = angle;
-    group.add(copy);
-  }
+  // f: см. комментарий в шапке файла — 3 из 7 реальных форм, не все.
+  group.add(buildLobeMesh(F_POLE3_ANGULAR, scale, color));
+  group.add(buildLobeMesh(F_A_ANGULAR, scale, color));
+  group.add(buildLobeMesh(F_B_ANGULAR, scale, color));
   return group;
-}
-
-/** Цвет по типу подоболочки — та же карта, что красит плитки в режиме
- *  «Электронный тип» (colorPalette.ts), чтобы 3D-вид не заводил свою
- *  параллельную цветовую легенду. */
-export function orbitalGroupColor(subshell: Subshell): string {
-  return ELECTRON_TYPE_COLOR[subshell as ElectronType];
 }
 
 /** Собирает единую сцену-группу под все валентные орбитальные группы

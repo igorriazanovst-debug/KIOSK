@@ -7,7 +7,7 @@
 // через `file://`). Плеер — устанавливаемое приложение, не веб-страница:
 // разовый рост инсталлятора — приемлемая цена за то, чтобы не трогать
 // общий для всех виджетов workaround.
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import * as THREE from 'three';
 // examples/jsm — часть пакета three, тот же паттерн подключения, что в
 // официальной документации/большинстве интеграций (не отдельный npm-пакет).
@@ -22,6 +22,8 @@ interface Props {
 
 const OrbitalViewer3D: React.FC<Props> = ({ element }) => {
   const containerRef = useRef<HTMLDivElement>(null);
+  const resetViewRef = useRef<() => void>(() => {});
+  const [rotating, setRotating] = useState(true);
   const parsed = parseElectronConfiguration(element.electronConfiguration);
 
   useEffect(() => {
@@ -80,9 +82,37 @@ const OrbitalViewer3D: React.FC<Props> = ({ element }) => {
     controls.maxDistance = fitDistance * 3;
     controls.update();
 
+    const initialCameraPos = camera.position.clone();
+    const initialTarget = controls.target.clone();
+
+    // Автовращение ТОЛЬКО пока пользователь не тронул вид сам — раньше
+    // фигура вращалась каждый кадр ВНЕ зависимости от того, крутит ли
+    // пользователь камеру через OrbitControls: два независимых вращения
+    // одновременно (само вращение атома + ручной поворот камеры) мешали
+    // друг другу и не давали "поймать" ракурс, чтобы рассмотреть форму —
+    // ровно то, что стояло за жалобой "не понятно, как построено".
+    let autoRotate = true;
+    controls.addEventListener('start', () => {
+      autoRotate = false;
+      setRotating(false);
+    });
+
+    // «Сбросить вид» — возврат к исходному кадрированию И включение
+    // автовращения обратно, а не просто прыжок камеры: после ручного
+    // вращения нет иного способа вернуть автообзор, кроме как заново
+    // открыть карточку.
+    resetViewRef.current = () => {
+      atom.rotation.y = 0;
+      camera.position.copy(initialCameraPos);
+      controls.target.copy(initialTarget);
+      controls.update();
+      autoRotate = true;
+      setRotating(true);
+    };
+
     let frameId = 0;
     const animate = () => {
-      atom.rotation.y += 0.0015;
+      if (autoRotate) atom.rotation.y += 0.0015;
       controls.update();
       renderer.render(scene, camera);
       frameId = requestAnimationFrame(animate);
@@ -130,11 +160,35 @@ const OrbitalViewer3D: React.FC<Props> = ({ element }) => {
 
   return (
     <div>
-      <div
-        ref={containerRef}
-        style={{ width: '100%', height: 320, borderRadius: 10, overflow: 'hidden', touchAction: 'none' }}
-        aria-label={`3D-модель орбиталей элемента ${element.nameRu}`}
-      />
+      <div style={{ position: 'relative' }}>
+        <div
+          ref={containerRef}
+          style={{ width: '100%', height: 320, borderRadius: 10, overflow: 'hidden', touchAction: 'none' }}
+          aria-label={`3D-модель орбиталей элемента ${element.nameRu}`}
+        />
+        {!rotating && (
+          <button
+            onClick={() => resetViewRef.current()}
+            style={{
+              position: 'absolute',
+              top: 10,
+              right: 10,
+              padding: '6px 12px',
+              background: 'rgba(255,255,255,0.9)',
+              border: '1px solid #cfd8dc',
+              borderRadius: 8,
+              cursor: 'pointer',
+              fontSize: 13,
+              color: '#37474f',
+            }}
+          >
+            ↺ Сбросить вид
+          </button>
+        )}
+      </div>
+      <p style={{ fontSize: 12, color: '#90a4ae', marginTop: 8, marginBottom: 0 }}>
+        Потяните пальцем или мышью, чтобы повернуть; колесо/щипок — приблизить.
+      </p>
       <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', marginTop: 10, fontSize: 13, color: '#607d8b' }}>
         {parsed.coreLabel && <span>Остов: [{parsed.coreLabel}]</span>}
         {parsed.valenceGroups.map((g) => (
