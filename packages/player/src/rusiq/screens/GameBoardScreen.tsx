@@ -26,8 +26,55 @@ const DISPLAY_MAX_WIDTH_CSS = 'min(1200px, 92vw)';
 // ложные точки текущего вопроса (`decoyPoints`) и общие ложные точки поля
 // (`genericDecoyPoints`) визуально неотличимы (находка 6 финального ревью):
 // иначе цвет точки сам по себе становится подсказкой правильного ответа.
-const POINT_COLOR = 'rgba(90, 90, 90, 0.55)';
+// Прозрачность снижена (2026-09-12): каждая буква алфавита — вариант
+// ответа, поэтому все 33 плитки покрыты областью клика одновременно
+// (не разреженный набор decoy) - при плотности 0.55 сплошная заливка всей
+// доски смотрелась тяжело; на 0.28 видно, что вся доска кликабельна, но
+// сами буквы/картинки остаются хорошо читаемыми под областью.
+const POINT_COLOR = 'rgba(90, 90, 90, 0.28)';
 const POINT_RING = '2px solid rgba(255, 255, 255, 0.5)';
+const FEEDBACK_CORRECT_COLOR = 'rgba(62, 207, 126, 0.85)';
+const FEEDBACK_WRONG_COLOR = 'rgba(255, 107, 107, 0.85)';
+const FEEDBACK_DURATION_MS = 900;
+
+// Одна кликабельная плитка доски после дедупликации (см. buildTiles ниже).
+interface BoardTile {
+  key: string;
+  x: number;
+  y: number;
+  width: number;
+  height: number;
+  isCorrect: boolean;
+}
+
+function tileKey(point: { x: number; y: number }): string {
+  return `${Math.round(point.x)}_${Math.round(point.y)}`;
+}
+
+// Находка живьём (2026-09-12): genericDecoyPoints теперь покрывает ВСЕ
+// плитки доски (каждая буква алфавита - вариант ответа, не разреженный
+// набор decoy - по прямому уточнению пользователя), поэтому плитка
+// правильного ответа (и любая decoy-точка текущего вопроса, если она
+// совпадает с уже покрытой generic-плиткой) раньше получала ДВА
+// наложенных полупрозрачных слоя (generic + свой собственный) - визуально
+// заметно темнее прочих плиток с одним слоем, то есть сама подсветка
+// выдавала правильный ответ. Дедупликация по ключу x_y гарантирует ровно
+// один отрисованный прямоугольник на плитку независимо от того, сколько
+// логических точек (generic/decoy/correct) на неё претендует.
+function buildTiles(question: RusiqQuestion, genericDecoyPoints: RusiqPoint[]): BoardTile[] {
+  const correctKey = tileKey(question);
+  const map = new Map<string, BoardTile>();
+  for (const p of genericDecoyPoints) {
+    const key = tileKey(p);
+    map.set(key, { key, x: p.x, y: p.y, width: p.width, height: p.height, isCorrect: key === correctKey });
+  }
+  for (const p of question.decoyPoints) {
+    const key = tileKey(p);
+    map.set(key, { key, x: p.x, y: p.y, width: p.width, height: p.height, isCorrect: key === correctKey });
+  }
+  map.set(correctKey, { key: correctKey, x: question.x, y: question.y, width: question.width, height: question.height, isCorrect: true });
+  return Array.from(map.values());
+}
 
 const GameBoardScreen: React.FC<Props> = ({ imageUrl, imageWidth, imageHeight, playerNames, questionsByPlayer, genericDecoyPoints, onFinished }) => {
   const [currentPlayer, setCurrentPlayer] = useState(0);
@@ -35,12 +82,20 @@ const GameBoardScreen: React.FC<Props> = ({ imageUrl, imageWidth, imageHeight, p
   const [elapsed, setElapsed] = useState(0);
   const [answers, setAnswers] = useState<RusiqAnswerEvent[]>([]);
   const [hintShown, setHintShown] = useState(false);
+  // Подсветка выбранной плитки зелёным/красным на FEEDBACK_DURATION_MS перед
+  // переходом к следующему вопросу — по прямому запросу пользователя
+  // (2026-09-12), чтобы игрок видел подтверждение своего клика, а не мгновенную
+  // смену вопроса без обратной связи.
+  const [feedback, setFeedback] = useState<{ key: string; correct: boolean } | null>(null);
 
-  // Защита от двойного advance() на один и тот же вопрос — единственная
-  // точка входа для "истёк таймер"/"клик по точке"/"сдался", см. advance().
+  // Защита от повторного клика на один и тот же вопрос, пока не сработал
+  // отложенный переход — единственная точка входа для "истёк таймер"/"клик
+  // по плитке"/"сдался", см. commitAdvance().
   const hasAnsweredRef = useRef(false);
+  const feedbackTimeoutRef = useRef<number | null>(null);
 
   const currentQuestion = questionsByPlayer[currentPlayer][questionIndexByPlayer[currentPlayer]];
+  const tiles = buildTiles(currentQuestion, genericDecoyPoints);
 
   // Обнуляет таймер и заводит секундный тик на каждый новый вопрос
   // (смена currentPlayer или его индекса вопроса). Само истечение времени
@@ -50,29 +105,35 @@ const GameBoardScreen: React.FC<Props> = ({ imageUrl, imageWidth, imageHeight, p
   useEffect(() => {
     setElapsed(0);
     setHintShown(false);
+    setFeedback(null);
     hasAnsweredRef.current = false;
     const interval = setInterval(() => setElapsed((prev) => prev + 1), 1000);
     return () => clearInterval(interval);
   }, [currentPlayer, questionIndexByPlayer[currentPlayer]]);
 
+  useEffect(() => {
+    return () => {
+      if (feedbackTimeoutRef.current !== null) window.clearTimeout(feedbackTimeoutRef.current);
+    };
+  }, []);
+
   // Истечение времени вопроса (находка 4 финального ревью): раньше ничего
   // не вызывало advance() при elapsed >= timeSeconds, из-за чего вопрос
-  // можно было держать открытым бесконечно. advance() сам себя защищает от
-  // повторного вызова через hasAnsweredRef, поэтому даже если этот эффект
-  // сработает несколько раз подряд, пока не остановился интервал/не
-  // применился переход на новый вопрос, advance() выполнится не более
-  // одного раза на вопрос.
+  // можно было держать открытым бесконечно. Явная проверка hasAnsweredRef
+  // здесь (а не только внутри commitAdvance) нужна потому, что клик по
+  // плитке теперь взводит hasAnsweredRef СРАЗУ, но саму мутацию состояния
+  // откладывает на FEEDBACK_DURATION_MS - без проверки здесь истечение
+  // таймера в этом окне повторно вызвало бы commitAdvance поверх уже
+  // запланированного отложенного вызова.
   useEffect(() => {
-    if (elapsed >= currentQuestion.timeSeconds) {
-      advance({ playerIndex: currentPlayer, score: 0, correct: false });
+    if (elapsed >= currentQuestion.timeSeconds && !hasAnsweredRef.current) {
+      hasAnsweredRef.current = true;
+      commitAdvance({ playerIndex: currentPlayer, score: 0, correct: false });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [elapsed]);
 
-  function advance(event: RusiqAnswerEvent) {
-    if (hasAnsweredRef.current) return;
-    hasAnsweredRef.current = true;
-
+  function commitAdvance(event: RusiqAnswerEvent) {
     const updatedAnswers = [...answers, event];
     setAnswers(updatedAnswers);
 
@@ -88,17 +149,22 @@ const GameBoardScreen: React.FC<Props> = ({ imageUrl, imageWidth, imageHeight, p
     setCurrentPlayer((prev) => nextTurn(prev, playerNames.length));
   }
 
-  function handleCorrectPointClick() {
-    const score = scoreForAnswer(currentQuestion.price, currentQuestion.timeSeconds, elapsed, true);
-    advance({ playerIndex: currentPlayer, score, correct: true });
-  }
-
-  function handleDecoyPointClick() {
-    advance({ playerIndex: currentPlayer, score: 0, correct: false });
+  function handleTileClick(tile: BoardTile) {
+    if (hasAnsweredRef.current) return;
+    hasAnsweredRef.current = true;
+    const correct = tile.isCorrect;
+    const score = correct ? scoreForAnswer(currentQuestion.price, currentQuestion.timeSeconds, elapsed, true) : 0;
+    setFeedback({ key: tile.key, correct });
+    feedbackTimeoutRef.current = window.setTimeout(() => {
+      setFeedback(null);
+      commitAdvance({ playerIndex: currentPlayer, score, correct });
+    }, FEEDBACK_DURATION_MS);
   }
 
   function handleGiveUp() {
-    advance({ playerIndex: currentPlayer, score: 0, correct: false });
+    if (hasAnsweredRef.current) return;
+    hasAnsweredRef.current = true;
+    commitAdvance({ playerIndex: currentPlayer, score: 0, correct: false });
   }
 
   function handleShowHint() {
@@ -120,18 +186,21 @@ const GameBoardScreen: React.FC<Props> = ({ imageUrl, imageWidth, imageHeight, p
   // именно область, привязанная к силуэту/иконке конкретного ответа (обычно
   // прямоугольная плитка), а не абстрактный круг любого размера — обратная
   // связь пользователя после первой попытки.
-  function pointStyle(point: { width: number; height: number }): React.CSSProperties {
+  function pointStyle(point: { width: number; height: number }, activeFeedback: { correct: boolean } | null): React.CSSProperties {
+    const background = activeFeedback ? (activeFeedback.correct ? FEEDBACK_CORRECT_COLOR : FEEDBACK_WRONG_COLOR) : POINT_COLOR;
+    const border = activeFeedback ? `2px solid ${activeFeedback.correct ? '#3ecf7e' : '#ff6b6b'}` : POINT_RING;
     return {
       position: 'absolute',
       width: `${(point.width / imageWidth) * 100}%`,
       height: `${(point.height / imageHeight) * 100}%`,
       transform: 'translate(-50%, -50%)',
       borderRadius: 6,
-      background: POINT_COLOR,
-      border: POINT_RING,
+      background,
+      border,
       boxShadow: '0 0 6px rgba(0, 0, 0, 0.4)',
       padding: 0,
-      cursor: 'pointer',
+      cursor: hasAnsweredRef.current ? 'default' : 'pointer',
+      transition: 'background 120ms ease, border-color 120ms ease',
     };
   }
 
@@ -186,32 +255,23 @@ const GameBoardScreen: React.FC<Props> = ({ imageUrl, imageWidth, imageHeight, p
         }}
       >
         <img src={imageUrl} alt="" style={{ width: '100%', height: '100%', display: 'block' }} />
-        {/* Общие ложные точки поля (спека, разд. 5) — видны постоянно, не зависят от текущего вопроса. */}
-        {genericDecoyPoints.map((point, i) => (
-          <button
-            key={`generic-${i}`}
-            onClick={handleDecoyPointClick}
-            style={{ ...pointStyle(point), ...pointPosition(point) }}
-            aria-label={`generic-decoy-${i}`}
-          />
-        ))}
-        {/* Ложные точки ИМЕННО текущего вопроса. */}
-        {currentQuestion.decoyPoints.map((point, i) => (
-          <button
-            key={`decoy-${i}`}
-            onClick={handleDecoyPointClick}
-            style={{ ...pointStyle(point), ...pointPosition(point) }}
-            aria-label={`decoy-${i}`}
-          />
-        ))}
-        {/* Точка правильного ответа — идентифицируется по ссылке на currentQuestion (не по координатам, не по стилю),
-            поэтому клик по ней однозначен даже если совпадает по (x,y) с чужой decoy-точкой, а внешне она неотличима
-            от ложных точек до клика (находка 6 финального ревью). */}
-        <button
-          onClick={handleCorrectPointClick}
-          style={{ ...pointStyle(currentQuestion), ...pointPosition(currentQuestion) }}
-          aria-label="correct-point"
-        />
+        {/* Одна плитка на уникальную позицию (buildTiles дедуплицирует
+            generic/decoy/correct по x_y) - клик однозначен через tile.isCorrect,
+            а не по ссылке на объект, но внешне плитки неотличимы до клика
+            (находка 6 финального ревью) и до клика получают ровно один слой
+            подсветки каждая (найдено живьём 2026-09-12 - двойное наложение
+            слоёв на плитке правильного ответа делало её темнее остальных). */}
+        {tiles.map((tile) => {
+          const activeFeedback = feedback && feedback.key === tile.key ? feedback : null;
+          return (
+            <button
+              key={tile.key}
+              onClick={() => handleTileClick(tile)}
+              style={{ ...pointStyle(tile, activeFeedback), ...pointPosition(tile) }}
+              aria-label={tile.isCorrect ? 'correct-point' : `decoy-${tile.key}`}
+            />
+          );
+        })}
       </div>
     </div>
   );
