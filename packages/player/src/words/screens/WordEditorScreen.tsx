@@ -12,7 +12,7 @@
 // педагогу нужно понятное объяснение, а не тишина.
 
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { BigButton, ErrorBanner, ScreenFrame, palette, TOUCH_TARGET_PX } from '../ui';
+import { BigButton, ErrorBanner, ScreenFrame, ScrollArea, palette, TOUCH_TARGET_PX } from '../ui';
 import Keyboard from '../components/Keyboard';
 import { userMediaUrl } from '../mediaUrl';
 import type { UserWord } from '@kiosk/shared';
@@ -126,9 +126,17 @@ const WordEditorScreen: React.FC<Props> = ({ api, editing, error, busy, onCancel
     <ScreenFrame title={editing ? 'Правка слова' : 'Новое слово'} onBack={onCancel}>
       <ErrorBanner text={localError ?? error} />
 
-      <div style={{ display: 'flex', gap: 24, flex: 1, minHeight: 0 }}>
+      {/* Колонки ПЕРЕНОСЯТСЯ, а область прокручивается.
+          Экранная клавиатура — 12 клавиш по TOUCH_TARGET_PX, это около 950 px,
+          и вместе с колонкой картинки и звука в логические 1024 она физически
+          не помещается: правая колонка уходила за край сцены и срезалась.
+          Уменьшать клавиши нельзя — это минимальный размер под палец. Поэтому
+          на узкой сцене колонки встают друг под друга, а на широкой (окно
+          шире 4:3 даёт сцене запас по ширине) остаются рядом. */}
+      <ScrollArea style={{ flex: 1 }}>
+      <div style={{ display: 'flex', gap: 24, flexWrap: 'wrap', alignItems: 'flex-start' }}>
         {/* Название */}
-        <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 12 }}>
+        <div style={{ flex: '1 1 560px', minWidth: 0, display: 'flex', flexDirection: 'column', gap: 12 }}>
           <span style={{ fontSize: 24 }}>Название</span>
           <div
             data-testid="word-name"
@@ -147,7 +155,7 @@ const WordEditorScreen: React.FC<Props> = ({ api, editing, error, busy, onCancel
         </div>
 
         {/* Картинка и звук */}
-        <div style={{ width: 380, display: 'flex', flexDirection: 'column', gap: 16 }}>
+        <div style={{ flex: '0 1 380px', minWidth: 320, display: 'flex', flexDirection: 'column', gap: 16 }}>
           <span style={{ fontSize: 24 }}>Изображение</span>
           <div
             data-testid="word-image"
@@ -225,6 +233,7 @@ const WordEditorScreen: React.FC<Props> = ({ api, editing, error, busy, onCancel
           )}
         </div>
       </div>
+      </ScrollArea>
 
       <div style={{ display: 'flex', gap: 16 }}>
         <BigButton onClick={onCancel} tone="secondary" testId="cancel-word">

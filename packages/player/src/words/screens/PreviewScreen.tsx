@@ -44,11 +44,19 @@ const PreviewScreen: React.FC<Props> = ({ library, themeId, onBack, onStart }) =
         {theme?.title ?? 'Тема'}
       </h1>
 
-      <img
-        src={themeCoverUrl(themeId)}
-        alt=""
-        style={{ width: 560, borderRadius: 16 }}
-      />
+      {/* Обложка ДОЛЖНА сжиматься. Раньше у неё была только ширина 560, а
+          высота бралась из пропорций картинки — квадратная обложка давала 560
+          и по высоте, и вместе с заголовком, совой и кнопками экран перерастал
+          сцену: заголовок срезался сверху, кнопки снизу. Теперь картинка —
+          гибкий элемент колонки и ужимается первой, а текст и кнопки остаются
+          на месте при любом размере окна. */}
+      <div style={{ flex: 1, minHeight: 0, display: 'flex', alignItems: 'center' }}>
+        <img
+          src={themeCoverUrl(themeId)}
+          alt=""
+          style={{ maxWidth: 560, maxHeight: '100%', objectFit: 'contain', borderRadius: 16 }}
+        />
+      </div>
 
       <div style={{ display: 'flex', alignItems: 'flex-end', gap: 20 }}>
         <OwlHelper

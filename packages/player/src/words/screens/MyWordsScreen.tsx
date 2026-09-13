@@ -114,9 +114,9 @@ const MyWordsScreen: React.FC<Props> = ({
       <div style={{ display: 'flex', gap: 24, flex: 1, minHeight: 0 }}>
         {/* Свои слова */}
         <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 12, minWidth: 0 }}>
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 10, flexWrap: 'wrap' }}>
             <span style={{ fontSize: 26 }}>Слова ({words.length})</span>
-            <div style={{ display: 'flex', gap: 10 }}>
+            <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap' }}>
               {/* Поставочные слова правятся на своём экране: там меняют чужую
                   картинку, а здесь заводят свои слова — операции разные */}
               <BigButton onClick={onWordImages} tone="secondary" testId="word-images">
@@ -178,9 +178,9 @@ const MyWordsScreen: React.FC<Props> = ({
 
         {/* Комплекты */}
         <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 12, minWidth: 0 }}>
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 10, flexWrap: 'wrap' }}>
             <span style={{ fontSize: 26 }}>Комплекты ({sets.length})</span>
-            <div style={{ display: 'flex', gap: 10 }}>
+            <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap' }}>
               <BigButton onClick={onImportSet} tone="secondary" disabled={busy} testId="import-set">
                 Импорт
               </BigButton>

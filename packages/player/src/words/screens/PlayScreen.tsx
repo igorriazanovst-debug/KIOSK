@@ -27,7 +27,10 @@ import type { Profile } from '../types';
 import type { GameSession } from '@kiosk/shared';
 import { currentStep, currentPlayerId, visibleOptions } from '@kiosk/shared';
 
+/** Логический размер поля. Всё внутри свёрстано под него */
 const BOARD_PX = 700;
+/** Насколько поле разрешено увеличить на вытянутом окне */
+const BOARD_MAX_ZOOM = 1.35;
 
 interface Props {
   session: GameSession;
@@ -43,6 +46,9 @@ interface Props {
    */
   hasAudio: boolean;
   lastOutcome: 'correct' | 'wrong' | null;
+  /** Логический размер сцены — от него считается сторона поля */
+  sceneWidth: number;
+  sceneHeight: number;
   onAnswer: (wordId: string) => void;
   onRepeat: () => void;
   onExit: () => void;
@@ -55,6 +61,8 @@ const PlayScreen: React.FC<Props> = ({
   players,
   hasAudio,
   lastOutcome,
+  sceneWidth,
+  sceneHeight,
   onAnswer,
   onRepeat,
   onExit,
@@ -66,6 +74,20 @@ const PlayScreen: React.FC<Props> = ({
   const playerId = currentPlayerId(session);
   const player = players.find((p) => p.id === playerId);
   const options = visibleOptions(session);
+
+  // Поле не РАСТЯГИВАЕТСЯ, а УВЕЛИЧИВАЕТСЯ целиком. Увеличивать сам блок
+  // бесполезно: рамка, карточки и подписи свёрстаны фиксированными, и
+  // растянутое поле просто получило бы пустые поля внутри. Масштаб же
+  // увеличивает вместе с полем всё его содержимое.
+  //
+  // Считается по МЕНЬШЕЙ стороне сцены: поле квадратное, и по большей оно
+  // вылезло бы за экран. На привычном 4:3 множитель равен единице, то есть
+  // поле остаётся ровно таким, каким было; запас появляется только на
+  // вытянутом окне — вертикальном планшете или сверхшироком мониторе.
+  const boardZoom = Math.min(
+    BOARD_MAX_ZOOM,
+    Math.max(1, Math.min(sceneWidth, sceneHeight) / (BOARD_PX + 68))
+  );
 
   const seats = seatsFor(session.playerIds.length);
   const rotation = SEAT_ROTATIONS[seats[session.playerIndex] ?? 0];
@@ -136,7 +158,7 @@ const PlayScreen: React.FC<Props> = ({
         style={{
           width: BOARD_PX,
           height: BOARD_PX,
-          transform: `rotate(${rotation}deg)`,
+          transform: `rotate(${rotation}deg) scale(${boardZoom})`,
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
