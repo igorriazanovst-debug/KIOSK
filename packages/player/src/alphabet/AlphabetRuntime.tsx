@@ -51,6 +51,7 @@ import SettingsScreen from './screens/SettingsScreen';
 import PasswordPrompt from './components/PasswordPrompt';
 import VoiceRecorder from './components/VoiceRecorder';
 import NewSyllablePrompt from './components/NewSyllablePrompt';
+import ConfirmPrompt from './components/ConfirmPrompt';
 import Seats, { SEAT_ANGLES } from './components/Seats';
 import MyContentScreen from './screens/MyContentScreen';
 import WordEditorScreen from './screens/WordEditorScreen';
@@ -144,6 +145,17 @@ const AlphabetRuntime: React.FC<Props> = ({ properties, width, height }) => {
   const [recording, setRecording] = useState<{ kind: VoiceKind; id: string; title: string } | null>(null);
   const [busy, setBusy] = useState(false);
   const [newSyllable, setNewSyllable] = useState<{ name: string; letters: string } | null>(null);
+  /**
+   * Подтверждение необратимого действия. Держится состоянием, а не window.confirm:
+   * на киоске системные диалоги выглядят чужеродно и не масштабируются вместе
+   * со сценой — на 4K-панели они остаются крошечными.
+   */
+  const [confirming, setConfirming] = useState<{
+    title: string;
+    consequence: string;
+    confirmLabel: string;
+    run: () => void;
+  } | null>(null);
   const [session, setSession] = useState<Session | null>(null);
   const [lastChoice, setLastChoice] = useState<{ key: string; correct: boolean } | null>(null);
 
@@ -270,6 +282,18 @@ const AlphabetRuntime: React.FC<Props> = ({ properties, width, height }) => {
     await reloadProfiles();
   };
 
+  const askDeleteProfile = (profileId: string) => {
+    const profile = profiles.find((p) => p.id === profileId);
+    if (!profile) return;
+    setConfirming({
+      title: `Удалить игрока «${profile.name}»?`,
+      consequence:
+        'Вместе с игроком пропадёт вся его статистика по буквам — и за последнюю игру, и за всё время. Вернуть её будет нельзя.',
+      confirmLabel: 'Удалить игрока',
+      run: () => void handleDelete(profileId),
+    });
+  };
+
   const handleDelete = async (profileId: string) => {
     const result = await platform.deleteProfile(profileId);
     if (!result.ok) {
@@ -346,6 +370,17 @@ const AlphabetRuntime: React.FC<Props> = ({ properties, width, height }) => {
     setError(null);
     await reloadUserContent();
     return true;
+  };
+
+  const askClearStatistics = () => {
+    if (!selected) return;
+    setConfirming({
+      title: `Очистить статистику: ${selected.name}?`,
+      consequence:
+        'Пропадут результаты по всем буквам — и за последнюю игру, и накопленные за всё время. Сам игрок останется.',
+      confirmLabel: 'Очистить',
+      run: () => void handleClearStatistics(),
+    });
   };
 
   const handleClearStatistics = async () => {
@@ -558,7 +593,7 @@ const AlphabetRuntime: React.FC<Props> = ({ properties, width, height }) => {
             onNewName={setNewName}
             onToggle={togglePlayer}
             onCreate={handleCreate}
-            onDelete={handleDelete}
+            onDelete={askDeleteProfile}
             onStart={() => setScreen({ name: 'menu' })}
           />
         )}
@@ -644,7 +679,7 @@ const AlphabetRuntime: React.FC<Props> = ({ properties, width, height }) => {
             statistics={statistics}
             profileId={selected.id}
             profileName={selected.name}
-            onClear={handleClearStatistics}
+            onClear={askClearStatistics}
             onBack={() => setScreen({ name: 'menu' })}
           />
         )}
@@ -668,7 +703,17 @@ const AlphabetRuntime: React.FC<Props> = ({ properties, width, height }) => {
             busy={busy}
             onNewWord={() => setScreen({ name: 'wordEditor', wordId: null })}
             onEditWord={(wordId) => setScreen({ name: 'wordEditor', wordId })}
-            onDeleteWord={(wordId) => void runEdit(() => platform.deleteUserWord(wordId))}
+            onDeleteWord={(wordId) => {
+              const word = userContent.words.find((w) => w.id === wordId);
+              if (!word) return;
+              setConfirming({
+                title: `Удалить слово «${word.name}»?`,
+                consequence:
+                  'Вместе со словом пропадут его иллюстрация и записи голоса, и оно исчезнет из всех комплектов, где стояло.',
+                confirmLabel: 'Удалить слово',
+                run: () => void runEdit(() => platform.deleteUserWord(wordId)),
+              });
+            }}
             onSaveSet={(setId, title, wordIds) =>
               void runEdit(() =>
                 setId
@@ -676,7 +721,18 @@ const AlphabetRuntime: React.FC<Props> = ({ properties, width, height }) => {
                   : platform.createSet({ title, wordIds })
               )
             }
-            onDeleteSet={(setId) => void runEdit(() => platform.deleteSet(setId))}
+            onDeleteSet={(setId) => {
+              const set = playable.sets.find((x) => x.id === setId);
+              if (!set) return;
+              setConfirming({
+                title: `Удалить комплект «${set.title}»?`,
+                // Слова остаются: комплект — это только список, и путать
+                // удаление списка с удалением слов нельзя
+                consequence: `Пропадёт только список из ${set.wordIds.length} слов. Сами слова останутся на месте.`,
+                confirmLabel: 'Удалить комплект',
+                run: () => void runEdit(() => platform.deleteSet(setId)),
+              });
+            }}
             onExportSet={async (setId) => {
               setBusy(true);
               const result = await platform.exportSet(setId);
@@ -829,6 +885,20 @@ const AlphabetRuntime: React.FC<Props> = ({ properties, width, height }) => {
               );
               if (ok) setNewSyllable(null);
             }}
+          />
+        )}
+
+        {confirming && (
+          <ConfirmPrompt
+            title={confirming.title}
+            consequence={confirming.consequence}
+            confirmLabel={confirming.confirmLabel}
+            onConfirm={() => {
+              const action = confirming.run;
+              setConfirming(null);
+              action();
+            }}
+            onCancel={() => setConfirming(null)}
           />
         )}
 
