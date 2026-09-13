@@ -29,7 +29,16 @@ import { createElectronPlatform } from './platform/electronPlatform';
 import { createWebPlatform } from './platform/webPlatform';
 import { detectPlatformKind, setAlphabetPlatform } from './platform/AlphabetPlatform';
 import type { AlphabetPlatform } from './platform/AlphabetPlatform';
-import type { AlphabetContext, AlphabetLibrary, AlphabetSettings, Profile, Statistics } from './types';
+import type {
+  AlphabetContext,
+  AlphabetLibrary,
+  AlphabetSettings,
+  Profile,
+  Statistics,
+  UserContent,
+  VoiceKind,
+  WordReadiness,
+} from './types';
 import ProfilesScreen from './screens/ProfilesScreen';
 import MenuScreen from './screens/MenuScreen';
 import AlphabetScreen from './screens/AlphabetScreen';
@@ -39,6 +48,10 @@ import { QuestionCountScreen, ResultsScreen, StageSelectScreen } from './screens
 import StatisticsScreen from './screens/StatisticsScreen';
 import SettingsScreen from './screens/SettingsScreen';
 import PasswordPrompt from './components/PasswordPrompt';
+import VoiceRecorder from './components/VoiceRecorder';
+import NewSyllablePrompt from './components/NewSyllablePrompt';
+import MyContentScreen from './screens/MyContentScreen';
+import WordEditorScreen from './screens/WordEditorScreen';
 import { letterAudioUrl, wordAudioUrl, wordWithoutLastSyllableAudioUrl } from './mediaUrl';
 
 const SCENE_MIN_WIDTH = 1024;
@@ -63,7 +76,9 @@ type Screen =
   | { name: 'play' }
   | { name: 'results' }
   | { name: 'statistics' }
-  | { name: 'settings' };
+  | { name: 'settings' }
+  | { name: 'myContent' }
+  | { name: 'wordEditor'; wordId: string | null };
 
 type Session = ReturnType<typeof alphabet.buildAlphabetSession>;
 
@@ -112,6 +127,13 @@ const AlphabetRuntime: React.FC<Props> = ({ properties, width, height }) => {
   const [gate, setGate] = useState<{ title: string; next: Screen } | null>(null);
   /** Открыто окно СМЕНЫ пароля, а не входа */
   const [changingPassword, setChangingPassword] = useState(false);
+  const [userContent, setUserContent] = useState<UserContent>({ words: [], syllables: [], sets: [] });
+  const [readiness, setReadiness] = useState<Record<string, WordReadiness>>({});
+  /** Какие записи уже есть — пересобирается вместе с готовностью слов */
+  const [voices, setVoices] = useState<Set<string>>(new Set());
+  const [recording, setRecording] = useState<{ kind: VoiceKind; id: string; title: string } | null>(null);
+  const [busy, setBusy] = useState(false);
+  const [newSyllable, setNewSyllable] = useState<{ name: string; letters: string } | null>(null);
   const [session, setSession] = useState<Session | null>(null);
   const [lastChoice, setLastChoice] = useState<{ key: string; correct: boolean } | null>(null);
 
@@ -160,16 +182,26 @@ const AlphabetRuntime: React.FC<Props> = ({ properties, width, height }) => {
   const sceneHeight = Math.max(SCENE_MIN_HEIGHT, Math.round(height / scale));
 
   const selected = profiles.find((p) => p.id === selectedId) ?? null;
+
+  /**
+   * Библиотека, которую видит ИГРА: поставочный пакет плюс контент педагога.
+   * Своё слово должно играться наравне с поставочными — ТЗ строка 78
+   * требует именно этого, а не отдельного раздела «мои слова».
+   */
+  const playable = useMemo(
+    () => (library ? alphabet.mergeUserContent(library, userContent) : null),
+    [library, userContent]
+  );
   const hasAudio = !!library && alphabet.schemeHasAudio(library);
 
   const availability = useMemo(() => {
     const empty = { letterShow: 0, wordCompleting: 0, wordMake: 0 } as Record<AlphabetStage, number>;
-    if (!library) return empty;
+    if (!playable) return empty;
     for (const stage of Object.keys(empty) as AlphabetStage[]) {
-      empty[stage] = alphabet.eligibleWords(library, stage).length;
+      empty[stage] = alphabet.eligibleWords(playable, stage).length;
     }
     return empty;
-  }, [library]);
+  }, [playable]);
 
   const play = (url: string) => {
     // Одна и та же дорожка на всё приложение: параллельные реплики в детской
@@ -231,6 +263,46 @@ const AlphabetRuntime: React.FC<Props> = ({ properties, width, height }) => {
    */
   const openGated = (title: string, next: Screen) => setGate({ title, next });
 
+  /**
+   * Перечитывает контент педагога вместе с готовностью слов.
+   *
+   * Готовность считает ГЛАВНЫЙ ПРОЦЕСС: наличие файла записи знает только он.
+   * Наличие записей приходит в том же ответе — иначе редактор спрашивал бы
+   * про каждую запись отдельно, а их у слова из трёх слогов пять.
+   */
+  const reloadUserContent = useCallback(async () => {
+    const content = await platform.getUserContent();
+    if (content.ok) setUserContent(content.data ?? { words: [], syllables: [], sets: [] });
+    const r = await platform.wordReadiness();
+    if (r.ok) {
+      const map = r.data ?? {};
+      setReadiness(map);
+      // Готовность уже знает, чего не хватает; здесь восстанавливаем, ЧТО
+      // есть, чтобы редактор отмечал записанное построчно
+      const present = new Set<string>();
+      for (const [wordId, info] of Object.entries(map)) {
+        if (!info.missing.some((m) => /слова целиком/.test(m))) present.add(`word:${wordId}`);
+        if (!info.missing.some((m) => /без последнего слога/.test(m))) present.add(`bgn:${wordId}`);
+      }
+      setVoices(present);
+    }
+  }, [platform]);
+
+  const hasVoice = (kind: VoiceKind, id: string) => voices.has(`${kind}:${id}`);
+
+  const runEdit = async (action: () => Promise<{ ok: boolean; error?: string }>) => {
+    setBusy(true);
+    const result = await action();
+    setBusy(false);
+    if (!result.ok) {
+      setError(result.error ?? 'Не удалось сохранить');
+      return false;
+    }
+    setError(null);
+    await reloadUserContent();
+    return true;
+  };
+
   const handleClearStatistics = async () => {
     if (!selected) return;
     const result = await platform.clearStatistics(selected.id);
@@ -242,9 +314,9 @@ const AlphabetRuntime: React.FC<Props> = ({ properties, width, height }) => {
   };
 
   const startSession = (stage: AlphabetStage) => {
-    if (!library || !selected) return;
+    if (!playable || !selected) return;
     try {
-      const built = alphabet.buildAlphabetSession(library, {
+      const built = alphabet.buildAlphabetSession(playable, {
         roundId: `${Date.now()}`,
         stage,
         playerIds: [selected.id],
@@ -291,12 +363,12 @@ const AlphabetRuntime: React.FC<Props> = ({ properties, width, height }) => {
   };
 
   const handleAnswer = (choice: string | number) => {
-    if (!library || !session) return;
+    if (!playable || !session) return;
     // Пока держится подсветка верного ответа, новые нажатия игнорируются:
     // иначе быстрый ребёнок «проскакивает» следующий вопрос вслепую
     if (holdTimer.current) return;
 
-    const outcome = alphabet.answer(library, session, choice);
+    const outcome = alphabet.answer(playable, session, choice);
     setLastChoice({ key: String(choice), correct: outcome.correct });
 
     if (!outcome.correct) {
@@ -316,7 +388,7 @@ const AlphabetRuntime: React.FC<Props> = ({ properties, width, height }) => {
   };
 
   const speakQuestion = () => {
-    if (!library || !session) return;
+    if (!playable || !session) return;
     const question = alphabet.currentQuestion(session);
     if (!question) return;
     if (question.stage === 'wordCompleting') {
@@ -425,6 +497,7 @@ const AlphabetRuntime: React.FC<Props> = ({ properties, width, height }) => {
             onChangePlayer={() => setScreen({ name: 'profiles' })}
             onStatistics={() => openGated('Статистика', { name: 'statistics' })}
             onSettings={() => openGated('Настройки', { name: 'settings' })}
+            onMyContent={() => openGated('Свои слова', { name: 'myContent' })}
           />
         )}
 
@@ -445,17 +518,17 @@ const AlphabetRuntime: React.FC<Props> = ({ properties, width, height }) => {
           />
         )}
 
-        {screen.name === 'alphabet' && library && (
+        {screen.name === 'alphabet' && playable && (
           <AlphabetScreen
-            library={library}
+            library={playable}
             onOpenLetter={(letterNumber) => setScreen({ name: 'letter', letterNumber })}
             onBack={() => setScreen({ name: 'menu' })}
           />
         )}
 
-        {screen.name === 'letter' && library && (
+        {screen.name === 'letter' && playable && (
           <LetterScreen
-            library={library}
+            library={playable}
             letterNumber={screen.letterNumber}
             hasAudio={hasAudio}
             onSpeakLetter={() => play(letterAudioUrl(screen.letterNumber))}
@@ -464,9 +537,9 @@ const AlphabetRuntime: React.FC<Props> = ({ properties, width, height }) => {
           />
         )}
 
-        {screen.name === 'play' && library && session && (
+        {screen.name === 'play' && playable && session && (
           <PlayScreen
-            library={library}
+            library={playable}
             session={session}
             lastChoice={lastChoice}
             hasAudio={hasAudio}
@@ -487,9 +560,9 @@ const AlphabetRuntime: React.FC<Props> = ({ properties, width, height }) => {
           />
         )}
 
-        {screen.name === 'statistics' && library && selected && (
+        {screen.name === 'statistics' && playable && selected && (
           <StatisticsScreen
-            library={library}
+            library={playable}
             statistics={statistics}
             profileId={selected.id}
             profileName={selected.name}
@@ -508,6 +581,144 @@ const AlphabetRuntime: React.FC<Props> = ({ properties, width, height }) => {
           />
         )}
 
+        {screen.name === 'myContent' && playable && (
+          <MyContentScreen
+            allWords={playable.words}
+            userWords={userContent.words}
+            sets={playable.sets}
+            readiness={readiness}
+            busy={busy}
+            onNewWord={() => setScreen({ name: 'wordEditor', wordId: null })}
+            onEditWord={(wordId) => setScreen({ name: 'wordEditor', wordId })}
+            onDeleteWord={(wordId) => void runEdit(() => platform.deleteUserWord(wordId))}
+            onSaveSet={(setId, title, wordIds) =>
+              void runEdit(() =>
+                setId
+                  ? platform.updateSet(setId, { title, wordIds })
+                  : platform.createSet({ title, wordIds })
+              )
+            }
+            onDeleteSet={(setId) => void runEdit(() => platform.deleteSet(setId))}
+            onBack={() => setScreen({ name: 'menu' })}
+          />
+        )}
+
+        {screen.name === 'wordEditor' && playable && (
+          <WordEditorScreen
+            syllables={playable.syllables}
+            word={
+              screen.wordId ? userContent.words.find((w) => w.id === screen.wordId) ?? null : null
+            }
+            readiness={screen.wordId ? readiness[screen.wordId] ?? null : null}
+            hasVoice={hasVoice}
+            busy={busy}
+            onSave={async (draft) => {
+              const id = screen.name === 'wordEditor' ? screen.wordId : null;
+              const ok = await runEdit(() =>
+                id ? platform.updateUserWord(id, draft) : platform.createUserWord(draft)
+              );
+              // После СОЗДАНИЯ остаёмся в редакторе: картинка и записи
+              // адресуются идентификатором слова, а у нового его до сих пор не
+              // было — уйти сейчас значило бы вернуться через минуту
+              if (ok && !id) {
+                const content = await platform.getUserContent();
+                const created = content.data?.words[content.data.words.length - 1];
+                if (created) setScreen({ name: 'wordEditor', wordId: created.id });
+              }
+            }}
+            onPickImage={async () => {
+              const id = screen.name === 'wordEditor' ? screen.wordId : null;
+              if (!id) return;
+              setBusy(true);
+              const picked = await platform.pickWordImage();
+              setBusy(false);
+              if (!picked.ok) {
+                setError(picked.error ?? 'Не удалось выбрать картинку');
+                return;
+              }
+              // Диалог закрыли без выбора — это не ошибка
+              if (!picked.data) return;
+              const word = userContent.words.find((w) => w.id === id);
+              if (!word) return;
+              const fileName = picked.data.fileName;
+              void runEdit(() =>
+                platform.updateUserWord(word.id, {
+                  name: word.name,
+                  syllableIds: word.syllableIds,
+                  hasWithoutLastSyllable: word.hasWithoutLastSyllable,
+                  imageFile: fileName,
+                })
+              );
+            }}
+            onRecord={(kind, id) =>
+              setRecording({
+                kind,
+                id,
+                title:
+                  kind === 'word'
+                    ? 'Запись слова целиком'
+                    : kind === 'bgn'
+                      ? 'Запись слова без последнего слога'
+                      : 'Запись слога',
+              })
+            }
+            onPlayVoice={(kind, id) => play(platform.userMediaUrl(`voice/${kind}-${id}.webm`))}
+            onNewSyllable={() => setNewSyllable({ name: '', letters: '' })}
+            onBack={() => setScreen({ name: 'myContent' })}
+          />
+        )}
+
+        {/* Запись голоса (ТЗ строка 76) */}
+        {recording && (
+          <VoiceRecorder
+            title={recording.title}
+            onSave={async (bytes) => {
+              const saved = await platform.saveVoice(recording.kind, recording.id, bytes);
+              if (!saved.ok) {
+                setError(saved.error ?? 'Не удалось сохранить запись');
+                return;
+              }
+              // Флаг «без последнего слога» ставится ФАКТОМ записи: у слова он
+              // означает не намерение педагога, а наличие файла
+              if (recording.kind === 'bgn') {
+                const word = userContent.words.find((w) => w.id === recording.id);
+                if (word && !word.hasWithoutLastSyllable) {
+                  await platform.updateUserWord(word.id, {
+                    name: word.name,
+                    syllableIds: word.syllableIds,
+                    hasWithoutLastSyllable: true,
+                    imageFile: word.imageFile ?? null,
+                  });
+                }
+              }
+              setVoices((v) => new Set(v).add(`${recording.kind}:${recording.id}`));
+              setRecording(null);
+              await reloadUserContent();
+            }}
+            onCancel={() => setRecording(null)}
+          />
+        )}
+
+        {/* Новый слог заводится отдельно, а не разбором строки с дефисами:
+            слог — самостоятельная сущность со своей озвучкой */}
+        {newSyllable && (
+          <NewSyllablePrompt
+            value={newSyllable}
+            onChange={setNewSyllable}
+            onCancel={() => setNewSyllable(null)}
+            onSave={async () => {
+              const letters = newSyllable.letters
+                .split(/[\s,]+/)
+                .map((n) => Number(n))
+                .filter((n) => Number.isInteger(n) && n >= 1 && n <= 33);
+              const ok = await runEdit(() =>
+                platform.createSyllable({ name: newSyllable.name, letterNumbers: letters })
+              );
+              if (ok) setNewSyllable(null);
+            }}
+          />
+        )}
+
         {/* Вход в закрытый раздел */}
         {gate && (
           <PasswordPrompt
@@ -521,6 +732,7 @@ const AlphabetRuntime: React.FC<Props> = ({ properties, width, height }) => {
               const next = gate.next;
               setGate(null);
               if (next.name === 'statistics') void reloadStatistics();
+              if (next.name === 'myContent') void reloadUserContent();
               setScreen(next);
             }}
           />

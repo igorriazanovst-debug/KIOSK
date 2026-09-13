@@ -20,6 +20,8 @@ export interface AlphabetPlatform extends AlphabetApi {
   readonly kind: PlatformKind;
   /** Путь внутри пакета контента → загружаемый в этой среде URL */
   assetUrl(assetPath: string): string;
+  /** Файл, добавленный педагогом на устройстве, → загружаемый URL */
+  userMediaUrl(fileName: string): string;
 }
 
 let current: AlphabetPlatform | null = null;

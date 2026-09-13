@@ -19,6 +19,7 @@ interface Props {
   onChangePlayer: () => void;
   onStatistics: () => void;
   onSettings: () => void;
+  onMyContent: () => void;
 }
 
 const MenuScreen: React.FC<Props> = ({
@@ -32,6 +33,7 @@ const MenuScreen: React.FC<Props> = ({
   onChangePlayer,
   onStatistics,
   onSettings,
+  onMyContent,
 }) => (
   <Panel testId="menu">
     <h2 style={{ margin: 0, fontSize: 30 }}>Занимается {playerName}</h2>
@@ -70,6 +72,9 @@ const MenuScreen: React.FC<Props> = ({
       </BigButton>
       <BigButton onClick={onSettings} tone="secondary" testId="menu-settings">
         🔒 Настройки
+      </BigButton>
+      <BigButton onClick={onMyContent} tone="secondary" testId="menu-my-content">
+        🔒 Свои слова
       </BigButton>
     </div>
   </Panel>

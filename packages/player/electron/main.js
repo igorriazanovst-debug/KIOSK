@@ -71,7 +71,11 @@ try {
     { scheme: 'wordsuser', privileges: { standard: true, secure: true, supportFetchAPI: true, stream: true } },
     // alphabetlib - поставочная (read-only) библиотека виджета «АзбукоСлов»
     // (packages/alphabet-library/assets/): иллюстрации и озвучка
-    { scheme: 'alphabetlib', privileges: { standard: true, secure: true, supportFetchAPI: true, stream: true } }
+    { scheme: 'alphabetlib', privileges: { standard: true, secure: true, supportFetchAPI: true, stream: true } },
+    // alphabetuser - картинки и записи, добавленные педагогом на устройстве.
+    // Отдельная схема от alphabetlib: поставочный контент read-only и лежит в
+    // сборке, свой пишется в каталог данных, и смешивать их нельзя
+    { scheme: 'alphabetuser', privileges: { standard: true, secure: true, supportFetchAPI: true, stream: true } }
   ]);
 } catch (e) { fileLog('protocol register error', e.message); }
 // ─────────────────────────────────────────────────────────────────────────────
@@ -84,6 +88,7 @@ let chronoBaseDir = null;
 let natcomBaseDir = null;
 let wordsAssetsDir = null;
 let alphabetAssetsDir = null;
+let alphabetBaseDir = null;
 let wordsBaseDir = null;
 let natcomAssetsDir = null;
 let rusiqQuizzesDir = null;
@@ -1291,8 +1296,9 @@ app.whenReady().then(() => {
   // экрана без объяснений.
   try {
     const { baseDir: alphabetDir, isFallback: alphabetIsFallback, assetsDir: alphabetAssets, report, libraryError } =
-      registerAlphabetIpc({ ipcMain, app });
+      registerAlphabetIpc({ ipcMain, app, dialog });
     alphabetAssetsDir = alphabetAssets;
+    alphabetBaseDir = alphabetDir;
     fileLog('[alphabet] storage dir:', alphabetDir, alphabetIsFallback ? '(fallback: no write access to shared dir)' : '');
     if (libraryError) {
       fileLog('[alphabet] WARNING:', libraryError);
@@ -1320,7 +1326,7 @@ app.whenReady().then(() => {
         ...details.responseHeaders,
         // chronomedia:/natcomlib: добавлены явно (не полагаемся на bypassCSP
         // этих схем - его нет, см. registerSchemesAsPrivileged выше).
-        'Content-Security-Policy': ["default-src 'self' 'unsafe-inline' 'unsafe-eval' data: file: blob: chronomedia: natcomlib: rusiqmedia: wordslib: wordsuser: alphabetlib: http: https: ws: wss:"]
+        'Content-Security-Policy': ["default-src 'self' 'unsafe-inline' 'unsafe-eval' data: file: blob: chronomedia: natcomlib: rusiqmedia: wordslib: wordsuser: alphabetlib: alphabetuser: http: https: ws: wss:"]
       }
     });
   });
@@ -1517,6 +1523,37 @@ app.whenReady().then(() => {
       const u = new URL(request.url);
       const fileName = decodeURIComponent(u.pathname.replace(/^\/+/, ''));
       const filePath = chronoResolveWithinRoot(alphabetAssetsDir, fileName);
+
+      if (!fs.existsSync(filePath) || !fs.statSync(filePath).isFile()) {
+        return new Response('Not found', { status: 404 });
+      }
+
+      const stat = fs.statSync(filePath);
+      const mime = guessMime(fileName, filePath);
+      const stream = fs.createReadStream(filePath);
+      return new Response(nodeStreamToWeb(stream), {
+        status: 200,
+        headers: { 'Content-Type': mime, 'Content-Length': String(stat.size) }
+      });
+    } catch {
+      return new Response('Not found', { status: 404 });
+    }
+  });
+
+  // Обработчик протокола alphabetuser://<имя файла> -> картинка или запись
+  // педагога. Имя файла выводится из хеша содержимого (медиа) либо из
+  // идентификатора сущности (записи), поэтому произвольного пути тут быть не
+  // может; guard всё равно ставим — граница есть граница.
+  protocol.handle('alphabetuser', async (request) => {
+    try {
+      if (!alphabetBaseDir) return new Response('Storage not initialized', { status: 503 });
+
+      const u = new URL(request.url);
+      const fileName = decodeURIComponent(u.pathname.replace(/^\/+/, ''));
+      // Записи лежат в voice/, картинки — в media/. Различаем по префиксу,
+      // а не по расширению: расширение приходит из имени файла
+      const sub = fileName.startsWith('voice/') ? '' : 'media/';
+      const filePath = chronoResolveWithinRoot(alphabetBaseDir, sub + fileName);
 
       if (!fs.existsSync(filePath) || !fs.statSync(filePath).isFile()) {
         return new Response('Not found', { status: 404 });

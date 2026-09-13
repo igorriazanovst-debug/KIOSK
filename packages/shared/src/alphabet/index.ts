@@ -22,3 +22,4 @@ export * from './game/wordCompleting';
 export * from './game/wordMake';
 export * from './game/session';
 export * from './game/statistics';
+export * from './store/contentRules';

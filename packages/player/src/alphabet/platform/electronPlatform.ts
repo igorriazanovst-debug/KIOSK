@@ -16,12 +16,16 @@ import type { AlphabetApi } from '../types.ts';
 
 /** Протокол поставочного контента; регистрируется в main.js в Фазе 7 */
 export const ALPHABET_ASSET_SCHEME = 'alphabetlib';
+/** Картинки и записи педагога — отдельная схема: поставочное read-only */
+export const ALPHABET_USER_SCHEME = 'alphabetuser';
 
 export function createElectronPlatform(api: AlphabetApi): AlphabetPlatform {
   return {
     kind: 'electron',
     assetUrl: (assetPath: string) =>
       `${ALPHABET_ASSET_SCHEME}://asset/${encodeURIComponent(assetPath)}`,
+    userMediaUrl: (fileName: string) =>
+      `${ALPHABET_USER_SCHEME}://asset/${encodeURIComponent(fileName)}`,
     getContext: () => api.getContext(),
     getLibrary: () => api.getLibrary(),
     listProfiles: () => api.listProfiles(),
@@ -35,5 +39,18 @@ export function createElectronPlatform(api: AlphabetApi): AlphabetPlatform {
     checkTeacherPassword: (password) => api.checkTeacherPassword(password),
     setTeacherPassword: (password) => api.setTeacherPassword(password),
     teacherPasswordState: () => api.teacherPasswordState(),
+    getUserContent: () => api.getUserContent(),
+    wordReadiness: () => api.wordReadiness(),
+    createSyllable: (draft) => api.createSyllable(draft),
+    deleteSyllable: (id) => api.deleteSyllable(id),
+    createUserWord: (draft) => api.createUserWord(draft),
+    updateUserWord: (id, draft) => api.updateUserWord(id, draft),
+    deleteUserWord: (id) => api.deleteUserWord(id),
+    createSet: (draft) => api.createSet(draft),
+    updateSet: (id, draft) => api.updateSet(id, draft),
+    deleteSet: (id) => api.deleteSet(id),
+    pickWordImage: () => api.pickWordImage(),
+    saveVoice: (kind, id, bytes) => api.saveVoice(kind, id, bytes),
+    deleteVoice: (kind, id) => api.deleteVoice(kind, id),
   };
 }

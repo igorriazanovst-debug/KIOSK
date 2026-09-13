@@ -50,7 +50,41 @@ export interface AlphabetApi {
   checkTeacherPassword(password: string): Promise<IpcResult<boolean>>;
   setTeacherPassword(password: string): Promise<IpcResult<{ isDefault: boolean }>>;
   teacherPasswordState(): Promise<IpcResult<{ isDefault: boolean }>>;
+
+  // Контент педагога (ТЗ строки 76-78)
+  getUserContent(): Promise<IpcResult<UserContent>>;
+  wordReadiness(): Promise<IpcResult<Record<string, WordReadiness>>>;
+  createSyllable(draft: UserSyllableDraft): Promise<IpcResult<Syllable>>;
+  deleteSyllable(syllableId: string): Promise<IpcResult<Syllable[]>>;
+  createUserWord(draft: UserWordDraft): Promise<IpcResult<Word>>;
+  updateUserWord(wordId: string, draft: UserWordDraft): Promise<IpcResult<Word>>;
+  deleteUserWord(wordId: string): Promise<IpcResult<UserContent>>;
+  createSet(draft: SetDraft): Promise<IpcResult<WordSet>>;
+  updateSet(setId: string, draft: SetDraft): Promise<IpcResult<WordSet>>;
+  deleteSet(setId: string): Promise<IpcResult<WordSet[]>>;
+  /** Путь к файлу границу не пересекает: диалог открывает главный процесс */
+  pickWordImage(): Promise<IpcResult<{ fileName: string } | null>>;
+  saveVoice(kind: VoiceKind, id: string, bytes: Uint8Array): Promise<IpcResult<string>>;
+  deleteVoice(kind: VoiceKind, id: string): Promise<IpcResult<boolean>>;
 }
+
+/** Три рода записей на слово — ровно то, что требует ТЗ строка 76 */
+export type VoiceKind = 'word' | 'bgn' | 'syllable';
+
+export type Word = AlphabetLibrary['words'][number];
+export type Syllable = AlphabetLibrary['syllables'][number];
+export type WordSet = AlphabetLibrary['sets'][number];
+
+export interface UserContent {
+  words: Word[];
+  syllables: Syllable[];
+  sets: WordSet[];
+}
+
+export type WordReadiness = ReturnType<typeof alphabet.checkUserWordReadiness>;
+export type UserWordDraft = Parameters<typeof alphabet.applyCreateWord>[2];
+export type UserSyllableDraft = Parameters<typeof alphabet.applyCreateSyllable>[1];
+export type SetDraft = Parameters<typeof alphabet.applyCreateSet>[2];
 
 declare global {
   interface Window {

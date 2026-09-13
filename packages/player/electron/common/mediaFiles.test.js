@@ -1,4 +1,4 @@
-// packages/player/electron/words/mediaFiles.test.js
+// packages/player/electron/common/mediaFiles.test.js
 // Проверка границы системы: что принимается и что отвергается при добавлении
 // картинки или записи педагогом (ТЗ раздел 9).
 

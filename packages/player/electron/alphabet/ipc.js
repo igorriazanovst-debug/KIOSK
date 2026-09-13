@@ -14,6 +14,8 @@ const store = require('./profileStore');
 const { WordsRulesError, TeacherGateError, alphabet } = require('@kiosk/shared');
 const { loadLibrarySync } = require('./contentLibrary');
 const teacherPassword = require('./teacherPassword');
+const content = require('./contentStore');
+const media = require('../common/mediaFiles');
 
 const ALPHABET_APP_DIR_NAME = store.ALPHABET_APP_DIR_NAME;
 
@@ -42,6 +44,9 @@ function translateDiskError(err) {
   if (err instanceof TeacherGateError) return err.message;
   if (err instanceof store.AlphabetStoreError) return err.message;
   if (err instanceof alphabet.AlphabetValidationError) return err.message;
+  if (err instanceof alphabet.AlphabetContentError) return err.message;
+  if (err instanceof content.AlphabetContentStoreError) return err.message;
+  if (err instanceof media.MediaError) return err.message;
   return err && err.message ? err.message : 'Не удалось выполнить операцию с данными занятия';
 }
 
@@ -57,14 +62,15 @@ function guarded(handler) {
 }
 
 /**
- * @param {{ ipcMain: Electron.IpcMain, app: Electron.App, sharedDirOverride?: string,
+ * @param {{ ipcMain: Electron.IpcMain, app: Electron.App, dialog?: Electron.Dialog,
+ *   sharedDirOverride?: string,
  *   loadLibrary?: () => object }} deps
  *   sharedDirOverride — только для тестов: каталог данных общий на машину
  *   (%ProgramData%\kiosk-alphabet), и без подмены тест писал бы в РЕАЛЬНЫЕ
  *   данные педагога на этой машине. В проде не передаётся.
  *   loadLibrary — тоже для тестов; в проде берётся ./contentLibrary.
  */
-function registerAlphabetIpc({ ipcMain, app, sharedDirOverride, loadLibrary }) {
+function registerAlphabetIpc({ ipcMain, app, dialog, sharedDirOverride, loadLibrary }) {
   const { dir: baseDir, isFallback } = resolveStorageDir({
     platform: process.platform,
     userDataDir: app.getPath('userData'),
@@ -160,6 +166,81 @@ function registerAlphabetIpc({ ipcMain, app, sharedDirOverride, loadLibrary }) {
   ipcMain.handle(
     'alphabet:teacher-password-state',
     guarded(async () => ({ isDefault: teacherPassword.isDefaultPassword(baseDir) }))
+  );
+
+  // ── Контент педагога (ТЗ строки 76–78) ───────────────────────────────
+  // Поставочные слоги и слова передаются в правила из уже прочитанной
+  // библиотеки: своё слово может опираться на поставочный слог, а комплект —
+  // содержать и то и другое (ТЗ строка 77 требует этого буквально)
+  const librarySyllables = () => (library ? library.syllables : []);
+  const libraryWords = () => (library ? library.words : []);
+
+  ipcMain.handle('alphabet:get-user-content', guarded(async () => content.readContent(baseDir)));
+  ipcMain.handle(
+    'alphabet:word-readiness',
+    guarded(async () => content.wordReadiness(baseDir, librarySyllables()))
+  );
+
+  ipcMain.handle(
+    'alphabet:create-syllable',
+    guarded(async (_e, draft) => content.createSyllable(baseDir, draft))
+  );
+  ipcMain.handle(
+    'alphabet:delete-syllable',
+    guarded(async (_e, id) => content.deleteSyllable(baseDir, id, libraryWords()))
+  );
+
+  ipcMain.handle(
+    'alphabet:create-word',
+    guarded(async (_e, draft) => content.createWord(baseDir, draft, librarySyllables()))
+  );
+  ipcMain.handle(
+    'alphabet:update-word',
+    guarded(async (_e, id, draft) => content.updateWord(baseDir, id, draft, librarySyllables()))
+  );
+  ipcMain.handle(
+    'alphabet:delete-word',
+    guarded(async (_e, id) => content.deleteWord(baseDir, id))
+  );
+
+  ipcMain.handle(
+    'alphabet:create-set',
+    guarded(async (_e, draft) => content.createSet(baseDir, draft, libraryWords()))
+  );
+  ipcMain.handle(
+    'alphabet:update-set',
+    guarded(async (_e, id, draft) => content.updateSet(baseDir, id, draft, libraryWords()))
+  );
+  ipcMain.handle('alphabet:delete-set', guarded(async (_e, id) => content.deleteSet(baseDir, id)));
+
+  /**
+   * Выбор картинки. ПУТЬ НЕ ПЕРЕСЕКАЕТ ГРАНИЦУ: диалог открывает главный
+   * процесс, рендерер получает только имя файла в хранилище. Иначе рендерер
+   * мог бы назвать любой путь на диске.
+   */
+  ipcMain.handle(
+    'alphabet:pick-word-image',
+    guarded(async () => {
+      if (!dialog) throw new content.AlphabetContentStoreError('Диалог выбора файла недоступен');
+      const result = await dialog.showOpenDialog({
+        title: 'Выберите картинку для слова',
+        properties: ['openFile'],
+        filters: [{ name: 'Изображения', extensions: ['png', 'jpg', 'jpeg', 'webp', 'svg', 'gif'] }],
+      });
+      if (result.canceled || result.filePaths.length === 0) return null;
+      return content.importImage(baseDir, result.filePaths[0]);
+    })
+  );
+
+  // Запись голоса приходит байтами из рендерера — MediaRecorder работает
+  // только там. Сигнатуру хранилище проверяет само
+  ipcMain.handle(
+    'alphabet:save-voice',
+    guarded(async (_e, kind, id, bytes) => content.saveVoice(baseDir, kind, id, bytes))
+  );
+  ipcMain.handle(
+    'alphabet:delete-voice',
+    guarded(async (_e, kind, id) => content.deleteVoice(baseDir, kind, id))
   );
 
   return { baseDir, isFallback, assetsDir, report, libraryError };

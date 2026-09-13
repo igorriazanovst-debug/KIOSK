@@ -178,5 +178,21 @@ contextBridge.exposeInMainWorld('alphabetAPI', {
   // Пароль педагога (ТЗ раздел 3). Наружу только «подошёл или нет»
   checkTeacherPassword: (password) => ipcRenderer.invoke('alphabet:check-teacher-password', password),
   setTeacherPassword: (password) => ipcRenderer.invoke('alphabet:set-teacher-password', password),
-  teacherPasswordState: () => ipcRenderer.invoke('alphabet:teacher-password-state')
+  teacherPasswordState: () => ipcRenderer.invoke('alphabet:teacher-password-state'),
+
+  // Контент педагога (ТЗ строки 76-78)
+  getUserContent: () => ipcRenderer.invoke('alphabet:get-user-content'),
+  wordReadiness: () => ipcRenderer.invoke('alphabet:word-readiness'),
+  createSyllable: (draft) => ipcRenderer.invoke('alphabet:create-syllable', draft),
+  deleteSyllable: (id) => ipcRenderer.invoke('alphabet:delete-syllable', id),
+  createUserWord: (draft) => ipcRenderer.invoke('alphabet:create-word', draft),
+  updateUserWord: (id, draft) => ipcRenderer.invoke('alphabet:update-word', id, draft),
+  deleteUserWord: (id) => ipcRenderer.invoke('alphabet:delete-word', id),
+  createSet: (draft) => ipcRenderer.invoke('alphabet:create-set', draft),
+  updateSet: (id, draft) => ipcRenderer.invoke('alphabet:update-set', id, draft),
+  deleteSet: (id) => ipcRenderer.invoke('alphabet:delete-set', id),
+  // Путь к файлу границу не пересекает: диалог открывает главный процесс
+  pickWordImage: () => ipcRenderer.invoke('alphabet:pick-word-image'),
+  saveVoice: (kind, id, bytes) => ipcRenderer.invoke('alphabet:save-voice', kind, id, bytes),
+  deleteVoice: (kind, id) => ipcRenderer.invoke('alphabet:delete-voice', kind, id)
 });

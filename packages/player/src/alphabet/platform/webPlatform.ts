@@ -41,6 +41,7 @@ const KEY_PROFILES = 'kiosk-alphabet:profiles';
 const KEY_SETTINGS = 'kiosk-alphabet:settings';
 const KEY_STATISTICS = 'kiosk-alphabet:statistics';
 const KEY_PASSWORD = 'kiosk-alphabet:password';
+const KEY_CONTENT = 'kiosk-alphabet:content';
 
 export interface KeyValueStorage {
   read(key: string): unknown;
@@ -94,10 +95,14 @@ export function createWebPlatform(options: WebPlatformOptions = {}): AlphabetPla
 
   const profiles = (): Profile[] => sanitizeProfiles(storage.read(KEY_PROFILES) ?? []);
   const statistics = (): Statistics => alphabet.parseStatistics(storage.read(KEY_STATISTICS) ?? {});
+  const content = () => alphabet.parseUserContent(storage.read(KEY_CONTENT) ?? {});
 
   return {
     kind: 'web',
     assetUrl: (assetPath: string) => `${WEB_LIBRARY_ROOT}/${assetPath}`,
+    // В браузере файлов нет: редактор контента здесь не работает, и это
+    // честнее, чем притворяться. Отладочный режим нужен для игрового цикла
+    userMediaUrl: (fileName: string) => `${WEB_LIBRARY_ROOT}/user/${fileName}`,
 
     async getContext(): Promise<IpcResult<AlphabetContext>> {
       return ok({
@@ -215,6 +220,119 @@ export function createWebPlatform(options: WebPlatformOptions = {}): AlphabetPla
         const stored = storage.read(KEY_PASSWORD);
         return { isDefault: typeof stored !== 'string' || stored === DEFAULT_TEACHER_PASSWORD };
       });
+    },
+
+    // ── Контент педагога ────────────────────────────────────────────────
+    // Правила те же (из @kiosk/shared), хранилище другое. Медиа и записи
+    // голоса в браузере НЕ поддерживаются: здесь нет ни файловой системы, ни
+    // границы процессов, и подделывать их значило бы отлаживать не то, что
+    // работает в продакшене.
+    async getUserContent() {
+      return guard(() => content());
+    },
+
+    async wordReadiness() {
+      return guard(() => {
+        const c = content();
+        const out: Record<string, ReturnType<typeof alphabet.checkUserWordReadiness>> = {};
+        for (const word of c.words) {
+          out[word.id] = alphabet.checkUserWordReadiness(word, {
+            hasImage: !!word.imageFile,
+            hasWholeAudio: false,
+            syllablesWithAudio: new Set<string>(),
+          });
+        }
+        return out;
+      });
+    },
+
+    async createSyllable(draft) {
+      return guard(() => {
+        const c = content();
+        const { syllables, created } = alphabet.applyCreateSyllable(c.syllables, draft, newId());
+        storage.write(KEY_CONTENT, { ...c, syllables });
+        return created;
+      });
+    },
+
+    async deleteSyllable(syllableId) {
+      return guard(() => {
+        const c = content();
+        const syllables = alphabet.applyDeleteSyllable(c.syllables, c.words, syllableId);
+        storage.write(KEY_CONTENT, { ...c, syllables });
+        return syllables;
+      });
+    },
+
+    async createUserWord(draft) {
+      return guard(() => {
+        const c = content();
+        const all = [...(library?.syllables ?? []), ...c.syllables];
+        const { words, created } = alphabet.applyCreateWord(c.words, all, draft, newId());
+        storage.write(KEY_CONTENT, { ...c, words });
+        return created;
+      });
+    },
+
+    async updateUserWord(wordId, draft) {
+      return guard(() => {
+        const c = content();
+        const all = [...(library?.syllables ?? []), ...c.syllables];
+        const { words, updated } = alphabet.applyUpdateWord(c.words, all, wordId, draft);
+        storage.write(KEY_CONTENT, { ...c, words });
+        return updated;
+      });
+    },
+
+    async deleteUserWord(wordId) {
+      return guard(() => {
+        const c = content();
+        const { words, sets } = alphabet.applyDeleteWord(c.words, c.sets, wordId);
+        const next = { ...c, words, sets };
+        storage.write(KEY_CONTENT, next);
+        return next;
+      });
+    },
+
+    async createSet(draft) {
+      return guard(() => {
+        const c = content();
+        const all = [...(library?.words ?? []), ...c.words];
+        const { sets, created } = alphabet.applyCreateSet(c.sets, all, draft, newId());
+        storage.write(KEY_CONTENT, { ...c, sets });
+        return created;
+      });
+    },
+
+    async updateSet(setId, draft) {
+      return guard(() => {
+        const c = content();
+        const all = [...(library?.words ?? []), ...c.words];
+        const { sets, updated } = alphabet.applyUpdateSet(c.sets, all, setId, draft);
+        storage.write(KEY_CONTENT, { ...c, sets });
+        return updated;
+      });
+    },
+
+    async deleteSet(setId) {
+      return guard(() => {
+        const c = content();
+        const sets = alphabet.applyDeleteSet(c.sets, setId);
+        storage.write(KEY_CONTENT, { ...c, sets });
+        return sets;
+      });
+    },
+
+    async pickWordImage() {
+      return fail<{ fileName: string } | null>('В браузере картинки не добавляются');
+    },
+
+    async saveVoice() {
+      return fail<string>('В браузере запись голоса не поддерживается');
+    },
+
+    async deleteVoice() {
+      return fail<boolean>('В браузере запись голоса не поддерживается');
     },
   };
 }
