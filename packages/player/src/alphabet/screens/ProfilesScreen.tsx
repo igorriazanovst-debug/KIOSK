@@ -12,10 +12,12 @@ import type { Profile } from '../types';
 
 interface Props {
   profiles: Profile[];
-  selectedId: string | null;
+  /** Выбранные игроки в порядке хода; 1 — одиночная игра, до 4 — за столом */
+  selectedIds: string[];
+  maxPlayers: number;
   newName: string;
   onNewName: (name: string) => void;
-  onSelect: (profileId: string) => void;
+  onToggle: (profileId: string) => void;
   onCreate: () => void;
   onDelete: (profileId: string) => void;
   onStart: () => void;
@@ -23,19 +25,29 @@ interface Props {
 
 const ProfilesScreen: React.FC<Props> = ({
   profiles,
-  selectedId,
+  selectedIds,
+  maxPlayers,
   newName,
   onNewName,
-  onSelect,
+  onToggle,
   onCreate,
   onDelete,
   onStart,
 }) => {
-  const selected = profiles.find((p) => p.id === selectedId) ?? null;
+  const chosen = selectedIds
+    .map((id) => profiles.find((p) => p.id === id))
+    .filter(Boolean) as Profile[];
 
   return (
     <Panel testId="alphabet-profiles">
       <h2 style={{ margin: 0, fontSize: 30 }}>Кто занимается?</h2>
+      {/* Порядок хода — это порядок выбора, и он показан номером на карточке:
+          за столом важно знать, кто за кем, а не только кто играет */}
+      <span data-testid="alphabet-players-hint" style={{ fontSize: 19, color: palette.textDim }}>
+        {chosen.length <= 1
+          ? `Выберите игрока. Можно выбрать до ${maxPlayers} — тогда играют по очереди, каждый со своей стороны стола.`
+          : `Игроков: ${chosen.length}. Ходят по очереди в порядке выбора.`}
+      </span>
 
       <ScrollArea testId="alphabet-profile-list">
         {profiles.length === 0 && (
@@ -52,15 +64,17 @@ const ProfilesScreen: React.FC<Props> = ({
                 display: 'flex',
                 alignItems: 'center',
                 gap: 10,
-                background: profile.id === selectedId ? palette.accent : 'rgba(255,255,255,0.12)',
-                color: profile.id === selectedId ? palette.textDark : palette.text,
+                background: selectedIds.includes(profile.id)
+                  ? palette.accent
+                  : 'rgba(255,255,255,0.12)',
+                color: selectedIds.includes(profile.id) ? palette.textDark : palette.text,
                 borderRadius: 14,
                 padding: '10px 14px',
               }}
             >
               <button
                 type="button"
-                onClick={() => onSelect(profile.id)}
+                onClick={() => onToggle(profile.id)}
                 style={{
                   background: 'none',
                   border: 'none',
@@ -69,6 +83,9 @@ const ProfilesScreen: React.FC<Props> = ({
                   cursor: 'pointer',
                 }}
               >
+                {selectedIds.indexOf(profile.id) >= 0 && (
+                  <span style={{ fontWeight: 800 }}>{selectedIds.indexOf(profile.id) + 1}. </span>
+                )}
                 {profile.name}
               </button>
               <button
@@ -104,8 +121,12 @@ const ProfilesScreen: React.FC<Props> = ({
         </BigButton>
       </div>
 
-      <BigButton onClick={onStart} wide disabled={!selected} testId="alphabet-to-menu">
-        {selected ? `Начать: ${selected.name}` : 'Выберите игрока'}
+      <BigButton onClick={onStart} wide disabled={chosen.length === 0} testId="alphabet-to-menu">
+        {chosen.length === 0
+          ? 'Выберите игрока'
+          : chosen.length === 1
+            ? `Начать: ${chosen[0].name}`
+            : `Начать: ${chosen.length} игрока`}
       </BigButton>
     </Panel>
   );

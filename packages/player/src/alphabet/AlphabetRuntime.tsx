@@ -23,6 +23,7 @@ import {
   ALPHABET_DEFAULT_PROPS,
   ALPHABET_QUESTION_COUNTS,
   ALPHABET_DEFAULT_QUESTION_COUNT,
+  ALPHABET_MAX_PLAYERS,
 } from '@kiosk/shared';
 import { SCREEN_THEME_COLORS, palette } from './ui';
 import { createElectronPlatform } from './platform/electronPlatform';
@@ -50,6 +51,7 @@ import SettingsScreen from './screens/SettingsScreen';
 import PasswordPrompt from './components/PasswordPrompt';
 import VoiceRecorder from './components/VoiceRecorder';
 import NewSyllablePrompt from './components/NewSyllablePrompt';
+import Seats, { SEAT_ANGLES } from './components/Seats';
 import MyContentScreen from './screens/MyContentScreen';
 import WordEditorScreen from './screens/WordEditorScreen';
 import { letterAudioUrl, wordAudioUrl, wordWithoutLastSyllableAudioUrl } from './mediaUrl';
@@ -99,7 +101,8 @@ const AlphabetRuntime: React.FC<Props> = ({ properties, width, height }) => {
   const [context, setContext] = useState<AlphabetContext | null>(null);
   const [library, setLibrary] = useState<AlphabetLibrary | null>(null);
   const [profiles, setProfiles] = useState<Profile[]>([]);
-  const [selectedId, setSelectedId] = useState<string | null>(null);
+  /** Игроки партии в порядке хода. Один — одиночная игра, до четырёх — за столом */
+  const [selectedIds, setSelectedIds] = useState<string[]>([]);
   const [screen, setScreenRaw] = useState<Screen>({ name: 'profiles' });
   const [newName, setNewName] = useState('');
   const [error, setError] = useState<string | null>(null);
@@ -184,11 +187,24 @@ const AlphabetRuntime: React.FC<Props> = ({ properties, width, height }) => {
     if (holdTimer.current) clearTimeout(holdTimer.current);
   }, []);
 
-  const scale = Math.min(width / SCENE_MIN_WIDTH, height / SCENE_MIN_HEIGHT);
-  const sceneWidth = Math.max(SCENE_MIN_WIDTH, Math.round(width / scale));
-  const sceneHeight = Math.max(SCENE_MIN_HEIGHT, Math.round(height / scale));
+  const chosen = selectedIds
+    .map((id) => profiles.find((p) => p.id === id))
+    .filter(Boolean) as Profile[];
+  /** Первый выбранный — он же «текущий» там, где игрок нужен один */
+  const selected = chosen[0] ?? null;
 
-  const selected = profiles.find((p) => p.id === selectedId) ?? null;
+  /**
+   * Выбор игрока переключателем, а не заменой: за столом играют двое-четверо,
+   * и порядок хода — это порядок выбора.
+   */
+  const togglePlayer = (profileId: string) =>
+    setSelectedIds((ids) =>
+      ids.includes(profileId)
+        ? ids.filter((id) => id !== profileId)
+        : ids.length >= ALPHABET_MAX_PLAYERS
+          ? ids
+          : [...ids, profileId]
+    );
 
   /**
    * Библиотека, которую видит ИГРА: поставочный пакет плюс контент педагога.
@@ -200,6 +216,28 @@ const AlphabetRuntime: React.FC<Props> = ({ properties, width, height }) => {
     [library, userContent]
   );
   const hasAudio = !!library && alphabet.schemeHasAudio(library);
+
+  /**
+   * Поворот сцены к тому, чей ход — ТЗ строка 75 («для каждой стороны
+   * интерактивного стола»). Только на доске и столе: на планшете игроки
+   * сидят рядом и вертеть экран незачем.
+   *
+   * При повороте на 90° и 270° СТОРОНЫ МЕНЯЮТСЯ МЕСТАМИ: сцена, которая
+   * после поворота должна заполнить окно шириной W и высотой H, до поворота
+   * обязана быть H на W. Без этого повёрнутое поле торчит за края.
+   */
+  const seatAngle =
+    screen.name === 'play' && session && chosen.length > 1 && settings.device !== 'tablet'
+      ? SEAT_ANGLES[session.playerIndex % SEAT_ANGLES.length]
+      : 0;
+  const quarterTurn = seatAngle === 90 || seatAngle === -90;
+  const boxWidth = quarterTurn ? height : width;
+  const boxHeight = quarterTurn ? width : height;
+
+  const scale = Math.min(boxWidth / SCENE_MIN_WIDTH, boxHeight / SCENE_MIN_HEIGHT);
+  const sceneWidth = Math.max(SCENE_MIN_WIDTH, Math.round(boxWidth / scale));
+  const sceneHeight = Math.max(SCENE_MIN_HEIGHT, Math.round(boxHeight / scale));
+
 
   const availability = useMemo(() => {
     const empty = { letterShow: 0, wordCompleting: 0, wordMake: 0 } as Record<AlphabetStage, number>;
@@ -228,7 +266,7 @@ const AlphabetRuntime: React.FC<Props> = ({ properties, width, height }) => {
       return;
     }
     setNewName('');
-    setSelectedId(result.data?.id ?? null);
+    if (result.data) togglePlayer(result.data.id);
     await reloadProfiles();
   };
 
@@ -238,7 +276,7 @@ const AlphabetRuntime: React.FC<Props> = ({ properties, width, height }) => {
       setError(result.error ?? 'Не удалось удалить игрока');
       return;
     }
-    if (selectedId === profileId) setSelectedId(null);
+    setSelectedIds((ids) => ids.filter((id) => id !== profileId));
     await reloadProfiles();
   };
 
@@ -321,12 +359,12 @@ const AlphabetRuntime: React.FC<Props> = ({ properties, width, height }) => {
   };
 
   const startSession = (stage: AlphabetStage) => {
-    if (!playable || !selected) return;
+    if (!playable || chosen.length === 0) return;
     try {
       const built = alphabet.buildAlphabetSession(playable, {
         roundId: `${Date.now()}`,
         stage,
-        playerIds: [selected.id],
+        playerIds: chosen.map((p) => p.id),
         questionsPerPlayer: settings.questionCount,
         rng: Math.random,
       });
@@ -428,20 +466,38 @@ const AlphabetRuntime: React.FC<Props> = ({ properties, width, height }) => {
         display: 'flex',
         alignItems: 'flex-start',
         justifyContent: 'flex-start',
+        // Система координат для повёрнутой сцены и для подписей мест
+        position: 'relative',
       }}
     >
+      {screen.name === 'play' && session && chosen.length > 1 && (
+        <Seats
+          seats={chosen.map((p) => ({ playerId: p.id, name: p.name }))}
+          activeIndex={session.playerIndex}
+        />
+      )}
       <div
         data-scene={screen.name}
         data-scene-size={`${sceneWidth}x${sceneHeight}`}
+        data-seat-angle={seatAngle}
         style={{
           width: sceneWidth,
           height: sceneHeight,
-          transform: `scale(${scale})`,
-          transformOrigin: 'top left',
-          // Окно пароля позиционируется по сцене, а не по окну браузера:
-          // сцена масштабирована, и position:fixed внутри трансформа ведёт
-          // себя не так, как ожидается
-          position: 'relative',
+          // Поворот вокруг ЦЕНТРА окна, а не левого верхнего угла: иначе
+          // повёрнутая сцена уезжает за границы.
+          //
+          // position тут делает две работы сразу: при повороте — привязку к
+          // центру окна, а без поворота — систему координат для окон пароля
+          // и записи, которые лежат ВНУТРИ масштабированной сцены (position:
+          // fixed внутри трансформа ведёт себя не так, как ожидается)
+          position: seatAngle === 0 ? 'relative' : 'absolute',
+          left: seatAngle !== 0 ? '50%' : undefined,
+          top: seatAngle !== 0 ? '50%' : undefined,
+          transform:
+            seatAngle === 0
+              ? `scale(${scale})`
+              : `translate(-50%, -50%) rotate(${seatAngle}deg) scale(${scale})`,
+          transformOrigin: seatAngle === 0 ? 'top left' : 'center center',
           display: 'flex',
           flexDirection: 'column',
           boxSizing: 'border-box',
@@ -496,10 +552,11 @@ const AlphabetRuntime: React.FC<Props> = ({ properties, width, height }) => {
         {screen.name === 'profiles' && (
           <ProfilesScreen
             profiles={profiles}
-            selectedId={selectedId}
+            selectedIds={selectedIds}
+            maxPlayers={ALPHABET_MAX_PLAYERS}
             newName={newName}
             onNewName={setNewName}
-            onSelect={setSelectedId}
+            onToggle={togglePlayer}
             onCreate={handleCreate}
             onDelete={handleDelete}
             onStart={() => setScreen({ name: 'menu' })}
