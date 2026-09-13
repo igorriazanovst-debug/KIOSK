@@ -9,6 +9,7 @@ import { isEmailAllowedForNatcom, projectDataHasNatcomWidget } from '../config/n
 import { isEmailAllowedForMathMachine, projectDataHasMathMachineWidget } from '../config/mathmachineAccess';
 import { isEmailAllowedForPeriodicTable, projectDataHasPeriodicTableWidget } from '../config/periodicTableAccess';
 import { isEmailAllowedForRusiq, projectDataHasRusiqWidget } from '../config/rusiqAccess';
+import { isEmailAllowedForWords, projectDataHasWordsWidget } from '../config/wordsAccess';
 import multer from 'multer';
 import path from 'path';
 
@@ -231,6 +232,13 @@ export class ProjectController {
         });
       }
 
+      if (projectDataHasWordsWidget(projectData) && !isEmailAllowedForWords(req.client.email)) {
+        return res.status(403).json({
+          error: 'Words widget not allowed',
+          message: 'Виджет «Я знаю много слов» пока недоступен для этого аккаунта'
+        });
+      }
+
       const project = await ProjectService.createProject({
         name,
         description,
@@ -416,6 +424,17 @@ export class ProjectController {
         return res.status(403).json({
           error: 'RusIQ widget not allowed',
           message: 'Виджет «РусIQ» пока недоступен для этого аккаунта'
+        });
+      }
+
+      if (
+        Object.prototype.hasOwnProperty.call(updates, 'projectData') &&
+        projectDataHasWordsWidget(updates.projectData) &&
+        !isEmailAllowedForWords(req.client.email)
+      ) {
+        return res.status(403).json({
+          error: 'Words widget not allowed',
+          message: 'Виджет «Я знаю много слов» пока недоступен для этого аккаунта'
         });
       }
 
