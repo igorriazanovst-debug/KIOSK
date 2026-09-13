@@ -379,9 +379,13 @@ const WordsRuntime: React.FC<Props> = ({ properties, width, height }) => {
       setScreen({ name: 'play', themeId });
 
       const first = currentStep(built);
-      if (first) sayWord(first.targetWordId, built.roundId);
+      // Озвучка НЕ запускается сама: вопрос написан текстом на поле, а
+      // звучит только по нажатию «Озвучка вопроса» (решение пользователя от
+      // 13.09.2026). Раунд всё равно открываем — очередь по нему отбрасывает
+      // запоздалую озвучку прошлой партии, если ребёнок успел нажать кнопку.
+
     },
-    [bus, library, players, properties.stepsPerPlayer, sayWord, sets, settings.levelOverrides]
+    [bus, library, players, properties.stepsPerPlayer, sets, settings.levelOverrides]
   );
 
   const finishGame = useCallback(
@@ -432,11 +436,11 @@ const WordsRuntime: React.FC<Props> = ({ properties, width, height }) => {
           void finishGame(result.session);
         } else {
           const next = currentStep(result.session);
-          if (next) sayWord(next.targetWordId, result.session.roundId);
+          // Следующий шаг тоже молчит: озвучка только по кнопке
         }
       }, REVEAL_MS);
     },
-    [finishGame, locked, sayWord, session]
+    [finishGame, locked, session]
   );
 
   const repeatWord = useCallback(() => {
