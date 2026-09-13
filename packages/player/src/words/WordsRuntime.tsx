@@ -36,7 +36,7 @@ import type { UserWord, UserSet } from '@kiosk/shared';
 import { setWordsPlatform, detectPlatformKind } from './platform/WordsPlatform';
 import { createElectronPlatform } from './platform/electronPlatform';
 import { createWebPlatform } from './platform/webPlatform';
-import { palette } from './ui';
+import { palette, SCREEN_THEME_COLORS } from './ui';
 import { libraryAssetUrl, wordImageUrl, userMediaUrl } from './mediaUrl';
 import { AudioBus, createHtmlAudioPlayer } from './audio/AudioBus';
 
@@ -50,6 +50,7 @@ import PlayScreen from './screens/PlayScreen';
 import ScoreScreen from './screens/ScoreScreen';
 import MyWordsScreen from './screens/MyWordsScreen';
 import WordImagesScreen from './screens/WordImagesScreen';
+import PasswordPrompt from './components/PasswordPrompt';
 import WordEditorScreen from './screens/WordEditorScreen';
 import SetEditorScreen from './screens/SetEditorScreen';
 
@@ -126,6 +127,12 @@ const WordsRuntime: React.FC<Props> = ({ properties, width, height }) => {
   const [archiveNotice, setArchiveNotice] = useState<string | null>(null);
   /** Свои картинки педагога для поставочных слов (ТЗ строка 42) */
   const [wordImages, setWordImages] = useState<WordImageOverrides>({});
+  /** Раздел, в который просят пароль. null — окна ввода нет */
+  const [gate, setGate] = useState<null | { screen: Screen; title: string }>(null);
+  /** Открыт ли ввод нового пароля (из настроек) */
+  const [changingPassword, setChangingPassword] = useState(false);
+  /** Стандартный ли ещё пароль — от этого зависит подсказка в окне ввода */
+  const [defaultPassword, setDefaultPassword] = useState(false);
 
   const busRef = useRef<AudioBus | null>(null);
   if (!busRef.current) busRef.current = new AudioBus(createHtmlAudioPlayer());
@@ -223,6 +230,8 @@ const WordsRuntime: React.FC<Props> = ({ properties, width, height }) => {
     if (uw.ok) setUserWords(uw.data ?? []);
     if (us.ok) setSets(us.data ?? []);
     if (wi.ok) setWordImages(wi.data ?? {});
+    const ps = await api.teacherPasswordState();
+    if (ps.ok) setDefaultPassword(ps.data?.isDefault ?? false);
   }, [api]);
 
   /**
@@ -529,8 +538,8 @@ const WordsRuntime: React.FC<Props> = ({ properties, width, height }) => {
         }}
         onMulti={() => setScreen({ name: 'players' })}
         onPlayers={() => setScreen({ name: 'players' })}
-        onSettings={() => setScreen({ name: 'settings' })}
-        onMyWords={() => setScreen({ name: 'myWords' })}
+        onSettings={() => setGate({ screen: { name: 'settings' }, title: 'Настройки' })}
+        onMyWords={() => setGate({ screen: { name: 'myWords' }, title: 'Мои слова' })}
       />
     );
   } else if (screen.name === 'players') {
@@ -727,7 +736,8 @@ const WordsRuntime: React.FC<Props> = ({ properties, width, height }) => {
           height: sceneHeight,
           transform: `scale(${scale})`,
           transformOrigin: 'center center',
-          background: palette.bg,
+          // Цвет экрана — из настроек педагога (ТЗ раздел 6)
+          background: SCREEN_THEME_COLORS[settings.screenTheme]?.bg ?? palette.bg,
           color: palette.text,
           fontFamily: 'system-ui, sans-serif',
           position: 'relative',
@@ -735,6 +745,46 @@ const WordsRuntime: React.FC<Props> = ({ properties, width, height }) => {
         }}
       >
         {content}
+
+        {/* Окно пароля живёт в рантайме, а не в меню: закрытых разделов два,
+            и правило входа должно быть одно на оба. */}
+        {gate && (
+          <PasswordPrompt
+            sectionTitle={gate.title}
+            onCheck={async (password) => {
+              if (!api) return false;
+              const res = await api.checkTeacherPassword(password);
+              return res.ok === true && res.data?.ok === true;
+            }}
+            onCancel={() => setGate(null)}
+            onSuccess={() => {
+              const target = gate.screen;
+              setGate(null);
+              setScreen(target);
+            }}
+          />
+        )}
+
+        {/* Смена пароля. Тот же компонент, но проверка заменена на запись:
+            подтверждать старый пароль здесь незачем — педагог уже прошёл
+            рубеж, иначе он не попал бы в настройки. */}
+        {changingPassword && (
+          <PasswordPrompt
+            sectionTitle="Новый пароль"
+            onCheck={async (password) => {
+              if (!api) return false;
+              const res = await api.setTeacherPassword(password);
+              if (!res.ok) {
+                setError(res.error ?? 'Не удалось сменить пароль');
+                return false;
+              }
+              setDefaultPassword(res.data?.isDefault ?? false);
+              return true;
+            }}
+            onCancel={() => setChangingPassword(false)}
+            onSuccess={() => setChangingPassword(false)}
+          />
+        )}
         {context?.isFallback && (
           <div
             style={{

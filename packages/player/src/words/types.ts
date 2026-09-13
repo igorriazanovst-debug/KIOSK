@@ -68,6 +68,12 @@ export interface WordsApi {
   /** Системный диалог открытия; архив разбирает главный процесс */
   importSet(): Promise<IpcResult<ImportedSet>>;
 
+  // ── Пароль педагога (ТЗ раздел 3) ───────────────────────────────────
+  /** Наружу отдаётся только «подошёл или нет» — ни пароля, ни хеша */
+  checkTeacherPassword(password: string): Promise<IpcResult<{ ok: boolean }>>;
+  setTeacherPassword(password: string): Promise<IpcResult<{ isDefault: boolean }>>;
+  teacherPasswordState(): Promise<IpcResult<{ isDefault: boolean }>>;
+
   // ── Свои картинки для поставочных слов (ТЗ строка 42) ────────────────
   listWordImages(): Promise<IpcResult<WordImageOverrides>>;
   /** Системный диалог выбора картинки; путь в рендерер не возвращается */
