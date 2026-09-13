@@ -259,3 +259,85 @@ test('одна и та же партия с одним зерном ГПСЧ в�
   const b = session({ rng: seededRng(7) });
   assert.deepEqual(a.steps, b.steps);
 });
+
+// ─── Совместная игра: задания игроков не повторяются ───────────────────────
+//
+// Проверяем через buildSession, а не через саму раздачу: верный алгоритм
+// можно подключить неверно — например, разложить шаги по игрокам не в том
+// порядке, в каком они ходят, и свойство раздачи до стола не дойдёт.
+//
+// Прогоняем на многих зёрнах. Прежняя раздача, где каждому игроку доставался
+// свой независимый список, на отдельных зёрнах тоже давала чистый круг, и
+// одно зерно ничего не доказывает. Здесь это особенно важно: слов в теме мало
+// (у эталона 10–21 при 20 шагах), поэтому совпадения были не редкостью, а
+// нормой.
+
+/** Слова партии в ПОРЯДКЕ ХОДА, как их видят дети за столом */
+function targetsInTurnOrder(state: GameSession): string[] {
+  const order: string[] = [];
+  for (let step = 0; step < state.stepsPerPlayer; step++) {
+    for (const playerId of state.playerIds) {
+      order.push(state.steps[playerId][step].targetWordId);
+    }
+  }
+  return order;
+}
+
+test('в совместной игре слова игроков не повторяются в одном круге', () => {
+  const players = ['p1', 'p2', 'p3', 'p4'];
+  for (let seed = 1; seed <= 100; seed++) {
+    const state = session({ playerIds: players, stepsPerPlayer: 5, rng: seededRng(seed) });
+    const order = targetsInTurnOrder(state);
+    for (let step = 0; step < 5; step++) {
+      const round = order.slice(step * players.length, (step + 1) * players.length);
+      assert.equal(
+        new Set(round).size,
+        players.length,
+        `зерно ${seed}, круг ${step}: повтор в круге — ${round.join(', ')}`
+      );
+    }
+  }
+});
+
+test('в совместной игре одно слово не выпадает игроку двумя его шагами подряд', () => {
+  const players = ['p1', 'p2', 'p3', 'p4'];
+  for (let seed = 1; seed <= 100; seed++) {
+    const state = session({ playerIds: players, stepsPerPlayer: 5, rng: seededRng(seed) });
+    for (const playerId of players) {
+      const mine = state.steps[playerId].map((s) => s.targetWordId);
+      for (let i = 1; i < mine.length; i++) {
+        assert.notEqual(mine[i], mine[i - 1], `зерно ${seed}, ${playerId}: своё слово подряд`);
+      }
+    }
+  }
+});
+
+test('в одиночной игре слово по-прежнему не встаёт двумя шагами подряд', () => {
+  for (let seed = 1; seed <= 100; seed++) {
+    const state = session({ stepsPerPlayer: 20, rng: seededRng(seed) });
+    const mine = state.steps.p1.map((s) => s.targetWordId);
+    for (let i = 1; i < mine.length; i++) {
+      assert.notEqual(mine[i], mine[i - 1], `зерно ${seed}: повтор подряд`);
+    }
+  }
+});
+
+test('шагов у каждого игрока ровно столько, сколько заказано', () => {
+  const players = ['p1', 'p2', 'p3'];
+  const state = session({ playerIds: players, stepsPerPlayer: 7 });
+  for (const playerId of players) {
+    assert.equal(state.steps[playerId].length, 7);
+  }
+});
+
+test('тема расходуется равномерно — нет слова, которое выпадает вдвое чаще', () => {
+  const players = ['p1', 'p2'];
+  const state = session({ playerIds: players, stepsPerPlayer: 9, rng: seededRng(5) });
+  const counts = new Map<string, number>();
+  for (const word of targetsInTurnOrder(state)) {
+    counts.set(word, (counts.get(word) ?? 0) + 1);
+  }
+  const used = [...counts.values()];
+  assert.ok(Math.max(...used) - Math.min(...used) <= 1, `разброс ${used.join(', ')}`);
+  assert.equal(counts.size, THEME_WORDS.length, 'задействована не вся тема');
+});

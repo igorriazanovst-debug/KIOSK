@@ -13,8 +13,8 @@
 
 import type { AlphabetLibrary } from '../model/schema';
 import { firstLetterNumber, wordsForCompleting, wordsForLetterShow, wordsForMaking } from '../model/graph';
-import { shuffled } from './random';
 import type { Rng } from './random';
+import { dealTurnTargets, playerIndexForTurn } from '../../utils/turnDeal';
 import { buildLetterShowQuestion, LETTER_OPTIONS, QuestionBuildError } from './letterShow';
 import type { LetterShowQuestion } from './letterShow';
 import { buildWordCompletingQuestion, SYLLABLE_OPTIONS } from './wordCompleting';
@@ -111,24 +111,6 @@ export function eligibleWords(
   }
 }
 
-/**
- * Загаданные слова на все вопросы игрока. Пригодных слов обычно меньше, чем
- * вопросов, поэтому список перемешивается и повторяется — но на стыке двух
- * проходов одно и то же слово не встаёт двумя вопросами подряд.
- */
-function pickTargets(wordIds: string[], count: number, rng: Rng): string[] {
-  const targets: string[] = [];
-  while (targets.length < count) {
-    const pass = shuffled(wordIds, rng);
-    const previous = targets[targets.length - 1];
-    if (previous !== undefined && pass[0] === previous && pass.length > 1) {
-      [pass[0], pass[1]] = [pass[1], pass[0]];
-    }
-    targets.push(...pass);
-  }
-  return targets.slice(0, count);
-}
-
 function buildQuestion(
   library: AlphabetLibrary,
   stage: AlphabetStage,
@@ -177,13 +159,22 @@ export function buildAlphabetSession(
   const tally: Record<string, PlayerTally> = {};
 
   for (const playerId of playerIds) {
-    questions[playerId] = pickTargets(pool, questionsPerPlayer, rng).map((wordId) =>
-      buildQuestion(library, stage, wordId, rng, optionCount)
-    );
+    questions[playerId] = [];
     results[playerId] = [];
     answers[playerId] = [];
     tally[playerId] = { completed: 0, flawless: 0, errors: 0 };
   }
+
+  // Слова раздаются НА ВСЮ ПАРТИЮ СРАЗУ, в порядке хода, а не каждому игроку
+  // своим независимым списком. Прежняя раздача по игрокам выглядела прилично
+  // в каждом списке по отдельности, а за столом дети регулярно получали одно
+  // и то же слово в одном круге. Правило общее с Типом 2 — см. utils/turnDeal
+  const turns = playerIds.length * questionsPerPlayer;
+  const targets = dealTurnTargets(pool, { turns, players: playerIds.length, rng });
+  targets.forEach((wordId, turn) => {
+    const playerId = playerIds[playerIndexForTurn(turn, playerIds.length)];
+    questions[playerId].push(buildQuestion(library, stage, wordId, rng, optionCount));
+  });
 
   return {
     roundId,

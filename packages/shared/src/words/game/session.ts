@@ -12,6 +12,7 @@
 // выхода в меню, догоняет следующую и произносит чужое слово. У эталона ОС3
 // ровно этот механизм назван roomId — приём неочевидный, но необходимый.
 
+import { dealTurnTargets, playerIndexForTurn } from '../../utils/turnDeal';
 import type { WordsLevel } from '../widgetProperties';
 import { WORDS_USER_LEVEL } from '../widgetProperties';
 import { isUserWordId } from '../model/schema';
@@ -105,29 +106,6 @@ function shuffled<T>(items: readonly T[], rng: Rng): T[] {
 }
 
 /**
- * Загаданные слова на все шаги игрока. Слов в теме почти всегда меньше, чем
- * шагов (у эталона темы по 10–21 слову при 20 шагах), поэтому список
- * перемешивается и повторяется — но так, чтобы внутри одного прохода слово не
- * повторялось: подряд одно и то же ребёнку не показывается.
- */
-function pickTargets(themeWordIds: string[], stepsPerPlayer: number, rng: Rng): string[] {
-  const targets: string[] = [];
-  while (targets.length < stepsPerPlayer) {
-    const pass = shuffled(themeWordIds, rng);
-    // Внутри одного прохода повторов нет по построению, но на СТЫКЕ проходов
-    // последнее слово предыдущего может совпасть с первым следующего — и
-    // ребёнок увидит одно и то же слово два шага подряд. Разводим их обменом
-    // с соседом: это дешевле, чем перемешивать проход заново, и не зацикливается.
-    const previous = targets[targets.length - 1];
-    if (previous !== undefined && pass[0] === previous && pass.length > 1) {
-      [pass[0], pass[1]] = [pass[1], pass[0]];
-    }
-    targets.push(...pass);
-  }
-  return targets.slice(0, stepsPerPlayer);
-}
-
-/**
  * Варианты ответа для шага: загаданное слово плюс дистракторы. Дистракторы
  * берутся сначала из своей темы (они ближе по смыслу — выбор сложнее и
  * осмысленнее), и только когда своих не хватает, добираются из запаса.
@@ -179,15 +157,25 @@ export function buildSession(options: BuildSessionOptions): GameSession {
   const tally: Record<string, PlayerTally> = {};
 
   for (const playerId of playerIds) {
-    const targets = pickTargets(themeWordIds, stepsPerPlayer, rng);
-    steps[playerId] = targets.map((targetWordId) => ({
-      level: levelOf(targetWordId),
-      targetWordId,
-      optionWordIds: pickOptions(targetWordId, themeWordIds, fallbackWordIds, optionsPerStep, rng),
-    }));
+    steps[playerId] = [];
     results[playerId] = {};
     tally[playerId] = { completed: 0, flawless: 0, errors: 0 };
   }
+
+  // Слова раздаются НА ВСЮ ПАРТИЮ СРАЗУ, в порядке хода, а не каждому игроку
+  // своим независимым списком. Слов в теме мало (у эталона 10–21 при 20
+  // шагах), поэтому при раздаче по игрокам совпадения в одном круге были не
+  // редкостью, а нормой. Правило общее с Типом 3 — см. utils/turnDeal
+  const turns = playerIds.length * stepsPerPlayer;
+  const targets = dealTurnTargets(themeWordIds, { turns, players: playerIds.length, rng });
+  targets.forEach((targetWordId, turn) => {
+    const playerId = playerIds[playerIndexForTurn(turn, playerIds.length)];
+    steps[playerId].push({
+      level: levelOf(targetWordId),
+      targetWordId,
+      optionWordIds: pickOptions(targetWordId, themeWordIds, fallbackWordIds, optionsPerStep, rng),
+    });
+  });
 
   return {
     roundId,

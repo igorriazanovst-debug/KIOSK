@@ -261,3 +261,122 @@ test('каждый ответ, верный и нет, попадает в сп�
     { letterNumber: question.answerLetterNumber, correct: true },
   ]);
 });
+
+// ─── Совместная игра: задания игроков не повторяются ───────────────────────
+//
+// Проверяем через buildAlphabetSession, а не через саму раздачу: верный
+// алгоритм можно подключить неверно — например, разложить ходы по игрокам не
+// в том порядке, в каком они ходят, и тогда свойство раздачи до стола не
+// дойдёт.
+//
+// Прогоняем на многих зёрнах: прежняя раздача по игрокам на отдельных зёрнах
+// тоже давала чистый круг, и одно зерно ничего не доказывает.
+
+/** Слова партии в ПОРЯДКЕ ХОДА, как их видят дети за столом */
+function wordsInTurnOrder(state: AlphabetSession): string[] {
+  const order: string[] = [];
+  for (let q = 0; q < state.questionsPerPlayer; q++) {
+    for (const playerId of state.playerIds) {
+      order.push(state.questions[playerId][q].wordId);
+    }
+  }
+  return order;
+}
+
+test('в совместной игре слова игроков не повторяются в одном круге', () => {
+  const players = ['p1', 'p2', 'p3', 'p4'];
+  for (let seed = 1; seed <= 100; seed++) {
+    const state = buildAlphabetSession(testLibrary(), {
+      roundId: 'r1',
+      stage: 'letterShow',
+      playerIds: players,
+      questionsPerPlayer: 3,
+      rng: seededRng(seed),
+    });
+    const order = wordsInTurnOrder(state);
+    for (let q = 0; q < 3; q++) {
+      const round = order.slice(q * players.length, (q + 1) * players.length);
+      assert.equal(
+        new Set(round).size,
+        players.length,
+        `зерно ${seed}, круг ${q}: повтор в круге — ${round.join(', ')}`
+      );
+    }
+  }
+});
+
+test('в совместной игре одно слово не выпадает игроку двумя его ходами подряд', () => {
+  // Трое, а не четверо: в тестовом пакете ровно четыре слова, пригодных
+  // этапу 1. При четверых запас РАВЕН числу игроков, и тогда это правило и
+  // правило чистого круга вместе невыполнимы — см. границу в utils/turnDeal.
+  // Отдельным тестом ниже зафиксировано, что в этом случае держится главное
+  const players = ['p1', 'p2', 'p3'];
+  for (let seed = 1; seed <= 100; seed++) {
+    const state = buildAlphabetSession(testLibrary(), {
+      roundId: 'r1',
+      stage: 'letterShow',
+      playerIds: players,
+      questionsPerPlayer: 3,
+      rng: seededRng(seed),
+    });
+    for (const playerId of players) {
+      const mine = state.questions[playerId].map((q) => q.wordId);
+      for (let i = 1; i < mine.length; i++) {
+        assert.notEqual(mine[i], mine[i - 1], `зерно ${seed}, ${playerId}: своё слово подряд`);
+      }
+    }
+  }
+});
+
+test('в одиночной игре слово по-прежнему не встаёт двумя вопросами подряд', () => {
+  for (let seed = 1; seed <= 100; seed++) {
+    const state = buildAlphabetSession(testLibrary(), {
+      roundId: 'r1',
+      stage: 'letterShow',
+      playerIds: ['p1'],
+      questionsPerPlayer: 8,
+      rng: seededRng(seed),
+    });
+    const mine = state.questions.p1.map((q) => q.wordId);
+    for (let i = 1; i < mine.length; i++) {
+      assert.notEqual(mine[i], mine[i - 1], `зерно ${seed}: повтор подряд`);
+    }
+  }
+});
+
+test('каждому игроку достаётся ровно столько вопросов, сколько заказано', () => {
+  const players = ['p1', 'p2', 'p3'];
+  const state = buildAlphabetSession(testLibrary(), {
+    roundId: 'r1',
+    stage: 'letterShow',
+    playerIds: players,
+    questionsPerPlayer: 4,
+    rng: seededRng(11),
+  });
+  for (const playerId of players) {
+    assert.equal(state.questions[playerId].length, 4);
+  }
+});
+
+test('слов ровно столько же, сколько игроков: круг всё равно чист', () => {
+  // Вырожденный случай: педагог собрал комплект ровно из четырёх слов на
+  // четверых. Главное требование — не выдать двум детям одно задание
+  // одновременно — держится и здесь; повтор у одного игрока между кругами
+  // принимается осознанно, потому что развести оба правила сразу при таком
+  // запасе эта раздача не может
+  const players = ['p1', 'p2', 'p3', 'p4'];
+  for (let seed = 1; seed <= 50; seed++) {
+    const state = buildAlphabetSession(testLibrary(), {
+      roundId: 'r1',
+      stage: 'letterShow',
+      playerIds: players,
+      questionsPerPlayer: 3,
+      rng: seededRng(seed),
+    });
+    const order = wordsInTurnOrder(state);
+    for (let q = 0; q < 3; q++) {
+      const round = order.slice(q * players.length, (q + 1) * players.length);
+      assert.equal(new Set(round).size, players.length, `зерно ${seed}, круг ${q}`);
+    }
+  }
+});
