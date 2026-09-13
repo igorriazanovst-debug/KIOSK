@@ -412,7 +412,19 @@ const EditorScreen: React.FC<Props> = ({ initialQuiz, pendingBackground, onExit 
           </button>
         </div>
       </div>
-      <div style={{ width: 340 }}>
+      {/* Найдено живой проверкой (2026-09-13, приёмка Фазы 2b): панель
+          справа растёт без ограничения (заголовок + форма вопроса + до трёх
+          превью картинок + пароль + кнопки Сохранить/Назад), а внешний
+          `.player-canvas` (Player.tsx, standalone-app режим) жёстко
+          ограничен высотой окна с `overflow: hidden` - без собственного
+          скролла у панели её нижняя часть, включая саму кнопку «Сохранить»,
+          физически уезжает за пределы окна и становится недостижимой мышью
+          на любом окне ниже ~1500px высотой (то есть буквально на дефолтном
+          размере окна standalone-виджета, BASE_WINDOW_OPTIONS 1280x800).
+          100vh здесь - высота именно `.player-canvas` (Player.tsx считает
+          его равным window.innerHeight в standalone-режиме), не экрана
+          целиком. */}
+      <div style={{ width: 340, maxHeight: 'calc(100vh - 80px)', overflowY: 'auto', paddingRight: 8 }}>
         <label className="riq-field">
           Название викторины
           <input value={quiz.title} onChange={(e) => update({ ...quiz, title: e.target.value })} className="riq-input" />
