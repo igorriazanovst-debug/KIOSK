@@ -1,0 +1,2557 @@
+{
+  "schemaVersion": 1,
+  "audioScheme": {
+    "recorded": false
+  },
+  "letters": [
+    {
+      "number": 1,
+      "name": "А",
+      "wordIds": [
+        "arbuz",
+        "avtobus",
+        "apel_sin"
+      ]
+    },
+    {
+      "number": 2,
+      "name": "Б",
+      "wordIds": [
+        "banan",
+        "baraban",
+        "belka"
+      ]
+    },
+    {
+      "number": 3,
+      "name": "В",
+      "wordIds": [
+        "vaza",
+        "voda",
+        "vorona"
+      ]
+    },
+    {
+      "number": 4,
+      "name": "Г",
+      "wordIds": [
+        "gusi",
+        "gitara",
+        "grusha"
+      ]
+    },
+    {
+      "number": 5,
+      "name": "Д",
+      "wordIds": [
+        "doroga",
+        "derevo",
+        "doktor"
+      ]
+    },
+    {
+      "number": 6,
+      "name": "Е",
+      "wordIds": [
+        "enot",
+        "eda",
+        "ezhevika"
+      ]
+    },
+    {
+      "number": 7,
+      "name": "Ё",
+      "wordIds": [
+        "yozhik",
+        "yolka",
+        "yorshik"
+      ]
+    },
+    {
+      "number": 8,
+      "name": "Ж",
+      "wordIds": [
+        "zhiraf",
+        "zhaba",
+        "zhuravl_"
+      ]
+    },
+    {
+      "number": 9,
+      "name": "З",
+      "wordIds": [
+        "zima",
+        "zayac",
+        "zontik"
+      ]
+    },
+    {
+      "number": 10,
+      "name": "И",
+      "wordIds": [
+        "igla",
+        "iva",
+        "indyuk"
+      ]
+    },
+    {
+      "number": 11,
+      "name": "Й",
+      "wordIds": [
+        "jogurt",
+        "joga",
+        "jod"
+      ]
+    },
+    {
+      "number": 12,
+      "name": "К",
+      "wordIds": [
+        "koshka",
+        "korova",
+        "kapusta"
+      ]
+    },
+    {
+      "number": 13,
+      "name": "Л",
+      "wordIds": [
+        "lampa",
+        "lisica",
+        "lodka"
+      ]
+    },
+    {
+      "number": 14,
+      "name": "М",
+      "wordIds": [
+        "mashina",
+        "malina",
+        "medved_",
+        "mylo"
+      ]
+    },
+    {
+      "number": 15,
+      "name": "Н",
+      "wordIds": [
+        "nosorog",
+        "nitka",
+        "nozhnicy"
+      ]
+    },
+    {
+      "number": 16,
+      "name": "О",
+      "wordIds": [
+        "oblako",
+        "okno",
+        "ovca",
+        "ob_yavlenie"
+      ]
+    },
+    {
+      "number": 17,
+      "name": "П",
+      "wordIds": [
+        "pomidor",
+        "petuh",
+        "poezd",
+        "pod_ezd",
+        "pal_to"
+      ]
+    },
+    {
+      "number": 18,
+      "name": "Р",
+      "wordIds": [
+        "romashka",
+        "ryba",
+        "raduga"
+      ]
+    },
+    {
+      "number": 19,
+      "name": "С",
+      "wordIds": [
+        "sobaka",
+        "solnce",
+        "soroka",
+        "s_yomka"
+      ]
+    },
+    {
+      "number": 20,
+      "name": "Т",
+      "wordIds": [
+        "tarelka",
+        "tramvaj",
+        "tykva"
+      ]
+    },
+    {
+      "number": 21,
+      "name": "У",
+      "wordIds": [
+        "utka",
+        "ulitka",
+        "uho"
+      ]
+    },
+    {
+      "number": 22,
+      "name": "Ф",
+      "wordIds": [
+        "fonar_",
+        "fialka",
+        "flazhok"
+      ]
+    },
+    {
+      "number": 23,
+      "name": "Х",
+      "wordIds": [
+        "homyak",
+        "halva",
+        "hudozhnik"
+      ]
+    },
+    {
+      "number": 24,
+      "name": "Ц",
+      "wordIds": [
+        "caplya",
+        "cvetok",
+        "cyplyonok"
+      ]
+    },
+    {
+      "number": 25,
+      "name": "Ч",
+      "wordIds": [
+        "chajnik",
+        "cherepaha",
+        "chasy"
+      ]
+    },
+    {
+      "number": 26,
+      "name": "Ш",
+      "wordIds": [
+        "shapka",
+        "shishka",
+        "shkola"
+      ]
+    },
+    {
+      "number": 27,
+      "name": "Щ",
+      "wordIds": [
+        "schenok",
+        "schyotka",
+        "schuka"
+      ]
+    },
+    {
+      "number": 28,
+      "name": "Ъ",
+      "wordIds": [
+        "pod_ezd",
+        "ob_yavlenie",
+        "s_yomka"
+      ]
+    },
+    {
+      "number": 29,
+      "name": "Ы",
+      "wordIds": [
+        "ryba",
+        "tykva",
+        "mylo"
+      ]
+    },
+    {
+      "number": 30,
+      "name": "Ь",
+      "wordIds": [
+        "medved_",
+        "fonar_",
+        "pal_to"
+      ]
+    },
+    {
+      "number": 31,
+      "name": "Э",
+      "wordIds": [
+        "ehkran",
+        "ehskimo",
+        "ehlektrichka"
+      ]
+    },
+    {
+      "number": 32,
+      "name": "Ю",
+      "wordIds": [
+        "yula",
+        "yubka",
+        "yunga"
+      ]
+    },
+    {
+      "number": 33,
+      "name": "Я",
+      "wordIds": [
+        "yabloko",
+        "yagoda",
+        "yakor_"
+      ]
+    }
+  ],
+  "syllables": [
+    {
+      "id": "ar",
+      "name": "ар",
+      "letterNumbers": [
+        1,
+        18
+      ]
+    },
+    {
+      "id": "buz",
+      "name": "буз",
+      "letterNumbers": [
+        2,
+        21,
+        9
+      ]
+    },
+    {
+      "id": "av",
+      "name": "ав",
+      "letterNumbers": [
+        1,
+        3
+      ]
+    },
+    {
+      "id": "to",
+      "name": "то",
+      "letterNumbers": [
+        20,
+        16
+      ]
+    },
+    {
+      "id": "bus",
+      "name": "бус",
+      "letterNumbers": [
+        2,
+        21,
+        19
+      ]
+    },
+    {
+      "id": "a",
+      "name": "а",
+      "letterNumbers": [
+        1
+      ]
+    },
+    {
+      "id": "pel_",
+      "name": "пель",
+      "letterNumbers": [
+        17,
+        6,
+        13,
+        30
+      ]
+    },
+    {
+      "id": "sin",
+      "name": "син",
+      "letterNumbers": [
+        19,
+        10,
+        15
+      ]
+    },
+    {
+      "id": "ba",
+      "name": "ба",
+      "letterNumbers": [
+        2,
+        1
+      ]
+    },
+    {
+      "id": "nan",
+      "name": "нан",
+      "letterNumbers": [
+        15,
+        1,
+        15
+      ]
+    },
+    {
+      "id": "ra",
+      "name": "ра",
+      "letterNumbers": [
+        18,
+        1
+      ]
+    },
+    {
+      "id": "ban",
+      "name": "бан",
+      "letterNumbers": [
+        2,
+        1,
+        15
+      ]
+    },
+    {
+      "id": "bel",
+      "name": "бел",
+      "letterNumbers": [
+        2,
+        6,
+        13
+      ]
+    },
+    {
+      "id": "ka",
+      "name": "ка",
+      "letterNumbers": [
+        12,
+        1
+      ]
+    },
+    {
+      "id": "va",
+      "name": "ва",
+      "letterNumbers": [
+        3,
+        1
+      ]
+    },
+    {
+      "id": "za",
+      "name": "за",
+      "letterNumbers": [
+        9,
+        1
+      ]
+    },
+    {
+      "id": "vo",
+      "name": "во",
+      "letterNumbers": [
+        3,
+        16
+      ]
+    },
+    {
+      "id": "da",
+      "name": "да",
+      "letterNumbers": [
+        5,
+        1
+      ]
+    },
+    {
+      "id": "ro",
+      "name": "ро",
+      "letterNumbers": [
+        18,
+        16
+      ]
+    },
+    {
+      "id": "na",
+      "name": "на",
+      "letterNumbers": [
+        15,
+        1
+      ]
+    },
+    {
+      "id": "gu",
+      "name": "гу",
+      "letterNumbers": [
+        4,
+        21
+      ]
+    },
+    {
+      "id": "si",
+      "name": "си",
+      "letterNumbers": [
+        19,
+        10
+      ]
+    },
+    {
+      "id": "gi",
+      "name": "ги",
+      "letterNumbers": [
+        4,
+        10
+      ]
+    },
+    {
+      "id": "ta",
+      "name": "та",
+      "letterNumbers": [
+        20,
+        1
+      ]
+    },
+    {
+      "id": "gru",
+      "name": "гру",
+      "letterNumbers": [
+        4,
+        18,
+        21
+      ]
+    },
+    {
+      "id": "sha",
+      "name": "ша",
+      "letterNumbers": [
+        26,
+        1
+      ]
+    },
+    {
+      "id": "do",
+      "name": "до",
+      "letterNumbers": [
+        5,
+        16
+      ]
+    },
+    {
+      "id": "ga",
+      "name": "га",
+      "letterNumbers": [
+        4,
+        1
+      ]
+    },
+    {
+      "id": "de",
+      "name": "де",
+      "letterNumbers": [
+        5,
+        6
+      ]
+    },
+    {
+      "id": "re",
+      "name": "ре",
+      "letterNumbers": [
+        18,
+        6
+      ]
+    },
+    {
+      "id": "dok",
+      "name": "док",
+      "letterNumbers": [
+        5,
+        16,
+        12
+      ]
+    },
+    {
+      "id": "tor",
+      "name": "тор",
+      "letterNumbers": [
+        20,
+        16,
+        18
+      ]
+    },
+    {
+      "id": "e",
+      "name": "е",
+      "letterNumbers": [
+        6
+      ]
+    },
+    {
+      "id": "not",
+      "name": "нот",
+      "letterNumbers": [
+        15,
+        16,
+        20
+      ]
+    },
+    {
+      "id": "zhe",
+      "name": "же",
+      "letterNumbers": [
+        8,
+        6
+      ]
+    },
+    {
+      "id": "vi",
+      "name": "ви",
+      "letterNumbers": [
+        3,
+        10
+      ]
+    },
+    {
+      "id": "yo",
+      "name": "ё",
+      "letterNumbers": [
+        7
+      ]
+    },
+    {
+      "id": "zhik",
+      "name": "жик",
+      "letterNumbers": [
+        8,
+        10,
+        12
+      ]
+    },
+    {
+      "id": "yol",
+      "name": "ёл",
+      "letterNumbers": [
+        7,
+        13
+      ]
+    },
+    {
+      "id": "yor",
+      "name": "ёр",
+      "letterNumbers": [
+        7,
+        18
+      ]
+    },
+    {
+      "id": "shik",
+      "name": "шик",
+      "letterNumbers": [
+        26,
+        10,
+        12
+      ]
+    },
+    {
+      "id": "zhi",
+      "name": "жи",
+      "letterNumbers": [
+        8,
+        10
+      ]
+    },
+    {
+      "id": "raf",
+      "name": "раф",
+      "letterNumbers": [
+        18,
+        1,
+        22
+      ]
+    },
+    {
+      "id": "zha",
+      "name": "жа",
+      "letterNumbers": [
+        8,
+        1
+      ]
+    },
+    {
+      "id": "zhu",
+      "name": "жу",
+      "letterNumbers": [
+        8,
+        21
+      ]
+    },
+    {
+      "id": "ravl_",
+      "name": "равль",
+      "letterNumbers": [
+        18,
+        1,
+        3,
+        13,
+        30
+      ]
+    },
+    {
+      "id": "zi",
+      "name": "зи",
+      "letterNumbers": [
+        9,
+        10
+      ]
+    },
+    {
+      "id": "ma",
+      "name": "ма",
+      "letterNumbers": [
+        14,
+        1
+      ]
+    },
+    {
+      "id": "yac",
+      "name": "яц",
+      "letterNumbers": [
+        33,
+        24
+      ]
+    },
+    {
+      "id": "zon",
+      "name": "зон",
+      "letterNumbers": [
+        9,
+        16,
+        15
+      ]
+    },
+    {
+      "id": "tik",
+      "name": "тик",
+      "letterNumbers": [
+        20,
+        10,
+        12
+      ]
+    },
+    {
+      "id": "ig",
+      "name": "иг",
+      "letterNumbers": [
+        10,
+        4
+      ]
+    },
+    {
+      "id": "la",
+      "name": "ла",
+      "letterNumbers": [
+        13,
+        1
+      ]
+    },
+    {
+      "id": "i",
+      "name": "и",
+      "letterNumbers": [
+        10
+      ]
+    },
+    {
+      "id": "in",
+      "name": "ин",
+      "letterNumbers": [
+        10,
+        15
+      ]
+    },
+    {
+      "id": "dyuk",
+      "name": "дюк",
+      "letterNumbers": [
+        5,
+        32,
+        12
+      ]
+    },
+    {
+      "id": "jo",
+      "name": "йо",
+      "letterNumbers": [
+        11,
+        16
+      ]
+    },
+    {
+      "id": "gurt",
+      "name": "гурт",
+      "letterNumbers": [
+        4,
+        21,
+        18,
+        20
+      ]
+    },
+    {
+      "id": "jod",
+      "name": "йод",
+      "letterNumbers": [
+        11,
+        16,
+        5
+      ]
+    },
+    {
+      "id": "kosh",
+      "name": "кош",
+      "letterNumbers": [
+        12,
+        16,
+        26
+      ]
+    },
+    {
+      "id": "ko",
+      "name": "ко",
+      "letterNumbers": [
+        12,
+        16
+      ]
+    },
+    {
+      "id": "pus",
+      "name": "пус",
+      "letterNumbers": [
+        17,
+        21,
+        19
+      ]
+    },
+    {
+      "id": "lam",
+      "name": "лам",
+      "letterNumbers": [
+        13,
+        1,
+        14
+      ]
+    },
+    {
+      "id": "pa",
+      "name": "па",
+      "letterNumbers": [
+        17,
+        1
+      ]
+    },
+    {
+      "id": "li",
+      "name": "ли",
+      "letterNumbers": [
+        13,
+        10
+      ]
+    },
+    {
+      "id": "ca",
+      "name": "ца",
+      "letterNumbers": [
+        24,
+        1
+      ]
+    },
+    {
+      "id": "lod",
+      "name": "лод",
+      "letterNumbers": [
+        13,
+        16,
+        5
+      ]
+    },
+    {
+      "id": "shi",
+      "name": "ши",
+      "letterNumbers": [
+        26,
+        10
+      ]
+    },
+    {
+      "id": "med",
+      "name": "мед",
+      "letterNumbers": [
+        14,
+        6,
+        5
+      ]
+    },
+    {
+      "id": "ved_",
+      "name": "ведь",
+      "letterNumbers": [
+        3,
+        6,
+        5,
+        30
+      ]
+    },
+    {
+      "id": "no",
+      "name": "но",
+      "letterNumbers": [
+        15,
+        16
+      ]
+    },
+    {
+      "id": "so",
+      "name": "со",
+      "letterNumbers": [
+        19,
+        16
+      ]
+    },
+    {
+      "id": "rog",
+      "name": "рог",
+      "letterNumbers": [
+        18,
+        16,
+        4
+      ]
+    },
+    {
+      "id": "nit",
+      "name": "нит",
+      "letterNumbers": [
+        15,
+        10,
+        20
+      ]
+    },
+    {
+      "id": "nozh",
+      "name": "нож",
+      "letterNumbers": [
+        15,
+        16,
+        8
+      ]
+    },
+    {
+      "id": "ni",
+      "name": "ни",
+      "letterNumbers": [
+        15,
+        10
+      ]
+    },
+    {
+      "id": "cy",
+      "name": "цы",
+      "letterNumbers": [
+        24,
+        29
+      ]
+    },
+    {
+      "id": "ob",
+      "name": "об",
+      "letterNumbers": [
+        16,
+        2
+      ]
+    },
+    {
+      "id": "ok",
+      "name": "ок",
+      "letterNumbers": [
+        16,
+        12
+      ]
+    },
+    {
+      "id": "ov",
+      "name": "ов",
+      "letterNumbers": [
+        16,
+        3
+      ]
+    },
+    {
+      "id": "po",
+      "name": "по",
+      "letterNumbers": [
+        17,
+        16
+      ]
+    },
+    {
+      "id": "mi",
+      "name": "ми",
+      "letterNumbers": [
+        14,
+        10
+      ]
+    },
+    {
+      "id": "dor",
+      "name": "дор",
+      "letterNumbers": [
+        5,
+        16,
+        18
+      ]
+    },
+    {
+      "id": "pe",
+      "name": "пе",
+      "letterNumbers": [
+        17,
+        6
+      ]
+    },
+    {
+      "id": "tuh",
+      "name": "тух",
+      "letterNumbers": [
+        20,
+        21,
+        23
+      ]
+    },
+    {
+      "id": "ezd",
+      "name": "езд",
+      "letterNumbers": [
+        6,
+        9,
+        5
+      ]
+    },
+    {
+      "id": "mash",
+      "name": "маш",
+      "letterNumbers": [
+        14,
+        1,
+        26
+      ]
+    },
+    {
+      "id": "ry",
+      "name": "ры",
+      "letterNumbers": [
+        18,
+        29
+      ]
+    },
+    {
+      "id": "du",
+      "name": "ду",
+      "letterNumbers": [
+        5,
+        21
+      ]
+    },
+    {
+      "id": "soln",
+      "name": "солн",
+      "letterNumbers": [
+        19,
+        16,
+        13,
+        15
+      ]
+    },
+    {
+      "id": "ce",
+      "name": "це",
+      "letterNumbers": [
+        24,
+        6
+      ]
+    },
+    {
+      "id": "rel",
+      "name": "рел",
+      "letterNumbers": [
+        18,
+        6,
+        13
+      ]
+    },
+    {
+      "id": "tram",
+      "name": "трам",
+      "letterNumbers": [
+        20,
+        18,
+        1,
+        14
+      ]
+    },
+    {
+      "id": "vaj",
+      "name": "вай",
+      "letterNumbers": [
+        3,
+        1,
+        11
+      ]
+    },
+    {
+      "id": "tyk",
+      "name": "тык",
+      "letterNumbers": [
+        20,
+        29,
+        12
+      ]
+    },
+    {
+      "id": "ut",
+      "name": "ут",
+      "letterNumbers": [
+        21,
+        20
+      ]
+    },
+    {
+      "id": "u",
+      "name": "у",
+      "letterNumbers": [
+        21
+      ]
+    },
+    {
+      "id": "lit",
+      "name": "лит",
+      "letterNumbers": [
+        13,
+        10,
+        20
+      ]
+    },
+    {
+      "id": "ho",
+      "name": "хо",
+      "letterNumbers": [
+        23,
+        16
+      ]
+    },
+    {
+      "id": "fo",
+      "name": "фо",
+      "letterNumbers": [
+        22,
+        16
+      ]
+    },
+    {
+      "id": "nar_",
+      "name": "нарь",
+      "letterNumbers": [
+        15,
+        1,
+        18,
+        30
+      ]
+    },
+    {
+      "id": "fi",
+      "name": "фи",
+      "letterNumbers": [
+        22,
+        10
+      ]
+    },
+    {
+      "id": "al",
+      "name": "ал",
+      "letterNumbers": [
+        1,
+        13
+      ]
+    },
+    {
+      "id": "fla",
+      "name": "фла",
+      "letterNumbers": [
+        22,
+        13,
+        1
+      ]
+    },
+    {
+      "id": "zhok",
+      "name": "жок",
+      "letterNumbers": [
+        8,
+        16,
+        12
+      ]
+    },
+    {
+      "id": "myak",
+      "name": "мяк",
+      "letterNumbers": [
+        14,
+        33,
+        12
+      ]
+    },
+    {
+      "id": "hal",
+      "name": "хал",
+      "letterNumbers": [
+        23,
+        1,
+        13
+      ]
+    },
+    {
+      "id": "hu",
+      "name": "ху",
+      "letterNumbers": [
+        23,
+        21
+      ]
+    },
+    {
+      "id": "dozh",
+      "name": "дож",
+      "letterNumbers": [
+        5,
+        16,
+        8
+      ]
+    },
+    {
+      "id": "nik",
+      "name": "ник",
+      "letterNumbers": [
+        15,
+        10,
+        12
+      ]
+    },
+    {
+      "id": "cap",
+      "name": "цап",
+      "letterNumbers": [
+        24,
+        1,
+        17
+      ]
+    },
+    {
+      "id": "lya",
+      "name": "ля",
+      "letterNumbers": [
+        13,
+        33
+      ]
+    },
+    {
+      "id": "cve",
+      "name": "цве",
+      "letterNumbers": [
+        24,
+        3,
+        6
+      ]
+    },
+    {
+      "id": "tok",
+      "name": "ток",
+      "letterNumbers": [
+        20,
+        16,
+        12
+      ]
+    },
+    {
+      "id": "cyp",
+      "name": "цып",
+      "letterNumbers": [
+        24,
+        29,
+        17
+      ]
+    },
+    {
+      "id": "lyo",
+      "name": "лё",
+      "letterNumbers": [
+        13,
+        7
+      ]
+    },
+    {
+      "id": "nok",
+      "name": "нок",
+      "letterNumbers": [
+        15,
+        16,
+        12
+      ]
+    },
+    {
+      "id": "chaj",
+      "name": "чай",
+      "letterNumbers": [
+        25,
+        1,
+        11
+      ]
+    },
+    {
+      "id": "che",
+      "name": "че",
+      "letterNumbers": [
+        25,
+        6
+      ]
+    },
+    {
+      "id": "ha",
+      "name": "ха",
+      "letterNumbers": [
+        23,
+        1
+      ]
+    },
+    {
+      "id": "cha",
+      "name": "ча",
+      "letterNumbers": [
+        25,
+        1
+      ]
+    },
+    {
+      "id": "sy",
+      "name": "сы",
+      "letterNumbers": [
+        19,
+        29
+      ]
+    },
+    {
+      "id": "shap",
+      "name": "шап",
+      "letterNumbers": [
+        26,
+        1,
+        17
+      ]
+    },
+    {
+      "id": "shish",
+      "name": "шиш",
+      "letterNumbers": [
+        26,
+        10,
+        26
+      ]
+    },
+    {
+      "id": "shko",
+      "name": "шко",
+      "letterNumbers": [
+        26,
+        12,
+        16
+      ]
+    },
+    {
+      "id": "sche",
+      "name": "ще",
+      "letterNumbers": [
+        27,
+        6
+      ]
+    },
+    {
+      "id": "schyot",
+      "name": "щёт",
+      "letterNumbers": [
+        27,
+        7,
+        20
+      ]
+    },
+    {
+      "id": "schu",
+      "name": "щу",
+      "letterNumbers": [
+        27,
+        21
+      ]
+    },
+    {
+      "id": "pod_",
+      "name": "подъ",
+      "letterNumbers": [
+        17,
+        16,
+        5,
+        28
+      ]
+    },
+    {
+      "id": "ob_",
+      "name": "объ",
+      "letterNumbers": [
+        16,
+        2,
+        28
+      ]
+    },
+    {
+      "id": "yav",
+      "name": "яв",
+      "letterNumbers": [
+        33,
+        3
+      ]
+    },
+    {
+      "id": "le",
+      "name": "ле",
+      "letterNumbers": [
+        13,
+        6
+      ]
+    },
+    {
+      "id": "s_yom",
+      "name": "съём",
+      "letterNumbers": [
+        19,
+        28,
+        7,
+        14
+      ]
+    },
+    {
+      "id": "my",
+      "name": "мы",
+      "letterNumbers": [
+        14,
+        29
+      ]
+    },
+    {
+      "id": "lo",
+      "name": "ло",
+      "letterNumbers": [
+        13,
+        16
+      ]
+    },
+    {
+      "id": "pal_",
+      "name": "паль",
+      "letterNumbers": [
+        17,
+        1,
+        13,
+        30
+      ]
+    },
+    {
+      "id": "ehk",
+      "name": "эк",
+      "letterNumbers": [
+        31,
+        12
+      ]
+    },
+    {
+      "id": "ran",
+      "name": "ран",
+      "letterNumbers": [
+        18,
+        1,
+        15
+      ]
+    },
+    {
+      "id": "ehs",
+      "name": "эс",
+      "letterNumbers": [
+        31,
+        19
+      ]
+    },
+    {
+      "id": "ki",
+      "name": "ки",
+      "letterNumbers": [
+        12,
+        10
+      ]
+    },
+    {
+      "id": "mo",
+      "name": "мо",
+      "letterNumbers": [
+        14,
+        16
+      ]
+    },
+    {
+      "id": "eh",
+      "name": "э",
+      "letterNumbers": [
+        31
+      ]
+    },
+    {
+      "id": "lek",
+      "name": "лек",
+      "letterNumbers": [
+        13,
+        6,
+        12
+      ]
+    },
+    {
+      "id": "trich",
+      "name": "трич",
+      "letterNumbers": [
+        20,
+        18,
+        10,
+        25
+      ]
+    },
+    {
+      "id": "yu",
+      "name": "ю",
+      "letterNumbers": [
+        32
+      ]
+    },
+    {
+      "id": "yub",
+      "name": "юб",
+      "letterNumbers": [
+        32,
+        2
+      ]
+    },
+    {
+      "id": "yun",
+      "name": "юн",
+      "letterNumbers": [
+        32,
+        15
+      ]
+    },
+    {
+      "id": "yab",
+      "name": "яб",
+      "letterNumbers": [
+        33,
+        2
+      ]
+    },
+    {
+      "id": "ya",
+      "name": "я",
+      "letterNumbers": [
+        33
+      ]
+    },
+    {
+      "id": "go",
+      "name": "го",
+      "letterNumbers": [
+        4,
+        16
+      ]
+    },
+    {
+      "id": "kor_",
+      "name": "корь",
+      "letterNumbers": [
+        12,
+        16,
+        18,
+        30
+      ]
+    }
+  ],
+  "words": [
+    {
+      "id": "arbuz",
+      "name": "Арбуз",
+      "syllableIds": [
+        "ar",
+        "buz"
+      ],
+      "hasWithoutLastSyllable": true
+    },
+    {
+      "id": "avtobus",
+      "name": "Автобус",
+      "syllableIds": [
+        "av",
+        "to",
+        "bus"
+      ],
+      "hasWithoutLastSyllable": true
+    },
+    {
+      "id": "apel_sin",
+      "name": "Апельсин",
+      "syllableIds": [
+        "a",
+        "pel_",
+        "sin"
+      ],
+      "hasWithoutLastSyllable": true
+    },
+    {
+      "id": "banan",
+      "name": "Банан",
+      "syllableIds": [
+        "ba",
+        "nan"
+      ],
+      "hasWithoutLastSyllable": true
+    },
+    {
+      "id": "baraban",
+      "name": "Барабан",
+      "syllableIds": [
+        "ba",
+        "ra",
+        "ban"
+      ],
+      "hasWithoutLastSyllable": true
+    },
+    {
+      "id": "belka",
+      "name": "Белка",
+      "syllableIds": [
+        "bel",
+        "ka"
+      ],
+      "hasWithoutLastSyllable": true
+    },
+    {
+      "id": "vaza",
+      "name": "Ваза",
+      "syllableIds": [
+        "va",
+        "za"
+      ],
+      "hasWithoutLastSyllable": true
+    },
+    {
+      "id": "voda",
+      "name": "Вода",
+      "syllableIds": [
+        "vo",
+        "da"
+      ],
+      "hasWithoutLastSyllable": true
+    },
+    {
+      "id": "vorona",
+      "name": "Ворона",
+      "syllableIds": [
+        "vo",
+        "ro",
+        "na"
+      ],
+      "hasWithoutLastSyllable": true
+    },
+    {
+      "id": "gusi",
+      "name": "Гуси",
+      "syllableIds": [
+        "gu",
+        "si"
+      ],
+      "hasWithoutLastSyllable": true
+    },
+    {
+      "id": "gitara",
+      "name": "Гитара",
+      "syllableIds": [
+        "gi",
+        "ta",
+        "ra"
+      ],
+      "hasWithoutLastSyllable": true
+    },
+    {
+      "id": "grusha",
+      "name": "Груша",
+      "syllableIds": [
+        "gru",
+        "sha"
+      ],
+      "hasWithoutLastSyllable": true
+    },
+    {
+      "id": "doroga",
+      "name": "Дорога",
+      "syllableIds": [
+        "do",
+        "ro",
+        "ga"
+      ],
+      "hasWithoutLastSyllable": true
+    },
+    {
+      "id": "derevo",
+      "name": "Дерево",
+      "syllableIds": [
+        "de",
+        "re",
+        "vo"
+      ],
+      "hasWithoutLastSyllable": true
+    },
+    {
+      "id": "doktor",
+      "name": "Доктор",
+      "syllableIds": [
+        "dok",
+        "tor"
+      ],
+      "hasWithoutLastSyllable": true
+    },
+    {
+      "id": "enot",
+      "name": "Енот",
+      "syllableIds": [
+        "e",
+        "not"
+      ],
+      "hasWithoutLastSyllable": true
+    },
+    {
+      "id": "eda",
+      "name": "Еда",
+      "syllableIds": [
+        "e",
+        "da"
+      ],
+      "hasWithoutLastSyllable": true
+    },
+    {
+      "id": "ezhevika",
+      "name": "Ежевика",
+      "syllableIds": [
+        "e",
+        "zhe",
+        "vi",
+        "ka"
+      ],
+      "hasWithoutLastSyllable": true
+    },
+    {
+      "id": "yozhik",
+      "name": "Ёжик",
+      "syllableIds": [
+        "yo",
+        "zhik"
+      ],
+      "hasWithoutLastSyllable": true
+    },
+    {
+      "id": "yolka",
+      "name": "Ёлка",
+      "syllableIds": [
+        "yol",
+        "ka"
+      ],
+      "hasWithoutLastSyllable": true
+    },
+    {
+      "id": "yorshik",
+      "name": "Ёршик",
+      "syllableIds": [
+        "yor",
+        "shik"
+      ],
+      "hasWithoutLastSyllable": true
+    },
+    {
+      "id": "zhiraf",
+      "name": "Жираф",
+      "syllableIds": [
+        "zhi",
+        "raf"
+      ],
+      "hasWithoutLastSyllable": true
+    },
+    {
+      "id": "zhaba",
+      "name": "Жаба",
+      "syllableIds": [
+        "zha",
+        "ba"
+      ],
+      "hasWithoutLastSyllable": true
+    },
+    {
+      "id": "zhuravl_",
+      "name": "Журавль",
+      "syllableIds": [
+        "zhu",
+        "ravl_"
+      ],
+      "hasWithoutLastSyllable": true
+    },
+    {
+      "id": "zima",
+      "name": "Зима",
+      "syllableIds": [
+        "zi",
+        "ma"
+      ],
+      "hasWithoutLastSyllable": true
+    },
+    {
+      "id": "zayac",
+      "name": "Заяц",
+      "syllableIds": [
+        "za",
+        "yac"
+      ],
+      "hasWithoutLastSyllable": true
+    },
+    {
+      "id": "zontik",
+      "name": "Зонтик",
+      "syllableIds": [
+        "zon",
+        "tik"
+      ],
+      "hasWithoutLastSyllable": true
+    },
+    {
+      "id": "igla",
+      "name": "Игла",
+      "syllableIds": [
+        "ig",
+        "la"
+      ],
+      "hasWithoutLastSyllable": true
+    },
+    {
+      "id": "iva",
+      "name": "Ива",
+      "syllableIds": [
+        "i",
+        "va"
+      ],
+      "hasWithoutLastSyllable": true
+    },
+    {
+      "id": "indyuk",
+      "name": "Индюк",
+      "syllableIds": [
+        "in",
+        "dyuk"
+      ],
+      "hasWithoutLastSyllable": true
+    },
+    {
+      "id": "jogurt",
+      "name": "Йогурт",
+      "syllableIds": [
+        "jo",
+        "gurt"
+      ],
+      "hasWithoutLastSyllable": true
+    },
+    {
+      "id": "joga",
+      "name": "Йога",
+      "syllableIds": [
+        "jo",
+        "ga"
+      ],
+      "hasWithoutLastSyllable": true
+    },
+    {
+      "id": "jod",
+      "name": "Йод",
+      "syllableIds": [
+        "jod"
+      ],
+      "hasWithoutLastSyllable": false
+    },
+    {
+      "id": "koshka",
+      "name": "Кошка",
+      "syllableIds": [
+        "kosh",
+        "ka"
+      ],
+      "hasWithoutLastSyllable": true
+    },
+    {
+      "id": "korova",
+      "name": "Корова",
+      "syllableIds": [
+        "ko",
+        "ro",
+        "va"
+      ],
+      "hasWithoutLastSyllable": true
+    },
+    {
+      "id": "kapusta",
+      "name": "Капуста",
+      "syllableIds": [
+        "ka",
+        "pus",
+        "ta"
+      ],
+      "hasWithoutLastSyllable": true
+    },
+    {
+      "id": "lampa",
+      "name": "Лампа",
+      "syllableIds": [
+        "lam",
+        "pa"
+      ],
+      "hasWithoutLastSyllable": true
+    },
+    {
+      "id": "lisica",
+      "name": "Лисица",
+      "syllableIds": [
+        "li",
+        "si",
+        "ca"
+      ],
+      "hasWithoutLastSyllable": true
+    },
+    {
+      "id": "lodka",
+      "name": "Лодка",
+      "syllableIds": [
+        "lod",
+        "ka"
+      ],
+      "hasWithoutLastSyllable": true
+    },
+    {
+      "id": "mashina",
+      "name": "Машина",
+      "syllableIds": [
+        "ma",
+        "shi",
+        "na"
+      ],
+      "hasWithoutLastSyllable": true
+    },
+    {
+      "id": "malina",
+      "name": "Малина",
+      "syllableIds": [
+        "ma",
+        "li",
+        "na"
+      ],
+      "hasWithoutLastSyllable": true
+    },
+    {
+      "id": "medved_",
+      "name": "Медведь",
+      "syllableIds": [
+        "med",
+        "ved_"
+      ],
+      "hasWithoutLastSyllable": true
+    },
+    {
+      "id": "nosorog",
+      "name": "Носорог",
+      "syllableIds": [
+        "no",
+        "so",
+        "rog"
+      ],
+      "hasWithoutLastSyllable": true
+    },
+    {
+      "id": "nitka",
+      "name": "Нитка",
+      "syllableIds": [
+        "nit",
+        "ka"
+      ],
+      "hasWithoutLastSyllable": true
+    },
+    {
+      "id": "nozhnicy",
+      "name": "Ножницы",
+      "syllableIds": [
+        "nozh",
+        "ni",
+        "cy"
+      ],
+      "hasWithoutLastSyllable": true
+    },
+    {
+      "id": "oblako",
+      "name": "Облако",
+      "syllableIds": [
+        "ob",
+        "la",
+        "ko"
+      ],
+      "hasWithoutLastSyllable": true
+    },
+    {
+      "id": "okno",
+      "name": "Окно",
+      "syllableIds": [
+        "ok",
+        "no"
+      ],
+      "hasWithoutLastSyllable": true
+    },
+    {
+      "id": "ovca",
+      "name": "Овца",
+      "syllableIds": [
+        "ov",
+        "ca"
+      ],
+      "hasWithoutLastSyllable": true
+    },
+    {
+      "id": "pomidor",
+      "name": "Помидор",
+      "syllableIds": [
+        "po",
+        "mi",
+        "dor"
+      ],
+      "hasWithoutLastSyllable": true
+    },
+    {
+      "id": "petuh",
+      "name": "Петух",
+      "syllableIds": [
+        "pe",
+        "tuh"
+      ],
+      "hasWithoutLastSyllable": true
+    },
+    {
+      "id": "poezd",
+      "name": "Поезд",
+      "syllableIds": [
+        "po",
+        "ezd"
+      ],
+      "hasWithoutLastSyllable": true
+    },
+    {
+      "id": "romashka",
+      "name": "Ромашка",
+      "syllableIds": [
+        "ro",
+        "mash",
+        "ka"
+      ],
+      "hasWithoutLastSyllable": true
+    },
+    {
+      "id": "ryba",
+      "name": "Рыба",
+      "syllableIds": [
+        "ry",
+        "ba"
+      ],
+      "hasWithoutLastSyllable": true
+    },
+    {
+      "id": "raduga",
+      "name": "Радуга",
+      "syllableIds": [
+        "ra",
+        "du",
+        "ga"
+      ],
+      "hasWithoutLastSyllable": true
+    },
+    {
+      "id": "sobaka",
+      "name": "Собака",
+      "syllableIds": [
+        "so",
+        "ba",
+        "ka"
+      ],
+      "hasWithoutLastSyllable": true
+    },
+    {
+      "id": "solnce",
+      "name": "Солнце",
+      "syllableIds": [
+        "soln",
+        "ce"
+      ],
+      "hasWithoutLastSyllable": true
+    },
+    {
+      "id": "soroka",
+      "name": "Сорока",
+      "syllableIds": [
+        "so",
+        "ro",
+        "ka"
+      ],
+      "hasWithoutLastSyllable": true
+    },
+    {
+      "id": "tarelka",
+      "name": "Тарелка",
+      "syllableIds": [
+        "ta",
+        "rel",
+        "ka"
+      ],
+      "hasWithoutLastSyllable": true
+    },
+    {
+      "id": "tramvaj",
+      "name": "Трамвай",
+      "syllableIds": [
+        "tram",
+        "vaj"
+      ],
+      "hasWithoutLastSyllable": true
+    },
+    {
+      "id": "tykva",
+      "name": "Тыква",
+      "syllableIds": [
+        "tyk",
+        "va"
+      ],
+      "hasWithoutLastSyllable": true
+    },
+    {
+      "id": "utka",
+      "name": "Утка",
+      "syllableIds": [
+        "ut",
+        "ka"
+      ],
+      "hasWithoutLastSyllable": true
+    },
+    {
+      "id": "ulitka",
+      "name": "Улитка",
+      "syllableIds": [
+        "u",
+        "lit",
+        "ka"
+      ],
+      "hasWithoutLastSyllable": true
+    },
+    {
+      "id": "uho",
+      "name": "Ухо",
+      "syllableIds": [
+        "u",
+        "ho"
+      ],
+      "hasWithoutLastSyllable": true
+    },
+    {
+      "id": "fonar_",
+      "name": "Фонарь",
+      "syllableIds": [
+        "fo",
+        "nar_"
+      ],
+      "hasWithoutLastSyllable": true
+    },
+    {
+      "id": "fialka",
+      "name": "Фиалка",
+      "syllableIds": [
+        "fi",
+        "al",
+        "ka"
+      ],
+      "hasWithoutLastSyllable": true
+    },
+    {
+      "id": "flazhok",
+      "name": "Флажок",
+      "syllableIds": [
+        "fla",
+        "zhok"
+      ],
+      "hasWithoutLastSyllable": true
+    },
+    {
+      "id": "homyak",
+      "name": "Хомяк",
+      "syllableIds": [
+        "ho",
+        "myak"
+      ],
+      "hasWithoutLastSyllable": true
+    },
+    {
+      "id": "halva",
+      "name": "Халва",
+      "syllableIds": [
+        "hal",
+        "va"
+      ],
+      "hasWithoutLastSyllable": true
+    },
+    {
+      "id": "hudozhnik",
+      "name": "Художник",
+      "syllableIds": [
+        "hu",
+        "dozh",
+        "nik"
+      ],
+      "hasWithoutLastSyllable": true
+    },
+    {
+      "id": "caplya",
+      "name": "Цапля",
+      "syllableIds": [
+        "cap",
+        "lya"
+      ],
+      "hasWithoutLastSyllable": true
+    },
+    {
+      "id": "cvetok",
+      "name": "Цветок",
+      "syllableIds": [
+        "cve",
+        "tok"
+      ],
+      "hasWithoutLastSyllable": true
+    },
+    {
+      "id": "cyplyonok",
+      "name": "Цыплёнок",
+      "syllableIds": [
+        "cyp",
+        "lyo",
+        "nok"
+      ],
+      "hasWithoutLastSyllable": true
+    },
+    {
+      "id": "chajnik",
+      "name": "Чайник",
+      "syllableIds": [
+        "chaj",
+        "nik"
+      ],
+      "hasWithoutLastSyllable": true
+    },
+    {
+      "id": "cherepaha",
+      "name": "Черепаха",
+      "syllableIds": [
+        "che",
+        "re",
+        "pa",
+        "ha"
+      ],
+      "hasWithoutLastSyllable": true
+    },
+    {
+      "id": "chasy",
+      "name": "Часы",
+      "syllableIds": [
+        "cha",
+        "sy"
+      ],
+      "hasWithoutLastSyllable": true
+    },
+    {
+      "id": "shapka",
+      "name": "Шапка",
+      "syllableIds": [
+        "shap",
+        "ka"
+      ],
+      "hasWithoutLastSyllable": true
+    },
+    {
+      "id": "shishka",
+      "name": "Шишка",
+      "syllableIds": [
+        "shish",
+        "ka"
+      ],
+      "hasWithoutLastSyllable": true
+    },
+    {
+      "id": "shkola",
+      "name": "Школа",
+      "syllableIds": [
+        "shko",
+        "la"
+      ],
+      "hasWithoutLastSyllable": true
+    },
+    {
+      "id": "schenok",
+      "name": "Щенок",
+      "syllableIds": [
+        "sche",
+        "nok"
+      ],
+      "hasWithoutLastSyllable": true
+    },
+    {
+      "id": "schyotka",
+      "name": "Щётка",
+      "syllableIds": [
+        "schyot",
+        "ka"
+      ],
+      "hasWithoutLastSyllable": true
+    },
+    {
+      "id": "schuka",
+      "name": "Щука",
+      "syllableIds": [
+        "schu",
+        "ka"
+      ],
+      "hasWithoutLastSyllable": true
+    },
+    {
+      "id": "pod_ezd",
+      "name": "Подъезд",
+      "syllableIds": [
+        "pod_",
+        "ezd"
+      ],
+      "hasWithoutLastSyllable": true
+    },
+    {
+      "id": "ob_yavlenie",
+      "name": "Объявление",
+      "syllableIds": [
+        "ob_",
+        "yav",
+        "le",
+        "ni",
+        "e"
+      ],
+      "hasWithoutLastSyllable": true
+    },
+    {
+      "id": "s_yomka",
+      "name": "Съёмка",
+      "syllableIds": [
+        "s_yom",
+        "ka"
+      ],
+      "hasWithoutLastSyllable": true
+    },
+    {
+      "id": "mylo",
+      "name": "Мыло",
+      "syllableIds": [
+        "my",
+        "lo"
+      ],
+      "hasWithoutLastSyllable": true
+    },
+    {
+      "id": "pal_to",
+      "name": "Пальто",
+      "syllableIds": [
+        "pal_",
+        "to"
+      ],
+      "hasWithoutLastSyllable": true
+    },
+    {
+      "id": "ehkran",
+      "name": "Экран",
+      "syllableIds": [
+        "ehk",
+        "ran"
+      ],
+      "hasWithoutLastSyllable": true
+    },
+    {
+      "id": "ehskimo",
+      "name": "Эскимо",
+      "syllableIds": [
+        "ehs",
+        "ki",
+        "mo"
+      ],
+      "hasWithoutLastSyllable": true
+    },
+    {
+      "id": "ehlektrichka",
+      "name": "Электричка",
+      "syllableIds": [
+        "eh",
+        "lek",
+        "trich",
+        "ka"
+      ],
+      "hasWithoutLastSyllable": true
+    },
+    {
+      "id": "yula",
+      "name": "Юла",
+      "syllableIds": [
+        "yu",
+        "la"
+      ],
+      "hasWithoutLastSyllable": true
+    },
+    {
+      "id": "yubka",
+      "name": "Юбка",
+      "syllableIds": [
+        "yub",
+        "ka"
+      ],
+      "hasWithoutLastSyllable": true
+    },
+    {
+      "id": "yunga",
+      "name": "Юнга",
+      "syllableIds": [
+        "yun",
+        "ga"
+      ],
+      "hasWithoutLastSyllable": true
+    },
+    {
+      "id": "yabloko",
+      "name": "Яблоко",
+      "syllableIds": [
+        "yab",
+        "lo",
+        "ko"
+      ],
+      "hasWithoutLastSyllable": true
+    },
+    {
+      "id": "yagoda",
+      "name": "Ягода",
+      "syllableIds": [
+        "ya",
+        "go",
+        "da"
+      ],
+      "hasWithoutLastSyllable": true
+    },
+    {
+      "id": "yakor_",
+      "name": "Якорь",
+      "syllableIds": [
+        "ya",
+        "kor_"
+      ],
+      "hasWithoutLastSyllable": true
+    }
+  ],
+  "sets": [
+    {
+      "id": "zhivotnye",
+      "title": "Животные",
+      "wordIds": [
+        "belka",
+        "vorona",
+        "gusi",
+        "enot",
+        "yozhik",
+        "zhiraf",
+        "zhaba",
+        "zhuravl_",
+        "zayac",
+        "indyuk",
+        "koshka",
+        "korova",
+        "lisica",
+        "medved_",
+        "nosorog",
+        "ovca",
+        "ryba",
+        "sobaka",
+        "soroka",
+        "ulitka",
+        "utka",
+        "homyak",
+        "caplya",
+        "cyplyonok",
+        "cherepaha",
+        "schenok",
+        "schuka"
+      ]
+    },
+    {
+      "id": "eda_i_rasteniya",
+      "title": "Еда и растения",
+      "wordIds": [
+        "arbuz",
+        "apel_sin",
+        "banan",
+        "grusha",
+        "derevo",
+        "eda",
+        "ezhevika",
+        "yolka",
+        "kapusta",
+        "malina",
+        "pomidor",
+        "romashka",
+        "tykva",
+        "fialka",
+        "halva",
+        "cvetok",
+        "ehskimo",
+        "yabloko",
+        "yagoda"
+      ]
+    },
+    {
+      "id": "transport",
+      "title": "Транспорт и дорога",
+      "wordIds": [
+        "avtobus",
+        "doroga",
+        "lodka",
+        "mashina",
+        "poezd",
+        "tramvaj",
+        "pod_ezd",
+        "ehlektrichka",
+        "fonar_"
+      ]
+    }
+  ]
+}

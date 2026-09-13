@@ -12,6 +12,7 @@
 const { resolveStorageDir } = require('../chrono/storageDir');
 const store = require('./profileStore');
 const { WordsRulesError, alphabet } = require('@kiosk/shared');
+const { loadLibrarySync } = require('./contentLibrary');
 
 const ALPHABET_APP_DIR_NAME = store.ALPHABET_APP_DIR_NAME;
 
@@ -59,7 +60,7 @@ function guarded(handler) {
  *   sharedDirOverride — только для тестов: каталог данных общий на машину
  *   (%ProgramData%\kiosk-alphabet), и без подмены тест писал бы в РЕАЛЬНЫЕ
  *   данные педагога на этой машине. В проде не передаётся.
- *   loadLibrary — тоже для тестов; в проде пакет контента появится в Фазе 7.
+ *   loadLibrary — тоже для тестов; в проде берётся ./contentLibrary.
  */
 function registerAlphabetIpc({ ipcMain, app, sharedDirOverride, loadLibrary }) {
   const { dir: baseDir, isFallback } = resolveStorageDir({
@@ -74,16 +75,25 @@ function registerAlphabetIpc({ ipcMain, app, sharedDirOverride, loadLibrary }) {
   // вызов: она статична на всё время жизни процесса. Её отсутствие не роняет
   // регистрацию — рантайм покажет внятное сообщение вместо пустого экрана.
   let library = null;
+  let assetsDir = null;
   let libraryError = null;
-  if (typeof loadLibrary === 'function') {
-    try {
-      library = loadLibrary();
-    } catch (err) {
-      library = null;
-      libraryError = err && err.message ? err.message : 'Пакет контента повреждён';
+  let report = null;
+  try {
+    const loaded = (loadLibrary || loadLibrarySync)();
+    if (loaded) {
+      library = loaded.library;
+      assetsDir = loaded.assetsDir;
+      report = {
+        completeness: loaded.completeness,
+        graph: loaded.graph,
+        illustrations: loaded.illustrations,
+      };
+    } else {
+      libraryError = 'Пакет учебного контента не найден в этой сборке';
     }
-  } else {
-    libraryError = 'Пакет учебного контента не входит в эту сборку';
+  } catch (err) {
+    library = null;
+    libraryError = err && err.message ? err.message : 'Пакет контента повреждён';
   }
 
   ipcMain.handle(
@@ -131,7 +141,7 @@ function registerAlphabetIpc({ ipcMain, app, sharedDirOverride, loadLibrary }) {
     guarded(async (_e, profileId) => store.clearStatistics(baseDir, profileId))
   );
 
-  return { baseDir, isFallback };
+  return { baseDir, isFallback, assetsDir, report, libraryError };
 }
 
 module.exports = { registerAlphabetIpc, translateDiskError, guarded, ALPHABET_APP_DIR_NAME };

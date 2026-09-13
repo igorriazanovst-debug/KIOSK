@@ -114,6 +114,15 @@
           "!README.md",
           "!tools/**"
         ]
+      },
+      {
+        "from": "../alphabet-library",
+        "to": "alphabet-library",
+        "filter": [
+          "**/*",
+          "!README.md",
+          "!tools/**"
+        ]
       }
     ],
     "win": {

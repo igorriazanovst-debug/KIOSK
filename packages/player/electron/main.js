@@ -68,7 +68,10 @@ try {
     // wordsuser - картинки и записи, добавленные педагогом на устройстве
     // (Фаза 5). Отдельная схема от wordslib: поставочный контент read-only и
     // общий, пользовательский - изменяемый и лежит в каталоге данных
-    { scheme: 'wordsuser', privileges: { standard: true, secure: true, supportFetchAPI: true, stream: true } }
+    { scheme: 'wordsuser', privileges: { standard: true, secure: true, supportFetchAPI: true, stream: true } },
+    // alphabetlib - поставочная (read-only) библиотека виджета «АзбукоСлов»
+    // (packages/alphabet-library/assets/): иллюстрации и озвучка
+    { scheme: 'alphabetlib', privileges: { standard: true, secure: true, supportFetchAPI: true, stream: true } }
   ]);
 } catch (e) { fileLog('protocol register error', e.message); }
 // ─────────────────────────────────────────────────────────────────────────────
@@ -80,6 +83,7 @@ let currentProject = null;
 let chronoBaseDir = null;
 let natcomBaseDir = null;
 let wordsAssetsDir = null;
+let alphabetAssetsDir = null;
 let wordsBaseDir = null;
 let natcomAssetsDir = null;
 let rusiqQuizzesDir = null;
@@ -1286,9 +1290,25 @@ app.whenReady().then(() => {
   // рантайм получает внятное «контента в этой сборке нет» вместо пустого
   // экрана без объяснений.
   try {
-    const { baseDir: alphabetDir, isFallback: alphabetIsFallback } =
+    const { baseDir: alphabetDir, isFallback: alphabetIsFallback, assetsDir: alphabetAssets, report, libraryError } =
       registerAlphabetIpc({ ipcMain, app });
+    alphabetAssetsDir = alphabetAssets;
     fileLog('[alphabet] storage dir:', alphabetDir, alphabetIsFallback ? '(fallback: no write access to shared dir)' : '');
+    if (libraryError) {
+      fileLog('[alphabet] WARNING:', libraryError);
+    } else if (report) {
+      // Проверки пакета докладываются в лог, но занятие не роняют: жёсткими
+      // они должны быть на сборке пакета, а не у педагога на устройстве
+      if (!report.completeness.complete) {
+        fileLog('[alphabet] WARNING: content package incomplete, missing files:', report.completeness.missing.length);
+      }
+      if (!report.graph.consistent) {
+        fileLog('[alphabet] WARNING: content graph broken:', report.graph.issues.length, 'issue(s), first:', report.graph.issues[0].message);
+      }
+      if (!report.illustrations.ok) {
+        fileLog('[alphabet] WARNING: letters below the 2-illustration requirement:', report.illustrations.insufficient.map((l) => l.name).join(','));
+      }
+    }
   } catch (err) {
     fileLog('[alphabet] failed to initialize local storage:', err && err.message);
   }
@@ -1300,7 +1320,7 @@ app.whenReady().then(() => {
         ...details.responseHeaders,
         // chronomedia:/natcomlib: добавлены явно (не полагаемся на bypassCSP
         // этих схем - его нет, см. registerSchemesAsPrivileged выше).
-        'Content-Security-Policy': ["default-src 'self' 'unsafe-inline' 'unsafe-eval' data: file: blob: chronomedia: natcomlib: rusiqmedia: wordslib: wordsuser: http: https: ws: wss:"]
+        'Content-Security-Policy': ["default-src 'self' 'unsafe-inline' 'unsafe-eval' data: file: blob: chronomedia: natcomlib: rusiqmedia: wordslib: wordsuser: alphabetlib: http: https: ws: wss:"]
       }
     });
   });
@@ -1470,6 +1490,33 @@ app.whenReady().then(() => {
       const u = new URL(request.url);
       const fileName = decodeURIComponent(u.pathname.replace(/^\/+/, ''));
       const filePath = chronoResolveWithinRoot(wordsAssetsDir, fileName);
+
+      if (!fs.existsSync(filePath) || !fs.statSync(filePath).isFile()) {
+        return new Response('Not found', { status: 404 });
+      }
+
+      const stat = fs.statSync(filePath);
+      const mime = guessMime(fileName, filePath);
+      const stream = fs.createReadStream(filePath);
+      return new Response(nodeStreamToWeb(stream), {
+        status: 200,
+        headers: { 'Content-Type': mime, 'Content-Length': String(stat.size) }
+      });
+    } catch {
+      return new Response('Not found', { status: 404 });
+    }
+  });
+
+  // Обработчик протокола alphabetlib://<путь внутри assets> -> файл
+  // поставочной библиотеки «АзбукоСлов». Путь резолвится тем же guard'ом,
+  // что у chronomedia/natcomlib/wordslib — выход за корень невозможен.
+  protocol.handle('alphabetlib', async (request) => {
+    try {
+      if (!alphabetAssetsDir) return new Response('Library not initialized', { status: 503 });
+
+      const u = new URL(request.url);
+      const fileName = decodeURIComponent(u.pathname.replace(/^\/+/, ''));
+      const filePath = chronoResolveWithinRoot(alphabetAssetsDir, fileName);
 
       if (!fs.existsSync(filePath) || !fs.statSync(filePath).isFile()) {
         return new Response('Not found', { status: 404 });

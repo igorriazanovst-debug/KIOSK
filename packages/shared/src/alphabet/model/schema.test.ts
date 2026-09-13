@@ -8,6 +8,8 @@ import {
   ALPHABET_LIBRARY_SCHEMA_VERSION,
   ALPHABET_SETTINGS_SCHEMA_VERSION,
   DEFAULT_ALPHABET_SETTINGS,
+  LibraryIdSchema,
+  UserIdSchema,
 } from './schema';
 import { testLibrary } from './testLibrary';
 
@@ -19,16 +21,31 @@ test('пакет контента разбирается и сохраняет �
   assert.deepEqual(avtobus?.syllableIds, ['av', 'to', 'bus']);
 });
 
-test('идентификатор поставочной сущности не начинается с «u»', () => {
-  // Префикс «u» зарезервирован за словами педагога, иначе поставочное
-  // обновление затрёт его слово с тем же идентификатором
-  assert.throws(
-    () =>
-      testLibrary({
-        words: [{ id: 'utka', name: 'Утка', syllableIds: ['ut'], hasWithoutLastSyllable: false }],
-      } as never),
-    AlphabetValidationError
-  );
+test('слово на букву У — законный поставочный идентификатор', () => {
+  // Запрещено не «начинаться с u», а совпадать ПО ФОРМЕ со своим
+  // идентификатором. Первая версия правила отвергала «Утку», «Улитку» и
+  // «Ухо» — то есть букву У целиком
+  const library = testLibrary({
+    letters: [{ number: 21, name: 'У', wordIds: ['utka'] }],
+    syllables: [{ id: 'ut', name: 'ут', letterNumbers: [21, 20] }],
+    words: [{ id: 'utka', name: 'Утка', syllableIds: ['ut'], hasWithoutLastSyllable: false }],
+    sets: [],
+  } as never);
+  assert.equal(library.words[0].id, 'utka');
+});
+
+test('поставочный и свой идентификаторы не пересекаются по форме', () => {
+  // Проверяется на самих схемах, а не через пакет: в списках слов лежат и
+  // поставочные, и свои, поэтому пакет обязан принимать оба вида — но одна
+  // строка не должна годиться сразу под обе роли, иначе обновление поставки
+  // однажды затрёт слово педагога
+  assert.equal(LibraryIdSchema.safeParse('utka').success, true);
+  assert.equal(LibraryIdSchema.safeParse('u0123456789abcdef').success, false);
+  assert.equal(UserIdSchema.safeParse('u0123456789abcdef').success, true);
+  assert.equal(UserIdSchema.safeParse('utka').success, false);
+  // «u» и 16 hex — и ни символом больше
+  assert.equal(UserIdSchema.safeParse('u0123456789abcde').success, false);
+  assert.equal(LibraryIdSchema.safeParse('u0123456789abcde').success, true);
 });
 
 test('идентификатор слова педагога — «u» и 16 hex-символов', () => {
