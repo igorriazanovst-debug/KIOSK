@@ -53,8 +53,19 @@ import WordImagesScreen from './screens/WordImagesScreen';
 import WordEditorScreen from './screens/WordEditorScreen';
 import SetEditorScreen from './screens/SetEditorScreen';
 
-const SCENE_WIDTH = 1024;
-const SCENE_HEIGHT = 768;
+/**
+ * МИНИМАЛЬНАЯ логическая сцена. Раньше она была единственной: всё рисовалось
+ * в 1024×768 и масштабировалось целиком, а окно другого соотношения сторон
+ * получало чёрные поля по краям.
+ *
+ * Теперь это именно минимум. Сцена растягивается до фактического соотношения
+ * окна: по одной оси остаётся ровно минимум, по другой логического места
+ * становится БОЛЬШЕ. Меньше не становится никогда, поэтому вёрстка, которая
+ * помещалась в 1024×768, помещается и дальше — а на широком или высоком окне
+ * получает запас вместо полей.
+ */
+const SCENE_MIN_WIDTH = 1024;
+const SCENE_MIN_HEIGHT = 768;
 
 /** Сколько держать «проявленный» предмет перед следующим шагом, мс */
 const REVEAL_MS = 1200;
@@ -77,7 +88,11 @@ interface Props {
 const GUEST: Profile = { id: 'guest', name: 'Гость', createdAt: '' };
 
 const WordsRuntime: React.FC<Props> = ({ properties, width, height }) => {
-  const scale = Math.min(width / SCENE_WIDTH, height / SCENE_HEIGHT);
+  // Масштаб по более тесной оси — как и раньше. Логический размер считается
+  // обратно из него, поэтому сцена заполняет окно ровно, без полей.
+  const scale = Math.min(width / SCENE_MIN_WIDTH, height / SCENE_MIN_HEIGHT);
+  const sceneWidth = Math.max(SCENE_MIN_WIDTH, Math.round(width / scale));
+  const sceneHeight = Math.max(SCENE_MIN_HEIGHT, Math.round(height / scale));
   // Платформа выбирается один раз: Electron на Windows, веб-реализация в
   // браузере и в будущей Android-сборке. Экраны и домен о ней не знают.
   const platformRef = useRef<ReturnType<typeof createWebPlatform> | null>(null);
@@ -586,6 +601,8 @@ const WordsRuntime: React.FC<Props> = ({ properties, width, height }) => {
         imageUrlFor={imageUrlFor}
         players={players}
         hasAudio={hasAudio}
+        sceneWidth={sceneWidth}
+        sceneHeight={sceneHeight}
         lastOutcome={lastOutcome}
         onAnswer={onAnswer}
         onRepeat={repeatWord}
@@ -703,9 +720,11 @@ const WordsRuntime: React.FC<Props> = ({ properties, width, height }) => {
       }}
     >
       <div
+        data-scene=""
+        data-scene-size={`${sceneWidth}x${sceneHeight}`}
         style={{
-          width: SCENE_WIDTH,
-          height: SCENE_HEIGHT,
+          width: sceneWidth,
+          height: sceneHeight,
           transform: `scale(${scale})`,
           transformOrigin: 'center center',
           background: palette.bg,
