@@ -5,6 +5,9 @@
 // фигура и подпись «заглушка». Они не притворяются рисунками, чтобы никто не
 // принял собранный пакет за готовый к поставке.
 //
+// ЗАГЛУШКА СТАВИТСЯ ТОЛЬКО ТАМ, ГДЕ КАРТИНКИ НЕТ. Сборщик манифеста не
+// должен уметь уничтожать контент — см. комментарий у самой записи файлов.
+//
 // ЗАГЛУШКА НЕ НЕСЁТ НИ БУКВЫ, НИ НАЗВАНИЯ СЛОВА — и это главное решение
 // файла. Первая версия рисовала первую букву слова крупно в круге и
 // подписывала словом; на этапе «покажи букву» это буквально был ответ,
@@ -132,13 +135,34 @@ const library = {
   sets: catalogue.sets,
 };
 
-// Чистим ТОЛЬКО картинки. media/ не трогаем: генерация озвучки занимает
-// минуты, и снести её пересборкой манифеста было бы больно
-fs.rmSync(imgDir, { recursive: true, force: true });
+// ЗАГЛУШКА СТАВИТСЯ, ТОЛЬКО ЕСЛИ КАРТИНКИ НЕТ. Первая версия чистила каталог
+// целиком и писала заглушки заново — и однажды снесла 95 настоящих
+// иллюстраций, сделанных за три часа, просто потому что сборку манифеста
+// запустили после них. Сборщик манифеста не должен уметь уничтожать контент.
+//
+// media/ не трогается по той же причине: генерация озвучки занимает минуты.
 fs.mkdirSync(imgDir, { recursive: true });
 
+let placeholders = 0;
+let real = 0;
 for (const word of catalogue.words) {
-  fs.writeFileSync(path.join(imgDir, `${word.id}.svg`), placeholderSvg(word), 'utf8');
+  const file = path.join(imgDir, `${word.id}.svg`);
+  if (fs.existsSync(file)) {
+    real += 1;
+    continue;
+  }
+  fs.writeFileSync(file, placeholderSvg(word), 'utf8');
+  placeholders += 1;
+}
+
+// Картинки слов, которых больше нет в словаре, — мёртвый вес дистрибутива.
+// Их убираем: это не контент, а мусор от прежних правок словаря
+const known = new Set(catalogue.words.map((w) => `${w.id}.svg`));
+for (const file of fs.readdirSync(imgDir)) {
+  if (!known.has(file)) {
+    fs.unlinkSync(path.join(imgDir, file));
+    console.log(`убрана картинка слова, которого больше нет: ${file}`);
+  }
 }
 
 fs.writeFileSync(
@@ -156,7 +180,10 @@ console.log(`букв: ${library.letters.length}`);
 console.log(`слов: ${library.words.length}`);
 console.log(`слогов: ${library.syllables.length}`);
 console.log(`комплектов: ${library.sets.length}`);
-console.log(`иллюстраций: ${catalogue.words.length}, ${(bytes / 1024).toFixed(1)} КБ`);
+console.log(
+  `иллюстраций: ${catalogue.words.length}, ${(bytes / 1024).toFixed(1)} КБ` +
+    (placeholders > 0 ? ` — из них ЗАГЛУШЕК ${placeholders}, настоящих ${real}` : ' (все настоящие)')
+);
 if (audio.complete) {
   const mediaBytes = fs
     .readdirSync(path.join(assets, 'media'))
