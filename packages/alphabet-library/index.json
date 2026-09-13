@@ -62,8 +62,7 @@
         "divan",
         "del_fin",
         "dynya",
-        "dym",
-        "den_"
+        "dym"
       ]
     },
     {
@@ -84,7 +83,6 @@
         "yozhik",
         "yolka",
         "yorshik",
-        "yomkost_",
         "yorsh"
       ]
     },
@@ -209,7 +207,6 @@
         "panama",
         "pero",
         "pod_ezd",
-        "pod_yom",
         "pal_to"
       ]
     },
@@ -222,8 +219,7 @@
         "raduga",
         "raketa",
         "roza",
-        "ryukzak",
-        "raz_ezd"
+        "ryukzak"
       ]
     },
     {
@@ -249,7 +245,8 @@
         "tykva",
         "tigr",
         "tucha",
-        "topor"
+        "topor",
+        "tetrad_"
       ]
     },
     {
@@ -272,8 +269,8 @@
         "fialka",
         "flazhok",
         "fartuk",
-        "futbol",
-        "flag"
+        "futbolka",
+        "frukty"
       ]
     },
     {
@@ -343,9 +340,7 @@
         "pod_ezd",
         "ob_yavlenie",
         "s_yomka",
-        "ob_ezd",
-        "raz_ezd",
-        "pod_yom"
+        "ob_ezd"
       ]
     },
     {
@@ -368,7 +363,7 @@
         "fonar_",
         "pal_to",
         "kon_",
-        "den_",
+        "tetrad_",
         "los_"
       ]
     },
@@ -379,8 +374,6 @@
         "ehkran",
         "ehskimo",
         "ehlektrichka",
-        "ehtazh",
-        "ehho",
         "ehmu"
       ]
     },
@@ -391,8 +384,7 @@
         "yula",
         "yubka",
         "yunga",
-        "yurta",
-        "yumor"
+        "yurta"
       ]
     },
     {
@@ -987,25 +979,6 @@
         26,
         10,
         12
-      ]
-    },
-    {
-      "id": "yom",
-      "name": "ём",
-      "letterNumbers": [
-        7,
-        14
-      ]
-    },
-    {
-      "id": "kost_",
-      "name": "кость",
-      "letterNumbers": [
-        12,
-        16,
-        19,
-        20,
-        30
       ]
     },
     {
@@ -2023,13 +1996,21 @@
       ]
     },
     {
-      "id": "flag",
-      "name": "флаг",
+      "id": "fruk",
+      "name": "фрук",
       "letterNumbers": [
         22,
-        13,
-        1,
-        4
+        18,
+        21,
+        12
+      ]
+    },
+    {
+      "id": "ty",
+      "name": "ты",
+      "letterNumbers": [
+        20,
+        29
       ]
     },
     {
@@ -2405,16 +2386,6 @@
       ]
     },
     {
-      "id": "raz_",
-      "name": "разъ",
-      "letterNumbers": [
-        18,
-        1,
-        9,
-        28
-      ]
-    },
-    {
       "id": "my",
       "name": "мы",
       "letterNumbers": [
@@ -2441,14 +2412,6 @@
       ]
     },
     {
-      "id": "ty",
-      "name": "ты",
-      "letterNumbers": [
-        20,
-        29
-      ]
-    },
-    {
       "id": "pal_",
       "name": "паль",
       "letterNumbers": [
@@ -2469,12 +2432,21 @@
       ]
     },
     {
-      "id": "den_",
-      "name": "день",
+      "id": "tet",
+      "name": "тет",
       "letterNumbers": [
-        5,
+        20,
         6,
-        15,
+        20
+      ]
+    },
+    {
+      "id": "rad_",
+      "name": "радь",
+      "letterNumbers": [
+        18,
+        1,
+        5,
         30
       ]
     },
@@ -2528,15 +2500,6 @@
         18,
         10,
         25
-      ]
-    },
-    {
-      "id": "tazh",
-      "name": "таж",
-      "letterNumbers": [
-        20,
-        1,
-        8
       ]
     },
     {
@@ -2979,15 +2942,6 @@
       "syllableIds": [
         "yor",
         "shik"
-      ],
-      "hasWithoutLastSyllable": true
-    },
-    {
-      "id": "yomkost_",
-      "name": "Ёмкость",
-      "syllableIds": [
-        "yom",
-        "kost_"
       ],
       "hasWithoutLastSyllable": true
     },
@@ -3785,21 +3739,23 @@
       "hasWithoutLastSyllable": true
     },
     {
-      "id": "futbol",
-      "name": "Футбол",
+      "id": "futbolka",
+      "name": "Футболка",
       "syllableIds": [
         "fut",
-        "bol"
+        "bol",
+        "ka"
       ],
       "hasWithoutLastSyllable": true
     },
     {
-      "id": "flag",
-      "name": "Флаг",
+      "id": "frukty",
+      "name": "Фрукты",
       "syllableIds": [
-        "flag"
+        "fruk",
+        "ty"
       ],
-      "hasWithoutLastSyllable": false
+      "hasWithoutLastSyllable": true
     },
     {
       "id": "homyak",
@@ -4100,24 +4056,6 @@
       "hasWithoutLastSyllable": true
     },
     {
-      "id": "raz_ezd",
-      "name": "Разъезд",
-      "syllableIds": [
-        "raz_",
-        "ezd"
-      ],
-      "hasWithoutLastSyllable": true
-    },
-    {
-      "id": "pod_yom",
-      "name": "Подъём",
-      "syllableIds": [
-        "pod_",
-        "yom"
-      ],
-      "hasWithoutLastSyllable": true
-    },
-    {
       "id": "mylo",
       "name": "Мыло",
       "syllableIds": [
@@ -4169,12 +4107,13 @@
       "hasWithoutLastSyllable": false
     },
     {
-      "id": "den_",
-      "name": "День",
+      "id": "tetrad_",
+      "name": "Тетрадь",
       "syllableIds": [
-        "den_"
+        "tet",
+        "rad_"
       ],
-      "hasWithoutLastSyllable": false
+      "hasWithoutLastSyllable": true
     },
     {
       "id": "los_",
@@ -4211,24 +4150,6 @@
         "lek",
         "trich",
         "ka"
-      ],
-      "hasWithoutLastSyllable": true
-    },
-    {
-      "id": "ehtazh",
-      "name": "Этаж",
-      "syllableIds": [
-        "eh",
-        "tazh"
-      ],
-      "hasWithoutLastSyllable": true
-    },
-    {
-      "id": "ehho",
-      "name": "Эхо",
-      "syllableIds": [
-        "eh",
-        "ho"
       ],
       "hasWithoutLastSyllable": true
     },
@@ -4274,15 +4195,6 @@
       "syllableIds": [
         "yur",
         "ta"
-      ],
-      "hasWithoutLastSyllable": true
-    },
-    {
-      "id": "yumor",
-      "name": "Юмор",
-      "syllableIds": [
-        "yu",
-        "mor"
       ],
       "hasWithoutLastSyllable": true
     },

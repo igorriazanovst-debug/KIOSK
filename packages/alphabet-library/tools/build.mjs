@@ -121,7 +121,7 @@ function audioIsComplete(cat) {
     if (word.hasWithoutLastSyllable) wanted.add(`${word.id}_bgn.mp3`);
   }
   const missing = [...wanted].filter((name) => !fs.existsSync(path.join(mediaDir, name)));
-  return { complete: missing.length === 0, missing, expected: wanted.size };
+  return { complete: missing.length === 0, missing, expected: wanted.size, wanted };
 }
 
 const audio = audioIsComplete(catalogue);
@@ -175,6 +175,19 @@ for (const file of fs.readdirSync(imgDir)) {
   if (!known.has(file)) {
     fs.unlinkSync(path.join(imgDir, file));
     console.log(`убрана картинка слова, которого больше нет: ${file}`);
+  }
+}
+
+// То же и для звука. Уборка была однобокой: картинки удалённых слов уходили,
+// а их озвучка оставалась — правка словаря оставила 20 осиротевших mp3, и
+// заметила их только внешняя сверка, не сам сборщик. Пакет обязан содержать
+// ровно то, что заявляет, иначе в дистрибутив едет мусор, а сверка на
+// принимающей стороне спотыкается о лишние файлы
+const mediaDir = path.join(assets, 'media');
+for (const file of fs.readdirSync(mediaDir)) {
+  if (!audio.wanted.has(file)) {
+    fs.unlinkSync(path.join(mediaDir, file));
+    console.log(`убрана озвучка слова, которого больше нет: ${file}`);
   }
 }
 
