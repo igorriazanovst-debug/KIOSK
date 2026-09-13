@@ -9,22 +9,29 @@
 
 import type { ElementClass, ElectronType, OxideCharacter } from './model/schema.ts';
 
+// Насыщенная мультицветная гамма (выбрана пользователем при доработке
+// дизайна 2026-09-11 — максимальный контраст между категориями, вместо
+// прежних едва различимых бледно-пастельных тонов уровня Material 50).
+// Уровень Material 300: достаточно ярко, чтобы категории читались с
+// одного взгляда на сенсорном киоске, и достаточно светло, чтобы тёмный
+// текст плиток (см. TableScreen.tsx) оставался контрастным без отдельной
+// карты цветов текста на каждую категорию.
 export const CLASS_COLOR: Record<ElementClass, string> = {
-  metal: '#e3f2fd',
-  metalloid: '#fff3e0',
-  nonmetal: '#e8f5e9',
+  metal: '#64b5f6',
+  metalloid: '#ffb74d',
+  nonmetal: '#81c784',
 };
 
 export const ELECTRON_TYPE_COLOR: Record<ElectronType, string> = {
-  s: '#ffebee',
-  p: '#e8f5e9',
-  d: '#e3f2fd',
-  f: '#f3e5f5',
+  s: '#e57373',
+  p: '#81c784',
+  d: '#64b5f6',
+  f: '#ba68c8',
 };
 
 export const OXIDE_COLOR: Record<OxideCharacter, string> = {
-  acidic: '#ffebee',
-  basic: '#e3f2fd',
-  amphoteric: '#fff3e0',
-  none: '#f5f5f5',
+  acidic: '#e57373',
+  basic: '#64b5f6',
+  amphoteric: '#ffb74d',
+  none: '#e0e0e0',
 };

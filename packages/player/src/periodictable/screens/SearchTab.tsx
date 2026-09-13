@@ -27,14 +27,32 @@ const SearchTab: React.FC<Props> = ({ elements, onSelectElement, onHighlightChan
         onChange={(e) => handleChange(e.target.value)}
         placeholder="Название, номер, символ или масса"
         aria-label="Поиск химического элемента"
-        style={{ fontSize: 18, padding: 8, width: '100%', boxSizing: 'border-box' }}
+        style={{
+          fontSize: 18,
+          padding: '10px 14px',
+          width: '100%',
+          boxSizing: 'border-box',
+          border: '1px solid #cfd8dc',
+          borderRadius: 8,
+          outline: 'none',
+        }}
       />
-      <ul style={{ listStyle: 'none', padding: 0 }}>
+      <ul style={{ listStyle: 'none', padding: 0, marginTop: 10, display: 'flex', flexDirection: 'column', gap: 6 }}>
         {results.map((el) => (
           <li key={el.atomicNumber}>
             <button
+              className="periodictable-cell"
               onClick={() => { onHighlightChange(el.symbol); onSelectElement(el); }}
-              style={{ width: '100%', textAlign: 'left', padding: 8 }}
+              style={{
+                width: '100%',
+                textAlign: 'left',
+                padding: '10px 14px',
+                background: '#fafafa',
+                border: '1px solid #eceff1',
+                borderRadius: 8,
+                cursor: 'pointer',
+                fontSize: 15,
+              }}
             >
               № {el.atomicNumber} — {el.nameRu} ({el.symbol})
             </button>

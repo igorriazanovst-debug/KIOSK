@@ -11,7 +11,7 @@
 // "undefined".
 
 import { z } from 'zod';
-import { ColorIndicationSchema, HighlightModeSchema } from './viewTypes.ts';
+import { ColorIndicationSchema, HighlightModeSchema, TrendPropertySchema } from './viewTypes.ts';
 import { TABLE_FORM_VALUES } from './tableLayout.ts';
 
 const STORAGE_KEY = 'periodictable.viewSettings.v1';
@@ -32,6 +32,13 @@ export const ViewSettingsSchema = z.object({
   tableForm: TableFormSchema,
   colorIndication: ColorIndicationSchema,
   highlight: HighlightModeSchema,
+  // Актуально только когда colorIndication === 'trend' — но поле хранится
+  // всегда (проще, чем делать его optional и подставлять дефолт в трёх
+  // местах, которые его читают). safeParse у ViewSettingsSchema в
+  // loadViewSettings() отбрасывает старые сохранённые настройки, где этого
+  // поля ещё нет, на DEFAULT_VIEW_SETTINGS целиком — миграция не нужна,
+  // это чисто локальное per-device UI-состояние (см. комментарий выше).
+  trendProperty: TrendPropertySchema,
 });
 export type ViewSettings = z.infer<typeof ViewSettingsSchema>;
 
@@ -39,6 +46,7 @@ export const DEFAULT_VIEW_SETTINGS: ViewSettings = {
   tableForm: 'short',
   colorIndication: 'class',
   highlight: 'none',
+  trendProperty: 'atomicMass',
 };
 
 function hasLocalStorage(): boolean {
