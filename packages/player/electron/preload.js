@@ -159,3 +159,19 @@ contextBridge.exposeInMainWorld('wordsAPI', {
   pickWordImage: (wordId) => ipcRenderer.invoke('words:pick-word-image', wordId),
   clearWordImage: (wordId) => ipcRenderer.invoke('words:clear-word-image', wordId)
 });
+
+// Локальное хранилище виджета «АзбукоСлов» (Тип 3) — профили детей, настройки
+// занятия и статистика по буквам. Отдельный namespace, используется только
+// виджетом alphabet.
+contextBridge.exposeInMainWorld('alphabetAPI', {
+  getContext: () => ipcRenderer.invoke('alphabet:get-context'),
+  getLibrary: () => ipcRenderer.invoke('alphabet:get-library'),
+  listProfiles: () => ipcRenderer.invoke('alphabet:list-profiles'),
+  createProfile: (name) => ipcRenderer.invoke('alphabet:create-profile', name),
+  deleteProfile: (profileId) => ipcRenderer.invoke('alphabet:delete-profile', profileId),
+  getSettings: () => ipcRenderer.invoke('alphabet:get-settings'),
+  saveSettings: (settings) => ipcRenderer.invoke('alphabet:save-settings', settings),
+  getStatistics: () => ipcRenderer.invoke('alphabet:get-statistics'),
+  saveSession: (profileId, answers) => ipcRenderer.invoke('alphabet:save-session', profileId, answers),
+  clearStatistics: (profileId) => ipcRenderer.invoke('alphabet:clear-statistics', profileId)
+});

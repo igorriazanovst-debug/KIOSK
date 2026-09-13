@@ -6,6 +6,7 @@ const { registerNatComIpc } = require('./natcom/ipc');
 const { registerMathmachineIpc } = require('./mathmachine/ipc');
 const { registerRusiqIpc } = require('./rusiq/ipc');
 const { registerWordsIpc } = require('./words/ipc');
+const { registerAlphabetIpc } = require('./alphabet/ipc');
 const wordsMediaFiles = require('./words/mediaFiles');
 const { buildBrowserWindowOptions, hasStandaloneAppWidget, hasNaturalCommunitiesWidget, NATCOM_WIDGET_TYPE } = require('./chrono/windowMode');
 const { mediaDir: chronoMediaDir } = require('./chrono/mediaStore');
@@ -1277,6 +1278,19 @@ app.whenReady().then(() => {
     }
   } catch (err) {
     fileLog('[words] failed to initialize local storage:', err && err.message);
+  }
+
+  // Локальное хранилище виджета «АзбукоСлов» (Тип 3). Регистрация тоже
+  // безусловная: канал 'alphabet:*' используется только виджетом alphabet.
+  // Пакет контента появится в Фазе 7 — до него loadLibrary не передаётся, и
+  // рантайм получает внятное «контента в этой сборке нет» вместо пустого
+  // экрана без объяснений.
+  try {
+    const { baseDir: alphabetDir, isFallback: alphabetIsFallback } =
+      registerAlphabetIpc({ ipcMain, app });
+    fileLog('[alphabet] storage dir:', alphabetDir, alphabetIsFallback ? '(fallback: no write access to shared dir)' : '');
+  } catch (err) {
+    fileLog('[alphabet] failed to initialize local storage:', err && err.message);
   }
 
   const { session } = require('electron');

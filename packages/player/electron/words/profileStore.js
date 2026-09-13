@@ -129,12 +129,10 @@ function deleteProfile(baseDir, profileId) {
 
 // ─── Настройки ──────────────────────────────────────────────────────────
 
-const DEFAULT_SETTINGS = {
-  schemaVersion: 1,
-  volume: 70,
-  device: 'board',
-  levelOverrides: {},
-};
+// Из @kiosk/shared, а не своей копией: копия здесь уже отстала на поле
+// screenTheme, и на свежем устройстве тема экрана приходила undefined
+const { DEFAULT_WORDS_SETTINGS } = require('@kiosk/shared');
+const DEFAULT_SETTINGS = DEFAULT_WORDS_SETTINGS;
 
 /**
  * Настройки занятия. Отсутствие файла — это дефолт, а не ошибка: на свежем

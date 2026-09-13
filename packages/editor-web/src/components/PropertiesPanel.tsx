@@ -8,6 +8,7 @@ import NatComPropertiesSection from './NatComPropertiesSection';
 import MathMachinePropertiesSection from './MathMachinePropertiesSection';
 import PeriodicTablePropertiesSection from './PeriodicTablePropertiesSection';
 import WordsPropertiesSection from './WordsPropertiesSection';
+import AlphabetPropertiesSection from './AlphabetPropertiesSection';
 import './PropertiesPanel.css';
 import RichTextEditor from './RichTextEditor';
 
@@ -90,6 +91,12 @@ const PropertiesPanel: React.FC = () => {
 
         {/* Секция виджета «Я знаю много слов» */}
         <WordsPropertiesSection
+          widget={selectedWidget}
+          onPropertiesChange={handlePropertiesChange}
+        />
+
+        {/* Секция виджета «АзбукоСлов» */}
+        <AlphabetPropertiesSection
           widget={selectedWidget}
           onPropertiesChange={handlePropertiesChange}
         />

@@ -59,7 +59,12 @@ export * from './words/store/rules';
 export * from './words/store/contentRules';
 export * from './words/store/teacherGate';
 
-// АзбукоСлов (Тип 3) — пространством имён, см. src/alphabet/index.ts:
+// АзбукоСлов (Тип 3)
+// widgetProperties — плоско: девять точек регистрации виджета в редакторе и
+// плеере импортируют из '@kiosk/shared' напрямую, и делать одну из них
+// непохожей на остальные незачем; имена там уникальны по пакету
+export * from './alphabet/widgetProperties';
+// Домен — пространством имён, см. src/alphabet/index.ts:
 // у него четырнадцать имён, общих с виджетом «слов», и плоский реэкспорт
 // молча выбросил бы столкнувшиеся
 export * as alphabet from './alphabet';
