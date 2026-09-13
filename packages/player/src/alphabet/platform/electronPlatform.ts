@@ -52,5 +52,7 @@ export function createElectronPlatform(api: AlphabetApi): AlphabetPlatform {
     pickWordImage: () => api.pickWordImage(),
     saveVoice: (kind, id, bytes) => api.saveVoice(kind, id, bytes),
     deleteVoice: (kind, id) => api.deleteVoice(kind, id),
+    exportSet: (setId) => api.exportSet(setId),
+    importSet: () => api.importSet(),
   };
 }

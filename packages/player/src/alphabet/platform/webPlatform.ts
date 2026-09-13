@@ -25,6 +25,8 @@ import {
 } from '@kiosk/shared';
 import type { AlphabetPlatform } from './AlphabetPlatform.ts';
 import type {
+  ExportReport,
+  ImportReport,
   AlphabetContext,
   AlphabetLibrary,
   AlphabetSettings,
@@ -333,6 +335,16 @@ export function createWebPlatform(options: WebPlatformOptions = {}): AlphabetPla
 
     async deleteVoice() {
       return fail<boolean>('В браузере запись голоса не поддерживается');
+    },
+
+    // Обмен комплектами требует файловой системы и системных диалогов —
+    // в браузере их нет, и подделывать нечем
+    async exportSet() {
+      return fail<ExportReport | null>('В браузере комплекты не выгружаются');
+    },
+
+    async importSet() {
+      return fail<ImportReport | null>('В браузере комплекты не загружаются');
     },
   };
 }

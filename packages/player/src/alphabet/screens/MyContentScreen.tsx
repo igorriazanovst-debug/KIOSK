@@ -26,6 +26,8 @@ interface Props {
   onDeleteWord: (wordId: string) => void;
   onSaveSet: (setId: string | null, title: string, wordIds: string[]) => void;
   onDeleteSet: (setId: string) => void;
+  onExportSet: (setId: string) => void;
+  onImportSet: () => void;
   onBack: () => void;
 }
 
@@ -42,6 +44,8 @@ const MyContentScreen: React.FC<Props> = ({
   onDeleteWord,
   onSaveSet,
   onDeleteSet,
+  onExportSet,
+  onImportSet,
   onBack,
 }) => {
   const [tab, setTab] = useState<Tab>('words');
@@ -150,9 +154,16 @@ const MyContentScreen: React.FC<Props> = ({
 
       {tab === 'sets' && !editingSet && (
         <>
-          <BigButton onClick={startNewSet} disabled={busy} testId="my-content-new-set">
-            + Новый комплект
-          </BigButton>
+          <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
+            <BigButton onClick={startNewSet} disabled={busy} testId="my-content-new-set">
+              + Новый комплект
+            </BigButton>
+            {/* Импорт — рядом с созданием: это два способа завести комплект,
+                и разносить их по разным местам незачем (ТЗ строка 77) */}
+            <BigButton onClick={onImportSet} tone="secondary" disabled={busy} testId="my-content-import-set">
+              Загрузить из файла
+            </BigButton>
+          </div>
           <ScrollArea testId="my-content-sets">
             {userSets.length === 0 && (
               <p style={{ fontSize: 19, color: palette.textDim, margin: 0 }}>
@@ -179,6 +190,9 @@ const MyContentScreen: React.FC<Props> = ({
                   </span>
                   <BigButton onClick={() => startEditSet(set)} tone="secondary" testId={`my-set-edit-${set.id}`}>
                     Изменить
+                  </BigButton>
+                  <BigButton onClick={() => onExportSet(set.id)} tone="secondary" testId={`my-set-export-${set.id}`}>
+                    Выгрузить
                   </BigButton>
                   <BigButton onClick={() => onDeleteSet(set.id)} tone="danger" testId={`my-set-delete-${set.id}`}>
                     Удалить

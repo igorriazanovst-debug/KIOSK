@@ -23,11 +23,16 @@
 // кода с недостающими медиа. Отказ только если после выпадения в комплекте
 // осталось меньше двух слов — играть таким нечем.
 //
+// ЗАЩИТА ЖИВЁТ В electron/common/zipGuard.js — вынесена туда при работе над
+// Тип 3, у которого свой формат архива (едут ещё и слоги, и три записи на
+// слово), но та же оборона. Код защиты дублировать нельзя: найдись дыра в
+// одной копии, вторая сохранила бы её, и никто бы не заметил — чинили бы
+// первую. Здесь остались формат архива и правила этого виджета.
+//
 // Защита от zip-slip: белый список ТОЧНЫХ имён (manifest.json/set.json/
 // media/<32hex>.<ext>) — не «путь не содержит ..», а «путь совпадает с
 // ожидаемым». Ни одно имя из архива не попадает в fs.* до этой проверки, и
-// имя файла на диске всё равно выводится из хеша содержимого, а не из
-// архива.
+// имя файла на диске всё равно выводится из хеша содержимого, а не из архива.
 //
 // Защита от zip-bomb: entry.uncompressedSize из центрального каталога
 // проверяется ДО открытия потока, плюс собственный счётчик прочитанных
@@ -40,8 +45,8 @@
 
 const fs = require('fs');
 const path = require('path');
-const yauzl = require('yauzl');
 const yazl = require('yazl');
+const zipGuard = require('../common/zipGuard');
 const { parseUserWords, MIN_SET_WORDS } = require('@kiosk/shared');
 const mediaFiles = require('./mediaFiles');
 const wordStore = require('./wordStore');
@@ -52,11 +57,10 @@ const SET_ENTRY = 'set.json';
 /** Имя файла медиа в архиве — то же, что и в хранилище: хеш содержимого + расширение */
 const MEDIA_ENTRY_RE = /^media\/([0-9a-f]{32})\.([a-z0-9]{2,4})$/;
 
-/** Потолки на файл и на архив: чуть выше лимитов обычного импорта медиа, но конечные */
-const MAX_ENTRY_UNCOMPRESSED_BYTES = 10 * 1024 * 1024;
-const MAX_TOTAL_UNCOMPRESSED_BYTES = 512 * 1024 * 1024;
-/** 500 слов по два файла плюс два json — с запасом */
-const MAX_ENTRY_COUNT = 1200;
+/** Потолки — общие с другими виджетами, см. common/zipGuard.js */
+const MAX_ENTRY_UNCOMPRESSED_BYTES = zipGuard.MAX_ENTRY_UNCOMPRESSED_BYTES;
+const MAX_TOTAL_UNCOMPRESSED_BYTES = zipGuard.MAX_TOTAL_UNCOMPRESSED_BYTES;
+const MAX_ENTRY_COUNT = zipGuard.MAX_ENTRY_COUNT;
 
 class SetArchiveError extends Error {
   constructor(message) {
@@ -141,83 +145,31 @@ async function exportSetToZip(baseDir, setId, targetFilePath) {
 
 // ─── Импорт ─────────────────────────────────────────────────────────────
 
-function openZip(sourceFilePath) {
-  return new Promise((resolve, reject) => {
-    yauzl.open(sourceFilePath, { lazyEntries: true, autoClose: false }, (err, zipfile) => {
-      if (err) reject(new SetArchiveError('Файл не является архивом комплекта'));
-      else resolve(zipfile);
-    });
-  });
-}
-
-/** Читает entry целиком в память, считая реально прочитанные байты */
-function readEntry(zipfile, entry, maxBytes) {
-  return new Promise((resolve, reject) => {
-    zipfile.openReadStream(entry, (err, stream) => {
-      if (err) return reject(new SetArchiveError(`Не удалось прочитать ${entry.fileName}`));
-      const chunks = [];
-      let total = 0;
-      stream.on('data', (chunk) => {
-        total += chunk.length;
-        if (total > maxBytes) {
-          stream.destroy();
-          reject(new SetArchiveError(`Файл в архиве больше заявленного размера: ${entry.fileName}`));
-        } else {
-          chunks.push(chunk);
-        }
-      });
-      stream.on('error', () => reject(new SetArchiveError(`Ошибка чтения ${entry.fileName}`)));
-      stream.on('end', () => resolve(Buffer.concat(chunks)));
-    });
-  });
-}
-
 /**
- * Проходит по каталогу архива, отбирая ТОЛЬКО записи из белого списка.
- * Всё остальное — ошибка, а не молчаливый пропуск: чужая структура значит,
- * что это не наш архив, и продолжать разбор нечего.
+ * Тонкие обёртки над common/zipGuard: общая оборона, но ошибки наружу
+ * уходят типом этого модуля — педагог видит текст про комплект слов, а не
+ * про абстрактный архив.
  */
-function collectEntries(zipfile) {
-  return new Promise((resolve, reject) => {
-    const found = new Map();
-    let count = 0;
-    let totalBytes = 0;
+const asSetError = (message) => new SetArchiveError(message);
 
-    zipfile.on('error', () => reject(new SetArchiveError('Архив повреждён')));
-    zipfile.on('entry', (entry) => {
-      count += 1;
-      if (count > MAX_ENTRY_COUNT) {
-        return reject(new SetArchiveError('В архиве слишком много файлов'));
-      }
-      if (/\/$/.test(entry.fileName)) return zipfile.readEntry(); // каталог
+const openZip = (sourceFilePath) => zipGuard.openZip(sourceFilePath, asSetError);
 
-      const name = entry.fileName;
-      const allowed = name === MANIFEST_ENTRY || name === SET_ENTRY || MEDIA_ENTRY_RE.test(name);
-      if (!allowed) {
-        return reject(new SetArchiveError(`Неожиданный файл в архиве: ${name}`));
-      }
-      if (entry.uncompressedSize > MAX_ENTRY_UNCOMPRESSED_BYTES) {
-        return reject(new SetArchiveError(`Файл в архиве слишком большой: ${name}`));
-      }
-      totalBytes += entry.uncompressedSize;
-      if (totalBytes > MAX_TOTAL_UNCOMPRESSED_BYTES) {
-        return reject(new SetArchiveError('Архив слишком большой'));
-      }
-      found.set(name, entry);
-      zipfile.readEntry();
-    });
-    zipfile.on('end', () => resolve(found));
-    zipfile.readEntry();
-  });
-}
+const readEntry = (zipfile, entry, maxBytes) =>
+  zipGuard.readEntry(zipfile, entry, maxBytes, asSetError);
 
-function parseJsonEntry(buffer, what) {
-  try {
-    return JSON.parse(buffer.toString('utf8'));
-  } catch {
-    throw new SetArchiveError(`Файл ${what} в архиве повреждён`);
-  }
-}
+const collectEntries = (zipfile) =>
+  zipGuard.collectEntries(
+    zipfile,
+    (name) => name === MANIFEST_ENTRY || name === SET_ENTRY || MEDIA_ENTRY_RE.test(name),
+    asSetError,
+    {
+      maxEntries: MAX_ENTRY_COUNT,
+      maxEntryBytes: MAX_ENTRY_UNCOMPRESSED_BYTES,
+      maxTotalBytes: MAX_TOTAL_UNCOMPRESSED_BYTES,
+    }
+  );
+
+const parseJsonEntry = (buffer, what) => zipGuard.parseJsonEntry(buffer, what, asSetError);
 
 /** Название, свободное среди существующих комплектов: «Урок», «Урок (2)», … */
 function freeTitle(existing, wanted) {

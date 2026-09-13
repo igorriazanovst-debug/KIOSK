@@ -66,6 +66,29 @@ export interface AlphabetApi {
   pickWordImage(): Promise<IpcResult<{ fileName: string } | null>>;
   saveVoice(kind: VoiceKind, id: string, bytes: Uint8Array): Promise<IpcResult<string>>;
   deleteVoice(kind: VoiceKind, id: string): Promise<IpcResult<boolean>>;
+
+  /** Обмен комплектами (ТЗ строка 77). null — диалог закрыли, это не ошибка */
+  exportSet(setId: string): Promise<IpcResult<ExportReport | null>>;
+  importSet(): Promise<IpcResult<ImportReport | null>>;
+}
+
+export interface ExportReport {
+  title: string;
+  words: number;
+  ownWords: number;
+  files: number;
+}
+
+export interface ImportReport {
+  set: WordSet;
+  /** Название занято — комплект переименован, а не отвергнут */
+  renamed: boolean;
+  words: number;
+  ownWords: number;
+  syllables: number;
+  voices: number;
+  /** Поставочные слова, которых нет на этом устройстве */
+  dropped: string[];
 }
 
 /** Три рода записей на слово — ровно то, что требует ТЗ строка 76 */

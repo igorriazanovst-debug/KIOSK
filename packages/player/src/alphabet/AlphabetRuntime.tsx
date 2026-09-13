@@ -103,6 +103,12 @@ const AlphabetRuntime: React.FC<Props> = ({ properties, width, height }) => {
   const [screen, setScreenRaw] = useState<Screen>({ name: 'profiles' });
   const [newName, setNewName] = useState('');
   const [error, setError] = useState<string | null>(null);
+  /**
+   * Сообщение об УДАЧНОМ действии. Отдельно от ошибки: «комплект загружен,
+   * два слова не нашлись» — не ошибка, но педагог обязан это увидеть, иначе
+   * обнаружит на занятии.
+   */
+  const [notice, setNotice] = useState<string | null>(null);
 
   /**
    * Смена экрана ГАСИТ сообщение об ошибке.
@@ -114,6 +120,7 @@ const AlphabetRuntime: React.FC<Props> = ({ properties, width, height }) => {
    */
   const setScreen = useCallback((next: Screen) => {
     setError(null);
+    setNotice(null);
     setScreenRaw(next);
   }, []);
   const [settings, setSettings] = useState<AlphabetSettings>({
@@ -458,6 +465,20 @@ const AlphabetRuntime: React.FC<Props> = ({ properties, width, height }) => {
           )}
         </header>
 
+        {notice && (
+          <div
+            data-testid="alphabet-notice"
+            style={{
+              background: '#2f6b4a',
+              borderRadius: 12,
+              padding: '10px 18px',
+              fontSize: 19,
+            }}
+          >
+            {notice}
+          </div>
+        )}
+
         {error && (
           <div
             data-testid="alphabet-error"
@@ -599,6 +620,41 @@ const AlphabetRuntime: React.FC<Props> = ({ properties, width, height }) => {
               )
             }
             onDeleteSet={(setId) => void runEdit(() => platform.deleteSet(setId))}
+            onExportSet={async (setId) => {
+              setBusy(true);
+              const result = await platform.exportSet(setId);
+              setBusy(false);
+              if (!result.ok) {
+                setError(result.error ?? 'Не удалось выгрузить комплект');
+                return;
+              }
+              // null — диалог закрыли, это не ошибка и не повод сообщать
+              if (result.data) {
+                setNotice(
+                  `Комплект «${result.data.title}» выгружен: слов ${result.data.words}, файлов ${result.data.files}`
+                );
+              }
+            }}
+            onImportSet={async () => {
+              setBusy(true);
+              const result = await platform.importSet();
+              setBusy(false);
+              if (!result.ok) {
+                setError(result.error ?? 'Не удалось загрузить комплект');
+                return;
+              }
+              if (!result.data) return;
+              const r = result.data;
+              // Педагог должен знать, если комплект приехал НЕ целиком:
+              // иначе он обнаружит это на занятии
+              const parts = [`Комплект «${r.set.title}» загружен: слов ${r.words}`];
+              if (r.renamed) parts.push('название было занято, комплект переименован');
+              if (r.dropped.length > 0) {
+                parts.push(`не нашлось слов из другого пакета контента: ${r.dropped.length}`);
+              }
+              setNotice(parts.join('. '));
+              await reloadUserContent();
+            }}
             onBack={() => setScreen({ name: 'menu' })}
           />
         )}

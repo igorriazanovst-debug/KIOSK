@@ -194,5 +194,10 @@ contextBridge.exposeInMainWorld('alphabetAPI', {
   // Путь к файлу границу не пересекает: диалог открывает главный процесс
   pickWordImage: () => ipcRenderer.invoke('alphabet:pick-word-image'),
   saveVoice: (kind, id, bytes) => ipcRenderer.invoke('alphabet:save-voice', kind, id, bytes),
-  deleteVoice: (kind, id) => ipcRenderer.invoke('alphabet:delete-voice', kind, id)
+  deleteVoice: (kind, id) => ipcRenderer.invoke('alphabet:delete-voice', kind, id),
+
+  // Обмен комплектами (ТЗ строка 77). Путь к файлу границу не пересекает:
+  // и сохранение, и открытие идут через системный диалог в main
+  exportSet: (setId) => ipcRenderer.invoke('alphabet:export-set', setId),
+  importSet: () => ipcRenderer.invoke('alphabet:import-set')
 });

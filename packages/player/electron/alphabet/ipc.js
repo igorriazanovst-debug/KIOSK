@@ -16,8 +16,13 @@ const { loadLibrarySync } = require('./contentLibrary');
 const teacherPassword = require('./teacherPassword');
 const content = require('./contentStore');
 const media = require('../common/mediaFiles');
+const setArchive = require('./setArchive');
+const path = require('path');
 
 const ALPHABET_APP_DIR_NAME = store.ALPHABET_APP_DIR_NAME;
+
+/** Своё расширение, чтобы файл комплекта было видно среди прочих */
+const SET_FILE_EXTENSION = '.kaset';
 
 /**
  * Превращает ошибку файловой системы в текст, понятный педагогу у доски.
@@ -47,6 +52,7 @@ function translateDiskError(err) {
   if (err instanceof alphabet.AlphabetContentError) return err.message;
   if (err instanceof content.AlphabetContentStoreError) return err.message;
   if (err instanceof media.MediaError) return err.message;
+  if (err instanceof setArchive.AlphabetSetArchiveError) return err.message;
   return err && err.message ? err.message : 'Не удалось выполнить операцию с данными занятия';
 }
 
@@ -241,6 +247,43 @@ function registerAlphabetIpc({ ipcMain, app, dialog, sharedDirOverride, loadLibr
   ipcMain.handle(
     'alphabet:delete-voice',
     guarded(async (_e, kind, id) => content.deleteVoice(baseDir, kind, id))
+  );
+
+  // ── Обмен комплектами (ТЗ строка 77: импорт и экспорт) ───────────────
+  // Путь к файлу выбирает ПОЛЬЗОВАТЕЛЬ в системном диалоге, и открывает
+  // диалог главный процесс: рендерер произвольного пути не называет
+  ipcMain.handle(
+    'alphabet:export-set',
+    guarded(async (_e, setId) => {
+      if (!dialog) throw new setArchive.AlphabetSetArchiveError('Диалог сохранения недоступен');
+      const set = content.readContent(baseDir).sets.find((s) => s.id === setId);
+      if (!set) throw new setArchive.AlphabetSetArchiveError('Такого комплекта нет');
+      const result = await dialog.showSaveDialog({
+        title: 'Сохранить комплект',
+        defaultPath: `${setArchive.safeFileStem(set.title)}${SET_FILE_EXTENSION}`,
+        filters: [{ name: 'Комплект АзбукоСлов', extensions: [SET_FILE_EXTENSION.slice(1)] }],
+      });
+      if (result.canceled || !result.filePath) return null;
+      return setArchive.exportSetToZip(baseDir, setId, result.filePath);
+    })
+  );
+
+  ipcMain.handle(
+    'alphabet:import-set',
+    guarded(async () => {
+      if (!dialog) throw new setArchive.AlphabetSetArchiveError('Диалог открытия недоступен');
+      const result = await dialog.showOpenDialog({
+        title: 'Открыть комплект',
+        properties: ['openFile'],
+        filters: [{ name: 'Комплект АзбукоСлов', extensions: [SET_FILE_EXTENSION.slice(1)] }],
+      });
+      if (result.canceled || result.filePaths.length === 0) return null;
+      return setArchive.importSetFromZip(
+        baseDir,
+        result.filePaths[0],
+        libraryWords().map((w) => w.id)
+      );
+    })
   );
 
   return { baseDir, isFallback, assetsDir, report, libraryError };
