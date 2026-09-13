@@ -173,5 +173,10 @@ contextBridge.exposeInMainWorld('alphabetAPI', {
   saveSettings: (settings) => ipcRenderer.invoke('alphabet:save-settings', settings),
   getStatistics: () => ipcRenderer.invoke('alphabet:get-statistics'),
   saveSession: (profileId, answers) => ipcRenderer.invoke('alphabet:save-session', profileId, answers),
-  clearStatistics: (profileId) => ipcRenderer.invoke('alphabet:clear-statistics', profileId)
+  clearStatistics: (profileId) => ipcRenderer.invoke('alphabet:clear-statistics', profileId),
+
+  // Пароль педагога (ТЗ раздел 3). Наружу только «подошёл или нет»
+  checkTeacherPassword: (password) => ipcRenderer.invoke('alphabet:check-teacher-password', password),
+  setTeacherPassword: (password) => ipcRenderer.invoke('alphabet:set-teacher-password', password),
+  teacherPasswordState: () => ipcRenderer.invoke('alphabet:teacher-password-state')
 });

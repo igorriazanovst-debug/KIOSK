@@ -11,8 +11,9 @@
 
 const { resolveStorageDir } = require('../chrono/storageDir');
 const store = require('./profileStore');
-const { WordsRulesError, alphabet } = require('@kiosk/shared');
+const { WordsRulesError, TeacherGateError, alphabet } = require('@kiosk/shared');
 const { loadLibrarySync } = require('./contentLibrary');
+const teacherPassword = require('./teacherPassword');
 
 const ALPHABET_APP_DIR_NAME = store.ALPHABET_APP_DIR_NAME;
 
@@ -38,6 +39,7 @@ function translateDiskError(err) {
   // Нарушение правила («такого игрока нет») и поломка хранилища — разные
   // вещи, но педагогу в обоих случаях нужен готовый текст, а не стек
   if (err instanceof WordsRulesError) return err.message;
+  if (err instanceof TeacherGateError) return err.message;
   if (err instanceof store.AlphabetStoreError) return err.message;
   if (err instanceof alphabet.AlphabetValidationError) return err.message;
   return err && err.message ? err.message : 'Не удалось выполнить операцию с данными занятия';
@@ -139,6 +141,25 @@ function registerAlphabetIpc({ ipcMain, app, sharedDirOverride, loadLibrary }) {
   ipcMain.handle(
     'alphabet:clear-statistics',
     guarded(async (_e, profileId) => store.clearStatistics(baseDir, profileId))
+  );
+
+  // ── Пароль педагога (ТЗ раздел 3) ────────────────────────────────────
+  // Наружу уходит только «подошёл или нет»: ни пароль, ни его хеш границу
+  // процесса не пересекают, иначе «защита» снималась бы инспектором
+  ipcMain.handle(
+    'alphabet:check-teacher-password',
+    guarded(async (_e, password) => teacherPassword.checkPassword(baseDir, password))
+  );
+  ipcMain.handle(
+    'alphabet:set-teacher-password',
+    guarded(async (_e, password) => {
+      teacherPassword.setPassword(baseDir, password);
+      return { isDefault: teacherPassword.isDefaultPassword(baseDir) };
+    })
+  );
+  ipcMain.handle(
+    'alphabet:teacher-password-state',
+    guarded(async () => ({ isDefault: teacherPassword.isDefaultPassword(baseDir) }))
   );
 
   return { baseDir, isFallback, assetsDir, report, libraryError };

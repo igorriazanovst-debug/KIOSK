@@ -200,11 +200,26 @@ export const QuestionCountSchema = z
   .int()
   .refine((v) => (QUESTION_COUNTS as readonly number[]).includes(v), 'недопустимое число вопросов');
 
+/**
+ * Цвет экрана. Требование не из ТЗ, а от пользователя: он попросил его в
+ * Тип 2, и причина общая для обоих виджетов — освещение в кабинетах разное,
+ * и на ярком солнце светлый фон интерактивной панели слепит.
+ *
+ * Набор тот же, что в Тип 2, и это не совпадение: два виджета стоят на одном
+ * устройстве, и разные наборы цветов в них выглядели бы недоделкой.
+ */
+export const SCREEN_THEMES = ['sky', 'forest', 'night', 'sand', 'plum', 'graphite'] as const;
+export const ScreenThemeSchema = z.enum(SCREEN_THEMES);
+export type ScreenTheme = z.infer<typeof ScreenThemeSchema>;
+
 export const AlphabetSettingsSchema = z.object({
   schemaVersion: z.literal(ALPHABET_SETTINGS_SCHEMA_VERSION),
   volume: z.number().int().min(0).max(100),
   device: AlphabetDeviceModeSchema,
   questionCount: QuestionCountSchema,
+  // .default нужен для старых файлов настроек: поле добавлено после первых
+  // сохранений, и без него пакет перестал бы читать собственные же записи
+  screenTheme: ScreenThemeSchema.default('sky'),
 });
 export type AlphabetSettings = z.infer<typeof AlphabetSettingsSchema>;
 
@@ -213,6 +228,7 @@ export const DEFAULT_ALPHABET_SETTINGS: AlphabetSettings = {
   volume: 70,
   device: 'board',
   questionCount: 10,
+  screenTheme: 'sky',
 };
 
 // ─── Разбор с границы системы ───────────────────────────────────────────

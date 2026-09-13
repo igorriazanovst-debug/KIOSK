@@ -16,7 +16,13 @@
 //
 // ОГРАНИЧЕНИЕ: Storage браузера может быть очищен. Для отладки приемлемо.
 
-import { sanitizeProfiles, applyCreateProfile, alphabet } from '@kiosk/shared';
+import {
+  sanitizeProfiles,
+  applyCreateProfile,
+  alphabet,
+  DEFAULT_TEACHER_PASSWORD,
+  assertPasswordAcceptable,
+} from '@kiosk/shared';
 import type { AlphabetPlatform } from './AlphabetPlatform.ts';
 import type {
   AlphabetContext,
@@ -34,6 +40,7 @@ export const WEB_LIBRARY_ROOT = 'alphabet-library';
 const KEY_PROFILES = 'kiosk-alphabet:profiles';
 const KEY_SETTINGS = 'kiosk-alphabet:settings';
 const KEY_STATISTICS = 'kiosk-alphabet:statistics';
+const KEY_PASSWORD = 'kiosk-alphabet:password';
 
 export interface KeyValueStorage {
   read(key: string): unknown;
@@ -177,6 +184,36 @@ export function createWebPlatform(options: WebPlatformOptions = {}): AlphabetPla
         const next = alphabet.clearUserStatistics(statistics(), profileId);
         storage.write(KEY_STATISTICS, next);
         return next;
+      });
+    },
+
+    // ── Пароль педагога ─────────────────────────────────────────────────
+    // В ОТЛАДОЧНОМ РЕЖИМЕ ПАРОЛЬ ХРАНИТСЯ ОТКРЫТО, а не хешем. Это не
+    // недосмотр: в Electron проверка идёт в главном процессе именно для
+    // того, чтобы пароль не лежал в бандле страницы, а здесь бандл и
+    // хранилище — одно и то же, и хеширование создавало бы ложное
+    // впечатление, будто защита работает. Продакшен-потребителя у этого
+    // файла нет; если появится, пароль обязан уехать за границу процесса.
+    async checkTeacherPassword(password: string) {
+      return guard(() => {
+        const stored = storage.read(KEY_PASSWORD);
+        const expected = typeof stored === 'string' ? stored : DEFAULT_TEACHER_PASSWORD;
+        return String(password) === expected;
+      });
+    },
+
+    async setTeacherPassword(password: string) {
+      return guard(() => {
+        const value = assertPasswordAcceptable(password);
+        storage.write(KEY_PASSWORD, value);
+        return { isDefault: value === DEFAULT_TEACHER_PASSWORD };
+      });
+    },
+
+    async teacherPasswordState() {
+      return guard(() => {
+        const stored = storage.read(KEY_PASSWORD);
+        return { isDefault: typeof stored !== 'string' || stored === DEFAULT_TEACHER_PASSWORD };
       });
     },
   };

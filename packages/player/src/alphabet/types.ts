@@ -44,6 +44,12 @@ export interface AlphabetApi {
   getStatistics(): Promise<IpcResult<Statistics>>;
   saveSession(profileId: string, answers: LetterAnswer[]): Promise<IpcResult<unknown>>;
   clearStatistics(profileId: string): Promise<IpcResult<Statistics>>;
+
+  // Пароль педагога (ТЗ раздел 3). Наружу уходит только «подошёл или нет»:
+  // ни пароль, ни его хеш границу процесса не пересекают
+  checkTeacherPassword(password: string): Promise<IpcResult<boolean>>;
+  setTeacherPassword(password: string): Promise<IpcResult<{ isDefault: boolean }>>;
+  teacherPasswordState(): Promise<IpcResult<{ isDefault: boolean }>>;
 }
 
 declare global {

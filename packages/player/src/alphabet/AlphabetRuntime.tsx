@@ -29,13 +29,16 @@ import { createElectronPlatform } from './platform/electronPlatform';
 import { createWebPlatform } from './platform/webPlatform';
 import { detectPlatformKind, setAlphabetPlatform } from './platform/AlphabetPlatform';
 import type { AlphabetPlatform } from './platform/AlphabetPlatform';
-import type { AlphabetContext, AlphabetLibrary, Profile } from './types';
+import type { AlphabetContext, AlphabetLibrary, AlphabetSettings, Profile, Statistics } from './types';
 import ProfilesScreen from './screens/ProfilesScreen';
 import MenuScreen from './screens/MenuScreen';
 import AlphabetScreen from './screens/AlphabetScreen';
 import LetterScreen from './screens/LetterScreen';
 import PlayScreen from './screens/PlayScreen';
 import { QuestionCountScreen, ResultsScreen, StageSelectScreen } from './screens/SetupScreens';
+import StatisticsScreen from './screens/StatisticsScreen';
+import SettingsScreen from './screens/SettingsScreen';
+import PasswordPrompt from './components/PasswordPrompt';
 import { letterAudioUrl, wordAudioUrl, wordWithoutLastSyllableAudioUrl } from './mediaUrl';
 
 const SCENE_MIN_WIDTH = 1024;
@@ -58,7 +61,9 @@ type Screen =
   | { name: 'alphabet' }
   | { name: 'letter'; letterNumber: number }
   | { name: 'play' }
-  | { name: 'results' };
+  | { name: 'results' }
+  | { name: 'statistics' }
+  | { name: 'settings' };
 
 type Session = ReturnType<typeof alphabet.buildAlphabetSession>;
 
@@ -80,12 +85,33 @@ const AlphabetRuntime: React.FC<Props> = ({ properties, width, height }) => {
   const [library, setLibrary] = useState<AlphabetLibrary | null>(null);
   const [profiles, setProfiles] = useState<Profile[]>([]);
   const [selectedId, setSelectedId] = useState<string | null>(null);
-  const [screen, setScreen] = useState<Screen>({ name: 'profiles' });
+  const [screen, setScreenRaw] = useState<Screen>({ name: 'profiles' });
   const [newName, setNewName] = useState('');
   const [error, setError] = useState<string | null>(null);
-  const [questionCount, setQuestionCount] = useState(
-    properties.questionCount ?? ALPHABET_DEFAULT_QUESTION_COUNT
-  );
+
+  /**
+   * Смена экрана ГАСИТ сообщение об ошибке.
+   *
+   * Без этого «Игрок уже есть в списке» из экрана профилей висело над
+   * статистикой и настройками до конца работы приложения — увидено на живом
+   * прогоне. Сообщение об ошибке относится к действию, а действие кончилось
+   * вместе с экраном.
+   */
+  const setScreen = useCallback((next: Screen) => {
+    setError(null);
+    setScreenRaw(next);
+  }, []);
+  const [settings, setSettings] = useState<AlphabetSettings>({
+    ...alphabet.DEFAULT_ALPHABET_SETTINGS,
+    questionCount: (properties.questionCount ??
+      ALPHABET_DEFAULT_QUESTION_COUNT) as AlphabetSettings['questionCount'],
+  });
+  const [statistics, setStatistics] = useState<Statistics>({});
+  const [passwordIsDefault, setPasswordIsDefault] = useState(false);
+  /** Куда идём после ввода пароля; null — окно закрыто */
+  const [gate, setGate] = useState<{ title: string; next: Screen } | null>(null);
+  /** Открыто окно СМЕНЫ пароля, а не входа */
+  const [changingPassword, setChangingPassword] = useState(false);
   const [session, setSession] = useState<Session | null>(null);
   const [lastChoice, setLastChoice] = useState<{ key: string; correct: boolean } | null>(null);
 
@@ -112,8 +138,10 @@ const AlphabetRuntime: React.FC<Props> = ({ properties, width, height }) => {
       if (!cancelled && ctx.ok) setContext(ctx.data ?? null);
       const lib = await platform.getLibrary();
       if (!cancelled && lib.ok && lib.data) setLibrary(lib.data);
-      const settings = await platform.getSettings();
-      if (!cancelled && settings.ok && settings.data) setQuestionCount(settings.data.questionCount);
+      const loaded = await platform.getSettings();
+      if (!cancelled && loaded.ok && loaded.data) setSettings(loaded.data);
+      const pass = await platform.teacherPasswordState();
+      if (!cancelled && pass.ok) setPasswordIsDefault(pass.data?.isDefault ?? false);
       await reloadProfiles();
     })();
     return () => {
@@ -175,11 +203,42 @@ const AlphabetRuntime: React.FC<Props> = ({ properties, width, height }) => {
     await reloadProfiles();
   };
 
-  const handlePickCount = async (count: number) => {
-    setQuestionCount(count);
-    const result = await platform.saveSettings({ questionCount: count as never });
+  const changeSettings = async (patch: Partial<AlphabetSettings>) => {
+    const next = { ...settings, ...patch };
+    // Сначала показываем, потом пишем: ползунок громкости иначе дёргается,
+    // дожидаясь диска на каждом шаге
+    setSettings(next);
+    const result = await platform.saveSettings(next);
     if (!result.ok) setError(result.error ?? 'Не удалось сохранить настройку');
+    else if (result.data) setSettings(result.data);
+  };
+
+  const handlePickCount = async (count: number) => {
+    await changeSettings({ questionCount: count as AlphabetSettings['questionCount'] });
     setScreen({ name: 'menu' });
+  };
+
+  const reloadStatistics = useCallback(async () => {
+    const result = await platform.getStatistics();
+    if (result.ok) setStatistics(result.data ?? {});
+    else setError(result.error ?? 'Не удалось прочитать статистику');
+  }, [platform]);
+
+  /**
+   * Вход в закрытый раздел. Пароль спрашивается КАЖДЫЙ раз, а не один раз за
+   * запуск: приложение работает весь день на одном устройстве, и «вошёл
+   * утром — открыто до вечера» не защищает ни от чего.
+   */
+  const openGated = (title: string, next: Screen) => setGate({ title, next });
+
+  const handleClearStatistics = async () => {
+    if (!selected) return;
+    const result = await platform.clearStatistics(selected.id);
+    if (!result.ok) {
+      setError(result.error ?? 'Не удалось очистить статистику');
+      return;
+    }
+    await reloadStatistics();
   };
 
   const startSession = (stage: AlphabetStage) => {
@@ -189,7 +248,7 @@ const AlphabetRuntime: React.FC<Props> = ({ properties, width, height }) => {
         roundId: `${Date.now()}`,
         stage,
         playerIds: [selected.id],
-        questionsPerPlayer: questionCount,
+        questionsPerPlayer: settings.questionCount,
         rng: Math.random,
       });
       setSession(built);
@@ -269,7 +328,7 @@ const AlphabetRuntime: React.FC<Props> = ({ properties, width, height }) => {
     }
   };
 
-  const background = SCREEN_THEME_COLORS.sky;
+  const background = SCREEN_THEME_COLORS[settings.screenTheme] ?? SCREEN_THEME_COLORS.sky;
 
   const resultsRows = session
     ? session.playerIds.map((playerId) => ({
@@ -300,6 +359,10 @@ const AlphabetRuntime: React.FC<Props> = ({ properties, width, height }) => {
           height: sceneHeight,
           transform: `scale(${scale})`,
           transformOrigin: 'top left',
+          // Окно пароля позиционируется по сцене, а не по окну браузера:
+          // сцена масштабирована, и position:fixed внутри трансформа ведёт
+          // себя не так, как ожидается
+          position: 'relative',
           display: 'flex',
           flexDirection: 'column',
           boxSizing: 'border-box',
@@ -355,11 +418,13 @@ const AlphabetRuntime: React.FC<Props> = ({ properties, width, height }) => {
             playerName={selected?.name ?? ''}
             hasLibrary={!!library}
             libraryNote={context?.libraryError ?? null}
-            questionCount={questionCount}
+            questionCount={settings.questionCount}
             onPlay={() => setScreen({ name: 'stages' })}
             onAlphabet={() => setScreen({ name: 'alphabet' })}
             onQuestionCount={() => setScreen({ name: 'count' })}
             onChangePlayer={() => setScreen({ name: 'profiles' })}
+            onStatistics={() => openGated('Статистика', { name: 'statistics' })}
+            onSettings={() => openGated('Настройки', { name: 'settings' })}
           />
         )}
 
@@ -374,7 +439,7 @@ const AlphabetRuntime: React.FC<Props> = ({ properties, width, height }) => {
         {screen.name === 'count' && (
           <QuestionCountScreen
             counts={ALPHABET_QUESTION_COUNTS}
-            current={questionCount}
+            current={settings.questionCount}
             onPick={handlePickCount}
             onBack={() => setScreen({ name: 'menu' })}
           />
@@ -419,6 +484,63 @@ const AlphabetRuntime: React.FC<Props> = ({ properties, width, height }) => {
             rows={resultsRows}
             onAgain={() => setScreen({ name: 'stages' })}
             onMenu={() => setScreen({ name: 'menu' })}
+          />
+        )}
+
+        {screen.name === 'statistics' && library && selected && (
+          <StatisticsScreen
+            library={library}
+            statistics={statistics}
+            profileId={selected.id}
+            profileName={selected.name}
+            onClear={handleClearStatistics}
+            onBack={() => setScreen({ name: 'menu' })}
+          />
+        )}
+
+        {screen.name === 'settings' && (
+          <SettingsScreen
+            settings={settings}
+            passwordIsDefault={passwordIsDefault}
+            onChange={changeSettings}
+            onChangePassword={() => setChangingPassword(true)}
+            onBack={() => setScreen({ name: 'menu' })}
+          />
+        )}
+
+        {/* Вход в закрытый раздел */}
+        {gate && (
+          <PasswordPrompt
+            sectionTitle={gate.title}
+            onCheck={async (password) => {
+              const result = await platform.checkTeacherPassword(password);
+              return result.ok && result.data === true;
+            }}
+            onCancel={() => setGate(null)}
+            onSuccess={() => {
+              const next = gate.next;
+              setGate(null);
+              if (next.name === 'statistics') void reloadStatistics();
+              setScreen(next);
+            }}
+          />
+        )}
+
+        {/* Смена пароля: то же окно, но введённое становится НОВЫМ паролем */}
+        {changingPassword && (
+          <PasswordPrompt
+            sectionTitle="Новый пароль педагога"
+            onCheck={async (password) => {
+              const result = await platform.setTeacherPassword(password);
+              if (!result.ok) {
+                setError(result.error ?? 'Не удалось сменить пароль');
+                return false;
+              }
+              setPasswordIsDefault(result.data?.isDefault ?? false);
+              return true;
+            }}
+            onCancel={() => setChangingPassword(false)}
+            onSuccess={() => setChangingPassword(false)}
           />
         )}
 

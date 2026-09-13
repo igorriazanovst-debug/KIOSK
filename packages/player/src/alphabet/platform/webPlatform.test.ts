@@ -96,3 +96,35 @@ test('повреждённая запись настроек не роняет �
 test('путь ресурса — обычный относительный, без протокола Electron', () => {
   assert.equal(platform().assetUrl('img/avtobus.svg'), 'alphabet-library/img/avtobus.svg');
 });
+
+test('цвет экрана сохраняется и проверяется схемой', () => {
+  return (async () => {
+    const p = platform();
+    assert.equal((await p.saveSettings({ screenTheme: 'night' })).ok, true);
+    assert.equal((await p.getSettings()).data?.screenTheme, 'night');
+    assert.equal((await p.saveSettings({ screenTheme: 'ультрафиолет' as never })).ok, false);
+  })();
+});
+
+test('пароль педагога: по умолчанию подходит, чужой нет', async () => {
+  const p = platform();
+  assert.equal((await p.checkTeacherPassword('12345')).data, true);
+  assert.equal((await p.checkTeacherPassword('54321')).data, false);
+  assert.equal((await p.teacherPasswordState()).data?.isDefault, true);
+});
+
+test('смена пароля закрывает старый', async () => {
+  const p = platform();
+  assert.equal((await p.setTeacherPassword('9876')).ok, true);
+  assert.equal((await p.checkTeacherPassword('9876')).data, true);
+  assert.equal((await p.checkTeacherPassword('12345')).data, false);
+  assert.equal((await p.teacherPasswordState()).data?.isDefault, false);
+});
+
+test('короткий пароль не принимается — правила те же, что на Windows', async () => {
+  const p = platform();
+  const result = await p.setTeacherPassword('12');
+  assert.equal(result.ok, false);
+  // и старый пароль остаётся рабочим
+  assert.equal((await p.checkTeacherPassword('12345')).data, true);
+});

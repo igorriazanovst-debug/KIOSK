@@ -32,5 +32,8 @@ export function createElectronPlatform(api: AlphabetApi): AlphabetPlatform {
     getStatistics: () => api.getStatistics(),
     saveSession: (profileId, answers) => api.saveSession(profileId, answers),
     clearStatistics: (profileId) => api.clearStatistics(profileId),
+    checkTeacherPassword: (password) => api.checkTeacherPassword(password),
+    setTeacherPassword: (password) => api.setTeacherPassword(password),
+    teacherPasswordState: () => api.teacherPasswordState(),
   };
 }

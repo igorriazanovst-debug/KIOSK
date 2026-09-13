@@ -17,6 +17,8 @@ interface Props {
   onAlphabet: () => void;
   onQuestionCount: () => void;
   onChangePlayer: () => void;
+  onStatistics: () => void;
+  onSettings: () => void;
 }
 
 const MenuScreen: React.FC<Props> = ({
@@ -28,6 +30,8 @@ const MenuScreen: React.FC<Props> = ({
   onAlphabet,
   onQuestionCount,
   onChangePlayer,
+  onStatistics,
+  onSettings,
 }) => (
   <Panel testId="menu">
     <h2 style={{ margin: 0, fontSize: 30 }}>Занимается {playerName}</h2>
@@ -59,6 +63,13 @@ const MenuScreen: React.FC<Props> = ({
       </BigButton>
       <BigButton onClick={onChangePlayer} tone="secondary" testId="menu-change-player">
         Сменить игрока
+      </BigButton>
+      {/* Два пункта ниже закрыты паролем — рубеж ставит рантайм, не экран */}
+      <BigButton onClick={onStatistics} tone="secondary" testId="menu-statistics">
+        🔒 Статистика
+      </BigButton>
+      <BigButton onClick={onSettings} tone="secondary" testId="menu-settings">
+        🔒 Настройки
       </BigButton>
     </div>
   </Panel>
