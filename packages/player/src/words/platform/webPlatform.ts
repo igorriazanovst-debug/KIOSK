@@ -32,6 +32,7 @@ import {
   applyUpdateSet,
   applyDeleteSet,
   DEFAULT_TEACHER_PASSWORD,
+  DEFAULT_WORDS_SETTINGS,
 } from '@kiosk/shared';
 import type { WordsPlatform } from './WordsPlatform.ts';
 import type {
@@ -57,12 +58,9 @@ const KEY_SCORES = 'kiosk-words:scores';
 const KEY_USER_WORDS = 'kiosk-words:user-words';
 const KEY_SETS = 'kiosk-words:sets';
 
-const DEFAULT_SETTINGS: WordsSettings = {
-  schemaVersion: 1,
-  volume: 70,
-  device: 'tablet',
-  levelOverrides: {},
-};
+// Дефолты берутся из @kiosk/shared, а не держатся третьей копией: своя копия
+// уже отстала на поле screenTheme, и тип это поймал только сейчас
+const DEFAULT_SETTINGS: WordsSettings = { ...DEFAULT_WORDS_SETTINGS, device: 'tablet' };
 
 function ok<T>(data: T): IpcResult<T> {
   return { ok: true, data };

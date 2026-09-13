@@ -33,6 +33,7 @@ import {
 
 import type { Profile, Screen, ScoreBook, WordsContext, UserWordDraft, SetDraft } from './types';
 import type { UserWord, UserSet } from '@kiosk/shared';
+import { DEFAULT_WORDS_SETTINGS } from '@kiosk/shared';
 import { setWordsPlatform, detectPlatformKind } from './platform/WordsPlatform';
 import { createElectronPlatform } from './platform/electronPlatform';
 import { createWebPlatform } from './platform/webPlatform';
@@ -73,12 +74,8 @@ const REVEAL_MS = 1200;
 /** Сколько подсвечивать ошибку */
 const WRONG_MS = 700;
 
-const DEFAULT_SETTINGS: WordsSettings = {
-  schemaVersion: 1,
-  volume: 70,
-  device: 'board',
-  levelOverrides: {},
-};
+// Из @kiosk/shared, не своей копией: копия уже отстала на screenTheme
+const DEFAULT_SETTINGS: WordsSettings = DEFAULT_WORDS_SETTINGS;
 
 interface Props {
   properties: Partial<WordsWidgetProperties>;
@@ -568,6 +565,11 @@ const WordsRuntime: React.FC<Props> = ({ properties, width, height }) => {
         error={error}
         onBack={() => setScreen({ name: 'menu' })}
         onChange={changeSettings}
+        // Без этих двух пропсов кнопка «Сменить пароль» оставалась навсегда
+        // отключённой, а предупреждение о пароле по умолчанию не появлялось:
+        // состояние в рантайме было, а дотянуться до него было нечем
+        onChangePassword={() => setChangingPassword(true)}
+        passwordIsDefault={defaultPassword}
       />
     );
   } else if (screen.name === 'map') {
