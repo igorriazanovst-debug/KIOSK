@@ -1,21 +1,23 @@
 import React from 'react';
 import { useEditorStore } from '../stores/editorStore';
-import { Square, Type, Image, Video, MousePointer, Menu, Globe, Compass, History, TreePine, Calculator, Atom } from 'lucide-react';
+import { Square, Type, Image, Video, MousePointer, Menu, Globe, Compass, History, TreePine, Calculator, Atom, Languages } from 'lucide-react';
 import OutlinePanel from './OutlinePanel';
 import { NAVIGATION_WIDGET_TYPE, NAVIGATION_DEFAULT_PROPS, NAVIGATION_DEFAULT_SIZE } from '../utils/navigation/widgetType';
-import { CHRONOLINE_WIDGET_TYPE, CHRONOLINE_DEFAULT_PROPS, CHRONOLINE_DEFAULT_SIZE, NATCOM_WIDGET_TYPE, NATCOM_DEFAULT_PROPS, NATCOM_DEFAULT_SIZE, MATHMACHINE_WIDGET_TYPE, MATHMACHINE_DEFAULT_PROPS, MATHMACHINE_DEFAULT_SIZE, PERIODICTABLE_WIDGET_TYPE, PERIODICTABLE_DEFAULT_PROPS, PERIODICTABLE_DEFAULT_SIZE } from '@kiosk/shared';
+import { CHRONOLINE_WIDGET_TYPE, CHRONOLINE_DEFAULT_PROPS, CHRONOLINE_DEFAULT_SIZE, NATCOM_WIDGET_TYPE, NATCOM_DEFAULT_PROPS, NATCOM_DEFAULT_SIZE, MATHMACHINE_WIDGET_TYPE, MATHMACHINE_DEFAULT_PROPS, MATHMACHINE_DEFAULT_SIZE, PERIODICTABLE_WIDGET_TYPE, PERIODICTABLE_DEFAULT_PROPS, PERIODICTABLE_DEFAULT_SIZE, RUSIQ_WIDGET_TYPE, RUSIQ_DEFAULT_PROPS, RUSIQ_DEFAULT_SIZE } from '@kiosk/shared';
 import { apiClient } from '../services/api-client';
 import './WidgetLibrary.css';
 
 // Временно: виджеты «Хронолиния», «Конструктор природных сообществ»,
-// «Матемашка» и «Таблица Менделеева» доступны только этому аккаунту (реальный
-// запрет — на сервере, см. packages/server/src/config/chronolineAccess.ts,
-// natcomAccess.ts, mathmachineAccess.ts; здесь только скрываем пункт для
-// остальных, чтобы не путать).
+// «Матемашка», «Таблица Менделеева» и «РусIQ» доступны только этому
+// аккаунту (реальный запрет — на сервере, см.
+// packages/server/src/config/chronolineAccess.ts, natcomAccess.ts,
+// mathmachineAccess.ts, periodicTableAccess.ts, rusiqAccess.ts; здесь
+// только скрываем пункт для остальных, чтобы не путать).
 const CHRONOLINE_ALLOWED_EMAILS = ['mokretcov.m@poznaikino.ru'];
 const NATCOM_ALLOWED_EMAILS = ['mokretcov.m@poznaikino.ru'];
 const MATHMACHINE_ALLOWED_EMAILS = ['mokretcov.m@poznaikino.ru'];
 const PERIODICTABLE_ALLOWED_EMAILS = ['mokretcov.m@poznaikino.ru'];
+const RUSIQ_ALLOWED_EMAILS = ['mokretcov.m@poznaikino.ru'];
 
 const WidgetLibrary: React.FC = () => {
   const { addWidget, project } = useEditorStore();
@@ -24,6 +26,7 @@ const WidgetLibrary: React.FC = () => {
   const isNatcomAllowed = !!currentUserEmail && NATCOM_ALLOWED_EMAILS.includes(currentUserEmail.toLowerCase());
   const isMathMachineAllowed = !!currentUserEmail && MATHMACHINE_ALLOWED_EMAILS.includes(currentUserEmail.toLowerCase());
   const isPeriodicTableAllowed = !!currentUserEmail && PERIODICTABLE_ALLOWED_EMAILS.includes(currentUserEmail.toLowerCase());
+  const isRusiqAllowed = !!currentUserEmail && RUSIQ_ALLOWED_EMAILS.includes(currentUserEmail.toLowerCase());
 
   const widgetTypes = [
     {
@@ -140,6 +143,13 @@ const WidgetLibrary: React.FC = () => {
       icon: Atom,
       defaultProps: PERIODICTABLE_DEFAULT_PROPS,
       defaultSize: PERIODICTABLE_DEFAULT_SIZE
+    }] : []),
+    ...(isRusiqAllowed ? [{
+      type: RUSIQ_WIDGET_TYPE,
+      name: 'РусIQ',
+      icon: Languages,
+      defaultProps: RUSIQ_DEFAULT_PROPS,
+      defaultSize: RUSIQ_DEFAULT_SIZE
     }] : [])
   ];
 

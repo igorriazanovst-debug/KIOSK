@@ -44,3 +44,6 @@ export * from './mathmachine/catalog';
 
 // Таблица Менделеева (Тип 8)
 export * from './periodictable/widgetProperties';
+
+// РусIQ (Тип 7)
+export * from './rusiq/widgetProperties';

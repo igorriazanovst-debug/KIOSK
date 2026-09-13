@@ -10,6 +10,7 @@ import ChronolineRuntime from './chrono/ChronolineRuntime.tsx';
 import NatComRuntime from './natcom/NatComRuntime.tsx';
 import MathMachineRuntime from './mathmachine/MathMachineRuntime';
 import PeriodicTableRuntime from './periodictable/PeriodicTableRuntime';
+import RusiqRuntime from './rusiq/RusiqRuntime';
 
 interface Project {
   name: string;
@@ -583,6 +584,17 @@ const Player: React.FC<PlayerProps> = ({ embedded = false }) => {
             <PeriodicTableRuntime properties={widget.properties as any} />
           </div>
         );
+      case 'rusiq':
+        // Тот же принцип, что "mathmachine"/"naturalcommunities"/"chronoline" выше —
+        // заполняет реальный размер окна/экрана целиком.
+        return (
+          <div
+            key={widget.id}
+            style={{ ...commonStyle, left: 0, top: 0, width: viewportSize.width, height: viewportSize.height, overflow: 'hidden' }}
+          >
+            <RusiqRuntime properties={widget.properties as any} />
+          </div>
+        );
       default:
         return null;
     }
@@ -1113,7 +1125,7 @@ const Player: React.FC<PlayerProps> = ({ embedded = false }) => {
   }
 
   // Standalone-app виджеты ("chronoline", "naturalcommunities", "mathmachine",
-  // "periodictable") заполняют реальный размер окна/экрана (см. viewportSize
+  // "periodictable", "rusiq") заполняют реальный размер окна/экрана (см. viewportSize
   // выше) - без этого
   // канвас оставался бы фиксированным на project.canvas.*, заданном при
   // проектировании, и не совпадал бы с фактическим окном. Список должен
@@ -1123,7 +1135,7 @@ const Player: React.FC<PlayerProps> = ({ embedded = false }) => {
   // по project.canvas.* и получается больше окна → двойной скролл и обрезка
   // контента (найдено вживую при ручном тестировании «Матемашки»).
   const isStandaloneAppProject = project.widgets.some(
-    (w) => w.type === 'chronoline' || w.type === 'naturalcommunities' || w.type === 'mathmachine' || w.type === 'periodictable'
+    (w) => w.type === 'chronoline' || w.type === 'naturalcommunities' || w.type === 'mathmachine' || w.type === 'periodictable' || w.type === 'rusiq'
   );
 
   // Letterbox-масштаб для НЕ-standalone проектов: канвас проектировался под
