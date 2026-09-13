@@ -14,7 +14,7 @@ function validQuiz(overrides: Partial<RusiqQuiz> = {}): RusiqQuiz {
     image: { fileName: 'bg.png', width: 100, height: 100 },
     levels: [{ id: 1, label: 'Начинающий' }, { id: 2, label: 'Опытный' }, { id: 3, label: 'Профессионал' }],
     questions: [
-      { id: 'q1', text: 'Вопрос?', answer: 'а', helpText: '', x: 10, y: 10, width: RUSIQ_DEFAULT_POINT_SIZE, height: RUSIQ_DEFAULT_POINT_SIZE, decoyPoints: [], price: 100, timeSeconds: 20, level: 1, theme: 'Тема' },
+      { id: 'q1', text: 'Вопрос?', answer: 'а', helpText: '', x: 10, y: 10, width: RUSIQ_DEFAULT_POINT_SIZE, height: RUSIQ_DEFAULT_POINT_SIZE, decoyPoints: [], price: 100, timeSeconds: 20, level: 1, theme: 'Тема', questionImage: null, answerImage: null, hintImage: null },
     ],
     genericDecoyPoints: [],
     ...overrides,

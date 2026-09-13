@@ -1,6 +1,9 @@
 // packages/player/src/rusiq/editor/PointEditForm.tsx
-import React from 'react';
+import React, { useRef } from 'react';
 import type { RusiqLevelId, RusiqQuestion } from '../model/schema.ts';
+import SpecialCharPicker from './SpecialCharPicker.tsx';
+import ItemImageUpload from './ItemImageUpload.tsx';
+import type { RusiqItemImageKind } from './quizStore.ts';
 
 interface Props {
   question: RusiqQuestion;
@@ -8,9 +11,20 @@ interface Props {
   onChange: (updated: RusiqQuestion) => void;
   onDelete: () => void;
   onClose: () => void;
+  // FR-015 (Фаза 2b) - картинка к вопросу/ответу/подсказке. getImagePreviewUrl
+  // сама решает, показывать ли ещё не сохранённое стейджинговое превью или
+  // уже сохранённую на диске картинку - PointEditForm об этом различии не
+  // знает, только просит превью по виду картинки.
+  getImagePreviewUrl: (kind: RusiqItemImageKind) => string | null;
+  onSelectImage: (kind: RusiqItemImageKind, file: File) => void;
+  onRemoveImage: (kind: RusiqItemImageKind) => void;
 }
 
-const PointEditForm: React.FC<Props> = ({ question, existingThemes, onChange, onDelete, onClose }) => {
+const PointEditForm: React.FC<Props> = ({ question, existingThemes, onChange, onDelete, onClose, getImagePreviewUrl, onSelectImage, onRemoveImage }) => {
+  const textRef = useRef<HTMLTextAreaElement>(null);
+  const answerRef = useRef<HTMLInputElement>(null);
+  const helpTextRef = useRef<HTMLTextAreaElement>(null);
+
   function set<K extends keyof RusiqQuestion>(key: K, value: RusiqQuestion[K]) {
     onChange({ ...question, [key]: value });
   }
@@ -27,12 +41,26 @@ const PointEditForm: React.FC<Props> = ({ question, existingThemes, onChange, on
       </div>
       <label className="riq-field">
         Текст вопроса
-        <textarea value={question.text} onChange={(e) => set('text', e.target.value)} className="riq-input" rows={2} />
+        <textarea ref={textRef} value={question.text} onChange={(e) => set('text', e.target.value)} className="riq-input" rows={2} />
       </label>
+      <SpecialCharPicker targetRef={textRef} onInsert={(next) => set('text', next)} />
+      <ItemImageUpload
+        label="Картинка к вопросу (необязательно)"
+        previewUrl={getImagePreviewUrl('question')}
+        onSelectFile={(file) => onSelectImage('question', file)}
+        onRemove={() => onRemoveImage('question')}
+      />
       <label className="riq-field">
         Ответ
-        <input value={question.answer} onChange={(e) => set('answer', e.target.value)} className="riq-input" />
+        <input ref={answerRef} value={question.answer} onChange={(e) => set('answer', e.target.value)} className="riq-input" />
       </label>
+      <SpecialCharPicker targetRef={answerRef} onInsert={(next) => set('answer', next)} />
+      <ItemImageUpload
+        label="Картинка к ответу (необязательно)"
+        previewUrl={getImagePreviewUrl('answer')}
+        onSelectFile={(file) => onSelectImage('answer', file)}
+        onRemove={() => onRemoveImage('answer')}
+      />
       <label className="riq-field">
         Тема
         <input value={question.theme} onChange={(e) => set('theme', e.target.value)} list="rusiq-editor-themes" className="riq-input" />
@@ -84,8 +112,15 @@ const PointEditForm: React.FC<Props> = ({ question, existingThemes, onChange, on
       </div>
       <label className="riq-field">
         Подсказка (необязательно)
-        <textarea value={question.helpText} onChange={(e) => set('helpText', e.target.value)} className="riq-input" rows={2} />
+        <textarea ref={helpTextRef} value={question.helpText} onChange={(e) => set('helpText', e.target.value)} className="riq-input" rows={2} />
       </label>
+      <SpecialCharPicker targetRef={helpTextRef} onInsert={(next) => set('helpText', next)} />
+      <ItemImageUpload
+        label="Картинка к подсказке (необязательно)"
+        previewUrl={getImagePreviewUrl('hint')}
+        onSelectFile={(file) => onSelectImage('hint', file)}
+        onRemove={() => onRemoveImage('hint')}
+      />
       <button onClick={onDelete} className="riq-btn riq-btn-danger riq-btn-small" style={{ marginTop: 4 }}>
         Удалить этот вопрос
       </button>

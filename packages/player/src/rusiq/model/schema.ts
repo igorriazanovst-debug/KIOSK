@@ -47,6 +47,18 @@ export const RusiqQuestionSchema = z.object({
   timeSeconds: z.number().int().positive(),
   level: RusiqLevelIdSchema,
   theme: z.string().min(1),
+  // FR-015 (Фаза 2b) - необязательная иллюстрирующая картинка к вопросу/
+  // ответу/подсказке, ОТДЕЛЬНАЯ от общего фона викторины (quiz.image).
+  // Хранится тем же способом, что и фон (файл на диске в quizzesDir,
+  // rusiqmedia://item/<fileName> - см. rusiqMediaUrl.ts), поэтому здесь
+  // только имя файла, не объект с width/height: эти картинки не участвуют
+  // в проверке границ кликабельных точек (checkPointInBounds), только
+  // иллюстративные. Добавлено как необязательное поле (default null) -
+  // не breaking change для уже сохранённых на диске викторин без него,
+  // schemaVersion не поднимается.
+  questionImage: z.string().min(1).nullable().default(null),
+  answerImage: z.string().min(1).nullable().default(null),
+  hintImage: z.string().min(1).nullable().default(null),
 });
 export type RusiqQuestion = z.infer<typeof RusiqQuestionSchema>;
 

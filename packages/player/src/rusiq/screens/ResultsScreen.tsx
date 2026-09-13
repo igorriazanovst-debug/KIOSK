@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import type { RusiqAnswerEvent } from '../gameLogic.ts';
 import { summarizeResults } from '../gameLogic.ts';
 import type { RusiqQuestion } from '../model/schema.ts';
+import { rusiqItemImageUrl } from '../rusiqMediaUrl.ts';
 import '../rusiqTheme.css';
 
 interface Props {
@@ -28,8 +29,23 @@ const ResultsScreen: React.FC<Props> = ({ playerNames, answers, questionsByPlaye
           <div className="riq-divider" />
           <ul style={{ listStyle: 'none', padding: 0 }}>
             {playerAnswers.map((a, i) => (
-              <li key={i} className={a.correct ? 'riq-result-correct' : 'riq-result-wrong'} style={{ padding: '8px 0', borderBottom: '1px solid var(--riq-border-soft)' }}>
-                {playerQuestions[i]?.text} — {a.correct ? `верно, ${a.score} очков` : 'неверно'}
+              <li
+                key={i}
+                className={a.correct ? 'riq-result-correct' : 'riq-result-wrong'}
+                style={{ padding: '8px 0', borderBottom: '1px solid var(--riq-border-soft)', display: 'flex', alignItems: 'center', gap: 10 }}
+              >
+                {/* FR-015 (Фаза 2b) - картинка правильного ответа в детализации,
+                    единственное место игры, где есть отдельный "разбор ответа" шаг. */}
+                {playerQuestions[i]?.answerImage && (
+                  <img
+                    src={rusiqItemImageUrl(playerQuestions[i].answerImage as string)}
+                    alt=""
+                    style={{ width: 40, height: 40, objectFit: 'cover', borderRadius: 6, flexShrink: 0 }}
+                  />
+                )}
+                <span>
+                  {playerQuestions[i]?.text} — {a.correct ? `верно, ${a.score} очков` : 'неверно'}
+                </span>
               </li>
             ))}
           </ul>

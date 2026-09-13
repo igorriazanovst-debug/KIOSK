@@ -106,5 +106,14 @@ contextBridge.exposeInMainWorld('rusiqAPI', {
   loadQuiz: (quizId) => ipcRenderer.invoke('rusiq:load-quiz', quizId),
   saveQuiz: (quiz) => ipcRenderer.invoke('rusiq:save-quiz', quiz),
   deleteQuiz: (quizId) => ipcRenderer.invoke('rusiq:delete-quiz', quizId),
-  saveQuizBackground: (quizId, arrayBuffer, mimeType) => ipcRenderer.invoke('rusiq:save-quiz-background', quizId, arrayBuffer, mimeType)
+  saveQuizBackground: (quizId, arrayBuffer, mimeType) => ipcRenderer.invoke('rusiq:save-quiz-background', quizId, arrayBuffer, mimeType),
+  // FR-015 (Фаза 2b) - картинка к вопросу/ответу/подсказке.
+  saveQuizItemImage: (quizId, questionId, kind, arrayBuffer, mimeType) =>
+    ipcRenderer.invoke('rusiq:save-quiz-item-image', quizId, questionId, kind, arrayBuffer, mimeType),
+  deleteQuizItemImage: (fileName) => ipcRenderer.invoke('rusiq:delete-quiz-item-image', fileName),
+  // FR-013/FR-018 (Фаза 2b) - экспорт/импорт файла викторины между
+  // проектами KIOSK через уже установленный Плеер (согласованная
+  // реинтерпретация ТЗ, см. Тип7_трассировочная_матрица.md).
+  exportQuiz: (fileContentJson, suggestedFileName) => ipcRenderer.invoke('rusiq:export-quiz', fileContentJson, suggestedFileName),
+  importQuiz: () => ipcRenderer.invoke('rusiq:import-quiz')
 });

@@ -4,7 +4,7 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
-import { registerRusiqIpc, readUserData, writeUserDataAtomic, resolveBaseDir, listQuizMetadata, loadQuizFile, saveQuizFile, deleteQuizFile, resolveQuizzesDir, saveQuizBackground } from './ipc.js';
+import { registerRusiqIpc, readUserData, writeUserDataAtomic, resolveBaseDir, listQuizMetadata, loadQuizFile, saveQuizFile, deleteQuizFile, resolveQuizzesDir, saveQuizBackground, saveQuizItemImage, deleteQuizItemImage } from './ipc.js';
 
 function fakeIpcMain() {
   const handlers = new Map();
@@ -226,6 +226,82 @@ test('registerRusiqIpc save-quiz-background handler round-trips through IPC', as
   const result = await ipcMain.invoke('rusiq:save-quiz-background', 'quiz-bg-3', buffer, 'image/jpeg');
   assert.deepEqual(result, { ok: true, fileName: 'quiz-bg-3-background.jpg' });
   assert.equal(fs.existsSync(path.join(quizzesDir, 'quiz-bg-3-background.jpg')), true);
+});
+
+// FR-015 (Фаза 2b): картинка к вопросу/ответу/подсказке.
+test('saveQuizItemImage writes a file named "<quizId>-<questionId>-<kind>.<ext>" and returns its fileName', () => {
+  const tmp = fs.mkdtempSync(path.join(os.tmpdir(), 'rusiq-item-img-'));
+  const dir = resolveQuizzesDir(tmp);
+  const buffer = Buffer.from([0x89, 0x50, 0x4e, 0x47]);
+  const result = saveQuizItemImage(dir, 'quiz-1', 'q-1', 'question', buffer, 'image/png');
+  assert.deepEqual(result, { ok: true, fileName: 'quiz-1-q-1-question.png' });
+  assert.equal(fs.existsSync(path.join(dir, 'quiz-1-q-1-question.png')), true);
+});
+
+test('saveQuizItemImage rejects an unknown kind', () => {
+  const tmp = fs.mkdtempSync(path.join(os.tmpdir(), 'rusiq-item-img-badkind-'));
+  const dir = resolveQuizzesDir(tmp);
+  const result = saveQuizItemImage(dir, 'quiz-1', 'q-1', 'explanation', Buffer.from([1]), 'image/png');
+  assert.deepEqual(result, { ok: false });
+});
+
+test('saveQuizItemImage rejects an unsupported mime type', () => {
+  const tmp = fs.mkdtempSync(path.join(os.tmpdir(), 'rusiq-item-img-badmime-'));
+  const dir = resolveQuizzesDir(tmp);
+  const result = saveQuizItemImage(dir, 'quiz-1', 'q-1', 'answer', Buffer.from([1]), 'application/pdf');
+  assert.deepEqual(result, { ok: false });
+});
+
+test('deleteQuizItemImage removes an existing file and returns true', () => {
+  const tmp = fs.mkdtempSync(path.join(os.tmpdir(), 'rusiq-item-img-delete-'));
+  const dir = resolveQuizzesDir(tmp);
+  const saved = saveQuizItemImage(dir, 'quiz-1', 'q-1', 'hint', Buffer.from([1]), 'image/png');
+  assert.equal(deleteQuizItemImage(dir, saved.fileName), true);
+  assert.equal(fs.existsSync(path.join(dir, saved.fileName)), false);
+});
+
+test('deleteQuizItemImage returns false for a missing file without throwing', () => {
+  const tmp = fs.mkdtempSync(path.join(os.tmpdir(), 'rusiq-item-img-delete-missing-'));
+  const dir = resolveQuizzesDir(tmp);
+  assert.equal(deleteQuizItemImage(dir, 'does-not-exist.png'), false);
+});
+
+test('registerRusiqIpc save/delete-quiz-item-image handlers round-trip through IPC', async () => {
+  const tmp = fs.mkdtempSync(path.join(os.tmpdir(), 'rusiq-item-img-ipc-'));
+  const app = { getPath: () => tmp };
+  const ipcMain = fakeIpcMain();
+  const { quizzesDir } = registerRusiqIpc({ ipcMain, app });
+  const buffer = new Uint8Array([0xff, 0xd8, 0xff]).buffer;
+  const saveResult = await ipcMain.invoke('rusiq:save-quiz-item-image', 'quiz-9', 'q-9', 'answer', buffer, 'image/jpeg');
+  assert.deepEqual(saveResult, { ok: true, fileName: 'quiz-9-q-9-answer.jpg' });
+  assert.equal(fs.existsSync(path.join(quizzesDir, 'quiz-9-q-9-answer.jpg')), true);
+
+  const deleteResult = await ipcMain.invoke('rusiq:delete-quiz-item-image', saveResult.fileName);
+  assert.deepEqual(deleteResult, { ok: true });
+  assert.equal(fs.existsSync(path.join(quizzesDir, saveResult.fileName)), false);
+});
+
+// Тот же класс дефекта, что был найден и исправлен для общего фона
+// (208ccaa4) - deleteQuizFile теперь должна закрывать и per-вопросные
+// картинки FR-015, не только quiz.image.fileName.
+test('deleteQuizFile also removes question/answer/hint images referenced by questions', () => {
+  const tmp = fs.mkdtempSync(path.join(os.tmpdir(), 'rusiq-quizzes-delete-itemimgs-'));
+  const dir = resolveQuizzesDir(tmp);
+  const q = saveQuizItemImage(dir, 'quiz-imgs', 'q-1', 'question', Buffer.from([1]), 'image/png');
+  const a = saveQuizItemImage(dir, 'quiz-imgs', 'q-1', 'answer', Buffer.from([1]), 'image/png');
+  const h = saveQuizItemImage(dir, 'quiz-imgs', 'q-1', 'hint', Buffer.from([1]), 'image/png');
+  saveQuizFile(dir, {
+    id: 'quiz-imgs',
+    title: 'С картинками вопроса',
+    passwordHash: null,
+    questions: [{ id: 'q-1', questionImage: q.fileName, answerImage: a.fileName, hintImage: h.fileName }],
+  });
+
+  assert.equal(deleteQuizFile(dir, 'quiz-imgs'), true);
+
+  assert.equal(fs.existsSync(path.join(dir, q.fileName)), false);
+  assert.equal(fs.existsSync(path.join(dir, a.fileName)), false);
+  assert.equal(fs.existsSync(path.join(dir, h.fileName)), false);
 });
 
 test('loadQuizFile and deleteQuizFile reject a path-traversal quiz id instead of touching files outside quizzesDir', () => {

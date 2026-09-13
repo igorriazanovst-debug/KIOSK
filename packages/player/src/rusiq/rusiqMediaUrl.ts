@@ -22,3 +22,12 @@
 export function rusiqBackgroundMediaUrl(fileName: string): string {
   return `rusiqmedia://bg/${encodeURIComponent(fileName)}`;
 }
+
+// FR-015 (Фаза 2b): картинка к вопросу/ответу/подсказке (не общий фон).
+// Тот же протокол и тот же обработчик в main.js (host отбрасывается
+// парсером, реально используется только pathname) - "item" здесь чисто
+// для читаемости URL, функционально эквивалентно rusiqBackgroundMediaUrl
+// с другим host.
+export function rusiqItemImageUrl(fileName: string): string {
+  return `rusiqmedia://item/${encodeURIComponent(fileName)}`;
+}

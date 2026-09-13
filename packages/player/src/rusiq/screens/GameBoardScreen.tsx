@@ -2,6 +2,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import type { RusiqPoint, RusiqQuestion } from '../model/schema.ts';
 import { scoreForAnswer, nextTurn, type RusiqAnswerEvent } from '../gameLogic.ts';
+import { rusiqItemImageUrl } from '../rusiqMediaUrl.ts';
 import '../rusiqTheme.css';
 
 interface Props {
@@ -231,10 +232,28 @@ const GameBoardScreen: React.FC<Props> = ({ imageUrl, imageWidth, imageHeight, p
         </button>
       </div>
       <p className="riq-question-text">{currentQuestion.text}</p>
+      {/* FR-015 (Фаза 2b) - иллюстрирующая картинка к вопросу, отдельная от
+          общего фона доски ниже. */}
+      {currentQuestion.questionImage && (
+        <img
+          src={rusiqItemImageUrl(currentQuestion.questionImage)}
+          alt=""
+          style={{ display: 'block', maxWidth: 220, maxHeight: 160, margin: '10px auto 0', borderRadius: 8 }}
+        />
+      )}
       {currentQuestion.helpText.length > 0 && (
         <div className="riq-hint">
           {hintShown ? (
-            <p className="riq-hint-text">Подсказка: {currentQuestion.helpText}</p>
+            <>
+              <p className="riq-hint-text">Подсказка: {currentQuestion.helpText}</p>
+              {currentQuestion.hintImage && (
+                <img
+                  src={rusiqItemImageUrl(currentQuestion.hintImage)}
+                  alt=""
+                  style={{ display: 'block', maxWidth: 220, maxHeight: 160, margin: '6px auto 0', borderRadius: 8 }}
+                />
+              )}
+            </>
           ) : (
             <button onClick={handleShowHint} className="riq-btn riq-btn-ghost riq-btn-small">
               Показать подсказку

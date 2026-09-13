@@ -1,9 +1,18 @@
 // packages/player/src/rusiq/editor/QuizCatalogScreen.tsx
 import React, { useEffect, useState } from 'react';
-import { listQuizzes, loadQuiz, saveQuiz, deleteQuiz, saveQuizBackground, type QuizListEntry } from './quizStore.ts';
+import { listQuizzes, loadQuiz, saveQuiz, deleteQuiz, saveQuizBackground, exportQuizFile, importQuizFile, type QuizListEntry } from './quizStore.ts';
 import { verifySecret } from './pinAuth.ts';
 import NewQuizModal, { type NewQuizResult } from './NewQuizModal.tsx';
 import { RUSIQ_QUIZ_SCHEMA_VERSION, type RusiqQuiz } from '../model/schema.ts';
+import {
+  buildExportPayload,
+  serializeExportPayload,
+  suggestExportFileName,
+  fetchMediaAsBase64,
+  parseAndPersistImportedQuiz,
+  persistBackgroundViaIpc,
+  persistItemImageViaIpc,
+} from './quizExport.ts';
 
 interface Props {
   builtinQuizTitle: string;
@@ -39,7 +48,7 @@ async function buildBlankQuiz(result: NewQuizResult): Promise<{ quiz: RusiqQuiz;
   return { quiz, pendingBackground: { buffer: result.imageBuffer, mimeType: result.imageMimeType } };
 }
 
-type PendingAction = 'edit' | 'delete' | 'duplicate';
+type PendingAction = 'edit' | 'delete' | 'duplicate' | 'export';
 
 const QuizCatalogScreen: React.FC<Props> = ({ builtinQuizTitle, activeQuizId, onSetActiveQuiz, onEditQuiz, onDuplicateBuiltin, onExit }) => {
   const [entries, setEntries] = useState<QuizListEntry[]>([]);
@@ -47,6 +56,9 @@ const QuizCatalogScreen: React.FC<Props> = ({ builtinQuizTitle, activeQuizId, on
   const [passwordPromptFor, setPasswordPromptFor] = useState<{ id: string; passwordHash: string; action: PendingAction } | null>(null);
   const [passwordInput, setPasswordInput] = useState('');
   const [passwordError, setPasswordError] = useState<string | null>(null);
+  // FR-013/FR-018 (Фаза 2b) - обмен викторинами между проектами KIOSK.
+  const [exportingId, setExportingId] = useState<string | null>(null);
+  const [importing, setImporting] = useState(false);
 
   async function refresh() {
     setEntries(await listQuizzes());
@@ -96,16 +108,71 @@ const QuizCatalogScreen: React.FC<Props> = ({ builtinQuizTitle, activeQuizId, on
       await refresh();
       return;
     }
-    // action === 'duplicate'
-    const quiz = await loadQuiz(quizId);
-    if (!quiz) {
+    if (action === 'duplicate') {
+      const quiz = await loadQuiz(quizId);
+      if (!quiz) {
+        await refresh();
+        return;
+      }
+      const newId = crypto.randomUUID();
+      const duplicated: RusiqQuiz = { ...quiz, id: newId, title: `${quiz.title} (копия)`, passwordHash: null };
+      await saveQuiz(duplicated);
       await refresh();
       return;
     }
-    const newId = crypto.randomUUID();
-    const duplicated: RusiqQuiz = { ...quiz, id: newId, title: `${quiz.title} (копия)`, passwordHash: null };
-    await saveQuiz(duplicated);
-    await refresh();
+    // action === 'export'
+    await exportQuizFlow(quizId);
+  }
+
+  // FR-013/FR-018 (Фаза 2b) - собрать самодостаточный файл (викторина +
+  // base64 всех её картинок) и предложить пользователю сохранить его через
+  // нативный диалог (main-процесс, см. electron/main.js 'rusiq:export-quiz').
+  async function exportQuizFlow(quizId: string) {
+    const quiz = await loadQuiz(quizId);
+    if (!quiz) {
+      alert('Не удалось открыть викторину — файл повреждён или удалён.');
+      await refresh();
+      return;
+    }
+    setExportingId(quizId);
+    try {
+      const payload = await buildExportPayload(quiz, fetchMediaAsBase64);
+      const result = await exportQuizFile(serializeExportPayload(payload), suggestExportFileName(quiz));
+      if (!result.ok && !('canceled' in result && result.canceled)) {
+        alert('Не удалось сохранить файл экспорта.');
+      }
+    } finally {
+      setExportingId(null);
+    }
+  }
+
+  // FR-013/FR-018 (Фаза 2b) - обратная операция: пользователь выбирает файл
+  // через нативный диалог, содержимое разбирается и картинки заново
+  // сохраняются на диск ПОД СВЕЖИМ id викторины (parseAndPersistImportedQuiz)
+  // - тот же принцип "не доверять чужим именам файлов", что уже применён к
+  // авторитетному имени фона при обычном сохранении в EditorScreen.
+  async function handleImport() {
+    setImporting(true);
+    try {
+      const picked = await importQuizFile();
+      if (!picked.ok || !picked.content) {
+        if (!('canceled' in picked && picked.canceled)) alert('Не удалось прочитать выбранный файл.');
+        return;
+      }
+      const imported = await parseAndPersistImportedQuiz(picked.content, persistBackgroundViaIpc, persistItemImageViaIpc);
+      if (!imported.ok) {
+        alert(imported.error);
+        return;
+      }
+      const saved = await saveQuiz(imported.quiz);
+      if (!saved) {
+        alert('Не удалось сохранить импортированную викторину.');
+        return;
+      }
+      await refresh();
+    } finally {
+      setImporting(false);
+    }
   }
 
   async function handlePasswordSubmit(e: React.FormEvent) {
@@ -163,6 +230,13 @@ const QuizCatalogScreen: React.FC<Props> = ({ builtinQuizTitle, activeQuizId, on
             <button onClick={() => requirePasswordThen(entry, 'duplicate')} className="riq-btn riq-btn-muted riq-btn-small">
               Дублировать
             </button>
+            <button
+              onClick={() => requirePasswordThen(entry, 'export')}
+              disabled={exportingId === entry.id}
+              className="riq-btn riq-btn-muted riq-btn-small"
+            >
+              {exportingId === entry.id ? 'Экспорт…' : 'Экспорт в файл'}
+            </button>
             <button onClick={() => requirePasswordThen(entry, 'delete')} className="riq-btn riq-btn-danger riq-btn-small">
               Удалить
             </button>
@@ -171,6 +245,9 @@ const QuizCatalogScreen: React.FC<Props> = ({ builtinQuizTitle, activeQuizId, on
         <div style={{ marginTop: 20, display: 'flex', justifyContent: 'center', gap: 10 }}>
           <button onClick={() => setShowNewQuizModal(true)} className="riq-btn">
             Создать новую
+          </button>
+          <button onClick={handleImport} disabled={importing} className="riq-btn riq-btn-muted">
+            {importing ? 'Импорт…' : 'Импортировать викторину'}
           </button>
           <button onClick={onExit} className="riq-btn riq-btn-muted">
             Выйти

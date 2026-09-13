@@ -6,7 +6,7 @@ import { RUSIQ_DEFAULT_POINT_SIZE, type RusiqQuestion } from './model/schema.ts'
 function q(overrides: Partial<RusiqQuestion> = {}): RusiqQuestion {
   return {
     id: 'q1', text: 't', answer: 'a', helpText: '', x: 0, y: 0, width: RUSIQ_DEFAULT_POINT_SIZE, height: RUSIQ_DEFAULT_POINT_SIZE, decoyPoints: [],
-    price: 100, timeSeconds: 30, level: 1, theme: 'A',
+    price: 100, timeSeconds: 30, level: 1, theme: 'A', questionImage: null, answerImage: null, hintImage: null,
     ...overrides,
   };
 }
