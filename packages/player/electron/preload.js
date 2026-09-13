@@ -149,6 +149,11 @@ contextBridge.exposeInMainWorld('wordsAPI', {
   exportSet: (setId) => ipcRenderer.invoke('words:export-set', setId),
   importSet: () => ipcRenderer.invoke('words:import-set'),
 
+  // Пароль педагога (ТЗ раздел 3). Наружу только «подошёл или нет»
+  checkTeacherPassword: (password) => ipcRenderer.invoke('words:check-teacher-password', password),
+  setTeacherPassword: (password) => ipcRenderer.invoke('words:set-teacher-password', password),
+  teacherPasswordState: () => ipcRenderer.invoke('words:teacher-password-state'),
+
   // Свои картинки для поставочных слов (ТЗ строка 42)
   listWordImages: () => ipcRenderer.invoke('words:list-word-images'),
   pickWordImage: (wordId) => ipcRenderer.invoke('words:pick-word-image', wordId),

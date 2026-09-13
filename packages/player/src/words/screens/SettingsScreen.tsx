@@ -9,8 +9,9 @@
 // может быть добавлено экраном позже, не меняя формат.
 
 import React from 'react';
-import { BigButton, ErrorBanner, ScreenFrame, ScrollArea, palette, TOUCH_TARGET_PX } from '../ui';
-import type { WordsLibrary, WordsSettings, DeviceMode } from '@kiosk/shared';
+import { BigButton, ErrorBanner, ScreenFrame, ScrollArea, SCREEN_THEME_COLORS, palette, TOUCH_TARGET_PX } from '../ui';
+import { SCREEN_THEMES } from '@kiosk/shared';
+import type { WordsLibrary, WordsSettings, DeviceMode, ScreenTheme } from '@kiosk/shared';
 
 interface Props {
   library: WordsLibrary | null;
@@ -18,6 +19,10 @@ interface Props {
   error: string | null;
   onBack: () => void;
   onChange: (next: WordsSettings) => void;
+  /** Смена пароля педагога; null — недоступна в этой среде */
+  onChangePassword: (() => void) | null;
+  /** Пароль всё ещё стандартный — это стоит показать явно */
+  passwordIsDefault: boolean;
 }
 
 const LEVELS: Array<{ value: 0 | 1 | 2; label: string }> = [
@@ -32,7 +37,15 @@ const DEVICES: Array<{ value: DeviceMode; label: string }> = [
   { value: 'table', label: 'Интерактивный стол' },
 ];
 
-const SettingsScreen: React.FC<Props> = ({ library, settings, error, onBack, onChange }) => {
+const SettingsScreen: React.FC<Props> = ({
+  library,
+  settings,
+  error,
+  onBack,
+  onChange,
+  onChangePassword,
+  passwordIsDefault,
+}) => {
   const themeLevel = (themeId: string): number => {
     const theme = library?.themes.find((t) => t.id === themeId);
     if (!theme || theme.wordIds.length === 0) return 0;
@@ -84,6 +97,61 @@ const SettingsScreen: React.FC<Props> = ({ library, settings, error, onBack, onC
       </div>
 
       <span style={{ fontSize: 26 }}>Уровень сложности по темам</span>
+      {/* Цвет экрана (ТЗ раздел 6): выбор из набора, а не пипетка —
+          подбирать оттенок пальцем на панели неудобно, а произвольный цвет
+          легко сделать таким, что светлый текст на нём перестанет читаться */}
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+        <span style={{ fontSize: 26 }}>Цвет экрана</span>
+        <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
+          {SCREEN_THEMES.map((theme) => {
+            const chosen = settings.screenTheme === theme;
+            return (
+              <button
+                key={theme}
+                type="button"
+                data-testid={`screen-theme-${theme}`}
+                data-chosen={chosen ? 'true' : 'false'}
+                onClick={() => onChange({ ...settings, screenTheme: theme as ScreenTheme })}
+                style={{
+                  minWidth: 140,
+                  minHeight: TOUCH_TARGET_PX,
+                  borderRadius: 12,
+                  border: chosen ? `3px solid ${palette.accent}` : `2px solid ${palette.panelLight}`,
+                  background: SCREEN_THEME_COLORS[theme]?.bg ?? palette.bg,
+                  color: palette.text,
+                  fontSize: 20,
+                  cursor: 'pointer',
+                  fontFamily: 'inherit',
+                }}
+              >
+                {SCREEN_THEME_COLORS[theme]?.label ?? theme}
+                {chosen && ' ✓'}
+              </button>
+            );
+          })}
+        </div>
+      </div>
+
+      {/* Пароль педагога */}
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+        <span style={{ fontSize: 26 }}>Пароль педагога</span>
+        <div style={{ display: 'flex', gap: 12, alignItems: 'center', flexWrap: 'wrap' }}>
+          <BigButton
+            onClick={() => onChangePassword?.()}
+            tone="secondary"
+            disabled={!onChangePassword}
+            testId="change-password"
+          >
+            Сменить пароль
+          </BigButton>
+          {passwordIsDefault && (
+            <span style={{ fontSize: 19, color: palette.textMuted }}>
+              Сейчас стандартный — <b>12345</b>. Его знают все, кто читал инструкцию.
+            </span>
+          )}
+        </div>
+      </div>
+
       <ScrollArea style={{ flex: 1 }}>
         <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
           {(library?.themes ?? []).map((theme) => {

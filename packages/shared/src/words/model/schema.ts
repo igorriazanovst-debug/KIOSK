@@ -185,6 +185,17 @@ export type ScoreBook = z.infer<typeof ScoreBookSchema>;
 export const DeviceModeSchema = z.enum(['tablet', 'board', 'table']);
 export type DeviceMode = z.infer<typeof DeviceModeSchema>;
 
+/**
+ * Цвет экрана (ТЗ раздел 6 — интерфейс настраивается визуально, без правки
+ * файлов). Выбор из набора, а не произвольный цвет: подбирать оттенок
+ * пипеткой на сенсорной панели без мыши неудобно, а произвольный цвет легко
+ * сделать таким, что текст на нём перестанет читаться. Каждая тема подобрана
+ * так, чтобы контраст со светлым текстом оставался достаточным.
+ */
+export const SCREEN_THEMES = ['forest', 'night', 'sand', 'sky', 'plum', 'graphite'] as const;
+export const ScreenThemeSchema = z.enum(SCREEN_THEMES);
+export type ScreenTheme = z.infer<typeof ScreenThemeSchema>;
+
 export const WORDS_SETTINGS_SCHEMA_VERSION = 1 as const;
 
 export const WordsSettingsSchema = z.object({
@@ -199,6 +210,14 @@ export const WordsSettingsSchema = z.object({
   device: DeviceModeSchema,
   /** Переназначенные педагогом уровни слов (ТЗ строка 50) */
   levelOverrides: z.record(WordIdSchema, LevelSchema),
+  /**
+   * Цвет экрана. Поле добавлено позже остальных, поэтому со ЗНАЧЕНИЕМ ПО
+   * УМОЛЧАНИЮ: в настройках, сохранённых прошлой версией приложения, его нет,
+   * и без default разбор таких настроек падал бы на границе — обновление
+   * приложения выглядело бы как «настройки повреждены». Версия схемы по той
+   * же причине не менялась: формат расширен совместимо.
+   */
+  screenTheme: ScreenThemeSchema.default('forest'),
 });
 export type WordsSettings = z.infer<typeof WordsSettingsSchema>;
 
@@ -332,4 +351,5 @@ export const DEFAULT_WORDS_SETTINGS: WordsSettings = {
   volume: 70,
   device: 'board',
   levelOverrides: {},
+  screenTheme: 'forest',
 };

@@ -31,6 +31,7 @@ import {
   applyCreateSet,
   applyUpdateSet,
   applyDeleteSet,
+  DEFAULT_TEACHER_PASSWORD,
 } from '@kiosk/shared';
 import type { WordsPlatform } from './WordsPlatform.ts';
 import type {
@@ -345,6 +346,20 @@ export function createWebPlatform(options: WebPlatformOptions = {}): WordsPlatfo
 
     async importSet(): Promise<IpcResult<ImportedSet>> {
       return { ok: false, error: 'Импорт комплекта доступен только в приложении на устройстве' };
+    },
+
+    // Отладочный браузерный режим: пароль проверяется по значению по
+    // умолчанию, своего пароля здесь негде хранить
+    async checkTeacherPassword(password: string): Promise<IpcResult<{ ok: boolean }>> {
+      return ok({ ok: password === DEFAULT_TEACHER_PASSWORD });
+    },
+
+    async setTeacherPassword(): Promise<IpcResult<{ isDefault: boolean }>> {
+      return { ok: false, error: 'Смена пароля доступна только в приложении на устройстве' };
+    },
+
+    async teacherPasswordState(): Promise<IpcResult<{ isDefault: boolean }>> {
+      return ok({ isDefault: true });
     },
 
     async listWordImages(): Promise<IpcResult<WordImageOverrides>> {

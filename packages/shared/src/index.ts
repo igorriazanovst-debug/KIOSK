@@ -57,3 +57,4 @@ export * from './words/game/achievements';
 export * from './words/game/stats';
 export * from './words/store/rules';
 export * from './words/store/contentRules';
+export * from './words/store/teacherGate';

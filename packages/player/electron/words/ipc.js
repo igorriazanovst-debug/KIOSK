@@ -16,6 +16,7 @@ const { loadLibrarySync } = require('./contentLibrary');
 const wordStore = require('./wordStore');
 const mediaFiles = require('./mediaFiles');
 const setArchive = require('./setArchive');
+const teacherPassword = require('./teacherPassword');
 
 const WORDS_APP_DIR_NAME = store.WORDS_APP_DIR_NAME;
 
@@ -184,6 +185,29 @@ function registerWordsIpc({ ipcMain, app, dialog, sharedDirOverride }) {
       const stored = mediaFiles.storeMediaBuffer(baseDir, buffer, 'audio');
       return { fileName: stored.fileName, type: stored.type, bytes: stored.bytes };
     })
+  );
+
+  // ── Пароль педагога (ТЗ раздел 3) ────────────────────────────────────
+  //
+  // Наружу уходит только «подошёл или нет». Ни пароль, ни его хеш рендерер не
+  // получает: иначе проверка снималась бы инспектором страницы.
+
+  ipcMain.handle(
+    'words:check-teacher-password',
+    guarded(async (_e, password) => ({ ok: teacherPassword.checkPassword(baseDir, password) }))
+  );
+
+  ipcMain.handle(
+    'words:set-teacher-password',
+    guarded(async (_e, password) => {
+      teacherPassword.setPassword(baseDir, password);
+      return { isDefault: teacherPassword.isDefaultPassword(baseDir) };
+    })
+  );
+
+  ipcMain.handle(
+    'words:teacher-password-state',
+    guarded(async () => ({ isDefault: teacherPassword.isDefaultPassword(baseDir) }))
   );
 
   // ── Свои картинки для поставочных слов (ТЗ строка 42) ────────────────

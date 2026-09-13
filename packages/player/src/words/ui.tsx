@@ -10,6 +10,21 @@ import React from 'react';
 /** Минимальная сторона нажимаемого элемента. Меньше — палец промахивается */
 export const TOUCH_TARGET_PX = 72;
 
+/**
+ * Цвета экрана на выбор педагога (ТЗ раздел 6 — настройка визуальными
+ * средствами). Каждый оттенок тёмный: текст и карточки в приложении светлые,
+ * и на светлом фоне они перестали бы читаться. Поэтому выбор из набора, а не
+ * произвольный цвет — см. ScreenThemeSchema в @kiosk/shared.
+ */
+export const SCREEN_THEME_COLORS: Record<string, { bg: string; label: string }> = {
+  forest: { bg: '#16302a', label: 'Лес' },
+  night: { bg: '#151a2e', label: 'Ночь' },
+  sand: { bg: '#2e2a1c', label: 'Песок' },
+  sky: { bg: '#152a33', label: 'Небо' },
+  plum: { bg: '#2a1a2e', label: 'Слива' },
+  graphite: { bg: '#1e1f22', label: 'Графит' },
+};
+
 export const palette = {
   bg: '#16302a',
   panel: '#1d3d35',

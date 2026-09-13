@@ -12,14 +12,16 @@
 // Три уровня различаются не «сложностью вопросов вообще», а механикой:
 //   Ⅰ — силуэт показан: сопоставление по форме, самый простой вход;
 //   Ⅱ — силуэта нет, опираться можно только на сам вопрос;
-//   Ⅲ — карточку надо ПЕРЕТАЩИТЬ в рамку, а не нажать (у эталона так же —
-//       это отдельная механика, а не настройка).
+//   Ⅲ — перетаскивание УБРАНО по решению пользователя от 13.09.2026; сейчас
+//       уровень отвечается нажатием, как и Ⅱ, и отличается от него только
+//       сценарием озвучки. Это делает уровни Ⅱ и Ⅲ практически одинаковыми
+//       для ребёнка — см. заметку в плане реализации.
 //
 // Поле квадратное и разворачивается целиком под текущего игрока: за столом
 // он сидит со своей стороны, и интерфейс должен читаться с неё. Квадрат — не
 // прихоть: прямоугольник при повороте на 90° вылезает за пределы сцены.
 
-import React, { useRef, useState } from 'react';
+import React, { useRef } from 'react';
 import { palette, BigButton, Stars } from '../ui';
 import OwlHelper from '../components/OwlHelper';
 import { SEAT_ROTATIONS, seatsFor } from '../types';
@@ -68,7 +70,6 @@ const PlayScreen: React.FC<Props> = ({
   onExit,
 }) => {
   const frameRef = useRef<HTMLDivElement | null>(null);
-  const [dragging, setDragging] = useState<{ wordId: string; x: number; y: number } | null>(null);
 
   const step = currentStep(session);
   const playerId = currentPlayerId(session);
@@ -96,16 +97,6 @@ const PlayScreen: React.FC<Props> = ({
   if (!step) return null;
 
   const solved = lastOutcome === 'correct';
-  const needsDrag = step.level === 2;
-
-  const finishDrag = (clientX: number, clientY: number, wordId: string) => {
-    setDragging(null);
-    const rect = frameRef.current?.getBoundingClientRect();
-    if (!rect) return;
-    const inside =
-      clientX >= rect.left && clientX <= rect.right && clientY >= rect.top && clientY <= rect.bottom;
-    if (inside) onAnswer(wordId);
-  };
 
   return (
     <div
@@ -118,10 +109,6 @@ const PlayScreen: React.FC<Props> = ({
         position: 'relative',
         color: palette.text,
       }}
-      onPointerMove={(e) =>
-        dragging && setDragging({ ...dragging, x: e.clientX, y: e.clientY })
-      }
-      onPointerUp={(e) => dragging && finishDrag(e.clientX, e.clientY, dragging.wordId)}
     >
       {/* Табло и выход вне поворачиваемого поля: они для педагога, а не для
           ребёнка, и вертеться вместе с полем им незачем.
@@ -175,7 +162,7 @@ const PlayScreen: React.FC<Props> = ({
             width: 260,
             height: 260,
             borderRadius: 20,
-            border: `4px dashed ${needsDrag ? palette.accent : palette.panelLight}`,
+            border: `4px dashed ${palette.panelLight}`,
             background: palette.panel,
             display: 'flex',
             alignItems: 'center',
@@ -208,7 +195,7 @@ const PlayScreen: React.FC<Props> = ({
             само. Теперь наоборот: текст — основной способ задать вопрос, а
             звук доступен по кнопке «Озвучка вопроса» и сам не включается. */}
         <div data-testid="spoken-word" style={{ fontSize: 40, textAlign: 'center' }}>
-          {needsDrag ? 'Перетащи сюда: ' : 'Найди: '}
+          {'Найди: '}
           <b>{wordName(step.targetWordId)}</b>
           {!hasAudio && (
             <span style={{ fontSize: 18, color: palette.textMuted }}> · озвучка не записана</span>
@@ -216,7 +203,7 @@ const PlayScreen: React.FC<Props> = ({
         </div>
 
         <div style={{ fontSize: 22, color: palette.textMuted }}>
-          {needsDrag ? 'Перетащите нужную карточку в рамку' : 'Выберите нужную карточку'}
+          Выберите нужную карточку
         </div>
 
         <div style={{ display: 'flex', gap: 18, flexWrap: 'wrap', justifyContent: 'center' }}>
@@ -225,15 +212,7 @@ const PlayScreen: React.FC<Props> = ({
               key={wordId}
               data-testid={`option-${wordId}`}
               data-word={wordName(wordId)}
-              onPointerDown={(e) => {
-                if (!needsDrag) return;
-                e.preventDefault();
-                setDragging({ wordId, x: e.clientX, y: e.clientY });
-              }}
-              onClick={() => {
-                if (needsDrag) return; // на третьем уровне нажатие не считается ответом
-                onAnswer(wordId);
-              }}
+              onClick={() => onAnswer(wordId)}
               style={{
                 width: 150,
                 height: 150,
@@ -242,8 +221,6 @@ const PlayScreen: React.FC<Props> = ({
                 background: palette.panel,
                 cursor: 'pointer',
                 padding: 8,
-                opacity: dragging?.wordId === wordId ? 0.35 : 1,
-                touchAction: 'none',
               }}
             >
               {imageUrlFor(wordId) ? (
@@ -290,24 +267,6 @@ const PlayScreen: React.FC<Props> = ({
         />
       </div>
 
-      {/* Карточка «в руке» при перетаскивании — вне поворота, чтобы
-          следовать точно за пальцем, а не за повёрнутой системой координат */}
-      {dragging && (
-        <img
-          src={imageUrlFor(dragging.wordId) ?? ''}
-          alt=""
-          data-testid="drag-ghost"
-          style={{
-            position: 'fixed',
-            left: dragging.x - 60,
-            top: dragging.y - 60,
-            width: 120,
-            height: 120,
-            pointerEvents: 'none',
-            opacity: 0.9,
-          }}
-        />
-      )}
     </div>
   );
 };
