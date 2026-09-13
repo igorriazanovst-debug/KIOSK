@@ -1,0 +1,262 @@
+{
+  "note": "Сверочные векторы виджета «АзбукоСлов» (Тип 3). Общий контракт между реализацией на Electron и будущей нативной Android-реализацией. Снято с текущей реализации; расхождение обязано быть падением теста.",
+  "generatedFrom": "packages/shared/src/alphabet",
+  "resources": {
+    "wordImage": [
+      {
+        "wordId": "avtobus",
+        "path": "img/avtobus.svg"
+      },
+      {
+        "wordId": "apel_sin",
+        "path": "img/apel_sin.svg"
+      },
+      {
+        "wordId": "jod",
+        "path": "img/jod.svg"
+      },
+      {
+        "wordId": "mysh_",
+        "path": "img/mysh_.svg"
+      }
+    ],
+    "wordAudio": [
+      {
+        "wordId": "avtobus",
+        "path": "media/avtobus.mp3"
+      },
+      {
+        "wordId": "jod",
+        "path": "media/jod.mp3"
+      }
+    ],
+    "wordWithoutLastSyllable": [
+      {
+        "wordId": "avtobus",
+        "path": "media/avtobus_bgn.mp3"
+      },
+      {
+        "wordId": "apel_sin",
+        "path": "media/apel_sin_bgn.mp3"
+      }
+    ],
+    "letterAudio": [
+      {
+        "letterNumber": 1,
+        "path": "media/1.mp3"
+      },
+      {
+        "letterNumber": 7,
+        "path": "media/7.mp3"
+      },
+      {
+        "letterNumber": 21,
+        "path": "media/21.mp3"
+      },
+      {
+        "letterNumber": 33,
+        "path": "media/33.mp3"
+      }
+    ],
+    "syllableAudio": [
+      {
+        "syllableId": "av",
+        "path": "media/av.mp3"
+      },
+      {
+        "syllableId": "to",
+        "path": "media/to.mp3"
+      },
+      {
+        "syllableId": "bus",
+        "path": "media/bus.mp3"
+      },
+      {
+        "syllableId": "pod_",
+        "path": "media/pod_.mp3"
+      }
+    ]
+  },
+  "stageEligibility": {
+    "letterShow": [
+      "avtobus",
+      "jod"
+    ],
+    "wordCompleting": [
+      "avtobus"
+    ],
+    "wordMake": [
+      "avtobus"
+    ]
+  },
+  "statistics": {
+    "afterFirst": {
+      "u1": {
+        "1": {
+          "lastSession": [
+            1,
+            2
+          ],
+          "total": [
+            1,
+            2
+          ]
+        },
+        "2": {
+          "lastSession": [
+            1,
+            1
+          ],
+          "total": [
+            1,
+            1
+          ]
+        }
+      }
+    },
+    "afterSecond": {
+      "u1": {
+        "1": {
+          "lastSession": [
+            1,
+            1
+          ],
+          "total": [
+            2,
+            3
+          ]
+        },
+        "2": {
+          "lastSession": [
+            0,
+            0
+          ],
+          "total": [
+            1,
+            1
+          ]
+        }
+      }
+    },
+    "chartRows": [
+      {
+        "letterNumber": 1,
+        "lastSession": 1,
+        "total": 0.6666666666666666,
+        "lastSessionAnswers": 1,
+        "totalAnswers": 3
+      },
+      {
+        "letterNumber": 2,
+        "lastSession": null,
+        "total": 1,
+        "lastSessionAnswers": 0,
+        "totalAnswers": 1
+      },
+      {
+        "letterNumber": 7,
+        "lastSession": null,
+        "total": null,
+        "lastSessionAnswers": 0,
+        "totalAnswers": 0
+      }
+    ]
+  },
+  "contentRules": [
+    {
+      "what": "регистр приводится",
+      "ok": true,
+      "result": "Кошка"
+    },
+    {
+      "what": "написание не совпало со слогами",
+      "ok": false,
+      "error": "Слоги складываются в «кошка», а слово написано «Кошечка»"
+    },
+    {
+      "what": "односложное не получает записи без последнего слога",
+      "ok": true,
+      "result": false
+    },
+    {
+      "what": "слог, использованный словом, не удаляется",
+      "ok": false,
+      "error": "Слог «ко» используется в словах: «Кошка». Сначала измените эти слова"
+    },
+    {
+      "what": "удалённое слово уходит из комплектов",
+      "ok": true,
+      "result": [
+        {
+          "id": "u0000000000000001",
+          "title": "Дом",
+          "wordIds": []
+        }
+      ]
+    },
+    {
+      "what": "повтор слова в комплекте схлопывается",
+      "ok": true,
+      "result": [
+        "u0000000000000003"
+      ]
+    },
+    {
+      "what": "конфликт имени при импорте",
+      "ok": true,
+      "result": {
+        "title": "ПДД (2)",
+        "renamed": true
+      }
+    }
+  ],
+  "readiness": {
+    "nothing": {
+      "letterShow": false,
+      "wordCompleting": false,
+      "wordMake": false,
+      "missing": [
+        "иллюстрация",
+        "запись слова целиком",
+        "озвучка слогов (2)"
+      ]
+    },
+    "imageOnly": {
+      "letterShow": true,
+      "wordCompleting": true,
+      "wordMake": false,
+      "missing": [
+        "запись слова целиком",
+        "озвучка слогов (2)"
+      ]
+    },
+    "complete": {
+      "letterShow": true,
+      "wordCompleting": true,
+      "wordMake": true,
+      "missing": []
+    }
+  },
+  "libraryValidation": [
+    {
+      "what": "чужая версия схемы",
+      "rejected": true
+    },
+    {
+      "what": "номер буквы вне 1..33",
+      "rejected": true
+    },
+    {
+      "what": "повтор идентификатора слова",
+      "rejected": true
+    },
+    {
+      "what": "слово без слогов",
+      "rejected": true
+    },
+    {
+      "what": "свой идентификатор в общем списке слов — ПРИНИМАЕТСЯ",
+      "rejected": false
+    }
+  ]
+}
