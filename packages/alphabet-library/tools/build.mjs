@@ -143,12 +143,25 @@ const library = {
 // media/ не трогается по той же причине: генерация озвучки занимает минуты.
 fs.mkdirSync(imgDir, { recursive: true });
 
+/**
+ * Заглушка узнаётся ПО СОДЕРЖИМОМУ, а не по наличию файла.
+ *
+ * Первая версия считала настоящей любую существующую картинку — и после
+ * дополнения словаря отчиталась «все 187 настоящих», когда 92 из них были
+ * свежепоставленными заглушками. Отчёт о готовности контента, который врёт
+ * в свою пользу, хуже отсутствующего.
+ */
+const PLACEHOLDER_MARK = 'заглушка';
+const isPlaceholder = (file) =>
+  fs.existsSync(file) && fs.readFileSync(file, 'utf8').includes(PLACEHOLDER_MARK);
+
 let placeholders = 0;
 let real = 0;
 for (const word of catalogue.words) {
   const file = path.join(imgDir, `${word.id}.svg`);
   if (fs.existsSync(file)) {
-    real += 1;
+    if (isPlaceholder(file)) placeholders += 1;
+    else real += 1;
     continue;
   }
   fs.writeFileSync(file, placeholderSvg(word), 'utf8');
