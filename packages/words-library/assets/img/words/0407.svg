@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <!-- заглушка: настоящей иллюстрации ещё нет -->
+  <rect width="512" height="512" rx="48" fill="#a06a3c" opacity="0.18"/>
+  <circle cx="299" cy="284" r="105" fill="#a06a3c" opacity="0.5"/>
+  <rect x="234" y="359" width="210" height="210" rx="18" fill="#a06a3c" opacity="0.35"/>
+  <path d="M 219 474 L 359 474 L 289 354 Z" fill="#a06a3c" opacity="0.28"/>
+</svg>

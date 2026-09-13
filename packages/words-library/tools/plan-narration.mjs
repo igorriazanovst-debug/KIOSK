@@ -79,7 +79,12 @@ if (phrasesPerVoice > PHRASE_TEMPLATES.length) {
   process.exit(1);
 }
 
-const themeIntroText = (title) => `Тема: ${title}. Послушай и найди нужную картинку.`;
+// Вводная берётся ИЗ ТЕМЫ, а шаблон остаётся только для пакетов, собранных до
+// появления поля intro. Одинаковая для всех тем фраза закрывала ТЗ строку 60
+// лишь по форме: вводной частью ТЕМЫ общий текст не является.
+const themeIntroFallback = (title) => `Тема: ${title}. Послушай и найди нужную картинку.`;
+const themeIntroText = (theme) =>
+  theme.intro ? `${theme.title}. ${theme.intro}` : themeIntroFallback(theme.title);
 const themeFinalText = (title) => `Молодец! Тема «${title}» пройдена.`;
 
 // ─── план ───────────────────────────────────────────────────────────────
@@ -92,7 +97,7 @@ const plan = [];
 
 for (const theme of library.themes) {
   for (const voice of voices) {
-    plan.push({ path: themeIntroAudioPath(theme.id, voice), text: themeIntroText(theme.title) });
+    plan.push({ path: themeIntroAudioPath(theme.id, voice), text: themeIntroText(theme) });
   }
   // Финальная сцена требуется проверкой комплектности, как только у схемы
   // появляется озвучка в любом виде — см. schemeHasAudio в resources.ts

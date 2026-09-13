@@ -1,0 +1,3202 @@
+[
+  {
+    "path": "media/themes/digits/irina.mp3",
+    "text": "Цифры и фигуры. Цифрами мы считаем всё вокруг, а по форме узнаём предметы: мяч круглый, окно квадратное."
+  },
+  {
+    "path": "media/scenes-final/digits.mp3",
+    "text": "Молодец! Тема «Цифры и фигуры» пройдена."
+  },
+  {
+    "path": "media/themes/my_room/irina.mp3",
+    "text": "Моя комната. В комнате у каждой вещи своё место. Давай вспомним, как эти вещи называются."
+  },
+  {
+    "path": "media/scenes-final/my_room.mp3",
+    "text": "Молодец! Тема «Моя комната» пройдена."
+  },
+  {
+    "path": "media/themes/transport/irina.mp3",
+    "text": "Транспорт. Транспорт возит людей и грузы. Что-то едет по дороге, что-то плывёт, а что-то летит."
+  },
+  {
+    "path": "media/scenes-final/transport.mp3",
+    "text": "Молодец! Тема «Транспорт» пройдена."
+  },
+  {
+    "path": "media/themes/food/irina.mp3",
+    "text": "Еда. Еда даёт нам силы. Посмотрим, что бывает на столе к завтраку и к обеду."
+  },
+  {
+    "path": "media/scenes-final/food.mp3",
+    "text": "Молодец! Тема «Еда» пройдена."
+  },
+  {
+    "path": "media/themes/animals/irina.mp3",
+    "text": "Домашние животные. Эти животные живут рядом с человеком. За ними ухаживают, а они помогают людям."
+  },
+  {
+    "path": "media/scenes-final/animals.mp3",
+    "text": "Молодец! Тема «Домашние животные» пройдена."
+  },
+  {
+    "path": "media/themes/wild/irina.mp3",
+    "text": "Дикие животные. Дикие животные живут в лесу и в поле. Они сами добывают еду и строят себе жильё."
+  },
+  {
+    "path": "media/scenes-final/wild.mp3",
+    "text": "Молодец! Тема «Дикие животные» пройдена."
+  },
+  {
+    "path": "media/themes/birds/irina.mp3",
+    "text": "Птицы. У птиц есть крылья и клюв. Одни птицы улетают на юг, другие зимуют с нами."
+  },
+  {
+    "path": "media/scenes-final/birds.mp3",
+    "text": "Молодец! Тема «Птицы» пройдена."
+  },
+  {
+    "path": "media/themes/clothes/irina.mp3",
+    "text": "Одежда. Одежду выбирают по погоде. В мороз надевают одно, а в жару совсем другое."
+  },
+  {
+    "path": "media/scenes-final/clothes.mp3",
+    "text": "Молодец! Тема «Одежда» пройдена."
+  },
+  {
+    "path": "media/themes/dishes/irina.mp3",
+    "text": "Посуда. Посуда нужна, чтобы готовить и накрывать на стол. У каждой вещи своё дело."
+  },
+  {
+    "path": "media/scenes-final/dishes.mp3",
+    "text": "Молодец! Тема «Посуда» пройдена."
+  },
+  {
+    "path": "media/themes/toys/irina.mp3",
+    "text": "Игрушки. С игрушками играют по-разному: одни катают, другие строят, третьи запускают."
+  },
+  {
+    "path": "media/scenes-final/toys.mp3",
+    "text": "Молодец! Тема «Игрушки» пройдена."
+  },
+  {
+    "path": "media/themes/fruits/irina.mp3",
+    "text": "Фрукты и ягоды. Фрукты растут на деревьях, а ягоды — на кустах и на грядке. И те и другие сладкие."
+  },
+  {
+    "path": "media/scenes-final/fruits.mp3",
+    "text": "Молодец! Тема «Фрукты и ягоды» пройдена."
+  },
+  {
+    "path": "media/themes/vegetables/irina.mp3",
+    "text": "Овощи. Овощи растут на грядке. Что-то прячется в земле, а что-то тянется к солнцу."
+  },
+  {
+    "path": "media/scenes-final/vegetables.mp3",
+    "text": "Молодец! Тема «Овощи» пройдена."
+  },
+  {
+    "path": "media/themes/school/irina.mp3",
+    "text": "Школа. В школе учатся читать, писать и считать. Для этого нужны свои вещи."
+  },
+  {
+    "path": "media/scenes-final/school.mp3",
+    "text": "Молодец! Тема «Школа» пройдена."
+  },
+  {
+    "path": "media/themes/body/irina.mp3",
+    "text": "Части тела. Своё тело знать полезно: так легче рассказать, где болит и что не получается."
+  },
+  {
+    "path": "media/scenes-final/body.mp3",
+    "text": "Молодец! Тема «Части тела» пройдена."
+  },
+  {
+    "path": "media/themes/nature/irina.mp3",
+    "text": "Природа. Природа вокруг нас всё время меняется: то дождь, то снег, то радуга после тучи."
+  },
+  {
+    "path": "media/scenes-final/nature.mp3",
+    "text": "Молодец! Тема «Природа» пройдена."
+  },
+  {
+    "path": "media/themes/jobs/irina.mp3",
+    "text": "Профессии. У взрослых есть работа. По одежде и вещам часто видно, кем человек работает."
+  },
+  {
+    "path": "media/scenes-final/jobs.mp3",
+    "text": "Молодец! Тема «Профессии» пройдена."
+  },
+  {
+    "path": "media/words/0000/neutral.mp3",
+    "text": "Один"
+  },
+  {
+    "path": "media/words/0000/irina/0.mp3",
+    "text": "Где один?"
+  },
+  {
+    "path": "media/words/0000/irina/1.mp3",
+    "text": "Покажи, где один."
+  },
+  {
+    "path": "media/words/0001/neutral.mp3",
+    "text": "Два"
+  },
+  {
+    "path": "media/words/0001/irina/0.mp3",
+    "text": "Где два?"
+  },
+  {
+    "path": "media/words/0001/irina/1.mp3",
+    "text": "Покажи, где два."
+  },
+  {
+    "path": "media/words/0002/neutral.mp3",
+    "text": "Три"
+  },
+  {
+    "path": "media/words/0002/irina/0.mp3",
+    "text": "Где три?"
+  },
+  {
+    "path": "media/words/0002/irina/1.mp3",
+    "text": "Покажи, где три."
+  },
+  {
+    "path": "media/words/0003/neutral.mp3",
+    "text": "Четыре"
+  },
+  {
+    "path": "media/words/0003/irina/0.mp3",
+    "text": "Где четыре?"
+  },
+  {
+    "path": "media/words/0003/irina/1.mp3",
+    "text": "Покажи, где четыре."
+  },
+  {
+    "path": "media/words/0004/neutral.mp3",
+    "text": "Пять"
+  },
+  {
+    "path": "media/words/0004/irina/0.mp3",
+    "text": "Где пять?"
+  },
+  {
+    "path": "media/words/0004/irina/1.mp3",
+    "text": "Покажи, где пять."
+  },
+  {
+    "path": "media/words/0005/neutral.mp3",
+    "text": "Шесть"
+  },
+  {
+    "path": "media/words/0005/irina/0.mp3",
+    "text": "Где шесть?"
+  },
+  {
+    "path": "media/words/0005/irina/1.mp3",
+    "text": "Покажи, где шесть."
+  },
+  {
+    "path": "media/words/0006/neutral.mp3",
+    "text": "Семь"
+  },
+  {
+    "path": "media/words/0006/irina/0.mp3",
+    "text": "Где семь?"
+  },
+  {
+    "path": "media/words/0006/irina/1.mp3",
+    "text": "Покажи, где семь."
+  },
+  {
+    "path": "media/words/0007/neutral.mp3",
+    "text": "Восемь"
+  },
+  {
+    "path": "media/words/0007/irina/0.mp3",
+    "text": "Где восемь?"
+  },
+  {
+    "path": "media/words/0007/irina/1.mp3",
+    "text": "Покажи, где восемь."
+  },
+  {
+    "path": "media/words/0008/neutral.mp3",
+    "text": "Девять"
+  },
+  {
+    "path": "media/words/0008/irina/0.mp3",
+    "text": "Где девять?"
+  },
+  {
+    "path": "media/words/0008/irina/1.mp3",
+    "text": "Покажи, где девять."
+  },
+  {
+    "path": "media/words/0009/neutral.mp3",
+    "text": "Десять"
+  },
+  {
+    "path": "media/words/0009/irina/0.mp3",
+    "text": "Где десять?"
+  },
+  {
+    "path": "media/words/0009/irina/1.mp3",
+    "text": "Покажи, где десять."
+  },
+  {
+    "path": "media/words/0010/neutral.mp3",
+    "text": "Ноль"
+  },
+  {
+    "path": "media/words/0010/irina/0.mp3",
+    "text": "Где ноль?"
+  },
+  {
+    "path": "media/words/0010/irina/1.mp3",
+    "text": "Покажи, где ноль."
+  },
+  {
+    "path": "media/words/0011/neutral.mp3",
+    "text": "Круг"
+  },
+  {
+    "path": "media/words/0011/irina/0.mp3",
+    "text": "Где круг?"
+  },
+  {
+    "path": "media/words/0011/irina/1.mp3",
+    "text": "Покажи, где круг."
+  },
+  {
+    "path": "media/words/0012/neutral.mp3",
+    "text": "Квадрат"
+  },
+  {
+    "path": "media/words/0012/irina/0.mp3",
+    "text": "Где квадрат?"
+  },
+  {
+    "path": "media/words/0012/irina/1.mp3",
+    "text": "Покажи, где квадрат."
+  },
+  {
+    "path": "media/words/0013/neutral.mp3",
+    "text": "Треугольник"
+  },
+  {
+    "path": "media/words/0013/irina/0.mp3",
+    "text": "Где треугольник?"
+  },
+  {
+    "path": "media/words/0013/irina/1.mp3",
+    "text": "Покажи, где треугольник."
+  },
+  {
+    "path": "media/words/0014/neutral.mp3",
+    "text": "Сердечко"
+  },
+  {
+    "path": "media/words/0014/irina/0.mp3",
+    "text": "Где сердечко?"
+  },
+  {
+    "path": "media/words/0014/irina/1.mp3",
+    "text": "Покажи, где сердечко."
+  },
+  {
+    "path": "media/words/0015/neutral.mp3",
+    "text": "Ромб"
+  },
+  {
+    "path": "media/words/0015/irina/0.mp3",
+    "text": "Где ромб?"
+  },
+  {
+    "path": "media/words/0015/irina/1.mp3",
+    "text": "Покажи, где ромб."
+  },
+  {
+    "path": "media/words/0100/neutral.mp3",
+    "text": "Кровать"
+  },
+  {
+    "path": "media/words/0100/irina/0.mp3",
+    "text": "Где кровать?"
+  },
+  {
+    "path": "media/words/0100/irina/1.mp3",
+    "text": "Покажи, где кровать."
+  },
+  {
+    "path": "media/words/0101/neutral.mp3",
+    "text": "Стол"
+  },
+  {
+    "path": "media/words/0101/irina/0.mp3",
+    "text": "Где стол?"
+  },
+  {
+    "path": "media/words/0101/irina/1.mp3",
+    "text": "Покажи, где стол."
+  },
+  {
+    "path": "media/words/0102/neutral.mp3",
+    "text": "Стул"
+  },
+  {
+    "path": "media/words/0102/irina/0.mp3",
+    "text": "Где стул?"
+  },
+  {
+    "path": "media/words/0102/irina/1.mp3",
+    "text": "Покажи, где стул."
+  },
+  {
+    "path": "media/words/0103/neutral.mp3",
+    "text": "Лампа"
+  },
+  {
+    "path": "media/words/0103/irina/0.mp3",
+    "text": "Где лампа?"
+  },
+  {
+    "path": "media/words/0103/irina/1.mp3",
+    "text": "Покажи, где лампа."
+  },
+  {
+    "path": "media/words/0104/neutral.mp3",
+    "text": "Окно"
+  },
+  {
+    "path": "media/words/0104/irina/0.mp3",
+    "text": "Где окно?"
+  },
+  {
+    "path": "media/words/0104/irina/1.mp3",
+    "text": "Покажи, где окно."
+  },
+  {
+    "path": "media/words/0105/neutral.mp3",
+    "text": "Дверь"
+  },
+  {
+    "path": "media/words/0105/irina/0.mp3",
+    "text": "Где дверь?"
+  },
+  {
+    "path": "media/words/0105/irina/1.mp3",
+    "text": "Покажи, где дверь."
+  },
+  {
+    "path": "media/words/0106/neutral.mp3",
+    "text": "Шкаф"
+  },
+  {
+    "path": "media/words/0106/irina/0.mp3",
+    "text": "Где шкаф?"
+  },
+  {
+    "path": "media/words/0106/irina/1.mp3",
+    "text": "Покажи, где шкаф."
+  },
+  {
+    "path": "media/words/0107/neutral.mp3",
+    "text": "Ковёр"
+  },
+  {
+    "path": "media/words/0107/irina/0.mp3",
+    "text": "Где ковёр?"
+  },
+  {
+    "path": "media/words/0107/irina/1.mp3",
+    "text": "Покажи, где ковёр."
+  },
+  {
+    "path": "media/words/0108/neutral.mp3",
+    "text": "Полка"
+  },
+  {
+    "path": "media/words/0108/irina/0.mp3",
+    "text": "Где полка?"
+  },
+  {
+    "path": "media/words/0108/irina/1.mp3",
+    "text": "Покажи, где полка."
+  },
+  {
+    "path": "media/words/0109/neutral.mp3",
+    "text": "Часы"
+  },
+  {
+    "path": "media/words/0109/irina/0.mp3",
+    "text": "Где часы?"
+  },
+  {
+    "path": "media/words/0109/irina/1.mp3",
+    "text": "Покажи, где часы."
+  },
+  {
+    "path": "media/words/0110/neutral.mp3",
+    "text": "Подушка"
+  },
+  {
+    "path": "media/words/0110/irina/0.mp3",
+    "text": "Где подушка?"
+  },
+  {
+    "path": "media/words/0110/irina/1.mp3",
+    "text": "Покажи, где подушка."
+  },
+  {
+    "path": "media/words/0111/neutral.mp3",
+    "text": "Одеяло"
+  },
+  {
+    "path": "media/words/0111/irina/0.mp3",
+    "text": "Где одеяло?"
+  },
+  {
+    "path": "media/words/0111/irina/1.mp3",
+    "text": "Покажи, где одеяло."
+  },
+  {
+    "path": "media/words/0112/neutral.mp3",
+    "text": "Зеркало"
+  },
+  {
+    "path": "media/words/0112/irina/0.mp3",
+    "text": "Где зеркало?"
+  },
+  {
+    "path": "media/words/0112/irina/1.mp3",
+    "text": "Покажи, где зеркало."
+  },
+  {
+    "path": "media/words/0113/neutral.mp3",
+    "text": "Коробка"
+  },
+  {
+    "path": "media/words/0113/irina/0.mp3",
+    "text": "Где коробка?"
+  },
+  {
+    "path": "media/words/0113/irina/1.mp3",
+    "text": "Покажи, где коробка."
+  },
+  {
+    "path": "media/words/0114/neutral.mp3",
+    "text": "Корзина"
+  },
+  {
+    "path": "media/words/0114/irina/0.mp3",
+    "text": "Где корзина?"
+  },
+  {
+    "path": "media/words/0114/irina/1.mp3",
+    "text": "Покажи, где корзина."
+  },
+  {
+    "path": "media/words/0115/neutral.mp3",
+    "text": "Тумбочка"
+  },
+  {
+    "path": "media/words/0115/irina/0.mp3",
+    "text": "Где тумбочка?"
+  },
+  {
+    "path": "media/words/0115/irina/1.mp3",
+    "text": "Покажи, где тумбочка."
+  },
+  {
+    "path": "media/words/0200/neutral.mp3",
+    "text": "Автобус"
+  },
+  {
+    "path": "media/words/0200/irina/0.mp3",
+    "text": "Где автобус?"
+  },
+  {
+    "path": "media/words/0200/irina/1.mp3",
+    "text": "Покажи, где автобус."
+  },
+  {
+    "path": "media/words/0201/neutral.mp3",
+    "text": "Велосипед"
+  },
+  {
+    "path": "media/words/0201/irina/0.mp3",
+    "text": "Где велосипед?"
+  },
+  {
+    "path": "media/words/0201/irina/1.mp3",
+    "text": "Покажи, где велосипед."
+  },
+  {
+    "path": "media/words/0202/neutral.mp3",
+    "text": "Самолёт"
+  },
+  {
+    "path": "media/words/0202/irina/0.mp3",
+    "text": "Где самолёт?"
+  },
+  {
+    "path": "media/words/0202/irina/1.mp3",
+    "text": "Покажи, где самолёт."
+  },
+  {
+    "path": "media/words/0203/neutral.mp3",
+    "text": "Кораблик"
+  },
+  {
+    "path": "media/words/0203/irina/0.mp3",
+    "text": "Где кораблик?"
+  },
+  {
+    "path": "media/words/0203/irina/1.mp3",
+    "text": "Покажи, где кораблик."
+  },
+  {
+    "path": "media/words/0204/neutral.mp3",
+    "text": "Поезд"
+  },
+  {
+    "path": "media/words/0204/irina/0.mp3",
+    "text": "Где поезд?"
+  },
+  {
+    "path": "media/words/0204/irina/1.mp3",
+    "text": "Покажи, где поезд."
+  },
+  {
+    "path": "media/words/0205/neutral.mp3",
+    "text": "Машина"
+  },
+  {
+    "path": "media/words/0205/irina/0.mp3",
+    "text": "Где машина?"
+  },
+  {
+    "path": "media/words/0205/irina/1.mp3",
+    "text": "Покажи, где машина."
+  },
+  {
+    "path": "media/words/0206/neutral.mp3",
+    "text": "Трамвай"
+  },
+  {
+    "path": "media/words/0206/irina/0.mp3",
+    "text": "Где трамвай?"
+  },
+  {
+    "path": "media/words/0206/irina/1.mp3",
+    "text": "Покажи, где трамвай."
+  },
+  {
+    "path": "media/words/0207/neutral.mp3",
+    "text": "Грузовик"
+  },
+  {
+    "path": "media/words/0207/irina/0.mp3",
+    "text": "Где грузовик?"
+  },
+  {
+    "path": "media/words/0207/irina/1.mp3",
+    "text": "Покажи, где грузовик."
+  },
+  {
+    "path": "media/words/0208/neutral.mp3",
+    "text": "Вертолёт"
+  },
+  {
+    "path": "media/words/0208/irina/0.mp3",
+    "text": "Где вертолёт?"
+  },
+  {
+    "path": "media/words/0208/irina/1.mp3",
+    "text": "Покажи, где вертолёт."
+  },
+  {
+    "path": "media/words/0209/neutral.mp3",
+    "text": "Ракета"
+  },
+  {
+    "path": "media/words/0209/irina/0.mp3",
+    "text": "Где ракета?"
+  },
+  {
+    "path": "media/words/0209/irina/1.mp3",
+    "text": "Покажи, где ракета."
+  },
+  {
+    "path": "media/words/0210/neutral.mp3",
+    "text": "Лодка"
+  },
+  {
+    "path": "media/words/0210/irina/0.mp3",
+    "text": "Где лодка?"
+  },
+  {
+    "path": "media/words/0210/irina/1.mp3",
+    "text": "Покажи, где лодка."
+  },
+  {
+    "path": "media/words/0211/neutral.mp3",
+    "text": "Мотоцикл"
+  },
+  {
+    "path": "media/words/0211/irina/0.mp3",
+    "text": "Где мотоцикл?"
+  },
+  {
+    "path": "media/words/0211/irina/1.mp3",
+    "text": "Покажи, где мотоцикл."
+  },
+  {
+    "path": "media/words/0212/neutral.mp3",
+    "text": "Трактор"
+  },
+  {
+    "path": "media/words/0212/irina/0.mp3",
+    "text": "Где трактор?"
+  },
+  {
+    "path": "media/words/0212/irina/1.mp3",
+    "text": "Покажи, где трактор."
+  },
+  {
+    "path": "media/words/0213/neutral.mp3",
+    "text": "Экскаватор"
+  },
+  {
+    "path": "media/words/0213/irina/0.mp3",
+    "text": "Где экскаватор?"
+  },
+  {
+    "path": "media/words/0213/irina/1.mp3",
+    "text": "Покажи, где экскаватор."
+  },
+  {
+    "path": "media/words/0214/neutral.mp3",
+    "text": "Фургон"
+  },
+  {
+    "path": "media/words/0214/irina/0.mp3",
+    "text": "Где фургон?"
+  },
+  {
+    "path": "media/words/0214/irina/1.mp3",
+    "text": "Покажи, где фургон."
+  },
+  {
+    "path": "media/words/0215/neutral.mp3",
+    "text": "Самокат"
+  },
+  {
+    "path": "media/words/0215/irina/0.mp3",
+    "text": "Где самокат?"
+  },
+  {
+    "path": "media/words/0215/irina/1.mp3",
+    "text": "Покажи, где самокат."
+  },
+  {
+    "path": "media/words/0300/neutral.mp3",
+    "text": "Яблоко"
+  },
+  {
+    "path": "media/words/0300/irina/0.mp3",
+    "text": "Где яблоко?"
+  },
+  {
+    "path": "media/words/0300/irina/1.mp3",
+    "text": "Покажи, где яблоко."
+  },
+  {
+    "path": "media/words/0301/neutral.mp3",
+    "text": "Хлеб"
+  },
+  {
+    "path": "media/words/0301/irina/0.mp3",
+    "text": "Где хлеб?"
+  },
+  {
+    "path": "media/words/0301/irina/1.mp3",
+    "text": "Покажи, где хлеб."
+  },
+  {
+    "path": "media/words/0302/neutral.mp3",
+    "text": "Молоко"
+  },
+  {
+    "path": "media/words/0302/irina/0.mp3",
+    "text": "Где молоко?"
+  },
+  {
+    "path": "media/words/0302/irina/1.mp3",
+    "text": "Покажи, где молоко."
+  },
+  {
+    "path": "media/words/0303/neutral.mp3",
+    "text": "Морковь"
+  },
+  {
+    "path": "media/words/0303/irina/0.mp3",
+    "text": "Где морковь?"
+  },
+  {
+    "path": "media/words/0303/irina/1.mp3",
+    "text": "Покажи, где морковь."
+  },
+  {
+    "path": "media/words/0304/neutral.mp3",
+    "text": "Сыр"
+  },
+  {
+    "path": "media/words/0304/irina/0.mp3",
+    "text": "Где сыр?"
+  },
+  {
+    "path": "media/words/0304/irina/1.mp3",
+    "text": "Покажи, где сыр."
+  },
+  {
+    "path": "media/words/0305/neutral.mp3",
+    "text": "Каша"
+  },
+  {
+    "path": "media/words/0305/irina/0.mp3",
+    "text": "Где каша?"
+  },
+  {
+    "path": "media/words/0305/irina/1.mp3",
+    "text": "Покажи, где каша."
+  },
+  {
+    "path": "media/words/0306/neutral.mp3",
+    "text": "Суп"
+  },
+  {
+    "path": "media/words/0306/irina/0.mp3",
+    "text": "Где суп?"
+  },
+  {
+    "path": "media/words/0306/irina/1.mp3",
+    "text": "Покажи, где суп."
+  },
+  {
+    "path": "media/words/0307/neutral.mp3",
+    "text": "Масло"
+  },
+  {
+    "path": "media/words/0307/irina/0.mp3",
+    "text": "Где масло?"
+  },
+  {
+    "path": "media/words/0307/irina/1.mp3",
+    "text": "Покажи, где масло."
+  },
+  {
+    "path": "media/words/0308/neutral.mp3",
+    "text": "Печенье"
+  },
+  {
+    "path": "media/words/0308/irina/0.mp3",
+    "text": "Где печенье?"
+  },
+  {
+    "path": "media/words/0308/irina/1.mp3",
+    "text": "Покажи, где печенье."
+  },
+  {
+    "path": "media/words/0309/neutral.mp3",
+    "text": "Конфета"
+  },
+  {
+    "path": "media/words/0309/irina/0.mp3",
+    "text": "Где конфета?"
+  },
+  {
+    "path": "media/words/0309/irina/1.mp3",
+    "text": "Покажи, где конфета."
+  },
+  {
+    "path": "media/words/0310/neutral.mp3",
+    "text": "Мёд"
+  },
+  {
+    "path": "media/words/0310/irina/0.mp3",
+    "text": "Где мёд?"
+  },
+  {
+    "path": "media/words/0310/irina/1.mp3",
+    "text": "Покажи, где мёд."
+  },
+  {
+    "path": "media/words/0311/neutral.mp3",
+    "text": "Яйцо"
+  },
+  {
+    "path": "media/words/0311/irina/0.mp3",
+    "text": "Где яйцо?"
+  },
+  {
+    "path": "media/words/0311/irina/1.mp3",
+    "text": "Покажи, где яйцо."
+  },
+  {
+    "path": "media/words/0312/neutral.mp3",
+    "text": "Колбаса"
+  },
+  {
+    "path": "media/words/0312/irina/0.mp3",
+    "text": "Где колбаса?"
+  },
+  {
+    "path": "media/words/0312/irina/1.mp3",
+    "text": "Покажи, где колбаса."
+  },
+  {
+    "path": "media/words/0313/neutral.mp3",
+    "text": "Пирог"
+  },
+  {
+    "path": "media/words/0313/irina/0.mp3",
+    "text": "Где пирог?"
+  },
+  {
+    "path": "media/words/0313/irina/1.mp3",
+    "text": "Покажи, где пирог."
+  },
+  {
+    "path": "media/words/0314/neutral.mp3",
+    "text": "Блины"
+  },
+  {
+    "path": "media/words/0314/irina/0.mp3",
+    "text": "Где блины?"
+  },
+  {
+    "path": "media/words/0314/irina/1.mp3",
+    "text": "Покажи, где блины."
+  },
+  {
+    "path": "media/words/0315/neutral.mp3",
+    "text": "Сок"
+  },
+  {
+    "path": "media/words/0315/irina/0.mp3",
+    "text": "Где сок?"
+  },
+  {
+    "path": "media/words/0315/irina/1.mp3",
+    "text": "Покажи, где сок."
+  },
+  {
+    "path": "media/words/0400/neutral.mp3",
+    "text": "Кошка"
+  },
+  {
+    "path": "media/words/0400/irina/0.mp3",
+    "text": "Где кошка?"
+  },
+  {
+    "path": "media/words/0400/irina/1.mp3",
+    "text": "Покажи, где кошка."
+  },
+  {
+    "path": "media/words/0401/neutral.mp3",
+    "text": "Собака"
+  },
+  {
+    "path": "media/words/0401/irina/0.mp3",
+    "text": "Где собака?"
+  },
+  {
+    "path": "media/words/0401/irina/1.mp3",
+    "text": "Покажи, где собака."
+  },
+  {
+    "path": "media/words/0402/neutral.mp3",
+    "text": "Корова"
+  },
+  {
+    "path": "media/words/0402/irina/0.mp3",
+    "text": "Где корова?"
+  },
+  {
+    "path": "media/words/0402/irina/1.mp3",
+    "text": "Покажи, где корова."
+  },
+  {
+    "path": "media/words/0403/neutral.mp3",
+    "text": "Лошадь"
+  },
+  {
+    "path": "media/words/0403/irina/0.mp3",
+    "text": "Где лошадь?"
+  },
+  {
+    "path": "media/words/0403/irina/1.mp3",
+    "text": "Покажи, где лошадь."
+  },
+  {
+    "path": "media/words/0404/neutral.mp3",
+    "text": "Коза"
+  },
+  {
+    "path": "media/words/0404/irina/0.mp3",
+    "text": "Где коза?"
+  },
+  {
+    "path": "media/words/0404/irina/1.mp3",
+    "text": "Покажи, где коза."
+  },
+  {
+    "path": "media/words/0405/neutral.mp3",
+    "text": "Овца"
+  },
+  {
+    "path": "media/words/0405/irina/0.mp3",
+    "text": "Где овца?"
+  },
+  {
+    "path": "media/words/0405/irina/1.mp3",
+    "text": "Покажи, где овца."
+  },
+  {
+    "path": "media/words/0406/neutral.mp3",
+    "text": "Свинья"
+  },
+  {
+    "path": "media/words/0406/irina/0.mp3",
+    "text": "Где свинья?"
+  },
+  {
+    "path": "media/words/0406/irina/1.mp3",
+    "text": "Покажи, где свинья."
+  },
+  {
+    "path": "media/words/0407/neutral.mp3",
+    "text": "Кролик"
+  },
+  {
+    "path": "media/words/0407/irina/0.mp3",
+    "text": "Где кролик?"
+  },
+  {
+    "path": "media/words/0407/irina/1.mp3",
+    "text": "Покажи, где кролик."
+  },
+  {
+    "path": "media/words/0408/neutral.mp3",
+    "text": "Утка"
+  },
+  {
+    "path": "media/words/0408/irina/0.mp3",
+    "text": "Где утка?"
+  },
+  {
+    "path": "media/words/0408/irina/1.mp3",
+    "text": "Покажи, где утка."
+  },
+  {
+    "path": "media/words/0409/neutral.mp3",
+    "text": "Гусь"
+  },
+  {
+    "path": "media/words/0409/irina/0.mp3",
+    "text": "Где гусь?"
+  },
+  {
+    "path": "media/words/0409/irina/1.mp3",
+    "text": "Покажи, где гусь."
+  },
+  {
+    "path": "media/words/0410/neutral.mp3",
+    "text": "Курица"
+  },
+  {
+    "path": "media/words/0410/irina/0.mp3",
+    "text": "Где курица?"
+  },
+  {
+    "path": "media/words/0410/irina/1.mp3",
+    "text": "Покажи, где курица."
+  },
+  {
+    "path": "media/words/0411/neutral.mp3",
+    "text": "Петух"
+  },
+  {
+    "path": "media/words/0411/irina/0.mp3",
+    "text": "Где петух?"
+  },
+  {
+    "path": "media/words/0411/irina/1.mp3",
+    "text": "Покажи, где петух."
+  },
+  {
+    "path": "media/words/0412/neutral.mp3",
+    "text": "Индюк"
+  },
+  {
+    "path": "media/words/0412/irina/0.mp3",
+    "text": "Где индюк?"
+  },
+  {
+    "path": "media/words/0412/irina/1.mp3",
+    "text": "Покажи, где индюк."
+  },
+  {
+    "path": "media/words/0413/neutral.mp3",
+    "text": "Осёл"
+  },
+  {
+    "path": "media/words/0413/irina/0.mp3",
+    "text": "Где осёл?"
+  },
+  {
+    "path": "media/words/0413/irina/1.mp3",
+    "text": "Покажи, где осёл."
+  },
+  {
+    "path": "media/words/0414/neutral.mp3",
+    "text": "Хомяк"
+  },
+  {
+    "path": "media/words/0414/irina/0.mp3",
+    "text": "Где хомяк?"
+  },
+  {
+    "path": "media/words/0414/irina/1.mp3",
+    "text": "Покажи, где хомяк."
+  },
+  {
+    "path": "media/words/0415/neutral.mp3",
+    "text": "Попугай"
+  },
+  {
+    "path": "media/words/0415/irina/0.mp3",
+    "text": "Где попугай?"
+  },
+  {
+    "path": "media/words/0415/irina/1.mp3",
+    "text": "Покажи, где попугай."
+  },
+  {
+    "path": "media/words/0500/neutral.mp3",
+    "text": "Заяц"
+  },
+  {
+    "path": "media/words/0500/irina/0.mp3",
+    "text": "Где заяц?"
+  },
+  {
+    "path": "media/words/0500/irina/1.mp3",
+    "text": "Покажи, где заяц."
+  },
+  {
+    "path": "media/words/0501/neutral.mp3",
+    "text": "Лиса"
+  },
+  {
+    "path": "media/words/0501/irina/0.mp3",
+    "text": "Где лиса?"
+  },
+  {
+    "path": "media/words/0501/irina/1.mp3",
+    "text": "Покажи, где лиса."
+  },
+  {
+    "path": "media/words/0502/neutral.mp3",
+    "text": "Волк"
+  },
+  {
+    "path": "media/words/0502/irina/0.mp3",
+    "text": "Где волк?"
+  },
+  {
+    "path": "media/words/0502/irina/1.mp3",
+    "text": "Покажи, где волк."
+  },
+  {
+    "path": "media/words/0503/neutral.mp3",
+    "text": "Медведь"
+  },
+  {
+    "path": "media/words/0503/irina/0.mp3",
+    "text": "Где медведь?"
+  },
+  {
+    "path": "media/words/0503/irina/1.mp3",
+    "text": "Покажи, где медведь."
+  },
+  {
+    "path": "media/words/0504/neutral.mp3",
+    "text": "Белка"
+  },
+  {
+    "path": "media/words/0504/irina/0.mp3",
+    "text": "Где белка?"
+  },
+  {
+    "path": "media/words/0504/irina/1.mp3",
+    "text": "Покажи, где белка."
+  },
+  {
+    "path": "media/words/0505/neutral.mp3",
+    "text": "Ёжик"
+  },
+  {
+    "path": "media/words/0505/irina/0.mp3",
+    "text": "Где ёжик?"
+  },
+  {
+    "path": "media/words/0505/irina/1.mp3",
+    "text": "Покажи, где ёжик."
+  },
+  {
+    "path": "media/words/0506/neutral.mp3",
+    "text": "Лось"
+  },
+  {
+    "path": "media/words/0506/irina/0.mp3",
+    "text": "Где лось?"
+  },
+  {
+    "path": "media/words/0506/irina/1.mp3",
+    "text": "Покажи, где лось."
+  },
+  {
+    "path": "media/words/0507/neutral.mp3",
+    "text": "Кабан"
+  },
+  {
+    "path": "media/words/0507/irina/0.mp3",
+    "text": "Где кабан?"
+  },
+  {
+    "path": "media/words/0507/irina/1.mp3",
+    "text": "Покажи, где кабан."
+  },
+  {
+    "path": "media/words/0508/neutral.mp3",
+    "text": "Барсук"
+  },
+  {
+    "path": "media/words/0508/irina/0.mp3",
+    "text": "Где барсук?"
+  },
+  {
+    "path": "media/words/0508/irina/1.mp3",
+    "text": "Покажи, где барсук."
+  },
+  {
+    "path": "media/words/0509/neutral.mp3",
+    "text": "Бобр"
+  },
+  {
+    "path": "media/words/0509/irina/0.mp3",
+    "text": "Где бобр?"
+  },
+  {
+    "path": "media/words/0509/irina/1.mp3",
+    "text": "Покажи, где бобр."
+  },
+  {
+    "path": "media/words/0510/neutral.mp3",
+    "text": "Змея"
+  },
+  {
+    "path": "media/words/0510/irina/0.mp3",
+    "text": "Где змея?"
+  },
+  {
+    "path": "media/words/0510/irina/1.mp3",
+    "text": "Покажи, где змея."
+  },
+  {
+    "path": "media/words/0511/neutral.mp3",
+    "text": "Рысь"
+  },
+  {
+    "path": "media/words/0511/irina/0.mp3",
+    "text": "Где рысь?"
+  },
+  {
+    "path": "media/words/0511/irina/1.mp3",
+    "text": "Покажи, где рысь."
+  },
+  {
+    "path": "media/words/0512/neutral.mp3",
+    "text": "Крот"
+  },
+  {
+    "path": "media/words/0512/irina/0.mp3",
+    "text": "Где крот?"
+  },
+  {
+    "path": "media/words/0512/irina/1.mp3",
+    "text": "Покажи, где крот."
+  },
+  {
+    "path": "media/words/0513/neutral.mp3",
+    "text": "Мышь"
+  },
+  {
+    "path": "media/words/0513/irina/0.mp3",
+    "text": "Где мышь?"
+  },
+  {
+    "path": "media/words/0513/irina/1.mp3",
+    "text": "Покажи, где мышь."
+  },
+  {
+    "path": "media/words/0514/neutral.mp3",
+    "text": "Лягушка"
+  },
+  {
+    "path": "media/words/0514/irina/0.mp3",
+    "text": "Где лягушка?"
+  },
+  {
+    "path": "media/words/0514/irina/1.mp3",
+    "text": "Покажи, где лягушка."
+  },
+  {
+    "path": "media/words/0515/neutral.mp3",
+    "text": "Черепаха"
+  },
+  {
+    "path": "media/words/0515/irina/0.mp3",
+    "text": "Где черепаха?"
+  },
+  {
+    "path": "media/words/0515/irina/1.mp3",
+    "text": "Покажи, где черепаха."
+  },
+  {
+    "path": "media/words/0600/neutral.mp3",
+    "text": "Воробей"
+  },
+  {
+    "path": "media/words/0600/irina/0.mp3",
+    "text": "Где воробей?"
+  },
+  {
+    "path": "media/words/0600/irina/1.mp3",
+    "text": "Покажи, где воробей."
+  },
+  {
+    "path": "media/words/0601/neutral.mp3",
+    "text": "Ворона"
+  },
+  {
+    "path": "media/words/0601/irina/0.mp3",
+    "text": "Где ворона?"
+  },
+  {
+    "path": "media/words/0601/irina/1.mp3",
+    "text": "Покажи, где ворона."
+  },
+  {
+    "path": "media/words/0602/neutral.mp3",
+    "text": "Голубь"
+  },
+  {
+    "path": "media/words/0602/irina/0.mp3",
+    "text": "Где голубь?"
+  },
+  {
+    "path": "media/words/0602/irina/1.mp3",
+    "text": "Покажи, где голубь."
+  },
+  {
+    "path": "media/words/0603/neutral.mp3",
+    "text": "Синица"
+  },
+  {
+    "path": "media/words/0603/irina/0.mp3",
+    "text": "Где синица?"
+  },
+  {
+    "path": "media/words/0603/irina/1.mp3",
+    "text": "Покажи, где синица."
+  },
+  {
+    "path": "media/words/0604/neutral.mp3",
+    "text": "Сорока"
+  },
+  {
+    "path": "media/words/0604/irina/0.mp3",
+    "text": "Где сорока?"
+  },
+  {
+    "path": "media/words/0604/irina/1.mp3",
+    "text": "Покажи, где сорока."
+  },
+  {
+    "path": "media/words/0605/neutral.mp3",
+    "text": "Снегирь"
+  },
+  {
+    "path": "media/words/0605/irina/0.mp3",
+    "text": "Где снегирь?"
+  },
+  {
+    "path": "media/words/0605/irina/1.mp3",
+    "text": "Покажи, где снегирь."
+  },
+  {
+    "path": "media/words/0606/neutral.mp3",
+    "text": "Дятел"
+  },
+  {
+    "path": "media/words/0606/irina/0.mp3",
+    "text": "Где дятел?"
+  },
+  {
+    "path": "media/words/0606/irina/1.mp3",
+    "text": "Покажи, где дятел."
+  },
+  {
+    "path": "media/words/0607/neutral.mp3",
+    "text": "Сова"
+  },
+  {
+    "path": "media/words/0607/irina/0.mp3",
+    "text": "Где сова?"
+  },
+  {
+    "path": "media/words/0607/irina/1.mp3",
+    "text": "Покажи, где сова."
+  },
+  {
+    "path": "media/words/0608/neutral.mp3",
+    "text": "Аист"
+  },
+  {
+    "path": "media/words/0608/irina/0.mp3",
+    "text": "Где аист?"
+  },
+  {
+    "path": "media/words/0608/irina/1.mp3",
+    "text": "Покажи, где аист."
+  },
+  {
+    "path": "media/words/0609/neutral.mp3",
+    "text": "Павлин"
+  },
+  {
+    "path": "media/words/0609/irina/0.mp3",
+    "text": "Где павлин?"
+  },
+  {
+    "path": "media/words/0609/irina/1.mp3",
+    "text": "Покажи, где павлин."
+  },
+  {
+    "path": "media/words/0610/neutral.mp3",
+    "text": "Лебедь"
+  },
+  {
+    "path": "media/words/0610/irina/0.mp3",
+    "text": "Где лебедь?"
+  },
+  {
+    "path": "media/words/0610/irina/1.mp3",
+    "text": "Покажи, где лебедь."
+  },
+  {
+    "path": "media/words/0611/neutral.mp3",
+    "text": "Фламинго"
+  },
+  {
+    "path": "media/words/0611/irina/0.mp3",
+    "text": "Где фламинго?"
+  },
+  {
+    "path": "media/words/0611/irina/1.mp3",
+    "text": "Покажи, где фламинго."
+  },
+  {
+    "path": "media/words/0612/neutral.mp3",
+    "text": "Орёл"
+  },
+  {
+    "path": "media/words/0612/irina/0.mp3",
+    "text": "Где орёл?"
+  },
+  {
+    "path": "media/words/0612/irina/1.mp3",
+    "text": "Покажи, где орёл."
+  },
+  {
+    "path": "media/words/0613/neutral.mp3",
+    "text": "Чайка"
+  },
+  {
+    "path": "media/words/0613/irina/0.mp3",
+    "text": "Где чайка?"
+  },
+  {
+    "path": "media/words/0613/irina/1.mp3",
+    "text": "Покажи, где чайка."
+  },
+  {
+    "path": "media/words/0614/neutral.mp3",
+    "text": "Ласточка"
+  },
+  {
+    "path": "media/words/0614/irina/0.mp3",
+    "text": "Где ласточка?"
+  },
+  {
+    "path": "media/words/0614/irina/1.mp3",
+    "text": "Покажи, где ласточка."
+  },
+  {
+    "path": "media/words/0615/neutral.mp3",
+    "text": "Пингвин"
+  },
+  {
+    "path": "media/words/0615/irina/0.mp3",
+    "text": "Где пингвин?"
+  },
+  {
+    "path": "media/words/0615/irina/1.mp3",
+    "text": "Покажи, где пингвин."
+  },
+  {
+    "path": "media/words/0700/neutral.mp3",
+    "text": "Шапка"
+  },
+  {
+    "path": "media/words/0700/irina/0.mp3",
+    "text": "Где шапка?"
+  },
+  {
+    "path": "media/words/0700/irina/1.mp3",
+    "text": "Покажи, где шапка."
+  },
+  {
+    "path": "media/words/0701/neutral.mp3",
+    "text": "Шарф"
+  },
+  {
+    "path": "media/words/0701/irina/0.mp3",
+    "text": "Где шарф?"
+  },
+  {
+    "path": "media/words/0701/irina/1.mp3",
+    "text": "Покажи, где шарф."
+  },
+  {
+    "path": "media/words/0702/neutral.mp3",
+    "text": "Куртка"
+  },
+  {
+    "path": "media/words/0702/irina/0.mp3",
+    "text": "Где куртка?"
+  },
+  {
+    "path": "media/words/0702/irina/1.mp3",
+    "text": "Покажи, где куртка."
+  },
+  {
+    "path": "media/words/0703/neutral.mp3",
+    "text": "Платье"
+  },
+  {
+    "path": "media/words/0703/irina/0.mp3",
+    "text": "Где платье?"
+  },
+  {
+    "path": "media/words/0703/irina/1.mp3",
+    "text": "Покажи, где платье."
+  },
+  {
+    "path": "media/words/0704/neutral.mp3",
+    "text": "Рубашка"
+  },
+  {
+    "path": "media/words/0704/irina/0.mp3",
+    "text": "Где рубашка?"
+  },
+  {
+    "path": "media/words/0704/irina/1.mp3",
+    "text": "Покажи, где рубашка."
+  },
+  {
+    "path": "media/words/0705/neutral.mp3",
+    "text": "Брюки"
+  },
+  {
+    "path": "media/words/0705/irina/0.mp3",
+    "text": "Где брюки?"
+  },
+  {
+    "path": "media/words/0705/irina/1.mp3",
+    "text": "Покажи, где брюки."
+  },
+  {
+    "path": "media/words/0706/neutral.mp3",
+    "text": "Юбка"
+  },
+  {
+    "path": "media/words/0706/irina/0.mp3",
+    "text": "Где юбка?"
+  },
+  {
+    "path": "media/words/0706/irina/1.mp3",
+    "text": "Покажи, где юбка."
+  },
+  {
+    "path": "media/words/0707/neutral.mp3",
+    "text": "Носки"
+  },
+  {
+    "path": "media/words/0707/irina/0.mp3",
+    "text": "Где носки?"
+  },
+  {
+    "path": "media/words/0707/irina/1.mp3",
+    "text": "Покажи, где носки."
+  },
+  {
+    "path": "media/words/0708/neutral.mp3",
+    "text": "Варежки"
+  },
+  {
+    "path": "media/words/0708/irina/0.mp3",
+    "text": "Где варежки?"
+  },
+  {
+    "path": "media/words/0708/irina/1.mp3",
+    "text": "Покажи, где варежки."
+  },
+  {
+    "path": "media/words/0709/neutral.mp3",
+    "text": "Сапоги"
+  },
+  {
+    "path": "media/words/0709/irina/0.mp3",
+    "text": "Где сапоги?"
+  },
+  {
+    "path": "media/words/0709/irina/1.mp3",
+    "text": "Покажи, где сапоги."
+  },
+  {
+    "path": "media/words/0710/neutral.mp3",
+    "text": "Тапочки"
+  },
+  {
+    "path": "media/words/0710/irina/0.mp3",
+    "text": "Где тапочки?"
+  },
+  {
+    "path": "media/words/0710/irina/1.mp3",
+    "text": "Покажи, где тапочки."
+  },
+  {
+    "path": "media/words/0711/neutral.mp3",
+    "text": "Ремень"
+  },
+  {
+    "path": "media/words/0711/irina/0.mp3",
+    "text": "Где ремень?"
+  },
+  {
+    "path": "media/words/0711/irina/1.mp3",
+    "text": "Покажи, где ремень."
+  },
+  {
+    "path": "media/words/0712/neutral.mp3",
+    "text": "Свитер"
+  },
+  {
+    "path": "media/words/0712/irina/0.mp3",
+    "text": "Где свитер?"
+  },
+  {
+    "path": "media/words/0712/irina/1.mp3",
+    "text": "Покажи, где свитер."
+  },
+  {
+    "path": "media/words/0713/neutral.mp3",
+    "text": "Футболка"
+  },
+  {
+    "path": "media/words/0713/irina/0.mp3",
+    "text": "Где футболка?"
+  },
+  {
+    "path": "media/words/0713/irina/1.mp3",
+    "text": "Покажи, где футболка."
+  },
+  {
+    "path": "media/words/0714/neutral.mp3",
+    "text": "Шорты"
+  },
+  {
+    "path": "media/words/0714/irina/0.mp3",
+    "text": "Где шорты?"
+  },
+  {
+    "path": "media/words/0714/irina/1.mp3",
+    "text": "Покажи, где шорты."
+  },
+  {
+    "path": "media/words/0715/neutral.mp3",
+    "text": "Пижама"
+  },
+  {
+    "path": "media/words/0715/irina/0.mp3",
+    "text": "Где пижама?"
+  },
+  {
+    "path": "media/words/0715/irina/1.mp3",
+    "text": "Покажи, где пижама."
+  },
+  {
+    "path": "media/words/0800/neutral.mp3",
+    "text": "Тарелка"
+  },
+  {
+    "path": "media/words/0800/irina/0.mp3",
+    "text": "Где тарелка?"
+  },
+  {
+    "path": "media/words/0800/irina/1.mp3",
+    "text": "Покажи, где тарелка."
+  },
+  {
+    "path": "media/words/0801/neutral.mp3",
+    "text": "Чашка"
+  },
+  {
+    "path": "media/words/0801/irina/0.mp3",
+    "text": "Где чашка?"
+  },
+  {
+    "path": "media/words/0801/irina/1.mp3",
+    "text": "Покажи, где чашка."
+  },
+  {
+    "path": "media/words/0802/neutral.mp3",
+    "text": "Ложка"
+  },
+  {
+    "path": "media/words/0802/irina/0.mp3",
+    "text": "Где ложка?"
+  },
+  {
+    "path": "media/words/0802/irina/1.mp3",
+    "text": "Покажи, где ложка."
+  },
+  {
+    "path": "media/words/0803/neutral.mp3",
+    "text": "Вилка"
+  },
+  {
+    "path": "media/words/0803/irina/0.mp3",
+    "text": "Где вилка?"
+  },
+  {
+    "path": "media/words/0803/irina/1.mp3",
+    "text": "Покажи, где вилка."
+  },
+  {
+    "path": "media/words/0804/neutral.mp3",
+    "text": "Нож"
+  },
+  {
+    "path": "media/words/0804/irina/0.mp3",
+    "text": "Где нож?"
+  },
+  {
+    "path": "media/words/0804/irina/1.mp3",
+    "text": "Покажи, где нож."
+  },
+  {
+    "path": "media/words/0805/neutral.mp3",
+    "text": "Кастрюля"
+  },
+  {
+    "path": "media/words/0805/irina/0.mp3",
+    "text": "Где кастрюля?"
+  },
+  {
+    "path": "media/words/0805/irina/1.mp3",
+    "text": "Покажи, где кастрюля."
+  },
+  {
+    "path": "media/words/0806/neutral.mp3",
+    "text": "Сковорода"
+  },
+  {
+    "path": "media/words/0806/irina/0.mp3",
+    "text": "Где сковорода?"
+  },
+  {
+    "path": "media/words/0806/irina/1.mp3",
+    "text": "Покажи, где сковорода."
+  },
+  {
+    "path": "media/words/0807/neutral.mp3",
+    "text": "Чайник"
+  },
+  {
+    "path": "media/words/0807/irina/0.mp3",
+    "text": "Где чайник?"
+  },
+  {
+    "path": "media/words/0807/irina/1.mp3",
+    "text": "Покажи, где чайник."
+  },
+  {
+    "path": "media/words/0808/neutral.mp3",
+    "text": "Стакан"
+  },
+  {
+    "path": "media/words/0808/irina/0.mp3",
+    "text": "Где стакан?"
+  },
+  {
+    "path": "media/words/0808/irina/1.mp3",
+    "text": "Покажи, где стакан."
+  },
+  {
+    "path": "media/words/0809/neutral.mp3",
+    "text": "Кувшин"
+  },
+  {
+    "path": "media/words/0809/irina/0.mp3",
+    "text": "Где кувшин?"
+  },
+  {
+    "path": "media/words/0809/irina/1.mp3",
+    "text": "Покажи, где кувшин."
+  },
+  {
+    "path": "media/words/0810/neutral.mp3",
+    "text": "Поднос"
+  },
+  {
+    "path": "media/words/0810/irina/0.mp3",
+    "text": "Где поднос?"
+  },
+  {
+    "path": "media/words/0810/irina/1.mp3",
+    "text": "Покажи, где поднос."
+  },
+  {
+    "path": "media/words/0811/neutral.mp3",
+    "text": "Солонка"
+  },
+  {
+    "path": "media/words/0811/irina/0.mp3",
+    "text": "Где солонка?"
+  },
+  {
+    "path": "media/words/0811/irina/1.mp3",
+    "text": "Покажи, где солонка."
+  },
+  {
+    "path": "media/words/0812/neutral.mp3",
+    "text": "Банка"
+  },
+  {
+    "path": "media/words/0812/irina/0.mp3",
+    "text": "Где банка?"
+  },
+  {
+    "path": "media/words/0812/irina/1.mp3",
+    "text": "Покажи, где банка."
+  },
+  {
+    "path": "media/words/0813/neutral.mp3",
+    "text": "Бутылка"
+  },
+  {
+    "path": "media/words/0813/irina/0.mp3",
+    "text": "Где бутылка?"
+  },
+  {
+    "path": "media/words/0813/irina/1.mp3",
+    "text": "Покажи, где бутылка."
+  },
+  {
+    "path": "media/words/0814/neutral.mp3",
+    "text": "Тёрка"
+  },
+  {
+    "path": "media/words/0814/irina/0.mp3",
+    "text": "Где тёрка?"
+  },
+  {
+    "path": "media/words/0814/irina/1.mp3",
+    "text": "Покажи, где тёрка."
+  },
+  {
+    "path": "media/words/0815/neutral.mp3",
+    "text": "Дуршлаг"
+  },
+  {
+    "path": "media/words/0815/irina/0.mp3",
+    "text": "Где дуршлаг?"
+  },
+  {
+    "path": "media/words/0815/irina/1.mp3",
+    "text": "Покажи, где дуршлаг."
+  },
+  {
+    "path": "media/words/0900/neutral.mp3",
+    "text": "Мяч"
+  },
+  {
+    "path": "media/words/0900/irina/0.mp3",
+    "text": "Где мяч?"
+  },
+  {
+    "path": "media/words/0900/irina/1.mp3",
+    "text": "Покажи, где мяч."
+  },
+  {
+    "path": "media/words/0901/neutral.mp3",
+    "text": "Кубик"
+  },
+  {
+    "path": "media/words/0901/irina/0.mp3",
+    "text": "Где кубик?"
+  },
+  {
+    "path": "media/words/0901/irina/1.mp3",
+    "text": "Покажи, где кубик."
+  },
+  {
+    "path": "media/words/0902/neutral.mp3",
+    "text": "Кукла"
+  },
+  {
+    "path": "media/words/0902/irina/0.mp3",
+    "text": "Где кукла?"
+  },
+  {
+    "path": "media/words/0902/irina/1.mp3",
+    "text": "Покажи, где кукла."
+  },
+  {
+    "path": "media/words/0903/neutral.mp3",
+    "text": "Матрёшка"
+  },
+  {
+    "path": "media/words/0903/irina/0.mp3",
+    "text": "Где матрёшка?"
+  },
+  {
+    "path": "media/words/0903/irina/1.mp3",
+    "text": "Покажи, где матрёшка."
+  },
+  {
+    "path": "media/words/0904/neutral.mp3",
+    "text": "Юла"
+  },
+  {
+    "path": "media/words/0904/irina/0.mp3",
+    "text": "Где юла?"
+  },
+  {
+    "path": "media/words/0904/irina/1.mp3",
+    "text": "Покажи, где юла."
+  },
+  {
+    "path": "media/words/0905/neutral.mp3",
+    "text": "Скакалка"
+  },
+  {
+    "path": "media/words/0905/irina/0.mp3",
+    "text": "Где скакалка?"
+  },
+  {
+    "path": "media/words/0905/irina/1.mp3",
+    "text": "Покажи, где скакалка."
+  },
+  {
+    "path": "media/words/0906/neutral.mp3",
+    "text": "Барабан"
+  },
+  {
+    "path": "media/words/0906/irina/0.mp3",
+    "text": "Где барабан?"
+  },
+  {
+    "path": "media/words/0906/irina/1.mp3",
+    "text": "Покажи, где барабан."
+  },
+  {
+    "path": "media/words/0907/neutral.mp3",
+    "text": "Дудочка"
+  },
+  {
+    "path": "media/words/0907/irina/0.mp3",
+    "text": "Где дудочка?"
+  },
+  {
+    "path": "media/words/0907/irina/1.mp3",
+    "text": "Покажи, где дудочка."
+  },
+  {
+    "path": "media/words/0908/neutral.mp3",
+    "text": "Пирамидка"
+  },
+  {
+    "path": "media/words/0908/irina/0.mp3",
+    "text": "Где пирамидка?"
+  },
+  {
+    "path": "media/words/0908/irina/1.mp3",
+    "text": "Покажи, где пирамидка."
+  },
+  {
+    "path": "media/words/0909/neutral.mp3",
+    "text": "Конструктор"
+  },
+  {
+    "path": "media/words/0909/irina/0.mp3",
+    "text": "Где конструктор?"
+  },
+  {
+    "path": "media/words/0909/irina/1.mp3",
+    "text": "Покажи, где конструктор."
+  },
+  {
+    "path": "media/words/0910/neutral.mp3",
+    "text": "Санки"
+  },
+  {
+    "path": "media/words/0910/irina/0.mp3",
+    "text": "Где санки?"
+  },
+  {
+    "path": "media/words/0910/irina/1.mp3",
+    "text": "Покажи, где санки."
+  },
+  {
+    "path": "media/words/0911/neutral.mp3",
+    "text": "Воздушный змей"
+  },
+  {
+    "path": "media/words/0911/irina/0.mp3",
+    "text": "Где воздушный змей?"
+  },
+  {
+    "path": "media/words/0911/irina/1.mp3",
+    "text": "Покажи, где воздушный змей."
+  },
+  {
+    "path": "media/words/0912/neutral.mp3",
+    "text": "Качели"
+  },
+  {
+    "path": "media/words/0912/irina/0.mp3",
+    "text": "Где качели?"
+  },
+  {
+    "path": "media/words/0912/irina/1.mp3",
+    "text": "Покажи, где качели."
+  },
+  {
+    "path": "media/words/0913/neutral.mp3",
+    "text": "Свисток"
+  },
+  {
+    "path": "media/words/0913/irina/0.mp3",
+    "text": "Где свисток?"
+  },
+  {
+    "path": "media/words/0913/irina/1.mp3",
+    "text": "Покажи, где свисток."
+  },
+  {
+    "path": "media/words/0914/neutral.mp3",
+    "text": "Погремушка"
+  },
+  {
+    "path": "media/words/0914/irina/0.mp3",
+    "text": "Где погремушка?"
+  },
+  {
+    "path": "media/words/0914/irina/1.mp3",
+    "text": "Покажи, где погремушка."
+  },
+  {
+    "path": "media/words/0915/neutral.mp3",
+    "text": "Робот"
+  },
+  {
+    "path": "media/words/0915/irina/0.mp3",
+    "text": "Где робот?"
+  },
+  {
+    "path": "media/words/0915/irina/1.mp3",
+    "text": "Покажи, где робот."
+  },
+  {
+    "path": "media/words/1000/neutral.mp3",
+    "text": "Груша"
+  },
+  {
+    "path": "media/words/1000/irina/0.mp3",
+    "text": "Где груша?"
+  },
+  {
+    "path": "media/words/1000/irina/1.mp3",
+    "text": "Покажи, где груша."
+  },
+  {
+    "path": "media/words/1001/neutral.mp3",
+    "text": "Слива"
+  },
+  {
+    "path": "media/words/1001/irina/0.mp3",
+    "text": "Где слива?"
+  },
+  {
+    "path": "media/words/1001/irina/1.mp3",
+    "text": "Покажи, где слива."
+  },
+  {
+    "path": "media/words/1002/neutral.mp3",
+    "text": "Банан"
+  },
+  {
+    "path": "media/words/1002/irina/0.mp3",
+    "text": "Где банан?"
+  },
+  {
+    "path": "media/words/1002/irina/1.mp3",
+    "text": "Покажи, где банан."
+  },
+  {
+    "path": "media/words/1003/neutral.mp3",
+    "text": "Апельсин"
+  },
+  {
+    "path": "media/words/1003/irina/0.mp3",
+    "text": "Где апельсин?"
+  },
+  {
+    "path": "media/words/1003/irina/1.mp3",
+    "text": "Покажи, где апельсин."
+  },
+  {
+    "path": "media/words/1004/neutral.mp3",
+    "text": "Лимон"
+  },
+  {
+    "path": "media/words/1004/irina/0.mp3",
+    "text": "Где лимон?"
+  },
+  {
+    "path": "media/words/1004/irina/1.mp3",
+    "text": "Покажи, где лимон."
+  },
+  {
+    "path": "media/words/1005/neutral.mp3",
+    "text": "Виноград"
+  },
+  {
+    "path": "media/words/1005/irina/0.mp3",
+    "text": "Где виноград?"
+  },
+  {
+    "path": "media/words/1005/irina/1.mp3",
+    "text": "Покажи, где виноград."
+  },
+  {
+    "path": "media/words/1006/neutral.mp3",
+    "text": "Персик"
+  },
+  {
+    "path": "media/words/1006/irina/0.mp3",
+    "text": "Где персик?"
+  },
+  {
+    "path": "media/words/1006/irina/1.mp3",
+    "text": "Покажи, где персик."
+  },
+  {
+    "path": "media/words/1007/neutral.mp3",
+    "text": "Ананас"
+  },
+  {
+    "path": "media/words/1007/irina/0.mp3",
+    "text": "Где ананас?"
+  },
+  {
+    "path": "media/words/1007/irina/1.mp3",
+    "text": "Покажи, где ананас."
+  },
+  {
+    "path": "media/words/1008/neutral.mp3",
+    "text": "Арбуз"
+  },
+  {
+    "path": "media/words/1008/irina/0.mp3",
+    "text": "Где арбуз?"
+  },
+  {
+    "path": "media/words/1008/irina/1.mp3",
+    "text": "Покажи, где арбуз."
+  },
+  {
+    "path": "media/words/1009/neutral.mp3",
+    "text": "Дыня"
+  },
+  {
+    "path": "media/words/1009/irina/0.mp3",
+    "text": "Где дыня?"
+  },
+  {
+    "path": "media/words/1009/irina/1.mp3",
+    "text": "Покажи, где дыня."
+  },
+  {
+    "path": "media/words/1010/neutral.mp3",
+    "text": "Клубника"
+  },
+  {
+    "path": "media/words/1010/irina/0.mp3",
+    "text": "Где клубника?"
+  },
+  {
+    "path": "media/words/1010/irina/1.mp3",
+    "text": "Покажи, где клубника."
+  },
+  {
+    "path": "media/words/1011/neutral.mp3",
+    "text": "Малина"
+  },
+  {
+    "path": "media/words/1011/irina/0.mp3",
+    "text": "Где малина?"
+  },
+  {
+    "path": "media/words/1011/irina/1.mp3",
+    "text": "Покажи, где малина."
+  },
+  {
+    "path": "media/words/1012/neutral.mp3",
+    "text": "Вишня"
+  },
+  {
+    "path": "media/words/1012/irina/0.mp3",
+    "text": "Где вишня?"
+  },
+  {
+    "path": "media/words/1012/irina/1.mp3",
+    "text": "Покажи, где вишня."
+  },
+  {
+    "path": "media/words/1013/neutral.mp3",
+    "text": "Смородина"
+  },
+  {
+    "path": "media/words/1013/irina/0.mp3",
+    "text": "Где смородина?"
+  },
+  {
+    "path": "media/words/1013/irina/1.mp3",
+    "text": "Покажи, где смородина."
+  },
+  {
+    "path": "media/words/1014/neutral.mp3",
+    "text": "Киви"
+  },
+  {
+    "path": "media/words/1014/irina/0.mp3",
+    "text": "Где киви?"
+  },
+  {
+    "path": "media/words/1014/irina/1.mp3",
+    "text": "Покажи, где киви."
+  },
+  {
+    "path": "media/words/1015/neutral.mp3",
+    "text": "Ежевика"
+  },
+  {
+    "path": "media/words/1015/irina/0.mp3",
+    "text": "Где ежевика?"
+  },
+  {
+    "path": "media/words/1015/irina/1.mp3",
+    "text": "Покажи, где ежевика."
+  },
+  {
+    "path": "media/words/1100/neutral.mp3",
+    "text": "Огурец"
+  },
+  {
+    "path": "media/words/1100/irina/0.mp3",
+    "text": "Где огурец?"
+  },
+  {
+    "path": "media/words/1100/irina/1.mp3",
+    "text": "Покажи, где огурец."
+  },
+  {
+    "path": "media/words/1101/neutral.mp3",
+    "text": "Помидор"
+  },
+  {
+    "path": "media/words/1101/irina/0.mp3",
+    "text": "Где помидор?"
+  },
+  {
+    "path": "media/words/1101/irina/1.mp3",
+    "text": "Покажи, где помидор."
+  },
+  {
+    "path": "media/words/1102/neutral.mp3",
+    "text": "Картошка"
+  },
+  {
+    "path": "media/words/1102/irina/0.mp3",
+    "text": "Где картошка?"
+  },
+  {
+    "path": "media/words/1102/irina/1.mp3",
+    "text": "Покажи, где картошка."
+  },
+  {
+    "path": "media/words/1103/neutral.mp3",
+    "text": "Капуста"
+  },
+  {
+    "path": "media/words/1103/irina/0.mp3",
+    "text": "Где капуста?"
+  },
+  {
+    "path": "media/words/1103/irina/1.mp3",
+    "text": "Покажи, где капуста."
+  },
+  {
+    "path": "media/words/1104/neutral.mp3",
+    "text": "Лук"
+  },
+  {
+    "path": "media/words/1104/irina/0.mp3",
+    "text": "Где лук?"
+  },
+  {
+    "path": "media/words/1104/irina/1.mp3",
+    "text": "Покажи, где лук."
+  },
+  {
+    "path": "media/words/1105/neutral.mp3",
+    "text": "Кукуруза"
+  },
+  {
+    "path": "media/words/1105/irina/0.mp3",
+    "text": "Где кукуруза?"
+  },
+  {
+    "path": "media/words/1105/irina/1.mp3",
+    "text": "Покажи, где кукуруза."
+  },
+  {
+    "path": "media/words/1106/neutral.mp3",
+    "text": "Редиска"
+  },
+  {
+    "path": "media/words/1106/irina/0.mp3",
+    "text": "Где редиска?"
+  },
+  {
+    "path": "media/words/1106/irina/1.mp3",
+    "text": "Покажи, где редиска."
+  },
+  {
+    "path": "media/words/1107/neutral.mp3",
+    "text": "Тыква"
+  },
+  {
+    "path": "media/words/1107/irina/0.mp3",
+    "text": "Где тыква?"
+  },
+  {
+    "path": "media/words/1107/irina/1.mp3",
+    "text": "Покажи, где тыква."
+  },
+  {
+    "path": "media/words/1108/neutral.mp3",
+    "text": "Кабачок"
+  },
+  {
+    "path": "media/words/1108/irina/0.mp3",
+    "text": "Где кабачок?"
+  },
+  {
+    "path": "media/words/1108/irina/1.mp3",
+    "text": "Покажи, где кабачок."
+  },
+  {
+    "path": "media/words/1109/neutral.mp3",
+    "text": "Горох"
+  },
+  {
+    "path": "media/words/1109/irina/0.mp3",
+    "text": "Где горох?"
+  },
+  {
+    "path": "media/words/1109/irina/1.mp3",
+    "text": "Покажи, где горох."
+  },
+  {
+    "path": "media/words/1110/neutral.mp3",
+    "text": "Брокколи"
+  },
+  {
+    "path": "media/words/1110/irina/0.mp3",
+    "text": "Где брокколи?"
+  },
+  {
+    "path": "media/words/1110/irina/1.mp3",
+    "text": "Покажи, где брокколи."
+  },
+  {
+    "path": "media/words/1111/neutral.mp3",
+    "text": "Чеснок"
+  },
+  {
+    "path": "media/words/1111/irina/0.mp3",
+    "text": "Где чеснок?"
+  },
+  {
+    "path": "media/words/1111/irina/1.mp3",
+    "text": "Покажи, где чеснок."
+  },
+  {
+    "path": "media/words/1112/neutral.mp3",
+    "text": "Перец"
+  },
+  {
+    "path": "media/words/1112/irina/0.mp3",
+    "text": "Где перец?"
+  },
+  {
+    "path": "media/words/1112/irina/1.mp3",
+    "text": "Покажи, где перец."
+  },
+  {
+    "path": "media/words/1113/neutral.mp3",
+    "text": "Баклажан"
+  },
+  {
+    "path": "media/words/1113/irina/0.mp3",
+    "text": "Где баклажан?"
+  },
+  {
+    "path": "media/words/1113/irina/1.mp3",
+    "text": "Покажи, где баклажан."
+  },
+  {
+    "path": "media/words/1114/neutral.mp3",
+    "text": "Укроп"
+  },
+  {
+    "path": "media/words/1114/irina/0.mp3",
+    "text": "Где укроп?"
+  },
+  {
+    "path": "media/words/1114/irina/1.mp3",
+    "text": "Покажи, где укроп."
+  },
+  {
+    "path": "media/words/1115/neutral.mp3",
+    "text": "Салат"
+  },
+  {
+    "path": "media/words/1115/irina/0.mp3",
+    "text": "Где салат?"
+  },
+  {
+    "path": "media/words/1115/irina/1.mp3",
+    "text": "Покажи, где салат."
+  },
+  {
+    "path": "media/words/1200/neutral.mp3",
+    "text": "Книга"
+  },
+  {
+    "path": "media/words/1200/irina/0.mp3",
+    "text": "Где книга?"
+  },
+  {
+    "path": "media/words/1200/irina/1.mp3",
+    "text": "Покажи, где книга."
+  },
+  {
+    "path": "media/words/1201/neutral.mp3",
+    "text": "Тетрадь"
+  },
+  {
+    "path": "media/words/1201/irina/0.mp3",
+    "text": "Где тетрадь?"
+  },
+  {
+    "path": "media/words/1201/irina/1.mp3",
+    "text": "Покажи, где тетрадь."
+  },
+  {
+    "path": "media/words/1202/neutral.mp3",
+    "text": "Карандаш"
+  },
+  {
+    "path": "media/words/1202/irina/0.mp3",
+    "text": "Где карандаш?"
+  },
+  {
+    "path": "media/words/1202/irina/1.mp3",
+    "text": "Покажи, где карандаш."
+  },
+  {
+    "path": "media/words/1203/neutral.mp3",
+    "text": "Ручка"
+  },
+  {
+    "path": "media/words/1203/irina/0.mp3",
+    "text": "Где ручка?"
+  },
+  {
+    "path": "media/words/1203/irina/1.mp3",
+    "text": "Покажи, где ручка."
+  },
+  {
+    "path": "media/words/1204/neutral.mp3",
+    "text": "Ластик"
+  },
+  {
+    "path": "media/words/1204/irina/0.mp3",
+    "text": "Где ластик?"
+  },
+  {
+    "path": "media/words/1204/irina/1.mp3",
+    "text": "Покажи, где ластик."
+  },
+  {
+    "path": "media/words/1205/neutral.mp3",
+    "text": "Линейка"
+  },
+  {
+    "path": "media/words/1205/irina/0.mp3",
+    "text": "Где линейка?"
+  },
+  {
+    "path": "media/words/1205/irina/1.mp3",
+    "text": "Покажи, где линейка."
+  },
+  {
+    "path": "media/words/1206/neutral.mp3",
+    "text": "Портфель"
+  },
+  {
+    "path": "media/words/1206/irina/0.mp3",
+    "text": "Где портфель?"
+  },
+  {
+    "path": "media/words/1206/irina/1.mp3",
+    "text": "Покажи, где портфель."
+  },
+  {
+    "path": "media/words/1207/neutral.mp3",
+    "text": "Пенал"
+  },
+  {
+    "path": "media/words/1207/irina/0.mp3",
+    "text": "Где пенал?"
+  },
+  {
+    "path": "media/words/1207/irina/1.mp3",
+    "text": "Покажи, где пенал."
+  },
+  {
+    "path": "media/words/1208/neutral.mp3",
+    "text": "Кисточка"
+  },
+  {
+    "path": "media/words/1208/irina/0.mp3",
+    "text": "Где кисточка?"
+  },
+  {
+    "path": "media/words/1208/irina/1.mp3",
+    "text": "Покажи, где кисточка."
+  },
+  {
+    "path": "media/words/1209/neutral.mp3",
+    "text": "Краски"
+  },
+  {
+    "path": "media/words/1209/irina/0.mp3",
+    "text": "Где краски?"
+  },
+  {
+    "path": "media/words/1209/irina/1.mp3",
+    "text": "Покажи, где краски."
+  },
+  {
+    "path": "media/words/1210/neutral.mp3",
+    "text": "Клей"
+  },
+  {
+    "path": "media/words/1210/irina/0.mp3",
+    "text": "Где клей?"
+  },
+  {
+    "path": "media/words/1210/irina/1.mp3",
+    "text": "Покажи, где клей."
+  },
+  {
+    "path": "media/words/1211/neutral.mp3",
+    "text": "Ножницы"
+  },
+  {
+    "path": "media/words/1211/irina/0.mp3",
+    "text": "Где ножницы?"
+  },
+  {
+    "path": "media/words/1211/irina/1.mp3",
+    "text": "Покажи, где ножницы."
+  },
+  {
+    "path": "media/words/1212/neutral.mp3",
+    "text": "Глобус"
+  },
+  {
+    "path": "media/words/1212/irina/0.mp3",
+    "text": "Где глобус?"
+  },
+  {
+    "path": "media/words/1212/irina/1.mp3",
+    "text": "Покажи, где глобус."
+  },
+  {
+    "path": "media/words/1213/neutral.mp3",
+    "text": "Доска"
+  },
+  {
+    "path": "media/words/1213/irina/0.mp3",
+    "text": "Где доска?"
+  },
+  {
+    "path": "media/words/1213/irina/1.mp3",
+    "text": "Покажи, где доска."
+  },
+  {
+    "path": "media/words/1214/neutral.mp3",
+    "text": "Мел"
+  },
+  {
+    "path": "media/words/1214/irina/0.mp3",
+    "text": "Где мел?"
+  },
+  {
+    "path": "media/words/1214/irina/1.mp3",
+    "text": "Покажи, где мел."
+  },
+  {
+    "path": "media/words/1215/neutral.mp3",
+    "text": "Звонок"
+  },
+  {
+    "path": "media/words/1215/irina/0.mp3",
+    "text": "Где звонок?"
+  },
+  {
+    "path": "media/words/1215/irina/1.mp3",
+    "text": "Покажи, где звонок."
+  },
+  {
+    "path": "media/words/1300/neutral.mp3",
+    "text": "Голова"
+  },
+  {
+    "path": "media/words/1300/irina/0.mp3",
+    "text": "Где голова?"
+  },
+  {
+    "path": "media/words/1300/irina/1.mp3",
+    "text": "Покажи, где голова."
+  },
+  {
+    "path": "media/words/1301/neutral.mp3",
+    "text": "Рука"
+  },
+  {
+    "path": "media/words/1301/irina/0.mp3",
+    "text": "Где рука?"
+  },
+  {
+    "path": "media/words/1301/irina/1.mp3",
+    "text": "Покажи, где рука."
+  },
+  {
+    "path": "media/words/1302/neutral.mp3",
+    "text": "Нога"
+  },
+  {
+    "path": "media/words/1302/irina/0.mp3",
+    "text": "Где нога?"
+  },
+  {
+    "path": "media/words/1302/irina/1.mp3",
+    "text": "Покажи, где нога."
+  },
+  {
+    "path": "media/words/1303/neutral.mp3",
+    "text": "Глаз"
+  },
+  {
+    "path": "media/words/1303/irina/0.mp3",
+    "text": "Где глаз?"
+  },
+  {
+    "path": "media/words/1303/irina/1.mp3",
+    "text": "Покажи, где глаз."
+  },
+  {
+    "path": "media/words/1304/neutral.mp3",
+    "text": "Нос"
+  },
+  {
+    "path": "media/words/1304/irina/0.mp3",
+    "text": "Где нос?"
+  },
+  {
+    "path": "media/words/1304/irina/1.mp3",
+    "text": "Покажи, где нос."
+  },
+  {
+    "path": "media/words/1305/neutral.mp3",
+    "text": "Рот"
+  },
+  {
+    "path": "media/words/1305/irina/0.mp3",
+    "text": "Где рот?"
+  },
+  {
+    "path": "media/words/1305/irina/1.mp3",
+    "text": "Покажи, где рот."
+  },
+  {
+    "path": "media/words/1306/neutral.mp3",
+    "text": "Ухо"
+  },
+  {
+    "path": "media/words/1306/irina/0.mp3",
+    "text": "Где ухо?"
+  },
+  {
+    "path": "media/words/1306/irina/1.mp3",
+    "text": "Покажи, где ухо."
+  },
+  {
+    "path": "media/words/1307/neutral.mp3",
+    "text": "Волосы"
+  },
+  {
+    "path": "media/words/1307/irina/0.mp3",
+    "text": "Где волосы?"
+  },
+  {
+    "path": "media/words/1307/irina/1.mp3",
+    "text": "Покажи, где волосы."
+  },
+  {
+    "path": "media/words/1308/neutral.mp3",
+    "text": "Зубы"
+  },
+  {
+    "path": "media/words/1308/irina/0.mp3",
+    "text": "Где зубы?"
+  },
+  {
+    "path": "media/words/1308/irina/1.mp3",
+    "text": "Покажи, где зубы."
+  },
+  {
+    "path": "media/words/1309/neutral.mp3",
+    "text": "Палец"
+  },
+  {
+    "path": "media/words/1309/irina/0.mp3",
+    "text": "Где палец?"
+  },
+  {
+    "path": "media/words/1309/irina/1.mp3",
+    "text": "Покажи, где палец."
+  },
+  {
+    "path": "media/words/1310/neutral.mp3",
+    "text": "Колено"
+  },
+  {
+    "path": "media/words/1310/irina/0.mp3",
+    "text": "Где колено?"
+  },
+  {
+    "path": "media/words/1310/irina/1.mp3",
+    "text": "Покажи, где колено."
+  },
+  {
+    "path": "media/words/1311/neutral.mp3",
+    "text": "Шея"
+  },
+  {
+    "path": "media/words/1311/irina/0.mp3",
+    "text": "Где шея?"
+  },
+  {
+    "path": "media/words/1311/irina/1.mp3",
+    "text": "Покажи, где шея."
+  },
+  {
+    "path": "media/words/1312/neutral.mp3",
+    "text": "Брови"
+  },
+  {
+    "path": "media/words/1312/irina/0.mp3",
+    "text": "Где брови?"
+  },
+  {
+    "path": "media/words/1312/irina/1.mp3",
+    "text": "Покажи, где брови."
+  },
+  {
+    "path": "media/words/1313/neutral.mp3",
+    "text": "Спина"
+  },
+  {
+    "path": "media/words/1313/irina/0.mp3",
+    "text": "Где спина?"
+  },
+  {
+    "path": "media/words/1313/irina/1.mp3",
+    "text": "Покажи, где спина."
+  },
+  {
+    "path": "media/words/1314/neutral.mp3",
+    "text": "Живот"
+  },
+  {
+    "path": "media/words/1314/irina/0.mp3",
+    "text": "Где живот?"
+  },
+  {
+    "path": "media/words/1314/irina/1.mp3",
+    "text": "Покажи, где живот."
+  },
+  {
+    "path": "media/words/1315/neutral.mp3",
+    "text": "Язык"
+  },
+  {
+    "path": "media/words/1315/irina/0.mp3",
+    "text": "Где язык?"
+  },
+  {
+    "path": "media/words/1315/irina/1.mp3",
+    "text": "Покажи, где язык."
+  },
+  {
+    "path": "media/words/1400/neutral.mp3",
+    "text": "Солнце"
+  },
+  {
+    "path": "media/words/1400/irina/0.mp3",
+    "text": "Где солнце?"
+  },
+  {
+    "path": "media/words/1400/irina/1.mp3",
+    "text": "Покажи, где солнце."
+  },
+  {
+    "path": "media/words/1401/neutral.mp3",
+    "text": "Луна"
+  },
+  {
+    "path": "media/words/1401/irina/0.mp3",
+    "text": "Где луна?"
+  },
+  {
+    "path": "media/words/1401/irina/1.mp3",
+    "text": "Покажи, где луна."
+  },
+  {
+    "path": "media/words/1402/neutral.mp3",
+    "text": "Звезда"
+  },
+  {
+    "path": "media/words/1402/irina/0.mp3",
+    "text": "Где звезда?"
+  },
+  {
+    "path": "media/words/1402/irina/1.mp3",
+    "text": "Покажи, где звезда."
+  },
+  {
+    "path": "media/words/1403/neutral.mp3",
+    "text": "Туча"
+  },
+  {
+    "path": "media/words/1403/irina/0.mp3",
+    "text": "Где туча?"
+  },
+  {
+    "path": "media/words/1403/irina/1.mp3",
+    "text": "Покажи, где туча."
+  },
+  {
+    "path": "media/words/1404/neutral.mp3",
+    "text": "Дождь"
+  },
+  {
+    "path": "media/words/1404/irina/0.mp3",
+    "text": "Где дождь?"
+  },
+  {
+    "path": "media/words/1404/irina/1.mp3",
+    "text": "Покажи, где дождь."
+  },
+  {
+    "path": "media/words/1405/neutral.mp3",
+    "text": "Снег"
+  },
+  {
+    "path": "media/words/1405/irina/0.mp3",
+    "text": "Где снег?"
+  },
+  {
+    "path": "media/words/1405/irina/1.mp3",
+    "text": "Покажи, где снег."
+  },
+  {
+    "path": "media/words/1406/neutral.mp3",
+    "text": "Радуга"
+  },
+  {
+    "path": "media/words/1406/irina/0.mp3",
+    "text": "Где радуга?"
+  },
+  {
+    "path": "media/words/1406/irina/1.mp3",
+    "text": "Покажи, где радуга."
+  },
+  {
+    "path": "media/words/1407/neutral.mp3",
+    "text": "Дерево"
+  },
+  {
+    "path": "media/words/1407/irina/0.mp3",
+    "text": "Где дерево?"
+  },
+  {
+    "path": "media/words/1407/irina/1.mp3",
+    "text": "Покажи, где дерево."
+  },
+  {
+    "path": "media/words/1408/neutral.mp3",
+    "text": "Цветок"
+  },
+  {
+    "path": "media/words/1408/irina/0.mp3",
+    "text": "Где цветок?"
+  },
+  {
+    "path": "media/words/1408/irina/1.mp3",
+    "text": "Покажи, где цветок."
+  },
+  {
+    "path": "media/words/1409/neutral.mp3",
+    "text": "Трава"
+  },
+  {
+    "path": "media/words/1409/irina/0.mp3",
+    "text": "Где трава?"
+  },
+  {
+    "path": "media/words/1409/irina/1.mp3",
+    "text": "Покажи, где трава."
+  },
+  {
+    "path": "media/words/1410/neutral.mp3",
+    "text": "Гриб"
+  },
+  {
+    "path": "media/words/1410/irina/0.mp3",
+    "text": "Где гриб?"
+  },
+  {
+    "path": "media/words/1410/irina/1.mp3",
+    "text": "Покажи, где гриб."
+  },
+  {
+    "path": "media/words/1411/neutral.mp3",
+    "text": "Шишка"
+  },
+  {
+    "path": "media/words/1411/irina/0.mp3",
+    "text": "Где шишка?"
+  },
+  {
+    "path": "media/words/1411/irina/1.mp3",
+    "text": "Покажи, где шишка."
+  },
+  {
+    "path": "media/words/1412/neutral.mp3",
+    "text": "Река"
+  },
+  {
+    "path": "media/words/1412/irina/0.mp3",
+    "text": "Где река?"
+  },
+  {
+    "path": "media/words/1412/irina/1.mp3",
+    "text": "Покажи, где река."
+  },
+  {
+    "path": "media/words/1413/neutral.mp3",
+    "text": "Гора"
+  },
+  {
+    "path": "media/words/1413/irina/0.mp3",
+    "text": "Где гора?"
+  },
+  {
+    "path": "media/words/1413/irina/1.mp3",
+    "text": "Покажи, где гора."
+  },
+  {
+    "path": "media/words/1414/neutral.mp3",
+    "text": "Камень"
+  },
+  {
+    "path": "media/words/1414/irina/0.mp3",
+    "text": "Где камень?"
+  },
+  {
+    "path": "media/words/1414/irina/1.mp3",
+    "text": "Покажи, где камень."
+  },
+  {
+    "path": "media/words/1415/neutral.mp3",
+    "text": "Костёр"
+  },
+  {
+    "path": "media/words/1415/irina/0.mp3",
+    "text": "Где костёр?"
+  },
+  {
+    "path": "media/words/1415/irina/1.mp3",
+    "text": "Покажи, где костёр."
+  },
+  {
+    "path": "media/words/1500/neutral.mp3",
+    "text": "Врач"
+  },
+  {
+    "path": "media/words/1500/irina/0.mp3",
+    "text": "Где врач?"
+  },
+  {
+    "path": "media/words/1500/irina/1.mp3",
+    "text": "Покажи, где врач."
+  },
+  {
+    "path": "media/words/1501/neutral.mp3",
+    "text": "Повар"
+  },
+  {
+    "path": "media/words/1501/irina/0.mp3",
+    "text": "Где повар?"
+  },
+  {
+    "path": "media/words/1501/irina/1.mp3",
+    "text": "Покажи, где повар."
+  },
+  {
+    "path": "media/words/1502/neutral.mp3",
+    "text": "Пожарный"
+  },
+  {
+    "path": "media/words/1502/irina/0.mp3",
+    "text": "Где пожарный?"
+  },
+  {
+    "path": "media/words/1502/irina/1.mp3",
+    "text": "Покажи, где пожарный."
+  },
+  {
+    "path": "media/words/1503/neutral.mp3",
+    "text": "Лётчик"
+  },
+  {
+    "path": "media/words/1503/irina/0.mp3",
+    "text": "Где лётчик?"
+  },
+  {
+    "path": "media/words/1503/irina/1.mp3",
+    "text": "Покажи, где лётчик."
+  },
+  {
+    "path": "media/words/1504/neutral.mp3",
+    "text": "Моряк"
+  },
+  {
+    "path": "media/words/1504/irina/0.mp3",
+    "text": "Где моряк?"
+  },
+  {
+    "path": "media/words/1504/irina/1.mp3",
+    "text": "Покажи, где моряк."
+  },
+  {
+    "path": "media/words/1505/neutral.mp3",
+    "text": "Художник"
+  },
+  {
+    "path": "media/words/1505/irina/0.mp3",
+    "text": "Где художник?"
+  },
+  {
+    "path": "media/words/1505/irina/1.mp3",
+    "text": "Покажи, где художник."
+  },
+  {
+    "path": "media/words/1506/neutral.mp3",
+    "text": "Музыкант"
+  },
+  {
+    "path": "media/words/1506/irina/0.mp3",
+    "text": "Где музыкант?"
+  },
+  {
+    "path": "media/words/1506/irina/1.mp3",
+    "text": "Покажи, где музыкант."
+  },
+  {
+    "path": "media/words/1507/neutral.mp3",
+    "text": "Строитель"
+  },
+  {
+    "path": "media/words/1507/irina/0.mp3",
+    "text": "Где строитель?"
+  },
+  {
+    "path": "media/words/1507/irina/1.mp3",
+    "text": "Покажи, где строитель."
+  },
+  {
+    "path": "media/words/1508/neutral.mp3",
+    "text": "Водитель"
+  },
+  {
+    "path": "media/words/1508/irina/0.mp3",
+    "text": "Где водитель?"
+  },
+  {
+    "path": "media/words/1508/irina/1.mp3",
+    "text": "Покажи, где водитель."
+  },
+  {
+    "path": "media/words/1509/neutral.mp3",
+    "text": "Продавец"
+  },
+  {
+    "path": "media/words/1509/irina/0.mp3",
+    "text": "Где продавец?"
+  },
+  {
+    "path": "media/words/1509/irina/1.mp3",
+    "text": "Покажи, где продавец."
+  },
+  {
+    "path": "media/words/1510/neutral.mp3",
+    "text": "Учитель"
+  },
+  {
+    "path": "media/words/1510/irina/0.mp3",
+    "text": "Где учитель?"
+  },
+  {
+    "path": "media/words/1510/irina/1.mp3",
+    "text": "Покажи, где учитель."
+  },
+  {
+    "path": "media/words/1511/neutral.mp3",
+    "text": "Почтальон"
+  },
+  {
+    "path": "media/words/1511/irina/0.mp3",
+    "text": "Где почтальон?"
+  },
+  {
+    "path": "media/words/1511/irina/1.mp3",
+    "text": "Покажи, где почтальон."
+  },
+  {
+    "path": "media/words/1512/neutral.mp3",
+    "text": "Садовник"
+  },
+  {
+    "path": "media/words/1512/irina/0.mp3",
+    "text": "Где садовник?"
+  },
+  {
+    "path": "media/words/1512/irina/1.mp3",
+    "text": "Покажи, где садовник."
+  },
+  {
+    "path": "media/words/1513/neutral.mp3",
+    "text": "Парикмахер"
+  },
+  {
+    "path": "media/words/1513/irina/0.mp3",
+    "text": "Где парикмахер?"
+  },
+  {
+    "path": "media/words/1513/irina/1.mp3",
+    "text": "Покажи, где парикмахер."
+  },
+  {
+    "path": "media/words/1514/neutral.mp3",
+    "text": "Пастух"
+  },
+  {
+    "path": "media/words/1514/irina/0.mp3",
+    "text": "Где пастух?"
+  },
+  {
+    "path": "media/words/1514/irina/1.mp3",
+    "text": "Покажи, где пастух."
+  },
+  {
+    "path": "media/words/1515/neutral.mp3",
+    "text": "Космонавт"
+  },
+  {
+    "path": "media/words/1515/irina/0.mp3",
+    "text": "Где космонавт?"
+  },
+  {
+    "path": "media/words/1515/irina/1.mp3",
+    "text": "Покажи, где космонавт."
+  }
+]

@@ -10,46 +10,370 @@
   "themes": [
     {
       "id": "digits",
-      "title": "Цифры",
+      "title": "Цифры и фигуры",
+      "intro": "Цифрами мы считаем всё вокруг, а по форме узнаём предметы: мяч круглый, окно квадратное.",
       "wordIds": [
         "0000",
         "0001",
         "0002",
         "0003",
-        "0004"
+        "0004",
+        "0005",
+        "0006",
+        "0007",
+        "0008",
+        "0009",
+        "0010",
+        "0011",
+        "0012",
+        "0013",
+        "0014",
+        "0015"
       ]
     },
     {
       "id": "my_room",
       "title": "Моя комната",
+      "intro": "В комнате у каждой вещи своё место. Давай вспомним, как эти вещи называются.",
       "wordIds": [
         "0100",
         "0101",
         "0102",
         "0103",
-        "0104"
+        "0104",
+        "0105",
+        "0106",
+        "0107",
+        "0108",
+        "0109",
+        "0110",
+        "0111",
+        "0112",
+        "0113",
+        "0114",
+        "0115"
       ]
     },
     {
       "id": "transport",
       "title": "Транспорт",
+      "intro": "Транспорт возит людей и грузы. Что-то едет по дороге, что-то плывёт, а что-то летит.",
       "wordIds": [
         "0200",
         "0201",
         "0202",
         "0203",
-        "0204"
+        "0204",
+        "0205",
+        "0206",
+        "0207",
+        "0208",
+        "0209",
+        "0210",
+        "0211",
+        "0212",
+        "0213",
+        "0214",
+        "0215"
       ]
     },
     {
       "id": "food",
       "title": "Еда",
+      "intro": "Еда даёт нам силы. Посмотрим, что бывает на столе к завтраку и к обеду.",
       "wordIds": [
         "0300",
         "0301",
         "0302",
         "0303",
-        "0304"
+        "0304",
+        "0305",
+        "0306",
+        "0307",
+        "0308",
+        "0309",
+        "0310",
+        "0311",
+        "0312",
+        "0313",
+        "0314",
+        "0315"
+      ]
+    },
+    {
+      "id": "animals",
+      "title": "Домашние животные",
+      "intro": "Эти животные живут рядом с человеком. За ними ухаживают, а они помогают людям.",
+      "wordIds": [
+        "0400",
+        "0401",
+        "0402",
+        "0403",
+        "0404",
+        "0405",
+        "0406",
+        "0407",
+        "0408",
+        "0409",
+        "0410",
+        "0411",
+        "0412",
+        "0413",
+        "0414",
+        "0415"
+      ]
+    },
+    {
+      "id": "wild",
+      "title": "Дикие животные",
+      "intro": "Дикие животные живут в лесу и в поле. Они сами добывают еду и строят себе жильё.",
+      "wordIds": [
+        "0500",
+        "0501",
+        "0502",
+        "0503",
+        "0504",
+        "0505",
+        "0506",
+        "0507",
+        "0508",
+        "0509",
+        "0510",
+        "0511",
+        "0512",
+        "0513",
+        "0514",
+        "0515"
+      ]
+    },
+    {
+      "id": "birds",
+      "title": "Птицы",
+      "intro": "У птиц есть крылья и клюв. Одни птицы улетают на юг, другие зимуют с нами.",
+      "wordIds": [
+        "0600",
+        "0601",
+        "0602",
+        "0603",
+        "0604",
+        "0605",
+        "0606",
+        "0607",
+        "0608",
+        "0609",
+        "0610",
+        "0611",
+        "0612",
+        "0613",
+        "0614",
+        "0615"
+      ]
+    },
+    {
+      "id": "clothes",
+      "title": "Одежда",
+      "intro": "Одежду выбирают по погоде. В мороз надевают одно, а в жару совсем другое.",
+      "wordIds": [
+        "0700",
+        "0701",
+        "0702",
+        "0703",
+        "0704",
+        "0705",
+        "0706",
+        "0707",
+        "0708",
+        "0709",
+        "0710",
+        "0711",
+        "0712",
+        "0713",
+        "0714",
+        "0715"
+      ]
+    },
+    {
+      "id": "dishes",
+      "title": "Посуда",
+      "intro": "Посуда нужна, чтобы готовить и накрывать на стол. У каждой вещи своё дело.",
+      "wordIds": [
+        "0800",
+        "0801",
+        "0802",
+        "0803",
+        "0804",
+        "0805",
+        "0806",
+        "0807",
+        "0808",
+        "0809",
+        "0810",
+        "0811",
+        "0812",
+        "0813",
+        "0814",
+        "0815"
+      ]
+    },
+    {
+      "id": "toys",
+      "title": "Игрушки",
+      "intro": "С игрушками играют по-разному: одни катают, другие строят, третьи запускают.",
+      "wordIds": [
+        "0900",
+        "0901",
+        "0902",
+        "0903",
+        "0904",
+        "0905",
+        "0906",
+        "0907",
+        "0908",
+        "0909",
+        "0910",
+        "0911",
+        "0912",
+        "0913",
+        "0914",
+        "0915"
+      ]
+    },
+    {
+      "id": "fruits",
+      "title": "Фрукты и ягоды",
+      "intro": "Фрукты растут на деревьях, а ягоды — на кустах и на грядке. И те и другие сладкие.",
+      "wordIds": [
+        "1000",
+        "1001",
+        "1002",
+        "1003",
+        "1004",
+        "1005",
+        "1006",
+        "1007",
+        "1008",
+        "1009",
+        "1010",
+        "1011",
+        "1012",
+        "1013",
+        "1014",
+        "1015"
+      ]
+    },
+    {
+      "id": "vegetables",
+      "title": "Овощи",
+      "intro": "Овощи растут на грядке. Что-то прячется в земле, а что-то тянется к солнцу.",
+      "wordIds": [
+        "1100",
+        "1101",
+        "1102",
+        "1103",
+        "1104",
+        "1105",
+        "1106",
+        "1107",
+        "1108",
+        "1109",
+        "1110",
+        "1111",
+        "1112",
+        "1113",
+        "1114",
+        "1115"
+      ]
+    },
+    {
+      "id": "school",
+      "title": "Школа",
+      "intro": "В школе учатся читать, писать и считать. Для этого нужны свои вещи.",
+      "wordIds": [
+        "1200",
+        "1201",
+        "1202",
+        "1203",
+        "1204",
+        "1205",
+        "1206",
+        "1207",
+        "1208",
+        "1209",
+        "1210",
+        "1211",
+        "1212",
+        "1213",
+        "1214",
+        "1215"
+      ]
+    },
+    {
+      "id": "body",
+      "title": "Части тела",
+      "intro": "Своё тело знать полезно: так легче рассказать, где болит и что не получается.",
+      "wordIds": [
+        "1300",
+        "1301",
+        "1302",
+        "1303",
+        "1304",
+        "1305",
+        "1306",
+        "1307",
+        "1308",
+        "1309",
+        "1310",
+        "1311",
+        "1312",
+        "1313",
+        "1314",
+        "1315"
+      ]
+    },
+    {
+      "id": "nature",
+      "title": "Природа",
+      "intro": "Природа вокруг нас всё время меняется: то дождь, то снег, то радуга после тучи.",
+      "wordIds": [
+        "1400",
+        "1401",
+        "1402",
+        "1403",
+        "1404",
+        "1405",
+        "1406",
+        "1407",
+        "1408",
+        "1409",
+        "1410",
+        "1411",
+        "1412",
+        "1413",
+        "1414",
+        "1415"
+      ]
+    },
+    {
+      "id": "jobs",
+      "title": "Профессии",
+      "intro": "У взрослых есть работа. По одежде и вещам часто видно, кем человек работает.",
+      "wordIds": [
+        "1500",
+        "1501",
+        "1502",
+        "1503",
+        "1504",
+        "1505",
+        "1506",
+        "1507",
+        "1508",
+        "1509",
+        "1510",
+        "1511",
+        "1512",
+        "1513",
+        "1514",
+        "1515"
       ]
     }
   ],
@@ -76,13 +400,79 @@
       "id": "0003",
       "name": "Четыре",
       "themeId": "digits",
-      "level": 1
+      "level": 0
     },
     {
       "id": "0004",
       "name": "Пять",
       "themeId": "digits",
+      "level": 0
+    },
+    {
+      "id": "0005",
+      "name": "Шесть",
+      "themeId": "digits",
+      "level": 0
+    },
+    {
+      "id": "0006",
+      "name": "Семь",
+      "themeId": "digits",
       "level": 1
+    },
+    {
+      "id": "0007",
+      "name": "Восемь",
+      "themeId": "digits",
+      "level": 1
+    },
+    {
+      "id": "0008",
+      "name": "Девять",
+      "themeId": "digits",
+      "level": 1
+    },
+    {
+      "id": "0009",
+      "name": "Десять",
+      "themeId": "digits",
+      "level": 1
+    },
+    {
+      "id": "0010",
+      "name": "Ноль",
+      "themeId": "digits",
+      "level": 1
+    },
+    {
+      "id": "0011",
+      "name": "Круг",
+      "themeId": "digits",
+      "level": 1
+    },
+    {
+      "id": "0012",
+      "name": "Квадрат",
+      "themeId": "digits",
+      "level": 2
+    },
+    {
+      "id": "0013",
+      "name": "Треугольник",
+      "themeId": "digits",
+      "level": 2
+    },
+    {
+      "id": "0014",
+      "name": "Сердечко",
+      "themeId": "digits",
+      "level": 2
+    },
+    {
+      "id": "0015",
+      "name": "Ромб",
+      "themeId": "digits",
+      "level": 2
     },
     {
       "id": "0100",
@@ -100,17 +490,83 @@
       "id": "0102",
       "name": "Стул",
       "themeId": "my_room",
-      "level": 1
+      "level": 0
     },
     {
       "id": "0103",
       "name": "Лампа",
       "themeId": "my_room",
-      "level": 1
+      "level": 0
     },
     {
       "id": "0104",
       "name": "Окно",
+      "themeId": "my_room",
+      "level": 0
+    },
+    {
+      "id": "0105",
+      "name": "Дверь",
+      "themeId": "my_room",
+      "level": 0
+    },
+    {
+      "id": "0106",
+      "name": "Шкаф",
+      "themeId": "my_room",
+      "level": 1
+    },
+    {
+      "id": "0107",
+      "name": "Ковёр",
+      "themeId": "my_room",
+      "level": 1
+    },
+    {
+      "id": "0108",
+      "name": "Полка",
+      "themeId": "my_room",
+      "level": 1
+    },
+    {
+      "id": "0109",
+      "name": "Часы",
+      "themeId": "my_room",
+      "level": 1
+    },
+    {
+      "id": "0110",
+      "name": "Подушка",
+      "themeId": "my_room",
+      "level": 1
+    },
+    {
+      "id": "0111",
+      "name": "Одеяло",
+      "themeId": "my_room",
+      "level": 1
+    },
+    {
+      "id": "0112",
+      "name": "Зеркало",
+      "themeId": "my_room",
+      "level": 2
+    },
+    {
+      "id": "0113",
+      "name": "Коробка",
+      "themeId": "my_room",
+      "level": 2
+    },
+    {
+      "id": "0114",
+      "name": "Корзина",
+      "themeId": "my_room",
+      "level": 2
+    },
+    {
+      "id": "0115",
+      "name": "Тумбочка",
       "themeId": "my_room",
       "level": 2
     },
@@ -124,23 +580,89 @@
       "id": "0201",
       "name": "Велосипед",
       "themeId": "transport",
-      "level": 1
+      "level": 0
     },
     {
       "id": "0202",
       "name": "Самолёт",
       "themeId": "transport",
-      "level": 1
+      "level": 0
     },
     {
       "id": "0203",
       "name": "Кораблик",
       "themeId": "transport",
-      "level": 2
+      "level": 0
     },
     {
       "id": "0204",
       "name": "Поезд",
+      "themeId": "transport",
+      "level": 0
+    },
+    {
+      "id": "0205",
+      "name": "Машина",
+      "themeId": "transport",
+      "level": 0
+    },
+    {
+      "id": "0206",
+      "name": "Трамвай",
+      "themeId": "transport",
+      "level": 1
+    },
+    {
+      "id": "0207",
+      "name": "Грузовик",
+      "themeId": "transport",
+      "level": 1
+    },
+    {
+      "id": "0208",
+      "name": "Вертолёт",
+      "themeId": "transport",
+      "level": 1
+    },
+    {
+      "id": "0209",
+      "name": "Ракета",
+      "themeId": "transport",
+      "level": 1
+    },
+    {
+      "id": "0210",
+      "name": "Лодка",
+      "themeId": "transport",
+      "level": 1
+    },
+    {
+      "id": "0211",
+      "name": "Мотоцикл",
+      "themeId": "transport",
+      "level": 1
+    },
+    {
+      "id": "0212",
+      "name": "Трактор",
+      "themeId": "transport",
+      "level": 2
+    },
+    {
+      "id": "0213",
+      "name": "Экскаватор",
+      "themeId": "transport",
+      "level": 2
+    },
+    {
+      "id": "0214",
+      "name": "Фургон",
+      "themeId": "transport",
+      "level": 2
+    },
+    {
+      "id": "0215",
+      "name": "Самокат",
       "themeId": "transport",
       "level": 2
     },
@@ -160,18 +682,1236 @@
       "id": "0302",
       "name": "Молоко",
       "themeId": "food",
-      "level": 1
+      "level": 0
     },
     {
       "id": "0303",
       "name": "Морковь",
       "themeId": "food",
-      "level": 1
+      "level": 0
     },
     {
       "id": "0304",
       "name": "Сыр",
       "themeId": "food",
+      "level": 0
+    },
+    {
+      "id": "0305",
+      "name": "Каша",
+      "themeId": "food",
+      "level": 0
+    },
+    {
+      "id": "0306",
+      "name": "Суп",
+      "themeId": "food",
+      "level": 1
+    },
+    {
+      "id": "0307",
+      "name": "Масло",
+      "themeId": "food",
+      "level": 1
+    },
+    {
+      "id": "0308",
+      "name": "Печенье",
+      "themeId": "food",
+      "level": 1
+    },
+    {
+      "id": "0309",
+      "name": "Конфета",
+      "themeId": "food",
+      "level": 1
+    },
+    {
+      "id": "0310",
+      "name": "Мёд",
+      "themeId": "food",
+      "level": 1
+    },
+    {
+      "id": "0311",
+      "name": "Яйцо",
+      "themeId": "food",
+      "level": 1
+    },
+    {
+      "id": "0312",
+      "name": "Колбаса",
+      "themeId": "food",
+      "level": 2
+    },
+    {
+      "id": "0313",
+      "name": "Пирог",
+      "themeId": "food",
+      "level": 2
+    },
+    {
+      "id": "0314",
+      "name": "Блины",
+      "themeId": "food",
+      "level": 2
+    },
+    {
+      "id": "0315",
+      "name": "Сок",
+      "themeId": "food",
+      "level": 2
+    },
+    {
+      "id": "0400",
+      "name": "Кошка",
+      "themeId": "animals",
+      "level": 0
+    },
+    {
+      "id": "0401",
+      "name": "Собака",
+      "themeId": "animals",
+      "level": 0
+    },
+    {
+      "id": "0402",
+      "name": "Корова",
+      "themeId": "animals",
+      "level": 0
+    },
+    {
+      "id": "0403",
+      "name": "Лошадь",
+      "themeId": "animals",
+      "level": 0
+    },
+    {
+      "id": "0404",
+      "name": "Коза",
+      "themeId": "animals",
+      "level": 0
+    },
+    {
+      "id": "0405",
+      "name": "Овца",
+      "themeId": "animals",
+      "level": 0
+    },
+    {
+      "id": "0406",
+      "name": "Свинья",
+      "themeId": "animals",
+      "level": 1
+    },
+    {
+      "id": "0407",
+      "name": "Кролик",
+      "themeId": "animals",
+      "level": 1
+    },
+    {
+      "id": "0408",
+      "name": "Утка",
+      "themeId": "animals",
+      "level": 1
+    },
+    {
+      "id": "0409",
+      "name": "Гусь",
+      "themeId": "animals",
+      "level": 1
+    },
+    {
+      "id": "0410",
+      "name": "Курица",
+      "themeId": "animals",
+      "level": 1
+    },
+    {
+      "id": "0411",
+      "name": "Петух",
+      "themeId": "animals",
+      "level": 1
+    },
+    {
+      "id": "0412",
+      "name": "Индюк",
+      "themeId": "animals",
+      "level": 2
+    },
+    {
+      "id": "0413",
+      "name": "Осёл",
+      "themeId": "animals",
+      "level": 2
+    },
+    {
+      "id": "0414",
+      "name": "Хомяк",
+      "themeId": "animals",
+      "level": 2
+    },
+    {
+      "id": "0415",
+      "name": "Попугай",
+      "themeId": "animals",
+      "level": 2
+    },
+    {
+      "id": "0500",
+      "name": "Заяц",
+      "themeId": "wild",
+      "level": 0
+    },
+    {
+      "id": "0501",
+      "name": "Лиса",
+      "themeId": "wild",
+      "level": 0
+    },
+    {
+      "id": "0502",
+      "name": "Волк",
+      "themeId": "wild",
+      "level": 0
+    },
+    {
+      "id": "0503",
+      "name": "Медведь",
+      "themeId": "wild",
+      "level": 0
+    },
+    {
+      "id": "0504",
+      "name": "Белка",
+      "themeId": "wild",
+      "level": 0
+    },
+    {
+      "id": "0505",
+      "name": "Ёжик",
+      "themeId": "wild",
+      "level": 0
+    },
+    {
+      "id": "0506",
+      "name": "Лось",
+      "themeId": "wild",
+      "level": 1
+    },
+    {
+      "id": "0507",
+      "name": "Кабан",
+      "themeId": "wild",
+      "level": 1
+    },
+    {
+      "id": "0508",
+      "name": "Барсук",
+      "themeId": "wild",
+      "level": 1
+    },
+    {
+      "id": "0509",
+      "name": "Бобр",
+      "themeId": "wild",
+      "level": 1
+    },
+    {
+      "id": "0510",
+      "name": "Змея",
+      "themeId": "wild",
+      "level": 1
+    },
+    {
+      "id": "0511",
+      "name": "Рысь",
+      "themeId": "wild",
+      "level": 1
+    },
+    {
+      "id": "0512",
+      "name": "Крот",
+      "themeId": "wild",
+      "level": 2
+    },
+    {
+      "id": "0513",
+      "name": "Мышь",
+      "themeId": "wild",
+      "level": 2
+    },
+    {
+      "id": "0514",
+      "name": "Лягушка",
+      "themeId": "wild",
+      "level": 2
+    },
+    {
+      "id": "0515",
+      "name": "Черепаха",
+      "themeId": "wild",
+      "level": 2
+    },
+    {
+      "id": "0600",
+      "name": "Воробей",
+      "themeId": "birds",
+      "level": 0
+    },
+    {
+      "id": "0601",
+      "name": "Ворона",
+      "themeId": "birds",
+      "level": 0
+    },
+    {
+      "id": "0602",
+      "name": "Голубь",
+      "themeId": "birds",
+      "level": 0
+    },
+    {
+      "id": "0603",
+      "name": "Синица",
+      "themeId": "birds",
+      "level": 0
+    },
+    {
+      "id": "0604",
+      "name": "Сорока",
+      "themeId": "birds",
+      "level": 0
+    },
+    {
+      "id": "0605",
+      "name": "Снегирь",
+      "themeId": "birds",
+      "level": 0
+    },
+    {
+      "id": "0606",
+      "name": "Дятел",
+      "themeId": "birds",
+      "level": 1
+    },
+    {
+      "id": "0607",
+      "name": "Сова",
+      "themeId": "birds",
+      "level": 1
+    },
+    {
+      "id": "0608",
+      "name": "Аист",
+      "themeId": "birds",
+      "level": 1
+    },
+    {
+      "id": "0609",
+      "name": "Павлин",
+      "themeId": "birds",
+      "level": 1
+    },
+    {
+      "id": "0610",
+      "name": "Лебедь",
+      "themeId": "birds",
+      "level": 1
+    },
+    {
+      "id": "0611",
+      "name": "Фламинго",
+      "themeId": "birds",
+      "level": 1
+    },
+    {
+      "id": "0612",
+      "name": "Орёл",
+      "themeId": "birds",
+      "level": 2
+    },
+    {
+      "id": "0613",
+      "name": "Чайка",
+      "themeId": "birds",
+      "level": 2
+    },
+    {
+      "id": "0614",
+      "name": "Ласточка",
+      "themeId": "birds",
+      "level": 2
+    },
+    {
+      "id": "0615",
+      "name": "Пингвин",
+      "themeId": "birds",
+      "level": 2
+    },
+    {
+      "id": "0700",
+      "name": "Шапка",
+      "themeId": "clothes",
+      "level": 0
+    },
+    {
+      "id": "0701",
+      "name": "Шарф",
+      "themeId": "clothes",
+      "level": 0
+    },
+    {
+      "id": "0702",
+      "name": "Куртка",
+      "themeId": "clothes",
+      "level": 0
+    },
+    {
+      "id": "0703",
+      "name": "Платье",
+      "themeId": "clothes",
+      "level": 0
+    },
+    {
+      "id": "0704",
+      "name": "Рубашка",
+      "themeId": "clothes",
+      "level": 0
+    },
+    {
+      "id": "0705",
+      "name": "Брюки",
+      "themeId": "clothes",
+      "level": 0
+    },
+    {
+      "id": "0706",
+      "name": "Юбка",
+      "themeId": "clothes",
+      "level": 1
+    },
+    {
+      "id": "0707",
+      "name": "Носки",
+      "themeId": "clothes",
+      "level": 1
+    },
+    {
+      "id": "0708",
+      "name": "Варежки",
+      "themeId": "clothes",
+      "level": 1
+    },
+    {
+      "id": "0709",
+      "name": "Сапоги",
+      "themeId": "clothes",
+      "level": 1
+    },
+    {
+      "id": "0710",
+      "name": "Тапочки",
+      "themeId": "clothes",
+      "level": 1
+    },
+    {
+      "id": "0711",
+      "name": "Ремень",
+      "themeId": "clothes",
+      "level": 1
+    },
+    {
+      "id": "0712",
+      "name": "Свитер",
+      "themeId": "clothes",
+      "level": 2
+    },
+    {
+      "id": "0713",
+      "name": "Футболка",
+      "themeId": "clothes",
+      "level": 2
+    },
+    {
+      "id": "0714",
+      "name": "Шорты",
+      "themeId": "clothes",
+      "level": 2
+    },
+    {
+      "id": "0715",
+      "name": "Пижама",
+      "themeId": "clothes",
+      "level": 2
+    },
+    {
+      "id": "0800",
+      "name": "Тарелка",
+      "themeId": "dishes",
+      "level": 0
+    },
+    {
+      "id": "0801",
+      "name": "Чашка",
+      "themeId": "dishes",
+      "level": 0
+    },
+    {
+      "id": "0802",
+      "name": "Ложка",
+      "themeId": "dishes",
+      "level": 0
+    },
+    {
+      "id": "0803",
+      "name": "Вилка",
+      "themeId": "dishes",
+      "level": 0
+    },
+    {
+      "id": "0804",
+      "name": "Нож",
+      "themeId": "dishes",
+      "level": 0
+    },
+    {
+      "id": "0805",
+      "name": "Кастрюля",
+      "themeId": "dishes",
+      "level": 0
+    },
+    {
+      "id": "0806",
+      "name": "Сковорода",
+      "themeId": "dishes",
+      "level": 1
+    },
+    {
+      "id": "0807",
+      "name": "Чайник",
+      "themeId": "dishes",
+      "level": 1
+    },
+    {
+      "id": "0808",
+      "name": "Стакан",
+      "themeId": "dishes",
+      "level": 1
+    },
+    {
+      "id": "0809",
+      "name": "Кувшин",
+      "themeId": "dishes",
+      "level": 1
+    },
+    {
+      "id": "0810",
+      "name": "Поднос",
+      "themeId": "dishes",
+      "level": 1
+    },
+    {
+      "id": "0811",
+      "name": "Солонка",
+      "themeId": "dishes",
+      "level": 1
+    },
+    {
+      "id": "0812",
+      "name": "Банка",
+      "themeId": "dishes",
+      "level": 2
+    },
+    {
+      "id": "0813",
+      "name": "Бутылка",
+      "themeId": "dishes",
+      "level": 2
+    },
+    {
+      "id": "0814",
+      "name": "Тёрка",
+      "themeId": "dishes",
+      "level": 2
+    },
+    {
+      "id": "0815",
+      "name": "Дуршлаг",
+      "themeId": "dishes",
+      "level": 2
+    },
+    {
+      "id": "0900",
+      "name": "Мяч",
+      "themeId": "toys",
+      "level": 0
+    },
+    {
+      "id": "0901",
+      "name": "Кубик",
+      "themeId": "toys",
+      "level": 0
+    },
+    {
+      "id": "0902",
+      "name": "Кукла",
+      "themeId": "toys",
+      "level": 0
+    },
+    {
+      "id": "0903",
+      "name": "Матрёшка",
+      "themeId": "toys",
+      "level": 0
+    },
+    {
+      "id": "0904",
+      "name": "Юла",
+      "themeId": "toys",
+      "level": 0
+    },
+    {
+      "id": "0905",
+      "name": "Скакалка",
+      "themeId": "toys",
+      "level": 0
+    },
+    {
+      "id": "0906",
+      "name": "Барабан",
+      "themeId": "toys",
+      "level": 1
+    },
+    {
+      "id": "0907",
+      "name": "Дудочка",
+      "themeId": "toys",
+      "level": 1
+    },
+    {
+      "id": "0908",
+      "name": "Пирамидка",
+      "themeId": "toys",
+      "level": 1
+    },
+    {
+      "id": "0909",
+      "name": "Конструктор",
+      "themeId": "toys",
+      "level": 1
+    },
+    {
+      "id": "0910",
+      "name": "Санки",
+      "themeId": "toys",
+      "level": 1
+    },
+    {
+      "id": "0911",
+      "name": "Воздушный змей",
+      "themeId": "toys",
+      "level": 1
+    },
+    {
+      "id": "0912",
+      "name": "Качели",
+      "themeId": "toys",
+      "level": 2
+    },
+    {
+      "id": "0913",
+      "name": "Свисток",
+      "themeId": "toys",
+      "level": 2
+    },
+    {
+      "id": "0914",
+      "name": "Погремушка",
+      "themeId": "toys",
+      "level": 2
+    },
+    {
+      "id": "0915",
+      "name": "Робот",
+      "themeId": "toys",
+      "level": 2
+    },
+    {
+      "id": "1000",
+      "name": "Груша",
+      "themeId": "fruits",
+      "level": 0
+    },
+    {
+      "id": "1001",
+      "name": "Слива",
+      "themeId": "fruits",
+      "level": 0
+    },
+    {
+      "id": "1002",
+      "name": "Банан",
+      "themeId": "fruits",
+      "level": 0
+    },
+    {
+      "id": "1003",
+      "name": "Апельсин",
+      "themeId": "fruits",
+      "level": 0
+    },
+    {
+      "id": "1004",
+      "name": "Лимон",
+      "themeId": "fruits",
+      "level": 0
+    },
+    {
+      "id": "1005",
+      "name": "Виноград",
+      "themeId": "fruits",
+      "level": 0
+    },
+    {
+      "id": "1006",
+      "name": "Персик",
+      "themeId": "fruits",
+      "level": 1
+    },
+    {
+      "id": "1007",
+      "name": "Ананас",
+      "themeId": "fruits",
+      "level": 1
+    },
+    {
+      "id": "1008",
+      "name": "Арбуз",
+      "themeId": "fruits",
+      "level": 1
+    },
+    {
+      "id": "1009",
+      "name": "Дыня",
+      "themeId": "fruits",
+      "level": 1
+    },
+    {
+      "id": "1010",
+      "name": "Клубника",
+      "themeId": "fruits",
+      "level": 1
+    },
+    {
+      "id": "1011",
+      "name": "Малина",
+      "themeId": "fruits",
+      "level": 1
+    },
+    {
+      "id": "1012",
+      "name": "Вишня",
+      "themeId": "fruits",
+      "level": 2
+    },
+    {
+      "id": "1013",
+      "name": "Смородина",
+      "themeId": "fruits",
+      "level": 2
+    },
+    {
+      "id": "1014",
+      "name": "Киви",
+      "themeId": "fruits",
+      "level": 2
+    },
+    {
+      "id": "1015",
+      "name": "Ежевика",
+      "themeId": "fruits",
+      "level": 2
+    },
+    {
+      "id": "1100",
+      "name": "Огурец",
+      "themeId": "vegetables",
+      "level": 0
+    },
+    {
+      "id": "1101",
+      "name": "Помидор",
+      "themeId": "vegetables",
+      "level": 0
+    },
+    {
+      "id": "1102",
+      "name": "Картошка",
+      "themeId": "vegetables",
+      "level": 0
+    },
+    {
+      "id": "1103",
+      "name": "Капуста",
+      "themeId": "vegetables",
+      "level": 0
+    },
+    {
+      "id": "1104",
+      "name": "Лук",
+      "themeId": "vegetables",
+      "level": 0
+    },
+    {
+      "id": "1105",
+      "name": "Кукуруза",
+      "themeId": "vegetables",
+      "level": 0
+    },
+    {
+      "id": "1106",
+      "name": "Редиска",
+      "themeId": "vegetables",
+      "level": 1
+    },
+    {
+      "id": "1107",
+      "name": "Тыква",
+      "themeId": "vegetables",
+      "level": 1
+    },
+    {
+      "id": "1108",
+      "name": "Кабачок",
+      "themeId": "vegetables",
+      "level": 1
+    },
+    {
+      "id": "1109",
+      "name": "Горох",
+      "themeId": "vegetables",
+      "level": 1
+    },
+    {
+      "id": "1110",
+      "name": "Брокколи",
+      "themeId": "vegetables",
+      "level": 1
+    },
+    {
+      "id": "1111",
+      "name": "Чеснок",
+      "themeId": "vegetables",
+      "level": 1
+    },
+    {
+      "id": "1112",
+      "name": "Перец",
+      "themeId": "vegetables",
+      "level": 2
+    },
+    {
+      "id": "1113",
+      "name": "Баклажан",
+      "themeId": "vegetables",
+      "level": 2
+    },
+    {
+      "id": "1114",
+      "name": "Укроп",
+      "themeId": "vegetables",
+      "level": 2
+    },
+    {
+      "id": "1115",
+      "name": "Салат",
+      "themeId": "vegetables",
+      "level": 2
+    },
+    {
+      "id": "1200",
+      "name": "Книга",
+      "themeId": "school",
+      "level": 0
+    },
+    {
+      "id": "1201",
+      "name": "Тетрадь",
+      "themeId": "school",
+      "level": 0
+    },
+    {
+      "id": "1202",
+      "name": "Карандаш",
+      "themeId": "school",
+      "level": 0
+    },
+    {
+      "id": "1203",
+      "name": "Ручка",
+      "themeId": "school",
+      "level": 0
+    },
+    {
+      "id": "1204",
+      "name": "Ластик",
+      "themeId": "school",
+      "level": 0
+    },
+    {
+      "id": "1205",
+      "name": "Линейка",
+      "themeId": "school",
+      "level": 0
+    },
+    {
+      "id": "1206",
+      "name": "Портфель",
+      "themeId": "school",
+      "level": 1
+    },
+    {
+      "id": "1207",
+      "name": "Пенал",
+      "themeId": "school",
+      "level": 1
+    },
+    {
+      "id": "1208",
+      "name": "Кисточка",
+      "themeId": "school",
+      "level": 1
+    },
+    {
+      "id": "1209",
+      "name": "Краски",
+      "themeId": "school",
+      "level": 1
+    },
+    {
+      "id": "1210",
+      "name": "Клей",
+      "themeId": "school",
+      "level": 1
+    },
+    {
+      "id": "1211",
+      "name": "Ножницы",
+      "themeId": "school",
+      "level": 1
+    },
+    {
+      "id": "1212",
+      "name": "Глобус",
+      "themeId": "school",
+      "level": 2
+    },
+    {
+      "id": "1213",
+      "name": "Доска",
+      "themeId": "school",
+      "level": 2
+    },
+    {
+      "id": "1214",
+      "name": "Мел",
+      "themeId": "school",
+      "level": 2
+    },
+    {
+      "id": "1215",
+      "name": "Звонок",
+      "themeId": "school",
+      "level": 2
+    },
+    {
+      "id": "1300",
+      "name": "Голова",
+      "themeId": "body",
+      "level": 0
+    },
+    {
+      "id": "1301",
+      "name": "Рука",
+      "themeId": "body",
+      "level": 0
+    },
+    {
+      "id": "1302",
+      "name": "Нога",
+      "themeId": "body",
+      "level": 0
+    },
+    {
+      "id": "1303",
+      "name": "Глаз",
+      "themeId": "body",
+      "level": 0
+    },
+    {
+      "id": "1304",
+      "name": "Нос",
+      "themeId": "body",
+      "level": 0
+    },
+    {
+      "id": "1305",
+      "name": "Рот",
+      "themeId": "body",
+      "level": 0
+    },
+    {
+      "id": "1306",
+      "name": "Ухо",
+      "themeId": "body",
+      "level": 1
+    },
+    {
+      "id": "1307",
+      "name": "Волосы",
+      "themeId": "body",
+      "level": 1
+    },
+    {
+      "id": "1308",
+      "name": "Зубы",
+      "themeId": "body",
+      "level": 1
+    },
+    {
+      "id": "1309",
+      "name": "Палец",
+      "themeId": "body",
+      "level": 1
+    },
+    {
+      "id": "1310",
+      "name": "Колено",
+      "themeId": "body",
+      "level": 1
+    },
+    {
+      "id": "1311",
+      "name": "Шея",
+      "themeId": "body",
+      "level": 1
+    },
+    {
+      "id": "1312",
+      "name": "Брови",
+      "themeId": "body",
+      "level": 2
+    },
+    {
+      "id": "1313",
+      "name": "Спина",
+      "themeId": "body",
+      "level": 2
+    },
+    {
+      "id": "1314",
+      "name": "Живот",
+      "themeId": "body",
+      "level": 2
+    },
+    {
+      "id": "1315",
+      "name": "Язык",
+      "themeId": "body",
+      "level": 2
+    },
+    {
+      "id": "1400",
+      "name": "Солнце",
+      "themeId": "nature",
+      "level": 0
+    },
+    {
+      "id": "1401",
+      "name": "Луна",
+      "themeId": "nature",
+      "level": 0
+    },
+    {
+      "id": "1402",
+      "name": "Звезда",
+      "themeId": "nature",
+      "level": 0
+    },
+    {
+      "id": "1403",
+      "name": "Туча",
+      "themeId": "nature",
+      "level": 0
+    },
+    {
+      "id": "1404",
+      "name": "Дождь",
+      "themeId": "nature",
+      "level": 0
+    },
+    {
+      "id": "1405",
+      "name": "Снег",
+      "themeId": "nature",
+      "level": 0
+    },
+    {
+      "id": "1406",
+      "name": "Радуга",
+      "themeId": "nature",
+      "level": 1
+    },
+    {
+      "id": "1407",
+      "name": "Дерево",
+      "themeId": "nature",
+      "level": 1
+    },
+    {
+      "id": "1408",
+      "name": "Цветок",
+      "themeId": "nature",
+      "level": 1
+    },
+    {
+      "id": "1409",
+      "name": "Трава",
+      "themeId": "nature",
+      "level": 1
+    },
+    {
+      "id": "1410",
+      "name": "Гриб",
+      "themeId": "nature",
+      "level": 1
+    },
+    {
+      "id": "1411",
+      "name": "Шишка",
+      "themeId": "nature",
+      "level": 1
+    },
+    {
+      "id": "1412",
+      "name": "Река",
+      "themeId": "nature",
+      "level": 2
+    },
+    {
+      "id": "1413",
+      "name": "Гора",
+      "themeId": "nature",
+      "level": 2
+    },
+    {
+      "id": "1414",
+      "name": "Камень",
+      "themeId": "nature",
+      "level": 2
+    },
+    {
+      "id": "1415",
+      "name": "Костёр",
+      "themeId": "nature",
+      "level": 2
+    },
+    {
+      "id": "1500",
+      "name": "Врач",
+      "themeId": "jobs",
+      "level": 0
+    },
+    {
+      "id": "1501",
+      "name": "Повар",
+      "themeId": "jobs",
+      "level": 0
+    },
+    {
+      "id": "1502",
+      "name": "Пожарный",
+      "themeId": "jobs",
+      "level": 0
+    },
+    {
+      "id": "1503",
+      "name": "Лётчик",
+      "themeId": "jobs",
+      "level": 0
+    },
+    {
+      "id": "1504",
+      "name": "Моряк",
+      "themeId": "jobs",
+      "level": 0
+    },
+    {
+      "id": "1505",
+      "name": "Художник",
+      "themeId": "jobs",
+      "level": 0
+    },
+    {
+      "id": "1506",
+      "name": "Музыкант",
+      "themeId": "jobs",
+      "level": 1
+    },
+    {
+      "id": "1507",
+      "name": "Строитель",
+      "themeId": "jobs",
+      "level": 1
+    },
+    {
+      "id": "1508",
+      "name": "Водитель",
+      "themeId": "jobs",
+      "level": 1
+    },
+    {
+      "id": "1509",
+      "name": "Продавец",
+      "themeId": "jobs",
+      "level": 1
+    },
+    {
+      "id": "1510",
+      "name": "Учитель",
+      "themeId": "jobs",
+      "level": 1
+    },
+    {
+      "id": "1511",
+      "name": "Почтальон",
+      "themeId": "jobs",
+      "level": 1
+    },
+    {
+      "id": "1512",
+      "name": "Садовник",
+      "themeId": "jobs",
+      "level": 2
+    },
+    {
+      "id": "1513",
+      "name": "Парикмахер",
+      "themeId": "jobs",
+      "level": 2
+    },
+    {
+      "id": "1514",
+      "name": "Пастух",
+      "themeId": "jobs",
+      "level": 2
+    },
+    {
+      "id": "1515",
+      "name": "Космонавт",
+      "themeId": "jobs",
       "level": 2
     }
   ]
