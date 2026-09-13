@@ -1,18 +1,13 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
   <defs>
     <linearGradient id="g" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0" stop-color="hsl(316 62% 74%)"/>
-      <stop offset="1" stop-color="hsl(316 55% 56%)"/>
+      <stop offset="0" stop-color="hsl(201 62% 78%)"/>
+      <stop offset="1" stop-color="hsl(201 55% 60%)"/>
     </linearGradient>
   </defs>
   <rect width="512" height="512" rx="36" fill="url(#g)"/>
-  <circle cx="256" cy="212" r="130" fill="#ffffff" opacity="0.86"/>
-  <text x="256" y="212" text-anchor="middle" dominant-baseline="central"
-        font-family="Georgia, 'Times New Roman', serif" font-size="170" font-weight="700"
-        fill="hsl(316 70% 34%)">Ф</text>
-  <text x="256" y="412" text-anchor="middle" dominant-baseline="central"
-        font-family="system-ui, sans-serif" font-size="68" font-weight="700"
-        fill="#ffffff">Фиалка</text>
-  <text x="256" y="470" text-anchor="middle" dominant-baseline="central"
-        font-family="system-ui, sans-serif" font-size="26" fill="#ffffff" opacity="0.72">заглушка</text>
+  <g transform="rotate(18 256 236)"><polygon points="256,110 372,236 256,362 140,236" fill="hsl(341 58% 46%)"/></g>
+  <text x="256" y="440" text-anchor="middle" dominant-baseline="central"
+        font-family="system-ui, sans-serif" font-size="34" font-weight="700"
+        fill="#ffffff" opacity="0.85">заглушка</text>
 </svg>

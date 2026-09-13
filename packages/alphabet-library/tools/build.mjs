@@ -1,18 +1,32 @@
 // packages/alphabet-library/tools/build.mjs
 // Собирает пакет контента: index.json и иллюстрации-заглушки.
 //
-// ИЛЛЮСТРАЦИИ ЗДЕСЬ — ЗАГЛУШКИ, и это видно с первого взгляда: буква на
-// цветном поле и подпись словом. Они не притворяются рисунками, чтобы никто
-// не принял собранный пакет за готовый к поставке.
+// ИЛЛЮСТРАЦИИ ЗДЕСЬ — ЗАГЛУШКИ, и это видно с первого взгляда: абстрактная
+// фигура и подпись «заглушка». Они не притворяются рисунками, чтобы никто не
+// принял собранный пакет за готовый к поставке.
 //
-// Заглушки всё же РАЗЛИЧИМЫ между собой (цвет выводится из идентификатора, и
-// подпись у каждой своя) — это не украшательство, а условие проверки: на всех
-// трёх этапах ребёнок выбирает из нескольких вариантов, и если карточки
-// неотличимы, живой прогон не докажет ничего.
+// ЗАГЛУШКА НЕ НЕСЁТ НИ БУКВЫ, НИ НАЗВАНИЯ СЛОВА — и это главное решение
+// файла. Первая версия рисовала первую букву слова крупно в круге и
+// подписывала словом; на этапе «покажи букву» это буквально был ответ,
+// напечатанный на карточке. Заглушка не должна давать того, чего не даст
+// настоящий рисунок: узнать слово по изображению — и есть задание.
 //
-// Настоящие рисунки и озвучка — Фаза 7. До них `audioScheme.recorded: false`,
-// и это законное состояние пакета: схема специально его допускает, иначе
-// иллюстрации нельзя было бы начать раньше звука.
+// Различимы между собой они при этом остаются: фигура и цвет выводятся из
+// идентификатора. Это условие проверки, а не украшательство — на всех трёх
+// этапах выбирают из нескольких карточек, и будь они одинаковы, живой прогон
+// не доказал бы ничего.
+//
+// Следствие: С ЗАГЛУШКАМИ ИГРА ОСМЫСЛЕННА ТОЛЬКО СО ЗВУКОМ. Так и задумано:
+// слово несут картинка и озвучка, а пока картинки условные — одна озвучка.
+//
+// ОЗВУЧКА ЗДЕСЬ НЕ ГЕНЕРИРУЕТСЯ — этим занимается отдельный прогон
+// (tools/plan-narration.mjs плюс общий генератор из words-library). Здесь
+// только СМОТРЯТ, полон ли набор файлов, и от этого зависит, объявит ли
+// манифест озвучку записанной.
+//
+// Флаг `audioScheme.recorded: false` — законное состояние пакета: схема
+// допускает его специально, иначе иллюстрации нельзя было бы начать раньше
+// звука, а делают их разные люди и в разные сроки.
 
 import fs from 'node:fs';
 import path from 'node:path';
@@ -26,35 +40,53 @@ const imgDir = path.join(assets, 'img');
 
 const SCHEMA_VERSION = 1;
 
-/** Устойчивый цвет из идентификатора: одно слово — всегда один цвет */
+/**
+ * Устойчивый хеш идентификатора: одно слово — всегда один вид заглушки.
+ *
+ * FNV-1a, а не «умножение на 31»: последнее на коротких строках вроде «ryba»
+ * и «yula» заметно кучкуется, и заглушек-двойников выходило 10 из 95 вместо
+ * ожидаемых трёх.
+ */
+function hashOf(id) {
+  let hash = 0x811c9dc5;
+  for (const ch of id) {
+    hash ^= ch.charCodeAt(0);
+    hash = Math.imul(hash, 0x01000193) >>> 0;
+  }
+  return hash;
+}
+
 function hueOf(id) {
-  let hash = 0;
-  for (const ch of id) hash = (hash * 31 + ch.charCodeAt(0)) >>> 0;
-  return hash % 360;
+  return hashOf(id) % 360;
 }
 
 function placeholderSvg(word) {
   const hue = hueOf(word.id);
-  const initial = word.name.charAt(0);
-  // Длинное слово должно влезать: уменьшаем кегль, а не обрезаем текст
-  const fontSize = word.name.length > 9 ? 46 : word.name.length > 7 ? 56 : 68;
+  // Фигура выводится из идентификатора: карточки должны различаться между
+  // собой, но ничего не сообщать о слове
+  const shape = hashOf(`${word.id}#shape`) % 4;
+  const tilt = (hashOf(`${word.id}#tilt`) % 5) * 9 - 18;
+  const accent = (hue + 140) % 360;
+
+  const figures = [
+    `<circle cx="256" cy="236" r="118" fill="hsl(${accent} 58% 46%)"/>`,
+    `<rect x="146" y="126" width="220" height="220" rx="34" fill="hsl(${accent} 58% 46%)"/>`,
+    `<polygon points="256,112 374,346 138,346" fill="hsl(${accent} 58% 46%)"/>`,
+    `<polygon points="256,110 372,236 256,362 140,236" fill="hsl(${accent} 58% 46%)"/>`,
+  ];
+
   return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
   <defs>
     <linearGradient id="g" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0" stop-color="hsl(${hue} 62% 74%)"/>
-      <stop offset="1" stop-color="hsl(${hue} 55% 56%)"/>
+      <stop offset="0" stop-color="hsl(${hue} 62% 78%)"/>
+      <stop offset="1" stop-color="hsl(${hue} 55% 60%)"/>
     </linearGradient>
   </defs>
   <rect width="512" height="512" rx="36" fill="url(#g)"/>
-  <circle cx="256" cy="212" r="130" fill="#ffffff" opacity="0.86"/>
-  <text x="256" y="212" text-anchor="middle" dominant-baseline="central"
-        font-family="Georgia, 'Times New Roman', serif" font-size="170" font-weight="700"
-        fill="hsl(${hue} 70% 34%)">${escapeXml(initial)}</text>
-  <text x="256" y="412" text-anchor="middle" dominant-baseline="central"
-        font-family="system-ui, sans-serif" font-size="${fontSize}" font-weight="700"
-        fill="#ffffff">${escapeXml(word.name)}</text>
-  <text x="256" y="470" text-anchor="middle" dominant-baseline="central"
-        font-family="system-ui, sans-serif" font-size="26" fill="#ffffff" opacity="0.72">заглушка</text>
+  <g transform="rotate(${tilt} 256 236)">${figures[shape]}</g>
+  <text x="256" y="440" text-anchor="middle" dominant-baseline="central"
+        font-family="system-ui, sans-serif" font-size="34" font-weight="700"
+        fill="#ffffff" opacity="0.85">заглушка</text>
 </svg>
 `;
 }
@@ -67,15 +99,41 @@ function escapeXml(text) {
 
 const catalogue = buildCatalogue();
 
+/**
+ * Объявлять озвучку записанной МОЖНО ТОЛЬКО ПРИ ПОЛНОМ НАБОРЕ ФАЙЛОВ.
+ *
+ * Манифест, объявивший звук, которого нет, — худший исход: подпись «озвучка
+ * ещё не записана» с экрана исчезает, кнопка становится активной, и ребёнок
+ * видит молчащую карточку без всякого объяснения. Отсутствующий файл очередь
+ * воспроизведения не роняет — именно поэтому такой дефект дожил бы до
+ * занятия. В Тип 2 это отдельный шаг сборки, здесь — часть этой же.
+ */
+function audioIsComplete(cat) {
+  const mediaDir = path.join(assets, 'media');
+  const wanted = new Set();
+  for (const letter of cat.letters) wanted.add(`${letter.number}.mp3`);
+  for (const syllable of cat.syllables) wanted.add(`${syllable.id}.mp3`);
+  for (const word of cat.words) {
+    wanted.add(`${word.id}.mp3`);
+    if (word.hasWithoutLastSyllable) wanted.add(`${word.id}_bgn.mp3`);
+  }
+  const missing = [...wanted].filter((name) => !fs.existsSync(path.join(mediaDir, name)));
+  return { complete: missing.length === 0, missing, expected: wanted.size };
+}
+
+const audio = audioIsComplete(catalogue);
+
 const library = {
   schemaVersion: SCHEMA_VERSION,
-  audioScheme: { recorded: false },
+  audioScheme: { recorded: audio.complete },
   letters: catalogue.letters,
   syllables: catalogue.syllables,
   words: catalogue.words,
   sets: catalogue.sets,
 };
 
+// Чистим ТОЛЬКО картинки. media/ не трогаем: генерация озвучки занимает
+// минуты, и снести её пересборкой манифеста было бы больно
 fs.rmSync(imgDir, { recursive: true, force: true });
 fs.mkdirSync(imgDir, { recursive: true });
 
@@ -99,4 +157,14 @@ console.log(`слов: ${library.words.length}`);
 console.log(`слогов: ${library.syllables.length}`);
 console.log(`комплектов: ${library.sets.length}`);
 console.log(`иллюстраций: ${catalogue.words.length}, ${(bytes / 1024).toFixed(1)} КБ`);
-console.log('озвучка: не записана (audioScheme.recorded = false)');
+if (audio.complete) {
+  const mediaBytes = fs
+    .readdirSync(path.join(assets, 'media'))
+    .reduce((sum, f) => sum + fs.statSync(path.join(assets, 'media', f)).size, 0);
+  console.log(`озвучка: записана, ${audio.expected} файлов, ${(mediaBytes / 1024 / 1024).toFixed(1)} МБ`);
+} else {
+  console.log(
+    `озвучка: НЕ записана — не хватает ${audio.missing.length} из ${audio.expected} файлов` +
+      (audio.missing.length ? ` (например ${audio.missing.slice(0, 3).join(', ')})` : '')
+  );
+}

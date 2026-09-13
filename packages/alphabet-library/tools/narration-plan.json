@@ -1,0 +1,1490 @@
+[
+  {
+    "path": "media/1.mp3",
+    "text": "а"
+  },
+  {
+    "path": "media/2.mp3",
+    "text": "б"
+  },
+  {
+    "path": "media/3.mp3",
+    "text": "в"
+  },
+  {
+    "path": "media/4.mp3",
+    "text": "г"
+  },
+  {
+    "path": "media/5.mp3",
+    "text": "д"
+  },
+  {
+    "path": "media/6.mp3",
+    "text": "е"
+  },
+  {
+    "path": "media/7.mp3",
+    "text": "ё"
+  },
+  {
+    "path": "media/8.mp3",
+    "text": "ж"
+  },
+  {
+    "path": "media/9.mp3",
+    "text": "з"
+  },
+  {
+    "path": "media/10.mp3",
+    "text": "и"
+  },
+  {
+    "path": "media/11.mp3",
+    "text": "й"
+  },
+  {
+    "path": "media/12.mp3",
+    "text": "к"
+  },
+  {
+    "path": "media/13.mp3",
+    "text": "л"
+  },
+  {
+    "path": "media/14.mp3",
+    "text": "м"
+  },
+  {
+    "path": "media/15.mp3",
+    "text": "н"
+  },
+  {
+    "path": "media/16.mp3",
+    "text": "о"
+  },
+  {
+    "path": "media/17.mp3",
+    "text": "п"
+  },
+  {
+    "path": "media/18.mp3",
+    "text": "р"
+  },
+  {
+    "path": "media/19.mp3",
+    "text": "с"
+  },
+  {
+    "path": "media/20.mp3",
+    "text": "т"
+  },
+  {
+    "path": "media/21.mp3",
+    "text": "у"
+  },
+  {
+    "path": "media/22.mp3",
+    "text": "ф"
+  },
+  {
+    "path": "media/23.mp3",
+    "text": "х"
+  },
+  {
+    "path": "media/24.mp3",
+    "text": "ц"
+  },
+  {
+    "path": "media/25.mp3",
+    "text": "ч"
+  },
+  {
+    "path": "media/26.mp3",
+    "text": "ш"
+  },
+  {
+    "path": "media/27.mp3",
+    "text": "щ"
+  },
+  {
+    "path": "media/28.mp3",
+    "text": "ъ"
+  },
+  {
+    "path": "media/29.mp3",
+    "text": "ы"
+  },
+  {
+    "path": "media/30.mp3",
+    "text": "ь"
+  },
+  {
+    "path": "media/31.mp3",
+    "text": "э"
+  },
+  {
+    "path": "media/32.mp3",
+    "text": "ю"
+  },
+  {
+    "path": "media/33.mp3",
+    "text": "я"
+  },
+  {
+    "path": "media/ar.mp3",
+    "text": "ар"
+  },
+  {
+    "path": "media/buz.mp3",
+    "text": "буз"
+  },
+  {
+    "path": "media/av.mp3",
+    "text": "ав"
+  },
+  {
+    "path": "media/to.mp3",
+    "text": "то"
+  },
+  {
+    "path": "media/bus.mp3",
+    "text": "бус"
+  },
+  {
+    "path": "media/a.mp3",
+    "text": "а"
+  },
+  {
+    "path": "media/pel_.mp3",
+    "text": "пель"
+  },
+  {
+    "path": "media/sin.mp3",
+    "text": "син"
+  },
+  {
+    "path": "media/ba.mp3",
+    "text": "ба"
+  },
+  {
+    "path": "media/nan.mp3",
+    "text": "нан"
+  },
+  {
+    "path": "media/ra.mp3",
+    "text": "ра"
+  },
+  {
+    "path": "media/ban.mp3",
+    "text": "бан"
+  },
+  {
+    "path": "media/bel.mp3",
+    "text": "бел"
+  },
+  {
+    "path": "media/ka.mp3",
+    "text": "ка"
+  },
+  {
+    "path": "media/va.mp3",
+    "text": "ва"
+  },
+  {
+    "path": "media/za.mp3",
+    "text": "за"
+  },
+  {
+    "path": "media/vo.mp3",
+    "text": "во"
+  },
+  {
+    "path": "media/da.mp3",
+    "text": "да"
+  },
+  {
+    "path": "media/ro.mp3",
+    "text": "ро"
+  },
+  {
+    "path": "media/na.mp3",
+    "text": "на"
+  },
+  {
+    "path": "media/gu.mp3",
+    "text": "гу"
+  },
+  {
+    "path": "media/si.mp3",
+    "text": "си"
+  },
+  {
+    "path": "media/gi.mp3",
+    "text": "ги"
+  },
+  {
+    "path": "media/ta.mp3",
+    "text": "та"
+  },
+  {
+    "path": "media/gru.mp3",
+    "text": "гру"
+  },
+  {
+    "path": "media/sha.mp3",
+    "text": "ша"
+  },
+  {
+    "path": "media/do.mp3",
+    "text": "до"
+  },
+  {
+    "path": "media/ga.mp3",
+    "text": "га"
+  },
+  {
+    "path": "media/de.mp3",
+    "text": "де"
+  },
+  {
+    "path": "media/re.mp3",
+    "text": "ре"
+  },
+  {
+    "path": "media/dok.mp3",
+    "text": "док"
+  },
+  {
+    "path": "media/tor.mp3",
+    "text": "тор"
+  },
+  {
+    "path": "media/e.mp3",
+    "text": "е"
+  },
+  {
+    "path": "media/not.mp3",
+    "text": "нот"
+  },
+  {
+    "path": "media/zhe.mp3",
+    "text": "же"
+  },
+  {
+    "path": "media/vi.mp3",
+    "text": "ви"
+  },
+  {
+    "path": "media/yo.mp3",
+    "text": "ё"
+  },
+  {
+    "path": "media/zhik.mp3",
+    "text": "жик"
+  },
+  {
+    "path": "media/yol.mp3",
+    "text": "ёл"
+  },
+  {
+    "path": "media/yor.mp3",
+    "text": "ёр"
+  },
+  {
+    "path": "media/shik.mp3",
+    "text": "шик"
+  },
+  {
+    "path": "media/zhi.mp3",
+    "text": "жи"
+  },
+  {
+    "path": "media/raf.mp3",
+    "text": "раф"
+  },
+  {
+    "path": "media/zha.mp3",
+    "text": "жа"
+  },
+  {
+    "path": "media/zhu.mp3",
+    "text": "жу"
+  },
+  {
+    "path": "media/ravl_.mp3",
+    "text": "равль"
+  },
+  {
+    "path": "media/zi.mp3",
+    "text": "зи"
+  },
+  {
+    "path": "media/ma.mp3",
+    "text": "ма"
+  },
+  {
+    "path": "media/yac.mp3",
+    "text": "яц"
+  },
+  {
+    "path": "media/zon.mp3",
+    "text": "зон"
+  },
+  {
+    "path": "media/tik.mp3",
+    "text": "тик"
+  },
+  {
+    "path": "media/ig.mp3",
+    "text": "иг"
+  },
+  {
+    "path": "media/la.mp3",
+    "text": "ла"
+  },
+  {
+    "path": "media/i.mp3",
+    "text": "и"
+  },
+  {
+    "path": "media/in.mp3",
+    "text": "ин"
+  },
+  {
+    "path": "media/dyuk.mp3",
+    "text": "дюк"
+  },
+  {
+    "path": "media/jo.mp3",
+    "text": "йо"
+  },
+  {
+    "path": "media/gurt.mp3",
+    "text": "гурт"
+  },
+  {
+    "path": "media/jod.mp3",
+    "text": "йод"
+  },
+  {
+    "path": "media/kosh.mp3",
+    "text": "кош"
+  },
+  {
+    "path": "media/ko.mp3",
+    "text": "ко"
+  },
+  {
+    "path": "media/pus.mp3",
+    "text": "пус"
+  },
+  {
+    "path": "media/lam.mp3",
+    "text": "лам"
+  },
+  {
+    "path": "media/pa.mp3",
+    "text": "па"
+  },
+  {
+    "path": "media/li.mp3",
+    "text": "ли"
+  },
+  {
+    "path": "media/ca.mp3",
+    "text": "ца"
+  },
+  {
+    "path": "media/lod.mp3",
+    "text": "лод"
+  },
+  {
+    "path": "media/shi.mp3",
+    "text": "ши"
+  },
+  {
+    "path": "media/med.mp3",
+    "text": "мед"
+  },
+  {
+    "path": "media/ved_.mp3",
+    "text": "ведь"
+  },
+  {
+    "path": "media/no.mp3",
+    "text": "но"
+  },
+  {
+    "path": "media/so.mp3",
+    "text": "со"
+  },
+  {
+    "path": "media/rog.mp3",
+    "text": "рог"
+  },
+  {
+    "path": "media/nit.mp3",
+    "text": "нит"
+  },
+  {
+    "path": "media/nozh.mp3",
+    "text": "нож"
+  },
+  {
+    "path": "media/ni.mp3",
+    "text": "ни"
+  },
+  {
+    "path": "media/cy.mp3",
+    "text": "цы"
+  },
+  {
+    "path": "media/ob.mp3",
+    "text": "об"
+  },
+  {
+    "path": "media/ok.mp3",
+    "text": "ок"
+  },
+  {
+    "path": "media/ov.mp3",
+    "text": "ов"
+  },
+  {
+    "path": "media/po.mp3",
+    "text": "по"
+  },
+  {
+    "path": "media/mi.mp3",
+    "text": "ми"
+  },
+  {
+    "path": "media/dor.mp3",
+    "text": "дор"
+  },
+  {
+    "path": "media/pe.mp3",
+    "text": "пе"
+  },
+  {
+    "path": "media/tuh.mp3",
+    "text": "тух"
+  },
+  {
+    "path": "media/ezd.mp3",
+    "text": "езд"
+  },
+  {
+    "path": "media/mash.mp3",
+    "text": "маш"
+  },
+  {
+    "path": "media/ry.mp3",
+    "text": "ры"
+  },
+  {
+    "path": "media/du.mp3",
+    "text": "ду"
+  },
+  {
+    "path": "media/soln.mp3",
+    "text": "солн"
+  },
+  {
+    "path": "media/ce.mp3",
+    "text": "це"
+  },
+  {
+    "path": "media/rel.mp3",
+    "text": "рел"
+  },
+  {
+    "path": "media/tram.mp3",
+    "text": "трам"
+  },
+  {
+    "path": "media/vaj.mp3",
+    "text": "вай"
+  },
+  {
+    "path": "media/tyk.mp3",
+    "text": "тык"
+  },
+  {
+    "path": "media/ut.mp3",
+    "text": "ут"
+  },
+  {
+    "path": "media/u.mp3",
+    "text": "у"
+  },
+  {
+    "path": "media/lit.mp3",
+    "text": "лит"
+  },
+  {
+    "path": "media/ho.mp3",
+    "text": "хо"
+  },
+  {
+    "path": "media/fo.mp3",
+    "text": "фо"
+  },
+  {
+    "path": "media/nar_.mp3",
+    "text": "нарь"
+  },
+  {
+    "path": "media/fi.mp3",
+    "text": "фи"
+  },
+  {
+    "path": "media/al.mp3",
+    "text": "ал"
+  },
+  {
+    "path": "media/fla.mp3",
+    "text": "фла"
+  },
+  {
+    "path": "media/zhok.mp3",
+    "text": "жок"
+  },
+  {
+    "path": "media/myak.mp3",
+    "text": "мяк"
+  },
+  {
+    "path": "media/hal.mp3",
+    "text": "хал"
+  },
+  {
+    "path": "media/hu.mp3",
+    "text": "ху"
+  },
+  {
+    "path": "media/dozh.mp3",
+    "text": "дож"
+  },
+  {
+    "path": "media/nik.mp3",
+    "text": "ник"
+  },
+  {
+    "path": "media/cap.mp3",
+    "text": "цап"
+  },
+  {
+    "path": "media/lya.mp3",
+    "text": "ля"
+  },
+  {
+    "path": "media/cve.mp3",
+    "text": "цве"
+  },
+  {
+    "path": "media/tok.mp3",
+    "text": "ток"
+  },
+  {
+    "path": "media/cyp.mp3",
+    "text": "цып"
+  },
+  {
+    "path": "media/lyo.mp3",
+    "text": "лё"
+  },
+  {
+    "path": "media/nok.mp3",
+    "text": "нок"
+  },
+  {
+    "path": "media/chaj.mp3",
+    "text": "чай"
+  },
+  {
+    "path": "media/che.mp3",
+    "text": "че"
+  },
+  {
+    "path": "media/ha.mp3",
+    "text": "ха"
+  },
+  {
+    "path": "media/cha.mp3",
+    "text": "ча"
+  },
+  {
+    "path": "media/sy.mp3",
+    "text": "сы"
+  },
+  {
+    "path": "media/shap.mp3",
+    "text": "шап"
+  },
+  {
+    "path": "media/shish.mp3",
+    "text": "шиш"
+  },
+  {
+    "path": "media/shko.mp3",
+    "text": "шко"
+  },
+  {
+    "path": "media/sche.mp3",
+    "text": "ще"
+  },
+  {
+    "path": "media/schyot.mp3",
+    "text": "щёт"
+  },
+  {
+    "path": "media/schu.mp3",
+    "text": "щу"
+  },
+  {
+    "path": "media/pod_.mp3",
+    "text": "подъ"
+  },
+  {
+    "path": "media/ob_.mp3",
+    "text": "объ"
+  },
+  {
+    "path": "media/yav.mp3",
+    "text": "яв"
+  },
+  {
+    "path": "media/le.mp3",
+    "text": "ле"
+  },
+  {
+    "path": "media/s_yom.mp3",
+    "text": "съём"
+  },
+  {
+    "path": "media/my.mp3",
+    "text": "мы"
+  },
+  {
+    "path": "media/lo.mp3",
+    "text": "ло"
+  },
+  {
+    "path": "media/pal_.mp3",
+    "text": "паль"
+  },
+  {
+    "path": "media/ehk.mp3",
+    "text": "эк"
+  },
+  {
+    "path": "media/ran.mp3",
+    "text": "ран"
+  },
+  {
+    "path": "media/ehs.mp3",
+    "text": "эс"
+  },
+  {
+    "path": "media/ki.mp3",
+    "text": "ки"
+  },
+  {
+    "path": "media/mo.mp3",
+    "text": "мо"
+  },
+  {
+    "path": "media/eh.mp3",
+    "text": "э"
+  },
+  {
+    "path": "media/lek.mp3",
+    "text": "лек"
+  },
+  {
+    "path": "media/trich.mp3",
+    "text": "трич"
+  },
+  {
+    "path": "media/yu.mp3",
+    "text": "ю"
+  },
+  {
+    "path": "media/yub.mp3",
+    "text": "юб"
+  },
+  {
+    "path": "media/yun.mp3",
+    "text": "юн"
+  },
+  {
+    "path": "media/yab.mp3",
+    "text": "яб"
+  },
+  {
+    "path": "media/ya.mp3",
+    "text": "я"
+  },
+  {
+    "path": "media/go.mp3",
+    "text": "го"
+  },
+  {
+    "path": "media/kor_.mp3",
+    "text": "корь"
+  },
+  {
+    "path": "media/arbuz.mp3",
+    "text": "Арбуз"
+  },
+  {
+    "path": "media/arbuz_bgn.mp3",
+    "text": "ар"
+  },
+  {
+    "path": "media/avtobus.mp3",
+    "text": "Автобус"
+  },
+  {
+    "path": "media/avtobus_bgn.mp3",
+    "text": "авто"
+  },
+  {
+    "path": "media/apel_sin.mp3",
+    "text": "Апельсин"
+  },
+  {
+    "path": "media/apel_sin_bgn.mp3",
+    "text": "апель"
+  },
+  {
+    "path": "media/banan.mp3",
+    "text": "Банан"
+  },
+  {
+    "path": "media/banan_bgn.mp3",
+    "text": "ба"
+  },
+  {
+    "path": "media/baraban.mp3",
+    "text": "Барабан"
+  },
+  {
+    "path": "media/baraban_bgn.mp3",
+    "text": "бара"
+  },
+  {
+    "path": "media/belka.mp3",
+    "text": "Белка"
+  },
+  {
+    "path": "media/belka_bgn.mp3",
+    "text": "бел"
+  },
+  {
+    "path": "media/vaza.mp3",
+    "text": "Ваза"
+  },
+  {
+    "path": "media/vaza_bgn.mp3",
+    "text": "ва"
+  },
+  {
+    "path": "media/voda.mp3",
+    "text": "Вода"
+  },
+  {
+    "path": "media/voda_bgn.mp3",
+    "text": "во"
+  },
+  {
+    "path": "media/vorona.mp3",
+    "text": "Ворона"
+  },
+  {
+    "path": "media/vorona_bgn.mp3",
+    "text": "воро"
+  },
+  {
+    "path": "media/gusi.mp3",
+    "text": "Гуси"
+  },
+  {
+    "path": "media/gusi_bgn.mp3",
+    "text": "гу"
+  },
+  {
+    "path": "media/gitara.mp3",
+    "text": "Гитара"
+  },
+  {
+    "path": "media/gitara_bgn.mp3",
+    "text": "гита"
+  },
+  {
+    "path": "media/grusha.mp3",
+    "text": "Груша"
+  },
+  {
+    "path": "media/grusha_bgn.mp3",
+    "text": "гру"
+  },
+  {
+    "path": "media/doroga.mp3",
+    "text": "Дорога"
+  },
+  {
+    "path": "media/doroga_bgn.mp3",
+    "text": "доро"
+  },
+  {
+    "path": "media/derevo.mp3",
+    "text": "Дерево"
+  },
+  {
+    "path": "media/derevo_bgn.mp3",
+    "text": "дере"
+  },
+  {
+    "path": "media/doktor.mp3",
+    "text": "Доктор"
+  },
+  {
+    "path": "media/doktor_bgn.mp3",
+    "text": "док"
+  },
+  {
+    "path": "media/enot.mp3",
+    "text": "Енот"
+  },
+  {
+    "path": "media/enot_bgn.mp3",
+    "text": "е"
+  },
+  {
+    "path": "media/eda.mp3",
+    "text": "Еда"
+  },
+  {
+    "path": "media/eda_bgn.mp3",
+    "text": "е"
+  },
+  {
+    "path": "media/ezhevika.mp3",
+    "text": "Ежевика"
+  },
+  {
+    "path": "media/ezhevika_bgn.mp3",
+    "text": "ежеви"
+  },
+  {
+    "path": "media/yozhik.mp3",
+    "text": "Ёжик"
+  },
+  {
+    "path": "media/yozhik_bgn.mp3",
+    "text": "ё"
+  },
+  {
+    "path": "media/yolka.mp3",
+    "text": "Ёлка"
+  },
+  {
+    "path": "media/yolka_bgn.mp3",
+    "text": "ёл"
+  },
+  {
+    "path": "media/yorshik.mp3",
+    "text": "Ёршик"
+  },
+  {
+    "path": "media/yorshik_bgn.mp3",
+    "text": "ёр"
+  },
+  {
+    "path": "media/zhiraf.mp3",
+    "text": "Жираф"
+  },
+  {
+    "path": "media/zhiraf_bgn.mp3",
+    "text": "жи"
+  },
+  {
+    "path": "media/zhaba.mp3",
+    "text": "Жаба"
+  },
+  {
+    "path": "media/zhaba_bgn.mp3",
+    "text": "жа"
+  },
+  {
+    "path": "media/zhuravl_.mp3",
+    "text": "Журавль"
+  },
+  {
+    "path": "media/zhuravl__bgn.mp3",
+    "text": "жу"
+  },
+  {
+    "path": "media/zima.mp3",
+    "text": "Зима"
+  },
+  {
+    "path": "media/zima_bgn.mp3",
+    "text": "зи"
+  },
+  {
+    "path": "media/zayac.mp3",
+    "text": "Заяц"
+  },
+  {
+    "path": "media/zayac_bgn.mp3",
+    "text": "за"
+  },
+  {
+    "path": "media/zontik.mp3",
+    "text": "Зонтик"
+  },
+  {
+    "path": "media/zontik_bgn.mp3",
+    "text": "зон"
+  },
+  {
+    "path": "media/igla.mp3",
+    "text": "Игла"
+  },
+  {
+    "path": "media/igla_bgn.mp3",
+    "text": "иг"
+  },
+  {
+    "path": "media/iva.mp3",
+    "text": "Ива"
+  },
+  {
+    "path": "media/iva_bgn.mp3",
+    "text": "и"
+  },
+  {
+    "path": "media/indyuk.mp3",
+    "text": "Индюк"
+  },
+  {
+    "path": "media/indyuk_bgn.mp3",
+    "text": "ин"
+  },
+  {
+    "path": "media/jogurt.mp3",
+    "text": "Йогурт"
+  },
+  {
+    "path": "media/jogurt_bgn.mp3",
+    "text": "йо"
+  },
+  {
+    "path": "media/joga.mp3",
+    "text": "Йога"
+  },
+  {
+    "path": "media/joga_bgn.mp3",
+    "text": "йо"
+  },
+  {
+    "path": "media/koshka.mp3",
+    "text": "Кошка"
+  },
+  {
+    "path": "media/koshka_bgn.mp3",
+    "text": "кош"
+  },
+  {
+    "path": "media/korova.mp3",
+    "text": "Корова"
+  },
+  {
+    "path": "media/korova_bgn.mp3",
+    "text": "коро"
+  },
+  {
+    "path": "media/kapusta.mp3",
+    "text": "Капуста"
+  },
+  {
+    "path": "media/kapusta_bgn.mp3",
+    "text": "капус"
+  },
+  {
+    "path": "media/lampa.mp3",
+    "text": "Лампа"
+  },
+  {
+    "path": "media/lampa_bgn.mp3",
+    "text": "лам"
+  },
+  {
+    "path": "media/lisica.mp3",
+    "text": "Лисица"
+  },
+  {
+    "path": "media/lisica_bgn.mp3",
+    "text": "лиси"
+  },
+  {
+    "path": "media/lodka.mp3",
+    "text": "Лодка"
+  },
+  {
+    "path": "media/lodka_bgn.mp3",
+    "text": "лод"
+  },
+  {
+    "path": "media/mashina.mp3",
+    "text": "Машина"
+  },
+  {
+    "path": "media/mashina_bgn.mp3",
+    "text": "маши"
+  },
+  {
+    "path": "media/malina.mp3",
+    "text": "Малина"
+  },
+  {
+    "path": "media/malina_bgn.mp3",
+    "text": "мали"
+  },
+  {
+    "path": "media/medved_.mp3",
+    "text": "Медведь"
+  },
+  {
+    "path": "media/medved__bgn.mp3",
+    "text": "мед"
+  },
+  {
+    "path": "media/nosorog.mp3",
+    "text": "Носорог"
+  },
+  {
+    "path": "media/nosorog_bgn.mp3",
+    "text": "носо"
+  },
+  {
+    "path": "media/nitka.mp3",
+    "text": "Нитка"
+  },
+  {
+    "path": "media/nitka_bgn.mp3",
+    "text": "нит"
+  },
+  {
+    "path": "media/nozhnicy.mp3",
+    "text": "Ножницы"
+  },
+  {
+    "path": "media/nozhnicy_bgn.mp3",
+    "text": "ножни"
+  },
+  {
+    "path": "media/oblako.mp3",
+    "text": "Облако"
+  },
+  {
+    "path": "media/oblako_bgn.mp3",
+    "text": "обла"
+  },
+  {
+    "path": "media/okno.mp3",
+    "text": "Окно"
+  },
+  {
+    "path": "media/okno_bgn.mp3",
+    "text": "ок"
+  },
+  {
+    "path": "media/ovca.mp3",
+    "text": "Овца"
+  },
+  {
+    "path": "media/ovca_bgn.mp3",
+    "text": "ов"
+  },
+  {
+    "path": "media/pomidor.mp3",
+    "text": "Помидор"
+  },
+  {
+    "path": "media/pomidor_bgn.mp3",
+    "text": "поми"
+  },
+  {
+    "path": "media/petuh.mp3",
+    "text": "Петух"
+  },
+  {
+    "path": "media/petuh_bgn.mp3",
+    "text": "пе"
+  },
+  {
+    "path": "media/poezd.mp3",
+    "text": "Поезд"
+  },
+  {
+    "path": "media/poezd_bgn.mp3",
+    "text": "по"
+  },
+  {
+    "path": "media/romashka.mp3",
+    "text": "Ромашка"
+  },
+  {
+    "path": "media/romashka_bgn.mp3",
+    "text": "ромаш"
+  },
+  {
+    "path": "media/ryba.mp3",
+    "text": "Рыба"
+  },
+  {
+    "path": "media/ryba_bgn.mp3",
+    "text": "ры"
+  },
+  {
+    "path": "media/raduga.mp3",
+    "text": "Радуга"
+  },
+  {
+    "path": "media/raduga_bgn.mp3",
+    "text": "раду"
+  },
+  {
+    "path": "media/sobaka.mp3",
+    "text": "Собака"
+  },
+  {
+    "path": "media/sobaka_bgn.mp3",
+    "text": "соба"
+  },
+  {
+    "path": "media/solnce.mp3",
+    "text": "Солнце"
+  },
+  {
+    "path": "media/solnce_bgn.mp3",
+    "text": "солн"
+  },
+  {
+    "path": "media/soroka.mp3",
+    "text": "Сорока"
+  },
+  {
+    "path": "media/soroka_bgn.mp3",
+    "text": "соро"
+  },
+  {
+    "path": "media/tarelka.mp3",
+    "text": "Тарелка"
+  },
+  {
+    "path": "media/tarelka_bgn.mp3",
+    "text": "тарел"
+  },
+  {
+    "path": "media/tramvaj.mp3",
+    "text": "Трамвай"
+  },
+  {
+    "path": "media/tramvaj_bgn.mp3",
+    "text": "трам"
+  },
+  {
+    "path": "media/tykva.mp3",
+    "text": "Тыква"
+  },
+  {
+    "path": "media/tykva_bgn.mp3",
+    "text": "тык"
+  },
+  {
+    "path": "media/utka.mp3",
+    "text": "Утка"
+  },
+  {
+    "path": "media/utka_bgn.mp3",
+    "text": "ут"
+  },
+  {
+    "path": "media/ulitka.mp3",
+    "text": "Улитка"
+  },
+  {
+    "path": "media/ulitka_bgn.mp3",
+    "text": "улит"
+  },
+  {
+    "path": "media/uho.mp3",
+    "text": "Ухо"
+  },
+  {
+    "path": "media/uho_bgn.mp3",
+    "text": "у"
+  },
+  {
+    "path": "media/fonar_.mp3",
+    "text": "Фонарь"
+  },
+  {
+    "path": "media/fonar__bgn.mp3",
+    "text": "фо"
+  },
+  {
+    "path": "media/fialka.mp3",
+    "text": "Фиалка"
+  },
+  {
+    "path": "media/fialka_bgn.mp3",
+    "text": "фиал"
+  },
+  {
+    "path": "media/flazhok.mp3",
+    "text": "Флажок"
+  },
+  {
+    "path": "media/flazhok_bgn.mp3",
+    "text": "фла"
+  },
+  {
+    "path": "media/homyak.mp3",
+    "text": "Хомяк"
+  },
+  {
+    "path": "media/homyak_bgn.mp3",
+    "text": "хо"
+  },
+  {
+    "path": "media/halva.mp3",
+    "text": "Халва"
+  },
+  {
+    "path": "media/halva_bgn.mp3",
+    "text": "хал"
+  },
+  {
+    "path": "media/hudozhnik.mp3",
+    "text": "Художник"
+  },
+  {
+    "path": "media/hudozhnik_bgn.mp3",
+    "text": "худож"
+  },
+  {
+    "path": "media/caplya.mp3",
+    "text": "Цапля"
+  },
+  {
+    "path": "media/caplya_bgn.mp3",
+    "text": "цап"
+  },
+  {
+    "path": "media/cvetok.mp3",
+    "text": "Цветок"
+  },
+  {
+    "path": "media/cvetok_bgn.mp3",
+    "text": "цве"
+  },
+  {
+    "path": "media/cyplyonok.mp3",
+    "text": "Цыплёнок"
+  },
+  {
+    "path": "media/cyplyonok_bgn.mp3",
+    "text": "цыплё"
+  },
+  {
+    "path": "media/chajnik.mp3",
+    "text": "Чайник"
+  },
+  {
+    "path": "media/chajnik_bgn.mp3",
+    "text": "чай"
+  },
+  {
+    "path": "media/cherepaha.mp3",
+    "text": "Черепаха"
+  },
+  {
+    "path": "media/cherepaha_bgn.mp3",
+    "text": "черепа"
+  },
+  {
+    "path": "media/chasy.mp3",
+    "text": "Часы"
+  },
+  {
+    "path": "media/chasy_bgn.mp3",
+    "text": "ча"
+  },
+  {
+    "path": "media/shapka.mp3",
+    "text": "Шапка"
+  },
+  {
+    "path": "media/shapka_bgn.mp3",
+    "text": "шап"
+  },
+  {
+    "path": "media/shishka.mp3",
+    "text": "Шишка"
+  },
+  {
+    "path": "media/shishka_bgn.mp3",
+    "text": "шиш"
+  },
+  {
+    "path": "media/shkola.mp3",
+    "text": "Школа"
+  },
+  {
+    "path": "media/shkola_bgn.mp3",
+    "text": "шко"
+  },
+  {
+    "path": "media/schenok.mp3",
+    "text": "Щенок"
+  },
+  {
+    "path": "media/schenok_bgn.mp3",
+    "text": "ще"
+  },
+  {
+    "path": "media/schyotka.mp3",
+    "text": "Щётка"
+  },
+  {
+    "path": "media/schyotka_bgn.mp3",
+    "text": "щёт"
+  },
+  {
+    "path": "media/schuka.mp3",
+    "text": "Щука"
+  },
+  {
+    "path": "media/schuka_bgn.mp3",
+    "text": "щу"
+  },
+  {
+    "path": "media/pod_ezd.mp3",
+    "text": "Подъезд"
+  },
+  {
+    "path": "media/pod_ezd_bgn.mp3",
+    "text": "подъ"
+  },
+  {
+    "path": "media/ob_yavlenie.mp3",
+    "text": "Объявление"
+  },
+  {
+    "path": "media/ob_yavlenie_bgn.mp3",
+    "text": "объявлени"
+  },
+  {
+    "path": "media/s_yomka.mp3",
+    "text": "Съёмка"
+  },
+  {
+    "path": "media/s_yomka_bgn.mp3",
+    "text": "съём"
+  },
+  {
+    "path": "media/mylo.mp3",
+    "text": "Мыло"
+  },
+  {
+    "path": "media/mylo_bgn.mp3",
+    "text": "мы"
+  },
+  {
+    "path": "media/pal_to.mp3",
+    "text": "Пальто"
+  },
+  {
+    "path": "media/pal_to_bgn.mp3",
+    "text": "паль"
+  },
+  {
+    "path": "media/ehkran.mp3",
+    "text": "Экран"
+  },
+  {
+    "path": "media/ehkran_bgn.mp3",
+    "text": "эк"
+  },
+  {
+    "path": "media/ehskimo.mp3",
+    "text": "Эскимо"
+  },
+  {
+    "path": "media/ehskimo_bgn.mp3",
+    "text": "эски"
+  },
+  {
+    "path": "media/ehlektrichka.mp3",
+    "text": "Электричка"
+  },
+  {
+    "path": "media/ehlektrichka_bgn.mp3",
+    "text": "электрич"
+  },
+  {
+    "path": "media/yula.mp3",
+    "text": "Юла"
+  },
+  {
+    "path": "media/yula_bgn.mp3",
+    "text": "ю"
+  },
+  {
+    "path": "media/yubka.mp3",
+    "text": "Юбка"
+  },
+  {
+    "path": "media/yubka_bgn.mp3",
+    "text": "юб"
+  },
+  {
+    "path": "media/yunga.mp3",
+    "text": "Юнга"
+  },
+  {
+    "path": "media/yunga_bgn.mp3",
+    "text": "юн"
+  },
+  {
+    "path": "media/yabloko.mp3",
+    "text": "Яблоко"
+  },
+  {
+    "path": "media/yabloko_bgn.mp3",
+    "text": "ябло"
+  },
+  {
+    "path": "media/yagoda.mp3",
+    "text": "Ягода"
+  },
+  {
+    "path": "media/yagoda_bgn.mp3",
+    "text": "яго"
+  },
+  {
+    "path": "media/yakor_.mp3",
+    "text": "Якорь"
+  },
+  {
+    "path": "media/yakor__bgn.mp3",
+    "text": "я"
+  }
+]
