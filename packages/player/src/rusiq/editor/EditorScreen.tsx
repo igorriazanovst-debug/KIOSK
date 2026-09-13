@@ -9,10 +9,26 @@ import { initHistory, pushHistory, undo, redo, canUndo, canRedo, type History } 
 import QuizCanvas, { type QuizCanvasAddMode } from './QuizCanvas.tsx';
 import PointEditForm from './PointEditForm.tsx';
 import { hashSecret } from './pinAuth.ts';
-import { saveQuiz, saveQuizBackground } from './quizStore.ts';
-import { rusiqBackgroundMediaUrl } from '../rusiqMediaUrl.ts';
+import { saveQuiz, saveQuizBackground, saveQuizItemImage, deleteQuizItemImage, type RusiqItemImageKind } from './quizStore.ts';
+import { rusiqBackgroundMediaUrl, rusiqItemImageUrl } from '../rusiqMediaUrl.ts';
 import { RusiqQuizSchema, RUSIQ_DEFAULT_POINT_SIZE, type RusiqPoint, type RusiqQuestion, type RusiqQuiz } from '../model/schema.ts';
 import '../rusiqTheme.css';
+
+const ITEM_IMAGE_FIELD_BY_KIND: Record<RusiqItemImageKind, 'questionImage' | 'answerImage' | 'hintImage'> = {
+  question: 'questionImage',
+  answer: 'answerImage',
+  hint: 'hintImage',
+};
+
+interface PendingItemImage {
+  buffer: ArrayBuffer;
+  mimeType: string;
+  previewUrl: string;
+}
+
+function pendingImageKey(questionId: string, kind: RusiqItemImageKind): string {
+  return `${questionId}:${kind}`;
+}
 
 interface Props {
   initialQuiz: RusiqQuiz;
@@ -37,6 +53,9 @@ function makeBlankQuestion(point: RusiqPoint): RusiqQuestion {
     timeSeconds: 30,
     level: 1,
     theme: '',
+    questionImage: null,
+    answerImage: null,
+    hintImage: null,
   };
 }
 
@@ -49,6 +68,19 @@ const EditorScreen: React.FC<Props> = ({ initialQuiz, pendingBackground, onExit 
   const [passwordDraft, setPasswordDraft] = useState('');
   const [saveError, setSaveError] = useState<string | null>(null);
   const [saving, setSaving] = useState(false);
+  // FR-015 (Фаза 2b) - картинки к вопросу/ответу/подсказке, ещё не
+  // записанные на диск. Тот же принцип отложенной записи, что уже
+  // используется для pendingBg (общий фон) - см. комментарий там же:
+  // не пишем файл, пока пользователь не нажал «Сохранить», иначе
+  // отменённое создание/правка оставляет на диске файл без ссылки на него.
+  const [pendingItemImages, setPendingItemImages] = useState<Record<string, PendingItemImage>>({});
+
+  useEffect(() => {
+    return () => {
+      Object.values(pendingItemImages).forEach((p) => URL.revokeObjectURL(p.previewUrl));
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const quiz = history.present;
   const hasUnsavedChanges = lastSavedQuiz === null || JSON.stringify(lastSavedQuiz) !== JSON.stringify(quiz);
@@ -111,6 +143,57 @@ const EditorScreen: React.FC<Props> = ({ initialQuiz, pendingBackground, onExit 
 
   function handleQuestionChange(updated: RusiqQuestion) {
     update({ ...quiz, questions: quiz.questions.map((q) => (q.id === updated.id ? updated : q)) });
+  }
+
+  // FR-015 (Фаза 2b) - выбор файла для картинки вопроса/ответа/подсказки:
+  // только стейджинг в памяти (ArrayBuffer + object URL для превью), запись
+  // на диск отложена до handleSave (см. комментарий у pendingItemImages).
+  async function handleSelectItemImage(questionId: string, kind: RusiqItemImageKind, file: File) {
+    const buffer = await file.arrayBuffer();
+    const previewUrl = URL.createObjectURL(file);
+    const key = pendingImageKey(questionId, kind);
+    setPendingItemImages((prev) => {
+      const old = prev[key];
+      if (old) URL.revokeObjectURL(old.previewUrl);
+      return { ...prev, [key]: { buffer, mimeType: file.type, previewUrl } };
+    });
+  }
+
+  // Убрать картинку. Если она ещё не сохранена на диске (была только
+  // застейджена) - просто снимаем стейджинг, писать/удалять на диске нечего.
+  // Если картинка уже сохранена (открыли существующую викторину) - удаляем
+  // файл на диске СРАЗУ (best-effort) и снимаем ссылку в quiz.questions.
+  // Отложенное до Save удаление здесь намеренно НЕ реализовано (в отличие
+  // от записи) - иначе от простого клика «Убрать» до реального освобождения
+  // файла на диске проходило бы неопределённое время, что легче спутать с
+  // багом; известный принятый компромисс - Отмена (undo) сразу после
+  // «Убрать» вернёт ссылку на уже удалённый файл (та же категория
+  // компромисса, что уже принята для замены фона другим типом файла).
+  async function handleRemoveItemImage(questionId: string, kind: RusiqItemImageKind) {
+    const key = pendingImageKey(questionId, kind);
+    if (pendingItemImages[key]) {
+      URL.revokeObjectURL(pendingItemImages[key].previewUrl);
+      setPendingItemImages((prev) => {
+        const next = { ...prev };
+        delete next[key];
+        return next;
+      });
+      return;
+    }
+    const field = ITEM_IMAGE_FIELD_BY_KIND[kind];
+    const question = quiz.questions.find((q) => q.id === questionId);
+    const fileName = question?.[field] ?? null;
+    if (fileName) {
+      deleteQuizItemImage(fileName); // best-effort, не блокируем UI на результате
+    }
+    handleQuestionChange({ ...(question as RusiqQuestion), [field]: null });
+  }
+
+  function getItemImagePreviewUrl(question: RusiqQuestion, kind: RusiqItemImageKind): string | null {
+    const pending = pendingItemImages[pendingImageKey(question.id, kind)];
+    if (pending) return pending.previewUrl;
+    const fileName = question[ITEM_IMAGE_FIELD_BY_KIND[kind]];
+    return fileName ? rusiqItemImageUrl(fileName) : null;
   }
 
   function handleDeleteSelectedQuestion() {
@@ -219,11 +302,40 @@ const EditorScreen: React.FC<Props> = ({ initialQuiz, pendingBackground, onExit 
       // несуществующий файл сразу после первого сохранения.
       setHistory((h) => ({ ...h, present: quizToSave }));
     }
+
+    // FR-015 (Фаза 2b) - записываем на диск все застейджированные
+    // картинки вопросов/ответов/подсказок ЭТИМ же сохранением (тот же
+    // момент, что и фон выше), патчим авторитетным именем файла из ответа
+    // IPC - тот же принцип "не доверять предсказанному имени", что уже
+    // применён к фону чуть выше.
+    const pendingKeys = Object.keys(pendingItemImages);
+    if (pendingKeys.length > 0) {
+      const patchedQuestions = new Map(quizToSave.questions.map((q) => [q.id, q]));
+      for (const key of pendingKeys) {
+        const [questionId, kind] = key.split(':') as [string, RusiqItemImageKind];
+        const pending = pendingItemImages[key];
+        const result = await saveQuizItemImage(quizToSave.id, questionId, kind, pending.buffer, pending.mimeType);
+        if (!result.ok || !result.fileName) {
+          setSaveError('Не удалось сохранить одну из картинок вопроса — попробуйте ещё раз');
+          setSaving(false);
+          return;
+        }
+        const existing = patchedQuestions.get(questionId);
+        if (existing) patchedQuestions.set(questionId, { ...existing, [ITEM_IMAGE_FIELD_BY_KIND[kind]]: result.fileName });
+      }
+      quizToSave = { ...quizToSave, questions: Array.from(patchedQuestions.values()) };
+      setHistory((h) => ({ ...h, present: quizToSave }));
+    }
+
     const ok = await saveQuiz(quizToSave);
     setSaving(false);
     if (!ok) {
       setSaveError('Не удалось сохранить викторину — попробуйте ещё раз');
       return;
+    }
+    if (pendingKeys.length > 0) {
+      Object.values(pendingItemImages).forEach((p) => URL.revokeObjectURL(p.previewUrl));
+      setPendingItemImages({});
     }
     setLastSavedQuiz(quizToSave);
   }
@@ -300,7 +412,19 @@ const EditorScreen: React.FC<Props> = ({ initialQuiz, pendingBackground, onExit 
           </button>
         </div>
       </div>
-      <div style={{ width: 340 }}>
+      {/* Найдено живой проверкой (2026-09-13, приёмка Фазы 2b): панель
+          справа растёт без ограничения (заголовок + форма вопроса + до трёх
+          превью картинок + пароль + кнопки Сохранить/Назад), а внешний
+          `.player-canvas` (Player.tsx, standalone-app режим) жёстко
+          ограничен высотой окна с `overflow: hidden` - без собственного
+          скролла у панели её нижняя часть, включая саму кнопку «Сохранить»,
+          физически уезжает за пределы окна и становится недостижимой мышью
+          на любом окне ниже ~1500px высотой (то есть буквально на дефолтном
+          размере окна standalone-виджета, BASE_WINDOW_OPTIONS 1280x800).
+          100vh здесь - высота именно `.player-canvas` (Player.tsx считает
+          его равным window.innerHeight в standalone-режиме), не экрана
+          целиком. */}
+      <div style={{ width: 340, maxHeight: 'calc(100vh - 80px)', overflowY: 'auto', paddingRight: 8 }}>
         <label className="riq-field">
           Название викторины
           <input value={quiz.title} onChange={(e) => update({ ...quiz, title: e.target.value })} className="riq-input" />
@@ -312,6 +436,9 @@ const EditorScreen: React.FC<Props> = ({ initialQuiz, pendingBackground, onExit 
             onChange={handleQuestionChange}
             onDelete={handleDeleteSelectedQuestion}
             onClose={() => setSelection(null)}
+            getImagePreviewUrl={(kind) => getItemImagePreviewUrl(selectedQuestion, kind)}
+            onSelectImage={(kind, file) => handleSelectItemImage(selectedQuestion.id, kind, file)}
+            onRemoveImage={(kind) => handleRemoveItemImage(selectedQuestion.id, kind)}
           />
         )}
         {selection?.kind === 'decoy-of-question' && selectedDecoyOfQuestion && (

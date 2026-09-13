@@ -108,16 +108,39 @@ function saveQuizFile(quizzesDir, quiz) {
   fs.renameSync(tmpPath, filePath);
 }
 
+// Собирает имена файлов ВСЕХ картинок, на которые ссылается викторина -
+// общий фон (quiz.image.fileName) и per-вопросные question/answer/hint
+// (FR-015, Фаза 2b) - для удаления при deleteQuizFile. Вынесено отдельной
+// функцией, т.к. источников имён теперь два разных по форме (одно поле
+// верхнего уровня + до трёх на каждый вопрос), и до этой находки уже один
+// раз забыли про источник целиком (см. комментарий deleteQuizFile ниже).
+function collectReferencedImageFileNames(quiz) {
+  const names = [];
+  if (quiz && isPlainRecord(quiz.image) && typeof quiz.image.fileName === 'string' && quiz.image.fileName.length > 0) {
+    names.push(quiz.image.fileName);
+  }
+  if (quiz && Array.isArray(quiz.questions)) {
+    for (const q of quiz.questions) {
+      if (!isPlainRecord(q)) continue;
+      for (const key of ['questionImage', 'answerImage', 'hintImage']) {
+        if (typeof q[key] === 'string' && q[key].length > 0) names.push(q[key]);
+      }
+    }
+  }
+  return names;
+}
+
 // Найдено при пересчёте соответствия ТЗ (2026-09-13): раньше удаляла
 // только JSON викторины, файл фонового изображения оставался осиротевшим
 // на диске - нарушение ТЗ §7 "удаление должно контролировать связанные
-// объекты". Перед удалением JSON читаем его же, чтобы узнать реальное имя
-// файла фона (quiz.image.fileName) - только оно, а не угаданное по
-// шаблону, гарантированно совпадает с тем, что реально лежит на диске
-// (та же дисциплина, что уже применена в EditorScreen.tsx - Не полагаться
-// на предугаданное имя, использовать just авторитетное). Удаление фона -
-// best-effort: отсутствие/ошибка удаления фона не должны блокировать
-// удаление самой викторины.
+// объекты". Перед удалением JSON читаем его же, чтобы узнать реальные имена
+// файлов (общий фон + per-вопросные question/answer/hint, добавленные
+// Фазой 2b) - только они, а не угаданные по шаблону, гарантированно
+// совпадают с тем, что реально лежит на диске (та же дисциплина, что уже
+// применена в EditorScreen.tsx - не полагаться на предугаданное имя,
+// использовать именно авторитетное). Удаление картинок - best-effort:
+// отсутствие/ошибка удаления одной из них не должна блокировать ни
+// удаление самой викторины, ни удаление остальных картинок.
 function deleteQuizFile(quizzesDir, quizId) {
   let filePath;
   try {
@@ -127,12 +150,12 @@ function deleteQuizFile(quizzesDir, quizId) {
   }
 
   const quiz = loadQuizFile(quizzesDir, quizId);
-  const backgroundFileName = quiz && isPlainRecord(quiz.image) ? quiz.image.fileName : null;
-  if (typeof backgroundFileName === 'string' && backgroundFileName.length > 0) {
+  for (const fileName of collectReferencedImageFileNames(quiz)) {
     try {
-      fs.unlinkSync(resolveWithinRoot(quizzesDir, backgroundFileName));
+      fs.unlinkSync(resolveWithinRoot(quizzesDir, fileName));
     } catch {
-      // Фон уже отсутствует/не читается - не блокирует удаление самой викторины.
+      // Файл уже отсутствует/не читается - не блокирует ни удаление самой
+      // викторины, ни удаление остальных картинок.
     }
   }
 
@@ -161,6 +184,46 @@ function saveQuizBackground(quizzesDir, quizId, bufferLike, mimeType) {
   fs.writeFileSync(tmpPath, buffer);
   fs.renameSync(tmpPath, filePath);
   return { ok: true, fileName };
+}
+
+const ITEM_IMAGE_KINDS = ['question', 'answer', 'hint'];
+
+// FR-015 (Фаза 2b) - картинка к вопросу/ответу/подсказке КОНКРЕТНОГО
+// вопроса, тот же механизм хранения, что и общий фон (saveQuizBackground
+// выше), но имя файла включает id вопроса и "вид" картинки, чтобы у
+// разных вопросов одной викторины и у трёх видов одного вопроса не
+// возникало коллизий имён. Как и у фона, замена уже существующей картинки
+// ДРУГИМ типом файла (другое расширение) оставит старый файл на диске до
+// удаления всей викторины (deleteQuizFile выше читает актуальную ссылку
+// из quiz.json, а не угадывает расширение) - тот же принятый, уже
+// существовавший для фона компромисс, не новый регресс.
+function saveQuizItemImage(quizzesDir, quizId, questionId, kind, bufferLike, mimeType) {
+  const ext = BACKGROUND_EXT_BY_MIME[mimeType];
+  if (!ext) return { ok: false };
+  if (!ITEM_IMAGE_KINDS.includes(kind)) return { ok: false };
+  if (typeof questionId !== 'string' || questionId.length === 0) return { ok: false };
+  const fileName = `${quizId}-${questionId}-${kind}${ext}`;
+  const filePath = resolveWithinRoot(quizzesDir, fileName);
+  const buffer = Buffer.isBuffer(bufferLike) ? bufferLike : Buffer.from(bufferLike);
+  const tmpPath = `${filePath}.tmp`;
+  fs.writeFileSync(tmpPath, buffer);
+  fs.renameSync(tmpPath, filePath);
+  return { ok: true, fileName };
+}
+
+// Явное удаление ОДНОЙ картинки вопроса/ответа/подсказки - используется,
+// когда пользователь в редакторе снимает уже сохранённую картинку до
+// удаления всей викторины (штатная очистка при удалении самой викторины -
+// deleteQuizFile выше, эта функция отдельно закрывает более узкий случай).
+// Best-effort: отсутствие файла - не ошибка.
+function deleteQuizItemImage(quizzesDir, fileName) {
+  if (typeof fileName !== 'string' || fileName.length === 0) return false;
+  try {
+    fs.unlinkSync(resolveWithinRoot(quizzesDir, fileName));
+    return true;
+  } catch {
+    return false;
+  }
 }
 
 /**
@@ -206,6 +269,19 @@ function registerRusiqIpc({ ipcMain, app }) {
     }
   });
 
+  ipcMain.handle('rusiq:save-quiz-item-image', (_event, quizId, questionId, kind, arrayBuffer, mimeType) => {
+    if (typeof quizId !== 'string' || quizId.length === 0) return { ok: false };
+    try {
+      return saveQuizItemImage(quizzesDir, quizId, questionId, kind, arrayBuffer, mimeType);
+    } catch {
+      return { ok: false };
+    }
+  });
+
+  ipcMain.handle('rusiq:delete-quiz-item-image', (_event, fileName) => {
+    return { ok: deleteQuizItemImage(quizzesDir, fileName) };
+  });
+
   return { baseDir, isFallback, quizzesDir };
 }
 
@@ -220,4 +296,7 @@ module.exports = {
   deleteQuizFile,
   resolveQuizzesDir,
   saveQuizBackground,
+  saveQuizItemImage,
+  deleteQuizItemImage,
+  collectReferencedImageFileNames,
 };

@@ -2,7 +2,7 @@
 
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { rusiqBackgroundMediaUrl } from './rusiqMediaUrl.ts';
+import { rusiqBackgroundMediaUrl, rusiqItemImageUrl } from './rusiqMediaUrl.ts';
 
 test('rusiqBackgroundMediaUrl encodes the filename into a rusiqmedia://bg/ URL', () => {
   assert.equal(rusiqBackgroundMediaUrl('abc-background.png'), 'rusiqmedia://bg/abc-background.png');
@@ -13,4 +13,11 @@ test('the URL host is non-empty - a standard-scheme URL with an empty host repar
   const url = new URL(rusiqBackgroundMediaUrl('abc-background.png'));
   assert.equal(url.hostname, 'bg');
   assert.equal(url.pathname, '/abc-background.png');
+});
+
+test('rusiqItemImageUrl encodes the filename into a rusiqmedia://item/ URL', () => {
+  assert.equal(rusiqItemImageUrl('quiz1-q1-question.png'), 'rusiqmedia://item/quiz1-q1-question.png');
+  const url = new URL(rusiqItemImageUrl('a b.png'));
+  assert.equal(url.hostname, 'item');
+  assert.equal(url.pathname, '/a%20b.png');
 });

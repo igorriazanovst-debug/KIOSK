@@ -1206,6 +1206,46 @@ app.whenReady().then(() => {
     fileLog('[rusiq] failed to initialize local storage:', err && err.message);
   }
 
+  // FR-013/FR-018 (Фаза 2b) - экспорт/импорт файла викторины между
+  // проектами KIOSK. Согласованная реинтерпретация буквального «без
+  // установки продукта» (см. Тип7_трассировочная_матрица.md) - файл
+  // открывается уже установленным лицензированным Плеером, не отдельным
+  // автономным исполняемым файлом. Диалог выбора файла (dialog.*) может
+  // существовать только в main-процессе, тот же принцип, что 'open-project'
+  // выше - контент файла (готовая самодостаточная JSON-строка с
+  // base64-картинками внутри, см. renderer/quizExport.ts) собирается и
+  // валидируется в рендерере, main только пишет/читает байты на диск.
+  ipcMain.handle('rusiq:export-quiz', async (_event, fileContentJson, suggestedFileName) => {
+    if (typeof fileContentJson !== 'string' || fileContentJson.length === 0) return { ok: false };
+    try {
+      const result = await dialog.showSaveDialog(mainWindow, {
+        defaultPath: typeof suggestedFileName === 'string' && suggestedFileName.length > 0 ? suggestedFileName : 'quiz.rusiq.json',
+        filters: [{ name: 'Викторина РусIQ', extensions: ['json'] }]
+      });
+      if (result.canceled || !result.filePath) return { ok: false, canceled: true };
+      fs.writeFileSync(result.filePath, fileContentJson, 'utf-8');
+      return { ok: true, filePath: result.filePath };
+    } catch (err) {
+      fileLog('[rusiq] export failed:', err && err.message);
+      return { ok: false };
+    }
+  });
+
+  ipcMain.handle('rusiq:import-quiz', async () => {
+    try {
+      const result = await dialog.showOpenDialog(mainWindow, {
+        properties: ['openFile'],
+        filters: [{ name: 'Викторина РусIQ', extensions: ['json'] }]
+      });
+      if (result.canceled || result.filePaths.length === 0) return { ok: false, canceled: true };
+      const raw = fs.readFileSync(result.filePaths[0], 'utf-8');
+      return { ok: true, content: raw };
+    } catch (err) {
+      fileLog('[rusiq] import failed:', err && err.message);
+      return { ok: false };
+    }
+  });
+
   const { session } = require('electron');
   session.defaultSession.webRequest.onHeadersReceived((details, callback) => {
     callback({

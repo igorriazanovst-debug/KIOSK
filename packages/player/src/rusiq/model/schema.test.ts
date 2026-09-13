@@ -108,6 +108,39 @@ test('RusiqQuizSchema rejects a non-positive width or height', () => {
   assert.equal(result.success, false);
 });
 
+// FR-015 (Фаза 2b): изображение к вопросу/ответу/подсказке, отдельное от
+// общего фона викторины.
+test('RusiqQuizSchema defaults question/answer/hint images to null when absent', () => {
+  const result = RusiqQuizSchema.safeParse(validQuiz());
+  assert.equal(result.success, true);
+  if (result.success) {
+    assert.equal(result.data.questions[0].questionImage, null);
+    assert.equal(result.data.questions[0].answerImage, null);
+    assert.equal(result.data.questions[0].hintImage, null);
+  }
+});
+
+test('RusiqQuizSchema accepts explicit question/answer/hint image file names', () => {
+  const question = validQuestion({
+    questionImage: 'quiz1-q1-question.png',
+    answerImage: 'quiz1-q1-answer.jpg',
+    hintImage: 'quiz1-q1-hint.webp',
+  });
+  const result = RusiqQuizSchema.safeParse(validQuiz({ questions: [question] }));
+  assert.equal(result.success, true);
+  if (result.success) {
+    assert.equal(result.data.questions[0].questionImage, 'quiz1-q1-question.png');
+    assert.equal(result.data.questions[0].answerImage, 'quiz1-q1-answer.jpg');
+    assert.equal(result.data.questions[0].hintImage, 'quiz1-q1-hint.webp');
+  }
+});
+
+test('RusiqQuizSchema rejects an empty-string image file name (must be null, not empty)', () => {
+  const question = validQuestion({ questionImage: '' });
+  const result = RusiqQuizSchema.safeParse(validQuiz({ questions: [question] }));
+  assert.equal(result.success, false);
+});
+
 test('RusiqUserDataSchema accepts empty history and defaults soundOn to true', () => {
   const result = RusiqUserDataSchema.safeParse({ schemaVersion: RUSIQ_USERDATA_SCHEMA_VERSION, sessions: [] });
   assert.equal(result.success, true);

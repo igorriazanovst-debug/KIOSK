@@ -25,6 +25,8 @@ export interface QuizListEntry {
   updatedAt: string;
 }
 
+export type RusiqItemImageKind = 'question' | 'answer' | 'hint';
+
 interface RusiqEditorAPI {
   listQuizzes: () => Promise<QuizListEntry[]>;
   loadQuiz: (quizId: string) => Promise<unknown>;
@@ -35,6 +37,16 @@ interface RusiqEditorAPI {
     buffer: ArrayBuffer,
     mimeType: string,
   ) => Promise<{ ok: boolean; fileName?: string }>;
+  saveQuizItemImage: (
+    quizId: string,
+    questionId: string,
+    kind: RusiqItemImageKind,
+    buffer: ArrayBuffer,
+    mimeType: string,
+  ) => Promise<{ ok: boolean; fileName?: string }>;
+  deleteQuizItemImage: (fileName: string) => Promise<{ ok: boolean }>;
+  exportQuiz: (fileContentJson: string, suggestedFileName: string) => Promise<{ ok: boolean; filePath?: string; canceled?: boolean }>;
+  importQuiz: () => Promise<{ ok: boolean; content?: string; canceled?: boolean }>;
 }
 
 function getEditorAPI(): RusiqEditorAPI | undefined {
@@ -95,6 +107,53 @@ export async function saveQuizBackground(
   if (!api) return { ok: false };
   try {
     return await api.saveQuizBackground(quizId, buffer, mimeType);
+  } catch {
+    return { ok: false };
+  }
+}
+
+export async function saveQuizItemImage(
+  quizId: string,
+  questionId: string,
+  kind: RusiqItemImageKind,
+  buffer: ArrayBuffer,
+  mimeType: string,
+): Promise<{ ok: boolean; fileName?: string }> {
+  const api = getEditorAPI();
+  if (!api) return { ok: false };
+  try {
+    return await api.saveQuizItemImage(quizId, questionId, kind, buffer, mimeType);
+  } catch {
+    return { ok: false };
+  }
+}
+
+export async function deleteQuizItemImage(fileName: string): Promise<boolean> {
+  const api = getEditorAPI();
+  if (!api) return false;
+  try {
+    const result = await api.deleteQuizItemImage(fileName);
+    return result.ok;
+  } catch {
+    return false;
+  }
+}
+
+export async function exportQuizFile(fileContentJson: string, suggestedFileName: string): Promise<{ ok: boolean; filePath?: string }> {
+  const api = getEditorAPI();
+  if (!api) return { ok: false };
+  try {
+    return await api.exportQuiz(fileContentJson, suggestedFileName);
+  } catch {
+    return { ok: false };
+  }
+}
+
+export async function importQuizFile(): Promise<{ ok: boolean; content?: string }> {
+  const api = getEditorAPI();
+  if (!api) return { ok: false };
+  try {
+    return await api.importQuiz();
   } catch {
     return { ok: false };
   }
