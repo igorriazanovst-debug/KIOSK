@@ -58,3 +58,8 @@ export * from './words/game/stats';
 export * from './words/store/rules';
 export * from './words/store/contentRules';
 export * from './words/store/teacherGate';
+
+// АзбукоСлов (Тип 3) — пространством имён, см. src/alphabet/index.ts:
+// у него четырнадцать имён, общих с виджетом «слов», и плоский реэкспорт
+// молча выбросил бы столкнувшиеся
+export * as alphabet from './alphabet';
