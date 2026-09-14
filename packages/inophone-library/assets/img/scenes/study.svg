@@ -2,16 +2,16 @@
   <rect width="1280" height="800" fill="#e7eef6"/>
   <rect y="496" width="1280" height="304" fill="#d8c9a8"/>
   <line x1="0" y1="496" x2="1280" y2="496" stroke="#c4b391" stroke-width="3"/>
-  <image href="../concepts/desk.svg" x="76" y="122" width="176" height="140" preserveAspectRatio="xMidYMid meet"/>
-  <image href="../concepts/computer.svg" x="345" y="115" width="154" height="122" preserveAspectRatio="xMidYMid meet"/>
-  <image href="../concepts/keyboard.svg" x="582" y="132" width="144" height="115" preserveAspectRatio="xMidYMid meet"/>
-  <image href="../concepts/mouse_pc.svg" x="800" y="132" width="138" height="110" preserveAspectRatio="xMidYMid meet"/>
-  <image href="../concepts/printer.svg" x="1069" y="133" width="150" height="119" preserveAspectRatio="xMidYMid meet"/>
-  <image href="../concepts/paper.svg" x="125" y="345" width="177" height="126" preserveAspectRatio="xMidYMid meet"/>
-  <image href="../concepts/pen.svg" x="417" y="309" width="196" height="140" preserveAspectRatio="xMidYMid meet"/>
-  <image href="../concepts/notebook.svg" x="721" y="328" width="177" height="127" preserveAspectRatio="xMidYMid meet"/>
-  <image href="../concepts/folder.svg" x="1027" y="345" width="185" height="132" preserveAspectRatio="xMidYMid meet"/>
-  <image href="../concepts/calendar.svg" x="127" y="579" width="276" height="153" preserveAspectRatio="xMidYMid meet"/>
-  <image href="../concepts/desk_lamp.svg" x="539" y="556" width="246" height="136" preserveAspectRatio="xMidYMid meet"/>
-  <image href="../concepts/glasses.svg" x="882" y="556" width="254" height="141" preserveAspectRatio="xMidYMid meet"/>
+  <image href="../concepts/desk.svg" x="88" y="89" width="157" height="157" preserveAspectRatio="xMidYMid meet"/>
+  <image href="../concepts/computer.svg" x="360" y="82" width="137" height="137" preserveAspectRatio="xMidYMid meet"/>
+  <image href="../concepts/keyboard.svg" x="594" y="101" width="128" height="128" preserveAspectRatio="xMidYMid meet"/>
+  <image href="../concepts/mouse_pc.svg" x="805" y="101" width="123" height="123" preserveAspectRatio="xMidYMid meet"/>
+  <image href="../concepts/printer.svg" x="1084" y="102" width="134" height="134" preserveAspectRatio="xMidYMid meet"/>
+  <image href="../concepts/paper.svg" x="152" y="334" width="141" height="141" preserveAspectRatio="xMidYMid meet"/>
+  <image href="../concepts/pen.svg" x="452" y="295" width="156" height="156" preserveAspectRatio="xMidYMid meet"/>
+  <image href="../concepts/notebook.svg" x="747" y="316" width="141" height="141" preserveAspectRatio="xMidYMid meet"/>
+  <image href="../concepts/folder.svg" x="1060" y="334" width="147" height="147" preserveAspectRatio="xMidYMid meet"/>
+  <image href="../concepts/calendar.svg" x="210" y="592" width="170" height="170" preserveAspectRatio="xMidYMid meet"/>
+  <image href="../concepts/desk_lamp.svg" x="604" y="566" width="152" height="152" preserveAspectRatio="xMidYMid meet"/>
+  <image href="../concepts/glasses.svg" x="903" y="566" width="157" height="157" preserveAspectRatio="xMidYMid meet"/>
 </svg>

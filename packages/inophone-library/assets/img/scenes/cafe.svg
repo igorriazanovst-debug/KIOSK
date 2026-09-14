@@ -2,16 +2,16 @@
   <rect width="1280" height="800" fill="#dfe9f2"/>
   <rect y="496" width="1280" height="304" fill="#c9c9c9"/>
   <line x1="0" y1="496" x2="1280" y2="496" stroke="#b0b0b0" stroke-width="3"/>
-  <image href="../concepts/menu.svg" x="112" y="151" width="137" height="108" preserveAspectRatio="xMidYMid meet"/>
-  <image href="../concepts/waiter.svg" x="345" y="113" width="139" height="110" preserveAspectRatio="xMidYMid meet"/>
-  <image href="../concepts/tray.svg" x="568" y="142" width="154" height="122" preserveAspectRatio="xMidYMid meet"/>
-  <image href="../concepts/napkin.svg" x="802" y="140" width="139" height="111" preserveAspectRatio="xMidYMid meet"/>
-  <image href="../concepts/coffee.svg" x="1040" y="115" width="140" height="111" preserveAspectRatio="xMidYMid meet"/>
-  <image href="../concepts/tea.svg" x="127" y="323" width="184" height="131" preserveAspectRatio="xMidYMid meet"/>
-  <image href="../concepts/juice.svg" x="392" y="344" width="202" height="144" preserveAspectRatio="xMidYMid meet"/>
-  <image href="../concepts/cake.svg" x="668" y="317" width="179" height="128" preserveAspectRatio="xMidYMid meet"/>
-  <image href="../concepts/straw.svg" x="965" y="392" width="141" height="101" preserveAspectRatio="xMidYMid meet"/>
-  <image href="../concepts/sugar.svg" x="180" y="611" width="183" height="101" preserveAspectRatio="xMidYMid meet"/>
-  <image href="../concepts/saucer.svg" x="478" y="553" width="248" height="138" preserveAspectRatio="xMidYMid meet"/>
-  <image href="../concepts/bill.svg" x="928" y="565" width="243" height="135" preserveAspectRatio="xMidYMid meet"/>
+  <image href="../concepts/menu.svg" x="125" y="122" width="121" height="121" preserveAspectRatio="xMidYMid meet"/>
+  <image href="../concepts/waiter.svg" x="356" y="79" width="123" height="123" preserveAspectRatio="xMidYMid meet"/>
+  <image href="../concepts/tray.svg" x="578" y="112" width="137" height="137" preserveAspectRatio="xMidYMid meet"/>
+  <image href="../concepts/napkin.svg" x="807" y="110" width="124" height="124" preserveAspectRatio="xMidYMid meet"/>
+  <image href="../concepts/coffee.svg" x="1045" y="82" width="124" height="124" preserveAspectRatio="xMidYMid meet"/>
+  <image href="../concepts/tea.svg" x="159" y="310" width="146" height="146" preserveAspectRatio="xMidYMid meet"/>
+  <image href="../concepts/juice.svg" x="415" y="333" width="161" height="161" preserveAspectRatio="xMidYMid meet"/>
+  <image href="../concepts/cake.svg" x="673" y="303" width="143" height="143" preserveAspectRatio="xMidYMid meet"/>
+  <image href="../concepts/straw.svg" x="967" y="388" width="112" height="112" preserveAspectRatio="xMidYMid meet"/>
+  <image href="../concepts/sugar.svg" x="228" y="627" width="113" height="113" preserveAspectRatio="xMidYMid meet"/>
+  <image href="../concepts/saucer.svg" x="495" y="563" width="153" height="153" preserveAspectRatio="xMidYMid meet"/>
+  <image href="../concepts/bill.svg" x="982" y="576" width="150" height="150" preserveAspectRatio="xMidYMid meet"/>
 </svg>

@@ -2,16 +2,16 @@
   <rect width="1280" height="800" fill="#e7eef6"/>
   <rect y="496" width="1280" height="304" fill="#d8c9a8"/>
   <line x1="0" y1="496" x2="1280" y2="496" stroke="#c4b391" stroke-width="3"/>
-  <image href="../concepts/bed.svg" x="67" y="117" width="179" height="142" preserveAspectRatio="xMidYMid meet"/>
-  <image href="../concepts/pillow.svg" x="308" y="124" width="148" height="117" preserveAspectRatio="xMidYMid meet"/>
-  <image href="../concepts/blanket.svg" x="548" y="112" width="146" height="116" preserveAspectRatio="xMidYMid meet"/>
-  <image href="../concepts/wardrobe.svg" x="779" y="113" width="183" height="146" preserveAspectRatio="xMidYMid meet"/>
-  <image href="../concepts/lamp.svg" x="1023" y="122" width="154" height="122" preserveAspectRatio="xMidYMid meet"/>
-  <image href="../concepts/window.svg" x="74" y="358" width="185" height="132" preserveAspectRatio="xMidYMid meet"/>
-  <image href="../concepts/curtain.svg" x="373" y="347" width="194" height="139" preserveAspectRatio="xMidYMid meet"/>
-  <image href="../concepts/carpet.svg" x="677" y="312" width="186" height="133" preserveAspectRatio="xMidYMid meet"/>
-  <image href="../concepts/mirror.svg" x="1028" y="346" width="187" height="133" preserveAspectRatio="xMidYMid meet"/>
-  <image href="../concepts/clock.svg" x="106" y="541" width="269" height="149" preserveAspectRatio="xMidYMid meet"/>
-  <image href="../concepts/slippers.svg" x="543" y="563" width="248" height="137" preserveAspectRatio="xMidYMid meet"/>
-  <image href="../concepts/door.svg" x="960" y="590" width="242" height="134" preserveAspectRatio="xMidYMid meet"/>
+  <image href="../concepts/bed.svg" x="75" y="84" width="159" height="159" preserveAspectRatio="xMidYMid meet"/>
+  <image href="../concepts/pillow.svg" x="311" y="91" width="131" height="131" preserveAspectRatio="xMidYMid meet"/>
+  <image href="../concepts/blanket.svg" x="552" y="79" width="129" height="129" preserveAspectRatio="xMidYMid meet"/>
+  <image href="../concepts/wardrobe.svg" x="779" y="79" width="163" height="163" preserveAspectRatio="xMidYMid meet"/>
+  <image href="../concepts/lamp.svg" x="1025" y="89" width="137" height="137" preserveAspectRatio="xMidYMid meet"/>
+  <image href="../concepts/window.svg" x="82" y="349" width="147" height="147" preserveAspectRatio="xMidYMid meet"/>
+  <image href="../concepts/curtain.svg" x="382" y="337" width="155" height="155" preserveAspectRatio="xMidYMid meet"/>
+  <image href="../concepts/carpet.svg" x="686" y="298" width="148" height="148" preserveAspectRatio="xMidYMid meet"/>
+  <image href="../concepts/mirror.svg" x="1063" y="335" width="149" height="149" preserveAspectRatio="xMidYMid meet"/>
+  <image href="../concepts/clock.svg" x="158" y="549" width="166" height="166" preserveAspectRatio="xMidYMid meet"/>
+  <image href="../concepts/slippers.svg" x="612" y="573" width="153" height="153" preserveAspectRatio="xMidYMid meet"/>
+  <image href="../concepts/door.svg" x="1038" y="604" width="149" height="149" preserveAspectRatio="xMidYMid meet"/>
 </svg>

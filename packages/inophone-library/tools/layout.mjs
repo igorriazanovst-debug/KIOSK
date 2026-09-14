@@ -36,7 +36,7 @@ function rngFor(seed) {
 export const VIEW = { width: 1280, height: 800 };
 
 /** Полоса, занятая рядами объектов; выше — «небо» сцены, ниже — «пол» */
-const AREA = { x: 40, y: 90, width: 1200, height: 660 };
+const AREA = { x: 40, y: 56, width: 1200, height: 724 };
 
 /** Обязательный зазор между соседними объектами, в единицах viewBox */
 const GAP = 18;
@@ -103,10 +103,17 @@ export function layoutScene(sceneId, ids) {
       const wiggle = 0.92 + rnd() * 0.16;
       const scale = Math.min(0.94, base * wiggle);
 
+      // КОНТУР КВАДРАТНЫЙ, как и сам рисунок. Иллюстрации понятий квадратные и
+      // вписываются в ячейку по короткой стороне; прямоугольный контур был бы
+      // ШИРЕ нарисованного предмета, и щелчок по пустому месту рядом с ним
+      // засчитывался бы как попадание в предмет. Увидено на отрисованной
+      // сцене: между кошкой и собакой оставался зазор, который принадлежал
+      // кошке
       const maxW = cellWidth - GAP * 2;
       const maxH = rowHeight - GAP * 2;
-      const w = Math.round(maxW * scale);
-      const h = Math.round(maxH * scale);
+      const side = Math.round(Math.min(maxW, maxH) * scale);
+      const w = side;
+      const h = side;
 
       // Смещение внутри свободной части ячейки. Предмет никогда не выходит за
       // её границы, поэтому соседи не пересекаются НИ ПРИ КАКИХ значениях rnd

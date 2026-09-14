@@ -2,16 +2,16 @@
   <rect width="1280" height="800" fill="#eceff2"/>
   <rect y="496" width="1280" height="304" fill="#d5d9de"/>
   <line x1="0" y1="496" x2="1280" y2="496" stroke="#bcc2c9" stroke-width="3"/>
-  <image href="../concepts/footballball.svg" x="63" y="123" width="145" height="115" preserveAspectRatio="xMidYMid meet"/>
-  <image href="../concepts/goal.svg" x="322" y="109" width="179" height="142" preserveAspectRatio="xMidYMid meet"/>
-  <image href="../concepts/racket.svg" x="561" y="122" width="146" height="116" preserveAspectRatio="xMidYMid meet"/>
-  <image href="../concepts/skates.svg" x="819" y="114" width="157" height="125" preserveAspectRatio="xMidYMid meet"/>
-  <image href="../concepts/skis.svg" x="1019" y="142" width="157" height="125" preserveAspectRatio="xMidYMid meet"/>
-  <image href="../concepts/dumbbell.svg" x="72" y="357" width="178" height="127" preserveAspectRatio="xMidYMid meet"/>
-  <image href="../concepts/skiprope.svg" x="408" y="338" width="180" height="128" preserveAspectRatio="xMidYMid meet"/>
-  <image href="../concepts/medal.svg" x="780" y="395" width="130" height="92" preserveAspectRatio="xMidYMid meet"/>
-  <image href="../concepts/cup_prize.svg" x="1003" y="339" width="180" height="129" preserveAspectRatio="xMidYMid meet"/>
-  <image href="../concepts/whistle.svg" x="69" y="563" width="174" height="97" preserveAspectRatio="xMidYMid meet"/>
-  <image href="../concepts/net.svg" x="503" y="554" width="270" height="149" preserveAspectRatio="xMidYMid meet"/>
-  <image href="../concepts/stopwatch.svg" x="929" y="549" width="180" height="99" preserveAspectRatio="xMidYMid meet"/>
+  <image href="../concepts/footballball.svg" x="64" y="91" width="128" height="128" preserveAspectRatio="xMidYMid meet"/>
+  <image href="../concepts/goal.svg" x="342" y="75" width="159" height="159" preserveAspectRatio="xMidYMid meet"/>
+  <image href="../concepts/racket.svg" x="568" y="90" width="129" height="129" preserveAspectRatio="xMidYMid meet"/>
+  <image href="../concepts/skates.svg" x="833" y="81" width="140" height="140" preserveAspectRatio="xMidYMid meet"/>
+  <image href="../concepts/skis.svg" x="1020" y="112" width="140" height="140" preserveAspectRatio="xMidYMid meet"/>
+  <image href="../concepts/dumbbell.svg" x="77" y="348" width="142" height="142" preserveAspectRatio="xMidYMid meet"/>
+  <image href="../concepts/skiprope.svg" x="430" y="326" width="143" height="143" preserveAspectRatio="xMidYMid meet"/>
+  <image href="../concepts/medal.svg" x="805" y="391" width="103" height="103" preserveAspectRatio="xMidYMid meet"/>
+  <image href="../concepts/cup_prize.svg" x="1022" y="329" width="143" height="143" preserveAspectRatio="xMidYMid meet"/>
+  <image href="../concepts/whistle.svg" x="73" y="574" width="108" height="108" preserveAspectRatio="xMidYMid meet"/>
+  <image href="../concepts/net.svg" x="553" y="564" width="166" height="166" preserveAspectRatio="xMidYMid meet"/>
+  <image href="../concepts/stopwatch.svg" x="955" y="558" width="111" height="111" preserveAspectRatio="xMidYMid meet"/>
 </svg>

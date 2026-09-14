@@ -2,16 +2,16 @@
   <rect width="1280" height="800" fill="#f0e9f2"/>
   <rect y="496" width="1280" height="304" fill="#ddd2e0"/>
   <line x1="0" y1="496" x2="1280" y2="496" stroke="#c8bace" stroke-width="3"/>
-  <image href="../concepts/shirt.svg" x="115" y="129" width="142" height="113" preserveAspectRatio="xMidYMid meet"/>
-  <image href="../concepts/tshirt.svg" x="298" y="146" width="151" height="120" preserveAspectRatio="xMidYMid meet"/>
-  <image href="../concepts/trousers.svg" x="560" y="137" width="146" height="116" preserveAspectRatio="xMidYMid meet"/>
-  <image href="../concepts/skirt.svg" x="796" y="146" width="136" height="108" preserveAspectRatio="xMidYMid meet"/>
-  <image href="../concepts/dress.svg" x="1060" y="146" width="149" height="118" preserveAspectRatio="xMidYMid meet"/>
-  <image href="../concepts/coat.svg" x="78" y="345" width="184" height="131" preserveAspectRatio="xMidYMid meet"/>
-  <image href="../concepts/jacket.svg" x="367" y="341" width="200" height="143" preserveAspectRatio="xMidYMid meet"/>
-  <image href="../concepts/sweater.svg" x="717" y="339" width="193" height="138" preserveAspectRatio="xMidYMid meet"/>
-  <image href="../concepts/socks.svg" x="1037" y="312" width="182" height="130" preserveAspectRatio="xMidYMid meet"/>
-  <image href="../concepts/belt.svg" x="134" y="531" width="245" height="136" preserveAspectRatio="xMidYMid meet"/>
-  <image href="../concepts/button.svg" x="609" y="614" width="178" height="99" preserveAspectRatio="xMidYMid meet"/>
-  <image href="../concepts/pocket.svg" x="904" y="561" width="259" height="144" preserveAspectRatio="xMidYMid meet"/>
+  <image href="../concepts/shirt.svg" x="129" y="98" width="126" height="126" preserveAspectRatio="xMidYMid meet"/>
+  <image href="../concepts/tshirt.svg" x="299" y="117" width="134" height="134" preserveAspectRatio="xMidYMid meet"/>
+  <image href="../concepts/trousers.svg" x="566" y="107" width="129" height="129" preserveAspectRatio="xMidYMid meet"/>
+  <image href="../concepts/skirt.svg" x="801" y="117" width="121" height="121" preserveAspectRatio="xMidYMid meet"/>
+  <image href="../concepts/dress.svg" x="1073" y="117" width="132" height="132" preserveAspectRatio="xMidYMid meet"/>
+  <image href="../concepts/coat.svg" x="87" y="335" width="146" height="146" preserveAspectRatio="xMidYMid meet"/>
+  <image href="../concepts/jacket.svg" x="372" y="331" width="159" height="159" preserveAspectRatio="xMidYMid meet"/>
+  <image href="../concepts/sweater.svg" x="749" y="327" width="154" height="154" preserveAspectRatio="xMidYMid meet"/>
+  <image href="../concepts/socks.svg" x="1072" y="298" width="145" height="145" preserveAspectRatio="xMidYMid meet"/>
+  <image href="../concepts/belt.svg" x="193" y="538" width="151" height="151" preserveAspectRatio="xMidYMid meet"/>
+  <image href="../concepts/button.svg" x="664" y="630" width="110" height="110" preserveAspectRatio="xMidYMid meet"/>
+  <image href="../concepts/pocket.svg" x="947" y="572" width="160" height="160" preserveAspectRatio="xMidYMid meet"/>
 </svg>

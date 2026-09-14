@@ -2,16 +2,16 @@
   <rect width="1280" height="800" fill="#f0e9f2"/>
   <rect y="496" width="1280" height="304" fill="#ddd2e0"/>
   <line x1="0" y1="496" x2="1280" y2="496" stroke="#c8bace" stroke-width="3"/>
-  <image href="../concepts/plate.svg" x="101" y="117" width="138" height="110" preserveAspectRatio="xMidYMid meet"/>
-  <image href="../concepts/cup.svg" x="322" y="137" width="157" height="125" preserveAspectRatio="xMidYMid meet"/>
-  <image href="../concepts/glass.svg" x="579" y="120" width="148" height="118" preserveAspectRatio="xMidYMid meet"/>
-  <image href="../concepts/spoon.svg" x="814" y="139" width="147" height="117" preserveAspectRatio="xMidYMid meet"/>
-  <image href="../concepts/fork.svg" x="1075" y="128" width="144" height="114" preserveAspectRatio="xMidYMid meet"/>
-  <image href="../concepts/knife.svg" x="98" y="363" width="181" height="129" preserveAspectRatio="xMidYMid meet"/>
-  <image href="../concepts/teapot.svg" x="368" y="337" width="193" height="137" preserveAspectRatio="xMidYMid meet"/>
-  <image href="../concepts/jug.svg" x="734" y="344" width="179" height="128" preserveAspectRatio="xMidYMid meet"/>
-  <image href="../concepts/bowl.svg" x="1016" y="323" width="183" height="131" preserveAspectRatio="xMidYMid meet"/>
-  <image href="../concepts/tablecloth.svg" x="77" y="562" width="268" height="148" preserveAspectRatio="xMidYMid meet"/>
-  <image href="../concepts/sugarbowl.svg" x="464" y="585" width="263" height="146" preserveAspectRatio="xMidYMid meet"/>
-  <image href="../concepts/breadbox.svg" x="891" y="583" width="249" height="138" preserveAspectRatio="xMidYMid meet"/>
+  <image href="../concepts/plate.svg" x="110" y="84" width="123" height="123" preserveAspectRatio="xMidYMid meet"/>
+  <image href="../concepts/cup.svg" x="331" y="107" width="139" height="139" preserveAspectRatio="xMidYMid meet"/>
+  <image href="../concepts/glass.svg" x="591" y="87" width="132" height="132" preserveAspectRatio="xMidYMid meet"/>
+  <image href="../concepts/spoon.svg" x="825" y="109" width="131" height="131" preserveAspectRatio="xMidYMid meet"/>
+  <image href="../concepts/fork.svg" x="1090" y="96" width="128" height="128" preserveAspectRatio="xMidYMid meet"/>
+  <image href="../concepts/knife.svg" x="116" y="354" width="144" height="144" preserveAspectRatio="xMidYMid meet"/>
+  <image href="../concepts/teapot.svg" x="374" y="326" width="153" height="153" preserveAspectRatio="xMidYMid meet"/>
+  <image href="../concepts/jug.svg" x="767" y="334" width="143" height="143" preserveAspectRatio="xMidYMid meet"/>
+  <image href="../concepts/bowl.svg" x="1042" y="311" width="146" height="146" preserveAspectRatio="xMidYMid meet"/>
+  <image href="../concepts/tablecloth.svg" x="97" y="573" width="165" height="165" preserveAspectRatio="xMidYMid meet"/>
+  <image href="../concepts/sugarbowl.svg" x="470" y="598" width="163" height="163" preserveAspectRatio="xMidYMid meet"/>
+  <image href="../concepts/breadbox.svg" x="919" y="595" width="154" height="154" preserveAspectRatio="xMidYMid meet"/>
 </svg>

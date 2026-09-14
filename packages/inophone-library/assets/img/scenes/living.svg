@@ -2,16 +2,16 @@
   <rect width="1280" height="800" fill="#e7eef6"/>
   <rect y="496" width="1280" height="304" fill="#d8c9a8"/>
   <line x1="0" y1="496" x2="1280" y2="496" stroke="#c4b391" stroke-width="3"/>
-  <image href="../concepts/sofa.svg" x="58" y="109" width="171" height="136" preserveAspectRatio="xMidYMid meet"/>
-  <image href="../concepts/armchair.svg" x="345" y="140" width="154" height="123" preserveAspectRatio="xMidYMid meet"/>
-  <image href="../concepts/tv.svg" x="550" y="133" width="156" height="124" preserveAspectRatio="xMidYMid meet"/>
-  <image href="../concepts/bookcase.svg" x="778" y="116" width="171" height="136" preserveAspectRatio="xMidYMid meet"/>
-  <image href="../concepts/book.svg" x="1068" y="115" width="140" height="111" preserveAspectRatio="xMidYMid meet"/>
-  <image href="../concepts/picture.svg" x="130" y="340" width="182" height="130" preserveAspectRatio="xMidYMid meet"/>
-  <image href="../concepts/vase.svg" x="372" y="353" width="187" height="134" preserveAspectRatio="xMidYMid meet"/>
-  <image href="../concepts/flowerpot.svg" x="722" y="315" width="197" height="140" preserveAspectRatio="xMidYMid meet"/>
-  <image href="../concepts/cushion.svg" x="1012" y="322" width="202" height="144" preserveAspectRatio="xMidYMid meet"/>
-  <image href="../concepts/chandelier.svg" x="170" y="557" width="246" height="136" preserveAspectRatio="xMidYMid meet"/>
-  <image href="../concepts/remote.svg" x="481" y="542" width="272" height="151" preserveAspectRatio="xMidYMid meet"/>
-  <image href="../concepts/coffeetable.svg" x="887" y="545" width="275" height="152" preserveAspectRatio="xMidYMid meet"/>
+  <image href="../concepts/sofa.svg" x="58" y="75" width="152" height="152" preserveAspectRatio="xMidYMid meet"/>
+  <image href="../concepts/armchair.svg" x="361" y="110" width="137" height="137" preserveAspectRatio="xMidYMid meet"/>
+  <image href="../concepts/tv.svg" x="554" y="102" width="139" height="139" preserveAspectRatio="xMidYMid meet"/>
+  <image href="../concepts/bookcase.svg" x="778" y="83" width="152" height="152" preserveAspectRatio="xMidYMid meet"/>
+  <image href="../concepts/book.svg" x="1080" y="82" width="124" height="124" preserveAspectRatio="xMidYMid meet"/>
+  <image href="../concepts/picture.svg" x="162" y="329" width="145" height="145" preserveAspectRatio="xMidYMid meet"/>
+  <image href="../concepts/vase.svg" x="379" y="343" width="149" height="149" preserveAspectRatio="xMidYMid meet"/>
+  <image href="../concepts/flowerpot.svg" x="761" y="301" width="157" height="157" preserveAspectRatio="xMidYMid meet"/>
+  <image href="../concepts/cushion.svg" x="1048" y="308" width="161" height="161" preserveAspectRatio="xMidYMid meet"/>
+  <image href="../concepts/chandelier.svg" x="259" y="567" width="152" height="152" preserveAspectRatio="xMidYMid meet"/>
+  <image href="../concepts/remote.svg" x="506" y="551" width="168" height="168" preserveAspectRatio="xMidYMid meet"/>
+  <image href="../concepts/coffeetable.svg" x="921" y="553" width="170" height="170" preserveAspectRatio="xMidYMid meet"/>
 </svg>

@@ -2,16 +2,16 @@
   <rect width="1280" height="800" fill="#eceff2"/>
   <rect y="496" width="1280" height="304" fill="#d5d9de"/>
   <line x1="0" y1="496" x2="1280" y2="496" stroke="#bcc2c9" stroke-width="3"/>
-  <image href="../concepts/guitar.svg" x="121" y="128" width="137" height="109" preserveAspectRatio="xMidYMid meet"/>
-  <image href="../concepts/piano.svg" x="306" y="110" width="192" height="152" preserveAspectRatio="xMidYMid meet"/>
-  <image href="../concepts/violin.svg" x="593" y="139" width="140" height="111" preserveAspectRatio="xMidYMid meet"/>
-  <image href="../concepts/drum.svg" x="825" y="144" width="146" height="116" preserveAspectRatio="xMidYMid meet"/>
-  <image href="../concepts/flute.svg" x="1034" y="111" width="158" height="126" preserveAspectRatio="xMidYMid meet"/>
-  <image href="../concepts/accordion.svg" x="136" y="318" width="183" height="131" preserveAspectRatio="xMidYMid meet"/>
-  <image href="../concepts/trumpet.svg" x="408" y="328" width="178" height="127" preserveAspectRatio="xMidYMid meet"/>
-  <image href="../concepts/notes.svg" x="761" y="352" width="140" height="100" preserveAspectRatio="xMidYMid meet"/>
-  <image href="../concepts/microphone.svg" x="1023" y="311" width="180" height="128" preserveAspectRatio="xMidYMid meet"/>
-  <image href="../concepts/headphones.svg" x="141" y="559" width="265" height="147" preserveAspectRatio="xMidYMid meet"/>
-  <image href="../concepts/speaker.svg" x="489" y="567" width="281" height="155" preserveAspectRatio="xMidYMid meet"/>
-  <image href="../concepts/stage.svg" x="858" y="536" width="310" height="172" preserveAspectRatio="xMidYMid meet"/>
+  <image href="../concepts/guitar.svg" x="135" y="96" width="122" height="122" preserveAspectRatio="xMidYMid meet"/>
+  <image href="../concepts/piano.svg" x="321" y="76" width="170" height="170" preserveAspectRatio="xMidYMid meet"/>
+  <image href="../concepts/violin.svg" x="607" y="109" width="124" height="124" preserveAspectRatio="xMidYMid meet"/>
+  <image href="../concepts/drum.svg" x="838" y="114" width="130" height="130" preserveAspectRatio="xMidYMid meet"/>
+  <image href="../concepts/flute.svg" x="1039" y="78" width="141" height="141" preserveAspectRatio="xMidYMid meet"/>
+  <image href="../concepts/accordion.svg" x="171" y="304" width="146" height="146" preserveAspectRatio="xMidYMid meet"/>
+  <image href="../concepts/trumpet.svg" x="430" y="315" width="142" height="142" preserveAspectRatio="xMidYMid meet"/>
+  <image href="../concepts/notes.svg" x="785" y="342" width="112" height="112" preserveAspectRatio="xMidYMid meet"/>
+  <image href="../concepts/microphone.svg" x="1052" y="297" width="143" height="143" preserveAspectRatio="xMidYMid meet"/>
+  <image href="../concepts/headphones.svg" x="226" y="569" width="164" height="164" preserveAspectRatio="xMidYMid meet"/>
+  <image href="../concepts/speaker.svg" x="530" y="578" width="173" height="173" preserveAspectRatio="xMidYMid meet"/>
+  <image href="../concepts/stage.svg" x="859" y="544" width="192" height="192" preserveAspectRatio="xMidYMid meet"/>
 </svg>
