@@ -134,7 +134,11 @@ contextBridge.exposeInMainWorld('chimiqAPI', {
     ipcRenderer.invoke('chimiq:save-quiz-level-image', quizId, level, arrayBuffer, mimeType),
   saveQuizItemImage: (quizId, questionId, kind, arrayBuffer, mimeType) =>
     ipcRenderer.invoke('chimiq:save-quiz-item-image', quizId, questionId, kind, arrayBuffer, mimeType),
-  deleteQuizItemImage: (fileName) => ipcRenderer.invoke('chimiq:delete-quiz-item-image', fileName)
+  deleteQuizItemImage: (fileName) => ipcRenderer.invoke('chimiq:delete-quiz-item-image', fileName),
+  // FR-013 ТЗ (строка 252, Фаза 5) - обмен викторинами между проектами
+  // KIOSK через уже установленный Плеер.
+  exportQuiz: (fileContentJson, suggestedFileName) => ipcRenderer.invoke('chimiq:export-quiz', fileContentJson, suggestedFileName),
+  importQuiz: () => ipcRenderer.invoke('chimiq:import-quiz')
 });
 
 // Локальное хранилище виджета «Я знаю много слов» (Тип 2) — профили детей,

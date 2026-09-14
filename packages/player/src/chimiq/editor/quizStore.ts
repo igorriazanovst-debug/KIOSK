@@ -37,6 +37,8 @@ interface ChimiqEditorAPI {
     mimeType: string,
   ) => Promise<{ ok: boolean; fileName?: string }>;
   deleteQuizItemImage: (fileName: string) => Promise<{ ok: boolean }>;
+  exportQuiz: (fileContentJson: string, suggestedFileName: string) => Promise<{ ok: boolean; filePath?: string; canceled?: boolean }>;
+  importQuiz: () => Promise<{ ok: boolean; content?: string; canceled?: boolean }>;
 }
 
 function getEditorAPI(): ChimiqEditorAPI | undefined {
@@ -127,5 +129,25 @@ export async function deleteQuizItemImage(fileName: string): Promise<boolean> {
     return result.ok;
   } catch {
     return false;
+  }
+}
+
+export async function exportQuizFile(fileContentJson: string, suggestedFileName: string): Promise<{ ok: boolean; filePath?: string }> {
+  const api = getEditorAPI();
+  if (!api) return { ok: false };
+  try {
+    return await api.exportQuiz(fileContentJson, suggestedFileName);
+  } catch {
+    return { ok: false };
+  }
+}
+
+export async function importQuizFile(): Promise<{ ok: boolean; content?: string }> {
+  const api = getEditorAPI();
+  if (!api) return { ok: false };
+  try {
+    return await api.importQuiz();
+  } catch {
+    return { ok: false };
   }
 }

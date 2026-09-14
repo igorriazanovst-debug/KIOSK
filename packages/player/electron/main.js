@@ -1286,6 +1286,39 @@ app.whenReady().then(() => {
     }
   });
 
+  // FR-013 ТЗ (строка 252) - обмен викторинами виджета «ХимIQ» (Фаза 5),
+  // тот же принцип, что rusiq:export-quiz/import-quiz выше.
+  ipcMain.handle('chimiq:export-quiz', async (_event, fileContentJson, suggestedFileName) => {
+    if (typeof fileContentJson !== 'string' || fileContentJson.length === 0) return { ok: false };
+    try {
+      const result = await dialog.showSaveDialog(mainWindow, {
+        defaultPath: typeof suggestedFileName === 'string' && suggestedFileName.length > 0 ? suggestedFileName : 'quiz.chimiq.json',
+        filters: [{ name: 'Викторина ХимIQ', extensions: ['json'] }]
+      });
+      if (result.canceled || !result.filePath) return { ok: false, canceled: true };
+      fs.writeFileSync(result.filePath, fileContentJson, 'utf-8');
+      return { ok: true, filePath: result.filePath };
+    } catch (err) {
+      fileLog('[chimiq] export failed:', err && err.message);
+      return { ok: false };
+    }
+  });
+
+  ipcMain.handle('chimiq:import-quiz', async () => {
+    try {
+      const result = await dialog.showOpenDialog(mainWindow, {
+        properties: ['openFile'],
+        filters: [{ name: 'Викторина ХимIQ', extensions: ['json'] }]
+      });
+      if (result.canceled || result.filePaths.length === 0) return { ok: false, canceled: true };
+      const raw = fs.readFileSync(result.filePaths[0], 'utf-8');
+      return { ok: true, content: raw };
+    } catch (err) {
+      fileLog('[chimiq] import failed:', err && err.message);
+      return { ok: false };
+    }
+  });
+
   // Локальное хранилище виджета «Я знаю много слов» (Тип 2). Как и у natcom,
   // регистрация безусловная и на существующих клиентов не влияет: канал
   // 'words:*' используется только виджетом words.
