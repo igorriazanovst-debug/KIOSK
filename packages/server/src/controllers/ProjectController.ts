@@ -11,6 +11,7 @@ import { isEmailAllowedForPeriodicTable, projectDataHasPeriodicTableWidget } fro
 import { isEmailAllowedForRusiq, projectDataHasRusiqWidget } from '../config/rusiqAccess';
 import { isEmailAllowedForWords, projectDataHasWordsWidget } from '../config/wordsAccess';
 import { isEmailAllowedForAlphabet, projectDataHasAlphabetWidget } from '../config/alphabetAccess';
+import { isEmailAllowedForChimiq, projectDataHasChimiqWidget } from '../config/chimiqAccess';
 import multer from 'multer';
 import path from 'path';
 
@@ -247,6 +248,13 @@ export class ProjectController {
         });
       }
 
+      if (projectDataHasChimiqWidget(projectData) && !isEmailAllowedForChimiq(req.client.email)) {
+        return res.status(403).json({
+          error: 'ChimIQ widget not allowed',
+          message: 'Виджет «ХимIQ» пока недоступен для этого аккаунта'
+        });
+      }
+
       const project = await ProjectService.createProject({
         name,
         description,
@@ -454,6 +462,17 @@ export class ProjectController {
         return res.status(403).json({
           error: 'Alphabet widget not allowed',
           message: 'Виджет «АзбукоСлов» пока недоступен для этого аккаунта'
+        });
+      }
+
+      if (
+        Object.prototype.hasOwnProperty.call(updates, 'projectData') &&
+        projectDataHasChimiqWidget(updates.projectData) &&
+        !isEmailAllowedForChimiq(req.client.email)
+      ) {
+        return res.status(403).json({
+          error: 'ChimIQ widget not allowed',
+          message: 'Виджет «ХимIQ» пока недоступен для этого аккаунта'
         });
       }
 
