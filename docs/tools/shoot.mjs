@@ -19,7 +19,11 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import http from 'node:http';
-import ws from './KIOSK/packages/player/node_modules/ws/index.js';
+// Путь к ws — ОТ САМОГО ФАЙЛА, а не от каталога запуска. Пока скрипт лежал
+// в рабочем каталоге, относительный путь совпадал случайно; после переноса в
+// репозиторий он перестал разрешаться, и инструмент не запускался со своего
+// же места — ровно то, чего требовал README.
+import ws from '../../packages/player/node_modules/ws/index.js';
 const { WebSocket } = ws;
 
 const plan = JSON.parse(fs.readFileSync(process.argv[2], 'utf8'));
@@ -51,11 +55,18 @@ const ev = async (expr) => {
 const wait = (ms) => new Promise((r) => setTimeout(r, ms));
 
 async function click(testId) {
+  // ПРОКРУТКА ПЕРЕД НАЖАТИЕМ ОБЯЗАТЕЛЬНА. Список тем вырос до шестнадцати и не
+  // помещается на экран; клик по координатам элемента, который ниже видимой
+  // области, попадает мимо — молча, без ошибки. Проверка «нажалось» при этом
+  // лжёт: элемент есть, координаты есть, а нажался кто-то другой.
+  await ev(`document.querySelector('[data-testid="${testId}"]')?.scrollIntoView({block:'center'})`);
+  await wait(250);
   const box = await ev(`(()=>{const e=document.querySelector('[data-testid="${testId}"]');
     if(!e)return null;const r=e.getBoundingClientRect();
     if(!r.width||!r.height)return null;
+    if(r.top<0||r.bottom>window.innerHeight)return null;
     return JSON.stringify({x:Math.round(r.left+r.width/2),y:Math.round(r.top+r.height/2)})})()`);
-  if (!box) throw new Error(`нет кликабельного [${testId}]`);
+  if (!box) throw new Error(`нет кликабельного [${testId}] — не виден даже после прокрутки`);
   const { x, y } = JSON.parse(box);
   await send('Input.dispatchMouseEvent', { type: 'mousePressed', x, y, button: 'left', clickCount: 1 });
   await send('Input.dispatchMouseEvent', { type: 'mouseReleased', x, y, button: 'left', clickCount: 1 });
