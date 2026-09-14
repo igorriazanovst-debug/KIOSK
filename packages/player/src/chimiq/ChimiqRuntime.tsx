@@ -3,10 +3,10 @@
 // Фаза 4 (редактор, план реализации Тип9_ХимIQ §5): полная машина
 // состояний — интро → (учитель: PIN → каталог → редактор) / (игрок:
 // настройка → поле → результаты). Прямая адаптация rusiq/RusiqRuntime.tsx
-// (Тип 7). Встроенная викторина — по-прежнему демо-контент Фазы 3
-// (chimiqDemoContent.json, синтетическая сетка), не финальный банк из
-// 168 вопросов — материализация реального контента приходит в Фазе 7,
-// когда будут готовы 3 измеренных изображения-карты.
+// (Тип 7). Фаза 7: встроенная викторина — реальный банк 168 вопросов
+// (chimiqRealContent.json, 3 измеренных изображения-карты по уровням),
+// демо-сетка Фазы 3 (chimiqDemoContent.json) больше не используется как
+// BUILTIN_QUIZ, но остаётся в репо как fixture для editor-тестов.
 import React, { useEffect, useState } from 'react';
 import './chimiqTheme.css';
 import IntroScreen from './screens/IntroScreen.tsx';
@@ -20,7 +20,7 @@ import { loadQuiz, saveQuiz, saveQuizLevelImage } from './editor/quizStore.ts';
 import { ChimiqQuizSchema, CHIMIQ_USERDATA_SCHEMA_VERSION, type ChimiqQuestion, type ChimiqQuiz, type ChimiqUserData } from './model/schema.ts';
 import { assignQuestions, summarizeResults, type ChimiqAnswerEvent } from './gameLogic.ts';
 import { loadUserData, saveUserData } from './userDataStorage.ts';
-import demoContentJson from './content/chimiqDemoContent.json' with { type: 'json' };
+import realContentJson from './content/chimiqRealContent.json' with { type: 'json' };
 
 // Изображение-карта — плоская строка пути в public/, без import (см. урок
 // §4 ретроспективы Тип7: import.meta ломает non-module сборку
@@ -30,7 +30,7 @@ function levelImageUrl(fileName: string): string {
   return `./chimiq/${fileName}`;
 }
 
-const BUILTIN_QUIZ: ChimiqQuiz = ChimiqQuizSchema.parse(demoContentJson);
+const BUILTIN_QUIZ: ChimiqQuiz = ChimiqQuizSchema.parse(realContentJson);
 
 interface Props {
   properties: { title?: string };
