@@ -48,6 +48,9 @@ export * from './periodictable/widgetProperties';
 // РусIQ (Тип 7)
 export * from './rusiq/widgetProperties';
 
+// ХимIQ (Тип 9)
+export * from './chimiq/widgetProperties';
+
 // Words («Я знаю много слов», Тип 2)
 export * from './words/widgetProperties';
 export * from './words/model/schema';

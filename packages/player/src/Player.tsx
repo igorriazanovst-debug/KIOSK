@@ -13,6 +13,7 @@ import PeriodicTableRuntime from './periodictable/PeriodicTableRuntime';
 import RusiqRuntime from './rusiq/RusiqRuntime';
 import AlphabetRuntime from './alphabet/AlphabetRuntime';
 import WordsRuntime from './words/WordsRuntime.tsx';
+import ChimiqRuntime from './chimiq/ChimiqRuntime.tsx';
 
 interface Project {
   name: string;
@@ -626,6 +627,17 @@ const Player: React.FC<PlayerProps> = ({ embedded = false }) => {
             />
           </div>
         );
+      case 'chimiq':
+        // «ХимIQ» (Тип 9) — того же рода, что "rusiq" (квиз по координатам
+        // точек на изображении).
+        return (
+          <div
+            key={widget.id}
+            style={{ ...commonStyle, left: 0, top: 0, width: viewportSize.width, height: viewportSize.height, overflow: 'hidden' }}
+          >
+            <ChimiqRuntime properties={widget.properties as any} />
+          </div>
+        );
       default:
         return null;
     }
@@ -1166,7 +1178,7 @@ const Player: React.FC<PlayerProps> = ({ embedded = false }) => {
   // по project.canvas.* и получается больше окна → двойной скролл и обрезка
   // контента (найдено вживую при ручном тестировании «Матемашки»).
   const isStandaloneAppProject = project.widgets.some(
-    (w) => w.type === 'chronoline' || w.type === 'naturalcommunities' || w.type === 'mathmachine' || w.type === 'periodictable' || w.type === 'rusiq' || w.type === 'words' || w.type === 'alphabet'
+    (w) => w.type === 'chronoline' || w.type === 'naturalcommunities' || w.type === 'mathmachine' || w.type === 'periodictable' || w.type === 'rusiq' || w.type === 'words' || w.type === 'alphabet' || w.type === 'chimiq'
   );
 
   // Letterbox-масштаб для НЕ-standalone проектов: канвас проектировался под
