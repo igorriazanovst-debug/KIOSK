@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 800" width="1280" height="800">
+  <rect width="1280" height="800" fill="#dfe9f2"/>
+  <rect y="496" width="1280" height="304" fill="#c9c9c9"/>
+  <line x1="0" y1="496" x2="1280" y2="496" stroke="#b0b0b0" stroke-width="3"/>
+  <image href="../concepts/counter.svg" x="61" y="115" width="190" height="151" preserveAspectRatio="xMidYMid meet"/>
+  <image href="../concepts/cashdesk.svg" x="346" y="125" width="155" height="123" preserveAspectRatio="xMidYMid meet"/>
+  <image href="../concepts/trolley.svg" x="582" y="123" width="155" height="123" preserveAspectRatio="xMidYMid meet"/>
+  <image href="../concepts/money.svg" x="800" y="144" width="155" height="123" preserveAspectRatio="xMidYMid meet"/>
+  <image href="../concepts/receipt.svg" x="1087" y="166" width="112" height="89" preserveAspectRatio="xMidYMid meet"/>
+  <image href="../concepts/pricetag.svg" x="94" y="331" width="145" height="103" preserveAspectRatio="xMidYMid meet"/>
+  <image href="../concepts/scales_shop.svg" x="372" y="308" width="183" height="130" preserveAspectRatio="xMidYMid meet"/>
+  <image href="../concepts/packet.svg" x="709" y="319" width="205" height="146" preserveAspectRatio="xMidYMid meet"/>
+  <image href="../concepts/seller.svg" x="1033" y="354" width="185" height="132" preserveAspectRatio="xMidYMid meet"/>
+  <image href="../concepts/buyer.svg" x="121" y="549" width="254" height="141" preserveAspectRatio="xMidYMid meet"/>
+  <image href="../concepts/shelves.svg" x="463" y="562" width="304" height="168" preserveAspectRatio="xMidYMid meet"/>
+  <image href="../concepts/fridge_shop.svg" x="898" y="534" width="318" height="176" preserveAspectRatio="xMidYMid meet"/>
+</svg>

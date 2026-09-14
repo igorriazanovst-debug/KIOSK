@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 800" width="1280" height="800">
+  <rect width="1280" height="800" fill="#d9ecf7"/>
+  <rect y="496" width="1280" height="304" fill="#c2d8a4"/>
+  <line x1="0" y1="496" x2="1280" y2="496" stroke="#a9c489" stroke-width="3"/>
+  <image href="../concepts/apple.svg" x="97" y="134" width="138" height="109" preserveAspectRatio="xMidYMid meet"/>
+  <image href="../concepts/pear.svg" x="345" y="113" width="157" height="124" preserveAspectRatio="xMidYMid meet"/>
+  <image href="../concepts/plum.svg" x="546" y="132" width="154" height="122" preserveAspectRatio="xMidYMid meet"/>
+  <image href="../concepts/cherry.svg" x="822" y="129" width="153" height="121" preserveAspectRatio="xMidYMid meet"/>
+  <image href="../concepts/currant.svg" x="1055" y="143" width="157" height="125" preserveAspectRatio="xMidYMid meet"/>
+  <image href="../concepts/bed_garden.svg" x="59" y="315" width="183" height="131" preserveAspectRatio="xMidYMid meet"/>
+  <image href="../concepts/watercan.svg" x="378" y="338" width="199" height="142" preserveAspectRatio="xMidYMid meet"/>
+  <image href="../concepts/spade.svg" x="695" y="321" width="200" height="143" preserveAspectRatio="xMidYMid meet"/>
+  <image href="../concepts/rake.svg" x="966" y="358" width="182" height="130" preserveAspectRatio="xMidYMid meet"/>
+  <image href="../concepts/wheelbarrow.svg" x="75" y="589" width="244" height="135" preserveAspectRatio="xMidYMid meet"/>
+  <image href="../concepts/greenhouse.svg" x="467" y="536" width="319" height="176" preserveAspectRatio="xMidYMid meet"/>
+  <image href="../concepts/beehive.svg" x="875" y="545" width="247" height="137" preserveAspectRatio="xMidYMid meet"/>
+</svg>

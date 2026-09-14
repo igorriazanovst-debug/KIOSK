@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 800" width="1280" height="800">
+  <rect width="1280" height="800" fill="#f4ecf7"/>
+  <rect y="496" width="1280" height="304" fill="#e3d7e8"/>
+  <line x1="0" y1="496" x2="1280" y2="496" stroke="#cbb9d2" stroke-width="3"/>
+  <image href="../concepts/present.svg" x="83" y="121" width="145" height="115" preserveAspectRatio="xMidYMid meet"/>
+  <image href="../concepts/balloon.svg" x="306" y="161" width="138" height="109" preserveAspectRatio="xMidYMid meet"/>
+  <image href="../concepts/birthdaycake.svg" x="561" y="119" width="156" height="124" preserveAspectRatio="xMidYMid meet"/>
+  <image href="../concepts/candle.svg" x="816" y="118" width="144" height="115" preserveAspectRatio="xMidYMid meet"/>
+  <image href="../concepts/garland.svg" x="1056" y="127" width="136" height="108" preserveAspectRatio="xMidYMid meet"/>
+  <image href="../concepts/sweet.svg" x="113" y="352" width="182" height="130" preserveAspectRatio="xMidYMid meet"/>
+  <image href="../concepts/card.svg" x="409" y="344" width="179" height="128" preserveAspectRatio="xMidYMid meet"/>
+  <image href="../concepts/ribbon.svg" x="707" y="325" width="179" height="127" preserveAspectRatio="xMidYMid meet"/>
+  <image href="../concepts/partyhat.svg" x="985" y="341" width="182" height="130" preserveAspectRatio="xMidYMid meet"/>
+  <image href="../concepts/confetti.svg" x="83" y="533" width="251" height="139" preserveAspectRatio="xMidYMid meet"/>
+  <image href="../concepts/camera.svg" x="476" y="563" width="264" height="146" preserveAspectRatio="xMidYMid meet"/>
+  <image href="../concepts/invitation.svg" x="867" y="588" width="244" height="135" preserveAspectRatio="xMidYMid meet"/>
+</svg>

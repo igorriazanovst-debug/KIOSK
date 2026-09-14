@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 800" width="1280" height="800">
+  <rect width="1280" height="800" fill="#dfe9f2"/>
+  <rect y="496" width="1280" height="304" fill="#c9c9c9"/>
+  <line x1="0" y1="496" x2="1280" y2="496" stroke="#b0b0b0" stroke-width="3"/>
+  <image href="../concepts/house.svg" x="60" y="109" width="192" height="152" preserveAspectRatio="xMidYMid meet"/>
+  <image href="../concepts/road.svg" x="300" y="115" width="186" height="148" preserveAspectRatio="xMidYMid meet"/>
+  <image href="../concepts/crosswalk.svg" x="551" y="148" width="150" height="119" preserveAspectRatio="xMidYMid meet"/>
+  <image href="../concepts/trafficlight.svg" x="807" y="149" width="140" height="111" preserveAspectRatio="xMidYMid meet"/>
+  <image href="../concepts/streetlamp.svg" x="1018" y="151" width="144" height="114" preserveAspectRatio="xMidYMid meet"/>
+  <image href="../concepts/bench.svg" x="96" y="340" width="187" height="133" preserveAspectRatio="xMidYMid meet"/>
+  <image href="../concepts/bin.svg" x="428" y="360" width="182" height="130" preserveAspectRatio="xMidYMid meet"/>
+  <image href="../concepts/sign.svg" x="701" y="346" width="193" height="137" preserveAspectRatio="xMidYMid meet"/>
+  <image href="../concepts/busstop.svg" x="1020" y="306" width="178" height="127" preserveAspectRatio="xMidYMid meet"/>
+  <image href="../concepts/pharmacy.svg" x="100" y="566" width="271" height="150" preserveAspectRatio="xMidYMid meet"/>
+  <image href="../concepts/postbox.svg" x="504" y="582" width="249" height="138" preserveAspectRatio="xMidYMid meet"/>
+  <image href="../concepts/fence.svg" x="912" y="565" width="260" height="144" preserveAspectRatio="xMidYMid meet"/>
+</svg>

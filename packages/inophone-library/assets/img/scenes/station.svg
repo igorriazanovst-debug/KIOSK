@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 800" width="1280" height="800">
+  <rect width="1280" height="800" fill="#dfe9f2"/>
+  <rect y="496" width="1280" height="304" fill="#c9c9c9"/>
+  <line x1="0" y1="496" x2="1280" y2="496" stroke="#b0b0b0" stroke-width="3"/>
+  <image href="../concepts/train.svg" x="76" y="122" width="176" height="140" preserveAspectRatio="xMidYMid meet"/>
+  <image href="../concepts/platform.svg" x="326" y="132" width="142" height="113" preserveAspectRatio="xMidYMid meet"/>
+  <image href="../concepts/rails.svg" x="551" y="121" width="156" height="124" preserveAspectRatio="xMidYMid meet"/>
+  <image href="../concepts/ticket.svg" x="810" y="141" width="147" height="117" preserveAspectRatio="xMidYMid meet"/>
+  <image href="../concepts/suitcase.svg" x="1080" y="127" width="141" height="112" preserveAspectRatio="xMidYMid meet"/>
+  <image href="../concepts/schedule.svg" x="138" y="311" width="180" height="128" preserveAspectRatio="xMidYMid meet"/>
+  <image href="../concepts/waitingroom.svg" x="361" y="311" width="245" height="175" preserveAspectRatio="xMidYMid meet"/>
+  <image href="../concepts/conductor.svg" x="679" y="353" width="190" height="136" preserveAspectRatio="xMidYMid meet"/>
+  <image href="../concepts/luggage.svg" x="989" y="317" width="197" height="141" preserveAspectRatio="xMidYMid meet"/>
+  <image href="../concepts/clock_station.svg" x="85" y="585" width="252" height="140" preserveAspectRatio="xMidYMid meet"/>
+  <image href="../concepts/kiosk.svg" x="531" y="579" width="256" height="142" preserveAspectRatio="xMidYMid meet"/>
+  <image href="../concepts/bus.svg" x="879" y="530" width="342" height="190" preserveAspectRatio="xMidYMid meet"/>
+</svg>

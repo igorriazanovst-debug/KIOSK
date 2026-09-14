@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 800" width="1280" height="800">
+  <rect width="1280" height="800" fill="#e7eef6"/>
+  <rect y="496" width="1280" height="304" fill="#d8c9a8"/>
+  <line x1="0" y1="496" x2="1280" y2="496" stroke="#c4b391" stroke-width="3"/>
+  <image href="../concepts/table.svg" x="74" y="112" width="169" height="134" preserveAspectRatio="xMidYMid meet"/>
+  <image href="../concepts/chair.svg" x="341" y="118" width="144" height="115" preserveAspectRatio="xMidYMid meet"/>
+  <image href="../concepts/fridge.svg" x="549" y="110" width="184" height="146" preserveAspectRatio="xMidYMid meet"/>
+  <image href="../concepts/stove.svg" x="786" y="116" width="192" height="152" preserveAspectRatio="xMidYMid meet"/>
+  <image href="../concepts/kettle.svg" x="1052" y="144" width="155" height="123" preserveAspectRatio="xMidYMid meet"/>
+  <image href="../concepts/pan.svg" x="89" y="316" width="202" height="144" preserveAspectRatio="xMidYMid meet"/>
+  <image href="../concepts/pot.svg" x="425" y="317" width="182" height="130" preserveAspectRatio="xMidYMid meet"/>
+  <image href="../concepts/sink.svg" x="731" y="331" width="189" height="135" preserveAspectRatio="xMidYMid meet"/>
+  <image href="../concepts/tap.svg" x="1009" y="354" width="197" height="140" preserveAspectRatio="xMidYMid meet"/>
+  <image href="../concepts/shelf.svg" x="112" y="546" width="278" height="154" preserveAspectRatio="xMidYMid meet"/>
+  <image href="../concepts/bread.svg" x="557" y="549" width="243" height="135" preserveAspectRatio="xMidYMid meet"/>
+  <image href="../concepts/salt.svg" x="897" y="568" width="198" height="110" preserveAspectRatio="xMidYMid meet"/>
+</svg>

@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 800" width="1280" height="800">
+  <rect width="1280" height="800" fill="#f0e9f2"/>
+  <rect y="496" width="1280" height="304" fill="#ddd2e0"/>
+  <line x1="0" y1="496" x2="1280" y2="496" stroke="#c8bace" stroke-width="3"/>
+  <image href="../concepts/mother.svg" x="106" y="150" width="142" height="112" preserveAspectRatio="xMidYMid meet"/>
+  <image href="../concepts/father.svg" x="337" y="138" width="156" height="124" preserveAspectRatio="xMidYMid meet"/>
+  <image href="../concepts/son.svg" x="584" y="113" width="136" height="108" preserveAspectRatio="xMidYMid meet"/>
+  <image href="../concepts/daughter.svg" x="821" y="161" width="136" height="108" preserveAspectRatio="xMidYMid meet"/>
+  <image href="../concepts/brother.svg" x="1039" y="144" width="139" height="110" preserveAspectRatio="xMidYMid meet"/>
+  <image href="../concepts/sister.svg" x="108" y="340" width="192" height="137" preserveAspectRatio="xMidYMid meet"/>
+  <image href="../concepts/grandmother.svg" x="364" y="345" width="186" height="133" preserveAspectRatio="xMidYMid meet"/>
+  <image href="../concepts/grandfather.svg" x="703" y="327" width="182" height="130" preserveAspectRatio="xMidYMid meet"/>
+  <image href="../concepts/baby.svg" x="981" y="329" width="189" height="135" preserveAspectRatio="xMidYMid meet"/>
+  <image href="../concepts/friend.svg" x="157" y="536" width="250" height="138" preserveAspectRatio="xMidYMid meet"/>
+  <image href="../concepts/neighbour.svg" x="548" y="569" width="254" height="141" preserveAspectRatio="xMidYMid meet"/>
+  <image href="../concepts/guest.svg" x="896" y="579" width="253" height="140" preserveAspectRatio="xMidYMid meet"/>
+</svg>

@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 800" width="1280" height="800">
+  <rect width="1280" height="800" fill="#eceff2"/>
+  <rect y="496" width="1280" height="304" fill="#d5d9de"/>
+  <line x1="0" y1="496" x2="1280" y2="496" stroke="#bcc2c9" stroke-width="3"/>
+  <image href="../concepts/cat.svg" x="78" y="128" width="154" height="122" preserveAspectRatio="xMidYMid meet"/>
+  <image href="../concepts/dog.svg" x="331" y="119" width="142" height="113" preserveAspectRatio="xMidYMid meet"/>
+  <image href="../concepts/cow.svg" x="546" y="116" width="190" height="151" preserveAspectRatio="xMidYMid meet"/>
+  <image href="../concepts/horse.svg" x="780" y="113" width="192" height="152" preserveAspectRatio="xMidYMid meet"/>
+  <image href="../concepts/sheep.svg" x="1073" y="114" width="148" height="117" preserveAspectRatio="xMidYMid meet"/>
+  <image href="../concepts/goat_farm.svg" x="113" y="351" width="178" height="127" preserveAspectRatio="xMidYMid meet"/>
+  <image href="../concepts/hen.svg" x="410" y="331" width="200" height="143" preserveAspectRatio="xMidYMid meet"/>
+  <image href="../concepts/goose.svg" x="697" y="333" width="201" height="144" preserveAspectRatio="xMidYMid meet"/>
+  <image href="../concepts/rabbit.svg" x="987" y="355" width="179" height="128" preserveAspectRatio="xMidYMid meet"/>
+  <image href="../concepts/pig.svg" x="70" y="573" width="281" height="155" preserveAspectRatio="xMidYMid meet"/>
+  <image href="../concepts/mouse.svg" x="534" y="556" width="253" height="140" preserveAspectRatio="xMidYMid meet"/>
+  <image href="../concepts/bird.svg" x="945" y="571" width="256" height="142" preserveAspectRatio="xMidYMid meet"/>
+</svg>

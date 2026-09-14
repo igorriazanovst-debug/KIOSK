@@ -1,0 +1,123 @@
+// packages/inophone-library/tools/catalogue/nature.mjs
+// Тема «Природа» — шесть сцен, 72 понятия.
+//
+// В этой теме особенно легко набрать слов, которые НЕЛЬЗЯ ОДНОЗНАЧНО
+// НАРИСОВАТЬ: «погода», «природа», «тепло». Их здесь нет намеренно — каждое
+// слово темы называет предмет, который ученик показывает пальцем.
+
+export default {
+  id: 'nature',
+  titles: {
+    ru: 'Природа', en: 'Nature', fr: 'Nature', de: 'Natur', zh: '大自然', ba: 'Тәбиғәт',
+  },
+  scenes: [
+    {
+      id: 'forest',
+      titles: { ru: 'Лес', en: 'Forest', fr: 'Forêt', de: 'Wald', zh: '森林', ba: 'Урман' },
+      words: [
+        { id: 'tree',       ru: 'дерево',     en: 'tree',         fr: 'arbre',        de: 'Baum',         zh: '树',   ba: 'ағас' },
+        { id: 'leaf',       ru: 'лист',       en: 'leaf',         fr: 'feuille',      de: 'Blatt',        zh: '叶子', ba: 'япраҡ' },
+        { id: 'branch',     ru: 'ветка',      en: 'branch',       fr: 'branche',      de: 'Ast',          zh: '树枝', ba: 'ботаҡ' },
+        { id: 'mushroom',   ru: 'гриб',       en: 'mushroom',     fr: 'champignon',   de: 'Pilz',         zh: '蘑菇', ba: 'бәшмәк' },
+        { id: 'berry',      ru: 'ягода',      en: 'berry',        fr: 'baie',         de: 'Beere',        zh: '浆果', ba: 'еләк' },
+        { id: 'fir',        ru: 'ёлка',       en: 'fir tree',     fr: 'sapin',        de: 'Tanne',        zh: '冷杉', ba: 'шыршы' },
+        { id: 'squirrel',   ru: 'белка',      en: 'squirrel',     fr: 'écureuil',     de: 'Eichhörnchen', zh: '松鼠', ba: 'тейен' },
+        { id: 'hedgehog',   ru: 'ёж',         en: 'hedgehog',     fr: 'hérisson',     de: 'Igel',         zh: '刺猬', ba: 'терпе' },
+        { id: 'owl',        ru: 'сова',       en: 'owl',          fr: 'hibou',        de: 'Eule',         zh: '猫头鹰', ba: 'ябалаҡ' },
+        { id: 'stump',      ru: 'пень',       en: 'tree stump',   fr: 'souche',       de: 'Baumstumpf',   zh: '树桩', ba: 'төп' },
+        { id: 'cone',       ru: 'шишка',      en: 'pine cone',    fr: 'pomme de pin', de: 'Tannenzapfen', zh: '松果', ba: 'ҡарағай емеше' },
+        { id: 'moss',       ru: 'мох',        en: 'moss',         fr: 'mousse',       de: 'Moos',         zh: '苔藓', ba: 'мүк' },
+      ],
+    },
+    {
+      id: 'river',
+      titles: { ru: 'Река', en: 'River', fr: 'Rivière', de: 'Fluss', zh: '河流', ba: 'Йылға' },
+      words: [
+        { id: 'water',      ru: 'вода',       en: 'water',        fr: 'eau',          de: 'Wasser',       zh: '水',   ba: 'һыу' },
+        { id: 'bank',       ru: 'берег',      en: 'riverbank',    fr: 'rive',         de: 'Ufer',         zh: '河岸', ba: 'яр' },
+        { id: 'bridge',     ru: 'мост',       en: 'bridge',       fr: 'pont',         de: 'Brücke',       zh: '桥',   ba: 'күпер' },
+        { id: 'boat',       ru: 'лодка',      en: 'boat',         fr: 'barque',       de: 'Boot',         zh: '小船', ba: 'кәмә' },
+        { id: 'fish',       ru: 'рыба',       en: 'fish',         fr: 'poisson',      de: 'Fisch',        zh: '鱼',   ba: 'балыҡ' },
+        { id: 'fishingrod', ru: 'удочка',     en: 'fishing rod',  fr: 'canne à pêche',de: 'Angel',        zh: '钓竿', ba: 'ҡармаҡ' },
+        { id: 'reed',       ru: 'камыш',      en: 'reeds',        fr: 'roseaux',      de: 'Schilf',       zh: '芦苇', ba: 'ҡамыш' },
+        { id: 'stone',      ru: 'камень',     en: 'stone',        fr: 'pierre',       de: 'Stein',        zh: '石头', ba: 'таш' },
+        { id: 'sand_river',  ru: 'песок',      en: 'sand',         fr: 'sable',        de: 'Sand',         zh: '沙子', ba: 'ҡом' },
+        { id: 'wave',       ru: 'волна',      en: 'wave',         fr: 'vague',        de: 'Welle',        zh: '波浪', ba: 'тулҡын' },
+        { id: 'frog',       ru: 'лягушка',    en: 'frog',         fr: 'grenouille',   de: 'Frosch',       zh: '青蛙', ba: 'баҡа' },
+        { id: 'dragonfly',  ru: 'стрекоза',   en: 'dragonfly',    fr: 'libellule',    de: 'Libelle',      zh: '蜻蜓', ba: 'энә ҡарағы' },
+      ],
+    },
+    {
+      id: 'field',
+      titles: { ru: 'Поле', en: 'Field', fr: 'Champ', de: 'Feld', zh: '田野', ba: 'Баҫыу' },
+      words: [
+        { id: 'grass',      ru: 'трава',      en: 'grass',        fr: 'herbe',        de: 'Gras',         zh: '草',   ba: 'үлән' },
+        { id: 'flower',     ru: 'цветок',     en: 'flower',       fr: 'fleur',        de: 'Blume',        zh: '花',   ba: 'сәскә' },
+        { id: 'wheat',      ru: 'пшеница',    en: 'wheat',        fr: 'blé',          de: 'Weizen',       zh: '小麦', ba: 'бойҙай' },
+        { id: 'haystack',   ru: 'стог',       en: 'haystack',     fr: 'meule de foin',de: 'Heuhaufen',    zh: '干草堆', ba: 'бесән кәбәне' },
+        { id: 'butterfly',  ru: 'бабочка',    en: 'butterfly',    fr: 'papillon',     de: 'Schmetterling',zh: '蝴蝶', ba: 'күбәләк' },
+        { id: 'bee',        ru: 'пчела',      en: 'bee',          fr: 'abeille',      de: 'Biene',        zh: '蜜蜂', ba: 'бал ҡорто' },
+        { id: 'grasshopper',ru: 'кузнечик',   en: 'grasshopper',  fr: 'sauterelle',   de: 'Heuschrecke',  zh: '蚂蚱', ba: 'саған' },
+        { id: 'scarecrow',  ru: 'пугало',     en: 'scarecrow',    fr: 'épouvantail',  de: 'Vogelscheuche',zh: '稻草人', ba: 'ҡурҡытҡыс' },
+        { id: 'tractor',    ru: 'трактор',    en: 'tractor',      fr: 'tracteur',     de: 'Traktor',      zh: '拖拉机', ba: 'трактор' },
+        { id: 'sun',        ru: 'солнце',     en: 'sun',          fr: 'soleil',       de: 'Sonne',        zh: '太阳', ba: 'ҡояш' },
+        { id: 'cloud',      ru: 'облако',     en: 'cloud',        fr: 'nuage',        de: 'Wolke',        zh: '云',   ba: 'болот' },
+        { id: 'rainbow',    ru: 'радуга',     en: 'rainbow',      fr: 'arc-en-ciel',  de: 'Regenbogen',   zh: '彩虹', ba: 'йәйғор' },
+      ],
+    },
+    {
+      id: 'mountains',
+      titles: { ru: 'Горы', en: 'Mountains', fr: 'Montagnes', de: 'Berge', zh: '山', ba: 'Тауҙар' },
+      words: [
+        { id: 'mountain',   ru: 'гора',       en: 'mountain',     fr: 'montagne',     de: 'Berg',         zh: '山',   ba: 'тау' },
+        { id: 'rock',       ru: 'скала',      en: 'cliff',        fr: 'falaise',      de: 'Felsen',       zh: '悬崖', ba: 'ҡая' },
+        { id: 'snow',       ru: 'снег',       en: 'snow',         fr: 'neige',        de: 'Schnee',       zh: '雪',   ba: 'ҡар' },
+        { id: 'cave',       ru: 'пещера',     en: 'cave',         fr: 'grotte',       de: 'Höhle',        zh: '山洞', ba: 'мәмерйә' },
+        { id: 'waterfall',  ru: 'водопад',    en: 'waterfall',    fr: 'cascade',      de: 'Wasserfall',   zh: '瀑布', ba: 'шарлауыҡ' },
+        { id: 'eagle',      ru: 'орёл',       en: 'eagle',        fr: 'aigle',        de: 'Adler',        zh: '鹰',   ba: 'бөркөт' },
+        { id: 'goat',       ru: 'горный козёл', en: 'mountain goat', fr: 'bouquetin', de: 'Steinbock',    zh: '野山羊', ba: 'тау кәзәһе' },
+        { id: 'tent',       ru: 'палатка',    en: 'tent',         fr: 'tente',        de: 'Zelt',         zh: '帐篷', ba: 'палатка' },
+        { id: 'backpack',   ru: 'рюкзак',     en: 'backpack',     fr: 'sac à dos',    de: 'Rucksack',     zh: '背包', ba: 'рюкзак' },
+        { id: 'rope',       ru: 'верёвка',    en: 'rope',         fr: 'corde',        de: 'Seil',         zh: '绳子', ba: 'бау' },
+        { id: 'campfire',   ru: 'костёр',     en: 'campfire',     fr: 'feu de camp',  de: 'Lagerfeuer',   zh: '篝火', ba: 'усаҡ' },
+        { id: 'trail',      ru: 'тропа',      en: 'trail',        fr: 'sentier',      de: 'Pfad',         zh: '山路', ba: 'һуҡмаҡ юлы' },
+      ],
+    },
+    {
+      id: 'sea',
+      titles: { ru: 'Море', en: 'Sea', fr: 'Mer', de: 'Meer', zh: '海', ba: 'Диңгеҙ' },
+      words: [
+        { id: 'sea_water',   ru: 'море',       en: 'sea',          fr: 'mer',          de: 'Meer',         zh: '海',   ba: 'диңгеҙ' },
+        { id: 'beach',      ru: 'пляж',       en: 'beach',        fr: 'plage',        de: 'Strand',       zh: '海滩', ba: 'пляж' },
+        { id: 'shell',      ru: 'ракушка',    en: 'seashell',     fr: 'coquillage',   de: 'Muschel',      zh: '贝壳', ba: 'ҡабырсаҡ' },
+        { id: 'crab',       ru: 'краб',       en: 'crab',         fr: 'crabe',        de: 'Krabbe',       zh: '螃蟹', ba: 'краб' },
+        { id: 'ship',       ru: 'корабль',    en: 'ship',         fr: 'navire',       de: 'Schiff',       zh: '轮船', ba: 'карап' },
+        { id: 'sail',       ru: 'парус',      en: 'sail',         fr: 'voile',        de: 'Segel',        zh: '帆',   ba: 'елкән' },
+        { id: 'seagull',    ru: 'чайка',      en: 'seagull',      fr: 'mouette',      de: 'Möwe',         zh: '海鸥', ba: 'аҡсарлаҡ' },
+        { id: 'lighthouse', ru: 'маяк',       en: 'lighthouse',   fr: 'phare',        de: 'Leuchtturm',   zh: '灯塔', ba: 'маяк' },
+        { id: 'starfish',   ru: 'морская звезда', en: 'starfish', fr: 'étoile de mer',de: 'Seestern',     zh: '海星', ba: 'диңгеҙ йондоҙо' },
+        { id: 'anchor',     ru: 'якорь',      en: 'anchor',       fr: 'ancre',        de: 'Anker',        zh: '锚',   ba: 'якорь' },
+        { id: 'buoy',       ru: 'буй',        en: 'buoy',         fr: 'bouée',        de: 'Boje',         zh: '浮标', ba: 'буй' },
+        { id: 'palm',       ru: 'пальма',     en: 'palm tree',    fr: 'palmier',      de: 'Palme',        zh: '棕榈树', ba: 'пальма' },
+      ],
+    },
+    {
+      id: 'garden',
+      titles: { ru: 'Сад', en: 'Garden', fr: 'Jardin', de: 'Garten', zh: '花园', ba: 'Баҡса' },
+      words: [
+        { id: 'apple',      ru: 'яблоко',     en: 'apple',        fr: 'pomme',        de: 'Apfel',        zh: '苹果', ba: 'алма' },
+        { id: 'pear',       ru: 'груша',      en: 'pear',         fr: 'poire',        de: 'Birne',        zh: '梨',   ba: 'груша' },
+        { id: 'plum',       ru: 'слива',      en: 'plum',         fr: 'prune',        de: 'Pflaume',      zh: '李子', ba: 'слива' },
+        { id: 'cherry',     ru: 'вишня',      en: 'cherry',       fr: 'cerise',       de: 'Kirsche',      zh: '樱桃', ba: 'сейә' },
+        { id: 'currant',    ru: 'смородина',  en: 'currant',      fr: 'groseille',    de: 'Johannisbeere',zh: '醋栗', ba: 'ҡарағат' },
+        { id: 'bed_garden', ru: 'грядка',     en: 'garden bed',   fr: 'plate-bande',  de: 'Beet',         zh: '苗床', ba: 'түтәл' },
+        { id: 'watercan',   ru: 'лейка',      en: 'watering can', fr: 'arrosoir',     de: 'Gießkanne',    zh: '洒水壶', ba: 'һыу һибкес' },
+        { id: 'spade',      ru: 'лопата',     en: 'spade',        fr: 'bêche',        de: 'Spaten',       zh: '铁锹', ba: 'көрәк' },
+        { id: 'rake',       ru: 'грабли',     en: 'rake',         fr: 'râteau',       de: 'Rechen',       zh: '耙子', ba: 'тырма' },
+        { id: 'wheelbarrow',ru: 'тачка',      en: 'wheelbarrow',  fr: 'brouette',     de: 'Schubkarre',   zh: '手推车', ba: 'арба тәгәрмәсле' },
+        { id: 'greenhouse', ru: 'теплица',    en: 'greenhouse',   fr: 'serre',        de: 'Gewächshaus',  zh: '温室', ba: 'йылытҡыс' },
+        { id: 'beehive',    ru: 'улей',       en: 'beehive',      fr: 'ruche',        de: 'Bienenstock',  zh: '蜂箱', ba: 'умарта' },
+      ],
+    },
+  ],
+};

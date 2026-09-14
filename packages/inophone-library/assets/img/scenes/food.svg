@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 800" width="1280" height="800">
+  <rect width="1280" height="800" fill="#f0e9f2"/>
+  <rect y="496" width="1280" height="304" fill="#ddd2e0"/>
+  <line x1="0" y1="496" x2="1280" y2="496" stroke="#c8bace" stroke-width="3"/>
+  <image href="../concepts/milk.svg" x="88" y="119" width="145" height="115" preserveAspectRatio="xMidYMid meet"/>
+  <image href="../concepts/cheese.svg" x="330" y="129" width="137" height="109" preserveAspectRatio="xMidYMid meet"/>
+  <image href="../concepts/butter.svg" x="587" y="153" width="141" height="112" preserveAspectRatio="xMidYMid meet"/>
+  <image href="../concepts/egg.svg" x="830" y="120" width="139" height="110" preserveAspectRatio="xMidYMid meet"/>
+  <image href="../concepts/meat.svg" x="1020" y="142" width="158" height="126" preserveAspectRatio="xMidYMid meet"/>
+  <image href="../concepts/soup.svg" x="130" y="334" width="179" height="128" preserveAspectRatio="xMidYMid meet"/>
+  <image href="../concepts/porridge.svg" x="436" y="341" width="180" height="128" preserveAspectRatio="xMidYMid meet"/>
+  <image href="../concepts/potato.svg" x="721" y="308" width="183" height="131" preserveAspectRatio="xMidYMid meet"/>
+  <image href="../concepts/carrot.svg" x="990" y="341" width="183" height="130" preserveAspectRatio="xMidYMid meet"/>
+  <image href="../concepts/cabbage.svg" x="95" y="558" width="281" height="156" preserveAspectRatio="xMidYMid meet"/>
+  <image href="../concepts/tomato.svg" x="468" y="588" width="253" height="140" preserveAspectRatio="xMidYMid meet"/>
+  <image href="../concepts/honey.svg" x="882" y="566" width="281" height="156" preserveAspectRatio="xMidYMid meet"/>
+</svg>

@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 800" width="1280" height="800">
+  <rect width="1280" height="800" fill="#f4ecf7"/>
+  <rect y="496" width="1280" height="304" fill="#e3d7e8"/>
+  <line x1="0" y1="496" x2="1280" y2="496" stroke="#cbb9d2" stroke-width="3"/>
+  <image href="../concepts/toydecoration.svg" x="86" y="135" width="150" height="119" preserveAspectRatio="xMidYMid meet"/>
+  <image href="../concepts/tinsel.svg" x="347" y="124" width="140" height="111" preserveAspectRatio="xMidYMid meet"/>
+  <image href="../concepts/star_top.svg" x="571" y="136" width="141" height="112" preserveAspectRatio="xMidYMid meet"/>
+  <image href="../concepts/snowman.svg" x="801" y="121" width="141" height="112" preserveAspectRatio="xMidYMid meet"/>
+  <image href="../concepts/snowflake.svg" x="1071" y="138" width="142" height="113" preserveAspectRatio="xMidYMid meet"/>
+  <image href="../concepts/firework.svg" x="101" y="319" width="197" height="141" preserveAspectRatio="xMidYMid meet"/>
+  <image href="../concepts/santa.svg" x="412" y="340" width="200" height="143" preserveAspectRatio="xMidYMid meet"/>
+  <image href="../concepts/mitten.svg" x="719" y="309" width="176" height="126" preserveAspectRatio="xMidYMid meet"/>
+  <image href="../concepts/icicle.svg" x="997" y="333" width="179" height="128" preserveAspectRatio="xMidYMid meet"/>
+  <image href="../concepts/skatingrink.svg" x="69" y="539" width="246" height="136" preserveAspectRatio="xMidYMid meet"/>
+  <image href="../concepts/chime.svg" x="534" y="577" width="262" height="145" preserveAspectRatio="xMidYMid meet"/>
+  <image href="../concepts/bell_toy.svg" x="926" y="570" width="276" height="153" preserveAspectRatio="xMidYMid meet"/>
+</svg>

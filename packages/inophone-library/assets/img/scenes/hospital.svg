@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 800" width="1280" height="800">
+  <rect width="1280" height="800" fill="#dfe9f2"/>
+  <rect y="496" width="1280" height="304" fill="#c9c9c9"/>
+  <line x1="0" y1="496" x2="1280" y2="496" stroke="#b0b0b0" stroke-width="3"/>
+  <image href="../concepts/doctor.svg" x="122" y="124" width="137" height="109" preserveAspectRatio="xMidYMid meet"/>
+  <image href="../concepts/nurse.svg" x="328" y="122" width="158" height="125" preserveAspectRatio="xMidYMid meet"/>
+  <image href="../concepts/patient.svg" x="555" y="119" width="150" height="119" preserveAspectRatio="xMidYMid meet"/>
+  <image href="../concepts/thermometer.svg" x="791" y="123" width="148" height="117" preserveAspectRatio="xMidYMid meet"/>
+  <image href="../concepts/bandage.svg" x="1068" y="147" width="145" height="115" preserveAspectRatio="xMidYMid meet"/>
+  <image href="../concepts/plaster.svg" x="111" y="325" width="128" height="91" preserveAspectRatio="xMidYMid meet"/>
+  <image href="../concepts/syringe.svg" x="386" y="319" width="202" height="144" preserveAspectRatio="xMidYMid meet"/>
+  <image href="../concepts/medicine.svg" x="705" y="325" width="202" height="144" preserveAspectRatio="xMidYMid meet"/>
+  <image href="../concepts/hospitalbed.svg" x="962" y="312" width="248" height="177" preserveAspectRatio="xMidYMid meet"/>
+  <image href="../concepts/stethoscope.svg" x="150" y="532" width="271" height="150" preserveAspectRatio="xMidYMid meet"/>
+  <image href="../concepts/ambulance.svg" x="485" y="544" width="330" height="183" preserveAspectRatio="xMidYMid meet"/>
+  <image href="../concepts/wheelchair.svg" x="896" y="580" width="258" height="143" preserveAspectRatio="xMidYMid meet"/>
+</svg>

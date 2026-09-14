@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 800" width="1280" height="800">
+  <rect width="1280" height="800" fill="#d9ecf7"/>
+  <rect y="496" width="1280" height="304" fill="#c2d8a4"/>
+  <line x1="0" y1="496" x2="1280" y2="496" stroke="#a9c489" stroke-width="3"/>
+  <image href="../concepts/tree.svg" x="69" y="110" width="190" height="151" preserveAspectRatio="xMidYMid meet"/>
+  <image href="../concepts/leaf.svg" x="304" y="115" width="149" height="118" preserveAspectRatio="xMidYMid meet"/>
+  <image href="../concepts/branch.svg" x="546" y="135" width="141" height="112" preserveAspectRatio="xMidYMid meet"/>
+  <image href="../concepts/mushroom.svg" x="783" y="118" width="154" height="122" preserveAspectRatio="xMidYMid meet"/>
+  <image href="../concepts/berry.svg" x="1110" y="160" width="103" height="82" preserveAspectRatio="xMidYMid meet"/>
+  <image href="../concepts/fir.svg" x="79" y="325" width="222" height="159" preserveAspectRatio="xMidYMid meet"/>
+  <image href="../concepts/squirrel.svg" x="371" y="309" width="196" height="140" preserveAspectRatio="xMidYMid meet"/>
+  <image href="../concepts/hedgehog.svg" x="734" y="355" width="176" height="126" preserveAspectRatio="xMidYMid meet"/>
+  <image href="../concepts/owl.svg" x="1001" y="324" width="205" height="146" preserveAspectRatio="xMidYMid meet"/>
+  <image href="../concepts/stump.svg" x="63" y="532" width="267" height="148" preserveAspectRatio="xMidYMid meet"/>
+  <image href="../concepts/cone.svg" x="630" y="598" width="187" height="103" preserveAspectRatio="xMidYMid meet"/>
+  <image href="../concepts/moss.svg" x="1027" y="608" width="179" height="99" preserveAspectRatio="xMidYMid meet"/>
+</svg>

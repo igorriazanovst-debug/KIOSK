@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 800" width="1280" height="800">
+  <rect width="1280" height="800" fill="#d9ecf7"/>
+  <rect y="496" width="1280" height="304" fill="#c2d8a4"/>
+  <line x1="0" y1="496" x2="1280" y2="496" stroke="#a9c489" stroke-width="3"/>
+  <image href="../concepts/water.svg" x="76" y="117" width="144" height="114" preserveAspectRatio="xMidYMid meet"/>
+  <image href="../concepts/bank.svg" x="331" y="125" width="143" height="114" preserveAspectRatio="xMidYMid meet"/>
+  <image href="../concepts/bridge.svg" x="547" y="112" width="192" height="152" preserveAspectRatio="xMidYMid meet"/>
+  <image href="../concepts/boat.svg" x="806" y="140" width="146" height="116" preserveAspectRatio="xMidYMid meet"/>
+  <image href="../concepts/fish.svg" x="1059" y="115" width="158" height="126" preserveAspectRatio="xMidYMid meet"/>
+  <image href="../concepts/fishingrod.svg" x="124" y="362" width="182" height="130" preserveAspectRatio="xMidYMid meet"/>
+  <image href="../concepts/reed.svg" x="382" y="332" width="204" height="146" preserveAspectRatio="xMidYMid meet"/>
+  <image href="../concepts/stone.svg" x="680" y="322" width="195" height="139" preserveAspectRatio="xMidYMid meet"/>
+  <image href="../concepts/sand_river.svg" x="989" y="354" width="196" height="140" preserveAspectRatio="xMidYMid meet"/>
+  <image href="../concepts/wave.svg" x="86" y="575" width="268" height="148" preserveAspectRatio="xMidYMid meet"/>
+  <image href="../concepts/frog.svg" x="544" y="579" width="264" height="146" preserveAspectRatio="xMidYMid meet"/>
+  <image href="../concepts/dragonfly.svg" x="884" y="587" width="252" height="140" preserveAspectRatio="xMidYMid meet"/>
+</svg>

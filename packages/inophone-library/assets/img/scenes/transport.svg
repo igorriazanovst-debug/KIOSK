@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 800" width="1280" height="800">
+  <rect width="1280" height="800" fill="#eceff2"/>
+  <rect y="496" width="1280" height="304" fill="#d5d9de"/>
+  <line x1="0" y1="496" x2="1280" y2="496" stroke="#bcc2c9" stroke-width="3"/>
+  <image href="../concepts/car.svg" x="80" y="116" width="170" height="135" preserveAspectRatio="xMidYMid meet"/>
+  <image href="../concepts/tram.svg" x="323" y="114" width="173" height="137" preserveAspectRatio="xMidYMid meet"/>
+  <image href="../concepts/trolleybus.svg" x="541" y="111" width="192" height="152" preserveAspectRatio="xMidYMid meet"/>
+  <image href="../concepts/plane.svg" x="785" y="112" width="184" height="146" preserveAspectRatio="xMidYMid meet"/>
+  <image href="../concepts/helicopter.svg" x="1029" y="113" width="190" height="151" preserveAspectRatio="xMidYMid meet"/>
+  <image href="../concepts/motorcycle.svg" x="132" y="360" width="186" height="133" preserveAspectRatio="xMidYMid meet"/>
+  <image href="../concepts/truck.svg" x="388" y="329" width="232" height="165" preserveAspectRatio="xMidYMid meet"/>
+  <image href="../concepts/scooter.svg" x="727" y="330" width="195" height="139" preserveAspectRatio="xMidYMid meet"/>
+  <image href="../concepts/wheel.svg" x="1033" y="331" width="177" height="126" preserveAspectRatio="xMidYMid meet"/>
+  <image href="../concepts/steering.svg" x="148" y="575" width="246" height="136" preserveAspectRatio="xMidYMid meet"/>
+  <image href="../concepts/sledge.svg" x="554" y="559" width="241" height="134" preserveAspectRatio="xMidYMid meet"/>
+  <image href="../concepts/metro.svg" x="867" y="539" width="340" height="188" preserveAspectRatio="xMidYMid meet"/>
+</svg>

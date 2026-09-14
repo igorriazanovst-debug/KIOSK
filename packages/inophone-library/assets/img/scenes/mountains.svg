@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 800" width="1280" height="800">
+  <rect width="1280" height="800" fill="#d9ecf7"/>
+  <rect y="496" width="1280" height="304" fill="#c2d8a4"/>
+  <line x1="0" y1="496" x2="1280" y2="496" stroke="#a9c489" stroke-width="3"/>
+  <image href="../concepts/mountain.svg" x="83" y="128" width="171" height="135" preserveAspectRatio="xMidYMid meet"/>
+  <image href="../concepts/rock.svg" x="310" y="113" width="156" height="124" preserveAspectRatio="xMidYMid meet"/>
+  <image href="../concepts/snow.svg" x="546" y="143" width="135" height="107" preserveAspectRatio="xMidYMid meet"/>
+  <image href="../concepts/cave.svg" x="792" y="109" width="187" height="148" preserveAspectRatio="xMidYMid meet"/>
+  <image href="../concepts/waterfall.svg" x="1037" y="115" width="176" height="140" preserveAspectRatio="xMidYMid meet"/>
+  <image href="../concepts/eagle.svg" x="108" y="330" width="177" height="127" preserveAspectRatio="xMidYMid meet"/>
+  <image href="../concepts/goat.svg" x="413" y="348" width="194" height="138" preserveAspectRatio="xMidYMid meet"/>
+  <image href="../concepts/tent.svg" x="716" y="327" width="198" height="141" preserveAspectRatio="xMidYMid meet"/>
+  <image href="../concepts/backpack.svg" x="1032" y="323" width="181" height="129" preserveAspectRatio="xMidYMid meet"/>
+  <image href="../concepts/rope.svg" x="86" y="563" width="243" height="135" preserveAspectRatio="xMidYMid meet"/>
+  <image href="../concepts/campfire.svg" x="521" y="581" width="265" height="147" preserveAspectRatio="xMidYMid meet"/>
+  <image href="../concepts/trail.svg" x="859" y="542" width="263" height="146" preserveAspectRatio="xMidYMid meet"/>
+</svg>

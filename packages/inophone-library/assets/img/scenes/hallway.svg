@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 800" width="1280" height="800">
+  <rect width="1280" height="800" fill="#e7eef6"/>
+  <rect y="496" width="1280" height="304" fill="#d8c9a8"/>
+  <line x1="0" y1="496" x2="1280" y2="496" stroke="#c4b391" stroke-width="3"/>
+  <image href="../concepts/coathanger.svg" x="63" y="124" width="173" height="137" preserveAspectRatio="xMidYMid meet"/>
+  <image href="../concepts/shoes.svg" x="326" y="131" width="152" height="120" preserveAspectRatio="xMidYMid meet"/>
+  <image href="../concepts/umbrella.svg" x="549" y="129" width="154" height="122" preserveAspectRatio="xMidYMid meet"/>
+  <image href="../concepts/key.svg" x="844" y="133" width="105" height="83" preserveAspectRatio="xMidYMid meet"/>
+  <image href="../concepts/bag.svg" x="1071" y="148" width="146" height="116" preserveAspectRatio="xMidYMid meet"/>
+  <image href="../concepts/doorbell.svg" x="116" y="325" width="176" height="125" preserveAspectRatio="xMidYMid meet"/>
+  <image href="../concepts/mat.svg" x="366" y="316" width="204" height="146" preserveAspectRatio="xMidYMid meet"/>
+  <image href="../concepts/hat.svg" x="681" y="311" width="191" height="136" preserveAspectRatio="xMidYMid meet"/>
+  <image href="../concepts/scarf.svg" x="966" y="333" width="197" height="141" preserveAspectRatio="xMidYMid meet"/>
+  <image href="../concepts/gloves.svg" x="100" y="552" width="246" height="136" preserveAspectRatio="xMidYMid meet"/>
+  <image href="../concepts/stool.svg" x="496" y="536" width="252" height="139" preserveAspectRatio="xMidYMid meet"/>
+  <image href="../concepts/lock.svg" x="865" y="565" width="243" height="134" preserveAspectRatio="xMidYMid meet"/>
+</svg>
