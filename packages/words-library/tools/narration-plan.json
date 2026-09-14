@@ -104,12 +104,12 @@
     "text": "Молодец! Тема «Школа» пройдена."
   },
   {
-    "path": "media/themes/body/irina.mp3",
-    "text": "Части тела. Своё тело знать полезно: так легче рассказать, где болит и что не получается."
+    "path": "media/themes/insects/irina.mp3",
+    "text": "Насекомые. Насекомые маленькие, но их легко узнать: одни жужжат, другие ползают, третьи прыгают."
   },
   {
-    "path": "media/scenes-final/body.mp3",
-    "text": "Молодец! Тема «Части тела» пройдена."
+    "path": "media/scenes-final/insects.mp3",
+    "text": "Молодец! Тема «Насекомые» пройдена."
   },
   {
     "path": "media/themes/nature/irina.mp3",
@@ -2625,195 +2625,195 @@
   },
   {
     "path": "media/words/1300/neutral.mp3",
-    "text": "Голова"
+    "text": "Бабочка"
   },
   {
     "path": "media/words/1300/irina/0.mp3",
-    "text": "Где голова?"
+    "text": "Где бабочка?"
   },
   {
     "path": "media/words/1300/irina/1.mp3",
-    "text": "Покажи, где голова."
+    "text": "Покажи, где бабочка."
   },
   {
     "path": "media/words/1301/neutral.mp3",
-    "text": "Рука"
+    "text": "Жук"
   },
   {
     "path": "media/words/1301/irina/0.mp3",
-    "text": "Где рука?"
+    "text": "Где жук?"
   },
   {
     "path": "media/words/1301/irina/1.mp3",
-    "text": "Покажи, где рука."
+    "text": "Покажи, где жук."
   },
   {
     "path": "media/words/1302/neutral.mp3",
-    "text": "Нога"
+    "text": "Муравей"
   },
   {
     "path": "media/words/1302/irina/0.mp3",
-    "text": "Где нога?"
+    "text": "Где муравей?"
   },
   {
     "path": "media/words/1302/irina/1.mp3",
-    "text": "Покажи, где нога."
+    "text": "Покажи, где муравей."
   },
   {
     "path": "media/words/1303/neutral.mp3",
-    "text": "Глаз"
+    "text": "Пчела"
   },
   {
     "path": "media/words/1303/irina/0.mp3",
-    "text": "Где глаз?"
+    "text": "Где пчела?"
   },
   {
     "path": "media/words/1303/irina/1.mp3",
-    "text": "Покажи, где глаз."
+    "text": "Покажи, где пчела."
   },
   {
     "path": "media/words/1304/neutral.mp3",
-    "text": "Нос"
+    "text": "Стрекоза"
   },
   {
     "path": "media/words/1304/irina/0.mp3",
-    "text": "Где нос?"
+    "text": "Где стрекоза?"
   },
   {
     "path": "media/words/1304/irina/1.mp3",
-    "text": "Покажи, где нос."
+    "text": "Покажи, где стрекоза."
   },
   {
     "path": "media/words/1305/neutral.mp3",
-    "text": "Рот"
+    "text": "Муха"
   },
   {
     "path": "media/words/1305/irina/0.mp3",
-    "text": "Где рот?"
+    "text": "Где муха?"
   },
   {
     "path": "media/words/1305/irina/1.mp3",
-    "text": "Покажи, где рот."
+    "text": "Покажи, где муха."
   },
   {
     "path": "media/words/1306/neutral.mp3",
-    "text": "Ухо"
+    "text": "Кузнечик"
   },
   {
     "path": "media/words/1306/irina/0.mp3",
-    "text": "Где ухо?"
+    "text": "Где кузнечик?"
   },
   {
     "path": "media/words/1306/irina/1.mp3",
-    "text": "Покажи, где ухо."
+    "text": "Покажи, где кузнечик."
   },
   {
     "path": "media/words/1307/neutral.mp3",
-    "text": "Волосы"
+    "text": "Гусеница"
   },
   {
     "path": "media/words/1307/irina/0.mp3",
-    "text": "Где волосы?"
+    "text": "Где гусеница?"
   },
   {
     "path": "media/words/1307/irina/1.mp3",
-    "text": "Покажи, где волосы."
+    "text": "Покажи, где гусеница."
   },
   {
     "path": "media/words/1308/neutral.mp3",
-    "text": "Зубы"
+    "text": "Улитка"
   },
   {
     "path": "media/words/1308/irina/0.mp3",
-    "text": "Где зубы?"
+    "text": "Где улитка?"
   },
   {
     "path": "media/words/1308/irina/1.mp3",
-    "text": "Покажи, где зубы."
+    "text": "Покажи, где улитка."
   },
   {
     "path": "media/words/1309/neutral.mp3",
-    "text": "Палец"
+    "text": "Паук"
   },
   {
     "path": "media/words/1309/irina/0.mp3",
-    "text": "Где палец?"
+    "text": "Где паук?"
   },
   {
     "path": "media/words/1309/irina/1.mp3",
-    "text": "Покажи, где палец."
+    "text": "Покажи, где паук."
   },
   {
     "path": "media/words/1310/neutral.mp3",
-    "text": "Колено"
+    "text": "Божья коровка"
   },
   {
     "path": "media/words/1310/irina/0.mp3",
-    "text": "Где колено?"
+    "text": "Где божья коровка?"
   },
   {
     "path": "media/words/1310/irina/1.mp3",
-    "text": "Покажи, где колено."
+    "text": "Покажи, где божья коровка."
   },
   {
     "path": "media/words/1311/neutral.mp3",
-    "text": "Шея"
+    "text": "Комар"
   },
   {
     "path": "media/words/1311/irina/0.mp3",
-    "text": "Где шея?"
+    "text": "Где комар?"
   },
   {
     "path": "media/words/1311/irina/1.mp3",
-    "text": "Покажи, где шея."
+    "text": "Покажи, где комар."
   },
   {
     "path": "media/words/1312/neutral.mp3",
-    "text": "Брови"
+    "text": "Червяк"
   },
   {
     "path": "media/words/1312/irina/0.mp3",
-    "text": "Где брови?"
+    "text": "Где червяк?"
   },
   {
     "path": "media/words/1312/irina/1.mp3",
-    "text": "Покажи, где брови."
+    "text": "Покажи, где червяк."
   },
   {
     "path": "media/words/1313/neutral.mp3",
-    "text": "Спина"
+    "text": "Сороконожка"
   },
   {
     "path": "media/words/1313/irina/0.mp3",
-    "text": "Где спина?"
+    "text": "Где сороконожка?"
   },
   {
     "path": "media/words/1313/irina/1.mp3",
-    "text": "Покажи, где спина."
+    "text": "Покажи, где сороконожка."
   },
   {
     "path": "media/words/1314/neutral.mp3",
-    "text": "Живот"
+    "text": "Богомол"
   },
   {
     "path": "media/words/1314/irina/0.mp3",
-    "text": "Где живот?"
+    "text": "Где богомол?"
   },
   {
     "path": "media/words/1314/irina/1.mp3",
-    "text": "Покажи, где живот."
+    "text": "Покажи, где богомол."
   },
   {
     "path": "media/words/1315/neutral.mp3",
-    "text": "Язык"
+    "text": "Светлячок"
   },
   {
     "path": "media/words/1315/irina/0.mp3",
-    "text": "Где язык?"
+    "text": "Где светлячок?"
   },
   {
     "path": "media/words/1315/irina/1.mp3",
-    "text": "Покажи, где язык."
+    "text": "Покажи, где светлячок."
   },
   {
     "path": "media/words/1400/neutral.mp3",

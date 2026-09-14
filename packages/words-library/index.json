@@ -308,9 +308,9 @@
       ]
     },
     {
-      "id": "body",
-      "title": "Части тела",
-      "intro": "Своё тело знать полезно: так легче рассказать, где болит и что не получается.",
+      "id": "insects",
+      "title": "Насекомые",
+      "intro": "Насекомые маленькие, но их легко узнать: одни жужжат, другие ползают, третьи прыгают.",
       "wordIds": [
         "1300",
         "1301",
@@ -1628,98 +1628,98 @@
     },
     {
       "id": "1300",
-      "name": "Голова",
-      "themeId": "body",
+      "name": "Бабочка",
+      "themeId": "insects",
       "level": 0
     },
     {
       "id": "1301",
-      "name": "Рука",
-      "themeId": "body",
+      "name": "Жук",
+      "themeId": "insects",
       "level": 0
     },
     {
       "id": "1302",
-      "name": "Нога",
-      "themeId": "body",
+      "name": "Муравей",
+      "themeId": "insects",
       "level": 0
     },
     {
       "id": "1303",
-      "name": "Глаз",
-      "themeId": "body",
+      "name": "Пчела",
+      "themeId": "insects",
       "level": 0
     },
     {
       "id": "1304",
-      "name": "Нос",
-      "themeId": "body",
+      "name": "Стрекоза",
+      "themeId": "insects",
       "level": 0
     },
     {
       "id": "1305",
-      "name": "Рот",
-      "themeId": "body",
+      "name": "Муха",
+      "themeId": "insects",
       "level": 0
     },
     {
       "id": "1306",
-      "name": "Ухо",
-      "themeId": "body",
+      "name": "Кузнечик",
+      "themeId": "insects",
       "level": 1
     },
     {
       "id": "1307",
-      "name": "Волосы",
-      "themeId": "body",
+      "name": "Гусеница",
+      "themeId": "insects",
       "level": 1
     },
     {
       "id": "1308",
-      "name": "Зубы",
-      "themeId": "body",
+      "name": "Улитка",
+      "themeId": "insects",
       "level": 1
     },
     {
       "id": "1309",
-      "name": "Палец",
-      "themeId": "body",
+      "name": "Паук",
+      "themeId": "insects",
       "level": 1
     },
     {
       "id": "1310",
-      "name": "Колено",
-      "themeId": "body",
+      "name": "Божья коровка",
+      "themeId": "insects",
       "level": 1
     },
     {
       "id": "1311",
-      "name": "Шея",
-      "themeId": "body",
+      "name": "Комар",
+      "themeId": "insects",
       "level": 1
     },
     {
       "id": "1312",
-      "name": "Брови",
-      "themeId": "body",
+      "name": "Червяк",
+      "themeId": "insects",
       "level": 2
     },
     {
       "id": "1313",
-      "name": "Спина",
-      "themeId": "body",
+      "name": "Сороконожка",
+      "themeId": "insects",
       "level": 2
     },
     {
       "id": "1314",
-      "name": "Живот",
-      "themeId": "body",
+      "name": "Богомол",
+      "themeId": "insects",
       "level": 2
     },
     {
       "id": "1315",
-      "name": "Язык",
-      "themeId": "body",
+      "name": "Светлячок",
+      "themeId": "insects",
       "level": 2
     },
     {
