@@ -26,6 +26,7 @@ interface Props {
   onSetActiveQuiz: (quizId: string | null) => void;
   onEditQuiz: (quiz: ChimiqQuiz, pendingLevel1Image: { buffer: ArrayBuffer; mimeType: string } | null) => void;
   onDuplicateBuiltin: () => Promise<void>;
+  onShowDailyStats: () => void;
   onExit: () => void;
 }
 
@@ -57,7 +58,7 @@ async function buildBlankQuiz(result: NewQuizResult): Promise<{ quiz: ChimiqQuiz
 
 type PendingAction = 'edit' | 'delete' | 'duplicate' | 'export';
 
-const QuizCatalogScreen: React.FC<Props> = ({ builtinQuizTitle, activeQuizId, onSetActiveQuiz, onEditQuiz, onDuplicateBuiltin, onExit }) => {
+const QuizCatalogScreen: React.FC<Props> = ({ builtinQuizTitle, activeQuizId, onSetActiveQuiz, onEditQuiz, onDuplicateBuiltin, onShowDailyStats, onExit }) => {
   const [entries, setEntries] = useState<QuizListEntry[]>([]);
   const [showNewQuizModal, setShowNewQuizModal] = useState(false);
   const [passwordPromptFor, setPasswordPromptFor] = useState<{ id: string; passwordHash: string; action: PendingAction } | null>(null);
@@ -245,12 +246,15 @@ const QuizCatalogScreen: React.FC<Props> = ({ builtinQuizTitle, activeQuizId, on
             </button>
           </div>
         ))}
-        <div style={{ marginTop: 20, display: 'flex', justifyContent: 'center', gap: 10 }}>
+        <div style={{ marginTop: 20, display: 'flex', justifyContent: 'center', gap: 10, flexWrap: 'wrap' }}>
           <button onClick={() => setShowNewQuizModal(true)} className="ciq-btn">
             Создать новую
           </button>
           <button onClick={handleImport} disabled={importing} className="ciq-btn ciq-btn-muted">
             {importing ? 'Импорт…' : 'Импортировать викторину'}
+          </button>
+          <button onClick={onShowDailyStats} className="ciq-btn ciq-btn-muted">
+            Статистика по дням
           </button>
           <button onClick={onExit} className="ciq-btn ciq-btn-muted">
             Выйти

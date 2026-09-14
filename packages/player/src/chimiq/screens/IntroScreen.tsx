@@ -6,13 +6,17 @@ interface Props {
   quiz: ChimiqQuiz;
   onPlay: () => void;
   onTeacherMode: () => void;
+  onShowThematicGallery: () => void;
 }
 
-const IntroScreen: React.FC<Props> = ({ quiz, onPlay, onTeacherMode }) => (
+const IntroScreen: React.FC<Props> = ({ quiz, onPlay, onTeacherMode, onShowThematicGallery }) => (
   <div className="ciq-page">
     <div className="ciq-page-narrow" style={{ position: 'relative', textAlign: 'center' }}>
       <button onClick={onTeacherMode} className="ciq-btn ciq-btn-ghost ciq-btn-small" style={{ position: 'absolute', top: 0, right: 0 }}>
         Режим учителя
+      </button>
+      <button onClick={onShowThematicGallery} className="ciq-btn ciq-btn-ghost ciq-btn-small" style={{ position: 'absolute', top: 0, left: 0 }}>
+        Справочные материалы
       </button>
       <p className="ciq-heading" style={{ fontSize: 13, letterSpacing: '0.2em', color: 'var(--ciq-blue)', marginBottom: 4 }}>
         ХимIQ

@@ -16,6 +16,8 @@ import ResultsScreen from './screens/ResultsScreen.tsx';
 import TeacherGateScreen from './editor/TeacherGateScreen.tsx';
 import QuizCatalogScreen from './editor/QuizCatalogScreen.tsx';
 import EditorScreen from './editor/EditorScreen.tsx';
+import DailyStatsScreen from './screens/DailyStatsScreen.tsx';
+import ThematicGalleryScreen from './screens/ThematicGalleryScreen.tsx';
 import { loadQuiz, saveQuiz, saveQuizLevelImage } from './editor/quizStore.ts';
 import { ChimiqQuizSchema, CHIMIQ_USERDATA_SCHEMA_VERSION, type ChimiqQuestion, type ChimiqQuiz, type ChimiqUserData } from './model/schema.ts';
 import { assignQuestions, summarizeResults, type ChimiqAnswerEvent } from './gameLogic.ts';
@@ -36,7 +38,7 @@ interface Props {
   properties: { title?: string };
 }
 
-type Phase = 'loading' | 'intro' | 'setup' | 'board' | 'results' | 'teacherGate' | 'catalog' | 'editor';
+type Phase = 'loading' | 'intro' | 'setup' | 'board' | 'results' | 'teacherGate' | 'catalog' | 'editor' | 'dailyStats' | 'thematicGallery';
 
 const INITIAL_USER_DATA: ChimiqUserData = {
   schemaVersion: CHIMIQ_USERDATA_SCHEMA_VERSION,
@@ -146,7 +148,18 @@ export default function ChimiqRuntime({ properties }: Props) {
   if (phase === 'loading') return <p style={{ textAlign: 'center', marginTop: 60, fontFamily: 'sans-serif' }}>Загрузка…</p>;
 
   if (phase === 'intro') {
-    return <IntroScreen quiz={activeQuiz} onPlay={() => setPhase('setup')} onTeacherMode={() => setPhase('teacherGate')} />;
+    return (
+      <IntroScreen
+        quiz={activeQuiz}
+        onPlay={() => setPhase('setup')}
+        onTeacherMode={() => setPhase('teacherGate')}
+        onShowThematicGallery={() => setPhase('thematicGallery')}
+      />
+    );
+  }
+
+  if (phase === 'thematicGallery') {
+    return <ThematicGalleryScreen onExit={() => setPhase('intro')} />;
   }
 
   if (phase === 'teacherGate') {
@@ -198,9 +211,14 @@ export default function ChimiqRuntime({ properties }: Props) {
           setPhase('editor');
         }}
         onDuplicateBuiltin={handleDuplicateBuiltin}
+        onShowDailyStats={() => setPhase('dailyStats')}
         onExit={() => setPhase('intro')}
       />
     );
+  }
+
+  if (phase === 'dailyStats') {
+    return <DailyStatsScreen sessions={userData.sessions} onExit={() => setPhase('catalog')} />;
   }
 
   if (phase === 'editor' && editingQuiz) {
@@ -221,5 +239,12 @@ export default function ChimiqRuntime({ properties }: Props) {
 
   // Недостижимо при корректном порядке фаз (phase==='editor' без
   // editingQuiz) — явный fallback вместо немого рендера.
-  return <IntroScreen quiz={activeQuiz} onPlay={() => setPhase('setup')} onTeacherMode={() => setPhase('teacherGate')} />;
+  return (
+    <IntroScreen
+      quiz={activeQuiz}
+      onPlay={() => setPhase('setup')}
+      onTeacherMode={() => setPhase('teacherGate')}
+      onShowThematicGallery={() => setPhase('thematicGallery')}
+    />
+  );
 }
