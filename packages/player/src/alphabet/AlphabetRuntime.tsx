@@ -17,7 +17,7 @@
 // размер берётся из реального, делённого на масштаб.
 
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { alphabet } from '@kiosk/shared';
+import { alphabet, seatRotationFor } from '@kiosk/shared';
 import type { AlphabetWidgetProperties, AlphabetStage } from '@kiosk/shared';
 import {
   ALPHABET_DEFAULT_PROPS,
@@ -52,7 +52,7 @@ import PasswordPrompt from './components/PasswordPrompt';
 import VoiceRecorder from './components/VoiceRecorder';
 import NewSyllablePrompt from './components/NewSyllablePrompt';
 import ConfirmPrompt from './components/ConfirmPrompt';
-import Seats, { SEAT_ANGLES } from './components/Seats';
+import Seats from './components/Seats';
 import MyContentScreen from './screens/MyContentScreen';
 import WordEditorScreen from './screens/WordEditorScreen';
 import { letterAudioUrl, wordAudioUrl, wordWithoutLastSyllableAudioUrl } from './mediaUrl';
@@ -240,7 +240,7 @@ const AlphabetRuntime: React.FC<Props> = ({ properties, width, height }) => {
    */
   const seatAngle =
     screen.name === 'play' && session && chosen.length > 1 && settings.device !== 'tablet'
-      ? SEAT_ANGLES[session.playerIndex % SEAT_ANGLES.length]
+      ? seatRotationFor(session.playerIndex, chosen.length)
       : 0;
   const quarterTurn = seatAngle === 90 || seatAngle === -90;
   const boxWidth = quarterTurn ? height : width;

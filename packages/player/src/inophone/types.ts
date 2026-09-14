@@ -24,6 +24,7 @@ export type InophoneSettings = ReturnType<typeof inophone.parseInophoneSettings>
 export type InophoneStatistics = ReturnType<typeof inophone.parseInophoneStatistics>;
 export type CompletenessReport = ReturnType<typeof inophone.checkCompleteness>;
 export type QuotaReport = ReturnType<typeof inophone.checkQuotas>;
+export type GeometryReport = ReturnType<typeof inophone.checkGeometry>;
 
 /** Итог партии по языкам: [верно, всего] на каждый изучаемый язык */
 export type TallyByLanguage = Partial<Record<LanguageCode, readonly [number, number]>>;
@@ -53,6 +54,8 @@ export interface InophoneContext {
    * молчит, а администратор — что доставить.
    */
   completeness: CompletenessReport | null;
+  /** Неоднозначная разметка сцен: наложившиеся контуры и вышедшие за край */
+  geometry: GeometryReport | null;
   quotas: QuotaReport | null;
 }
 

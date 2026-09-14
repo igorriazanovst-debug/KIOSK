@@ -21,10 +21,14 @@
 // Решение зафиксировано как расхождение с эталоном и вынесено на приёмку.
 
 import React from 'react';
+import { SEAT_ROTATIONS, seatsFor } from '@kiosk/shared';
 import { palette } from '../ui';
 
-/** Углы мест: снизу, слева, сверху, справа */
-export const SEAT_ANGLES = [0, 90, 180, -90] as const;
+// Углы и правило рассадки — ОБЩИЕ с Типами 2 и 4 (@kiosk/shared, utils/seats).
+// Здесь была своя копия, и она разошлась с копией Типа 2: при двоих игроках
+// занимались места «снизу» и «слева», то есть люди садились рядом и закрывали
+// друг другу половину доски, тогда как правило эталона — НАПРОТИВ.
+export { SEAT_ROTATIONS as SEAT_ANGLES } from '@kiosk/shared';
 
 interface Seat {
   playerId: string;
@@ -45,8 +49,13 @@ interface Props {
 const Seats: React.FC<Props> = ({ seats, activeIndex }) => {
   if (seats.length < 2) return null;
 
+  // Номер игрока -> НОМЕР МЕСТА по общему правилу, а не «первый садится на
+  // место 0, второй на место 1». При двоих это и есть разница между «напротив»
+  // и «рядом»
+  const order = seatsFor(seats.length);
+
   const place = (index: number): React.CSSProperties => {
-    switch (index) {
+    switch (order[index]) {
       case 0:
         return { bottom: 6, left: '50%', transform: 'translateX(-50%)' };
       case 1:

@@ -9,6 +9,8 @@ export * from './constants/features';
 
 // Utils
 export * from './utils/validation';
+// Рассадка вокруг интерактивного стола — общая на Типы 2, 3 и 4
+export * from './utils/seats';
 
 // Chrono («Хронолиния»)
 export * from './chrono/precision';

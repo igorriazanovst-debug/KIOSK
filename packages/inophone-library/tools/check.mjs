@@ -55,6 +55,7 @@ try {
 const present = listFiles(ASSETS);
 const completeness = inophone.checkCompleteness(library, present);
 const quotas = inophone.checkQuotas(library);
+const geometry = inophone.checkGeometry(library);
 
 console.log(`тем ${library.themes.length}, сцен ${library.scenes.length}, понятий ${library.concepts.length}`);
 console.log(`файлов в пакете: ${present.size}`);
@@ -79,4 +80,19 @@ for (const f of completeness.extraFiles) console.log(`    лишний: ${f}`);
 console.log('  не записана озвучка, по языкам:');
 for (const code of inophone.LANGUAGE_CODES) {
   console.log(`    ${inophone.languageInfo(code).russianName}: ${completeness.audioGapByLanguage[code]}`);
+}
+
+console.log('');
+console.log('Разметка сцен');
+if (geometry.ok) {
+  console.log('  наложений нет, все контуры внутри подложек');
+} else {
+  // Наложившиеся контуры не роняют программу и ничего не сообщают: она молча
+  // засчитывает нарисованный позже объект
+  for (const p of geometry.ambiguous) {
+    console.log(`  сцена ${p.sceneId}: щелчок принадлежит обоим — ${p.a} и ${p.b}`);
+  }
+  for (const p of geometry.outOfBounds) {
+    console.log(`  сцена ${p.sceneId}: контур вышел за край подложки — ${p.conceptId}`);
+  }
 }

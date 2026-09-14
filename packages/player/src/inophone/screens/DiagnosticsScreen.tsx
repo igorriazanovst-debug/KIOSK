@@ -12,7 +12,7 @@
 
 import React from 'react';
 import { Panel, ScreenHeader, palette } from '../ui';
-import type { CompletenessReport, QuotaReport } from '../types';
+import type { CompletenessReport, GeometryReport, QuotaReport } from '../types';
 import { inophone } from '@kiosk/shared';
 
 interface Props {
@@ -21,6 +21,7 @@ interface Props {
   isFallback: boolean;
   libraryError: string | null;
   completeness: CompletenessReport | null;
+  geometry: GeometryReport | null;
   quotas: QuotaReport | null;
 }
 
@@ -53,6 +54,7 @@ const DiagnosticsScreen: React.FC<Props> = ({
   isFallback,
   libraryError,
   completeness,
+  geometry,
   quotas,
 }) => (
   <div>
@@ -139,6 +141,35 @@ const DiagnosticsScreen: React.FC<Props> = ({
             </ul>
           </>
         )}
+      </Panel>
+    )}
+
+    {geometry && !geometry.ok && (
+      <Panel style={{ marginTop: 20, borderColor: palette.danger }}>
+        <div style={{ fontSize: 24, fontWeight: 700, color: palette.danger, marginBottom: 8 }}>
+          Разметка сцен
+        </div>
+        {/*
+          Наложившиеся контуры не роняют программу и ничего не сообщают: она
+          молча засчитывает нарисованный позже объект. Ученик тычет в подушку,
+          ответ идёт за кровать — и понять, почему «неверно», он не может
+        */}
+        {geometry.ambiguous.map((p) => (
+          <Row
+            key={`${p.sceneId}-${p.a}-${p.b}`}
+            label={`сцена ${p.sceneId}: щелчок принадлежит обоим`}
+            value={`${p.a} и ${p.b}`}
+            tone="bad"
+          />
+        ))}
+        {geometry.outOfBounds.map((p) => (
+          <Row
+            key={`${p.sceneId}-${p.conceptId}`}
+            label={`сцена ${p.sceneId}: контур вышел за край подложки`}
+            value={p.conceptId}
+            tone="bad"
+          />
+        ))}
       </Panel>
     )}
 

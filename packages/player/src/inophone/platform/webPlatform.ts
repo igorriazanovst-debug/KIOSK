@@ -100,6 +100,7 @@ export function createWebPlatform(options: WebPlatformOptions = {}): InophonePla
         hasLibrary: !!library,
         libraryError: library ? null : 'Пакет учебного контента не подключён в этом режиме',
         completeness: null,
+        geometry: library ? inophone.checkGeometry(library) : null,
         quotas: library ? inophone.checkQuotas(library) : null,
       });
     },

@@ -36,15 +36,22 @@ const rect = (x, y, w, h) => ({
 });
 
 // Комната: пол, стена и восемь предметов. Координаты в системе viewBox сцены.
+//
+// КОНТУРЫ НЕ НАКЛАДЫВАЮТСЯ, и это не вкусовщина. Два перекрывающихся контура
+// дают точку, где щелчок принадлежит обоим объектам: программа не падает и
+// ничего не сообщает, она молча засчитывает нарисованный позже. Первая версия
+// этой сцены была именно такой — подушка лежала внутри кровати, — и увидено
+// это было ГЛАЗОМ на снимке, а не проверкой. Проверка появилась следом:
+// @kiosk/shared, inophone/model/geometry, checkGeometry.
 const OBJECTS = [
-  { id: 'bed', box: rect(130, 430, 420, 250), fill: '#b5651d', accent: '#f2e3c8' },
-  { id: 'window', box: rect(700, 140, 300, 220), fill: '#8ecae6', accent: '#ffffff' },
-  { id: 'pillow', box: rect(160, 450, 150, 90), fill: '#f7f3e8', accent: '#d9d2c0' },
-  { id: 'lamp', box: rect(1060, 300, 120, 200), fill: '#ffd166', accent: '#6b705c' },
-  { id: 'chair', box: rect(600, 500, 150, 220), fill: '#8d6e4a', accent: '#6b5136' },
-  { id: 'carpet', box: rect(330, 690, 560, 90), fill: '#9d4edd', accent: '#c77dff' },
-  { id: 'door', box: rect(60, 170, 160, 420), fill: '#7f5539', accent: '#e6b800' },
-  { id: 'wardrobe', box: rect(950, 420, 220, 300), fill: '#a67c52', accent: '#5c4326' },
+  { id: 'bed', box: rect(300, 470, 340, 210), fill: '#b5651d', accent: '#f2e3c8' },
+  { id: 'window', box: rect(690, 150, 300, 220), fill: '#8ecae6', accent: '#ffffff' },
+  { id: 'pillow', box: rect(120, 470, 150, 110), fill: '#f7f3e8', accent: '#d9d2c0' },
+  { id: 'lamp', box: rect(1070, 250, 120, 210), fill: '#ffd166', accent: '#6b705c' },
+  { id: 'chair', box: rect(690, 480, 160, 200), fill: '#8d6e4a', accent: '#6b5136' },
+  { id: 'carpet', box: rect(300, 700, 560, 80), fill: '#9d4edd', accent: '#c77dff' },
+  { id: 'door', box: rect(60, 150, 170, 280), fill: '#7f5539', accent: '#e6b800' },
+  { id: 'wardrobe', box: rect(900, 400, 150, 280), fill: '#a67c52', accent: '#5c4326' },
 ];
 
 /**

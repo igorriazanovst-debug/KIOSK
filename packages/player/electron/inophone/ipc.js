@@ -82,6 +82,11 @@ function registerInophoneIpc({ ipcMain, app, sharedDirOverride, loadLibrary }) {
     completeness = inophone.checkCompleteness(library, listAssetFiles(assetsDir));
   }
 
+  // Разметка сцен проверяется ЗДЕСЬ ЖЕ и по той же причине: наложившиеся
+  // контуры не роняют программу и ничего не сообщают — она молча засчитывает
+  // нарисованный позже объект, и ученик не понимает, почему «неверно»
+  const geometry = library ? inophone.checkGeometry(library) : null;
+
   ipcMain.handle(
     'inophone:get-context',
     guarded(async () => ({
@@ -90,6 +95,7 @@ function registerInophoneIpc({ ipcMain, app, sharedDirOverride, loadLibrary }) {
       hasLibrary: !!library,
       libraryError,
       completeness,
+      geometry,
       quotas: library ? inophone.checkQuotas(library) : null,
     }))
   );
@@ -115,7 +121,7 @@ function registerInophoneIpc({ ipcMain, app, sharedDirOverride, loadLibrary }) {
     guarded(async (_e, profileId) => store.clearStatistics(baseDir, profileId))
   );
 
-  return { baseDir, isFallback, assetsDir, library, libraryError, completeness };
+  return { baseDir, isFallback, assetsDir, library, libraryError, completeness, geometry };
 }
 
 module.exports = { registerInophoneIpc, translateDiskError, guarded, INOPHONE_APP_DIR_NAME };
