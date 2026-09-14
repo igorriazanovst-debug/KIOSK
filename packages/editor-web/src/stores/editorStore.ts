@@ -547,7 +547,8 @@ export const useEditorStore = create<EditorState>((set, get) => ({
       menu: { width: 600, height: 40 },
       chronoline: { width: 1200, height: 700 },
       words: { width: 1280, height: 800 },
-      alphabet: { width: 1280, height: 800 }
+      alphabet: { width: 1280, height: 800 },
+      inophone: { width: 1280, height: 800 }
     };
 
     const defaultSize = defaultSizes[pendingWidget.type] || { width: 200, height: 100 };

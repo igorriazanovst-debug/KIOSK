@@ -71,3 +71,12 @@ export * from './alphabet/widgetProperties';
 // у него четырнадцать имён, общих с виджетом «слов», и плоский реэкспорт
 // молча выбросил бы столкнувшиеся
 export * as alphabet from './alphabet';
+
+// Инофон (Тип 4)
+// widgetProperties — плоско, как у остальных виджетов: девять точек
+// регистрации импортируют из '@kiosk/shared' напрямую
+export * from './inophone/widgetProperties';
+// Домен — пространством имён, см. src/inophone/index.ts: имена Scene, Theme,
+// Translation, answer, MAX_PLAYERS совпадают с чужими, и плоский реэкспорт
+// молча выбросил бы столкнувшиеся
+export * as inophone from './inophone';
