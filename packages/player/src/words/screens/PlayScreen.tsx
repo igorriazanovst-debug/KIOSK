@@ -110,35 +110,6 @@ const PlayScreen: React.FC<Props> = ({
         color: palette.text,
       }}
     >
-      {/* Табло и выход вне поворачиваемого поля: они для педагога, а не для
-          ребёнка, и вертеться вместе с полем им незачем.
-
-          zIndex ОБЯЗАТЕЛЕН. Поле идёт ниже по разметке и имеет transform, из-за
-          чего создаёт свой контекст наложения и рисуется ПОВЕРХ этой шапки.
-          Без явного zIndex кнопка «Озвучить слово» и табло видны, но нажать их
-          нельзя — касание перехватывает поле. В окне 1280×800 кнопка была
-          закрыта целиком, в 1920 — наполовину, поэтому дефект легко принять за
-          случайное «не сработало». Найдено сквозным прогоном 13.09.2026. */}
-      <div style={{ position: 'absolute', top: 16, left: 24, right: 24, zIndex: 5, display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 16 }}>
-        <div data-testid="scoreboard" style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
-          <span style={{ fontSize: 30 }}>
-            Ходит: <b data-testid="current-player">{player?.name ?? 'Гость'}</b>
-          </span>
-          <Stars
-            filled={session.tally[playerId]?.completed ?? 0}
-            total={session.stepsPerPlayer}
-          />
-        </div>
-        <div style={{ display: 'flex', gap: 12 }}>
-          <BigButton onClick={onRepeat} tone="secondary" testId="repeat">
-            🔊 Озвучка вопроса
-          </BigButton>
-          <BigButton onClick={onExit} tone="danger" testId="exit-game">
-            Выйти
-          </BigButton>
-        </div>
-      </div>
-
       <div
         data-testid="board"
         data-rotation={rotation}
@@ -153,6 +124,50 @@ const PlayScreen: React.FC<Props> = ({
           gap: 24,
         }}
       >
+        {/* ТАБЛО И КНОПКИ ПОВОРАЧИВАЮТСЯ ВМЕСТЕ С ПОЛЕМ (решение заказчика от
+            14.09.2026). Раньше полоса висела наложением поверх сцены и не
+            вертелась: для игрока напротив «Ходит: Катя» читалось вверх ногами.
+
+            Полоса лежит ВНУТРИ поля обычным элементом колонки, а не наложением
+            поверх него. Наложение здесь не годится: при 180° оно встало бы на
+            место, а при 90° полоса во всю ширину экрана развернулась бы
+            вертикально и вылезла за нижний и верхний край — окно не квадратное,
+            а поле квадратное именно поэтому.
+
+            ВМЕСТЕ С ПОЛОСОЙ К РЕБЁНКУ УЕХАЛА КНОПКА «ВЫЙТИ». Это следствие
+            принятого решения, а не недосмотр: раньше она стояла со стороны
+            педагога и случайно нажать её ребёнок не мог.
+
+            Прежняя заметка про zIndex снята вместе с наложением: она была нужна,
+            пока полоса и поле были соседями с разными контекстами наложения. */}
+        <div
+          style={{
+            width: '100%',
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            gap: 16,
+          }}
+        >
+          <div data-testid="scoreboard" style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+            <span style={{ fontSize: 30 }}>
+              Ходит: <b data-testid="current-player">{player?.name ?? 'Гость'}</b>
+            </span>
+            <Stars
+              filled={session.tally[playerId]?.completed ?? 0}
+              total={session.stepsPerPlayer}
+            />
+          </div>
+          <div style={{ display: 'flex', gap: 12 }}>
+            <BigButton onClick={onRepeat} tone="secondary" testId="repeat">
+              🔊 Озвучка вопроса
+            </BigButton>
+            <BigButton onClick={onExit} tone="danger" testId="exit-game">
+              Выйти
+            </BigButton>
+          </div>
+        </div>
+
         {/* Рамка с загаданным предметом */}
         <div
           ref={frameRef}
