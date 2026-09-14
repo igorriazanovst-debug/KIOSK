@@ -9,6 +9,7 @@ import MathMachinePropertiesSection from './MathMachinePropertiesSection';
 import PeriodicTablePropertiesSection from './PeriodicTablePropertiesSection';
 import WordsPropertiesSection from './WordsPropertiesSection';
 import AlphabetPropertiesSection from './AlphabetPropertiesSection';
+import InophonePropertiesSection from './InophonePropertiesSection';
 import './PropertiesPanel.css';
 import RichTextEditor from './RichTextEditor';
 
@@ -97,6 +98,12 @@ const PropertiesPanel: React.FC = () => {
 
         {/* Секция виджета «АзбукоСлов» */}
         <AlphabetPropertiesSection
+          widget={selectedWidget}
+          onPropertiesChange={handlePropertiesChange}
+        />
+
+        {/* Секция виджета «Инофон» */}
+        <InophonePropertiesSection
           widget={selectedWidget}
           onPropertiesChange={handlePropertiesChange}
         />

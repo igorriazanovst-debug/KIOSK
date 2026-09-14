@@ -220,3 +220,21 @@ export function translationOf(
   const concept = lib.concepts.find((c) => c.id === conceptId);
   return concept ? (concept.translations[code] ?? null) : null;
 }
+
+/**
+ * Название темы или сцены на языке интерфейса.
+ *
+ * ЕСТЬ ЗАПАСНОЙ ВАРИАНТ, и это не послабление к данным. Названия хранятся на
+ * всех языках, но набор языков растёт: добавив седьмой, мы получаем пакет, где
+ * у сцен ещё нет нового названия, — и приложение обязано показать сцену, а не
+ * пустую строку. Порядок отхода: запрошенный язык → русский → любой, какой
+ * есть. Пустая строка возвращается только если названий нет вовсе, и это
+ * видно глазом, а не прячется за «сцена 3».
+ */
+export function localTitle(
+  titles: Record<string, string>,
+  code: LanguageCode,
+  fallback: LanguageCode = 'ru'
+): string {
+  return titles[code] ?? titles[fallback] ?? Object.values(titles)[0] ?? '';
+}

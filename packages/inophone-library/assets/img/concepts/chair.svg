@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 320" width="320" height="320">
+  <rect width="320" height="320" rx="24" fill="#ffffff"/>
+  <rect x="105.5" y="60" width="109" height="160" rx="10" fill="#8d6e4a" stroke="#6b5136" stroke-width="5"/>
+  <text x="160" y="294" text-anchor="middle" font-family="system-ui, sans-serif" font-size="28" fill="#17222e">стул</text>
+</svg>

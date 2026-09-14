@@ -224,3 +224,27 @@ contextBridge.exposeInMainWorld('alphabetAPI', {
   exportSet: (setId) => ipcRenderer.invoke('alphabet:export-set', setId),
   importSet: () => ipcRenderer.invoke('alphabet:import-set')
 });
+
+// Локальное хранилище виджета «Инофон» (Тип 4) — профили учеников, настройки
+// (язык интерфейса и изучаемые языки) и статистика по сценам и языкам.
+// Отдельный namespace, используется только виджетом inophone.
+//
+// Ручек ЗАМЕТНО МЕНЬШЕ, чем у Типов 2 и 3, и это не недоделка: у «Инофона» по
+// ТЗ нет редактора контента педагога — набор сцен и словарь поставляются с
+// приложением. Нет своего контента — нет ни пароля педагога, ни импорта
+// комплектов, ни выбора картинок с диска.
+contextBridge.exposeInMainWorld('inophoneAPI', {
+  getContext: () => ipcRenderer.invoke('inophone:get-context'),
+  getLibrary: () => ipcRenderer.invoke('inophone:get-library'),
+  listProfiles: () => ipcRenderer.invoke('inophone:list-profiles'),
+  createProfile: (name) => ipcRenderer.invoke('inophone:create-profile', name),
+  deleteProfile: (profileId) => ipcRenderer.invoke('inophone:delete-profile', profileId),
+  getSettings: () => ipcRenderer.invoke('inophone:get-settings'),
+  saveSettings: (settings) => ipcRenderer.invoke('inophone:save-settings', settings),
+  getStatistics: () => ipcRenderer.invoke('inophone:get-statistics'),
+  // Итог партии пишется ПО ЯЗЫКАМ, а не одним числом: смысл пособия в том,
+  // чтобы педагог видел, что по-английски ребёнок уверен, а по-немецки путается
+  recordSession: (profileId, sceneId, byLanguage) =>
+    ipcRenderer.invoke('inophone:record-session', profileId, sceneId, byLanguage),
+  clearStatistics: (profileId) => ipcRenderer.invoke('inophone:clear-statistics', profileId)
+});

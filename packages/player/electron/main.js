@@ -8,6 +8,7 @@ const { registerRusiqIpc } = require('./rusiq/ipc');
 const { registerChimiqIpc } = require('./chimiq/ipc');
 const { registerWordsIpc } = require('./words/ipc');
 const { registerAlphabetIpc } = require('./alphabet/ipc');
+const { registerInophoneIpc } = require('./inophone/ipc');
 const wordsMediaFiles = require('./words/mediaFiles');
 const { buildBrowserWindowOptions, hasStandaloneAppWidget, hasNaturalCommunitiesWidget, NATCOM_WIDGET_TYPE } = require('./chrono/windowMode');
 const { mediaDir: chronoMediaDir } = require('./chrono/mediaStore');
@@ -81,7 +82,13 @@ try {
     // alphabetuser - картинки и записи, добавленные педагогом на устройстве.
     // Отдельная схема от alphabetlib: поставочный контент read-only и лежит в
     // сборке, свой пишется в каталог данных, и смешивать их нельзя
-    { scheme: 'alphabetuser', privileges: { standard: true, secure: true, supportFetchAPI: true, stream: true } }
+    { scheme: 'alphabetuser', privileges: { standard: true, secure: true, supportFetchAPI: true, stream: true } },
+    // inophonelib - поставочная (read-only) библиотека «Инофона» (Тип 4):
+    // подложки сцен, картинки понятий и озвучка на шести языках. Своей схемы
+    // для пользовательского контента здесь НЕТ: у этого виджета педагог
+    // своего контента не заводит, и заводить схему «на будущее» значит
+    // расширять поверхность без нужды
+    { scheme: 'inophonelib', privileges: { standard: true, secure: true, supportFetchAPI: true, stream: true } }
   ]);
 } catch (e) { fileLog('protocol register error', e.message); }
 // ─────────────────────────────────────────────────────────────────────────────
@@ -94,6 +101,7 @@ let chronoBaseDir = null;
 let natcomBaseDir = null;
 let wordsAssetsDir = null;
 let alphabetAssetsDir = null;
+let inophoneAssetsDir = null;
 let alphabetBaseDir = null;
 let wordsBaseDir = null;
 let natcomAssetsDir = null;
@@ -1369,6 +1377,25 @@ app.whenReady().then(() => {
     fileLog('[alphabet] failed to initialize local storage:', err && err.message);
   }
 
+  // Локальное хранилище виджета «Инофон» (Тип 4). Регистрация безусловная:
+  // канал 'inophone:*' используется только этим виджетом и на существующих
+  // клиентов не влияет.
+  try {
+    const { baseDir: inophoneDir, isFallback: inophoneIsFallback, assetsDir: inophoneAssets, libraryError: inophoneLibError, completeness } =
+      registerInophoneIpc({ ipcMain, app });
+    inophoneAssetsDir = inophoneAssets;
+    fileLog('[inophone] storage dir:', inophoneDir, inophoneIsFallback ? '(fallback: no write access to shared dir)' : '');
+    if (inophoneLibError) {
+      fileLog('[inophone] WARNING:', inophoneLibError);
+    } else if (completeness && !completeness.ok) {
+      // Неполный пакет докладывается в лог, но занятие не роняет: жёсткой
+      // проверка обязана быть на сборке пакета, а не у педагога у доски
+      fileLog('[inophone] WARNING: пакет контента неполон, не хватает файлов:', completeness.missingCount);
+    }
+  } catch (err) {
+    fileLog('[inophone] failed to initialize local storage:', err && err.message);
+  }
+
   const { session } = require('electron');
   session.defaultSession.webRequest.onHeadersReceived((details, callback) => {
     callback({
@@ -1376,7 +1403,7 @@ app.whenReady().then(() => {
         ...details.responseHeaders,
         // chronomedia:/natcomlib: добавлены явно (не полагаемся на bypassCSP
         // этих схем - его нет, см. registerSchemesAsPrivileged выше).
-        'Content-Security-Policy': ["default-src 'self' 'unsafe-inline' 'unsafe-eval' data: file: blob: chronomedia: natcomlib: rusiqmedia: chimiqmedia: wordslib: wordsuser: alphabetlib: alphabetuser: http: https: ws: wss:"]
+        'Content-Security-Policy': ["default-src 'self' 'unsafe-inline' 'unsafe-eval' data: file: blob: chronomedia: natcomlib: rusiqmedia: chimiqmedia: wordslib: wordsuser: alphabetlib: alphabetuser: inophonelib: http: https: ws: wss:"]
       }
     });
   });
@@ -1573,6 +1600,33 @@ app.whenReady().then(() => {
       const u = new URL(request.url);
       const fileName = decodeURIComponent(u.pathname.replace(/^\/+/, ''));
       const filePath = chronoResolveWithinRoot(alphabetAssetsDir, fileName);
+
+      if (!fs.existsSync(filePath) || !fs.statSync(filePath).isFile()) {
+        return new Response('Not found', { status: 404 });
+      }
+
+      const stat = fs.statSync(filePath);
+      const mime = guessMime(fileName, filePath);
+      const stream = fs.createReadStream(filePath);
+      return new Response(nodeStreamToWeb(stream), {
+        status: 200,
+        headers: { 'Content-Type': mime, 'Content-Length': String(stat.size) }
+      });
+    } catch {
+      return new Response('Not found', { status: 404 });
+    }
+  });
+
+  // Обработчик протокола inophonelib://<путь внутри assets> -> файл
+  // поставочной библиотеки «Инофона». Путь резолвится тем же guard'ом, что у
+  // chronomedia/natcomlib/wordslib/alphabetlib — выход за корень невозможен.
+  protocol.handle('inophonelib', async (request) => {
+    try {
+      if (!inophoneAssetsDir) return new Response('Library not initialized', { status: 503 });
+
+      const u = new URL(request.url);
+      const fileName = decodeURIComponent(u.pathname.replace(/^\/+/, ''));
+      const filePath = chronoResolveWithinRoot(inophoneAssetsDir, fileName);
 
       if (!fs.existsSync(filePath) || !fs.statSync(filePath).isFile()) {
         return new Response('Not found', { status: 404 });

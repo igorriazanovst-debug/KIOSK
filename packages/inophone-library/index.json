@@ -1,0 +1,312 @@
+{
+  "schemaVersion": 1,
+  "themes": [
+    {
+      "id": "home",
+      "titles": {
+        "ru": "Дом",
+        "en": "Home",
+        "fr": "Maison",
+        "de": "Zuhause",
+        "zh": "家",
+        "ba": "Өй"
+      },
+      "sceneIds": [
+        "bedroom"
+      ]
+    }
+  ],
+  "scenes": [
+    {
+      "id": "bedroom",
+      "titles": {
+        "ru": "Спальня",
+        "en": "Bedroom",
+        "fr": "Chambre",
+        "de": "Schlafzimmer",
+        "zh": "卧室",
+        "ba": "Йоҡо бүлмәһе"
+      },
+      "viewBox": {
+        "width": 1280,
+        "height": 800
+      },
+      "hotspots": [
+        {
+          "conceptId": "bed",
+          "points": "130,430 550,430 550,680 130,680"
+        },
+        {
+          "conceptId": "window",
+          "points": "700,140 1000,140 1000,360 700,360"
+        },
+        {
+          "conceptId": "pillow",
+          "points": "160,450 310,450 310,540 160,540"
+        },
+        {
+          "conceptId": "lamp",
+          "points": "1060,300 1180,300 1180,500 1060,500"
+        },
+        {
+          "conceptId": "chair",
+          "points": "600,500 750,500 750,720 600,720"
+        },
+        {
+          "conceptId": "carpet",
+          "points": "330,690 890,690 890,780 330,780"
+        },
+        {
+          "conceptId": "door",
+          "points": "60,170 220,170 220,590 60,590"
+        },
+        {
+          "conceptId": "wardrobe",
+          "points": "950,420 1170,420 1170,720 950,720"
+        }
+      ]
+    }
+  ],
+  "concepts": [
+    {
+      "id": "bed",
+      "hasPicture": true,
+      "translations": {
+        "ru": {
+          "text": "кровать",
+          "hasAudio": false
+        },
+        "en": {
+          "text": "bed",
+          "hasAudio": false
+        },
+        "fr": {
+          "text": "lit",
+          "hasAudio": false
+        },
+        "de": {
+          "text": "Bett",
+          "hasAudio": false
+        },
+        "zh": {
+          "text": "床",
+          "hasAudio": false
+        },
+        "ba": {
+          "text": "карауат",
+          "hasAudio": false
+        }
+      }
+    },
+    {
+      "id": "window",
+      "hasPicture": true,
+      "translations": {
+        "ru": {
+          "text": "окно",
+          "hasAudio": false
+        },
+        "en": {
+          "text": "window",
+          "hasAudio": false
+        },
+        "fr": {
+          "text": "fenêtre",
+          "hasAudio": false
+        },
+        "de": {
+          "text": "Fenster",
+          "hasAudio": false
+        },
+        "zh": {
+          "text": "窗户",
+          "hasAudio": false
+        },
+        "ba": {
+          "text": "тәҙрә",
+          "hasAudio": false
+        }
+      }
+    },
+    {
+      "id": "pillow",
+      "hasPicture": true,
+      "translations": {
+        "ru": {
+          "text": "подушка",
+          "hasAudio": false
+        },
+        "en": {
+          "text": "pillow",
+          "hasAudio": false
+        },
+        "fr": {
+          "text": "oreiller",
+          "hasAudio": false
+        },
+        "de": {
+          "text": "Kissen",
+          "hasAudio": false
+        },
+        "zh": {
+          "text": "枕头",
+          "hasAudio": false
+        },
+        "ba": {
+          "text": "мендәр",
+          "hasAudio": false
+        }
+      }
+    },
+    {
+      "id": "lamp",
+      "hasPicture": true,
+      "translations": {
+        "ru": {
+          "text": "лампа",
+          "hasAudio": false
+        },
+        "en": {
+          "text": "lamp",
+          "hasAudio": false
+        },
+        "fr": {
+          "text": "lampe",
+          "hasAudio": false
+        },
+        "de": {
+          "text": "Lampe",
+          "hasAudio": false
+        },
+        "zh": {
+          "text": "灯",
+          "hasAudio": false
+        },
+        "ba": {
+          "text": "лампа",
+          "hasAudio": false
+        }
+      }
+    },
+    {
+      "id": "chair",
+      "hasPicture": true,
+      "translations": {
+        "ru": {
+          "text": "стул",
+          "hasAudio": false
+        },
+        "en": {
+          "text": "chair",
+          "hasAudio": false
+        },
+        "fr": {
+          "text": "chaise",
+          "hasAudio": false
+        },
+        "de": {
+          "text": "Stuhl",
+          "hasAudio": false
+        },
+        "zh": {
+          "text": "椅子",
+          "hasAudio": false
+        },
+        "ba": {
+          "text": "ултырғыс",
+          "hasAudio": false
+        }
+      }
+    },
+    {
+      "id": "carpet",
+      "hasPicture": true,
+      "translations": {
+        "ru": {
+          "text": "ковёр",
+          "hasAudio": false
+        },
+        "en": {
+          "text": "carpet",
+          "hasAudio": false
+        },
+        "fr": {
+          "text": "tapis",
+          "hasAudio": false
+        },
+        "de": {
+          "text": "Teppich",
+          "hasAudio": false
+        },
+        "zh": {
+          "text": "地毯",
+          "hasAudio": false
+        },
+        "ba": {
+          "text": "келәм",
+          "hasAudio": false
+        }
+      }
+    },
+    {
+      "id": "door",
+      "hasPicture": true,
+      "translations": {
+        "ru": {
+          "text": "дверь",
+          "hasAudio": false
+        },
+        "en": {
+          "text": "door",
+          "hasAudio": false
+        },
+        "fr": {
+          "text": "porte",
+          "hasAudio": false
+        },
+        "de": {
+          "text": "Tür",
+          "hasAudio": false
+        },
+        "zh": {
+          "text": "门",
+          "hasAudio": false
+        },
+        "ba": {
+          "text": "ишек",
+          "hasAudio": false
+        }
+      }
+    },
+    {
+      "id": "wardrobe",
+      "hasPicture": true,
+      "translations": {
+        "ru": {
+          "text": "шкаф",
+          "hasAudio": false
+        },
+        "en": {
+          "text": "wardrobe",
+          "hasAudio": false
+        },
+        "fr": {
+          "text": "armoire",
+          "hasAudio": false
+        },
+        "de": {
+          "text": "Schrank",
+          "hasAudio": false
+        },
+        "zh": {
+          "text": "衣柜",
+          "hasAudio": false
+        },
+        "ba": {
+          "text": "шкаф",
+          "hasAudio": false
+        }
+      }
+    }
+  ]
+}

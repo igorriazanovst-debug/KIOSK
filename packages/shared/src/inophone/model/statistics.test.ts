@@ -119,3 +119,11 @@ test('доля без ответов — null, а не ноль', () => {
   assert.equal(successShare({ lastSession: [0, 0], total: [0, 0] }, 'total'), null);
   assert.equal(successShare({ lastSession: [1, 2], total: [1, 4] }, 'total'), 0.25);
 });
+
+test('язык без ключа не считается нулём', () => {
+  // Языков шесть, изучаемых в партии от одного до трёх. Ноль означал бы
+  // «отвечал и не ответил ни разу» — неправда: на этом языке не спрашивали
+  const stats = mergeStatistics({}, 'p1', 'city', { en: [2, 3], fr: undefined });
+  assert.deepEqual(Object.keys(stats.p1.byLanguage), ['en']);
+  assert.deepEqual(stats.p1.byScene.city.total, [2, 3]);
+});

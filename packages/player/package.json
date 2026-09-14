@@ -123,6 +123,15 @@
           "!README.md",
           "!tools/**"
         ]
+      },
+      {
+        "from": "../inophone-library",
+        "to": "inophone-library",
+        "filter": [
+          "**/*",
+          "!README.md",
+          "!tools/**"
+        ]
       }
     ],
     "win": {

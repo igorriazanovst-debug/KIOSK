@@ -12,6 +12,7 @@ import {
   parseInophoneLibrary,
   playableConceptIds,
   translationOf,
+  localTitle,
   InophoneContentError,
   INOPHONE_SCHEMA_VERSION,
 } from './schema';
@@ -185,4 +186,16 @@ test('перевод достаётся по коду языка, неизвес
   const lib = parseInophoneLibrary(library());
   assert.equal(translationOf(lib, 'bed', 'de')?.text, 'кровать-de');
   assert.equal(translationOf(lib, 'nope', 'de'), null);
+});
+
+test('название берётся на языке интерфейса', () => {
+  assert.equal(localTitle({ ru: 'Спальня', en: 'Bedroom' }, 'en'), 'Bedroom');
+});
+
+test('нет названия на нужном языке — отходим к русскому, потом к любому', () => {
+  // Набор языков растёт: добавив седьмой, мы получаем пакет, где у сцен ещё
+  // нет нового названия. Приложение обязано показать сцену, а не пустоту
+  assert.equal(localTitle({ ru: 'Спальня' }, 'zh'), 'Спальня');
+  assert.equal(localTitle({ fr: 'Chambre' }, 'zh'), 'Chambre');
+  assert.equal(localTitle({}, 'ru'), '', 'пусто видно глазом, а не прячется за «сцена 3»');
 });

@@ -1,0 +1,9 @@
+{
+  "name": "@kiosk/inophone-library",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Учебный контент виджета «Инофон» (Тип 4)",
+  "scripts": {
+    "check": "node tools/check.mjs"
+  }
+}

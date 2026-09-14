@@ -122,12 +122,16 @@ function merge(prev: SceneStat | undefined, add: Tally): SceneStat {
  * `byLanguage` — сколько верных и всего пришлось на каждый изучаемый язык в
  * этой партии. Сумма по языкам даёт итог сцены, поэтому он не передаётся
  * отдельно: два источника одного числа разъедутся.
+ *
+ * Запись НЕПОЛНАЯ по смыслу: языков шесть, а изучаемых в партии от одного до
+ * трёх, и у остальных здесь нет ни ключа, ни нуля. Ноль означал бы «отвечал и
+ * не ответил ни разу», а это неправда — на этом языке не спрашивали.
  */
 export function mergeStatistics(
   current: InophoneStatistics,
   profileId: string,
   sceneId: string,
-  byLanguage: Readonly<Record<string, Tally>>
+  byLanguage: Readonly<Partial<Record<string, Tally>>>
 ): InophoneStatistics {
   const profile = current[profileId] ?? { byScene: {}, byLanguage: {} };
 
@@ -135,6 +139,7 @@ export function mergeStatistics(
   let all = 0;
   const nextByLanguage: Record<string, SceneStat> = { ...profile.byLanguage };
   for (const [code, tally] of Object.entries(byLanguage)) {
+    if (!tally) continue;
     ok += tally[0];
     all += tally[1];
     nextByLanguage[code] = merge(profile.byLanguage[code], tally);

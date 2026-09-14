@@ -12,6 +12,7 @@ import MathMachineRuntime from './mathmachine/MathMachineRuntime';
 import PeriodicTableRuntime from './periodictable/PeriodicTableRuntime';
 import RusiqRuntime from './rusiq/RusiqRuntime';
 import AlphabetRuntime from './alphabet/AlphabetRuntime';
+import InophoneRuntime from './inophone/InophoneRuntime';
 import WordsRuntime from './words/WordsRuntime.tsx';
 import ChimiqRuntime from './chimiq/ChimiqRuntime.tsx';
 
@@ -638,6 +639,20 @@ const Player: React.FC<PlayerProps> = ({ embedded = false }) => {
             <ChimiqRuntime properties={widget.properties as any} />
           </div>
         );
+      case 'inophone':
+        // «Инофон» (Тип 4) — того же рода полноэкранное приложение.
+        return (
+          <div
+            key={widget.id}
+            style={{ ...commonStyle, left: 0, top: 0, width: viewportSize.width, height: viewportSize.height, overflow: 'hidden' }}
+          >
+            <InophoneRuntime
+              properties={widget.properties as any}
+              width={viewportSize.width}
+              height={viewportSize.height}
+            />
+          </div>
+        );
       default:
         return null;
     }
@@ -1178,7 +1193,7 @@ const Player: React.FC<PlayerProps> = ({ embedded = false }) => {
   // по project.canvas.* и получается больше окна → двойной скролл и обрезка
   // контента (найдено вживую при ручном тестировании «Матемашки»).
   const isStandaloneAppProject = project.widgets.some(
-    (w) => w.type === 'chronoline' || w.type === 'naturalcommunities' || w.type === 'mathmachine' || w.type === 'periodictable' || w.type === 'rusiq' || w.type === 'words' || w.type === 'alphabet' || w.type === 'chimiq'
+    (w) => w.type === 'chronoline' || w.type === 'naturalcommunities' || w.type === 'mathmachine' || w.type === 'periodictable' || w.type === 'rusiq' || w.type === 'words' || w.type === 'alphabet' || w.type === 'chimiq' || w.type === 'inophone'
   );
 
   // Letterbox-масштаб для НЕ-standalone проектов: канвас проектировался под
