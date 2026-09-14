@@ -11,5 +11,6 @@
 export * from './model/languages';
 export * from './model/schema';
 export * from './model/resources';
+export * from './model/statistics';
 export * from './game/session';
 export * from './game/presentation';
