@@ -1,0 +1,131 @@
+// packages/player/src/chimiq/editor/quizStore.ts
+// Тонкая обёртка над window.chimiqAPI для каталога пользовательских
+// викторин. Прямая адаптация rusiq/editor/quizStore.ts (Тип 7).
+// Отличие: saveQuizBackground (один общий фон) заменён на
+// saveQuizLevelImage(quizId, level, ...) — своя картинка на каждый из
+// 3 уровней (план реализации §3). Список (listQuizzes) НЕ валидируется
+// схемой — только метаданные каталога; полная ChimiqQuizSchema
+// применяется к результату loadQuiz/перед saveQuiz.
+
+import { ChimiqQuizSchema, type ChimiqQuiz } from '../model/schema.ts';
+
+export interface QuizListEntry {
+  id: string;
+  title: string;
+  hasPassword: boolean;
+  updatedAt: string;
+}
+
+export type ChimiqItemImageKind = 'question' | 'answer' | 'hint';
+
+interface ChimiqEditorAPI {
+  listQuizzes: () => Promise<QuizListEntry[]>;
+  loadQuiz: (quizId: string) => Promise<unknown>;
+  saveQuiz: (quiz: ChimiqQuiz) => Promise<{ ok: boolean }>;
+  deleteQuiz: (quizId: string) => Promise<{ ok: boolean }>;
+  saveQuizLevelImage: (
+    quizId: string,
+    level: number,
+    buffer: ArrayBuffer,
+    mimeType: string,
+  ) => Promise<{ ok: boolean; fileName?: string }>;
+  saveQuizItemImage: (
+    quizId: string,
+    questionId: string,
+    kind: ChimiqItemImageKind,
+    buffer: ArrayBuffer,
+    mimeType: string,
+  ) => Promise<{ ok: boolean; fileName?: string }>;
+  deleteQuizItemImage: (fileName: string) => Promise<{ ok: boolean }>;
+}
+
+function getEditorAPI(): ChimiqEditorAPI | undefined {
+  if (typeof window === 'undefined') return undefined;
+  return (window as unknown as { chimiqAPI?: ChimiqEditorAPI }).chimiqAPI;
+}
+
+export async function listQuizzes(): Promise<QuizListEntry[]> {
+  const api = getEditorAPI();
+  if (!api) return [];
+  try {
+    return await api.listQuizzes();
+  } catch {
+    return [];
+  }
+}
+
+export async function loadQuiz(quizId: string): Promise<ChimiqQuiz | null> {
+  const api = getEditorAPI();
+  if (!api) return null;
+  try {
+    const raw = await api.loadQuiz(quizId);
+    const parsed = ChimiqQuizSchema.safeParse(raw);
+    return parsed.success ? parsed.data : null;
+  } catch {
+    return null;
+  }
+}
+
+export async function saveQuiz(quiz: ChimiqQuiz): Promise<boolean> {
+  const api = getEditorAPI();
+  if (!api) return false;
+  try {
+    const result = await api.saveQuiz(quiz);
+    return result.ok;
+  } catch {
+    return false;
+  }
+}
+
+export async function deleteQuiz(quizId: string): Promise<boolean> {
+  const api = getEditorAPI();
+  if (!api) return false;
+  try {
+    const result = await api.deleteQuiz(quizId);
+    return result.ok;
+  } catch {
+    return false;
+  }
+}
+
+export async function saveQuizLevelImage(
+  quizId: string,
+  level: number,
+  buffer: ArrayBuffer,
+  mimeType: string,
+): Promise<{ ok: boolean; fileName?: string }> {
+  const api = getEditorAPI();
+  if (!api) return { ok: false };
+  try {
+    return await api.saveQuizLevelImage(quizId, level, buffer, mimeType);
+  } catch {
+    return { ok: false };
+  }
+}
+
+export async function saveQuizItemImage(
+  quizId: string,
+  questionId: string,
+  kind: ChimiqItemImageKind,
+  buffer: ArrayBuffer,
+  mimeType: string,
+): Promise<{ ok: boolean; fileName?: string }> {
+  const api = getEditorAPI();
+  if (!api) return { ok: false };
+  try {
+    return await api.saveQuizItemImage(quizId, questionId, kind, buffer, mimeType);
+  } catch {
+    return { ok: false };
+  }
+}
+
+export async function deleteQuizItemImage(fileName: string): Promise<boolean> {
+  const api = getEditorAPI();
+  if (!api) return false;
+  try {
+    const result = await api.deleteQuizItemImage(fileName);
+    return result.ok;
+  } catch {
+    return false;
+  }
+}

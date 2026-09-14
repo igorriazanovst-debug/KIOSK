@@ -118,6 +118,25 @@ contextBridge.exposeInMainWorld('rusiqAPI', {
   importQuiz: () => ipcRenderer.invoke('rusiq:import-quiz')
 });
 
+// Пользовательские данные (история результатов/настройки) и каталог
+// викторин виджета «ХимIQ» (Тип 9) — отдельный namespace, тот же принцип,
+// что rusiqAPI выше. Экспорт/импорт (Фаза 5) сюда пока не добавлены.
+contextBridge.exposeInMainWorld('chimiqAPI', {
+  loadUserData: () => ipcRenderer.invoke('chimiq:load-user-data'),
+  saveUserData: (data) => ipcRenderer.invoke('chimiq:save-user-data', data),
+  listQuizzes: () => ipcRenderer.invoke('chimiq:list-quizzes'),
+  loadQuiz: (quizId) => ipcRenderer.invoke('chimiq:load-quiz', quizId),
+  saveQuiz: (quiz) => ipcRenderer.invoke('chimiq:save-quiz', quiz),
+  deleteQuiz: (quizId) => ipcRenderer.invoke('chimiq:delete-quiz', quizId),
+  // Отличие от rusiqAPI.saveQuizBackground: своя картинка на каждый из 3
+  // уровней, не один общий фон.
+  saveQuizLevelImage: (quizId, level, arrayBuffer, mimeType) =>
+    ipcRenderer.invoke('chimiq:save-quiz-level-image', quizId, level, arrayBuffer, mimeType),
+  saveQuizItemImage: (quizId, questionId, kind, arrayBuffer, mimeType) =>
+    ipcRenderer.invoke('chimiq:save-quiz-item-image', quizId, questionId, kind, arrayBuffer, mimeType),
+  deleteQuizItemImage: (fileName) => ipcRenderer.invoke('chimiq:delete-quiz-item-image', fileName)
+});
+
 // Локальное хранилище виджета «Я знаю много слов» (Тип 2) — профили детей,
 // настройки занятия и достижения. Отдельный namespace, используется только
 // виджетом words.

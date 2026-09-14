@@ -5,6 +5,7 @@ const { registerChronoIpc } = require('./chrono/ipc');
 const { registerNatComIpc } = require('./natcom/ipc');
 const { registerMathmachineIpc } = require('./mathmachine/ipc');
 const { registerRusiqIpc } = require('./rusiq/ipc');
+const { registerChimiqIpc } = require('./chimiq/ipc');
 const { registerWordsIpc } = require('./words/ipc');
 const { registerAlphabetIpc } = require('./alphabet/ipc');
 const wordsMediaFiles = require('./words/mediaFiles');
@@ -60,6 +61,11 @@ try {
     // «РусIQ» (Фаза 2a), тот же принцип, что chronomedia/natcomlib - без
     // bypassCSP, схема явно добавлена в CSP-заголовок ниже.
     { scheme: 'rusiqmedia', privileges: { standard: true, secure: true, supportFetchAPI: true, stream: true } },
+    // chimiqmedia - изображения-карты уровней и картинки вопросов/ответов/
+    // подсказок пользовательских викторин виджета «ХимIQ» (Фаза 4), тот же
+    // принцип, что rusiqmedia - без bypassCSP, схема явно добавлена в
+    // CSP-заголовок ниже.
+    { scheme: 'chimiqmedia', privileges: { standard: true, secure: true, supportFetchAPI: true, stream: true } },
     // wordslib - поставочная (read-only) библиотека виджета «Я знаю много
     // слов» (packages/words-library/assets/): иллюстрации и озвучка. Тот же
     // принцип, что chronomedia/natcomlib - без bypassCSP, схема явно
@@ -92,6 +98,7 @@ let alphabetBaseDir = null;
 let wordsBaseDir = null;
 let natcomAssetsDir = null;
 let rusiqQuizzesDir = null;
+let chimiqQuizzesDir = null;
 let natcomLibrary = null;
 
 // ═══ OFFLINE-CACHE-MODULE-V1 — Офлайн-кэш медиафайлов ═══════════════════════════
@@ -1229,6 +1236,16 @@ app.whenReady().then(() => {
     fileLog('[rusiq] failed to initialize local storage:', err && err.message);
   }
 
+  // Пользовательские данные (история/настройки) и каталог викторин виджета
+  // «ХимIQ» (Тип 9) — канал 'chimiq:*', тот же принцип, что и у rusiq выше.
+  try {
+    const { baseDir: chimiqBaseDir, isFallback: chimiqIsFallback, quizzesDir: chimiqQuizzesDirResult } = registerChimiqIpc({ ipcMain, app });
+    chimiqQuizzesDir = chimiqQuizzesDirResult;
+    fileLog('[chimiq] storage dir:', chimiqBaseDir, chimiqIsFallback ? '(fallback: no write access to shared dir)' : '');
+  } catch (err) {
+    fileLog('[chimiq] failed to initialize local storage:', err && err.message);
+  }
+
   // FR-013/FR-018 (Фаза 2b) - экспорт/импорт файла викторины между
   // проектами KIOSK. Согласованная реинтерпретация буквального «без
   // установки продукта» (см. Тип7_трассировочная_матрица.md) - файл
@@ -1326,7 +1343,7 @@ app.whenReady().then(() => {
         ...details.responseHeaders,
         // chronomedia:/natcomlib: добавлены явно (не полагаемся на bypassCSP
         // этих схем - его нет, см. registerSchemesAsPrivileged выше).
-        'Content-Security-Policy': ["default-src 'self' 'unsafe-inline' 'unsafe-eval' data: file: blob: chronomedia: natcomlib: rusiqmedia: wordslib: wordsuser: alphabetlib: alphabetuser: http: https: ws: wss:"]
+        'Content-Security-Policy': ["default-src 'self' 'unsafe-inline' 'unsafe-eval' data: file: blob: chronomedia: natcomlib: rusiqmedia: chimiqmedia: wordslib: wordsuser: alphabetlib: alphabetuser: http: https: ws: wss:"]
       }
     });
   });
@@ -1611,6 +1628,36 @@ app.whenReady().then(() => {
       const u = new URL(request.url);
       const fileName = decodeURIComponent(u.pathname.replace(/^\/+/, ''));
       const filePath = chronoResolveWithinRoot(rusiqQuizzesDir, fileName);
+
+      if (!fs.existsSync(filePath) || !fs.statSync(filePath).isFile()) {
+        return new Response('Not found', { status: 404 });
+      }
+
+      const stat = fs.statSync(filePath);
+      const mime = guessMime(fileName, filePath);
+      const stream = fs.createReadStream(filePath);
+      return new Response(nodeStreamToWeb(stream), {
+        status: 200,
+        headers: { 'Content-Type': mime, 'Content-Length': String(stat.size) }
+      });
+    } catch {
+      return new Response('Not found', { status: 404 });
+    }
+  });
+
+  // Обработчик протокола chimiqmedia://level/<fileName> и chimiqmedia://item/
+  // <fileName> → изображение-карта уровня / картинка вопроса-ответа-подсказки
+  // пользовательской викторины «ХимIQ» (Фаза 4), packages/player/electron/
+  // chimiq/ipc.js resolveQuizzesDir. Тот же паттерн, что rusiqmedia выше —
+  // host ("level"/"item") отбрасывается парсером URL, читается только
+  // pathname; непустой host обязателен (см. комментарий у rusiqmedia).
+  protocol.handle('chimiqmedia', async (request) => {
+    try {
+      if (!chimiqQuizzesDir) return new Response('Not initialized', { status: 503 });
+
+      const u = new URL(request.url);
+      const fileName = decodeURIComponent(u.pathname.replace(/^\/+/, ''));
+      const filePath = chronoResolveWithinRoot(chimiqQuizzesDir, fileName);
 
       if (!fs.existsSync(filePath) || !fs.statSync(filePath).isFile()) {
         return new Response('Not found', { status: 404 });

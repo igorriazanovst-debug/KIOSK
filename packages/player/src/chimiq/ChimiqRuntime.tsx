@@ -1,28 +1,31 @@
 // packages/player/src/chimiq/ChimiqRuntime.tsx
 //
-// Фаза 3 (игровой поток плеера, план реализации Тип9_ХимIQ §5): интро →
-// настройка → игровое поле → результаты, полностью рабочий цикл. Пока на
-// ВСТРОЕННОМ демо-контенте (chimiqDemoContent.json — синтетическая сетка
-// 4×3, не финальные изображения-карты) — реальный контент с изображениями
-// по уровням и полным банком из 168 вопросов подключается в Фазе 7, когда
-// изображения будут выбраны и измерены. Редактор (каталог/создание своих
-// викторин/учительский режим) — Фаза 4, ещё не подключён: кнопка "Режим
-// учителя" на интро пока не имеет действия дальше самого экрана-заглушки.
-import React, { useState } from 'react';
+// Фаза 4 (редактор, план реализации Тип9_ХимIQ §5): полная машина
+// состояний — интро → (учитель: PIN → каталог → редактор) / (игрок:
+// настройка → поле → результаты). Прямая адаптация rusiq/RusiqRuntime.tsx
+// (Тип 7). Встроенная викторина — по-прежнему демо-контент Фазы 3
+// (chimiqDemoContent.json, синтетическая сетка), не финальный банк из
+// 168 вопросов — материализация реального контента приходит в Фазе 7,
+// когда будут готовы 3 измеренных изображения-карты.
+import React, { useEffect, useState } from 'react';
 import './chimiqTheme.css';
 import IntroScreen from './screens/IntroScreen.tsx';
 import GameSetupScreen, { type GameSetupResult } from './screens/GameSetupScreen.tsx';
 import GameBoardScreen from './screens/GameBoardScreen.tsx';
 import ResultsScreen from './screens/ResultsScreen.tsx';
-import { ChimiqQuizSchema, type ChimiqQuestion, type ChimiqQuiz } from './model/schema.ts';
-import { assignQuestions, type ChimiqAnswerEvent } from './gameLogic.ts';
+import TeacherGateScreen from './editor/TeacherGateScreen.tsx';
+import QuizCatalogScreen from './editor/QuizCatalogScreen.tsx';
+import EditorScreen from './editor/EditorScreen.tsx';
+import { loadQuiz, saveQuiz, saveQuizLevelImage } from './editor/quizStore.ts';
+import { ChimiqQuizSchema, CHIMIQ_USERDATA_SCHEMA_VERSION, type ChimiqQuestion, type ChimiqQuiz, type ChimiqUserData } from './model/schema.ts';
+import { assignQuestions, summarizeResults, type ChimiqAnswerEvent } from './gameLogic.ts';
+import { loadUserData, saveUserData } from './userDataStorage.ts';
 import demoContentJson from './content/chimiqDemoContent.json' with { type: 'json' };
 
-// Изображение-карта — плоская строка пути в public/, без import (см.
-// урок §4 ретроспективы Тип7: import.meta ломает non-module сборку
-// packages/player в собранном .exe, даже когда исходный синтаксис — обычный
-// import). Путь строится из quiz.images[level].fileName динамически, не
-// хардкодом одного имени — реальный контент Фазы 7 будет менять имя файла.
+// Изображение-карта — плоская строка пути в public/, без import (см. урок
+// §4 ретроспективы Тип7: import.meta ломает non-module сборку
+// packages/player в собранном .exe). Путь строится динамически из
+// quiz.images[level].fileName.
 function levelImageUrl(fileName: string): string {
   return `./chimiq/${fileName}`;
 }
@@ -33,56 +36,130 @@ interface Props {
   properties: { title?: string };
 }
 
-type Phase = 'intro' | 'setup' | 'board' | 'results';
+type Phase = 'loading' | 'intro' | 'setup' | 'board' | 'results' | 'teacherGate' | 'catalog' | 'editor';
+
+const INITIAL_USER_DATA: ChimiqUserData = {
+  schemaVersion: CHIMIQ_USERDATA_SCHEMA_VERSION,
+  sessions: [],
+  soundOn: true,
+  activeQuizId: null,
+  teacherPinHash: null,
+};
 
 export default function ChimiqRuntime({ properties }: Props) {
-  const [phase, setPhase] = useState<Phase>('intro');
+  const [phase, setPhase] = useState<Phase>('loading');
+  const [activeQuiz, setActiveQuiz] = useState<ChimiqQuiz>(BUILTIN_QUIZ);
   const [setup, setSetup] = useState<GameSetupResult | null>(null);
   const [questionsByPlayer, setQuestionsByPlayer] = useState<ChimiqQuestion[][]>([]);
-  const [answers, setAnswers] = useState<ChimiqAnswerEvent[]>([]);
+  const [finalAnswers, setFinalAnswers] = useState<ChimiqAnswerEvent[]>([]);
+  const [userData, setUserData] = useState<ChimiqUserData>(INITIAL_USER_DATA);
+  const [editingQuiz, setEditingQuiz] = useState<{ quiz: ChimiqQuiz; pendingLevel1Image: { buffer: ArrayBuffer; mimeType: string } | null } | null>(null);
 
-  const quiz = BUILTIN_QUIZ;
-
-  function handlePlay() {
-    setPhase('setup');
-  }
-
-  function handleTeacherMode() {
-    // Фаза 4 (редактор/учительский режим) ещё не подключена — оставлено
-    // как явный no-op, не тихая заглушка без обратной связи.
-  }
+  useEffect(() => {
+    loadUserData()
+      .then(async (loaded) => {
+        setUserData(loaded);
+        if (loaded.activeQuizId !== null) {
+          const custom = await loadQuiz(loaded.activeQuizId);
+          setActiveQuiz(custom ?? BUILTIN_QUIZ);
+        } else {
+          setActiveQuiz(BUILTIN_QUIZ);
+        }
+        setPhase('intro');
+      })
+      .catch(() => setPhase('intro'));
+  }, []);
 
   function handleSetupComplete(result: GameSetupResult) {
-    const pool = quiz.questions.filter((q) => q.level === result.level);
+    const pool = activeQuiz.questions.filter((q) => q.level === result.level);
     const assigned = assignQuestions(pool, result.playerNames.length, result.questionsPerPlayer);
     setSetup(result);
     setQuestionsByPlayer(assigned);
     setPhase('board');
   }
 
-  function handleBoardFinished(finalAnswers: ChimiqAnswerEvent[]) {
-    setAnswers(finalAnswers);
+  function handleGameFinished(answers: ChimiqAnswerEvent[]) {
+    setFinalAnswers(answers);
     setPhase('results');
+    if (setup) {
+      const summaries = summarizeResults(setup.playerNames, answers);
+      const updated: ChimiqUserData = {
+        ...userData,
+        sessions: [
+          ...userData.sessions,
+          { id: `session-${Date.now()}`, quizId: activeQuiz.id, playedAtIso: new Date().toISOString(), players: summaries },
+        ],
+      };
+      setUserData(updated);
+      saveUserData(updated);
+    }
   }
 
   function handleRestart() {
+    setPhase('intro');
     setSetup(null);
     setQuestionsByPlayer([]);
-    setAnswers([]);
-    setPhase('intro');
+    setFinalAnswers([]);
   }
 
+  async function handleTeacherUnlocked(newPinHash?: string) {
+    if (newPinHash) {
+      const updated: ChimiqUserData = { ...userData, teacherPinHash: newPinHash };
+      setUserData(updated);
+      saveUserData(updated);
+    }
+    setPhase('catalog');
+  }
+
+  // Дублирует встроенную демо-викторину как отправную точку для
+  // собственной — копирует ВСЕ изображения её уровней (не одно, как у
+  // rusiq: там на всю викторину одна картинка), т.к. до сохранения
+  // duplicated.images всё ещё ссылается на demo_grid.png из public/,
+  // недоступный по chimiqmedia://.
+  async function handleDuplicateBuiltin() {
+    try {
+      const newId = crypto.randomUUID();
+      const patchedImages: typeof BUILTIN_QUIZ.images = {};
+      for (const levelKey of Object.keys(BUILTIN_QUIZ.images)) {
+        const meta = BUILTIN_QUIZ.images[levelKey];
+        const response = await fetch(levelImageUrl(meta.fileName));
+        if (!response.ok) throw new Error('fetch failed for level ' + levelKey);
+        const buffer = await response.arrayBuffer();
+        const saved = await saveQuizLevelImage(newId, Number(levelKey), buffer, 'image/png');
+        if (!saved.ok || !saved.fileName) throw new Error('saveQuizLevelImage failed for level ' + levelKey);
+        patchedImages[levelKey] = { ...meta, fileName: saved.fileName };
+      }
+      const duplicated: ChimiqQuiz = {
+        ...BUILTIN_QUIZ,
+        id: newId,
+        title: `${BUILTIN_QUIZ.title} (копия)`,
+        passwordHash: null,
+        images: patchedImages,
+      };
+      const ok = await saveQuiz(duplicated);
+      if (!ok) throw new Error('saveQuiz failed');
+    } catch {
+      alert('Не удалось продублировать встроенную викторину — попробуйте ещё раз.');
+    }
+  }
+
+  if (phase === 'loading') return <p style={{ textAlign: 'center', marginTop: 60, fontFamily: 'sans-serif' }}>Загрузка…</p>;
+
   if (phase === 'intro') {
-    return <IntroScreen quiz={quiz} onPlay={handlePlay} onTeacherMode={handleTeacherMode} />;
+    return <IntroScreen quiz={activeQuiz} onPlay={() => setPhase('setup')} onTeacherMode={() => setPhase('teacherGate')} />;
+  }
+
+  if (phase === 'teacherGate') {
+    return <TeacherGateScreen teacherPinHash={userData.teacherPinHash} onUnlocked={handleTeacherUnlocked} onCancel={() => setPhase('intro')} />;
   }
 
   if (phase === 'setup') {
-    return <GameSetupScreen quiz={quiz} onComplete={handleSetupComplete} />;
+    return <GameSetupScreen quiz={activeQuiz} onComplete={handleSetupComplete} />;
   }
 
   if (phase === 'board' && setup) {
-    const image = quiz.images[String(setup.level)];
-    const decoyPoints = quiz.genericDecoyPoints.filter((p) => p.level === setup.level);
+    const image = activeQuiz.images[String(setup.level)];
+    const decoyPoints = activeQuiz.genericDecoyPoints.filter((p) => p.level === setup.level);
     return (
       <GameBoardScreen
         imageUrl={levelImageUrl(image.fileName)}
@@ -91,24 +168,58 @@ export default function ChimiqRuntime({ properties }: Props) {
         playerNames={setup.playerNames}
         questionsByPlayer={questionsByPlayer}
         genericDecoyPoints={decoyPoints}
-        onFinished={handleBoardFinished}
+        onFinished={handleGameFinished}
       />
     );
   }
 
   if (phase === 'results' && setup) {
+    return <ResultsScreen playerNames={setup.playerNames} answers={finalAnswers} questionsByPlayer={questionsByPlayer} onRestart={handleRestart} />;
+  }
+
+  if (phase === 'catalog') {
     return (
-      <ResultsScreen
-        playerNames={setup.playerNames}
-        answers={answers}
-        questionsByPlayer={questionsByPlayer}
-        onRestart={handleRestart}
+      <QuizCatalogScreen
+        builtinQuizTitle={BUILTIN_QUIZ.title}
+        activeQuizId={userData.activeQuizId}
+        onSetActiveQuiz={async (quizId) => {
+          const updated: ChimiqUserData = { ...userData, activeQuizId: quizId };
+          setUserData(updated);
+          saveUserData(updated);
+          if (quizId !== null) {
+            const custom = await loadQuiz(quizId);
+            setActiveQuiz(custom ?? BUILTIN_QUIZ);
+          } else {
+            setActiveQuiz(BUILTIN_QUIZ);
+          }
+        }}
+        onEditQuiz={(quiz, pendingLevel1Image) => {
+          setEditingQuiz({ quiz, pendingLevel1Image });
+          setPhase('editor');
+        }}
+        onDuplicateBuiltin={handleDuplicateBuiltin}
+        onExit={() => setPhase('intro')}
       />
     );
   }
 
-  // Недостижимо при корректном порядке фаз — оставлено как явный fallback,
-  // а не пустой рендер, если сюда всё же попадём (например, phase==='board'
-  // без setup из-за гонки состояния).
-  return <IntroScreen quiz={quiz} onPlay={handlePlay} onTeacherMode={handleTeacherMode} />;
+  if (phase === 'editor' && editingQuiz) {
+    return (
+      <EditorScreen
+        initialQuiz={editingQuiz.quiz}
+        pendingLevel1Image={editingQuiz.pendingLevel1Image}
+        onExit={(savedQuiz) => {
+          if (savedQuiz && userData.activeQuizId === savedQuiz.id) {
+            setActiveQuiz(savedQuiz);
+          }
+          setEditingQuiz(null);
+          setPhase('catalog');
+        }}
+      />
+    );
+  }
+
+  // Недостижимо при корректном порядке фаз (phase==='editor' без
+  // editingQuiz) — явный fallback вместо немого рендера.
+  return <IntroScreen quiz={activeQuiz} onPlay={() => setPhase('setup')} onTeacherMode={() => setPhase('teacherGate')} />;
 }
