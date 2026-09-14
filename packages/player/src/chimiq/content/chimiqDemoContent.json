@@ -1,0 +1,62 @@
+{
+  "schemaVersion": 1,
+  "id": "chimiq-demo-phase3",
+  "title": "ХимIQ (демо Фазы 3)",
+  "intro": "Демонстрационная викторина для проверки игрового цикла — не финальный контент. Реальные изображения-карты для каждого уровня появятся в Фазе 7.",
+  "themes": ["Химические элементы"],
+  "passwordHash": null,
+  "images": {
+    "1": { "fileName": "demo_grid.png", "width": 1200, "height": 800 },
+    "2": { "fileName": "demo_grid.png", "width": 1200, "height": 800 },
+    "3": { "fileName": "demo_grid.png", "width": 1200, "height": 800 }
+  },
+  "levels": [
+    { "id": 1, "label": "Начинающий" },
+    { "id": 2, "label": "Опытный" },
+    { "id": 3, "label": "Профессионал" }
+  ],
+  "questions": [
+    { "id": "demo-1", "text": "Каким химическим символом обозначается кислород?", "answer": "O", "helpText": "Этим же газом мы дышим.", "x": 150, "y": 133, "width": 260, "height": 220, "decoyPoints": [], "price": 80, "timeSeconds": 20, "level": 1, "theme": "Химические элементы", "questionImage": null, "answerImage": null, "hintImage": null },
+    { "id": "demo-2", "text": "Каким химическим символом обозначается водород?", "answer": "H", "helpText": "Самый лёгкий элемент.", "x": 450, "y": 133, "width": 260, "height": 220, "decoyPoints": [], "price": 80, "timeSeconds": 20, "level": 1, "theme": "Химические элементы", "questionImage": null, "answerImage": null, "hintImage": null },
+    { "id": "demo-3", "text": "Каким химическим символом обозначается железо?", "answer": "Fe", "helpText": "От латинского Ferrum.", "x": 750, "y": 133, "width": 260, "height": 220, "decoyPoints": [], "price": 80, "timeSeconds": 20, "level": 1, "theme": "Химические элементы", "questionImage": null, "answerImage": null, "hintImage": null },
+    { "id": "demo-4", "text": "Каким химическим символом обозначается углерод?", "answer": "C", "helpText": "", "x": 1050, "y": 133, "width": 260, "height": 220, "decoyPoints": [], "price": 80, "timeSeconds": 20, "level": 1, "theme": "Химические элементы", "questionImage": null, "answerImage": null, "hintImage": null },
+
+    { "id": "demo-5", "text": "Каким химическим символом обозначается натрий?", "answer": "Na", "helpText": "От латинского Natrium.", "x": 150, "y": 399, "width": 260, "height": 220, "decoyPoints": [], "price": 100, "timeSeconds": 25, "level": 2, "theme": "Химические элементы", "questionImage": null, "answerImage": null, "hintImage": null },
+    { "id": "demo-6", "text": "Каким химическим символом обозначается калий?", "answer": "K", "helpText": "От латинского Kalium.", "x": 450, "y": 399, "width": 260, "height": 220, "decoyPoints": [], "price": 100, "timeSeconds": 25, "level": 2, "theme": "Химические элементы", "questionImage": null, "answerImage": null, "hintImage": null },
+    { "id": "demo-7", "text": "Какой металл обозначается символом Cu?", "answer": "Медь", "helpText": "", "x": 750, "y": 399, "width": 260, "height": 220, "decoyPoints": [], "price": 100, "timeSeconds": 25, "level": 2, "theme": "Химические элементы", "questionImage": null, "answerImage": null, "hintImage": null },
+    { "id": "demo-8", "text": "Какой металл обозначается символом Ag?", "answer": "Серебро", "helpText": "", "x": 1050, "y": 399, "width": 260, "height": 220, "decoyPoints": [], "price": 100, "timeSeconds": 25, "level": 2, "theme": "Химические элементы", "questionImage": null, "answerImage": null, "hintImage": null },
+
+    { "id": "demo-9", "text": "Какой элемент обозначается символом Sn?", "answer": "Олово", "helpText": "От латинского Stannum.", "x": 150, "y": 665, "width": 260, "height": 220, "decoyPoints": [], "price": 150, "timeSeconds": 35, "level": 3, "theme": "Химические элементы", "questionImage": null, "answerImage": null, "hintImage": null },
+    { "id": "demo-10", "text": "Какой элемент обозначается символом Pb?", "answer": "Свинец", "helpText": "От латинского Plumbum.", "x": 450, "y": 665, "width": 260, "height": 220, "decoyPoints": [], "price": 150, "timeSeconds": 35, "level": 3, "theme": "Химические элементы", "questionImage": null, "answerImage": null, "hintImage": null },
+    { "id": "demo-11", "text": "Какой элемент обозначается символом Hg и является единственным жидким металлом при комнатной температуре?", "answer": "Ртуть", "helpText": "", "x": 750, "y": 665, "width": 260, "height": 220, "decoyPoints": [], "price": 150, "timeSeconds": 35, "level": 3, "theme": "Химические элементы", "questionImage": null, "answerImage": null, "hintImage": null },
+    { "id": "demo-12", "text": "Какой элемент обозначается символом Au и является благородным металлом?", "answer": "Золото", "helpText": "От латинского Aurum.", "x": 1050, "y": 665, "width": 260, "height": 220, "decoyPoints": [], "price": 150, "timeSeconds": 35, "level": 3, "theme": "Химические элементы", "questionImage": null, "answerImage": null, "hintImage": null }
+  ],
+  "genericDecoyPoints": [
+    { "x": 150, "y": 399, "width": 260, "height": 220, "level": 1 },
+    { "x": 450, "y": 399, "width": 260, "height": 220, "level": 1 },
+    { "x": 750, "y": 399, "width": 260, "height": 220, "level": 1 },
+    { "x": 1050, "y": 399, "width": 260, "height": 220, "level": 1 },
+    { "x": 150, "y": 665, "width": 260, "height": 220, "level": 1 },
+    { "x": 450, "y": 665, "width": 260, "height": 220, "level": 1 },
+    { "x": 750, "y": 665, "width": 260, "height": 220, "level": 1 },
+    { "x": 1050, "y": 665, "width": 260, "height": 220, "level": 1 },
+
+    { "x": 150, "y": 133, "width": 260, "height": 220, "level": 2 },
+    { "x": 450, "y": 133, "width": 260, "height": 220, "level": 2 },
+    { "x": 750, "y": 133, "width": 260, "height": 220, "level": 2 },
+    { "x": 1050, "y": 133, "width": 260, "height": 220, "level": 2 },
+    { "x": 150, "y": 665, "width": 260, "height": 220, "level": 2 },
+    { "x": 450, "y": 665, "width": 260, "height": 220, "level": 2 },
+    { "x": 750, "y": 665, "width": 260, "height": 220, "level": 2 },
+    { "x": 1050, "y": 665, "width": 260, "height": 220, "level": 2 },
+
+    { "x": 150, "y": 133, "width": 260, "height": 220, "level": 3 },
+    { "x": 450, "y": 133, "width": 260, "height": 220, "level": 3 },
+    { "x": 750, "y": 133, "width": 260, "height": 220, "level": 3 },
+    { "x": 1050, "y": 133, "width": 260, "height": 220, "level": 3 },
+    { "x": 150, "y": 399, "width": 260, "height": 220, "level": 3 },
+    { "x": 450, "y": 399, "width": 260, "height": 220, "level": 3 },
+    { "x": 750, "y": 399, "width": 260, "height": 220, "level": 3 },
+    { "x": 1050, "y": 399, "width": 260, "height": 220, "level": 3 }
+  ]
+}

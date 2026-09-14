@@ -1,0 +1,413 @@
+/* packages/player/src/chimiq/chimiqTheme.css
+   Визуальная идентичность «ХимIQ» — лабораторная тема (тёмная сцена,
+   бирюзово-зелёный акцент вместо золотого телевикторинного стиля РусIQ —
+   ассоциация с цветом пламени/свечения реактивов). Структура файла и
+   классы — прямая адаптация rusiqTheme.css (Тип 7), тот же принцип
+   единого источника токенов, что и там; переименован только префикс
+   (riq- -> ciq-) и цветовая схема.
+
+   Используются уже забандленные глобально шрифты (fonts.css) — Oswald для
+   заголовков/очков/кнопок, PT Sans для текста вопросов/форм/таблиц. */
+
+:root {
+  --ciq-bg: #061520;
+  --ciq-surface: #0d2438;
+  --ciq-surface-raised: #163a56;
+  --ciq-border: #1f4d6e;
+  --ciq-border-soft: #163a56;
+  --ciq-accent: #2ee6b8;
+  --ciq-accent-strong: #52ffd4;
+  --ciq-accent-dark: #0e9b78;
+  --ciq-blue: #4db8ff;
+  --ciq-text: #f0fbf8;
+  --ciq-text-muted: #8fb8ac;
+  --ciq-text-on-accent: #062018;
+  --ciq-success: #3ecf7e;
+  --ciq-danger: #ff6b6b;
+  --ciq-modal-bg: #fffaf0;
+  --ciq-modal-text: #16261f;
+  --ciq-modal-border: #bcdfd2;
+  --ciq-font-display: 'Oswald', 'Arial Narrow', sans-serif;
+  --ciq-font-body: 'PT Sans', 'Segoe UI', sans-serif;
+}
+
+.ciq-page {
+  min-height: 100%;
+  background: radial-gradient(ellipse at top, var(--ciq-surface) 0%, var(--ciq-bg) 65%);
+  color: var(--ciq-text);
+  font-family: var(--ciq-font-body);
+  padding: 32px 24px 48px;
+  box-sizing: border-box;
+}
+
+.ciq-page-narrow {
+  max-width: 480px;
+  margin: 0 auto;
+}
+
+.ciq-page-medium {
+  max-width: 760px;
+  margin: 0 auto;
+}
+
+.ciq-heading {
+  font-family: var(--ciq-font-display);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--ciq-accent-strong);
+  margin: 0 0 8px;
+}
+
+.ciq-heading-hero {
+  font-size: clamp(28px, 4vw, 44px);
+  text-align: center;
+}
+
+.ciq-heading-section {
+  font-size: 22px;
+}
+
+.ciq-subtitle {
+  color: var(--ciq-text-muted);
+  text-align: center;
+  margin: 0 0 24px;
+  font-size: 15px;
+  line-height: 1.5;
+}
+
+.ciq-divider {
+  height: 3px;
+  width: 64px;
+  margin: 0 auto 24px;
+  background: linear-gradient(90deg, transparent, var(--ciq-accent), transparent);
+  border-radius: 2px;
+}
+
+/* ---- Кнопки ---- */
+
+.ciq-btn {
+  font-family: var(--ciq-font-display);
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  font-size: 15px;
+  font-weight: 700;
+  border-radius: 6px;
+  padding: 10px 22px;
+  border: 2px solid var(--ciq-accent);
+  background: var(--ciq-accent);
+  color: var(--ciq-text-on-accent);
+  cursor: pointer;
+  transition: transform 120ms ease, box-shadow 120ms ease, background 120ms ease, opacity 120ms ease;
+  box-shadow: 0 2px 0 var(--ciq-accent-dark);
+}
+
+.ciq-btn:hover:not(:disabled) {
+  background: var(--ciq-accent-strong);
+  transform: translateY(-1px);
+  box-shadow: 0 3px 0 var(--ciq-accent-dark);
+}
+
+.ciq-btn:active:not(:disabled) {
+  transform: translateY(1px);
+  box-shadow: 0 1px 0 var(--ciq-accent-dark);
+}
+
+.ciq-btn:focus-visible {
+  outline: 3px solid var(--ciq-blue);
+  outline-offset: 2px;
+}
+
+.ciq-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+.ciq-btn-lg {
+  font-size: 20px;
+  padding: 16px 40px;
+}
+
+.ciq-btn-ghost {
+  background: transparent;
+  color: var(--ciq-accent-strong);
+  box-shadow: none;
+}
+
+.ciq-btn-ghost:hover:not(:disabled) {
+  background: rgba(46, 230, 184, 0.12);
+  transform: none;
+  box-shadow: none;
+}
+
+.ciq-btn-muted {
+  background: var(--ciq-surface-raised);
+  border-color: var(--ciq-border);
+  color: var(--ciq-text);
+  box-shadow: 0 2px 0 rgba(0, 0, 0, 0.35);
+}
+
+.ciq-btn-muted:hover:not(:disabled) {
+  background: #1c4a63;
+  box-shadow: 0 3px 0 rgba(0, 0, 0, 0.35);
+}
+
+.ciq-btn-danger {
+  background: transparent;
+  border-color: var(--ciq-danger);
+  color: var(--ciq-danger);
+  box-shadow: none;
+}
+
+.ciq-btn-danger:hover:not(:disabled) {
+  background: rgba(255, 107, 107, 0.12);
+  transform: none;
+}
+
+.ciq-btn-small {
+  font-size: 12px;
+  padding: 5px 12px;
+}
+
+.ciq-btn-tile {
+  min-width: 64px;
+  font-size: 22px;
+}
+
+/* ---- Карточки / поверхности ---- */
+
+.ciq-card {
+  background: var(--ciq-surface);
+  border: 1px solid var(--ciq-border-soft);
+  border-radius: 10px;
+  padding: 20px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+}
+
+.ciq-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 16px;
+  background: var(--ciq-surface);
+  border: 1px solid var(--ciq-border-soft);
+  border-radius: 8px;
+  margin-bottom: 10px;
+}
+
+.ciq-row-active {
+  border-color: var(--ciq-accent);
+  box-shadow: 0 0 0 1px var(--ciq-accent);
+}
+
+.ciq-row-title {
+  flex: 1;
+  font-family: var(--ciq-font-display);
+  font-size: 16px;
+  letter-spacing: 0.02em;
+}
+
+.ciq-row-title-badge {
+  color: var(--ciq-text-muted);
+  font-size: 13px;
+  font-style: italic;
+  margin-left: 6px;
+}
+
+/* ---- Поля ввода ---- */
+
+.ciq-field {
+  display: block;
+  margin-bottom: 14px;
+  font-size: 13px;
+  color: var(--ciq-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.ciq-input {
+  display: block;
+  width: 100%;
+  box-sizing: border-box;
+  margin-top: 6px;
+  padding: 10px 12px;
+  font-family: var(--ciq-font-body);
+  font-size: 15px;
+  color: var(--ciq-text);
+  background: var(--ciq-surface-raised);
+  border: 1px solid var(--ciq-border);
+  border-radius: 6px;
+  transition: border-color 120ms ease, box-shadow 120ms ease;
+}
+
+.ciq-input:focus {
+  outline: none;
+  border-color: var(--ciq-blue);
+  box-shadow: 0 0 0 3px rgba(77, 184, 255, 0.25);
+}
+
+.ciq-input-pin {
+  text-align: center;
+  font-size: 28px;
+  letter-spacing: 10px;
+  font-family: var(--ciq-font-display);
+}
+
+.ciq-error {
+  color: var(--ciq-danger);
+  font-size: 14px;
+  margin: 6px 0 0;
+}
+
+/* ---- Модалки (светлая поверхность на тёмной подложке) ---- */
+
+.ciq-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(2, 10, 8, 0.72);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 50;
+}
+
+.ciq-modal {
+  background: var(--ciq-modal-bg);
+  color: var(--ciq-modal-text);
+  border: 1px solid var(--ciq-modal-border);
+  border-radius: 10px;
+  padding: 24px;
+  width: 380px;
+  max-width: 92vw;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+  font-family: var(--ciq-font-body);
+}
+
+.ciq-modal h3 {
+  font-family: var(--ciq-font-display);
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  margin: 0 0 16px;
+  color: #0e6b52;
+}
+
+.ciq-modal .ciq-field {
+  color: #4a7a68;
+}
+
+.ciq-modal .ciq-input {
+  background: #fff;
+  color: var(--ciq-modal-text);
+  border-color: #a9d6c4;
+}
+
+.ciq-modal .ciq-input:focus {
+  border-color: var(--ciq-accent-dark);
+  box-shadow: 0 0 0 3px rgba(14, 155, 120, 0.25);
+}
+
+.ciq-modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: 18px;
+}
+
+.ciq-modal .ciq-btn-ghost {
+  color: #0e6b52;
+}
+
+.ciq-modal .ciq-btn-ghost:hover:not(:disabled) {
+  background: rgba(14, 155, 120, 0.1);
+}
+
+/* ---- Игровое поле ---- */
+
+.ciq-scoreboard {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  padding: 14px 20px;
+  background: var(--ciq-surface);
+  border-bottom: 3px solid var(--ciq-accent);
+}
+
+.ciq-scoreboard-item {
+  font-family: var(--ciq-font-display);
+  font-size: 15px;
+  letter-spacing: 0.02em;
+  color: var(--ciq-text);
+}
+
+.ciq-scoreboard-item strong {
+  color: var(--ciq-accent-strong);
+  font-size: 18px;
+}
+
+.ciq-scoreboard-timer {
+  color: var(--ciq-accent-strong);
+}
+
+.ciq-scoreboard-timer-urgent {
+  color: var(--ciq-danger);
+}
+
+.ciq-question-text {
+  text-align: center;
+  font-size: clamp(18px, 2.4vw, 24px);
+  padding: 20px 24px 6px;
+  color: var(--ciq-text);
+  font-weight: 600;
+}
+
+.ciq-hint {
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+.ciq-hint-text {
+  color: var(--ciq-accent-strong);
+  font-style: italic;
+  font-size: 15px;
+  padding: 0 24px;
+}
+
+/* ---- Таблица результатов ---- */
+
+.ciq-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 0 auto 24px;
+  font-family: var(--ciq-font-body);
+}
+
+.ciq-table th {
+  font-family: var(--ciq-font-display);
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  font-size: 13px;
+  color: var(--ciq-text-muted);
+  padding: 8px 12px;
+  border-bottom: 2px solid var(--ciq-accent);
+  text-align: left;
+}
+
+.ciq-table td {
+  padding: 12px;
+  border-bottom: 1px solid var(--ciq-border-soft);
+  font-size: 16px;
+}
+
+.ciq-table tr:last-child td {
+  border-bottom: none;
+}
+
+.ciq-result-correct {
+  color: var(--ciq-success);
+}
+
+.ciq-result-wrong {
+  color: var(--ciq-danger);
+}
