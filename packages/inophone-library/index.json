@@ -33,12 +33,45 @@
       },
       "sceneIds": [
         "street",
-        "shop",
         "school",
         "hospital",
         "park",
         "station",
         "cafe"
+      ]
+    },
+    {
+      "id": "shopping",
+      "titles": {
+        "ru": "Покупки",
+        "en": "Shopping",
+        "fr": "Achats",
+        "de": "Einkaufen",
+        "zh": "购物",
+        "ba": "Һатып алыу"
+      },
+      "sceneIds": [
+        "shop",
+        "market",
+        "department"
+      ]
+    },
+    {
+      "id": "person",
+      "titles": {
+        "ru": "Человек",
+        "en": "People",
+        "fr": "La personne",
+        "de": "Der Mensch",
+        "zh": "人",
+        "ba": "Кеше"
+      },
+      "sceneIds": [
+        "body",
+        "clothes",
+        "food",
+        "tableware",
+        "family"
       ]
     },
     {
@@ -58,24 +91,6 @@
         "mountains",
         "sea",
         "garden"
-      ]
-    },
-    {
-      "id": "person",
-      "titles": {
-        "ru": "Человек",
-        "en": "People",
-        "fr": "La personne",
-        "de": "Der Mensch",
-        "zh": "人",
-        "ba": "Кеше"
-      },
-      "sceneIds": [
-        "body",
-        "clothes",
-        "food",
-        "tableware",
-        "family"
       ]
     },
     {
@@ -635,71 +650,6 @@
       ]
     },
     {
-      "id": "shop",
-      "titles": {
-        "ru": "Магазин",
-        "en": "Shop",
-        "fr": "Magasin",
-        "de": "Geschäft",
-        "zh": "商店",
-        "ba": "Магазин"
-      },
-      "viewBox": {
-        "width": 1280,
-        "height": 800
-      },
-      "hotspots": [
-        {
-          "conceptId": "counter",
-          "points": "66,82 235,82 235,251 66,251"
-        },
-        {
-          "conceptId": "cashdesk",
-          "points": "363,93 501,93 501,231 363,231"
-        },
-        {
-          "conceptId": "trolley",
-          "points": "597,91 735,91 735,229 597,229"
-        },
-        {
-          "conceptId": "money",
-          "points": "808,114 946,114 946,252 808,252"
-        },
-        {
-          "conceptId": "receipt",
-          "points": "1096,139 1196,139 1196,239 1096,239"
-        },
-        {
-          "conceptId": "pricetag",
-          "points": "103,319 218,319 218,434 103,434"
-        },
-        {
-          "conceptId": "scales_shop",
-          "points": "379,293 524,293 524,438 379,438"
-        },
-        {
-          "conceptId": "packet",
-          "points": "746,306 909,306 909,469 746,469"
-        },
-        {
-          "conceptId": "seller",
-          "points": "1069,345 1216,345 1216,492 1069,492"
-        },
-        {
-          "conceptId": "buyer",
-          "points": "177,558 334,558 334,715 177,715"
-        },
-        {
-          "conceptId": "shelves",
-          "points": "474,572 662,572 662,760 474,760"
-        },
-        {
-          "conceptId": "fridge_shop",
-          "points": "1003,542 1199,542 1199,738 1003,738"
-        }
-      ]
-    },
-    {
       "id": "school",
       "titles": {
         "ru": "Школа",
@@ -1021,6 +971,526 @@
         {
           "conceptId": "bill",
           "points": "982,576 1132,576 1132,726 982,726"
+        }
+      ]
+    },
+    {
+      "id": "shop",
+      "titles": {
+        "ru": "Магазин",
+        "en": "Shop",
+        "fr": "Magasin",
+        "de": "Geschäft",
+        "zh": "商店",
+        "ba": "Магазин"
+      },
+      "viewBox": {
+        "width": 1280,
+        "height": 800
+      },
+      "hotspots": [
+        {
+          "conceptId": "counter",
+          "points": "66,82 235,82 235,251 66,251"
+        },
+        {
+          "conceptId": "cashdesk",
+          "points": "363,93 501,93 501,231 363,231"
+        },
+        {
+          "conceptId": "trolley",
+          "points": "597,91 735,91 735,229 597,229"
+        },
+        {
+          "conceptId": "money",
+          "points": "808,114 946,114 946,252 808,252"
+        },
+        {
+          "conceptId": "receipt",
+          "points": "1096,139 1196,139 1196,239 1096,239"
+        },
+        {
+          "conceptId": "pricetag",
+          "points": "103,319 218,319 218,434 103,434"
+        },
+        {
+          "conceptId": "scales_shop",
+          "points": "379,293 524,293 524,438 379,438"
+        },
+        {
+          "conceptId": "packet",
+          "points": "746,306 909,306 909,469 746,469"
+        },
+        {
+          "conceptId": "seller",
+          "points": "1069,345 1216,345 1216,492 1069,492"
+        },
+        {
+          "conceptId": "buyer",
+          "points": "177,558 334,558 334,715 177,715"
+        },
+        {
+          "conceptId": "shelves",
+          "points": "474,572 662,572 662,760 474,760"
+        },
+        {
+          "conceptId": "fridge_shop",
+          "points": "1003,542 1199,542 1199,738 1003,738"
+        }
+      ]
+    },
+    {
+      "id": "market",
+      "titles": {
+        "ru": "Рынок",
+        "en": "Market",
+        "fr": "Marché",
+        "de": "Markt",
+        "zh": "市场",
+        "ba": "Баҙар"
+      },
+      "viewBox": {
+        "width": 1280,
+        "height": 800
+      },
+      "hotspots": [
+        {
+          "conceptId": "watermelon",
+          "points": "83,114 205,114 205,236 83,236"
+        },
+        {
+          "conceptId": "grapes",
+          "points": "346,95 483,95 483,232 346,232"
+        },
+        {
+          "conceptId": "onion",
+          "points": "574,75 707,75 707,208 574,208"
+        },
+        {
+          "conceptId": "cucumber",
+          "points": "845,107 977,107 977,239 845,239"
+        },
+        {
+          "conceptId": "nuts",
+          "points": "1058,103 1198,103 1198,243 1058,243"
+        },
+        {
+          "conceptId": "sack",
+          "points": "66,334 216,334 216,484 66,484"
+        },
+        {
+          "conceptId": "crate",
+          "points": "361,343 501,343 501,483 361,483"
+        },
+        {
+          "conceptId": "awning",
+          "points": "665,318 811,318 811,464 665,464"
+        },
+        {
+          "conceptId": "coin",
+          "points": "1076,384 1183,384 1183,491 1076,491"
+        },
+        {
+          "conceptId": "purse",
+          "points": "109,572 269,572 269,732 109,732"
+        },
+        {
+          "conceptId": "weight",
+          "points": "475,588 624,588 624,737 475,737"
+        },
+        {
+          "conceptId": "apron",
+          "points": "965,582 1115,582 1115,732 965,732"
+        }
+      ]
+    },
+    {
+      "id": "department",
+      "titles": {
+        "ru": "Универмаг",
+        "en": "Department store",
+        "fr": "Grand magasin",
+        "de": "Kaufhaus",
+        "zh": "百货商店",
+        "ba": "Универмаг"
+      },
+      "viewBox": {
+        "width": 1280,
+        "height": 800
+      },
+      "hotspots": [
+        {
+          "conceptId": "escalator",
+          "points": "69,113 194,113 194,238 69,238"
+        },
+        {
+          "conceptId": "lift",
+          "points": "345,96 479,96 479,230 345,230"
+        },
+        {
+          "conceptId": "shopwindow",
+          "points": "567,114 702,114 702,249 567,249"
+        },
+        {
+          "conceptId": "mannequin",
+          "points": "787,101 927,101 927,241 787,241"
+        },
+        {
+          "conceptId": "fittingroom",
+          "points": "1070,114 1207,114 1207,251 1070,251"
+        },
+        {
+          "conceptId": "guard",
+          "points": "156,329 314,329 314,487 156,487"
+        },
+        {
+          "conceptId": "atm",
+          "points": "429,313 575,313 575,459 429,459"
+        },
+        {
+          "conceptId": "bankcard",
+          "points": "682,326 839,326 839,483 682,483"
+        },
+        {
+          "conceptId": "queue",
+          "points": "993,302 1147,302 1147,456 993,456"
+        },
+        {
+          "conceptId": "barcode",
+          "points": "89,589 257,589 257,757 89,757"
+        },
+        {
+          "conceptId": "box",
+          "points": "578,566 746,566 746,734 578,734"
+        },
+        {
+          "conceptId": "locker",
+          "points": "950,593 1105,593 1105,748 950,748"
+        }
+      ]
+    },
+    {
+      "id": "body",
+      "titles": {
+        "ru": "Тело",
+        "en": "Body",
+        "fr": "Le corps",
+        "de": "Körper",
+        "zh": "身体",
+        "ba": "Кәүҙә"
+      },
+      "viewBox": {
+        "width": 1280,
+        "height": 800
+      },
+      "hotspots": [
+        {
+          "conceptId": "head",
+          "points": "109,131 232,131 232,254 109,254"
+        },
+        {
+          "conceptId": "hair",
+          "points": "332,121 455,121 455,244 332,244"
+        },
+        {
+          "conceptId": "eye",
+          "points": "587,121 677,121 677,211 587,211"
+        },
+        {
+          "conceptId": "ear",
+          "points": "868,138 959,138 959,229 868,229"
+        },
+        {
+          "conceptId": "nose",
+          "points": "1083,80 1178,80 1178,175 1083,175"
+        },
+        {
+          "conceptId": "mouth",
+          "points": "90,297 240,297 240,447 90,447"
+        },
+        {
+          "conceptId": "tooth",
+          "points": "377,389 481,389 481,493 377,493"
+        },
+        {
+          "conceptId": "neck",
+          "points": "710,326 862,326 862,478 710,478"
+        },
+        {
+          "conceptId": "hand",
+          "points": "995,295 1146,295 1146,446 995,446"
+        },
+        {
+          "conceptId": "finger",
+          "points": "296,610 405,610 405,719 296,719"
+        },
+        {
+          "conceptId": "leg",
+          "points": "528,575 693,575 693,740 528,740"
+        },
+        {
+          "conceptId": "back",
+          "points": "858,581 1016,581 1016,739 858,739"
+        }
+      ]
+    },
+    {
+      "id": "clothes",
+      "titles": {
+        "ru": "Одежда",
+        "en": "Clothes",
+        "fr": "Vêtements",
+        "de": "Kleidung",
+        "zh": "衣服",
+        "ba": "Кейем"
+      },
+      "viewBox": {
+        "width": 1280,
+        "height": 800
+      },
+      "hotspots": [
+        {
+          "conceptId": "shirt",
+          "points": "129,98 255,98 255,224 129,224"
+        },
+        {
+          "conceptId": "tshirt",
+          "points": "299,117 433,117 433,251 299,251"
+        },
+        {
+          "conceptId": "trousers",
+          "points": "566,107 695,107 695,236 566,236"
+        },
+        {
+          "conceptId": "skirt",
+          "points": "801,117 922,117 922,238 801,238"
+        },
+        {
+          "conceptId": "dress",
+          "points": "1073,117 1205,117 1205,249 1073,249"
+        },
+        {
+          "conceptId": "coat",
+          "points": "87,335 233,335 233,481 87,481"
+        },
+        {
+          "conceptId": "jacket",
+          "points": "372,331 531,331 531,490 372,490"
+        },
+        {
+          "conceptId": "sweater",
+          "points": "749,327 903,327 903,481 749,481"
+        },
+        {
+          "conceptId": "socks",
+          "points": "1072,298 1217,298 1217,443 1072,443"
+        },
+        {
+          "conceptId": "belt",
+          "points": "193,538 344,538 344,689 193,689"
+        },
+        {
+          "conceptId": "button",
+          "points": "664,630 774,630 774,740 664,740"
+        },
+        {
+          "conceptId": "pocket",
+          "points": "947,572 1107,572 1107,732 947,732"
+        }
+      ]
+    },
+    {
+      "id": "food",
+      "titles": {
+        "ru": "Еда",
+        "en": "Food",
+        "fr": "Nourriture",
+        "de": "Essen",
+        "zh": "食物",
+        "ba": "Аҙыҡ"
+      },
+      "viewBox": {
+        "width": 1280,
+        "height": 800
+      },
+      "hotspots": [
+        {
+          "conceptId": "milk",
+          "points": "97,87 226,87 226,216 97,216"
+        },
+        {
+          "conceptId": "cheese",
+          "points": "337,97 459,97 459,219 337,219"
+        },
+        {
+          "conceptId": "butter",
+          "points": "599,125 724,125 724,250 599,250"
+        },
+        {
+          "conceptId": "egg",
+          "points": "842,87 965,87 965,210 842,210"
+        },
+        {
+          "conceptId": "meat",
+          "points": "1021,112 1162,112 1162,253 1021,253"
+        },
+        {
+          "conceptId": "soup",
+          "points": "162,322 304,322 304,464 162,464"
+        },
+        {
+          "conceptId": "porridge",
+          "points": "470,330 613,330 613,473 470,473"
+        },
+        {
+          "conceptId": "potato",
+          "points": "750,294 896,294 896,440 750,440"
+        },
+        {
+          "conceptId": "carrot",
+          "points": "1005,330 1151,330 1151,476 1005,476"
+        },
+        {
+          "conceptId": "cabbage",
+          "points": "143,568 317,568 317,742 143,742"
+        },
+        {
+          "conceptId": "tomato",
+          "points": "476,602 632,602 632,758 476,758"
+        },
+        {
+          "conceptId": "honey",
+          "points": "913,577 1087,577 1087,751 913,751"
+        }
+      ]
+    },
+    {
+      "id": "tableware",
+      "titles": {
+        "ru": "Посуда",
+        "en": "Tableware",
+        "fr": "Vaisselle",
+        "de": "Geschirr",
+        "zh": "餐具",
+        "ba": "Һауыт-һаба"
+      },
+      "viewBox": {
+        "width": 1280,
+        "height": 800
+      },
+      "hotspots": [
+        {
+          "conceptId": "plate",
+          "points": "110,84 233,84 233,207 110,207"
+        },
+        {
+          "conceptId": "cup",
+          "points": "331,107 470,107 470,246 331,246"
+        },
+        {
+          "conceptId": "glass",
+          "points": "591,87 723,87 723,219 591,219"
+        },
+        {
+          "conceptId": "spoon",
+          "points": "825,109 956,109 956,240 825,240"
+        },
+        {
+          "conceptId": "fork",
+          "points": "1090,96 1218,96 1218,224 1090,224"
+        },
+        {
+          "conceptId": "knife",
+          "points": "116,354 260,354 260,498 116,498"
+        },
+        {
+          "conceptId": "teapot",
+          "points": "374,326 527,326 527,479 374,479"
+        },
+        {
+          "conceptId": "jug",
+          "points": "767,334 910,334 910,477 767,477"
+        },
+        {
+          "conceptId": "bowl",
+          "points": "1042,311 1188,311 1188,457 1042,457"
+        },
+        {
+          "conceptId": "tablecloth",
+          "points": "97,573 262,573 262,738 97,738"
+        },
+        {
+          "conceptId": "sugarbowl",
+          "points": "470,598 633,598 633,761 470,761"
+        },
+        {
+          "conceptId": "breadbox",
+          "points": "919,595 1073,595 1073,749 919,749"
+        }
+      ]
+    },
+    {
+      "id": "family",
+      "titles": {
+        "ru": "Семья",
+        "en": "Family",
+        "fr": "Famille",
+        "de": "Familie",
+        "zh": "家庭",
+        "ba": "Ғаилә"
+      },
+      "viewBox": {
+        "width": 1280,
+        "height": 800
+      },
+      "hotspots": [
+        {
+          "conceptId": "mother",
+          "points": "118,120 244,120 244,246 118,246"
+        },
+        {
+          "conceptId": "father",
+          "points": "352,108 490,108 490,246 352,246"
+        },
+        {
+          "conceptId": "son",
+          "points": "594,80 715,80 715,201 594,201"
+        },
+        {
+          "conceptId": "daughter",
+          "points": "830,133 951,133 951,254 830,254"
+        },
+        {
+          "conceptId": "brother",
+          "points": "1045,115 1168,115 1168,238 1045,238"
+        },
+        {
+          "conceptId": "sister",
+          "points": "135,329 287,329 287,481 135,481"
+        },
+        {
+          "conceptId": "grandmother",
+          "points": "367,335 515,335 515,483 367,483"
+        },
+        {
+          "conceptId": "grandfather",
+          "points": "723,314 868,314 868,459 723,459"
+        },
+        {
+          "conceptId": "baby",
+          "points": "992,317 1143,317 1143,468 992,468"
+        },
+        {
+          "conceptId": "friend",
+          "points": "240,544 394,544 394,698 240,698"
+        },
+        {
+          "conceptId": "neighbour",
+          "points": "627,580 784,580 784,737 627,737"
+        },
+        {
+          "conceptId": "guest",
+          "points": "930,592 1086,592 1086,748 930,748"
         }
       ]
     },
@@ -1411,331 +1881,6 @@
         {
           "conceptId": "beehive",
           "points": "888,554 1040,554 1040,706 888,706"
-        }
-      ]
-    },
-    {
-      "id": "body",
-      "titles": {
-        "ru": "Тело",
-        "en": "Body",
-        "fr": "Le corps",
-        "de": "Körper",
-        "zh": "身体",
-        "ba": "Кәүҙә"
-      },
-      "viewBox": {
-        "width": 1280,
-        "height": 800
-      },
-      "hotspots": [
-        {
-          "conceptId": "head",
-          "points": "109,131 232,131 232,254 109,254"
-        },
-        {
-          "conceptId": "hair",
-          "points": "332,121 455,121 455,244 332,244"
-        },
-        {
-          "conceptId": "eye",
-          "points": "587,121 677,121 677,211 587,211"
-        },
-        {
-          "conceptId": "ear",
-          "points": "868,138 959,138 959,229 868,229"
-        },
-        {
-          "conceptId": "nose",
-          "points": "1083,80 1178,80 1178,175 1083,175"
-        },
-        {
-          "conceptId": "mouth",
-          "points": "90,297 240,297 240,447 90,447"
-        },
-        {
-          "conceptId": "tooth",
-          "points": "377,389 481,389 481,493 377,493"
-        },
-        {
-          "conceptId": "neck",
-          "points": "710,326 862,326 862,478 710,478"
-        },
-        {
-          "conceptId": "hand",
-          "points": "995,295 1146,295 1146,446 995,446"
-        },
-        {
-          "conceptId": "finger",
-          "points": "296,610 405,610 405,719 296,719"
-        },
-        {
-          "conceptId": "leg",
-          "points": "528,575 693,575 693,740 528,740"
-        },
-        {
-          "conceptId": "back",
-          "points": "858,581 1016,581 1016,739 858,739"
-        }
-      ]
-    },
-    {
-      "id": "clothes",
-      "titles": {
-        "ru": "Одежда",
-        "en": "Clothes",
-        "fr": "Vêtements",
-        "de": "Kleidung",
-        "zh": "衣服",
-        "ba": "Кейем"
-      },
-      "viewBox": {
-        "width": 1280,
-        "height": 800
-      },
-      "hotspots": [
-        {
-          "conceptId": "shirt",
-          "points": "129,98 255,98 255,224 129,224"
-        },
-        {
-          "conceptId": "tshirt",
-          "points": "299,117 433,117 433,251 299,251"
-        },
-        {
-          "conceptId": "trousers",
-          "points": "566,107 695,107 695,236 566,236"
-        },
-        {
-          "conceptId": "skirt",
-          "points": "801,117 922,117 922,238 801,238"
-        },
-        {
-          "conceptId": "dress",
-          "points": "1073,117 1205,117 1205,249 1073,249"
-        },
-        {
-          "conceptId": "coat",
-          "points": "87,335 233,335 233,481 87,481"
-        },
-        {
-          "conceptId": "jacket",
-          "points": "372,331 531,331 531,490 372,490"
-        },
-        {
-          "conceptId": "sweater",
-          "points": "749,327 903,327 903,481 749,481"
-        },
-        {
-          "conceptId": "socks",
-          "points": "1072,298 1217,298 1217,443 1072,443"
-        },
-        {
-          "conceptId": "belt",
-          "points": "193,538 344,538 344,689 193,689"
-        },
-        {
-          "conceptId": "button",
-          "points": "664,630 774,630 774,740 664,740"
-        },
-        {
-          "conceptId": "pocket",
-          "points": "947,572 1107,572 1107,732 947,732"
-        }
-      ]
-    },
-    {
-      "id": "food",
-      "titles": {
-        "ru": "Еда",
-        "en": "Food",
-        "fr": "Nourriture",
-        "de": "Essen",
-        "zh": "食物",
-        "ba": "Аҙыҡ"
-      },
-      "viewBox": {
-        "width": 1280,
-        "height": 800
-      },
-      "hotspots": [
-        {
-          "conceptId": "milk",
-          "points": "97,87 226,87 226,216 97,216"
-        },
-        {
-          "conceptId": "cheese",
-          "points": "337,97 459,97 459,219 337,219"
-        },
-        {
-          "conceptId": "butter",
-          "points": "599,125 724,125 724,250 599,250"
-        },
-        {
-          "conceptId": "egg",
-          "points": "842,87 965,87 965,210 842,210"
-        },
-        {
-          "conceptId": "meat",
-          "points": "1021,112 1162,112 1162,253 1021,253"
-        },
-        {
-          "conceptId": "soup",
-          "points": "162,322 304,322 304,464 162,464"
-        },
-        {
-          "conceptId": "porridge",
-          "points": "470,330 613,330 613,473 470,473"
-        },
-        {
-          "conceptId": "potato",
-          "points": "750,294 896,294 896,440 750,440"
-        },
-        {
-          "conceptId": "carrot",
-          "points": "1005,330 1151,330 1151,476 1005,476"
-        },
-        {
-          "conceptId": "cabbage",
-          "points": "143,568 317,568 317,742 143,742"
-        },
-        {
-          "conceptId": "tomato",
-          "points": "476,602 632,602 632,758 476,758"
-        },
-        {
-          "conceptId": "honey",
-          "points": "913,577 1087,577 1087,751 913,751"
-        }
-      ]
-    },
-    {
-      "id": "tableware",
-      "titles": {
-        "ru": "Посуда",
-        "en": "Tableware",
-        "fr": "Vaisselle",
-        "de": "Geschirr",
-        "zh": "餐具",
-        "ba": "Һауыт-һаба"
-      },
-      "viewBox": {
-        "width": 1280,
-        "height": 800
-      },
-      "hotspots": [
-        {
-          "conceptId": "plate",
-          "points": "110,84 233,84 233,207 110,207"
-        },
-        {
-          "conceptId": "cup",
-          "points": "331,107 470,107 470,246 331,246"
-        },
-        {
-          "conceptId": "glass",
-          "points": "591,87 723,87 723,219 591,219"
-        },
-        {
-          "conceptId": "spoon",
-          "points": "825,109 956,109 956,240 825,240"
-        },
-        {
-          "conceptId": "fork",
-          "points": "1090,96 1218,96 1218,224 1090,224"
-        },
-        {
-          "conceptId": "knife",
-          "points": "116,354 260,354 260,498 116,498"
-        },
-        {
-          "conceptId": "teapot",
-          "points": "374,326 527,326 527,479 374,479"
-        },
-        {
-          "conceptId": "jug",
-          "points": "767,334 910,334 910,477 767,477"
-        },
-        {
-          "conceptId": "bowl",
-          "points": "1042,311 1188,311 1188,457 1042,457"
-        },
-        {
-          "conceptId": "tablecloth",
-          "points": "97,573 262,573 262,738 97,738"
-        },
-        {
-          "conceptId": "sugarbowl",
-          "points": "470,598 633,598 633,761 470,761"
-        },
-        {
-          "conceptId": "breadbox",
-          "points": "919,595 1073,595 1073,749 919,749"
-        }
-      ]
-    },
-    {
-      "id": "family",
-      "titles": {
-        "ru": "Семья",
-        "en": "Family",
-        "fr": "Famille",
-        "de": "Familie",
-        "zh": "家庭",
-        "ba": "Ғаилә"
-      },
-      "viewBox": {
-        "width": 1280,
-        "height": 800
-      },
-      "hotspots": [
-        {
-          "conceptId": "mother",
-          "points": "118,120 244,120 244,246 118,246"
-        },
-        {
-          "conceptId": "father",
-          "points": "352,108 490,108 490,246 352,246"
-        },
-        {
-          "conceptId": "son",
-          "points": "594,80 715,80 715,201 594,201"
-        },
-        {
-          "conceptId": "daughter",
-          "points": "830,133 951,133 951,254 830,254"
-        },
-        {
-          "conceptId": "brother",
-          "points": "1045,115 1168,115 1168,238 1045,238"
-        },
-        {
-          "conceptId": "sister",
-          "points": "135,329 287,329 287,481 135,481"
-        },
-        {
-          "conceptId": "grandmother",
-          "points": "367,335 515,335 515,483 367,483"
-        },
-        {
-          "conceptId": "grandfather",
-          "points": "723,314 868,314 868,459 723,459"
-        },
-        {
-          "conceptId": "baby",
-          "points": "992,317 1143,317 1143,468 992,468"
-        },
-        {
-          "conceptId": "friend",
-          "points": "240,544 394,544 394,698 240,698"
-        },
-        {
-          "conceptId": "neighbour",
-          "points": "627,580 784,580 784,737 627,737"
-        },
-        {
-          "conceptId": "guest",
-          "points": "930,592 1086,592 1086,748 930,748"
         }
       ]
     },
@@ -5142,366 +5287,6 @@
       }
     },
     {
-      "id": "counter",
-      "hasPicture": true,
-      "translations": {
-        "ru": {
-          "text": "прилавок",
-          "hasAudio": true
-        },
-        "en": {
-          "text": "counter",
-          "hasAudio": true
-        },
-        "fr": {
-          "text": "comptoir",
-          "hasAudio": true
-        },
-        "de": {
-          "text": "Theke",
-          "hasAudio": true
-        },
-        "zh": {
-          "text": "柜台",
-          "hasAudio": true
-        },
-        "ba": {
-          "text": "прилавок",
-          "hasAudio": true
-        }
-      }
-    },
-    {
-      "id": "cashdesk",
-      "hasPicture": true,
-      "translations": {
-        "ru": {
-          "text": "касса",
-          "hasAudio": true
-        },
-        "en": {
-          "text": "checkout",
-          "hasAudio": true
-        },
-        "fr": {
-          "text": "caisse",
-          "hasAudio": true
-        },
-        "de": {
-          "text": "Kasse",
-          "hasAudio": true
-        },
-        "zh": {
-          "text": "收银台",
-          "hasAudio": true
-        },
-        "ba": {
-          "text": "касса",
-          "hasAudio": true
-        }
-      }
-    },
-    {
-      "id": "trolley",
-      "hasPicture": true,
-      "translations": {
-        "ru": {
-          "text": "тележка",
-          "hasAudio": true
-        },
-        "en": {
-          "text": "trolley",
-          "hasAudio": true
-        },
-        "fr": {
-          "text": "chariot",
-          "hasAudio": true
-        },
-        "de": {
-          "text": "Einkaufswagen",
-          "hasAudio": true
-        },
-        "zh": {
-          "text": "购物车",
-          "hasAudio": true
-        },
-        "ba": {
-          "text": "арба",
-          "hasAudio": true
-        }
-      }
-    },
-    {
-      "id": "money",
-      "hasPicture": true,
-      "translations": {
-        "ru": {
-          "text": "деньги",
-          "hasAudio": true
-        },
-        "en": {
-          "text": "money",
-          "hasAudio": true
-        },
-        "fr": {
-          "text": "argent",
-          "hasAudio": true
-        },
-        "de": {
-          "text": "Geld",
-          "hasAudio": true
-        },
-        "zh": {
-          "text": "钱",
-          "hasAudio": true
-        },
-        "ba": {
-          "text": "аҡса",
-          "hasAudio": true
-        }
-      }
-    },
-    {
-      "id": "receipt",
-      "hasPicture": true,
-      "translations": {
-        "ru": {
-          "text": "чек",
-          "hasAudio": true
-        },
-        "en": {
-          "text": "receipt",
-          "hasAudio": true
-        },
-        "fr": {
-          "text": "ticket de caisse",
-          "hasAudio": true
-        },
-        "de": {
-          "text": "Kassenbon",
-          "hasAudio": true
-        },
-        "zh": {
-          "text": "收据",
-          "hasAudio": true
-        },
-        "ba": {
-          "text": "чек",
-          "hasAudio": true
-        }
-      }
-    },
-    {
-      "id": "pricetag",
-      "hasPicture": true,
-      "translations": {
-        "ru": {
-          "text": "ценник",
-          "hasAudio": true
-        },
-        "en": {
-          "text": "price tag",
-          "hasAudio": true
-        },
-        "fr": {
-          "text": "étiquette de prix",
-          "hasAudio": true
-        },
-        "de": {
-          "text": "Preisschild",
-          "hasAudio": true
-        },
-        "zh": {
-          "text": "价签",
-          "hasAudio": true
-        },
-        "ba": {
-          "text": "хаҡ билдәһе",
-          "hasAudio": true
-        }
-      }
-    },
-    {
-      "id": "scales_shop",
-      "hasPicture": true,
-      "translations": {
-        "ru": {
-          "text": "весы в магазине",
-          "hasAudio": true
-        },
-        "en": {
-          "text": "shop scales",
-          "hasAudio": true
-        },
-        "fr": {
-          "text": "balance de magasin",
-          "hasAudio": true
-        },
-        "de": {
-          "text": "Ladenwaage",
-          "hasAudio": true
-        },
-        "zh": {
-          "text": "商店秤",
-          "hasAudio": true
-        },
-        "ba": {
-          "text": "магазин үлсәүе",
-          "hasAudio": true
-        }
-      }
-    },
-    {
-      "id": "packet",
-      "hasPicture": true,
-      "translations": {
-        "ru": {
-          "text": "пакет",
-          "hasAudio": true
-        },
-        "en": {
-          "text": "carrier bag",
-          "hasAudio": true
-        },
-        "fr": {
-          "text": "sac plastique",
-          "hasAudio": true
-        },
-        "de": {
-          "text": "Tüte",
-          "hasAudio": true
-        },
-        "zh": {
-          "text": "购物袋",
-          "hasAudio": true
-        },
-        "ba": {
-          "text": "пакет",
-          "hasAudio": true
-        }
-      }
-    },
-    {
-      "id": "seller",
-      "hasPicture": true,
-      "translations": {
-        "ru": {
-          "text": "продавец",
-          "hasAudio": true
-        },
-        "en": {
-          "text": "shop assistant",
-          "hasAudio": true
-        },
-        "fr": {
-          "text": "vendeur",
-          "hasAudio": true
-        },
-        "de": {
-          "text": "Verkäufer",
-          "hasAudio": true
-        },
-        "zh": {
-          "text": "售货员",
-          "hasAudio": true
-        },
-        "ba": {
-          "text": "һатыусы",
-          "hasAudio": true
-        }
-      }
-    },
-    {
-      "id": "buyer",
-      "hasPicture": true,
-      "translations": {
-        "ru": {
-          "text": "покупатель",
-          "hasAudio": true
-        },
-        "en": {
-          "text": "customer",
-          "hasAudio": true
-        },
-        "fr": {
-          "text": "client",
-          "hasAudio": true
-        },
-        "de": {
-          "text": "Kunde",
-          "hasAudio": true
-        },
-        "zh": {
-          "text": "顾客",
-          "hasAudio": true
-        },
-        "ba": {
-          "text": "һатып алыусы",
-          "hasAudio": true
-        }
-      }
-    },
-    {
-      "id": "shelves",
-      "hasPicture": true,
-      "translations": {
-        "ru": {
-          "text": "стеллаж",
-          "hasAudio": true
-        },
-        "en": {
-          "text": "shelving unit",
-          "hasAudio": true
-        },
-        "fr": {
-          "text": "rayonnage",
-          "hasAudio": true
-        },
-        "de": {
-          "text": "Regalwand",
-          "hasAudio": true
-        },
-        "zh": {
-          "text": "货架",
-          "hasAudio": true
-        },
-        "ba": {
-          "text": "стеллаж",
-          "hasAudio": true
-        }
-      }
-    },
-    {
-      "id": "fridge_shop",
-      "hasPicture": true,
-      "translations": {
-        "ru": {
-          "text": "витрина-холодильник",
-          "hasAudio": true
-        },
-        "en": {
-          "text": "chiller cabinet",
-          "hasAudio": true
-        },
-        "fr": {
-          "text": "vitrine réfrigérée",
-          "hasAudio": true
-        },
-        "de": {
-          "text": "Kühltheke",
-          "hasAudio": true
-        },
-        "zh": {
-          "text": "冷藏柜",
-          "hasAudio": true
-        },
-        "ba": {
-          "text": "һыуытҡыс витрина",
-          "hasAudio": true
-        }
-      }
-    },
-    {
       "id": "blackboard",
       "hasPicture": true,
       "translations": {
@@ -7297,6 +7082,2886 @@
         },
         "ba": {
           "text": "иҫәп",
+          "hasAudio": true
+        }
+      }
+    },
+    {
+      "id": "counter",
+      "hasPicture": true,
+      "translations": {
+        "ru": {
+          "text": "прилавок",
+          "hasAudio": true
+        },
+        "en": {
+          "text": "counter",
+          "hasAudio": true
+        },
+        "fr": {
+          "text": "comptoir",
+          "hasAudio": true
+        },
+        "de": {
+          "text": "Theke",
+          "hasAudio": true
+        },
+        "zh": {
+          "text": "柜台",
+          "hasAudio": true
+        },
+        "ba": {
+          "text": "прилавок",
+          "hasAudio": true
+        }
+      }
+    },
+    {
+      "id": "cashdesk",
+      "hasPicture": true,
+      "translations": {
+        "ru": {
+          "text": "касса",
+          "hasAudio": true
+        },
+        "en": {
+          "text": "checkout",
+          "hasAudio": true
+        },
+        "fr": {
+          "text": "caisse",
+          "hasAudio": true
+        },
+        "de": {
+          "text": "Kasse",
+          "hasAudio": true
+        },
+        "zh": {
+          "text": "收银台",
+          "hasAudio": true
+        },
+        "ba": {
+          "text": "касса",
+          "hasAudio": true
+        }
+      }
+    },
+    {
+      "id": "trolley",
+      "hasPicture": true,
+      "translations": {
+        "ru": {
+          "text": "тележка",
+          "hasAudio": true
+        },
+        "en": {
+          "text": "trolley",
+          "hasAudio": true
+        },
+        "fr": {
+          "text": "chariot",
+          "hasAudio": true
+        },
+        "de": {
+          "text": "Einkaufswagen",
+          "hasAudio": true
+        },
+        "zh": {
+          "text": "购物车",
+          "hasAudio": true
+        },
+        "ba": {
+          "text": "арба",
+          "hasAudio": true
+        }
+      }
+    },
+    {
+      "id": "money",
+      "hasPicture": true,
+      "translations": {
+        "ru": {
+          "text": "деньги",
+          "hasAudio": true
+        },
+        "en": {
+          "text": "money",
+          "hasAudio": true
+        },
+        "fr": {
+          "text": "argent",
+          "hasAudio": true
+        },
+        "de": {
+          "text": "Geld",
+          "hasAudio": true
+        },
+        "zh": {
+          "text": "钱",
+          "hasAudio": true
+        },
+        "ba": {
+          "text": "аҡса",
+          "hasAudio": true
+        }
+      }
+    },
+    {
+      "id": "receipt",
+      "hasPicture": true,
+      "translations": {
+        "ru": {
+          "text": "чек",
+          "hasAudio": true
+        },
+        "en": {
+          "text": "receipt",
+          "hasAudio": true
+        },
+        "fr": {
+          "text": "ticket de caisse",
+          "hasAudio": true
+        },
+        "de": {
+          "text": "Kassenbon",
+          "hasAudio": true
+        },
+        "zh": {
+          "text": "收据",
+          "hasAudio": true
+        },
+        "ba": {
+          "text": "чек",
+          "hasAudio": true
+        }
+      }
+    },
+    {
+      "id": "pricetag",
+      "hasPicture": true,
+      "translations": {
+        "ru": {
+          "text": "ценник",
+          "hasAudio": true
+        },
+        "en": {
+          "text": "price tag",
+          "hasAudio": true
+        },
+        "fr": {
+          "text": "étiquette de prix",
+          "hasAudio": true
+        },
+        "de": {
+          "text": "Preisschild",
+          "hasAudio": true
+        },
+        "zh": {
+          "text": "价签",
+          "hasAudio": true
+        },
+        "ba": {
+          "text": "хаҡ билдәһе",
+          "hasAudio": true
+        }
+      }
+    },
+    {
+      "id": "scales_shop",
+      "hasPicture": true,
+      "translations": {
+        "ru": {
+          "text": "весы в магазине",
+          "hasAudio": true
+        },
+        "en": {
+          "text": "shop scales",
+          "hasAudio": true
+        },
+        "fr": {
+          "text": "balance de magasin",
+          "hasAudio": true
+        },
+        "de": {
+          "text": "Ladenwaage",
+          "hasAudio": true
+        },
+        "zh": {
+          "text": "商店秤",
+          "hasAudio": true
+        },
+        "ba": {
+          "text": "магазин үлсәүе",
+          "hasAudio": true
+        }
+      }
+    },
+    {
+      "id": "packet",
+      "hasPicture": true,
+      "translations": {
+        "ru": {
+          "text": "пакет",
+          "hasAudio": true
+        },
+        "en": {
+          "text": "carrier bag",
+          "hasAudio": true
+        },
+        "fr": {
+          "text": "sac plastique",
+          "hasAudio": true
+        },
+        "de": {
+          "text": "Tüte",
+          "hasAudio": true
+        },
+        "zh": {
+          "text": "购物袋",
+          "hasAudio": true
+        },
+        "ba": {
+          "text": "пакет",
+          "hasAudio": true
+        }
+      }
+    },
+    {
+      "id": "seller",
+      "hasPicture": true,
+      "translations": {
+        "ru": {
+          "text": "продавец",
+          "hasAudio": true
+        },
+        "en": {
+          "text": "shop assistant",
+          "hasAudio": true
+        },
+        "fr": {
+          "text": "vendeur",
+          "hasAudio": true
+        },
+        "de": {
+          "text": "Verkäufer",
+          "hasAudio": true
+        },
+        "zh": {
+          "text": "售货员",
+          "hasAudio": true
+        },
+        "ba": {
+          "text": "һатыусы",
+          "hasAudio": true
+        }
+      }
+    },
+    {
+      "id": "buyer",
+      "hasPicture": true,
+      "translations": {
+        "ru": {
+          "text": "покупатель",
+          "hasAudio": true
+        },
+        "en": {
+          "text": "customer",
+          "hasAudio": true
+        },
+        "fr": {
+          "text": "client",
+          "hasAudio": true
+        },
+        "de": {
+          "text": "Kunde",
+          "hasAudio": true
+        },
+        "zh": {
+          "text": "顾客",
+          "hasAudio": true
+        },
+        "ba": {
+          "text": "һатып алыусы",
+          "hasAudio": true
+        }
+      }
+    },
+    {
+      "id": "shelves",
+      "hasPicture": true,
+      "translations": {
+        "ru": {
+          "text": "стеллаж",
+          "hasAudio": true
+        },
+        "en": {
+          "text": "shelving unit",
+          "hasAudio": true
+        },
+        "fr": {
+          "text": "rayonnage",
+          "hasAudio": true
+        },
+        "de": {
+          "text": "Regalwand",
+          "hasAudio": true
+        },
+        "zh": {
+          "text": "货架",
+          "hasAudio": true
+        },
+        "ba": {
+          "text": "стеллаж",
+          "hasAudio": true
+        }
+      }
+    },
+    {
+      "id": "fridge_shop",
+      "hasPicture": true,
+      "translations": {
+        "ru": {
+          "text": "витрина-холодильник",
+          "hasAudio": true
+        },
+        "en": {
+          "text": "chiller cabinet",
+          "hasAudio": true
+        },
+        "fr": {
+          "text": "vitrine réfrigérée",
+          "hasAudio": true
+        },
+        "de": {
+          "text": "Kühltheke",
+          "hasAudio": true
+        },
+        "zh": {
+          "text": "冷藏柜",
+          "hasAudio": true
+        },
+        "ba": {
+          "text": "һыуытҡыс витрина",
+          "hasAudio": true
+        }
+      }
+    },
+    {
+      "id": "watermelon",
+      "hasPicture": true,
+      "translations": {
+        "ru": {
+          "text": "арбуз",
+          "hasAudio": true
+        },
+        "en": {
+          "text": "watermelon",
+          "hasAudio": true
+        },
+        "fr": {
+          "text": "pastèque",
+          "hasAudio": true
+        },
+        "de": {
+          "text": "Wassermelone",
+          "hasAudio": true
+        },
+        "zh": {
+          "text": "西瓜",
+          "hasAudio": true
+        },
+        "ba": {
+          "text": "ҡарбуҙ",
+          "hasAudio": true
+        }
+      }
+    },
+    {
+      "id": "grapes",
+      "hasPicture": true,
+      "translations": {
+        "ru": {
+          "text": "виноград",
+          "hasAudio": true
+        },
+        "en": {
+          "text": "grapes",
+          "hasAudio": true
+        },
+        "fr": {
+          "text": "raisin",
+          "hasAudio": true
+        },
+        "de": {
+          "text": "Weintrauben",
+          "hasAudio": true
+        },
+        "zh": {
+          "text": "葡萄",
+          "hasAudio": true
+        },
+        "ba": {
+          "text": "йөҙөм",
+          "hasAudio": true
+        }
+      }
+    },
+    {
+      "id": "onion",
+      "hasPicture": true,
+      "translations": {
+        "ru": {
+          "text": "лук",
+          "hasAudio": true
+        },
+        "en": {
+          "text": "onion",
+          "hasAudio": true
+        },
+        "fr": {
+          "text": "oignon",
+          "hasAudio": true
+        },
+        "de": {
+          "text": "Zwiebel",
+          "hasAudio": true
+        },
+        "zh": {
+          "text": "洋葱",
+          "hasAudio": true
+        },
+        "ba": {
+          "text": "һуған",
+          "hasAudio": true
+        }
+      }
+    },
+    {
+      "id": "cucumber",
+      "hasPicture": true,
+      "translations": {
+        "ru": {
+          "text": "огурец",
+          "hasAudio": true
+        },
+        "en": {
+          "text": "cucumber",
+          "hasAudio": true
+        },
+        "fr": {
+          "text": "concombre",
+          "hasAudio": true
+        },
+        "de": {
+          "text": "Gurke",
+          "hasAudio": true
+        },
+        "zh": {
+          "text": "黄瓜",
+          "hasAudio": true
+        },
+        "ba": {
+          "text": "ҡыяр",
+          "hasAudio": true
+        }
+      }
+    },
+    {
+      "id": "nuts",
+      "hasPicture": true,
+      "translations": {
+        "ru": {
+          "text": "орехи",
+          "hasAudio": true
+        },
+        "en": {
+          "text": "nuts",
+          "hasAudio": true
+        },
+        "fr": {
+          "text": "noix",
+          "hasAudio": true
+        },
+        "de": {
+          "text": "Nüsse",
+          "hasAudio": true
+        },
+        "zh": {
+          "text": "坚果",
+          "hasAudio": true
+        },
+        "ba": {
+          "text": "сәтләүек",
+          "hasAudio": true
+        }
+      }
+    },
+    {
+      "id": "sack",
+      "hasPicture": true,
+      "translations": {
+        "ru": {
+          "text": "мешок",
+          "hasAudio": true
+        },
+        "en": {
+          "text": "sack",
+          "hasAudio": true
+        },
+        "fr": {
+          "text": "sac de jute",
+          "hasAudio": true
+        },
+        "de": {
+          "text": "Sack",
+          "hasAudio": true
+        },
+        "zh": {
+          "text": "麻袋",
+          "hasAudio": true
+        },
+        "ba": {
+          "text": "тоҡ",
+          "hasAudio": true
+        }
+      }
+    },
+    {
+      "id": "crate",
+      "hasPicture": true,
+      "translations": {
+        "ru": {
+          "text": "ящик",
+          "hasAudio": true
+        },
+        "en": {
+          "text": "crate",
+          "hasAudio": true
+        },
+        "fr": {
+          "text": "cageot",
+          "hasAudio": true
+        },
+        "de": {
+          "text": "Kiste",
+          "hasAudio": true
+        },
+        "zh": {
+          "text": "板条箱",
+          "hasAudio": true
+        },
+        "ba": {
+          "text": "йәшник",
+          "hasAudio": true
+        }
+      }
+    },
+    {
+      "id": "awning",
+      "hasPicture": true,
+      "translations": {
+        "ru": {
+          "text": "навес",
+          "hasAudio": true
+        },
+        "en": {
+          "text": "awning",
+          "hasAudio": true
+        },
+        "fr": {
+          "text": "auvent",
+          "hasAudio": true
+        },
+        "de": {
+          "text": "Markise",
+          "hasAudio": true
+        },
+        "zh": {
+          "text": "遮阳篷",
+          "hasAudio": true
+        },
+        "ba": {
+          "text": "ҡуйма",
+          "hasAudio": true
+        }
+      }
+    },
+    {
+      "id": "coin",
+      "hasPicture": true,
+      "translations": {
+        "ru": {
+          "text": "монета",
+          "hasAudio": true
+        },
+        "en": {
+          "text": "coin",
+          "hasAudio": true
+        },
+        "fr": {
+          "text": "pièce",
+          "hasAudio": true
+        },
+        "de": {
+          "text": "Münze",
+          "hasAudio": true
+        },
+        "zh": {
+          "text": "硬币",
+          "hasAudio": true
+        },
+        "ba": {
+          "text": "тәңкә",
+          "hasAudio": true
+        }
+      }
+    },
+    {
+      "id": "purse",
+      "hasPicture": true,
+      "translations": {
+        "ru": {
+          "text": "кошелёк",
+          "hasAudio": true
+        },
+        "en": {
+          "text": "purse",
+          "hasAudio": true
+        },
+        "fr": {
+          "text": "porte-monnaie",
+          "hasAudio": true
+        },
+        "de": {
+          "text": "Geldbörse",
+          "hasAudio": true
+        },
+        "zh": {
+          "text": "钱包",
+          "hasAudio": true
+        },
+        "ba": {
+          "text": "кеҫә ҡалтаһы",
+          "hasAudio": true
+        }
+      }
+    },
+    {
+      "id": "weight",
+      "hasPicture": true,
+      "translations": {
+        "ru": {
+          "text": "гиря",
+          "hasAudio": true
+        },
+        "en": {
+          "text": "weight",
+          "hasAudio": true
+        },
+        "fr": {
+          "text": "poids",
+          "hasAudio": true
+        },
+        "de": {
+          "text": "Gewicht",
+          "hasAudio": true
+        },
+        "zh": {
+          "text": "砝码",
+          "hasAudio": true
+        },
+        "ba": {
+          "text": "гер",
+          "hasAudio": true
+        }
+      }
+    },
+    {
+      "id": "apron",
+      "hasPicture": true,
+      "translations": {
+        "ru": {
+          "text": "фартук",
+          "hasAudio": true
+        },
+        "en": {
+          "text": "apron",
+          "hasAudio": true
+        },
+        "fr": {
+          "text": "tablier",
+          "hasAudio": true
+        },
+        "de": {
+          "text": "Schürze",
+          "hasAudio": true
+        },
+        "zh": {
+          "text": "围裙",
+          "hasAudio": true
+        },
+        "ba": {
+          "text": "алъяпҡыс",
+          "hasAudio": true
+        }
+      }
+    },
+    {
+      "id": "escalator",
+      "hasPicture": true,
+      "translations": {
+        "ru": {
+          "text": "эскалатор",
+          "hasAudio": true
+        },
+        "en": {
+          "text": "escalator",
+          "hasAudio": true
+        },
+        "fr": {
+          "text": "escalator",
+          "hasAudio": true
+        },
+        "de": {
+          "text": "Rolltreppe",
+          "hasAudio": true
+        },
+        "zh": {
+          "text": "自动扶梯",
+          "hasAudio": true
+        },
+        "ba": {
+          "text": "эскалатор",
+          "hasAudio": true
+        }
+      }
+    },
+    {
+      "id": "lift",
+      "hasPicture": true,
+      "translations": {
+        "ru": {
+          "text": "лифт",
+          "hasAudio": true
+        },
+        "en": {
+          "text": "lift",
+          "hasAudio": true
+        },
+        "fr": {
+          "text": "ascenseur",
+          "hasAudio": true
+        },
+        "de": {
+          "text": "Aufzug",
+          "hasAudio": true
+        },
+        "zh": {
+          "text": "电梯",
+          "hasAudio": true
+        },
+        "ba": {
+          "text": "лифт",
+          "hasAudio": true
+        }
+      }
+    },
+    {
+      "id": "shopwindow",
+      "hasPicture": true,
+      "translations": {
+        "ru": {
+          "text": "витрина",
+          "hasAudio": true
+        },
+        "en": {
+          "text": "shop window",
+          "hasAudio": true
+        },
+        "fr": {
+          "text": "vitrine",
+          "hasAudio": true
+        },
+        "de": {
+          "text": "Schaufenster",
+          "hasAudio": true
+        },
+        "zh": {
+          "text": "橱窗",
+          "hasAudio": true
+        },
+        "ba": {
+          "text": "витрина",
+          "hasAudio": true
+        }
+      }
+    },
+    {
+      "id": "mannequin",
+      "hasPicture": true,
+      "translations": {
+        "ru": {
+          "text": "манекен",
+          "hasAudio": true
+        },
+        "en": {
+          "text": "mannequin",
+          "hasAudio": true
+        },
+        "fr": {
+          "text": "mannequin",
+          "hasAudio": true
+        },
+        "de": {
+          "text": "Schaufensterpuppe",
+          "hasAudio": true
+        },
+        "zh": {
+          "text": "模特儿",
+          "hasAudio": true
+        },
+        "ba": {
+          "text": "манекен",
+          "hasAudio": true
+        }
+      }
+    },
+    {
+      "id": "fittingroom",
+      "hasPicture": true,
+      "translations": {
+        "ru": {
+          "text": "примерочная",
+          "hasAudio": true
+        },
+        "en": {
+          "text": "fitting room",
+          "hasAudio": true
+        },
+        "fr": {
+          "text": "cabine d’essayage",
+          "hasAudio": true
+        },
+        "de": {
+          "text": "Umkleidekabine",
+          "hasAudio": true
+        },
+        "zh": {
+          "text": "试衣间",
+          "hasAudio": true
+        },
+        "ba": {
+          "text": "кейем үлсәү бүлмәһе",
+          "hasAudio": true
+        }
+      }
+    },
+    {
+      "id": "guard",
+      "hasPicture": true,
+      "translations": {
+        "ru": {
+          "text": "охранник",
+          "hasAudio": true
+        },
+        "en": {
+          "text": "security guard",
+          "hasAudio": true
+        },
+        "fr": {
+          "text": "agent de sécurité",
+          "hasAudio": true
+        },
+        "de": {
+          "text": "Wachmann",
+          "hasAudio": true
+        },
+        "zh": {
+          "text": "保安",
+          "hasAudio": true
+        },
+        "ba": {
+          "text": "һаҡсы",
+          "hasAudio": true
+        }
+      }
+    },
+    {
+      "id": "atm",
+      "hasPicture": true,
+      "translations": {
+        "ru": {
+          "text": "банкомат",
+          "hasAudio": true
+        },
+        "en": {
+          "text": "cash machine",
+          "hasAudio": true
+        },
+        "fr": {
+          "text": "distributeur",
+          "hasAudio": true
+        },
+        "de": {
+          "text": "Geldautomat",
+          "hasAudio": true
+        },
+        "zh": {
+          "text": "取款机",
+          "hasAudio": true
+        },
+        "ba": {
+          "text": "банкомат",
+          "hasAudio": true
+        }
+      }
+    },
+    {
+      "id": "bankcard",
+      "hasPicture": true,
+      "translations": {
+        "ru": {
+          "text": "банковская карта",
+          "hasAudio": true
+        },
+        "en": {
+          "text": "bank card",
+          "hasAudio": true
+        },
+        "fr": {
+          "text": "carte bancaire",
+          "hasAudio": true
+        },
+        "de": {
+          "text": "Bankkarte",
+          "hasAudio": true
+        },
+        "zh": {
+          "text": "银行卡",
+          "hasAudio": true
+        },
+        "ba": {
+          "text": "банк картаһы",
+          "hasAudio": true
+        }
+      }
+    },
+    {
+      "id": "queue",
+      "hasPicture": true,
+      "translations": {
+        "ru": {
+          "text": "очередь",
+          "hasAudio": true
+        },
+        "en": {
+          "text": "queue",
+          "hasAudio": true
+        },
+        "fr": {
+          "text": "file d’attente",
+          "hasAudio": true
+        },
+        "de": {
+          "text": "Warteschlange",
+          "hasAudio": true
+        },
+        "zh": {
+          "text": "排队",
+          "hasAudio": true
+        },
+        "ba": {
+          "text": "сират",
+          "hasAudio": true
+        }
+      }
+    },
+    {
+      "id": "barcode",
+      "hasPicture": true,
+      "translations": {
+        "ru": {
+          "text": "штрихкод",
+          "hasAudio": true
+        },
+        "en": {
+          "text": "barcode",
+          "hasAudio": true
+        },
+        "fr": {
+          "text": "code-barres",
+          "hasAudio": true
+        },
+        "de": {
+          "text": "Strichcode",
+          "hasAudio": true
+        },
+        "zh": {
+          "text": "条形码",
+          "hasAudio": true
+        },
+        "ba": {
+          "text": "штрихкод",
+          "hasAudio": true
+        }
+      }
+    },
+    {
+      "id": "box",
+      "hasPicture": true,
+      "translations": {
+        "ru": {
+          "text": "коробка",
+          "hasAudio": true
+        },
+        "en": {
+          "text": "box",
+          "hasAudio": true
+        },
+        "fr": {
+          "text": "boîte",
+          "hasAudio": true
+        },
+        "de": {
+          "text": "Schachtel",
+          "hasAudio": true
+        },
+        "zh": {
+          "text": "盒子",
+          "hasAudio": true
+        },
+        "ba": {
+          "text": "ҡумта",
+          "hasAudio": true
+        }
+      }
+    },
+    {
+      "id": "locker",
+      "hasPicture": true,
+      "translations": {
+        "ru": {
+          "text": "камера хранения",
+          "hasAudio": true
+        },
+        "en": {
+          "text": "locker",
+          "hasAudio": true
+        },
+        "fr": {
+          "text": "consigne",
+          "hasAudio": true
+        },
+        "de": {
+          "text": "Schließfach",
+          "hasAudio": true
+        },
+        "zh": {
+          "text": "寄存柜",
+          "hasAudio": true
+        },
+        "ba": {
+          "text": "һаҡлау камераһы",
+          "hasAudio": true
+        }
+      }
+    },
+    {
+      "id": "head",
+      "hasPicture": true,
+      "translations": {
+        "ru": {
+          "text": "голова",
+          "hasAudio": true
+        },
+        "en": {
+          "text": "head",
+          "hasAudio": true
+        },
+        "fr": {
+          "text": "tête",
+          "hasAudio": true
+        },
+        "de": {
+          "text": "Kopf",
+          "hasAudio": true
+        },
+        "zh": {
+          "text": "头",
+          "hasAudio": true
+        },
+        "ba": {
+          "text": "баш",
+          "hasAudio": true
+        }
+      }
+    },
+    {
+      "id": "hair",
+      "hasPicture": true,
+      "translations": {
+        "ru": {
+          "text": "волосы",
+          "hasAudio": true
+        },
+        "en": {
+          "text": "hair",
+          "hasAudio": true
+        },
+        "fr": {
+          "text": "cheveux",
+          "hasAudio": true
+        },
+        "de": {
+          "text": "Haare",
+          "hasAudio": true
+        },
+        "zh": {
+          "text": "头发",
+          "hasAudio": true
+        },
+        "ba": {
+          "text": "сәс",
+          "hasAudio": true
+        }
+      }
+    },
+    {
+      "id": "eye",
+      "hasPicture": true,
+      "translations": {
+        "ru": {
+          "text": "глаз",
+          "hasAudio": true
+        },
+        "en": {
+          "text": "eye",
+          "hasAudio": true
+        },
+        "fr": {
+          "text": "œil",
+          "hasAudio": true
+        },
+        "de": {
+          "text": "Auge",
+          "hasAudio": true
+        },
+        "zh": {
+          "text": "眼睛",
+          "hasAudio": true
+        },
+        "ba": {
+          "text": "күҙ",
+          "hasAudio": true
+        }
+      }
+    },
+    {
+      "id": "ear",
+      "hasPicture": true,
+      "translations": {
+        "ru": {
+          "text": "ухо",
+          "hasAudio": true
+        },
+        "en": {
+          "text": "ear",
+          "hasAudio": true
+        },
+        "fr": {
+          "text": "oreille",
+          "hasAudio": true
+        },
+        "de": {
+          "text": "Ohr",
+          "hasAudio": true
+        },
+        "zh": {
+          "text": "耳朵",
+          "hasAudio": true
+        },
+        "ba": {
+          "text": "ҡолаҡ",
+          "hasAudio": true
+        }
+      }
+    },
+    {
+      "id": "nose",
+      "hasPicture": true,
+      "translations": {
+        "ru": {
+          "text": "нос",
+          "hasAudio": true
+        },
+        "en": {
+          "text": "nose",
+          "hasAudio": true
+        },
+        "fr": {
+          "text": "nez",
+          "hasAudio": true
+        },
+        "de": {
+          "text": "Nase",
+          "hasAudio": true
+        },
+        "zh": {
+          "text": "鼻子",
+          "hasAudio": true
+        },
+        "ba": {
+          "text": "танау",
+          "hasAudio": true
+        }
+      }
+    },
+    {
+      "id": "mouth",
+      "hasPicture": true,
+      "translations": {
+        "ru": {
+          "text": "рот",
+          "hasAudio": true
+        },
+        "en": {
+          "text": "mouth",
+          "hasAudio": true
+        },
+        "fr": {
+          "text": "bouche",
+          "hasAudio": true
+        },
+        "de": {
+          "text": "Mund",
+          "hasAudio": true
+        },
+        "zh": {
+          "text": "嘴",
+          "hasAudio": true
+        },
+        "ba": {
+          "text": "ауыҙ",
+          "hasAudio": true
+        }
+      }
+    },
+    {
+      "id": "tooth",
+      "hasPicture": true,
+      "translations": {
+        "ru": {
+          "text": "зуб",
+          "hasAudio": true
+        },
+        "en": {
+          "text": "tooth",
+          "hasAudio": true
+        },
+        "fr": {
+          "text": "dent",
+          "hasAudio": true
+        },
+        "de": {
+          "text": "Zahn",
+          "hasAudio": true
+        },
+        "zh": {
+          "text": "牙齿",
+          "hasAudio": true
+        },
+        "ba": {
+          "text": "теш",
+          "hasAudio": true
+        }
+      }
+    },
+    {
+      "id": "neck",
+      "hasPicture": true,
+      "translations": {
+        "ru": {
+          "text": "шея",
+          "hasAudio": true
+        },
+        "en": {
+          "text": "neck",
+          "hasAudio": true
+        },
+        "fr": {
+          "text": "cou",
+          "hasAudio": true
+        },
+        "de": {
+          "text": "Hals",
+          "hasAudio": true
+        },
+        "zh": {
+          "text": "脖子",
+          "hasAudio": true
+        },
+        "ba": {
+          "text": "муйын",
+          "hasAudio": true
+        }
+      }
+    },
+    {
+      "id": "hand",
+      "hasPicture": true,
+      "translations": {
+        "ru": {
+          "text": "рука",
+          "hasAudio": true
+        },
+        "en": {
+          "text": "hand",
+          "hasAudio": true
+        },
+        "fr": {
+          "text": "main",
+          "hasAudio": true
+        },
+        "de": {
+          "text": "Hand",
+          "hasAudio": true
+        },
+        "zh": {
+          "text": "手",
+          "hasAudio": true
+        },
+        "ba": {
+          "text": "ҡул",
+          "hasAudio": true
+        }
+      }
+    },
+    {
+      "id": "finger",
+      "hasPicture": true,
+      "translations": {
+        "ru": {
+          "text": "палец",
+          "hasAudio": true
+        },
+        "en": {
+          "text": "finger",
+          "hasAudio": true
+        },
+        "fr": {
+          "text": "doigt",
+          "hasAudio": true
+        },
+        "de": {
+          "text": "Finger",
+          "hasAudio": true
+        },
+        "zh": {
+          "text": "手指",
+          "hasAudio": true
+        },
+        "ba": {
+          "text": "бармаҡ",
+          "hasAudio": true
+        }
+      }
+    },
+    {
+      "id": "leg",
+      "hasPicture": true,
+      "translations": {
+        "ru": {
+          "text": "нога",
+          "hasAudio": true
+        },
+        "en": {
+          "text": "leg",
+          "hasAudio": true
+        },
+        "fr": {
+          "text": "jambe",
+          "hasAudio": true
+        },
+        "de": {
+          "text": "Bein",
+          "hasAudio": true
+        },
+        "zh": {
+          "text": "腿",
+          "hasAudio": true
+        },
+        "ba": {
+          "text": "аяҡ",
+          "hasAudio": true
+        }
+      }
+    },
+    {
+      "id": "back",
+      "hasPicture": true,
+      "translations": {
+        "ru": {
+          "text": "спина",
+          "hasAudio": true
+        },
+        "en": {
+          "text": "back",
+          "hasAudio": true
+        },
+        "fr": {
+          "text": "dos",
+          "hasAudio": true
+        },
+        "de": {
+          "text": "Rücken",
+          "hasAudio": true
+        },
+        "zh": {
+          "text": "背",
+          "hasAudio": true
+        },
+        "ba": {
+          "text": "арҡа",
+          "hasAudio": true
+        }
+      }
+    },
+    {
+      "id": "shirt",
+      "hasPicture": true,
+      "translations": {
+        "ru": {
+          "text": "рубашка",
+          "hasAudio": true
+        },
+        "en": {
+          "text": "shirt",
+          "hasAudio": true
+        },
+        "fr": {
+          "text": "chemise",
+          "hasAudio": true
+        },
+        "de": {
+          "text": "Hemd",
+          "hasAudio": true
+        },
+        "zh": {
+          "text": "衬衫",
+          "hasAudio": true
+        },
+        "ba": {
+          "text": "күлдәк",
+          "hasAudio": true
+        }
+      }
+    },
+    {
+      "id": "tshirt",
+      "hasPicture": true,
+      "translations": {
+        "ru": {
+          "text": "футболка",
+          "hasAudio": true
+        },
+        "en": {
+          "text": "T-shirt",
+          "hasAudio": true
+        },
+        "fr": {
+          "text": "tee-shirt",
+          "hasAudio": true
+        },
+        "de": {
+          "text": "T-Shirt",
+          "hasAudio": true
+        },
+        "zh": {
+          "text": "T恤",
+          "hasAudio": true
+        },
+        "ba": {
+          "text": "футболка",
+          "hasAudio": true
+        }
+      }
+    },
+    {
+      "id": "trousers",
+      "hasPicture": true,
+      "translations": {
+        "ru": {
+          "text": "брюки",
+          "hasAudio": true
+        },
+        "en": {
+          "text": "trousers",
+          "hasAudio": true
+        },
+        "fr": {
+          "text": "pantalon",
+          "hasAudio": true
+        },
+        "de": {
+          "text": "Hose",
+          "hasAudio": true
+        },
+        "zh": {
+          "text": "裤子",
+          "hasAudio": true
+        },
+        "ba": {
+          "text": "салбар",
+          "hasAudio": true
+        }
+      }
+    },
+    {
+      "id": "skirt",
+      "hasPicture": true,
+      "translations": {
+        "ru": {
+          "text": "юбка",
+          "hasAudio": true
+        },
+        "en": {
+          "text": "skirt",
+          "hasAudio": true
+        },
+        "fr": {
+          "text": "jupe",
+          "hasAudio": true
+        },
+        "de": {
+          "text": "Rock",
+          "hasAudio": true
+        },
+        "zh": {
+          "text": "裙子",
+          "hasAudio": true
+        },
+        "ba": {
+          "text": "итәк",
+          "hasAudio": true
+        }
+      }
+    },
+    {
+      "id": "dress",
+      "hasPicture": true,
+      "translations": {
+        "ru": {
+          "text": "платье",
+          "hasAudio": true
+        },
+        "en": {
+          "text": "dress",
+          "hasAudio": true
+        },
+        "fr": {
+          "text": "robe",
+          "hasAudio": true
+        },
+        "de": {
+          "text": "Kleid",
+          "hasAudio": true
+        },
+        "zh": {
+          "text": "连衣裙",
+          "hasAudio": true
+        },
+        "ba": {
+          "text": "күлдәк озон",
+          "hasAudio": true
+        }
+      }
+    },
+    {
+      "id": "coat",
+      "hasPicture": true,
+      "translations": {
+        "ru": {
+          "text": "пальто",
+          "hasAudio": true
+        },
+        "en": {
+          "text": "coat",
+          "hasAudio": true
+        },
+        "fr": {
+          "text": "manteau",
+          "hasAudio": true
+        },
+        "de": {
+          "text": "Mantel",
+          "hasAudio": true
+        },
+        "zh": {
+          "text": "大衣",
+          "hasAudio": true
+        },
+        "ba": {
+          "text": "пальто",
+          "hasAudio": true
+        }
+      }
+    },
+    {
+      "id": "jacket",
+      "hasPicture": true,
+      "translations": {
+        "ru": {
+          "text": "куртка",
+          "hasAudio": true
+        },
+        "en": {
+          "text": "jacket",
+          "hasAudio": true
+        },
+        "fr": {
+          "text": "blouson",
+          "hasAudio": true
+        },
+        "de": {
+          "text": "Jacke",
+          "hasAudio": true
+        },
+        "zh": {
+          "text": "夹克",
+          "hasAudio": true
+        },
+        "ba": {
+          "text": "куртка",
+          "hasAudio": true
+        }
+      }
+    },
+    {
+      "id": "sweater",
+      "hasPicture": true,
+      "translations": {
+        "ru": {
+          "text": "свитер",
+          "hasAudio": true
+        },
+        "en": {
+          "text": "sweater",
+          "hasAudio": true
+        },
+        "fr": {
+          "text": "pull",
+          "hasAudio": true
+        },
+        "de": {
+          "text": "Pullover",
+          "hasAudio": true
+        },
+        "zh": {
+          "text": "毛衣",
+          "hasAudio": true
+        },
+        "ba": {
+          "text": "свитер",
+          "hasAudio": true
+        }
+      }
+    },
+    {
+      "id": "socks",
+      "hasPicture": true,
+      "translations": {
+        "ru": {
+          "text": "носки",
+          "hasAudio": true
+        },
+        "en": {
+          "text": "socks",
+          "hasAudio": true
+        },
+        "fr": {
+          "text": "chaussettes",
+          "hasAudio": true
+        },
+        "de": {
+          "text": "Socken",
+          "hasAudio": true
+        },
+        "zh": {
+          "text": "袜子",
+          "hasAudio": true
+        },
+        "ba": {
+          "text": "ойоҡбаш",
+          "hasAudio": true
+        }
+      }
+    },
+    {
+      "id": "belt",
+      "hasPicture": true,
+      "translations": {
+        "ru": {
+          "text": "ремень",
+          "hasAudio": true
+        },
+        "en": {
+          "text": "belt",
+          "hasAudio": true
+        },
+        "fr": {
+          "text": "ceinture",
+          "hasAudio": true
+        },
+        "de": {
+          "text": "Gürtel",
+          "hasAudio": true
+        },
+        "zh": {
+          "text": "腰带",
+          "hasAudio": true
+        },
+        "ba": {
+          "text": "ҡайыш",
+          "hasAudio": true
+        }
+      }
+    },
+    {
+      "id": "button",
+      "hasPicture": true,
+      "translations": {
+        "ru": {
+          "text": "пуговица",
+          "hasAudio": true
+        },
+        "en": {
+          "text": "button",
+          "hasAudio": true
+        },
+        "fr": {
+          "text": "bouton",
+          "hasAudio": true
+        },
+        "de": {
+          "text": "Knopf",
+          "hasAudio": true
+        },
+        "zh": {
+          "text": "纽扣",
+          "hasAudio": true
+        },
+        "ba": {
+          "text": "төймә",
+          "hasAudio": true
+        }
+      }
+    },
+    {
+      "id": "pocket",
+      "hasPicture": true,
+      "translations": {
+        "ru": {
+          "text": "карман",
+          "hasAudio": true
+        },
+        "en": {
+          "text": "pocket",
+          "hasAudio": true
+        },
+        "fr": {
+          "text": "poche",
+          "hasAudio": true
+        },
+        "de": {
+          "text": "Tasche",
+          "hasAudio": true
+        },
+        "zh": {
+          "text": "口袋",
+          "hasAudio": true
+        },
+        "ba": {
+          "text": "кеҫә",
+          "hasAudio": true
+        }
+      }
+    },
+    {
+      "id": "milk",
+      "hasPicture": true,
+      "translations": {
+        "ru": {
+          "text": "молоко",
+          "hasAudio": true
+        },
+        "en": {
+          "text": "milk",
+          "hasAudio": true
+        },
+        "fr": {
+          "text": "lait",
+          "hasAudio": true
+        },
+        "de": {
+          "text": "Milch",
+          "hasAudio": true
+        },
+        "zh": {
+          "text": "牛奶",
+          "hasAudio": true
+        },
+        "ba": {
+          "text": "һөт",
+          "hasAudio": true
+        }
+      }
+    },
+    {
+      "id": "cheese",
+      "hasPicture": true,
+      "translations": {
+        "ru": {
+          "text": "сыр",
+          "hasAudio": true
+        },
+        "en": {
+          "text": "cheese",
+          "hasAudio": true
+        },
+        "fr": {
+          "text": "fromage",
+          "hasAudio": true
+        },
+        "de": {
+          "text": "Käse",
+          "hasAudio": true
+        },
+        "zh": {
+          "text": "奶酪",
+          "hasAudio": true
+        },
+        "ba": {
+          "text": "ҡорот",
+          "hasAudio": true
+        }
+      }
+    },
+    {
+      "id": "butter",
+      "hasPicture": true,
+      "translations": {
+        "ru": {
+          "text": "масло",
+          "hasAudio": true
+        },
+        "en": {
+          "text": "butter",
+          "hasAudio": true
+        },
+        "fr": {
+          "text": "beurre",
+          "hasAudio": true
+        },
+        "de": {
+          "text": "Butter",
+          "hasAudio": true
+        },
+        "zh": {
+          "text": "黄油",
+          "hasAudio": true
+        },
+        "ba": {
+          "text": "май",
+          "hasAudio": true
+        }
+      }
+    },
+    {
+      "id": "egg",
+      "hasPicture": true,
+      "translations": {
+        "ru": {
+          "text": "яйцо",
+          "hasAudio": true
+        },
+        "en": {
+          "text": "egg",
+          "hasAudio": true
+        },
+        "fr": {
+          "text": "œuf",
+          "hasAudio": true
+        },
+        "de": {
+          "text": "Ei",
+          "hasAudio": true
+        },
+        "zh": {
+          "text": "鸡蛋",
+          "hasAudio": true
+        },
+        "ba": {
+          "text": "йомортҡа",
+          "hasAudio": true
+        }
+      }
+    },
+    {
+      "id": "meat",
+      "hasPicture": true,
+      "translations": {
+        "ru": {
+          "text": "мясо",
+          "hasAudio": true
+        },
+        "en": {
+          "text": "meat",
+          "hasAudio": true
+        },
+        "fr": {
+          "text": "viande",
+          "hasAudio": true
+        },
+        "de": {
+          "text": "Fleisch",
+          "hasAudio": true
+        },
+        "zh": {
+          "text": "肉",
+          "hasAudio": true
+        },
+        "ba": {
+          "text": "ит",
+          "hasAudio": true
+        }
+      }
+    },
+    {
+      "id": "soup",
+      "hasPicture": true,
+      "translations": {
+        "ru": {
+          "text": "суп",
+          "hasAudio": true
+        },
+        "en": {
+          "text": "soup",
+          "hasAudio": true
+        },
+        "fr": {
+          "text": "soupe",
+          "hasAudio": true
+        },
+        "de": {
+          "text": "Suppe",
+          "hasAudio": true
+        },
+        "zh": {
+          "text": "汤",
+          "hasAudio": true
+        },
+        "ba": {
+          "text": "һурпа",
+          "hasAudio": true
+        }
+      }
+    },
+    {
+      "id": "porridge",
+      "hasPicture": true,
+      "translations": {
+        "ru": {
+          "text": "каша",
+          "hasAudio": true
+        },
+        "en": {
+          "text": "porridge",
+          "hasAudio": true
+        },
+        "fr": {
+          "text": "bouillie",
+          "hasAudio": true
+        },
+        "de": {
+          "text": "Brei",
+          "hasAudio": true
+        },
+        "zh": {
+          "text": "粥",
+          "hasAudio": true
+        },
+        "ba": {
+          "text": "бутҡа",
+          "hasAudio": true
+        }
+      }
+    },
+    {
+      "id": "potato",
+      "hasPicture": true,
+      "translations": {
+        "ru": {
+          "text": "картошка",
+          "hasAudio": true
+        },
+        "en": {
+          "text": "potato",
+          "hasAudio": true
+        },
+        "fr": {
+          "text": "pomme de terre",
+          "hasAudio": true
+        },
+        "de": {
+          "text": "Kartoffel",
+          "hasAudio": true
+        },
+        "zh": {
+          "text": "土豆",
+          "hasAudio": true
+        },
+        "ba": {
+          "text": "картуф",
+          "hasAudio": true
+        }
+      }
+    },
+    {
+      "id": "carrot",
+      "hasPicture": true,
+      "translations": {
+        "ru": {
+          "text": "морковь",
+          "hasAudio": true
+        },
+        "en": {
+          "text": "carrot",
+          "hasAudio": true
+        },
+        "fr": {
+          "text": "carotte",
+          "hasAudio": true
+        },
+        "de": {
+          "text": "Karotte",
+          "hasAudio": true
+        },
+        "zh": {
+          "text": "胡萝卜",
+          "hasAudio": true
+        },
+        "ba": {
+          "text": "кишер",
+          "hasAudio": true
+        }
+      }
+    },
+    {
+      "id": "cabbage",
+      "hasPicture": true,
+      "translations": {
+        "ru": {
+          "text": "капуста",
+          "hasAudio": true
+        },
+        "en": {
+          "text": "cabbage",
+          "hasAudio": true
+        },
+        "fr": {
+          "text": "chou",
+          "hasAudio": true
+        },
+        "de": {
+          "text": "Kohl",
+          "hasAudio": true
+        },
+        "zh": {
+          "text": "白菜",
+          "hasAudio": true
+        },
+        "ba": {
+          "text": "кәбеҫтә",
+          "hasAudio": true
+        }
+      }
+    },
+    {
+      "id": "tomato",
+      "hasPicture": true,
+      "translations": {
+        "ru": {
+          "text": "помидор",
+          "hasAudio": true
+        },
+        "en": {
+          "text": "tomato",
+          "hasAudio": true
+        },
+        "fr": {
+          "text": "tomate",
+          "hasAudio": true
+        },
+        "de": {
+          "text": "Tomate",
+          "hasAudio": true
+        },
+        "zh": {
+          "text": "番茄",
+          "hasAudio": true
+        },
+        "ba": {
+          "text": "помидор",
+          "hasAudio": true
+        }
+      }
+    },
+    {
+      "id": "honey",
+      "hasPicture": true,
+      "translations": {
+        "ru": {
+          "text": "мёд",
+          "hasAudio": true
+        },
+        "en": {
+          "text": "honey",
+          "hasAudio": true
+        },
+        "fr": {
+          "text": "miel",
+          "hasAudio": true
+        },
+        "de": {
+          "text": "Honig",
+          "hasAudio": true
+        },
+        "zh": {
+          "text": "蜂蜜",
+          "hasAudio": true
+        },
+        "ba": {
+          "text": "бал",
+          "hasAudio": true
+        }
+      }
+    },
+    {
+      "id": "plate",
+      "hasPicture": true,
+      "translations": {
+        "ru": {
+          "text": "тарелка",
+          "hasAudio": true
+        },
+        "en": {
+          "text": "plate",
+          "hasAudio": true
+        },
+        "fr": {
+          "text": "assiette",
+          "hasAudio": true
+        },
+        "de": {
+          "text": "Teller",
+          "hasAudio": true
+        },
+        "zh": {
+          "text": "盘子",
+          "hasAudio": true
+        },
+        "ba": {
+          "text": "тәрилкә",
+          "hasAudio": true
+        }
+      }
+    },
+    {
+      "id": "cup",
+      "hasPicture": true,
+      "translations": {
+        "ru": {
+          "text": "чашка",
+          "hasAudio": true
+        },
+        "en": {
+          "text": "cup",
+          "hasAudio": true
+        },
+        "fr": {
+          "text": "tasse",
+          "hasAudio": true
+        },
+        "de": {
+          "text": "Tasse",
+          "hasAudio": true
+        },
+        "zh": {
+          "text": "杯子",
+          "hasAudio": true
+        },
+        "ba": {
+          "text": "сынаяҡ",
+          "hasAudio": true
+        }
+      }
+    },
+    {
+      "id": "glass",
+      "hasPicture": true,
+      "translations": {
+        "ru": {
+          "text": "стакан",
+          "hasAudio": true
+        },
+        "en": {
+          "text": "glass",
+          "hasAudio": true
+        },
+        "fr": {
+          "text": "verre",
+          "hasAudio": true
+        },
+        "de": {
+          "text": "Glas",
+          "hasAudio": true
+        },
+        "zh": {
+          "text": "玻璃杯",
+          "hasAudio": true
+        },
+        "ba": {
+          "text": "стакан",
+          "hasAudio": true
+        }
+      }
+    },
+    {
+      "id": "spoon",
+      "hasPicture": true,
+      "translations": {
+        "ru": {
+          "text": "ложка",
+          "hasAudio": true
+        },
+        "en": {
+          "text": "spoon",
+          "hasAudio": true
+        },
+        "fr": {
+          "text": "cuillère",
+          "hasAudio": true
+        },
+        "de": {
+          "text": "Löffel",
+          "hasAudio": true
+        },
+        "zh": {
+          "text": "勺子",
+          "hasAudio": true
+        },
+        "ba": {
+          "text": "ҡалаҡ",
+          "hasAudio": true
+        }
+      }
+    },
+    {
+      "id": "fork",
+      "hasPicture": true,
+      "translations": {
+        "ru": {
+          "text": "вилка",
+          "hasAudio": true
+        },
+        "en": {
+          "text": "fork",
+          "hasAudio": true
+        },
+        "fr": {
+          "text": "fourchette",
+          "hasAudio": true
+        },
+        "de": {
+          "text": "Gabel",
+          "hasAudio": true
+        },
+        "zh": {
+          "text": "叉子",
+          "hasAudio": true
+        },
+        "ba": {
+          "text": "сәнске",
+          "hasAudio": true
+        }
+      }
+    },
+    {
+      "id": "knife",
+      "hasPicture": true,
+      "translations": {
+        "ru": {
+          "text": "нож",
+          "hasAudio": true
+        },
+        "en": {
+          "text": "knife",
+          "hasAudio": true
+        },
+        "fr": {
+          "text": "couteau",
+          "hasAudio": true
+        },
+        "de": {
+          "text": "Messer",
+          "hasAudio": true
+        },
+        "zh": {
+          "text": "刀",
+          "hasAudio": true
+        },
+        "ba": {
+          "text": "бысаҡ",
+          "hasAudio": true
+        }
+      }
+    },
+    {
+      "id": "teapot",
+      "hasPicture": true,
+      "translations": {
+        "ru": {
+          "text": "заварочный чайник",
+          "hasAudio": true
+        },
+        "en": {
+          "text": "teapot",
+          "hasAudio": true
+        },
+        "fr": {
+          "text": "théière",
+          "hasAudio": true
+        },
+        "de": {
+          "text": "Teekanne",
+          "hasAudio": true
+        },
+        "zh": {
+          "text": "茶壶",
+          "hasAudio": true
+        },
+        "ba": {
+          "text": "сәйнүк ҙур",
+          "hasAudio": true
+        }
+      }
+    },
+    {
+      "id": "jug",
+      "hasPicture": true,
+      "translations": {
+        "ru": {
+          "text": "кувшин",
+          "hasAudio": true
+        },
+        "en": {
+          "text": "jug",
+          "hasAudio": true
+        },
+        "fr": {
+          "text": "pichet",
+          "hasAudio": true
+        },
+        "de": {
+          "text": "Krug",
+          "hasAudio": true
+        },
+        "zh": {
+          "text": "水壶罐",
+          "hasAudio": true
+        },
+        "ba": {
+          "text": "кувшин",
+          "hasAudio": true
+        }
+      }
+    },
+    {
+      "id": "bowl",
+      "hasPicture": true,
+      "translations": {
+        "ru": {
+          "text": "миска",
+          "hasAudio": true
+        },
+        "en": {
+          "text": "bowl",
+          "hasAudio": true
+        },
+        "fr": {
+          "text": "bol",
+          "hasAudio": true
+        },
+        "de": {
+          "text": "Schüssel",
+          "hasAudio": true
+        },
+        "zh": {
+          "text": "碗",
+          "hasAudio": true
+        },
+        "ba": {
+          "text": "табаҡ",
+          "hasAudio": true
+        }
+      }
+    },
+    {
+      "id": "tablecloth",
+      "hasPicture": true,
+      "translations": {
+        "ru": {
+          "text": "скатерть",
+          "hasAudio": true
+        },
+        "en": {
+          "text": "tablecloth",
+          "hasAudio": true
+        },
+        "fr": {
+          "text": "nappe",
+          "hasAudio": true
+        },
+        "de": {
+          "text": "Tischdecke",
+          "hasAudio": true
+        },
+        "zh": {
+          "text": "桌布",
+          "hasAudio": true
+        },
+        "ba": {
+          "text": "ашъяулыҡ",
+          "hasAudio": true
+        }
+      }
+    },
+    {
+      "id": "sugarbowl",
+      "hasPicture": true,
+      "translations": {
+        "ru": {
+          "text": "сахарница",
+          "hasAudio": true
+        },
+        "en": {
+          "text": "sugar bowl",
+          "hasAudio": true
+        },
+        "fr": {
+          "text": "sucrier",
+          "hasAudio": true
+        },
+        "de": {
+          "text": "Zuckerdose",
+          "hasAudio": true
+        },
+        "zh": {
+          "text": "糖罐",
+          "hasAudio": true
+        },
+        "ba": {
+          "text": "шәкәр һауыты",
+          "hasAudio": true
+        }
+      }
+    },
+    {
+      "id": "breadbox",
+      "hasPicture": true,
+      "translations": {
+        "ru": {
+          "text": "хлебница",
+          "hasAudio": true
+        },
+        "en": {
+          "text": "bread bin",
+          "hasAudio": true
+        },
+        "fr": {
+          "text": "boîte à pain",
+          "hasAudio": true
+        },
+        "de": {
+          "text": "Brotkasten",
+          "hasAudio": true
+        },
+        "zh": {
+          "text": "面包盒",
+          "hasAudio": true
+        },
+        "ba": {
+          "text": "икмәк һауыты",
+          "hasAudio": true
+        }
+      }
+    },
+    {
+      "id": "mother",
+      "hasPicture": true,
+      "translations": {
+        "ru": {
+          "text": "мама",
+          "hasAudio": true
+        },
+        "en": {
+          "text": "mother",
+          "hasAudio": true
+        },
+        "fr": {
+          "text": "mère",
+          "hasAudio": true
+        },
+        "de": {
+          "text": "Mutter",
+          "hasAudio": true
+        },
+        "zh": {
+          "text": "妈妈",
+          "hasAudio": true
+        },
+        "ba": {
+          "text": "әсәй",
+          "hasAudio": true
+        }
+      }
+    },
+    {
+      "id": "father",
+      "hasPicture": true,
+      "translations": {
+        "ru": {
+          "text": "папа",
+          "hasAudio": true
+        },
+        "en": {
+          "text": "father",
+          "hasAudio": true
+        },
+        "fr": {
+          "text": "père",
+          "hasAudio": true
+        },
+        "de": {
+          "text": "Vater",
+          "hasAudio": true
+        },
+        "zh": {
+          "text": "爸爸",
+          "hasAudio": true
+        },
+        "ba": {
+          "text": "атай",
+          "hasAudio": true
+        }
+      }
+    },
+    {
+      "id": "son",
+      "hasPicture": true,
+      "translations": {
+        "ru": {
+          "text": "сын",
+          "hasAudio": true
+        },
+        "en": {
+          "text": "son",
+          "hasAudio": true
+        },
+        "fr": {
+          "text": "fils",
+          "hasAudio": true
+        },
+        "de": {
+          "text": "Sohn",
+          "hasAudio": true
+        },
+        "zh": {
+          "text": "儿子",
+          "hasAudio": true
+        },
+        "ba": {
+          "text": "ул",
+          "hasAudio": true
+        }
+      }
+    },
+    {
+      "id": "daughter",
+      "hasPicture": true,
+      "translations": {
+        "ru": {
+          "text": "дочь",
+          "hasAudio": true
+        },
+        "en": {
+          "text": "daughter",
+          "hasAudio": true
+        },
+        "fr": {
+          "text": "fille",
+          "hasAudio": true
+        },
+        "de": {
+          "text": "Tochter",
+          "hasAudio": true
+        },
+        "zh": {
+          "text": "女儿",
+          "hasAudio": true
+        },
+        "ba": {
+          "text": "ҡыҙ",
+          "hasAudio": true
+        }
+      }
+    },
+    {
+      "id": "brother",
+      "hasPicture": true,
+      "translations": {
+        "ru": {
+          "text": "брат",
+          "hasAudio": true
+        },
+        "en": {
+          "text": "brother",
+          "hasAudio": true
+        },
+        "fr": {
+          "text": "frère",
+          "hasAudio": true
+        },
+        "de": {
+          "text": "Bruder",
+          "hasAudio": true
+        },
+        "zh": {
+          "text": "兄弟",
+          "hasAudio": true
+        },
+        "ba": {
+          "text": "ағай",
+          "hasAudio": true
+        }
+      }
+    },
+    {
+      "id": "sister",
+      "hasPicture": true,
+      "translations": {
+        "ru": {
+          "text": "сестра",
+          "hasAudio": true
+        },
+        "en": {
+          "text": "sister",
+          "hasAudio": true
+        },
+        "fr": {
+          "text": "sœur",
+          "hasAudio": true
+        },
+        "de": {
+          "text": "Schwester",
+          "hasAudio": true
+        },
+        "zh": {
+          "text": "姐妹",
+          "hasAudio": true
+        },
+        "ba": {
+          "text": "апай",
+          "hasAudio": true
+        }
+      }
+    },
+    {
+      "id": "grandmother",
+      "hasPicture": true,
+      "translations": {
+        "ru": {
+          "text": "бабушка",
+          "hasAudio": true
+        },
+        "en": {
+          "text": "grandmother",
+          "hasAudio": true
+        },
+        "fr": {
+          "text": "grand-mère",
+          "hasAudio": true
+        },
+        "de": {
+          "text": "Großmutter",
+          "hasAudio": true
+        },
+        "zh": {
+          "text": "奶奶",
+          "hasAudio": true
+        },
+        "ba": {
+          "text": "өләсәй",
+          "hasAudio": true
+        }
+      }
+    },
+    {
+      "id": "grandfather",
+      "hasPicture": true,
+      "translations": {
+        "ru": {
+          "text": "дедушка",
+          "hasAudio": true
+        },
+        "en": {
+          "text": "grandfather",
+          "hasAudio": true
+        },
+        "fr": {
+          "text": "grand-père",
+          "hasAudio": true
+        },
+        "de": {
+          "text": "Großvater",
+          "hasAudio": true
+        },
+        "zh": {
+          "text": "爷爷",
+          "hasAudio": true
+        },
+        "ba": {
+          "text": "олатай",
+          "hasAudio": true
+        }
+      }
+    },
+    {
+      "id": "baby",
+      "hasPicture": true,
+      "translations": {
+        "ru": {
+          "text": "малыш",
+          "hasAudio": true
+        },
+        "en": {
+          "text": "baby",
+          "hasAudio": true
+        },
+        "fr": {
+          "text": "bébé",
+          "hasAudio": true
+        },
+        "de": {
+          "text": "Baby",
+          "hasAudio": true
+        },
+        "zh": {
+          "text": "婴儿",
+          "hasAudio": true
+        },
+        "ba": {
+          "text": "бәпес",
+          "hasAudio": true
+        }
+      }
+    },
+    {
+      "id": "friend",
+      "hasPicture": true,
+      "translations": {
+        "ru": {
+          "text": "друг",
+          "hasAudio": true
+        },
+        "en": {
+          "text": "friend",
+          "hasAudio": true
+        },
+        "fr": {
+          "text": "ami",
+          "hasAudio": true
+        },
+        "de": {
+          "text": "Freund",
+          "hasAudio": true
+        },
+        "zh": {
+          "text": "朋友",
+          "hasAudio": true
+        },
+        "ba": {
+          "text": "дуҫ",
+          "hasAudio": true
+        }
+      }
+    },
+    {
+      "id": "neighbour",
+      "hasPicture": true,
+      "translations": {
+        "ru": {
+          "text": "сосед",
+          "hasAudio": true
+        },
+        "en": {
+          "text": "neighbour",
+          "hasAudio": true
+        },
+        "fr": {
+          "text": "voisin",
+          "hasAudio": true
+        },
+        "de": {
+          "text": "Nachbar",
+          "hasAudio": true
+        },
+        "zh": {
+          "text": "邻居",
+          "hasAudio": true
+        },
+        "ba": {
+          "text": "күрше",
+          "hasAudio": true
+        }
+      }
+    },
+    {
+      "id": "guest",
+      "hasPicture": true,
+      "translations": {
+        "ru": {
+          "text": "гость",
+          "hasAudio": true
+        },
+        "en": {
+          "text": "guest",
+          "hasAudio": true
+        },
+        "fr": {
+          "text": "invité",
+          "hasAudio": true
+        },
+        "de": {
+          "text": "Gast",
+          "hasAudio": true
+        },
+        "zh": {
+          "text": "客人",
+          "hasAudio": true
+        },
+        "ba": {
+          "text": "ҡунаҡ",
           "hasAudio": true
         }
       }
@@ -9457,1806 +12122,6 @@
         },
         "ba": {
           "text": "умарта",
-          "hasAudio": true
-        }
-      }
-    },
-    {
-      "id": "head",
-      "hasPicture": true,
-      "translations": {
-        "ru": {
-          "text": "голова",
-          "hasAudio": true
-        },
-        "en": {
-          "text": "head",
-          "hasAudio": true
-        },
-        "fr": {
-          "text": "tête",
-          "hasAudio": true
-        },
-        "de": {
-          "text": "Kopf",
-          "hasAudio": true
-        },
-        "zh": {
-          "text": "头",
-          "hasAudio": true
-        },
-        "ba": {
-          "text": "баш",
-          "hasAudio": true
-        }
-      }
-    },
-    {
-      "id": "hair",
-      "hasPicture": true,
-      "translations": {
-        "ru": {
-          "text": "волосы",
-          "hasAudio": true
-        },
-        "en": {
-          "text": "hair",
-          "hasAudio": true
-        },
-        "fr": {
-          "text": "cheveux",
-          "hasAudio": true
-        },
-        "de": {
-          "text": "Haare",
-          "hasAudio": true
-        },
-        "zh": {
-          "text": "头发",
-          "hasAudio": true
-        },
-        "ba": {
-          "text": "сәс",
-          "hasAudio": true
-        }
-      }
-    },
-    {
-      "id": "eye",
-      "hasPicture": true,
-      "translations": {
-        "ru": {
-          "text": "глаз",
-          "hasAudio": true
-        },
-        "en": {
-          "text": "eye",
-          "hasAudio": true
-        },
-        "fr": {
-          "text": "œil",
-          "hasAudio": true
-        },
-        "de": {
-          "text": "Auge",
-          "hasAudio": true
-        },
-        "zh": {
-          "text": "眼睛",
-          "hasAudio": true
-        },
-        "ba": {
-          "text": "күҙ",
-          "hasAudio": true
-        }
-      }
-    },
-    {
-      "id": "ear",
-      "hasPicture": true,
-      "translations": {
-        "ru": {
-          "text": "ухо",
-          "hasAudio": true
-        },
-        "en": {
-          "text": "ear",
-          "hasAudio": true
-        },
-        "fr": {
-          "text": "oreille",
-          "hasAudio": true
-        },
-        "de": {
-          "text": "Ohr",
-          "hasAudio": true
-        },
-        "zh": {
-          "text": "耳朵",
-          "hasAudio": true
-        },
-        "ba": {
-          "text": "ҡолаҡ",
-          "hasAudio": true
-        }
-      }
-    },
-    {
-      "id": "nose",
-      "hasPicture": true,
-      "translations": {
-        "ru": {
-          "text": "нос",
-          "hasAudio": true
-        },
-        "en": {
-          "text": "nose",
-          "hasAudio": true
-        },
-        "fr": {
-          "text": "nez",
-          "hasAudio": true
-        },
-        "de": {
-          "text": "Nase",
-          "hasAudio": true
-        },
-        "zh": {
-          "text": "鼻子",
-          "hasAudio": true
-        },
-        "ba": {
-          "text": "танау",
-          "hasAudio": true
-        }
-      }
-    },
-    {
-      "id": "mouth",
-      "hasPicture": true,
-      "translations": {
-        "ru": {
-          "text": "рот",
-          "hasAudio": true
-        },
-        "en": {
-          "text": "mouth",
-          "hasAudio": true
-        },
-        "fr": {
-          "text": "bouche",
-          "hasAudio": true
-        },
-        "de": {
-          "text": "Mund",
-          "hasAudio": true
-        },
-        "zh": {
-          "text": "嘴",
-          "hasAudio": true
-        },
-        "ba": {
-          "text": "ауыҙ",
-          "hasAudio": true
-        }
-      }
-    },
-    {
-      "id": "tooth",
-      "hasPicture": true,
-      "translations": {
-        "ru": {
-          "text": "зуб",
-          "hasAudio": true
-        },
-        "en": {
-          "text": "tooth",
-          "hasAudio": true
-        },
-        "fr": {
-          "text": "dent",
-          "hasAudio": true
-        },
-        "de": {
-          "text": "Zahn",
-          "hasAudio": true
-        },
-        "zh": {
-          "text": "牙齿",
-          "hasAudio": true
-        },
-        "ba": {
-          "text": "теш",
-          "hasAudio": true
-        }
-      }
-    },
-    {
-      "id": "neck",
-      "hasPicture": true,
-      "translations": {
-        "ru": {
-          "text": "шея",
-          "hasAudio": true
-        },
-        "en": {
-          "text": "neck",
-          "hasAudio": true
-        },
-        "fr": {
-          "text": "cou",
-          "hasAudio": true
-        },
-        "de": {
-          "text": "Hals",
-          "hasAudio": true
-        },
-        "zh": {
-          "text": "脖子",
-          "hasAudio": true
-        },
-        "ba": {
-          "text": "муйын",
-          "hasAudio": true
-        }
-      }
-    },
-    {
-      "id": "hand",
-      "hasPicture": true,
-      "translations": {
-        "ru": {
-          "text": "рука",
-          "hasAudio": true
-        },
-        "en": {
-          "text": "hand",
-          "hasAudio": true
-        },
-        "fr": {
-          "text": "main",
-          "hasAudio": true
-        },
-        "de": {
-          "text": "Hand",
-          "hasAudio": true
-        },
-        "zh": {
-          "text": "手",
-          "hasAudio": true
-        },
-        "ba": {
-          "text": "ҡул",
-          "hasAudio": true
-        }
-      }
-    },
-    {
-      "id": "finger",
-      "hasPicture": true,
-      "translations": {
-        "ru": {
-          "text": "палец",
-          "hasAudio": true
-        },
-        "en": {
-          "text": "finger",
-          "hasAudio": true
-        },
-        "fr": {
-          "text": "doigt",
-          "hasAudio": true
-        },
-        "de": {
-          "text": "Finger",
-          "hasAudio": true
-        },
-        "zh": {
-          "text": "手指",
-          "hasAudio": true
-        },
-        "ba": {
-          "text": "бармаҡ",
-          "hasAudio": true
-        }
-      }
-    },
-    {
-      "id": "leg",
-      "hasPicture": true,
-      "translations": {
-        "ru": {
-          "text": "нога",
-          "hasAudio": true
-        },
-        "en": {
-          "text": "leg",
-          "hasAudio": true
-        },
-        "fr": {
-          "text": "jambe",
-          "hasAudio": true
-        },
-        "de": {
-          "text": "Bein",
-          "hasAudio": true
-        },
-        "zh": {
-          "text": "腿",
-          "hasAudio": true
-        },
-        "ba": {
-          "text": "аяҡ",
-          "hasAudio": true
-        }
-      }
-    },
-    {
-      "id": "back",
-      "hasPicture": true,
-      "translations": {
-        "ru": {
-          "text": "спина",
-          "hasAudio": true
-        },
-        "en": {
-          "text": "back",
-          "hasAudio": true
-        },
-        "fr": {
-          "text": "dos",
-          "hasAudio": true
-        },
-        "de": {
-          "text": "Rücken",
-          "hasAudio": true
-        },
-        "zh": {
-          "text": "背",
-          "hasAudio": true
-        },
-        "ba": {
-          "text": "арҡа",
-          "hasAudio": true
-        }
-      }
-    },
-    {
-      "id": "shirt",
-      "hasPicture": true,
-      "translations": {
-        "ru": {
-          "text": "рубашка",
-          "hasAudio": true
-        },
-        "en": {
-          "text": "shirt",
-          "hasAudio": true
-        },
-        "fr": {
-          "text": "chemise",
-          "hasAudio": true
-        },
-        "de": {
-          "text": "Hemd",
-          "hasAudio": true
-        },
-        "zh": {
-          "text": "衬衫",
-          "hasAudio": true
-        },
-        "ba": {
-          "text": "күлдәк",
-          "hasAudio": true
-        }
-      }
-    },
-    {
-      "id": "tshirt",
-      "hasPicture": true,
-      "translations": {
-        "ru": {
-          "text": "футболка",
-          "hasAudio": true
-        },
-        "en": {
-          "text": "T-shirt",
-          "hasAudio": true
-        },
-        "fr": {
-          "text": "tee-shirt",
-          "hasAudio": true
-        },
-        "de": {
-          "text": "T-Shirt",
-          "hasAudio": true
-        },
-        "zh": {
-          "text": "T恤",
-          "hasAudio": true
-        },
-        "ba": {
-          "text": "футболка",
-          "hasAudio": true
-        }
-      }
-    },
-    {
-      "id": "trousers",
-      "hasPicture": true,
-      "translations": {
-        "ru": {
-          "text": "брюки",
-          "hasAudio": true
-        },
-        "en": {
-          "text": "trousers",
-          "hasAudio": true
-        },
-        "fr": {
-          "text": "pantalon",
-          "hasAudio": true
-        },
-        "de": {
-          "text": "Hose",
-          "hasAudio": true
-        },
-        "zh": {
-          "text": "裤子",
-          "hasAudio": true
-        },
-        "ba": {
-          "text": "салбар",
-          "hasAudio": true
-        }
-      }
-    },
-    {
-      "id": "skirt",
-      "hasPicture": true,
-      "translations": {
-        "ru": {
-          "text": "юбка",
-          "hasAudio": true
-        },
-        "en": {
-          "text": "skirt",
-          "hasAudio": true
-        },
-        "fr": {
-          "text": "jupe",
-          "hasAudio": true
-        },
-        "de": {
-          "text": "Rock",
-          "hasAudio": true
-        },
-        "zh": {
-          "text": "裙子",
-          "hasAudio": true
-        },
-        "ba": {
-          "text": "итәк",
-          "hasAudio": true
-        }
-      }
-    },
-    {
-      "id": "dress",
-      "hasPicture": true,
-      "translations": {
-        "ru": {
-          "text": "платье",
-          "hasAudio": true
-        },
-        "en": {
-          "text": "dress",
-          "hasAudio": true
-        },
-        "fr": {
-          "text": "robe",
-          "hasAudio": true
-        },
-        "de": {
-          "text": "Kleid",
-          "hasAudio": true
-        },
-        "zh": {
-          "text": "连衣裙",
-          "hasAudio": true
-        },
-        "ba": {
-          "text": "күлдәк озон",
-          "hasAudio": true
-        }
-      }
-    },
-    {
-      "id": "coat",
-      "hasPicture": true,
-      "translations": {
-        "ru": {
-          "text": "пальто",
-          "hasAudio": true
-        },
-        "en": {
-          "text": "coat",
-          "hasAudio": true
-        },
-        "fr": {
-          "text": "manteau",
-          "hasAudio": true
-        },
-        "de": {
-          "text": "Mantel",
-          "hasAudio": true
-        },
-        "zh": {
-          "text": "大衣",
-          "hasAudio": true
-        },
-        "ba": {
-          "text": "пальто",
-          "hasAudio": true
-        }
-      }
-    },
-    {
-      "id": "jacket",
-      "hasPicture": true,
-      "translations": {
-        "ru": {
-          "text": "куртка",
-          "hasAudio": true
-        },
-        "en": {
-          "text": "jacket",
-          "hasAudio": true
-        },
-        "fr": {
-          "text": "blouson",
-          "hasAudio": true
-        },
-        "de": {
-          "text": "Jacke",
-          "hasAudio": true
-        },
-        "zh": {
-          "text": "夹克",
-          "hasAudio": true
-        },
-        "ba": {
-          "text": "куртка",
-          "hasAudio": true
-        }
-      }
-    },
-    {
-      "id": "sweater",
-      "hasPicture": true,
-      "translations": {
-        "ru": {
-          "text": "свитер",
-          "hasAudio": true
-        },
-        "en": {
-          "text": "sweater",
-          "hasAudio": true
-        },
-        "fr": {
-          "text": "pull",
-          "hasAudio": true
-        },
-        "de": {
-          "text": "Pullover",
-          "hasAudio": true
-        },
-        "zh": {
-          "text": "毛衣",
-          "hasAudio": true
-        },
-        "ba": {
-          "text": "свитер",
-          "hasAudio": true
-        }
-      }
-    },
-    {
-      "id": "socks",
-      "hasPicture": true,
-      "translations": {
-        "ru": {
-          "text": "носки",
-          "hasAudio": true
-        },
-        "en": {
-          "text": "socks",
-          "hasAudio": true
-        },
-        "fr": {
-          "text": "chaussettes",
-          "hasAudio": true
-        },
-        "de": {
-          "text": "Socken",
-          "hasAudio": true
-        },
-        "zh": {
-          "text": "袜子",
-          "hasAudio": true
-        },
-        "ba": {
-          "text": "ойоҡбаш",
-          "hasAudio": true
-        }
-      }
-    },
-    {
-      "id": "belt",
-      "hasPicture": true,
-      "translations": {
-        "ru": {
-          "text": "ремень",
-          "hasAudio": true
-        },
-        "en": {
-          "text": "belt",
-          "hasAudio": true
-        },
-        "fr": {
-          "text": "ceinture",
-          "hasAudio": true
-        },
-        "de": {
-          "text": "Gürtel",
-          "hasAudio": true
-        },
-        "zh": {
-          "text": "腰带",
-          "hasAudio": true
-        },
-        "ba": {
-          "text": "ҡайыш",
-          "hasAudio": true
-        }
-      }
-    },
-    {
-      "id": "button",
-      "hasPicture": true,
-      "translations": {
-        "ru": {
-          "text": "пуговица",
-          "hasAudio": true
-        },
-        "en": {
-          "text": "button",
-          "hasAudio": true
-        },
-        "fr": {
-          "text": "bouton",
-          "hasAudio": true
-        },
-        "de": {
-          "text": "Knopf",
-          "hasAudio": true
-        },
-        "zh": {
-          "text": "纽扣",
-          "hasAudio": true
-        },
-        "ba": {
-          "text": "төймә",
-          "hasAudio": true
-        }
-      }
-    },
-    {
-      "id": "pocket",
-      "hasPicture": true,
-      "translations": {
-        "ru": {
-          "text": "карман",
-          "hasAudio": true
-        },
-        "en": {
-          "text": "pocket",
-          "hasAudio": true
-        },
-        "fr": {
-          "text": "poche",
-          "hasAudio": true
-        },
-        "de": {
-          "text": "Tasche",
-          "hasAudio": true
-        },
-        "zh": {
-          "text": "口袋",
-          "hasAudio": true
-        },
-        "ba": {
-          "text": "кеҫә",
-          "hasAudio": true
-        }
-      }
-    },
-    {
-      "id": "milk",
-      "hasPicture": true,
-      "translations": {
-        "ru": {
-          "text": "молоко",
-          "hasAudio": true
-        },
-        "en": {
-          "text": "milk",
-          "hasAudio": true
-        },
-        "fr": {
-          "text": "lait",
-          "hasAudio": true
-        },
-        "de": {
-          "text": "Milch",
-          "hasAudio": true
-        },
-        "zh": {
-          "text": "牛奶",
-          "hasAudio": true
-        },
-        "ba": {
-          "text": "һөт",
-          "hasAudio": true
-        }
-      }
-    },
-    {
-      "id": "cheese",
-      "hasPicture": true,
-      "translations": {
-        "ru": {
-          "text": "сыр",
-          "hasAudio": true
-        },
-        "en": {
-          "text": "cheese",
-          "hasAudio": true
-        },
-        "fr": {
-          "text": "fromage",
-          "hasAudio": true
-        },
-        "de": {
-          "text": "Käse",
-          "hasAudio": true
-        },
-        "zh": {
-          "text": "奶酪",
-          "hasAudio": true
-        },
-        "ba": {
-          "text": "ҡорот",
-          "hasAudio": true
-        }
-      }
-    },
-    {
-      "id": "butter",
-      "hasPicture": true,
-      "translations": {
-        "ru": {
-          "text": "масло",
-          "hasAudio": true
-        },
-        "en": {
-          "text": "butter",
-          "hasAudio": true
-        },
-        "fr": {
-          "text": "beurre",
-          "hasAudio": true
-        },
-        "de": {
-          "text": "Butter",
-          "hasAudio": true
-        },
-        "zh": {
-          "text": "黄油",
-          "hasAudio": true
-        },
-        "ba": {
-          "text": "май",
-          "hasAudio": true
-        }
-      }
-    },
-    {
-      "id": "egg",
-      "hasPicture": true,
-      "translations": {
-        "ru": {
-          "text": "яйцо",
-          "hasAudio": true
-        },
-        "en": {
-          "text": "egg",
-          "hasAudio": true
-        },
-        "fr": {
-          "text": "œuf",
-          "hasAudio": true
-        },
-        "de": {
-          "text": "Ei",
-          "hasAudio": true
-        },
-        "zh": {
-          "text": "鸡蛋",
-          "hasAudio": true
-        },
-        "ba": {
-          "text": "йомортҡа",
-          "hasAudio": true
-        }
-      }
-    },
-    {
-      "id": "meat",
-      "hasPicture": true,
-      "translations": {
-        "ru": {
-          "text": "мясо",
-          "hasAudio": true
-        },
-        "en": {
-          "text": "meat",
-          "hasAudio": true
-        },
-        "fr": {
-          "text": "viande",
-          "hasAudio": true
-        },
-        "de": {
-          "text": "Fleisch",
-          "hasAudio": true
-        },
-        "zh": {
-          "text": "肉",
-          "hasAudio": true
-        },
-        "ba": {
-          "text": "ит",
-          "hasAudio": true
-        }
-      }
-    },
-    {
-      "id": "soup",
-      "hasPicture": true,
-      "translations": {
-        "ru": {
-          "text": "суп",
-          "hasAudio": true
-        },
-        "en": {
-          "text": "soup",
-          "hasAudio": true
-        },
-        "fr": {
-          "text": "soupe",
-          "hasAudio": true
-        },
-        "de": {
-          "text": "Suppe",
-          "hasAudio": true
-        },
-        "zh": {
-          "text": "汤",
-          "hasAudio": true
-        },
-        "ba": {
-          "text": "һурпа",
-          "hasAudio": true
-        }
-      }
-    },
-    {
-      "id": "porridge",
-      "hasPicture": true,
-      "translations": {
-        "ru": {
-          "text": "каша",
-          "hasAudio": true
-        },
-        "en": {
-          "text": "porridge",
-          "hasAudio": true
-        },
-        "fr": {
-          "text": "bouillie",
-          "hasAudio": true
-        },
-        "de": {
-          "text": "Brei",
-          "hasAudio": true
-        },
-        "zh": {
-          "text": "粥",
-          "hasAudio": true
-        },
-        "ba": {
-          "text": "бутҡа",
-          "hasAudio": true
-        }
-      }
-    },
-    {
-      "id": "potato",
-      "hasPicture": true,
-      "translations": {
-        "ru": {
-          "text": "картошка",
-          "hasAudio": true
-        },
-        "en": {
-          "text": "potato",
-          "hasAudio": true
-        },
-        "fr": {
-          "text": "pomme de terre",
-          "hasAudio": true
-        },
-        "de": {
-          "text": "Kartoffel",
-          "hasAudio": true
-        },
-        "zh": {
-          "text": "土豆",
-          "hasAudio": true
-        },
-        "ba": {
-          "text": "картуф",
-          "hasAudio": true
-        }
-      }
-    },
-    {
-      "id": "carrot",
-      "hasPicture": true,
-      "translations": {
-        "ru": {
-          "text": "морковь",
-          "hasAudio": true
-        },
-        "en": {
-          "text": "carrot",
-          "hasAudio": true
-        },
-        "fr": {
-          "text": "carotte",
-          "hasAudio": true
-        },
-        "de": {
-          "text": "Karotte",
-          "hasAudio": true
-        },
-        "zh": {
-          "text": "胡萝卜",
-          "hasAudio": true
-        },
-        "ba": {
-          "text": "кишер",
-          "hasAudio": true
-        }
-      }
-    },
-    {
-      "id": "cabbage",
-      "hasPicture": true,
-      "translations": {
-        "ru": {
-          "text": "капуста",
-          "hasAudio": true
-        },
-        "en": {
-          "text": "cabbage",
-          "hasAudio": true
-        },
-        "fr": {
-          "text": "chou",
-          "hasAudio": true
-        },
-        "de": {
-          "text": "Kohl",
-          "hasAudio": true
-        },
-        "zh": {
-          "text": "白菜",
-          "hasAudio": true
-        },
-        "ba": {
-          "text": "кәбеҫтә",
-          "hasAudio": true
-        }
-      }
-    },
-    {
-      "id": "tomato",
-      "hasPicture": true,
-      "translations": {
-        "ru": {
-          "text": "помидор",
-          "hasAudio": true
-        },
-        "en": {
-          "text": "tomato",
-          "hasAudio": true
-        },
-        "fr": {
-          "text": "tomate",
-          "hasAudio": true
-        },
-        "de": {
-          "text": "Tomate",
-          "hasAudio": true
-        },
-        "zh": {
-          "text": "番茄",
-          "hasAudio": true
-        },
-        "ba": {
-          "text": "помидор",
-          "hasAudio": true
-        }
-      }
-    },
-    {
-      "id": "honey",
-      "hasPicture": true,
-      "translations": {
-        "ru": {
-          "text": "мёд",
-          "hasAudio": true
-        },
-        "en": {
-          "text": "honey",
-          "hasAudio": true
-        },
-        "fr": {
-          "text": "miel",
-          "hasAudio": true
-        },
-        "de": {
-          "text": "Honig",
-          "hasAudio": true
-        },
-        "zh": {
-          "text": "蜂蜜",
-          "hasAudio": true
-        },
-        "ba": {
-          "text": "бал",
-          "hasAudio": true
-        }
-      }
-    },
-    {
-      "id": "plate",
-      "hasPicture": true,
-      "translations": {
-        "ru": {
-          "text": "тарелка",
-          "hasAudio": true
-        },
-        "en": {
-          "text": "plate",
-          "hasAudio": true
-        },
-        "fr": {
-          "text": "assiette",
-          "hasAudio": true
-        },
-        "de": {
-          "text": "Teller",
-          "hasAudio": true
-        },
-        "zh": {
-          "text": "盘子",
-          "hasAudio": true
-        },
-        "ba": {
-          "text": "тәрилкә",
-          "hasAudio": true
-        }
-      }
-    },
-    {
-      "id": "cup",
-      "hasPicture": true,
-      "translations": {
-        "ru": {
-          "text": "чашка",
-          "hasAudio": true
-        },
-        "en": {
-          "text": "cup",
-          "hasAudio": true
-        },
-        "fr": {
-          "text": "tasse",
-          "hasAudio": true
-        },
-        "de": {
-          "text": "Tasse",
-          "hasAudio": true
-        },
-        "zh": {
-          "text": "杯子",
-          "hasAudio": true
-        },
-        "ba": {
-          "text": "сынаяҡ",
-          "hasAudio": true
-        }
-      }
-    },
-    {
-      "id": "glass",
-      "hasPicture": true,
-      "translations": {
-        "ru": {
-          "text": "стакан",
-          "hasAudio": true
-        },
-        "en": {
-          "text": "glass",
-          "hasAudio": true
-        },
-        "fr": {
-          "text": "verre",
-          "hasAudio": true
-        },
-        "de": {
-          "text": "Glas",
-          "hasAudio": true
-        },
-        "zh": {
-          "text": "玻璃杯",
-          "hasAudio": true
-        },
-        "ba": {
-          "text": "стакан",
-          "hasAudio": true
-        }
-      }
-    },
-    {
-      "id": "spoon",
-      "hasPicture": true,
-      "translations": {
-        "ru": {
-          "text": "ложка",
-          "hasAudio": true
-        },
-        "en": {
-          "text": "spoon",
-          "hasAudio": true
-        },
-        "fr": {
-          "text": "cuillère",
-          "hasAudio": true
-        },
-        "de": {
-          "text": "Löffel",
-          "hasAudio": true
-        },
-        "zh": {
-          "text": "勺子",
-          "hasAudio": true
-        },
-        "ba": {
-          "text": "ҡалаҡ",
-          "hasAudio": true
-        }
-      }
-    },
-    {
-      "id": "fork",
-      "hasPicture": true,
-      "translations": {
-        "ru": {
-          "text": "вилка",
-          "hasAudio": true
-        },
-        "en": {
-          "text": "fork",
-          "hasAudio": true
-        },
-        "fr": {
-          "text": "fourchette",
-          "hasAudio": true
-        },
-        "de": {
-          "text": "Gabel",
-          "hasAudio": true
-        },
-        "zh": {
-          "text": "叉子",
-          "hasAudio": true
-        },
-        "ba": {
-          "text": "сәнске",
-          "hasAudio": true
-        }
-      }
-    },
-    {
-      "id": "knife",
-      "hasPicture": true,
-      "translations": {
-        "ru": {
-          "text": "нож",
-          "hasAudio": true
-        },
-        "en": {
-          "text": "knife",
-          "hasAudio": true
-        },
-        "fr": {
-          "text": "couteau",
-          "hasAudio": true
-        },
-        "de": {
-          "text": "Messer",
-          "hasAudio": true
-        },
-        "zh": {
-          "text": "刀",
-          "hasAudio": true
-        },
-        "ba": {
-          "text": "бысаҡ",
-          "hasAudio": true
-        }
-      }
-    },
-    {
-      "id": "teapot",
-      "hasPicture": true,
-      "translations": {
-        "ru": {
-          "text": "заварочный чайник",
-          "hasAudio": true
-        },
-        "en": {
-          "text": "teapot",
-          "hasAudio": true
-        },
-        "fr": {
-          "text": "théière",
-          "hasAudio": true
-        },
-        "de": {
-          "text": "Teekanne",
-          "hasAudio": true
-        },
-        "zh": {
-          "text": "茶壶",
-          "hasAudio": true
-        },
-        "ba": {
-          "text": "сәйнүк ҙур",
-          "hasAudio": true
-        }
-      }
-    },
-    {
-      "id": "jug",
-      "hasPicture": true,
-      "translations": {
-        "ru": {
-          "text": "кувшин",
-          "hasAudio": true
-        },
-        "en": {
-          "text": "jug",
-          "hasAudio": true
-        },
-        "fr": {
-          "text": "pichet",
-          "hasAudio": true
-        },
-        "de": {
-          "text": "Krug",
-          "hasAudio": true
-        },
-        "zh": {
-          "text": "水壶罐",
-          "hasAudio": true
-        },
-        "ba": {
-          "text": "кувшин",
-          "hasAudio": true
-        }
-      }
-    },
-    {
-      "id": "bowl",
-      "hasPicture": true,
-      "translations": {
-        "ru": {
-          "text": "миска",
-          "hasAudio": true
-        },
-        "en": {
-          "text": "bowl",
-          "hasAudio": true
-        },
-        "fr": {
-          "text": "bol",
-          "hasAudio": true
-        },
-        "de": {
-          "text": "Schüssel",
-          "hasAudio": true
-        },
-        "zh": {
-          "text": "碗",
-          "hasAudio": true
-        },
-        "ba": {
-          "text": "табаҡ",
-          "hasAudio": true
-        }
-      }
-    },
-    {
-      "id": "tablecloth",
-      "hasPicture": true,
-      "translations": {
-        "ru": {
-          "text": "скатерть",
-          "hasAudio": true
-        },
-        "en": {
-          "text": "tablecloth",
-          "hasAudio": true
-        },
-        "fr": {
-          "text": "nappe",
-          "hasAudio": true
-        },
-        "de": {
-          "text": "Tischdecke",
-          "hasAudio": true
-        },
-        "zh": {
-          "text": "桌布",
-          "hasAudio": true
-        },
-        "ba": {
-          "text": "ашъяулыҡ",
-          "hasAudio": true
-        }
-      }
-    },
-    {
-      "id": "sugarbowl",
-      "hasPicture": true,
-      "translations": {
-        "ru": {
-          "text": "сахарница",
-          "hasAudio": true
-        },
-        "en": {
-          "text": "sugar bowl",
-          "hasAudio": true
-        },
-        "fr": {
-          "text": "sucrier",
-          "hasAudio": true
-        },
-        "de": {
-          "text": "Zuckerdose",
-          "hasAudio": true
-        },
-        "zh": {
-          "text": "糖罐",
-          "hasAudio": true
-        },
-        "ba": {
-          "text": "шәкәр һауыты",
-          "hasAudio": true
-        }
-      }
-    },
-    {
-      "id": "breadbox",
-      "hasPicture": true,
-      "translations": {
-        "ru": {
-          "text": "хлебница",
-          "hasAudio": true
-        },
-        "en": {
-          "text": "bread bin",
-          "hasAudio": true
-        },
-        "fr": {
-          "text": "boîte à pain",
-          "hasAudio": true
-        },
-        "de": {
-          "text": "Brotkasten",
-          "hasAudio": true
-        },
-        "zh": {
-          "text": "面包盒",
-          "hasAudio": true
-        },
-        "ba": {
-          "text": "икмәк һауыты",
-          "hasAudio": true
-        }
-      }
-    },
-    {
-      "id": "mother",
-      "hasPicture": true,
-      "translations": {
-        "ru": {
-          "text": "мама",
-          "hasAudio": true
-        },
-        "en": {
-          "text": "mother",
-          "hasAudio": true
-        },
-        "fr": {
-          "text": "mère",
-          "hasAudio": true
-        },
-        "de": {
-          "text": "Mutter",
-          "hasAudio": true
-        },
-        "zh": {
-          "text": "妈妈",
-          "hasAudio": true
-        },
-        "ba": {
-          "text": "әсәй",
-          "hasAudio": true
-        }
-      }
-    },
-    {
-      "id": "father",
-      "hasPicture": true,
-      "translations": {
-        "ru": {
-          "text": "папа",
-          "hasAudio": true
-        },
-        "en": {
-          "text": "father",
-          "hasAudio": true
-        },
-        "fr": {
-          "text": "père",
-          "hasAudio": true
-        },
-        "de": {
-          "text": "Vater",
-          "hasAudio": true
-        },
-        "zh": {
-          "text": "爸爸",
-          "hasAudio": true
-        },
-        "ba": {
-          "text": "атай",
-          "hasAudio": true
-        }
-      }
-    },
-    {
-      "id": "son",
-      "hasPicture": true,
-      "translations": {
-        "ru": {
-          "text": "сын",
-          "hasAudio": true
-        },
-        "en": {
-          "text": "son",
-          "hasAudio": true
-        },
-        "fr": {
-          "text": "fils",
-          "hasAudio": true
-        },
-        "de": {
-          "text": "Sohn",
-          "hasAudio": true
-        },
-        "zh": {
-          "text": "儿子",
-          "hasAudio": true
-        },
-        "ba": {
-          "text": "ул",
-          "hasAudio": true
-        }
-      }
-    },
-    {
-      "id": "daughter",
-      "hasPicture": true,
-      "translations": {
-        "ru": {
-          "text": "дочь",
-          "hasAudio": true
-        },
-        "en": {
-          "text": "daughter",
-          "hasAudio": true
-        },
-        "fr": {
-          "text": "fille",
-          "hasAudio": true
-        },
-        "de": {
-          "text": "Tochter",
-          "hasAudio": true
-        },
-        "zh": {
-          "text": "女儿",
-          "hasAudio": true
-        },
-        "ba": {
-          "text": "ҡыҙ",
-          "hasAudio": true
-        }
-      }
-    },
-    {
-      "id": "brother",
-      "hasPicture": true,
-      "translations": {
-        "ru": {
-          "text": "брат",
-          "hasAudio": true
-        },
-        "en": {
-          "text": "brother",
-          "hasAudio": true
-        },
-        "fr": {
-          "text": "frère",
-          "hasAudio": true
-        },
-        "de": {
-          "text": "Bruder",
-          "hasAudio": true
-        },
-        "zh": {
-          "text": "兄弟",
-          "hasAudio": true
-        },
-        "ba": {
-          "text": "ағай",
-          "hasAudio": true
-        }
-      }
-    },
-    {
-      "id": "sister",
-      "hasPicture": true,
-      "translations": {
-        "ru": {
-          "text": "сестра",
-          "hasAudio": true
-        },
-        "en": {
-          "text": "sister",
-          "hasAudio": true
-        },
-        "fr": {
-          "text": "sœur",
-          "hasAudio": true
-        },
-        "de": {
-          "text": "Schwester",
-          "hasAudio": true
-        },
-        "zh": {
-          "text": "姐妹",
-          "hasAudio": true
-        },
-        "ba": {
-          "text": "апай",
-          "hasAudio": true
-        }
-      }
-    },
-    {
-      "id": "grandmother",
-      "hasPicture": true,
-      "translations": {
-        "ru": {
-          "text": "бабушка",
-          "hasAudio": true
-        },
-        "en": {
-          "text": "grandmother",
-          "hasAudio": true
-        },
-        "fr": {
-          "text": "grand-mère",
-          "hasAudio": true
-        },
-        "de": {
-          "text": "Großmutter",
-          "hasAudio": true
-        },
-        "zh": {
-          "text": "奶奶",
-          "hasAudio": true
-        },
-        "ba": {
-          "text": "өләсәй",
-          "hasAudio": true
-        }
-      }
-    },
-    {
-      "id": "grandfather",
-      "hasPicture": true,
-      "translations": {
-        "ru": {
-          "text": "дедушка",
-          "hasAudio": true
-        },
-        "en": {
-          "text": "grandfather",
-          "hasAudio": true
-        },
-        "fr": {
-          "text": "grand-père",
-          "hasAudio": true
-        },
-        "de": {
-          "text": "Großvater",
-          "hasAudio": true
-        },
-        "zh": {
-          "text": "爷爷",
-          "hasAudio": true
-        },
-        "ba": {
-          "text": "олатай",
-          "hasAudio": true
-        }
-      }
-    },
-    {
-      "id": "baby",
-      "hasPicture": true,
-      "translations": {
-        "ru": {
-          "text": "малыш",
-          "hasAudio": true
-        },
-        "en": {
-          "text": "baby",
-          "hasAudio": true
-        },
-        "fr": {
-          "text": "bébé",
-          "hasAudio": true
-        },
-        "de": {
-          "text": "Baby",
-          "hasAudio": true
-        },
-        "zh": {
-          "text": "婴儿",
-          "hasAudio": true
-        },
-        "ba": {
-          "text": "бәпес",
-          "hasAudio": true
-        }
-      }
-    },
-    {
-      "id": "friend",
-      "hasPicture": true,
-      "translations": {
-        "ru": {
-          "text": "друг",
-          "hasAudio": true
-        },
-        "en": {
-          "text": "friend",
-          "hasAudio": true
-        },
-        "fr": {
-          "text": "ami",
-          "hasAudio": true
-        },
-        "de": {
-          "text": "Freund",
-          "hasAudio": true
-        },
-        "zh": {
-          "text": "朋友",
-          "hasAudio": true
-        },
-        "ba": {
-          "text": "дуҫ",
-          "hasAudio": true
-        }
-      }
-    },
-    {
-      "id": "neighbour",
-      "hasPicture": true,
-      "translations": {
-        "ru": {
-          "text": "сосед",
-          "hasAudio": true
-        },
-        "en": {
-          "text": "neighbour",
-          "hasAudio": true
-        },
-        "fr": {
-          "text": "voisin",
-          "hasAudio": true
-        },
-        "de": {
-          "text": "Nachbar",
-          "hasAudio": true
-        },
-        "zh": {
-          "text": "邻居",
-          "hasAudio": true
-        },
-        "ba": {
-          "text": "күрше",
-          "hasAudio": true
-        }
-      }
-    },
-    {
-      "id": "guest",
-      "hasPicture": true,
-      "translations": {
-        "ru": {
-          "text": "гость",
-          "hasAudio": true
-        },
-        "en": {
-          "text": "guest",
-          "hasAudio": true
-        },
-        "fr": {
-          "text": "invité",
-          "hasAudio": true
-        },
-        "de": {
-          "text": "Gast",
-          "hasAudio": true
-        },
-        "zh": {
-          "text": "客人",
-          "hasAudio": true
-        },
-        "ba": {
-          "text": "ҡунаҡ",
           "hasAudio": true
         }
       }

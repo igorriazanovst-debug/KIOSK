@@ -1,5 +1,9 @@
 // packages/inophone-library/tools/catalogue/city.mjs
-// Тема «Город» — семь сцен, 84 понятия.
+// Тема «Город» — шесть сцен, 72 понятия.
+//
+// Сцена «Магазин» ПЕРЕЕХАЛА в тему «Покупки»: ТЗ строка 97 требует «покупки»
+// именно темой, а не подтемой города, и на приёмке перечень тем сверяют
+// построчно.
 //
 // Здесь сознательно много слов, которые инофону нужны В ПЕРВУЮ ОЧЕРЕДЬ:
 // «аптека», «остановка», «билет», «врач», «расписание». Пособие рассчитано не
@@ -27,24 +31,6 @@ export default {
         { id: 'pharmacy',   ru: 'аптека',     en: 'pharmacy',     fr: 'pharmacie',    de: 'Apotheke',     zh: '药店', ba: 'дарыуханә' },
         { id: 'postbox',    ru: 'почтовый ящик', en: 'postbox',   fr: 'boîte aux lettres', de: 'Briefkasten', zh: '邮箱', ba: 'почта йәшниге' },
         { id: 'fence',      ru: 'забор',      en: 'fence',        fr: 'clôture',      de: 'Zaun',         zh: '围栏', ba: 'ҡойма' },
-      ],
-    },
-    {
-      id: 'shop',
-      titles: { ru: 'Магазин', en: 'Shop', fr: 'Magasin', de: 'Geschäft', zh: '商店', ba: 'Магазин' },
-      words: [
-        { id: 'counter',    ru: 'прилавок',   en: 'counter',      fr: 'comptoir',     de: 'Theke',        zh: '柜台', ba: 'прилавок' },
-        { id: 'cashdesk',   ru: 'касса',      en: 'checkout',     fr: 'caisse',       de: 'Kasse',        zh: '收银台', ba: 'касса' },
-        { id: 'trolley',    ru: 'тележка',    en: 'trolley',      fr: 'chariot',      de: 'Einkaufswagen',zh: '购物车', ba: 'арба' },
-        { id: 'money',      ru: 'деньги',     en: 'money',        fr: 'argent',       de: 'Geld',         zh: '钱',   ba: 'аҡса' },
-        { id: 'receipt',    ru: 'чек',        en: 'receipt',      fr: 'ticket de caisse', de: 'Kassenbon',zh: '收据', ba: 'чек' },
-        { id: 'pricetag',   ru: 'ценник',     en: 'price tag',    fr: 'étiquette de prix', de: 'Preisschild', zh: '价签', ba: 'хаҡ билдәһе' },
-        { id: 'scales_shop', ru: 'весы в магазине', en: 'shop scales', fr: 'balance de magasin', de: 'Ladenwaage', zh: '商店秤', ba: 'магазин үлсәүе' },
-        { id: 'packet',     ru: 'пакет',      en: 'carrier bag',  fr: 'sac plastique',de: 'Tüte',         zh: '购物袋', ba: 'пакет' },
-        { id: 'seller',     ru: 'продавец',   en: 'shop assistant', fr: 'vendeur',    de: 'Verkäufer',    zh: '售货员', ba: 'һатыусы' },
-        { id: 'buyer',      ru: 'покупатель', en: 'customer',     fr: 'client',       de: 'Kunde',        zh: '顾客', ba: 'һатып алыусы' },
-        { id: 'shelves',    ru: 'стеллаж',    en: 'shelving unit',fr: 'rayonnage',    de: 'Regalwand',    zh: '货架', ba: 'стеллаж' },
-        { id: 'fridge_shop', ru: 'витрина-холодильник', en: 'chiller cabinet', fr: 'vitrine réfrigérée', de: 'Kühltheke', zh: '冷藏柜', ba: 'һыуытҡыс витрина' },
       ],
     },
     {

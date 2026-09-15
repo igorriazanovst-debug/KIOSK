@@ -1,7 +1,7 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 800" width="1280" height="800">
-  <rect width="1280" height="800" fill="#dfe9f2"/>
-  <rect y="496" width="1280" height="304" fill="#c9c9c9"/>
-  <line x1="0" y1="496" x2="1280" y2="496" stroke="#b0b0b0" stroke-width="3"/>
+  <rect width="1280" height="800" fill="#eaf2ec"/>
+  <rect y="496" width="1280" height="304" fill="#d6e0d8"/>
+  <line x1="0" y1="496" x2="1280" y2="496" stroke="#bcc9bf" stroke-width="3"/>
   <image href="../concepts/counter.svg" x="66" y="82" width="169" height="169" preserveAspectRatio="xMidYMid meet"/>
   <image href="../concepts/cashdesk.svg" x="363" y="93" width="138" height="138" preserveAspectRatio="xMidYMid meet"/>
   <image href="../concepts/trolley.svg" x="597" y="91" width="138" height="138" preserveAspectRatio="xMidYMid meet"/>

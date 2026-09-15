@@ -4032,510 +4032,6 @@
     "out": "assets/audio/ba/fence.mp3"
   },
   {
-    "id": "counter",
-    "code": "ru",
-    "text": "прилавок",
-    "engine": "sapi",
-    "out": "assets/audio/ru/counter.mp3"
-  },
-  {
-    "id": "counter",
-    "code": "en",
-    "text": "counter",
-    "engine": "sapi",
-    "out": "assets/audio/en/counter.mp3"
-  },
-  {
-    "id": "counter",
-    "code": "fr",
-    "text": "comptoir",
-    "engine": "espeak",
-    "out": "assets/audio/fr/counter.mp3"
-  },
-  {
-    "id": "counter",
-    "code": "de",
-    "text": "Theke",
-    "engine": "espeak",
-    "out": "assets/audio/de/counter.mp3"
-  },
-  {
-    "id": "counter",
-    "code": "zh",
-    "text": "柜台",
-    "engine": "espeak",
-    "out": "assets/audio/zh/counter.mp3"
-  },
-  {
-    "id": "counter",
-    "code": "ba",
-    "text": "прилавок",
-    "engine": "espeak",
-    "out": "assets/audio/ba/counter.mp3"
-  },
-  {
-    "id": "cashdesk",
-    "code": "ru",
-    "text": "касса",
-    "engine": "sapi",
-    "out": "assets/audio/ru/cashdesk.mp3"
-  },
-  {
-    "id": "cashdesk",
-    "code": "en",
-    "text": "checkout",
-    "engine": "sapi",
-    "out": "assets/audio/en/cashdesk.mp3"
-  },
-  {
-    "id": "cashdesk",
-    "code": "fr",
-    "text": "caisse",
-    "engine": "espeak",
-    "out": "assets/audio/fr/cashdesk.mp3"
-  },
-  {
-    "id": "cashdesk",
-    "code": "de",
-    "text": "Kasse",
-    "engine": "espeak",
-    "out": "assets/audio/de/cashdesk.mp3"
-  },
-  {
-    "id": "cashdesk",
-    "code": "zh",
-    "text": "收银台",
-    "engine": "espeak",
-    "out": "assets/audio/zh/cashdesk.mp3"
-  },
-  {
-    "id": "cashdesk",
-    "code": "ba",
-    "text": "касса",
-    "engine": "espeak",
-    "out": "assets/audio/ba/cashdesk.mp3"
-  },
-  {
-    "id": "trolley",
-    "code": "ru",
-    "text": "тележка",
-    "engine": "sapi",
-    "out": "assets/audio/ru/trolley.mp3"
-  },
-  {
-    "id": "trolley",
-    "code": "en",
-    "text": "trolley",
-    "engine": "sapi",
-    "out": "assets/audio/en/trolley.mp3"
-  },
-  {
-    "id": "trolley",
-    "code": "fr",
-    "text": "chariot",
-    "engine": "espeak",
-    "out": "assets/audio/fr/trolley.mp3"
-  },
-  {
-    "id": "trolley",
-    "code": "de",
-    "text": "Einkaufswagen",
-    "engine": "espeak",
-    "out": "assets/audio/de/trolley.mp3"
-  },
-  {
-    "id": "trolley",
-    "code": "zh",
-    "text": "购物车",
-    "engine": "espeak",
-    "out": "assets/audio/zh/trolley.mp3"
-  },
-  {
-    "id": "trolley",
-    "code": "ba",
-    "text": "арба",
-    "engine": "espeak",
-    "out": "assets/audio/ba/trolley.mp3"
-  },
-  {
-    "id": "money",
-    "code": "ru",
-    "text": "деньги",
-    "engine": "sapi",
-    "out": "assets/audio/ru/money.mp3"
-  },
-  {
-    "id": "money",
-    "code": "en",
-    "text": "money",
-    "engine": "sapi",
-    "out": "assets/audio/en/money.mp3"
-  },
-  {
-    "id": "money",
-    "code": "fr",
-    "text": "argent",
-    "engine": "espeak",
-    "out": "assets/audio/fr/money.mp3"
-  },
-  {
-    "id": "money",
-    "code": "de",
-    "text": "Geld",
-    "engine": "espeak",
-    "out": "assets/audio/de/money.mp3"
-  },
-  {
-    "id": "money",
-    "code": "zh",
-    "text": "钱",
-    "engine": "espeak",
-    "out": "assets/audio/zh/money.mp3"
-  },
-  {
-    "id": "money",
-    "code": "ba",
-    "text": "аҡса",
-    "engine": "espeak",
-    "out": "assets/audio/ba/money.mp3"
-  },
-  {
-    "id": "receipt",
-    "code": "ru",
-    "text": "чек",
-    "engine": "sapi",
-    "out": "assets/audio/ru/receipt.mp3"
-  },
-  {
-    "id": "receipt",
-    "code": "en",
-    "text": "receipt",
-    "engine": "sapi",
-    "out": "assets/audio/en/receipt.mp3"
-  },
-  {
-    "id": "receipt",
-    "code": "fr",
-    "text": "ticket de caisse",
-    "engine": "espeak",
-    "out": "assets/audio/fr/receipt.mp3"
-  },
-  {
-    "id": "receipt",
-    "code": "de",
-    "text": "Kassenbon",
-    "engine": "espeak",
-    "out": "assets/audio/de/receipt.mp3"
-  },
-  {
-    "id": "receipt",
-    "code": "zh",
-    "text": "收据",
-    "engine": "espeak",
-    "out": "assets/audio/zh/receipt.mp3"
-  },
-  {
-    "id": "receipt",
-    "code": "ba",
-    "text": "чек",
-    "engine": "espeak",
-    "out": "assets/audio/ba/receipt.mp3"
-  },
-  {
-    "id": "pricetag",
-    "code": "ru",
-    "text": "ценник",
-    "engine": "sapi",
-    "out": "assets/audio/ru/pricetag.mp3"
-  },
-  {
-    "id": "pricetag",
-    "code": "en",
-    "text": "price tag",
-    "engine": "sapi",
-    "out": "assets/audio/en/pricetag.mp3"
-  },
-  {
-    "id": "pricetag",
-    "code": "fr",
-    "text": "étiquette de prix",
-    "engine": "espeak",
-    "out": "assets/audio/fr/pricetag.mp3"
-  },
-  {
-    "id": "pricetag",
-    "code": "de",
-    "text": "Preisschild",
-    "engine": "espeak",
-    "out": "assets/audio/de/pricetag.mp3"
-  },
-  {
-    "id": "pricetag",
-    "code": "zh",
-    "text": "价签",
-    "engine": "espeak",
-    "out": "assets/audio/zh/pricetag.mp3"
-  },
-  {
-    "id": "pricetag",
-    "code": "ba",
-    "text": "хаҡ билдәһе",
-    "engine": "espeak",
-    "out": "assets/audio/ba/pricetag.mp3"
-  },
-  {
-    "id": "scales_shop",
-    "code": "ru",
-    "text": "весы в магазине",
-    "engine": "sapi",
-    "out": "assets/audio/ru/scales_shop.mp3"
-  },
-  {
-    "id": "scales_shop",
-    "code": "en",
-    "text": "shop scales",
-    "engine": "sapi",
-    "out": "assets/audio/en/scales_shop.mp3"
-  },
-  {
-    "id": "scales_shop",
-    "code": "fr",
-    "text": "balance de magasin",
-    "engine": "espeak",
-    "out": "assets/audio/fr/scales_shop.mp3"
-  },
-  {
-    "id": "scales_shop",
-    "code": "de",
-    "text": "Ladenwaage",
-    "engine": "espeak",
-    "out": "assets/audio/de/scales_shop.mp3"
-  },
-  {
-    "id": "scales_shop",
-    "code": "zh",
-    "text": "商店秤",
-    "engine": "espeak",
-    "out": "assets/audio/zh/scales_shop.mp3"
-  },
-  {
-    "id": "scales_shop",
-    "code": "ba",
-    "text": "магазин үлсәүе",
-    "engine": "espeak",
-    "out": "assets/audio/ba/scales_shop.mp3"
-  },
-  {
-    "id": "packet",
-    "code": "ru",
-    "text": "пакет",
-    "engine": "sapi",
-    "out": "assets/audio/ru/packet.mp3"
-  },
-  {
-    "id": "packet",
-    "code": "en",
-    "text": "carrier bag",
-    "engine": "sapi",
-    "out": "assets/audio/en/packet.mp3"
-  },
-  {
-    "id": "packet",
-    "code": "fr",
-    "text": "sac plastique",
-    "engine": "espeak",
-    "out": "assets/audio/fr/packet.mp3"
-  },
-  {
-    "id": "packet",
-    "code": "de",
-    "text": "Tüte",
-    "engine": "espeak",
-    "out": "assets/audio/de/packet.mp3"
-  },
-  {
-    "id": "packet",
-    "code": "zh",
-    "text": "购物袋",
-    "engine": "espeak",
-    "out": "assets/audio/zh/packet.mp3"
-  },
-  {
-    "id": "packet",
-    "code": "ba",
-    "text": "пакет",
-    "engine": "espeak",
-    "out": "assets/audio/ba/packet.mp3"
-  },
-  {
-    "id": "seller",
-    "code": "ru",
-    "text": "продавец",
-    "engine": "sapi",
-    "out": "assets/audio/ru/seller.mp3"
-  },
-  {
-    "id": "seller",
-    "code": "en",
-    "text": "shop assistant",
-    "engine": "sapi",
-    "out": "assets/audio/en/seller.mp3"
-  },
-  {
-    "id": "seller",
-    "code": "fr",
-    "text": "vendeur",
-    "engine": "espeak",
-    "out": "assets/audio/fr/seller.mp3"
-  },
-  {
-    "id": "seller",
-    "code": "de",
-    "text": "Verkäufer",
-    "engine": "espeak",
-    "out": "assets/audio/de/seller.mp3"
-  },
-  {
-    "id": "seller",
-    "code": "zh",
-    "text": "售货员",
-    "engine": "espeak",
-    "out": "assets/audio/zh/seller.mp3"
-  },
-  {
-    "id": "seller",
-    "code": "ba",
-    "text": "һатыусы",
-    "engine": "espeak",
-    "out": "assets/audio/ba/seller.mp3"
-  },
-  {
-    "id": "buyer",
-    "code": "ru",
-    "text": "покупатель",
-    "engine": "sapi",
-    "out": "assets/audio/ru/buyer.mp3"
-  },
-  {
-    "id": "buyer",
-    "code": "en",
-    "text": "customer",
-    "engine": "sapi",
-    "out": "assets/audio/en/buyer.mp3"
-  },
-  {
-    "id": "buyer",
-    "code": "fr",
-    "text": "client",
-    "engine": "espeak",
-    "out": "assets/audio/fr/buyer.mp3"
-  },
-  {
-    "id": "buyer",
-    "code": "de",
-    "text": "Kunde",
-    "engine": "espeak",
-    "out": "assets/audio/de/buyer.mp3"
-  },
-  {
-    "id": "buyer",
-    "code": "zh",
-    "text": "顾客",
-    "engine": "espeak",
-    "out": "assets/audio/zh/buyer.mp3"
-  },
-  {
-    "id": "buyer",
-    "code": "ba",
-    "text": "һатып алыусы",
-    "engine": "espeak",
-    "out": "assets/audio/ba/buyer.mp3"
-  },
-  {
-    "id": "shelves",
-    "code": "ru",
-    "text": "стеллаж",
-    "engine": "sapi",
-    "out": "assets/audio/ru/shelves.mp3"
-  },
-  {
-    "id": "shelves",
-    "code": "en",
-    "text": "shelving unit",
-    "engine": "sapi",
-    "out": "assets/audio/en/shelves.mp3"
-  },
-  {
-    "id": "shelves",
-    "code": "fr",
-    "text": "rayonnage",
-    "engine": "espeak",
-    "out": "assets/audio/fr/shelves.mp3"
-  },
-  {
-    "id": "shelves",
-    "code": "de",
-    "text": "Regalwand",
-    "engine": "espeak",
-    "out": "assets/audio/de/shelves.mp3"
-  },
-  {
-    "id": "shelves",
-    "code": "zh",
-    "text": "货架",
-    "engine": "espeak",
-    "out": "assets/audio/zh/shelves.mp3"
-  },
-  {
-    "id": "shelves",
-    "code": "ba",
-    "text": "стеллаж",
-    "engine": "espeak",
-    "out": "assets/audio/ba/shelves.mp3"
-  },
-  {
-    "id": "fridge_shop",
-    "code": "ru",
-    "text": "витрина-холодильник",
-    "engine": "sapi",
-    "out": "assets/audio/ru/fridge_shop.mp3"
-  },
-  {
-    "id": "fridge_shop",
-    "code": "en",
-    "text": "chiller cabinet",
-    "engine": "sapi",
-    "out": "assets/audio/en/fridge_shop.mp3"
-  },
-  {
-    "id": "fridge_shop",
-    "code": "fr",
-    "text": "vitrine réfrigérée",
-    "engine": "espeak",
-    "out": "assets/audio/fr/fridge_shop.mp3"
-  },
-  {
-    "id": "fridge_shop",
-    "code": "de",
-    "text": "Kühltheke",
-    "engine": "espeak",
-    "out": "assets/audio/de/fridge_shop.mp3"
-  },
-  {
-    "id": "fridge_shop",
-    "code": "zh",
-    "text": "冷藏柜",
-    "engine": "espeak",
-    "out": "assets/audio/zh/fridge_shop.mp3"
-  },
-  {
-    "id": "fridge_shop",
-    "code": "ba",
-    "text": "һыуытҡыс витрина",
-    "engine": "espeak",
-    "out": "assets/audio/ba/fridge_shop.mp3"
-  },
-  {
     "id": "blackboard",
     "code": "ru",
     "text": "доска",
@@ -7054,6 +6550,4038 @@
     "text": "иҫәп",
     "engine": "espeak",
     "out": "assets/audio/ba/bill.mp3"
+  },
+  {
+    "id": "counter",
+    "code": "ru",
+    "text": "прилавок",
+    "engine": "sapi",
+    "out": "assets/audio/ru/counter.mp3"
+  },
+  {
+    "id": "counter",
+    "code": "en",
+    "text": "counter",
+    "engine": "sapi",
+    "out": "assets/audio/en/counter.mp3"
+  },
+  {
+    "id": "counter",
+    "code": "fr",
+    "text": "comptoir",
+    "engine": "espeak",
+    "out": "assets/audio/fr/counter.mp3"
+  },
+  {
+    "id": "counter",
+    "code": "de",
+    "text": "Theke",
+    "engine": "espeak",
+    "out": "assets/audio/de/counter.mp3"
+  },
+  {
+    "id": "counter",
+    "code": "zh",
+    "text": "柜台",
+    "engine": "espeak",
+    "out": "assets/audio/zh/counter.mp3"
+  },
+  {
+    "id": "counter",
+    "code": "ba",
+    "text": "прилавок",
+    "engine": "espeak",
+    "out": "assets/audio/ba/counter.mp3"
+  },
+  {
+    "id": "cashdesk",
+    "code": "ru",
+    "text": "касса",
+    "engine": "sapi",
+    "out": "assets/audio/ru/cashdesk.mp3"
+  },
+  {
+    "id": "cashdesk",
+    "code": "en",
+    "text": "checkout",
+    "engine": "sapi",
+    "out": "assets/audio/en/cashdesk.mp3"
+  },
+  {
+    "id": "cashdesk",
+    "code": "fr",
+    "text": "caisse",
+    "engine": "espeak",
+    "out": "assets/audio/fr/cashdesk.mp3"
+  },
+  {
+    "id": "cashdesk",
+    "code": "de",
+    "text": "Kasse",
+    "engine": "espeak",
+    "out": "assets/audio/de/cashdesk.mp3"
+  },
+  {
+    "id": "cashdesk",
+    "code": "zh",
+    "text": "收银台",
+    "engine": "espeak",
+    "out": "assets/audio/zh/cashdesk.mp3"
+  },
+  {
+    "id": "cashdesk",
+    "code": "ba",
+    "text": "касса",
+    "engine": "espeak",
+    "out": "assets/audio/ba/cashdesk.mp3"
+  },
+  {
+    "id": "trolley",
+    "code": "ru",
+    "text": "тележка",
+    "engine": "sapi",
+    "out": "assets/audio/ru/trolley.mp3"
+  },
+  {
+    "id": "trolley",
+    "code": "en",
+    "text": "trolley",
+    "engine": "sapi",
+    "out": "assets/audio/en/trolley.mp3"
+  },
+  {
+    "id": "trolley",
+    "code": "fr",
+    "text": "chariot",
+    "engine": "espeak",
+    "out": "assets/audio/fr/trolley.mp3"
+  },
+  {
+    "id": "trolley",
+    "code": "de",
+    "text": "Einkaufswagen",
+    "engine": "espeak",
+    "out": "assets/audio/de/trolley.mp3"
+  },
+  {
+    "id": "trolley",
+    "code": "zh",
+    "text": "购物车",
+    "engine": "espeak",
+    "out": "assets/audio/zh/trolley.mp3"
+  },
+  {
+    "id": "trolley",
+    "code": "ba",
+    "text": "арба",
+    "engine": "espeak",
+    "out": "assets/audio/ba/trolley.mp3"
+  },
+  {
+    "id": "money",
+    "code": "ru",
+    "text": "деньги",
+    "engine": "sapi",
+    "out": "assets/audio/ru/money.mp3"
+  },
+  {
+    "id": "money",
+    "code": "en",
+    "text": "money",
+    "engine": "sapi",
+    "out": "assets/audio/en/money.mp3"
+  },
+  {
+    "id": "money",
+    "code": "fr",
+    "text": "argent",
+    "engine": "espeak",
+    "out": "assets/audio/fr/money.mp3"
+  },
+  {
+    "id": "money",
+    "code": "de",
+    "text": "Geld",
+    "engine": "espeak",
+    "out": "assets/audio/de/money.mp3"
+  },
+  {
+    "id": "money",
+    "code": "zh",
+    "text": "钱",
+    "engine": "espeak",
+    "out": "assets/audio/zh/money.mp3"
+  },
+  {
+    "id": "money",
+    "code": "ba",
+    "text": "аҡса",
+    "engine": "espeak",
+    "out": "assets/audio/ba/money.mp3"
+  },
+  {
+    "id": "receipt",
+    "code": "ru",
+    "text": "чек",
+    "engine": "sapi",
+    "out": "assets/audio/ru/receipt.mp3"
+  },
+  {
+    "id": "receipt",
+    "code": "en",
+    "text": "receipt",
+    "engine": "sapi",
+    "out": "assets/audio/en/receipt.mp3"
+  },
+  {
+    "id": "receipt",
+    "code": "fr",
+    "text": "ticket de caisse",
+    "engine": "espeak",
+    "out": "assets/audio/fr/receipt.mp3"
+  },
+  {
+    "id": "receipt",
+    "code": "de",
+    "text": "Kassenbon",
+    "engine": "espeak",
+    "out": "assets/audio/de/receipt.mp3"
+  },
+  {
+    "id": "receipt",
+    "code": "zh",
+    "text": "收据",
+    "engine": "espeak",
+    "out": "assets/audio/zh/receipt.mp3"
+  },
+  {
+    "id": "receipt",
+    "code": "ba",
+    "text": "чек",
+    "engine": "espeak",
+    "out": "assets/audio/ba/receipt.mp3"
+  },
+  {
+    "id": "pricetag",
+    "code": "ru",
+    "text": "ценник",
+    "engine": "sapi",
+    "out": "assets/audio/ru/pricetag.mp3"
+  },
+  {
+    "id": "pricetag",
+    "code": "en",
+    "text": "price tag",
+    "engine": "sapi",
+    "out": "assets/audio/en/pricetag.mp3"
+  },
+  {
+    "id": "pricetag",
+    "code": "fr",
+    "text": "étiquette de prix",
+    "engine": "espeak",
+    "out": "assets/audio/fr/pricetag.mp3"
+  },
+  {
+    "id": "pricetag",
+    "code": "de",
+    "text": "Preisschild",
+    "engine": "espeak",
+    "out": "assets/audio/de/pricetag.mp3"
+  },
+  {
+    "id": "pricetag",
+    "code": "zh",
+    "text": "价签",
+    "engine": "espeak",
+    "out": "assets/audio/zh/pricetag.mp3"
+  },
+  {
+    "id": "pricetag",
+    "code": "ba",
+    "text": "хаҡ билдәһе",
+    "engine": "espeak",
+    "out": "assets/audio/ba/pricetag.mp3"
+  },
+  {
+    "id": "scales_shop",
+    "code": "ru",
+    "text": "весы в магазине",
+    "engine": "sapi",
+    "out": "assets/audio/ru/scales_shop.mp3"
+  },
+  {
+    "id": "scales_shop",
+    "code": "en",
+    "text": "shop scales",
+    "engine": "sapi",
+    "out": "assets/audio/en/scales_shop.mp3"
+  },
+  {
+    "id": "scales_shop",
+    "code": "fr",
+    "text": "balance de magasin",
+    "engine": "espeak",
+    "out": "assets/audio/fr/scales_shop.mp3"
+  },
+  {
+    "id": "scales_shop",
+    "code": "de",
+    "text": "Ladenwaage",
+    "engine": "espeak",
+    "out": "assets/audio/de/scales_shop.mp3"
+  },
+  {
+    "id": "scales_shop",
+    "code": "zh",
+    "text": "商店秤",
+    "engine": "espeak",
+    "out": "assets/audio/zh/scales_shop.mp3"
+  },
+  {
+    "id": "scales_shop",
+    "code": "ba",
+    "text": "магазин үлсәүе",
+    "engine": "espeak",
+    "out": "assets/audio/ba/scales_shop.mp3"
+  },
+  {
+    "id": "packet",
+    "code": "ru",
+    "text": "пакет",
+    "engine": "sapi",
+    "out": "assets/audio/ru/packet.mp3"
+  },
+  {
+    "id": "packet",
+    "code": "en",
+    "text": "carrier bag",
+    "engine": "sapi",
+    "out": "assets/audio/en/packet.mp3"
+  },
+  {
+    "id": "packet",
+    "code": "fr",
+    "text": "sac plastique",
+    "engine": "espeak",
+    "out": "assets/audio/fr/packet.mp3"
+  },
+  {
+    "id": "packet",
+    "code": "de",
+    "text": "Tüte",
+    "engine": "espeak",
+    "out": "assets/audio/de/packet.mp3"
+  },
+  {
+    "id": "packet",
+    "code": "zh",
+    "text": "购物袋",
+    "engine": "espeak",
+    "out": "assets/audio/zh/packet.mp3"
+  },
+  {
+    "id": "packet",
+    "code": "ba",
+    "text": "пакет",
+    "engine": "espeak",
+    "out": "assets/audio/ba/packet.mp3"
+  },
+  {
+    "id": "seller",
+    "code": "ru",
+    "text": "продавец",
+    "engine": "sapi",
+    "out": "assets/audio/ru/seller.mp3"
+  },
+  {
+    "id": "seller",
+    "code": "en",
+    "text": "shop assistant",
+    "engine": "sapi",
+    "out": "assets/audio/en/seller.mp3"
+  },
+  {
+    "id": "seller",
+    "code": "fr",
+    "text": "vendeur",
+    "engine": "espeak",
+    "out": "assets/audio/fr/seller.mp3"
+  },
+  {
+    "id": "seller",
+    "code": "de",
+    "text": "Verkäufer",
+    "engine": "espeak",
+    "out": "assets/audio/de/seller.mp3"
+  },
+  {
+    "id": "seller",
+    "code": "zh",
+    "text": "售货员",
+    "engine": "espeak",
+    "out": "assets/audio/zh/seller.mp3"
+  },
+  {
+    "id": "seller",
+    "code": "ba",
+    "text": "һатыусы",
+    "engine": "espeak",
+    "out": "assets/audio/ba/seller.mp3"
+  },
+  {
+    "id": "buyer",
+    "code": "ru",
+    "text": "покупатель",
+    "engine": "sapi",
+    "out": "assets/audio/ru/buyer.mp3"
+  },
+  {
+    "id": "buyer",
+    "code": "en",
+    "text": "customer",
+    "engine": "sapi",
+    "out": "assets/audio/en/buyer.mp3"
+  },
+  {
+    "id": "buyer",
+    "code": "fr",
+    "text": "client",
+    "engine": "espeak",
+    "out": "assets/audio/fr/buyer.mp3"
+  },
+  {
+    "id": "buyer",
+    "code": "de",
+    "text": "Kunde",
+    "engine": "espeak",
+    "out": "assets/audio/de/buyer.mp3"
+  },
+  {
+    "id": "buyer",
+    "code": "zh",
+    "text": "顾客",
+    "engine": "espeak",
+    "out": "assets/audio/zh/buyer.mp3"
+  },
+  {
+    "id": "buyer",
+    "code": "ba",
+    "text": "һатып алыусы",
+    "engine": "espeak",
+    "out": "assets/audio/ba/buyer.mp3"
+  },
+  {
+    "id": "shelves",
+    "code": "ru",
+    "text": "стеллаж",
+    "engine": "sapi",
+    "out": "assets/audio/ru/shelves.mp3"
+  },
+  {
+    "id": "shelves",
+    "code": "en",
+    "text": "shelving unit",
+    "engine": "sapi",
+    "out": "assets/audio/en/shelves.mp3"
+  },
+  {
+    "id": "shelves",
+    "code": "fr",
+    "text": "rayonnage",
+    "engine": "espeak",
+    "out": "assets/audio/fr/shelves.mp3"
+  },
+  {
+    "id": "shelves",
+    "code": "de",
+    "text": "Regalwand",
+    "engine": "espeak",
+    "out": "assets/audio/de/shelves.mp3"
+  },
+  {
+    "id": "shelves",
+    "code": "zh",
+    "text": "货架",
+    "engine": "espeak",
+    "out": "assets/audio/zh/shelves.mp3"
+  },
+  {
+    "id": "shelves",
+    "code": "ba",
+    "text": "стеллаж",
+    "engine": "espeak",
+    "out": "assets/audio/ba/shelves.mp3"
+  },
+  {
+    "id": "fridge_shop",
+    "code": "ru",
+    "text": "витрина-холодильник",
+    "engine": "sapi",
+    "out": "assets/audio/ru/fridge_shop.mp3"
+  },
+  {
+    "id": "fridge_shop",
+    "code": "en",
+    "text": "chiller cabinet",
+    "engine": "sapi",
+    "out": "assets/audio/en/fridge_shop.mp3"
+  },
+  {
+    "id": "fridge_shop",
+    "code": "fr",
+    "text": "vitrine réfrigérée",
+    "engine": "espeak",
+    "out": "assets/audio/fr/fridge_shop.mp3"
+  },
+  {
+    "id": "fridge_shop",
+    "code": "de",
+    "text": "Kühltheke",
+    "engine": "espeak",
+    "out": "assets/audio/de/fridge_shop.mp3"
+  },
+  {
+    "id": "fridge_shop",
+    "code": "zh",
+    "text": "冷藏柜",
+    "engine": "espeak",
+    "out": "assets/audio/zh/fridge_shop.mp3"
+  },
+  {
+    "id": "fridge_shop",
+    "code": "ba",
+    "text": "һыуытҡыс витрина",
+    "engine": "espeak",
+    "out": "assets/audio/ba/fridge_shop.mp3"
+  },
+  {
+    "id": "watermelon",
+    "code": "ru",
+    "text": "арбуз",
+    "engine": "sapi",
+    "out": "assets/audio/ru/watermelon.mp3"
+  },
+  {
+    "id": "watermelon",
+    "code": "en",
+    "text": "watermelon",
+    "engine": "sapi",
+    "out": "assets/audio/en/watermelon.mp3"
+  },
+  {
+    "id": "watermelon",
+    "code": "fr",
+    "text": "pastèque",
+    "engine": "espeak",
+    "out": "assets/audio/fr/watermelon.mp3"
+  },
+  {
+    "id": "watermelon",
+    "code": "de",
+    "text": "Wassermelone",
+    "engine": "espeak",
+    "out": "assets/audio/de/watermelon.mp3"
+  },
+  {
+    "id": "watermelon",
+    "code": "zh",
+    "text": "西瓜",
+    "engine": "espeak",
+    "out": "assets/audio/zh/watermelon.mp3"
+  },
+  {
+    "id": "watermelon",
+    "code": "ba",
+    "text": "ҡарбуҙ",
+    "engine": "espeak",
+    "out": "assets/audio/ba/watermelon.mp3"
+  },
+  {
+    "id": "grapes",
+    "code": "ru",
+    "text": "виноград",
+    "engine": "sapi",
+    "out": "assets/audio/ru/grapes.mp3"
+  },
+  {
+    "id": "grapes",
+    "code": "en",
+    "text": "grapes",
+    "engine": "sapi",
+    "out": "assets/audio/en/grapes.mp3"
+  },
+  {
+    "id": "grapes",
+    "code": "fr",
+    "text": "raisin",
+    "engine": "espeak",
+    "out": "assets/audio/fr/grapes.mp3"
+  },
+  {
+    "id": "grapes",
+    "code": "de",
+    "text": "Weintrauben",
+    "engine": "espeak",
+    "out": "assets/audio/de/grapes.mp3"
+  },
+  {
+    "id": "grapes",
+    "code": "zh",
+    "text": "葡萄",
+    "engine": "espeak",
+    "out": "assets/audio/zh/grapes.mp3"
+  },
+  {
+    "id": "grapes",
+    "code": "ba",
+    "text": "йөҙөм",
+    "engine": "espeak",
+    "out": "assets/audio/ba/grapes.mp3"
+  },
+  {
+    "id": "onion",
+    "code": "ru",
+    "text": "лук",
+    "engine": "sapi",
+    "out": "assets/audio/ru/onion.mp3"
+  },
+  {
+    "id": "onion",
+    "code": "en",
+    "text": "onion",
+    "engine": "sapi",
+    "out": "assets/audio/en/onion.mp3"
+  },
+  {
+    "id": "onion",
+    "code": "fr",
+    "text": "oignon",
+    "engine": "espeak",
+    "out": "assets/audio/fr/onion.mp3"
+  },
+  {
+    "id": "onion",
+    "code": "de",
+    "text": "Zwiebel",
+    "engine": "espeak",
+    "out": "assets/audio/de/onion.mp3"
+  },
+  {
+    "id": "onion",
+    "code": "zh",
+    "text": "洋葱",
+    "engine": "espeak",
+    "out": "assets/audio/zh/onion.mp3"
+  },
+  {
+    "id": "onion",
+    "code": "ba",
+    "text": "һуған",
+    "engine": "espeak",
+    "out": "assets/audio/ba/onion.mp3"
+  },
+  {
+    "id": "cucumber",
+    "code": "ru",
+    "text": "огурец",
+    "engine": "sapi",
+    "out": "assets/audio/ru/cucumber.mp3"
+  },
+  {
+    "id": "cucumber",
+    "code": "en",
+    "text": "cucumber",
+    "engine": "sapi",
+    "out": "assets/audio/en/cucumber.mp3"
+  },
+  {
+    "id": "cucumber",
+    "code": "fr",
+    "text": "concombre",
+    "engine": "espeak",
+    "out": "assets/audio/fr/cucumber.mp3"
+  },
+  {
+    "id": "cucumber",
+    "code": "de",
+    "text": "Gurke",
+    "engine": "espeak",
+    "out": "assets/audio/de/cucumber.mp3"
+  },
+  {
+    "id": "cucumber",
+    "code": "zh",
+    "text": "黄瓜",
+    "engine": "espeak",
+    "out": "assets/audio/zh/cucumber.mp3"
+  },
+  {
+    "id": "cucumber",
+    "code": "ba",
+    "text": "ҡыяр",
+    "engine": "espeak",
+    "out": "assets/audio/ba/cucumber.mp3"
+  },
+  {
+    "id": "nuts",
+    "code": "ru",
+    "text": "орехи",
+    "engine": "sapi",
+    "out": "assets/audio/ru/nuts.mp3"
+  },
+  {
+    "id": "nuts",
+    "code": "en",
+    "text": "nuts",
+    "engine": "sapi",
+    "out": "assets/audio/en/nuts.mp3"
+  },
+  {
+    "id": "nuts",
+    "code": "fr",
+    "text": "noix",
+    "engine": "espeak",
+    "out": "assets/audio/fr/nuts.mp3"
+  },
+  {
+    "id": "nuts",
+    "code": "de",
+    "text": "Nüsse",
+    "engine": "espeak",
+    "out": "assets/audio/de/nuts.mp3"
+  },
+  {
+    "id": "nuts",
+    "code": "zh",
+    "text": "坚果",
+    "engine": "espeak",
+    "out": "assets/audio/zh/nuts.mp3"
+  },
+  {
+    "id": "nuts",
+    "code": "ba",
+    "text": "сәтләүек",
+    "engine": "espeak",
+    "out": "assets/audio/ba/nuts.mp3"
+  },
+  {
+    "id": "sack",
+    "code": "ru",
+    "text": "мешок",
+    "engine": "sapi",
+    "out": "assets/audio/ru/sack.mp3"
+  },
+  {
+    "id": "sack",
+    "code": "en",
+    "text": "sack",
+    "engine": "sapi",
+    "out": "assets/audio/en/sack.mp3"
+  },
+  {
+    "id": "sack",
+    "code": "fr",
+    "text": "sac de jute",
+    "engine": "espeak",
+    "out": "assets/audio/fr/sack.mp3"
+  },
+  {
+    "id": "sack",
+    "code": "de",
+    "text": "Sack",
+    "engine": "espeak",
+    "out": "assets/audio/de/sack.mp3"
+  },
+  {
+    "id": "sack",
+    "code": "zh",
+    "text": "麻袋",
+    "engine": "espeak",
+    "out": "assets/audio/zh/sack.mp3"
+  },
+  {
+    "id": "sack",
+    "code": "ba",
+    "text": "тоҡ",
+    "engine": "espeak",
+    "out": "assets/audio/ba/sack.mp3"
+  },
+  {
+    "id": "crate",
+    "code": "ru",
+    "text": "ящик",
+    "engine": "sapi",
+    "out": "assets/audio/ru/crate.mp3"
+  },
+  {
+    "id": "crate",
+    "code": "en",
+    "text": "crate",
+    "engine": "sapi",
+    "out": "assets/audio/en/crate.mp3"
+  },
+  {
+    "id": "crate",
+    "code": "fr",
+    "text": "cageot",
+    "engine": "espeak",
+    "out": "assets/audio/fr/crate.mp3"
+  },
+  {
+    "id": "crate",
+    "code": "de",
+    "text": "Kiste",
+    "engine": "espeak",
+    "out": "assets/audio/de/crate.mp3"
+  },
+  {
+    "id": "crate",
+    "code": "zh",
+    "text": "板条箱",
+    "engine": "espeak",
+    "out": "assets/audio/zh/crate.mp3"
+  },
+  {
+    "id": "crate",
+    "code": "ba",
+    "text": "йәшник",
+    "engine": "espeak",
+    "out": "assets/audio/ba/crate.mp3"
+  },
+  {
+    "id": "awning",
+    "code": "ru",
+    "text": "навес",
+    "engine": "sapi",
+    "out": "assets/audio/ru/awning.mp3"
+  },
+  {
+    "id": "awning",
+    "code": "en",
+    "text": "awning",
+    "engine": "sapi",
+    "out": "assets/audio/en/awning.mp3"
+  },
+  {
+    "id": "awning",
+    "code": "fr",
+    "text": "auvent",
+    "engine": "espeak",
+    "out": "assets/audio/fr/awning.mp3"
+  },
+  {
+    "id": "awning",
+    "code": "de",
+    "text": "Markise",
+    "engine": "espeak",
+    "out": "assets/audio/de/awning.mp3"
+  },
+  {
+    "id": "awning",
+    "code": "zh",
+    "text": "遮阳篷",
+    "engine": "espeak",
+    "out": "assets/audio/zh/awning.mp3"
+  },
+  {
+    "id": "awning",
+    "code": "ba",
+    "text": "ҡуйма",
+    "engine": "espeak",
+    "out": "assets/audio/ba/awning.mp3"
+  },
+  {
+    "id": "coin",
+    "code": "ru",
+    "text": "монета",
+    "engine": "sapi",
+    "out": "assets/audio/ru/coin.mp3"
+  },
+  {
+    "id": "coin",
+    "code": "en",
+    "text": "coin",
+    "engine": "sapi",
+    "out": "assets/audio/en/coin.mp3"
+  },
+  {
+    "id": "coin",
+    "code": "fr",
+    "text": "pièce",
+    "engine": "espeak",
+    "out": "assets/audio/fr/coin.mp3"
+  },
+  {
+    "id": "coin",
+    "code": "de",
+    "text": "Münze",
+    "engine": "espeak",
+    "out": "assets/audio/de/coin.mp3"
+  },
+  {
+    "id": "coin",
+    "code": "zh",
+    "text": "硬币",
+    "engine": "espeak",
+    "out": "assets/audio/zh/coin.mp3"
+  },
+  {
+    "id": "coin",
+    "code": "ba",
+    "text": "тәңкә",
+    "engine": "espeak",
+    "out": "assets/audio/ba/coin.mp3"
+  },
+  {
+    "id": "purse",
+    "code": "ru",
+    "text": "кошелёк",
+    "engine": "sapi",
+    "out": "assets/audio/ru/purse.mp3"
+  },
+  {
+    "id": "purse",
+    "code": "en",
+    "text": "purse",
+    "engine": "sapi",
+    "out": "assets/audio/en/purse.mp3"
+  },
+  {
+    "id": "purse",
+    "code": "fr",
+    "text": "porte-monnaie",
+    "engine": "espeak",
+    "out": "assets/audio/fr/purse.mp3"
+  },
+  {
+    "id": "purse",
+    "code": "de",
+    "text": "Geldbörse",
+    "engine": "espeak",
+    "out": "assets/audio/de/purse.mp3"
+  },
+  {
+    "id": "purse",
+    "code": "zh",
+    "text": "钱包",
+    "engine": "espeak",
+    "out": "assets/audio/zh/purse.mp3"
+  },
+  {
+    "id": "purse",
+    "code": "ba",
+    "text": "кеҫә ҡалтаһы",
+    "engine": "espeak",
+    "out": "assets/audio/ba/purse.mp3"
+  },
+  {
+    "id": "weight",
+    "code": "ru",
+    "text": "гиря",
+    "engine": "sapi",
+    "out": "assets/audio/ru/weight.mp3"
+  },
+  {
+    "id": "weight",
+    "code": "en",
+    "text": "weight",
+    "engine": "sapi",
+    "out": "assets/audio/en/weight.mp3"
+  },
+  {
+    "id": "weight",
+    "code": "fr",
+    "text": "poids",
+    "engine": "espeak",
+    "out": "assets/audio/fr/weight.mp3"
+  },
+  {
+    "id": "weight",
+    "code": "de",
+    "text": "Gewicht",
+    "engine": "espeak",
+    "out": "assets/audio/de/weight.mp3"
+  },
+  {
+    "id": "weight",
+    "code": "zh",
+    "text": "砝码",
+    "engine": "espeak",
+    "out": "assets/audio/zh/weight.mp3"
+  },
+  {
+    "id": "weight",
+    "code": "ba",
+    "text": "гер",
+    "engine": "espeak",
+    "out": "assets/audio/ba/weight.mp3"
+  },
+  {
+    "id": "apron",
+    "code": "ru",
+    "text": "фартук",
+    "engine": "sapi",
+    "out": "assets/audio/ru/apron.mp3"
+  },
+  {
+    "id": "apron",
+    "code": "en",
+    "text": "apron",
+    "engine": "sapi",
+    "out": "assets/audio/en/apron.mp3"
+  },
+  {
+    "id": "apron",
+    "code": "fr",
+    "text": "tablier",
+    "engine": "espeak",
+    "out": "assets/audio/fr/apron.mp3"
+  },
+  {
+    "id": "apron",
+    "code": "de",
+    "text": "Schürze",
+    "engine": "espeak",
+    "out": "assets/audio/de/apron.mp3"
+  },
+  {
+    "id": "apron",
+    "code": "zh",
+    "text": "围裙",
+    "engine": "espeak",
+    "out": "assets/audio/zh/apron.mp3"
+  },
+  {
+    "id": "apron",
+    "code": "ba",
+    "text": "алъяпҡыс",
+    "engine": "espeak",
+    "out": "assets/audio/ba/apron.mp3"
+  },
+  {
+    "id": "escalator",
+    "code": "ru",
+    "text": "эскалатор",
+    "engine": "sapi",
+    "out": "assets/audio/ru/escalator.mp3"
+  },
+  {
+    "id": "escalator",
+    "code": "en",
+    "text": "escalator",
+    "engine": "sapi",
+    "out": "assets/audio/en/escalator.mp3"
+  },
+  {
+    "id": "escalator",
+    "code": "fr",
+    "text": "escalator",
+    "engine": "espeak",
+    "out": "assets/audio/fr/escalator.mp3"
+  },
+  {
+    "id": "escalator",
+    "code": "de",
+    "text": "Rolltreppe",
+    "engine": "espeak",
+    "out": "assets/audio/de/escalator.mp3"
+  },
+  {
+    "id": "escalator",
+    "code": "zh",
+    "text": "自动扶梯",
+    "engine": "espeak",
+    "out": "assets/audio/zh/escalator.mp3"
+  },
+  {
+    "id": "escalator",
+    "code": "ba",
+    "text": "эскалатор",
+    "engine": "espeak",
+    "out": "assets/audio/ba/escalator.mp3"
+  },
+  {
+    "id": "lift",
+    "code": "ru",
+    "text": "лифт",
+    "engine": "sapi",
+    "out": "assets/audio/ru/lift.mp3"
+  },
+  {
+    "id": "lift",
+    "code": "en",
+    "text": "lift",
+    "engine": "sapi",
+    "out": "assets/audio/en/lift.mp3"
+  },
+  {
+    "id": "lift",
+    "code": "fr",
+    "text": "ascenseur",
+    "engine": "espeak",
+    "out": "assets/audio/fr/lift.mp3"
+  },
+  {
+    "id": "lift",
+    "code": "de",
+    "text": "Aufzug",
+    "engine": "espeak",
+    "out": "assets/audio/de/lift.mp3"
+  },
+  {
+    "id": "lift",
+    "code": "zh",
+    "text": "电梯",
+    "engine": "espeak",
+    "out": "assets/audio/zh/lift.mp3"
+  },
+  {
+    "id": "lift",
+    "code": "ba",
+    "text": "лифт",
+    "engine": "espeak",
+    "out": "assets/audio/ba/lift.mp3"
+  },
+  {
+    "id": "shopwindow",
+    "code": "ru",
+    "text": "витрина",
+    "engine": "sapi",
+    "out": "assets/audio/ru/shopwindow.mp3"
+  },
+  {
+    "id": "shopwindow",
+    "code": "en",
+    "text": "shop window",
+    "engine": "sapi",
+    "out": "assets/audio/en/shopwindow.mp3"
+  },
+  {
+    "id": "shopwindow",
+    "code": "fr",
+    "text": "vitrine",
+    "engine": "espeak",
+    "out": "assets/audio/fr/shopwindow.mp3"
+  },
+  {
+    "id": "shopwindow",
+    "code": "de",
+    "text": "Schaufenster",
+    "engine": "espeak",
+    "out": "assets/audio/de/shopwindow.mp3"
+  },
+  {
+    "id": "shopwindow",
+    "code": "zh",
+    "text": "橱窗",
+    "engine": "espeak",
+    "out": "assets/audio/zh/shopwindow.mp3"
+  },
+  {
+    "id": "shopwindow",
+    "code": "ba",
+    "text": "витрина",
+    "engine": "espeak",
+    "out": "assets/audio/ba/shopwindow.mp3"
+  },
+  {
+    "id": "mannequin",
+    "code": "ru",
+    "text": "манекен",
+    "engine": "sapi",
+    "out": "assets/audio/ru/mannequin.mp3"
+  },
+  {
+    "id": "mannequin",
+    "code": "en",
+    "text": "mannequin",
+    "engine": "sapi",
+    "out": "assets/audio/en/mannequin.mp3"
+  },
+  {
+    "id": "mannequin",
+    "code": "fr",
+    "text": "mannequin",
+    "engine": "espeak",
+    "out": "assets/audio/fr/mannequin.mp3"
+  },
+  {
+    "id": "mannequin",
+    "code": "de",
+    "text": "Schaufensterpuppe",
+    "engine": "espeak",
+    "out": "assets/audio/de/mannequin.mp3"
+  },
+  {
+    "id": "mannequin",
+    "code": "zh",
+    "text": "模特儿",
+    "engine": "espeak",
+    "out": "assets/audio/zh/mannequin.mp3"
+  },
+  {
+    "id": "mannequin",
+    "code": "ba",
+    "text": "манекен",
+    "engine": "espeak",
+    "out": "assets/audio/ba/mannequin.mp3"
+  },
+  {
+    "id": "fittingroom",
+    "code": "ru",
+    "text": "примерочная",
+    "engine": "sapi",
+    "out": "assets/audio/ru/fittingroom.mp3"
+  },
+  {
+    "id": "fittingroom",
+    "code": "en",
+    "text": "fitting room",
+    "engine": "sapi",
+    "out": "assets/audio/en/fittingroom.mp3"
+  },
+  {
+    "id": "fittingroom",
+    "code": "fr",
+    "text": "cabine d’essayage",
+    "engine": "espeak",
+    "out": "assets/audio/fr/fittingroom.mp3"
+  },
+  {
+    "id": "fittingroom",
+    "code": "de",
+    "text": "Umkleidekabine",
+    "engine": "espeak",
+    "out": "assets/audio/de/fittingroom.mp3"
+  },
+  {
+    "id": "fittingroom",
+    "code": "zh",
+    "text": "试衣间",
+    "engine": "espeak",
+    "out": "assets/audio/zh/fittingroom.mp3"
+  },
+  {
+    "id": "fittingroom",
+    "code": "ba",
+    "text": "кейем үлсәү бүлмәһе",
+    "engine": "espeak",
+    "out": "assets/audio/ba/fittingroom.mp3"
+  },
+  {
+    "id": "guard",
+    "code": "ru",
+    "text": "охранник",
+    "engine": "sapi",
+    "out": "assets/audio/ru/guard.mp3"
+  },
+  {
+    "id": "guard",
+    "code": "en",
+    "text": "security guard",
+    "engine": "sapi",
+    "out": "assets/audio/en/guard.mp3"
+  },
+  {
+    "id": "guard",
+    "code": "fr",
+    "text": "agent de sécurité",
+    "engine": "espeak",
+    "out": "assets/audio/fr/guard.mp3"
+  },
+  {
+    "id": "guard",
+    "code": "de",
+    "text": "Wachmann",
+    "engine": "espeak",
+    "out": "assets/audio/de/guard.mp3"
+  },
+  {
+    "id": "guard",
+    "code": "zh",
+    "text": "保安",
+    "engine": "espeak",
+    "out": "assets/audio/zh/guard.mp3"
+  },
+  {
+    "id": "guard",
+    "code": "ba",
+    "text": "һаҡсы",
+    "engine": "espeak",
+    "out": "assets/audio/ba/guard.mp3"
+  },
+  {
+    "id": "atm",
+    "code": "ru",
+    "text": "банкомат",
+    "engine": "sapi",
+    "out": "assets/audio/ru/atm.mp3"
+  },
+  {
+    "id": "atm",
+    "code": "en",
+    "text": "cash machine",
+    "engine": "sapi",
+    "out": "assets/audio/en/atm.mp3"
+  },
+  {
+    "id": "atm",
+    "code": "fr",
+    "text": "distributeur",
+    "engine": "espeak",
+    "out": "assets/audio/fr/atm.mp3"
+  },
+  {
+    "id": "atm",
+    "code": "de",
+    "text": "Geldautomat",
+    "engine": "espeak",
+    "out": "assets/audio/de/atm.mp3"
+  },
+  {
+    "id": "atm",
+    "code": "zh",
+    "text": "取款机",
+    "engine": "espeak",
+    "out": "assets/audio/zh/atm.mp3"
+  },
+  {
+    "id": "atm",
+    "code": "ba",
+    "text": "банкомат",
+    "engine": "espeak",
+    "out": "assets/audio/ba/atm.mp3"
+  },
+  {
+    "id": "bankcard",
+    "code": "ru",
+    "text": "банковская карта",
+    "engine": "sapi",
+    "out": "assets/audio/ru/bankcard.mp3"
+  },
+  {
+    "id": "bankcard",
+    "code": "en",
+    "text": "bank card",
+    "engine": "sapi",
+    "out": "assets/audio/en/bankcard.mp3"
+  },
+  {
+    "id": "bankcard",
+    "code": "fr",
+    "text": "carte bancaire",
+    "engine": "espeak",
+    "out": "assets/audio/fr/bankcard.mp3"
+  },
+  {
+    "id": "bankcard",
+    "code": "de",
+    "text": "Bankkarte",
+    "engine": "espeak",
+    "out": "assets/audio/de/bankcard.mp3"
+  },
+  {
+    "id": "bankcard",
+    "code": "zh",
+    "text": "银行卡",
+    "engine": "espeak",
+    "out": "assets/audio/zh/bankcard.mp3"
+  },
+  {
+    "id": "bankcard",
+    "code": "ba",
+    "text": "банк картаһы",
+    "engine": "espeak",
+    "out": "assets/audio/ba/bankcard.mp3"
+  },
+  {
+    "id": "queue",
+    "code": "ru",
+    "text": "очередь",
+    "engine": "sapi",
+    "out": "assets/audio/ru/queue.mp3"
+  },
+  {
+    "id": "queue",
+    "code": "en",
+    "text": "queue",
+    "engine": "sapi",
+    "out": "assets/audio/en/queue.mp3"
+  },
+  {
+    "id": "queue",
+    "code": "fr",
+    "text": "file d’attente",
+    "engine": "espeak",
+    "out": "assets/audio/fr/queue.mp3"
+  },
+  {
+    "id": "queue",
+    "code": "de",
+    "text": "Warteschlange",
+    "engine": "espeak",
+    "out": "assets/audio/de/queue.mp3"
+  },
+  {
+    "id": "queue",
+    "code": "zh",
+    "text": "排队",
+    "engine": "espeak",
+    "out": "assets/audio/zh/queue.mp3"
+  },
+  {
+    "id": "queue",
+    "code": "ba",
+    "text": "сират",
+    "engine": "espeak",
+    "out": "assets/audio/ba/queue.mp3"
+  },
+  {
+    "id": "barcode",
+    "code": "ru",
+    "text": "штрихкод",
+    "engine": "sapi",
+    "out": "assets/audio/ru/barcode.mp3"
+  },
+  {
+    "id": "barcode",
+    "code": "en",
+    "text": "barcode",
+    "engine": "sapi",
+    "out": "assets/audio/en/barcode.mp3"
+  },
+  {
+    "id": "barcode",
+    "code": "fr",
+    "text": "code-barres",
+    "engine": "espeak",
+    "out": "assets/audio/fr/barcode.mp3"
+  },
+  {
+    "id": "barcode",
+    "code": "de",
+    "text": "Strichcode",
+    "engine": "espeak",
+    "out": "assets/audio/de/barcode.mp3"
+  },
+  {
+    "id": "barcode",
+    "code": "zh",
+    "text": "条形码",
+    "engine": "espeak",
+    "out": "assets/audio/zh/barcode.mp3"
+  },
+  {
+    "id": "barcode",
+    "code": "ba",
+    "text": "штрихкод",
+    "engine": "espeak",
+    "out": "assets/audio/ba/barcode.mp3"
+  },
+  {
+    "id": "box",
+    "code": "ru",
+    "text": "коробка",
+    "engine": "sapi",
+    "out": "assets/audio/ru/box.mp3"
+  },
+  {
+    "id": "box",
+    "code": "en",
+    "text": "box",
+    "engine": "sapi",
+    "out": "assets/audio/en/box.mp3"
+  },
+  {
+    "id": "box",
+    "code": "fr",
+    "text": "boîte",
+    "engine": "espeak",
+    "out": "assets/audio/fr/box.mp3"
+  },
+  {
+    "id": "box",
+    "code": "de",
+    "text": "Schachtel",
+    "engine": "espeak",
+    "out": "assets/audio/de/box.mp3"
+  },
+  {
+    "id": "box",
+    "code": "zh",
+    "text": "盒子",
+    "engine": "espeak",
+    "out": "assets/audio/zh/box.mp3"
+  },
+  {
+    "id": "box",
+    "code": "ba",
+    "text": "ҡумта",
+    "engine": "espeak",
+    "out": "assets/audio/ba/box.mp3"
+  },
+  {
+    "id": "locker",
+    "code": "ru",
+    "text": "камера хранения",
+    "engine": "sapi",
+    "out": "assets/audio/ru/locker.mp3"
+  },
+  {
+    "id": "locker",
+    "code": "en",
+    "text": "locker",
+    "engine": "sapi",
+    "out": "assets/audio/en/locker.mp3"
+  },
+  {
+    "id": "locker",
+    "code": "fr",
+    "text": "consigne",
+    "engine": "espeak",
+    "out": "assets/audio/fr/locker.mp3"
+  },
+  {
+    "id": "locker",
+    "code": "de",
+    "text": "Schließfach",
+    "engine": "espeak",
+    "out": "assets/audio/de/locker.mp3"
+  },
+  {
+    "id": "locker",
+    "code": "zh",
+    "text": "寄存柜",
+    "engine": "espeak",
+    "out": "assets/audio/zh/locker.mp3"
+  },
+  {
+    "id": "locker",
+    "code": "ba",
+    "text": "һаҡлау камераһы",
+    "engine": "espeak",
+    "out": "assets/audio/ba/locker.mp3"
+  },
+  {
+    "id": "head",
+    "code": "ru",
+    "text": "голова",
+    "engine": "sapi",
+    "out": "assets/audio/ru/head.mp3"
+  },
+  {
+    "id": "head",
+    "code": "en",
+    "text": "head",
+    "engine": "sapi",
+    "out": "assets/audio/en/head.mp3"
+  },
+  {
+    "id": "head",
+    "code": "fr",
+    "text": "tête",
+    "engine": "espeak",
+    "out": "assets/audio/fr/head.mp3"
+  },
+  {
+    "id": "head",
+    "code": "de",
+    "text": "Kopf",
+    "engine": "espeak",
+    "out": "assets/audio/de/head.mp3"
+  },
+  {
+    "id": "head",
+    "code": "zh",
+    "text": "头",
+    "engine": "espeak",
+    "out": "assets/audio/zh/head.mp3"
+  },
+  {
+    "id": "head",
+    "code": "ba",
+    "text": "баш",
+    "engine": "espeak",
+    "out": "assets/audio/ba/head.mp3"
+  },
+  {
+    "id": "hair",
+    "code": "ru",
+    "text": "волосы",
+    "engine": "sapi",
+    "out": "assets/audio/ru/hair.mp3"
+  },
+  {
+    "id": "hair",
+    "code": "en",
+    "text": "hair",
+    "engine": "sapi",
+    "out": "assets/audio/en/hair.mp3"
+  },
+  {
+    "id": "hair",
+    "code": "fr",
+    "text": "cheveux",
+    "engine": "espeak",
+    "out": "assets/audio/fr/hair.mp3"
+  },
+  {
+    "id": "hair",
+    "code": "de",
+    "text": "Haare",
+    "engine": "espeak",
+    "out": "assets/audio/de/hair.mp3"
+  },
+  {
+    "id": "hair",
+    "code": "zh",
+    "text": "头发",
+    "engine": "espeak",
+    "out": "assets/audio/zh/hair.mp3"
+  },
+  {
+    "id": "hair",
+    "code": "ba",
+    "text": "сәс",
+    "engine": "espeak",
+    "out": "assets/audio/ba/hair.mp3"
+  },
+  {
+    "id": "eye",
+    "code": "ru",
+    "text": "глаз",
+    "engine": "sapi",
+    "out": "assets/audio/ru/eye.mp3"
+  },
+  {
+    "id": "eye",
+    "code": "en",
+    "text": "eye",
+    "engine": "sapi",
+    "out": "assets/audio/en/eye.mp3"
+  },
+  {
+    "id": "eye",
+    "code": "fr",
+    "text": "œil",
+    "engine": "espeak",
+    "out": "assets/audio/fr/eye.mp3"
+  },
+  {
+    "id": "eye",
+    "code": "de",
+    "text": "Auge",
+    "engine": "espeak",
+    "out": "assets/audio/de/eye.mp3"
+  },
+  {
+    "id": "eye",
+    "code": "zh",
+    "text": "眼睛",
+    "engine": "espeak",
+    "out": "assets/audio/zh/eye.mp3"
+  },
+  {
+    "id": "eye",
+    "code": "ba",
+    "text": "күҙ",
+    "engine": "espeak",
+    "out": "assets/audio/ba/eye.mp3"
+  },
+  {
+    "id": "ear",
+    "code": "ru",
+    "text": "ухо",
+    "engine": "sapi",
+    "out": "assets/audio/ru/ear.mp3"
+  },
+  {
+    "id": "ear",
+    "code": "en",
+    "text": "ear",
+    "engine": "sapi",
+    "out": "assets/audio/en/ear.mp3"
+  },
+  {
+    "id": "ear",
+    "code": "fr",
+    "text": "oreille",
+    "engine": "espeak",
+    "out": "assets/audio/fr/ear.mp3"
+  },
+  {
+    "id": "ear",
+    "code": "de",
+    "text": "Ohr",
+    "engine": "espeak",
+    "out": "assets/audio/de/ear.mp3"
+  },
+  {
+    "id": "ear",
+    "code": "zh",
+    "text": "耳朵",
+    "engine": "espeak",
+    "out": "assets/audio/zh/ear.mp3"
+  },
+  {
+    "id": "ear",
+    "code": "ba",
+    "text": "ҡолаҡ",
+    "engine": "espeak",
+    "out": "assets/audio/ba/ear.mp3"
+  },
+  {
+    "id": "nose",
+    "code": "ru",
+    "text": "нос",
+    "engine": "sapi",
+    "out": "assets/audio/ru/nose.mp3"
+  },
+  {
+    "id": "nose",
+    "code": "en",
+    "text": "nose",
+    "engine": "sapi",
+    "out": "assets/audio/en/nose.mp3"
+  },
+  {
+    "id": "nose",
+    "code": "fr",
+    "text": "nez",
+    "engine": "espeak",
+    "out": "assets/audio/fr/nose.mp3"
+  },
+  {
+    "id": "nose",
+    "code": "de",
+    "text": "Nase",
+    "engine": "espeak",
+    "out": "assets/audio/de/nose.mp3"
+  },
+  {
+    "id": "nose",
+    "code": "zh",
+    "text": "鼻子",
+    "engine": "espeak",
+    "out": "assets/audio/zh/nose.mp3"
+  },
+  {
+    "id": "nose",
+    "code": "ba",
+    "text": "танау",
+    "engine": "espeak",
+    "out": "assets/audio/ba/nose.mp3"
+  },
+  {
+    "id": "mouth",
+    "code": "ru",
+    "text": "рот",
+    "engine": "sapi",
+    "out": "assets/audio/ru/mouth.mp3"
+  },
+  {
+    "id": "mouth",
+    "code": "en",
+    "text": "mouth",
+    "engine": "sapi",
+    "out": "assets/audio/en/mouth.mp3"
+  },
+  {
+    "id": "mouth",
+    "code": "fr",
+    "text": "bouche",
+    "engine": "espeak",
+    "out": "assets/audio/fr/mouth.mp3"
+  },
+  {
+    "id": "mouth",
+    "code": "de",
+    "text": "Mund",
+    "engine": "espeak",
+    "out": "assets/audio/de/mouth.mp3"
+  },
+  {
+    "id": "mouth",
+    "code": "zh",
+    "text": "嘴",
+    "engine": "espeak",
+    "out": "assets/audio/zh/mouth.mp3"
+  },
+  {
+    "id": "mouth",
+    "code": "ba",
+    "text": "ауыҙ",
+    "engine": "espeak",
+    "out": "assets/audio/ba/mouth.mp3"
+  },
+  {
+    "id": "tooth",
+    "code": "ru",
+    "text": "зуб",
+    "engine": "sapi",
+    "out": "assets/audio/ru/tooth.mp3"
+  },
+  {
+    "id": "tooth",
+    "code": "en",
+    "text": "tooth",
+    "engine": "sapi",
+    "out": "assets/audio/en/tooth.mp3"
+  },
+  {
+    "id": "tooth",
+    "code": "fr",
+    "text": "dent",
+    "engine": "espeak",
+    "out": "assets/audio/fr/tooth.mp3"
+  },
+  {
+    "id": "tooth",
+    "code": "de",
+    "text": "Zahn",
+    "engine": "espeak",
+    "out": "assets/audio/de/tooth.mp3"
+  },
+  {
+    "id": "tooth",
+    "code": "zh",
+    "text": "牙齿",
+    "engine": "espeak",
+    "out": "assets/audio/zh/tooth.mp3"
+  },
+  {
+    "id": "tooth",
+    "code": "ba",
+    "text": "теш",
+    "engine": "espeak",
+    "out": "assets/audio/ba/tooth.mp3"
+  },
+  {
+    "id": "neck",
+    "code": "ru",
+    "text": "шея",
+    "engine": "sapi",
+    "out": "assets/audio/ru/neck.mp3"
+  },
+  {
+    "id": "neck",
+    "code": "en",
+    "text": "neck",
+    "engine": "sapi",
+    "out": "assets/audio/en/neck.mp3"
+  },
+  {
+    "id": "neck",
+    "code": "fr",
+    "text": "cou",
+    "engine": "espeak",
+    "out": "assets/audio/fr/neck.mp3"
+  },
+  {
+    "id": "neck",
+    "code": "de",
+    "text": "Hals",
+    "engine": "espeak",
+    "out": "assets/audio/de/neck.mp3"
+  },
+  {
+    "id": "neck",
+    "code": "zh",
+    "text": "脖子",
+    "engine": "espeak",
+    "out": "assets/audio/zh/neck.mp3"
+  },
+  {
+    "id": "neck",
+    "code": "ba",
+    "text": "муйын",
+    "engine": "espeak",
+    "out": "assets/audio/ba/neck.mp3"
+  },
+  {
+    "id": "hand",
+    "code": "ru",
+    "text": "рука",
+    "engine": "sapi",
+    "out": "assets/audio/ru/hand.mp3"
+  },
+  {
+    "id": "hand",
+    "code": "en",
+    "text": "hand",
+    "engine": "sapi",
+    "out": "assets/audio/en/hand.mp3"
+  },
+  {
+    "id": "hand",
+    "code": "fr",
+    "text": "main",
+    "engine": "espeak",
+    "out": "assets/audio/fr/hand.mp3"
+  },
+  {
+    "id": "hand",
+    "code": "de",
+    "text": "Hand",
+    "engine": "espeak",
+    "out": "assets/audio/de/hand.mp3"
+  },
+  {
+    "id": "hand",
+    "code": "zh",
+    "text": "手",
+    "engine": "espeak",
+    "out": "assets/audio/zh/hand.mp3"
+  },
+  {
+    "id": "hand",
+    "code": "ba",
+    "text": "ҡул",
+    "engine": "espeak",
+    "out": "assets/audio/ba/hand.mp3"
+  },
+  {
+    "id": "finger",
+    "code": "ru",
+    "text": "палец",
+    "engine": "sapi",
+    "out": "assets/audio/ru/finger.mp3"
+  },
+  {
+    "id": "finger",
+    "code": "en",
+    "text": "finger",
+    "engine": "sapi",
+    "out": "assets/audio/en/finger.mp3"
+  },
+  {
+    "id": "finger",
+    "code": "fr",
+    "text": "doigt",
+    "engine": "espeak",
+    "out": "assets/audio/fr/finger.mp3"
+  },
+  {
+    "id": "finger",
+    "code": "de",
+    "text": "Finger",
+    "engine": "espeak",
+    "out": "assets/audio/de/finger.mp3"
+  },
+  {
+    "id": "finger",
+    "code": "zh",
+    "text": "手指",
+    "engine": "espeak",
+    "out": "assets/audio/zh/finger.mp3"
+  },
+  {
+    "id": "finger",
+    "code": "ba",
+    "text": "бармаҡ",
+    "engine": "espeak",
+    "out": "assets/audio/ba/finger.mp3"
+  },
+  {
+    "id": "leg",
+    "code": "ru",
+    "text": "нога",
+    "engine": "sapi",
+    "out": "assets/audio/ru/leg.mp3"
+  },
+  {
+    "id": "leg",
+    "code": "en",
+    "text": "leg",
+    "engine": "sapi",
+    "out": "assets/audio/en/leg.mp3"
+  },
+  {
+    "id": "leg",
+    "code": "fr",
+    "text": "jambe",
+    "engine": "espeak",
+    "out": "assets/audio/fr/leg.mp3"
+  },
+  {
+    "id": "leg",
+    "code": "de",
+    "text": "Bein",
+    "engine": "espeak",
+    "out": "assets/audio/de/leg.mp3"
+  },
+  {
+    "id": "leg",
+    "code": "zh",
+    "text": "腿",
+    "engine": "espeak",
+    "out": "assets/audio/zh/leg.mp3"
+  },
+  {
+    "id": "leg",
+    "code": "ba",
+    "text": "аяҡ",
+    "engine": "espeak",
+    "out": "assets/audio/ba/leg.mp3"
+  },
+  {
+    "id": "back",
+    "code": "ru",
+    "text": "спина",
+    "engine": "sapi",
+    "out": "assets/audio/ru/back.mp3"
+  },
+  {
+    "id": "back",
+    "code": "en",
+    "text": "back",
+    "engine": "sapi",
+    "out": "assets/audio/en/back.mp3"
+  },
+  {
+    "id": "back",
+    "code": "fr",
+    "text": "dos",
+    "engine": "espeak",
+    "out": "assets/audio/fr/back.mp3"
+  },
+  {
+    "id": "back",
+    "code": "de",
+    "text": "Rücken",
+    "engine": "espeak",
+    "out": "assets/audio/de/back.mp3"
+  },
+  {
+    "id": "back",
+    "code": "zh",
+    "text": "背",
+    "engine": "espeak",
+    "out": "assets/audio/zh/back.mp3"
+  },
+  {
+    "id": "back",
+    "code": "ba",
+    "text": "арҡа",
+    "engine": "espeak",
+    "out": "assets/audio/ba/back.mp3"
+  },
+  {
+    "id": "shirt",
+    "code": "ru",
+    "text": "рубашка",
+    "engine": "sapi",
+    "out": "assets/audio/ru/shirt.mp3"
+  },
+  {
+    "id": "shirt",
+    "code": "en",
+    "text": "shirt",
+    "engine": "sapi",
+    "out": "assets/audio/en/shirt.mp3"
+  },
+  {
+    "id": "shirt",
+    "code": "fr",
+    "text": "chemise",
+    "engine": "espeak",
+    "out": "assets/audio/fr/shirt.mp3"
+  },
+  {
+    "id": "shirt",
+    "code": "de",
+    "text": "Hemd",
+    "engine": "espeak",
+    "out": "assets/audio/de/shirt.mp3"
+  },
+  {
+    "id": "shirt",
+    "code": "zh",
+    "text": "衬衫",
+    "engine": "espeak",
+    "out": "assets/audio/zh/shirt.mp3"
+  },
+  {
+    "id": "shirt",
+    "code": "ba",
+    "text": "күлдәк",
+    "engine": "espeak",
+    "out": "assets/audio/ba/shirt.mp3"
+  },
+  {
+    "id": "tshirt",
+    "code": "ru",
+    "text": "футболка",
+    "engine": "sapi",
+    "out": "assets/audio/ru/tshirt.mp3"
+  },
+  {
+    "id": "tshirt",
+    "code": "en",
+    "text": "T-shirt",
+    "engine": "sapi",
+    "out": "assets/audio/en/tshirt.mp3"
+  },
+  {
+    "id": "tshirt",
+    "code": "fr",
+    "text": "tee-shirt",
+    "engine": "espeak",
+    "out": "assets/audio/fr/tshirt.mp3"
+  },
+  {
+    "id": "tshirt",
+    "code": "de",
+    "text": "T-Shirt",
+    "engine": "espeak",
+    "out": "assets/audio/de/tshirt.mp3"
+  },
+  {
+    "id": "tshirt",
+    "code": "zh",
+    "text": "T恤",
+    "engine": "espeak",
+    "out": "assets/audio/zh/tshirt.mp3"
+  },
+  {
+    "id": "tshirt",
+    "code": "ba",
+    "text": "футболка",
+    "engine": "espeak",
+    "out": "assets/audio/ba/tshirt.mp3"
+  },
+  {
+    "id": "trousers",
+    "code": "ru",
+    "text": "брюки",
+    "engine": "sapi",
+    "out": "assets/audio/ru/trousers.mp3"
+  },
+  {
+    "id": "trousers",
+    "code": "en",
+    "text": "trousers",
+    "engine": "sapi",
+    "out": "assets/audio/en/trousers.mp3"
+  },
+  {
+    "id": "trousers",
+    "code": "fr",
+    "text": "pantalon",
+    "engine": "espeak",
+    "out": "assets/audio/fr/trousers.mp3"
+  },
+  {
+    "id": "trousers",
+    "code": "de",
+    "text": "Hose",
+    "engine": "espeak",
+    "out": "assets/audio/de/trousers.mp3"
+  },
+  {
+    "id": "trousers",
+    "code": "zh",
+    "text": "裤子",
+    "engine": "espeak",
+    "out": "assets/audio/zh/trousers.mp3"
+  },
+  {
+    "id": "trousers",
+    "code": "ba",
+    "text": "салбар",
+    "engine": "espeak",
+    "out": "assets/audio/ba/trousers.mp3"
+  },
+  {
+    "id": "skirt",
+    "code": "ru",
+    "text": "юбка",
+    "engine": "sapi",
+    "out": "assets/audio/ru/skirt.mp3"
+  },
+  {
+    "id": "skirt",
+    "code": "en",
+    "text": "skirt",
+    "engine": "sapi",
+    "out": "assets/audio/en/skirt.mp3"
+  },
+  {
+    "id": "skirt",
+    "code": "fr",
+    "text": "jupe",
+    "engine": "espeak",
+    "out": "assets/audio/fr/skirt.mp3"
+  },
+  {
+    "id": "skirt",
+    "code": "de",
+    "text": "Rock",
+    "engine": "espeak",
+    "out": "assets/audio/de/skirt.mp3"
+  },
+  {
+    "id": "skirt",
+    "code": "zh",
+    "text": "裙子",
+    "engine": "espeak",
+    "out": "assets/audio/zh/skirt.mp3"
+  },
+  {
+    "id": "skirt",
+    "code": "ba",
+    "text": "итәк",
+    "engine": "espeak",
+    "out": "assets/audio/ba/skirt.mp3"
+  },
+  {
+    "id": "dress",
+    "code": "ru",
+    "text": "платье",
+    "engine": "sapi",
+    "out": "assets/audio/ru/dress.mp3"
+  },
+  {
+    "id": "dress",
+    "code": "en",
+    "text": "dress",
+    "engine": "sapi",
+    "out": "assets/audio/en/dress.mp3"
+  },
+  {
+    "id": "dress",
+    "code": "fr",
+    "text": "robe",
+    "engine": "espeak",
+    "out": "assets/audio/fr/dress.mp3"
+  },
+  {
+    "id": "dress",
+    "code": "de",
+    "text": "Kleid",
+    "engine": "espeak",
+    "out": "assets/audio/de/dress.mp3"
+  },
+  {
+    "id": "dress",
+    "code": "zh",
+    "text": "连衣裙",
+    "engine": "espeak",
+    "out": "assets/audio/zh/dress.mp3"
+  },
+  {
+    "id": "dress",
+    "code": "ba",
+    "text": "күлдәк озон",
+    "engine": "espeak",
+    "out": "assets/audio/ba/dress.mp3"
+  },
+  {
+    "id": "coat",
+    "code": "ru",
+    "text": "пальто",
+    "engine": "sapi",
+    "out": "assets/audio/ru/coat.mp3"
+  },
+  {
+    "id": "coat",
+    "code": "en",
+    "text": "coat",
+    "engine": "sapi",
+    "out": "assets/audio/en/coat.mp3"
+  },
+  {
+    "id": "coat",
+    "code": "fr",
+    "text": "manteau",
+    "engine": "espeak",
+    "out": "assets/audio/fr/coat.mp3"
+  },
+  {
+    "id": "coat",
+    "code": "de",
+    "text": "Mantel",
+    "engine": "espeak",
+    "out": "assets/audio/de/coat.mp3"
+  },
+  {
+    "id": "coat",
+    "code": "zh",
+    "text": "大衣",
+    "engine": "espeak",
+    "out": "assets/audio/zh/coat.mp3"
+  },
+  {
+    "id": "coat",
+    "code": "ba",
+    "text": "пальто",
+    "engine": "espeak",
+    "out": "assets/audio/ba/coat.mp3"
+  },
+  {
+    "id": "jacket",
+    "code": "ru",
+    "text": "куртка",
+    "engine": "sapi",
+    "out": "assets/audio/ru/jacket.mp3"
+  },
+  {
+    "id": "jacket",
+    "code": "en",
+    "text": "jacket",
+    "engine": "sapi",
+    "out": "assets/audio/en/jacket.mp3"
+  },
+  {
+    "id": "jacket",
+    "code": "fr",
+    "text": "blouson",
+    "engine": "espeak",
+    "out": "assets/audio/fr/jacket.mp3"
+  },
+  {
+    "id": "jacket",
+    "code": "de",
+    "text": "Jacke",
+    "engine": "espeak",
+    "out": "assets/audio/de/jacket.mp3"
+  },
+  {
+    "id": "jacket",
+    "code": "zh",
+    "text": "夹克",
+    "engine": "espeak",
+    "out": "assets/audio/zh/jacket.mp3"
+  },
+  {
+    "id": "jacket",
+    "code": "ba",
+    "text": "куртка",
+    "engine": "espeak",
+    "out": "assets/audio/ba/jacket.mp3"
+  },
+  {
+    "id": "sweater",
+    "code": "ru",
+    "text": "свитер",
+    "engine": "sapi",
+    "out": "assets/audio/ru/sweater.mp3"
+  },
+  {
+    "id": "sweater",
+    "code": "en",
+    "text": "sweater",
+    "engine": "sapi",
+    "out": "assets/audio/en/sweater.mp3"
+  },
+  {
+    "id": "sweater",
+    "code": "fr",
+    "text": "pull",
+    "engine": "espeak",
+    "out": "assets/audio/fr/sweater.mp3"
+  },
+  {
+    "id": "sweater",
+    "code": "de",
+    "text": "Pullover",
+    "engine": "espeak",
+    "out": "assets/audio/de/sweater.mp3"
+  },
+  {
+    "id": "sweater",
+    "code": "zh",
+    "text": "毛衣",
+    "engine": "espeak",
+    "out": "assets/audio/zh/sweater.mp3"
+  },
+  {
+    "id": "sweater",
+    "code": "ba",
+    "text": "свитер",
+    "engine": "espeak",
+    "out": "assets/audio/ba/sweater.mp3"
+  },
+  {
+    "id": "socks",
+    "code": "ru",
+    "text": "носки",
+    "engine": "sapi",
+    "out": "assets/audio/ru/socks.mp3"
+  },
+  {
+    "id": "socks",
+    "code": "en",
+    "text": "socks",
+    "engine": "sapi",
+    "out": "assets/audio/en/socks.mp3"
+  },
+  {
+    "id": "socks",
+    "code": "fr",
+    "text": "chaussettes",
+    "engine": "espeak",
+    "out": "assets/audio/fr/socks.mp3"
+  },
+  {
+    "id": "socks",
+    "code": "de",
+    "text": "Socken",
+    "engine": "espeak",
+    "out": "assets/audio/de/socks.mp3"
+  },
+  {
+    "id": "socks",
+    "code": "zh",
+    "text": "袜子",
+    "engine": "espeak",
+    "out": "assets/audio/zh/socks.mp3"
+  },
+  {
+    "id": "socks",
+    "code": "ba",
+    "text": "ойоҡбаш",
+    "engine": "espeak",
+    "out": "assets/audio/ba/socks.mp3"
+  },
+  {
+    "id": "belt",
+    "code": "ru",
+    "text": "ремень",
+    "engine": "sapi",
+    "out": "assets/audio/ru/belt.mp3"
+  },
+  {
+    "id": "belt",
+    "code": "en",
+    "text": "belt",
+    "engine": "sapi",
+    "out": "assets/audio/en/belt.mp3"
+  },
+  {
+    "id": "belt",
+    "code": "fr",
+    "text": "ceinture",
+    "engine": "espeak",
+    "out": "assets/audio/fr/belt.mp3"
+  },
+  {
+    "id": "belt",
+    "code": "de",
+    "text": "Gürtel",
+    "engine": "espeak",
+    "out": "assets/audio/de/belt.mp3"
+  },
+  {
+    "id": "belt",
+    "code": "zh",
+    "text": "腰带",
+    "engine": "espeak",
+    "out": "assets/audio/zh/belt.mp3"
+  },
+  {
+    "id": "belt",
+    "code": "ba",
+    "text": "ҡайыш",
+    "engine": "espeak",
+    "out": "assets/audio/ba/belt.mp3"
+  },
+  {
+    "id": "button",
+    "code": "ru",
+    "text": "пуговица",
+    "engine": "sapi",
+    "out": "assets/audio/ru/button.mp3"
+  },
+  {
+    "id": "button",
+    "code": "en",
+    "text": "button",
+    "engine": "sapi",
+    "out": "assets/audio/en/button.mp3"
+  },
+  {
+    "id": "button",
+    "code": "fr",
+    "text": "bouton",
+    "engine": "espeak",
+    "out": "assets/audio/fr/button.mp3"
+  },
+  {
+    "id": "button",
+    "code": "de",
+    "text": "Knopf",
+    "engine": "espeak",
+    "out": "assets/audio/de/button.mp3"
+  },
+  {
+    "id": "button",
+    "code": "zh",
+    "text": "纽扣",
+    "engine": "espeak",
+    "out": "assets/audio/zh/button.mp3"
+  },
+  {
+    "id": "button",
+    "code": "ba",
+    "text": "төймә",
+    "engine": "espeak",
+    "out": "assets/audio/ba/button.mp3"
+  },
+  {
+    "id": "pocket",
+    "code": "ru",
+    "text": "карман",
+    "engine": "sapi",
+    "out": "assets/audio/ru/pocket.mp3"
+  },
+  {
+    "id": "pocket",
+    "code": "en",
+    "text": "pocket",
+    "engine": "sapi",
+    "out": "assets/audio/en/pocket.mp3"
+  },
+  {
+    "id": "pocket",
+    "code": "fr",
+    "text": "poche",
+    "engine": "espeak",
+    "out": "assets/audio/fr/pocket.mp3"
+  },
+  {
+    "id": "pocket",
+    "code": "de",
+    "text": "Tasche",
+    "engine": "espeak",
+    "out": "assets/audio/de/pocket.mp3"
+  },
+  {
+    "id": "pocket",
+    "code": "zh",
+    "text": "口袋",
+    "engine": "espeak",
+    "out": "assets/audio/zh/pocket.mp3"
+  },
+  {
+    "id": "pocket",
+    "code": "ba",
+    "text": "кеҫә",
+    "engine": "espeak",
+    "out": "assets/audio/ba/pocket.mp3"
+  },
+  {
+    "id": "milk",
+    "code": "ru",
+    "text": "молоко",
+    "engine": "sapi",
+    "out": "assets/audio/ru/milk.mp3"
+  },
+  {
+    "id": "milk",
+    "code": "en",
+    "text": "milk",
+    "engine": "sapi",
+    "out": "assets/audio/en/milk.mp3"
+  },
+  {
+    "id": "milk",
+    "code": "fr",
+    "text": "lait",
+    "engine": "espeak",
+    "out": "assets/audio/fr/milk.mp3"
+  },
+  {
+    "id": "milk",
+    "code": "de",
+    "text": "Milch",
+    "engine": "espeak",
+    "out": "assets/audio/de/milk.mp3"
+  },
+  {
+    "id": "milk",
+    "code": "zh",
+    "text": "牛奶",
+    "engine": "espeak",
+    "out": "assets/audio/zh/milk.mp3"
+  },
+  {
+    "id": "milk",
+    "code": "ba",
+    "text": "һөт",
+    "engine": "espeak",
+    "out": "assets/audio/ba/milk.mp3"
+  },
+  {
+    "id": "cheese",
+    "code": "ru",
+    "text": "сыр",
+    "engine": "sapi",
+    "out": "assets/audio/ru/cheese.mp3"
+  },
+  {
+    "id": "cheese",
+    "code": "en",
+    "text": "cheese",
+    "engine": "sapi",
+    "out": "assets/audio/en/cheese.mp3"
+  },
+  {
+    "id": "cheese",
+    "code": "fr",
+    "text": "fromage",
+    "engine": "espeak",
+    "out": "assets/audio/fr/cheese.mp3"
+  },
+  {
+    "id": "cheese",
+    "code": "de",
+    "text": "Käse",
+    "engine": "espeak",
+    "out": "assets/audio/de/cheese.mp3"
+  },
+  {
+    "id": "cheese",
+    "code": "zh",
+    "text": "奶酪",
+    "engine": "espeak",
+    "out": "assets/audio/zh/cheese.mp3"
+  },
+  {
+    "id": "cheese",
+    "code": "ba",
+    "text": "ҡорот",
+    "engine": "espeak",
+    "out": "assets/audio/ba/cheese.mp3"
+  },
+  {
+    "id": "butter",
+    "code": "ru",
+    "text": "масло",
+    "engine": "sapi",
+    "out": "assets/audio/ru/butter.mp3"
+  },
+  {
+    "id": "butter",
+    "code": "en",
+    "text": "butter",
+    "engine": "sapi",
+    "out": "assets/audio/en/butter.mp3"
+  },
+  {
+    "id": "butter",
+    "code": "fr",
+    "text": "beurre",
+    "engine": "espeak",
+    "out": "assets/audio/fr/butter.mp3"
+  },
+  {
+    "id": "butter",
+    "code": "de",
+    "text": "Butter",
+    "engine": "espeak",
+    "out": "assets/audio/de/butter.mp3"
+  },
+  {
+    "id": "butter",
+    "code": "zh",
+    "text": "黄油",
+    "engine": "espeak",
+    "out": "assets/audio/zh/butter.mp3"
+  },
+  {
+    "id": "butter",
+    "code": "ba",
+    "text": "май",
+    "engine": "espeak",
+    "out": "assets/audio/ba/butter.mp3"
+  },
+  {
+    "id": "egg",
+    "code": "ru",
+    "text": "яйцо",
+    "engine": "sapi",
+    "out": "assets/audio/ru/egg.mp3"
+  },
+  {
+    "id": "egg",
+    "code": "en",
+    "text": "egg",
+    "engine": "sapi",
+    "out": "assets/audio/en/egg.mp3"
+  },
+  {
+    "id": "egg",
+    "code": "fr",
+    "text": "œuf",
+    "engine": "espeak",
+    "out": "assets/audio/fr/egg.mp3"
+  },
+  {
+    "id": "egg",
+    "code": "de",
+    "text": "Ei",
+    "engine": "espeak",
+    "out": "assets/audio/de/egg.mp3"
+  },
+  {
+    "id": "egg",
+    "code": "zh",
+    "text": "鸡蛋",
+    "engine": "espeak",
+    "out": "assets/audio/zh/egg.mp3"
+  },
+  {
+    "id": "egg",
+    "code": "ba",
+    "text": "йомортҡа",
+    "engine": "espeak",
+    "out": "assets/audio/ba/egg.mp3"
+  },
+  {
+    "id": "meat",
+    "code": "ru",
+    "text": "мясо",
+    "engine": "sapi",
+    "out": "assets/audio/ru/meat.mp3"
+  },
+  {
+    "id": "meat",
+    "code": "en",
+    "text": "meat",
+    "engine": "sapi",
+    "out": "assets/audio/en/meat.mp3"
+  },
+  {
+    "id": "meat",
+    "code": "fr",
+    "text": "viande",
+    "engine": "espeak",
+    "out": "assets/audio/fr/meat.mp3"
+  },
+  {
+    "id": "meat",
+    "code": "de",
+    "text": "Fleisch",
+    "engine": "espeak",
+    "out": "assets/audio/de/meat.mp3"
+  },
+  {
+    "id": "meat",
+    "code": "zh",
+    "text": "肉",
+    "engine": "espeak",
+    "out": "assets/audio/zh/meat.mp3"
+  },
+  {
+    "id": "meat",
+    "code": "ba",
+    "text": "ит",
+    "engine": "espeak",
+    "out": "assets/audio/ba/meat.mp3"
+  },
+  {
+    "id": "soup",
+    "code": "ru",
+    "text": "суп",
+    "engine": "sapi",
+    "out": "assets/audio/ru/soup.mp3"
+  },
+  {
+    "id": "soup",
+    "code": "en",
+    "text": "soup",
+    "engine": "sapi",
+    "out": "assets/audio/en/soup.mp3"
+  },
+  {
+    "id": "soup",
+    "code": "fr",
+    "text": "soupe",
+    "engine": "espeak",
+    "out": "assets/audio/fr/soup.mp3"
+  },
+  {
+    "id": "soup",
+    "code": "de",
+    "text": "Suppe",
+    "engine": "espeak",
+    "out": "assets/audio/de/soup.mp3"
+  },
+  {
+    "id": "soup",
+    "code": "zh",
+    "text": "汤",
+    "engine": "espeak",
+    "out": "assets/audio/zh/soup.mp3"
+  },
+  {
+    "id": "soup",
+    "code": "ba",
+    "text": "һурпа",
+    "engine": "espeak",
+    "out": "assets/audio/ba/soup.mp3"
+  },
+  {
+    "id": "porridge",
+    "code": "ru",
+    "text": "каша",
+    "engine": "sapi",
+    "out": "assets/audio/ru/porridge.mp3"
+  },
+  {
+    "id": "porridge",
+    "code": "en",
+    "text": "porridge",
+    "engine": "sapi",
+    "out": "assets/audio/en/porridge.mp3"
+  },
+  {
+    "id": "porridge",
+    "code": "fr",
+    "text": "bouillie",
+    "engine": "espeak",
+    "out": "assets/audio/fr/porridge.mp3"
+  },
+  {
+    "id": "porridge",
+    "code": "de",
+    "text": "Brei",
+    "engine": "espeak",
+    "out": "assets/audio/de/porridge.mp3"
+  },
+  {
+    "id": "porridge",
+    "code": "zh",
+    "text": "粥",
+    "engine": "espeak",
+    "out": "assets/audio/zh/porridge.mp3"
+  },
+  {
+    "id": "porridge",
+    "code": "ba",
+    "text": "бутҡа",
+    "engine": "espeak",
+    "out": "assets/audio/ba/porridge.mp3"
+  },
+  {
+    "id": "potato",
+    "code": "ru",
+    "text": "картошка",
+    "engine": "sapi",
+    "out": "assets/audio/ru/potato.mp3"
+  },
+  {
+    "id": "potato",
+    "code": "en",
+    "text": "potato",
+    "engine": "sapi",
+    "out": "assets/audio/en/potato.mp3"
+  },
+  {
+    "id": "potato",
+    "code": "fr",
+    "text": "pomme de terre",
+    "engine": "espeak",
+    "out": "assets/audio/fr/potato.mp3"
+  },
+  {
+    "id": "potato",
+    "code": "de",
+    "text": "Kartoffel",
+    "engine": "espeak",
+    "out": "assets/audio/de/potato.mp3"
+  },
+  {
+    "id": "potato",
+    "code": "zh",
+    "text": "土豆",
+    "engine": "espeak",
+    "out": "assets/audio/zh/potato.mp3"
+  },
+  {
+    "id": "potato",
+    "code": "ba",
+    "text": "картуф",
+    "engine": "espeak",
+    "out": "assets/audio/ba/potato.mp3"
+  },
+  {
+    "id": "carrot",
+    "code": "ru",
+    "text": "морковь",
+    "engine": "sapi",
+    "out": "assets/audio/ru/carrot.mp3"
+  },
+  {
+    "id": "carrot",
+    "code": "en",
+    "text": "carrot",
+    "engine": "sapi",
+    "out": "assets/audio/en/carrot.mp3"
+  },
+  {
+    "id": "carrot",
+    "code": "fr",
+    "text": "carotte",
+    "engine": "espeak",
+    "out": "assets/audio/fr/carrot.mp3"
+  },
+  {
+    "id": "carrot",
+    "code": "de",
+    "text": "Karotte",
+    "engine": "espeak",
+    "out": "assets/audio/de/carrot.mp3"
+  },
+  {
+    "id": "carrot",
+    "code": "zh",
+    "text": "胡萝卜",
+    "engine": "espeak",
+    "out": "assets/audio/zh/carrot.mp3"
+  },
+  {
+    "id": "carrot",
+    "code": "ba",
+    "text": "кишер",
+    "engine": "espeak",
+    "out": "assets/audio/ba/carrot.mp3"
+  },
+  {
+    "id": "cabbage",
+    "code": "ru",
+    "text": "капуста",
+    "engine": "sapi",
+    "out": "assets/audio/ru/cabbage.mp3"
+  },
+  {
+    "id": "cabbage",
+    "code": "en",
+    "text": "cabbage",
+    "engine": "sapi",
+    "out": "assets/audio/en/cabbage.mp3"
+  },
+  {
+    "id": "cabbage",
+    "code": "fr",
+    "text": "chou",
+    "engine": "espeak",
+    "out": "assets/audio/fr/cabbage.mp3"
+  },
+  {
+    "id": "cabbage",
+    "code": "de",
+    "text": "Kohl",
+    "engine": "espeak",
+    "out": "assets/audio/de/cabbage.mp3"
+  },
+  {
+    "id": "cabbage",
+    "code": "zh",
+    "text": "白菜",
+    "engine": "espeak",
+    "out": "assets/audio/zh/cabbage.mp3"
+  },
+  {
+    "id": "cabbage",
+    "code": "ba",
+    "text": "кәбеҫтә",
+    "engine": "espeak",
+    "out": "assets/audio/ba/cabbage.mp3"
+  },
+  {
+    "id": "tomato",
+    "code": "ru",
+    "text": "помидор",
+    "engine": "sapi",
+    "out": "assets/audio/ru/tomato.mp3"
+  },
+  {
+    "id": "tomato",
+    "code": "en",
+    "text": "tomato",
+    "engine": "sapi",
+    "out": "assets/audio/en/tomato.mp3"
+  },
+  {
+    "id": "tomato",
+    "code": "fr",
+    "text": "tomate",
+    "engine": "espeak",
+    "out": "assets/audio/fr/tomato.mp3"
+  },
+  {
+    "id": "tomato",
+    "code": "de",
+    "text": "Tomate",
+    "engine": "espeak",
+    "out": "assets/audio/de/tomato.mp3"
+  },
+  {
+    "id": "tomato",
+    "code": "zh",
+    "text": "番茄",
+    "engine": "espeak",
+    "out": "assets/audio/zh/tomato.mp3"
+  },
+  {
+    "id": "tomato",
+    "code": "ba",
+    "text": "помидор",
+    "engine": "espeak",
+    "out": "assets/audio/ba/tomato.mp3"
+  },
+  {
+    "id": "honey",
+    "code": "ru",
+    "text": "мёд",
+    "engine": "sapi",
+    "out": "assets/audio/ru/honey.mp3"
+  },
+  {
+    "id": "honey",
+    "code": "en",
+    "text": "honey",
+    "engine": "sapi",
+    "out": "assets/audio/en/honey.mp3"
+  },
+  {
+    "id": "honey",
+    "code": "fr",
+    "text": "miel",
+    "engine": "espeak",
+    "out": "assets/audio/fr/honey.mp3"
+  },
+  {
+    "id": "honey",
+    "code": "de",
+    "text": "Honig",
+    "engine": "espeak",
+    "out": "assets/audio/de/honey.mp3"
+  },
+  {
+    "id": "honey",
+    "code": "zh",
+    "text": "蜂蜜",
+    "engine": "espeak",
+    "out": "assets/audio/zh/honey.mp3"
+  },
+  {
+    "id": "honey",
+    "code": "ba",
+    "text": "бал",
+    "engine": "espeak",
+    "out": "assets/audio/ba/honey.mp3"
+  },
+  {
+    "id": "plate",
+    "code": "ru",
+    "text": "тарелка",
+    "engine": "sapi",
+    "out": "assets/audio/ru/plate.mp3"
+  },
+  {
+    "id": "plate",
+    "code": "en",
+    "text": "plate",
+    "engine": "sapi",
+    "out": "assets/audio/en/plate.mp3"
+  },
+  {
+    "id": "plate",
+    "code": "fr",
+    "text": "assiette",
+    "engine": "espeak",
+    "out": "assets/audio/fr/plate.mp3"
+  },
+  {
+    "id": "plate",
+    "code": "de",
+    "text": "Teller",
+    "engine": "espeak",
+    "out": "assets/audio/de/plate.mp3"
+  },
+  {
+    "id": "plate",
+    "code": "zh",
+    "text": "盘子",
+    "engine": "espeak",
+    "out": "assets/audio/zh/plate.mp3"
+  },
+  {
+    "id": "plate",
+    "code": "ba",
+    "text": "тәрилкә",
+    "engine": "espeak",
+    "out": "assets/audio/ba/plate.mp3"
+  },
+  {
+    "id": "cup",
+    "code": "ru",
+    "text": "чашка",
+    "engine": "sapi",
+    "out": "assets/audio/ru/cup.mp3"
+  },
+  {
+    "id": "cup",
+    "code": "en",
+    "text": "cup",
+    "engine": "sapi",
+    "out": "assets/audio/en/cup.mp3"
+  },
+  {
+    "id": "cup",
+    "code": "fr",
+    "text": "tasse",
+    "engine": "espeak",
+    "out": "assets/audio/fr/cup.mp3"
+  },
+  {
+    "id": "cup",
+    "code": "de",
+    "text": "Tasse",
+    "engine": "espeak",
+    "out": "assets/audio/de/cup.mp3"
+  },
+  {
+    "id": "cup",
+    "code": "zh",
+    "text": "杯子",
+    "engine": "espeak",
+    "out": "assets/audio/zh/cup.mp3"
+  },
+  {
+    "id": "cup",
+    "code": "ba",
+    "text": "сынаяҡ",
+    "engine": "espeak",
+    "out": "assets/audio/ba/cup.mp3"
+  },
+  {
+    "id": "glass",
+    "code": "ru",
+    "text": "стакан",
+    "engine": "sapi",
+    "out": "assets/audio/ru/glass.mp3"
+  },
+  {
+    "id": "glass",
+    "code": "en",
+    "text": "glass",
+    "engine": "sapi",
+    "out": "assets/audio/en/glass.mp3"
+  },
+  {
+    "id": "glass",
+    "code": "fr",
+    "text": "verre",
+    "engine": "espeak",
+    "out": "assets/audio/fr/glass.mp3"
+  },
+  {
+    "id": "glass",
+    "code": "de",
+    "text": "Glas",
+    "engine": "espeak",
+    "out": "assets/audio/de/glass.mp3"
+  },
+  {
+    "id": "glass",
+    "code": "zh",
+    "text": "玻璃杯",
+    "engine": "espeak",
+    "out": "assets/audio/zh/glass.mp3"
+  },
+  {
+    "id": "glass",
+    "code": "ba",
+    "text": "стакан",
+    "engine": "espeak",
+    "out": "assets/audio/ba/glass.mp3"
+  },
+  {
+    "id": "spoon",
+    "code": "ru",
+    "text": "ложка",
+    "engine": "sapi",
+    "out": "assets/audio/ru/spoon.mp3"
+  },
+  {
+    "id": "spoon",
+    "code": "en",
+    "text": "spoon",
+    "engine": "sapi",
+    "out": "assets/audio/en/spoon.mp3"
+  },
+  {
+    "id": "spoon",
+    "code": "fr",
+    "text": "cuillère",
+    "engine": "espeak",
+    "out": "assets/audio/fr/spoon.mp3"
+  },
+  {
+    "id": "spoon",
+    "code": "de",
+    "text": "Löffel",
+    "engine": "espeak",
+    "out": "assets/audio/de/spoon.mp3"
+  },
+  {
+    "id": "spoon",
+    "code": "zh",
+    "text": "勺子",
+    "engine": "espeak",
+    "out": "assets/audio/zh/spoon.mp3"
+  },
+  {
+    "id": "spoon",
+    "code": "ba",
+    "text": "ҡалаҡ",
+    "engine": "espeak",
+    "out": "assets/audio/ba/spoon.mp3"
+  },
+  {
+    "id": "fork",
+    "code": "ru",
+    "text": "вилка",
+    "engine": "sapi",
+    "out": "assets/audio/ru/fork.mp3"
+  },
+  {
+    "id": "fork",
+    "code": "en",
+    "text": "fork",
+    "engine": "sapi",
+    "out": "assets/audio/en/fork.mp3"
+  },
+  {
+    "id": "fork",
+    "code": "fr",
+    "text": "fourchette",
+    "engine": "espeak",
+    "out": "assets/audio/fr/fork.mp3"
+  },
+  {
+    "id": "fork",
+    "code": "de",
+    "text": "Gabel",
+    "engine": "espeak",
+    "out": "assets/audio/de/fork.mp3"
+  },
+  {
+    "id": "fork",
+    "code": "zh",
+    "text": "叉子",
+    "engine": "espeak",
+    "out": "assets/audio/zh/fork.mp3"
+  },
+  {
+    "id": "fork",
+    "code": "ba",
+    "text": "сәнске",
+    "engine": "espeak",
+    "out": "assets/audio/ba/fork.mp3"
+  },
+  {
+    "id": "knife",
+    "code": "ru",
+    "text": "нож",
+    "engine": "sapi",
+    "out": "assets/audio/ru/knife.mp3"
+  },
+  {
+    "id": "knife",
+    "code": "en",
+    "text": "knife",
+    "engine": "sapi",
+    "out": "assets/audio/en/knife.mp3"
+  },
+  {
+    "id": "knife",
+    "code": "fr",
+    "text": "couteau",
+    "engine": "espeak",
+    "out": "assets/audio/fr/knife.mp3"
+  },
+  {
+    "id": "knife",
+    "code": "de",
+    "text": "Messer",
+    "engine": "espeak",
+    "out": "assets/audio/de/knife.mp3"
+  },
+  {
+    "id": "knife",
+    "code": "zh",
+    "text": "刀",
+    "engine": "espeak",
+    "out": "assets/audio/zh/knife.mp3"
+  },
+  {
+    "id": "knife",
+    "code": "ba",
+    "text": "бысаҡ",
+    "engine": "espeak",
+    "out": "assets/audio/ba/knife.mp3"
+  },
+  {
+    "id": "teapot",
+    "code": "ru",
+    "text": "заварочный чайник",
+    "engine": "sapi",
+    "out": "assets/audio/ru/teapot.mp3"
+  },
+  {
+    "id": "teapot",
+    "code": "en",
+    "text": "teapot",
+    "engine": "sapi",
+    "out": "assets/audio/en/teapot.mp3"
+  },
+  {
+    "id": "teapot",
+    "code": "fr",
+    "text": "théière",
+    "engine": "espeak",
+    "out": "assets/audio/fr/teapot.mp3"
+  },
+  {
+    "id": "teapot",
+    "code": "de",
+    "text": "Teekanne",
+    "engine": "espeak",
+    "out": "assets/audio/de/teapot.mp3"
+  },
+  {
+    "id": "teapot",
+    "code": "zh",
+    "text": "茶壶",
+    "engine": "espeak",
+    "out": "assets/audio/zh/teapot.mp3"
+  },
+  {
+    "id": "teapot",
+    "code": "ba",
+    "text": "сәйнүк ҙур",
+    "engine": "espeak",
+    "out": "assets/audio/ba/teapot.mp3"
+  },
+  {
+    "id": "jug",
+    "code": "ru",
+    "text": "кувшин",
+    "engine": "sapi",
+    "out": "assets/audio/ru/jug.mp3"
+  },
+  {
+    "id": "jug",
+    "code": "en",
+    "text": "jug",
+    "engine": "sapi",
+    "out": "assets/audio/en/jug.mp3"
+  },
+  {
+    "id": "jug",
+    "code": "fr",
+    "text": "pichet",
+    "engine": "espeak",
+    "out": "assets/audio/fr/jug.mp3"
+  },
+  {
+    "id": "jug",
+    "code": "de",
+    "text": "Krug",
+    "engine": "espeak",
+    "out": "assets/audio/de/jug.mp3"
+  },
+  {
+    "id": "jug",
+    "code": "zh",
+    "text": "水壶罐",
+    "engine": "espeak",
+    "out": "assets/audio/zh/jug.mp3"
+  },
+  {
+    "id": "jug",
+    "code": "ba",
+    "text": "кувшин",
+    "engine": "espeak",
+    "out": "assets/audio/ba/jug.mp3"
+  },
+  {
+    "id": "bowl",
+    "code": "ru",
+    "text": "миска",
+    "engine": "sapi",
+    "out": "assets/audio/ru/bowl.mp3"
+  },
+  {
+    "id": "bowl",
+    "code": "en",
+    "text": "bowl",
+    "engine": "sapi",
+    "out": "assets/audio/en/bowl.mp3"
+  },
+  {
+    "id": "bowl",
+    "code": "fr",
+    "text": "bol",
+    "engine": "espeak",
+    "out": "assets/audio/fr/bowl.mp3"
+  },
+  {
+    "id": "bowl",
+    "code": "de",
+    "text": "Schüssel",
+    "engine": "espeak",
+    "out": "assets/audio/de/bowl.mp3"
+  },
+  {
+    "id": "bowl",
+    "code": "zh",
+    "text": "碗",
+    "engine": "espeak",
+    "out": "assets/audio/zh/bowl.mp3"
+  },
+  {
+    "id": "bowl",
+    "code": "ba",
+    "text": "табаҡ",
+    "engine": "espeak",
+    "out": "assets/audio/ba/bowl.mp3"
+  },
+  {
+    "id": "tablecloth",
+    "code": "ru",
+    "text": "скатерть",
+    "engine": "sapi",
+    "out": "assets/audio/ru/tablecloth.mp3"
+  },
+  {
+    "id": "tablecloth",
+    "code": "en",
+    "text": "tablecloth",
+    "engine": "sapi",
+    "out": "assets/audio/en/tablecloth.mp3"
+  },
+  {
+    "id": "tablecloth",
+    "code": "fr",
+    "text": "nappe",
+    "engine": "espeak",
+    "out": "assets/audio/fr/tablecloth.mp3"
+  },
+  {
+    "id": "tablecloth",
+    "code": "de",
+    "text": "Tischdecke",
+    "engine": "espeak",
+    "out": "assets/audio/de/tablecloth.mp3"
+  },
+  {
+    "id": "tablecloth",
+    "code": "zh",
+    "text": "桌布",
+    "engine": "espeak",
+    "out": "assets/audio/zh/tablecloth.mp3"
+  },
+  {
+    "id": "tablecloth",
+    "code": "ba",
+    "text": "ашъяулыҡ",
+    "engine": "espeak",
+    "out": "assets/audio/ba/tablecloth.mp3"
+  },
+  {
+    "id": "sugarbowl",
+    "code": "ru",
+    "text": "сахарница",
+    "engine": "sapi",
+    "out": "assets/audio/ru/sugarbowl.mp3"
+  },
+  {
+    "id": "sugarbowl",
+    "code": "en",
+    "text": "sugar bowl",
+    "engine": "sapi",
+    "out": "assets/audio/en/sugarbowl.mp3"
+  },
+  {
+    "id": "sugarbowl",
+    "code": "fr",
+    "text": "sucrier",
+    "engine": "espeak",
+    "out": "assets/audio/fr/sugarbowl.mp3"
+  },
+  {
+    "id": "sugarbowl",
+    "code": "de",
+    "text": "Zuckerdose",
+    "engine": "espeak",
+    "out": "assets/audio/de/sugarbowl.mp3"
+  },
+  {
+    "id": "sugarbowl",
+    "code": "zh",
+    "text": "糖罐",
+    "engine": "espeak",
+    "out": "assets/audio/zh/sugarbowl.mp3"
+  },
+  {
+    "id": "sugarbowl",
+    "code": "ba",
+    "text": "шәкәр һауыты",
+    "engine": "espeak",
+    "out": "assets/audio/ba/sugarbowl.mp3"
+  },
+  {
+    "id": "breadbox",
+    "code": "ru",
+    "text": "хлебница",
+    "engine": "sapi",
+    "out": "assets/audio/ru/breadbox.mp3"
+  },
+  {
+    "id": "breadbox",
+    "code": "en",
+    "text": "bread bin",
+    "engine": "sapi",
+    "out": "assets/audio/en/breadbox.mp3"
+  },
+  {
+    "id": "breadbox",
+    "code": "fr",
+    "text": "boîte à pain",
+    "engine": "espeak",
+    "out": "assets/audio/fr/breadbox.mp3"
+  },
+  {
+    "id": "breadbox",
+    "code": "de",
+    "text": "Brotkasten",
+    "engine": "espeak",
+    "out": "assets/audio/de/breadbox.mp3"
+  },
+  {
+    "id": "breadbox",
+    "code": "zh",
+    "text": "面包盒",
+    "engine": "espeak",
+    "out": "assets/audio/zh/breadbox.mp3"
+  },
+  {
+    "id": "breadbox",
+    "code": "ba",
+    "text": "икмәк һауыты",
+    "engine": "espeak",
+    "out": "assets/audio/ba/breadbox.mp3"
+  },
+  {
+    "id": "mother",
+    "code": "ru",
+    "text": "мама",
+    "engine": "sapi",
+    "out": "assets/audio/ru/mother.mp3"
+  },
+  {
+    "id": "mother",
+    "code": "en",
+    "text": "mother",
+    "engine": "sapi",
+    "out": "assets/audio/en/mother.mp3"
+  },
+  {
+    "id": "mother",
+    "code": "fr",
+    "text": "mère",
+    "engine": "espeak",
+    "out": "assets/audio/fr/mother.mp3"
+  },
+  {
+    "id": "mother",
+    "code": "de",
+    "text": "Mutter",
+    "engine": "espeak",
+    "out": "assets/audio/de/mother.mp3"
+  },
+  {
+    "id": "mother",
+    "code": "zh",
+    "text": "妈妈",
+    "engine": "espeak",
+    "out": "assets/audio/zh/mother.mp3"
+  },
+  {
+    "id": "mother",
+    "code": "ba",
+    "text": "әсәй",
+    "engine": "espeak",
+    "out": "assets/audio/ba/mother.mp3"
+  },
+  {
+    "id": "father",
+    "code": "ru",
+    "text": "папа",
+    "engine": "sapi",
+    "out": "assets/audio/ru/father.mp3"
+  },
+  {
+    "id": "father",
+    "code": "en",
+    "text": "father",
+    "engine": "sapi",
+    "out": "assets/audio/en/father.mp3"
+  },
+  {
+    "id": "father",
+    "code": "fr",
+    "text": "père",
+    "engine": "espeak",
+    "out": "assets/audio/fr/father.mp3"
+  },
+  {
+    "id": "father",
+    "code": "de",
+    "text": "Vater",
+    "engine": "espeak",
+    "out": "assets/audio/de/father.mp3"
+  },
+  {
+    "id": "father",
+    "code": "zh",
+    "text": "爸爸",
+    "engine": "espeak",
+    "out": "assets/audio/zh/father.mp3"
+  },
+  {
+    "id": "father",
+    "code": "ba",
+    "text": "атай",
+    "engine": "espeak",
+    "out": "assets/audio/ba/father.mp3"
+  },
+  {
+    "id": "son",
+    "code": "ru",
+    "text": "сын",
+    "engine": "sapi",
+    "out": "assets/audio/ru/son.mp3"
+  },
+  {
+    "id": "son",
+    "code": "en",
+    "text": "son",
+    "engine": "sapi",
+    "out": "assets/audio/en/son.mp3"
+  },
+  {
+    "id": "son",
+    "code": "fr",
+    "text": "fils",
+    "engine": "espeak",
+    "out": "assets/audio/fr/son.mp3"
+  },
+  {
+    "id": "son",
+    "code": "de",
+    "text": "Sohn",
+    "engine": "espeak",
+    "out": "assets/audio/de/son.mp3"
+  },
+  {
+    "id": "son",
+    "code": "zh",
+    "text": "儿子",
+    "engine": "espeak",
+    "out": "assets/audio/zh/son.mp3"
+  },
+  {
+    "id": "son",
+    "code": "ba",
+    "text": "ул",
+    "engine": "espeak",
+    "out": "assets/audio/ba/son.mp3"
+  },
+  {
+    "id": "daughter",
+    "code": "ru",
+    "text": "дочь",
+    "engine": "sapi",
+    "out": "assets/audio/ru/daughter.mp3"
+  },
+  {
+    "id": "daughter",
+    "code": "en",
+    "text": "daughter",
+    "engine": "sapi",
+    "out": "assets/audio/en/daughter.mp3"
+  },
+  {
+    "id": "daughter",
+    "code": "fr",
+    "text": "fille",
+    "engine": "espeak",
+    "out": "assets/audio/fr/daughter.mp3"
+  },
+  {
+    "id": "daughter",
+    "code": "de",
+    "text": "Tochter",
+    "engine": "espeak",
+    "out": "assets/audio/de/daughter.mp3"
+  },
+  {
+    "id": "daughter",
+    "code": "zh",
+    "text": "女儿",
+    "engine": "espeak",
+    "out": "assets/audio/zh/daughter.mp3"
+  },
+  {
+    "id": "daughter",
+    "code": "ba",
+    "text": "ҡыҙ",
+    "engine": "espeak",
+    "out": "assets/audio/ba/daughter.mp3"
+  },
+  {
+    "id": "brother",
+    "code": "ru",
+    "text": "брат",
+    "engine": "sapi",
+    "out": "assets/audio/ru/brother.mp3"
+  },
+  {
+    "id": "brother",
+    "code": "en",
+    "text": "brother",
+    "engine": "sapi",
+    "out": "assets/audio/en/brother.mp3"
+  },
+  {
+    "id": "brother",
+    "code": "fr",
+    "text": "frère",
+    "engine": "espeak",
+    "out": "assets/audio/fr/brother.mp3"
+  },
+  {
+    "id": "brother",
+    "code": "de",
+    "text": "Bruder",
+    "engine": "espeak",
+    "out": "assets/audio/de/brother.mp3"
+  },
+  {
+    "id": "brother",
+    "code": "zh",
+    "text": "兄弟",
+    "engine": "espeak",
+    "out": "assets/audio/zh/brother.mp3"
+  },
+  {
+    "id": "brother",
+    "code": "ba",
+    "text": "ағай",
+    "engine": "espeak",
+    "out": "assets/audio/ba/brother.mp3"
+  },
+  {
+    "id": "sister",
+    "code": "ru",
+    "text": "сестра",
+    "engine": "sapi",
+    "out": "assets/audio/ru/sister.mp3"
+  },
+  {
+    "id": "sister",
+    "code": "en",
+    "text": "sister",
+    "engine": "sapi",
+    "out": "assets/audio/en/sister.mp3"
+  },
+  {
+    "id": "sister",
+    "code": "fr",
+    "text": "sœur",
+    "engine": "espeak",
+    "out": "assets/audio/fr/sister.mp3"
+  },
+  {
+    "id": "sister",
+    "code": "de",
+    "text": "Schwester",
+    "engine": "espeak",
+    "out": "assets/audio/de/sister.mp3"
+  },
+  {
+    "id": "sister",
+    "code": "zh",
+    "text": "姐妹",
+    "engine": "espeak",
+    "out": "assets/audio/zh/sister.mp3"
+  },
+  {
+    "id": "sister",
+    "code": "ba",
+    "text": "апай",
+    "engine": "espeak",
+    "out": "assets/audio/ba/sister.mp3"
+  },
+  {
+    "id": "grandmother",
+    "code": "ru",
+    "text": "бабушка",
+    "engine": "sapi",
+    "out": "assets/audio/ru/grandmother.mp3"
+  },
+  {
+    "id": "grandmother",
+    "code": "en",
+    "text": "grandmother",
+    "engine": "sapi",
+    "out": "assets/audio/en/grandmother.mp3"
+  },
+  {
+    "id": "grandmother",
+    "code": "fr",
+    "text": "grand-mère",
+    "engine": "espeak",
+    "out": "assets/audio/fr/grandmother.mp3"
+  },
+  {
+    "id": "grandmother",
+    "code": "de",
+    "text": "Großmutter",
+    "engine": "espeak",
+    "out": "assets/audio/de/grandmother.mp3"
+  },
+  {
+    "id": "grandmother",
+    "code": "zh",
+    "text": "奶奶",
+    "engine": "espeak",
+    "out": "assets/audio/zh/grandmother.mp3"
+  },
+  {
+    "id": "grandmother",
+    "code": "ba",
+    "text": "өләсәй",
+    "engine": "espeak",
+    "out": "assets/audio/ba/grandmother.mp3"
+  },
+  {
+    "id": "grandfather",
+    "code": "ru",
+    "text": "дедушка",
+    "engine": "sapi",
+    "out": "assets/audio/ru/grandfather.mp3"
+  },
+  {
+    "id": "grandfather",
+    "code": "en",
+    "text": "grandfather",
+    "engine": "sapi",
+    "out": "assets/audio/en/grandfather.mp3"
+  },
+  {
+    "id": "grandfather",
+    "code": "fr",
+    "text": "grand-père",
+    "engine": "espeak",
+    "out": "assets/audio/fr/grandfather.mp3"
+  },
+  {
+    "id": "grandfather",
+    "code": "de",
+    "text": "Großvater",
+    "engine": "espeak",
+    "out": "assets/audio/de/grandfather.mp3"
+  },
+  {
+    "id": "grandfather",
+    "code": "zh",
+    "text": "爷爷",
+    "engine": "espeak",
+    "out": "assets/audio/zh/grandfather.mp3"
+  },
+  {
+    "id": "grandfather",
+    "code": "ba",
+    "text": "олатай",
+    "engine": "espeak",
+    "out": "assets/audio/ba/grandfather.mp3"
+  },
+  {
+    "id": "baby",
+    "code": "ru",
+    "text": "малыш",
+    "engine": "sapi",
+    "out": "assets/audio/ru/baby.mp3"
+  },
+  {
+    "id": "baby",
+    "code": "en",
+    "text": "baby",
+    "engine": "sapi",
+    "out": "assets/audio/en/baby.mp3"
+  },
+  {
+    "id": "baby",
+    "code": "fr",
+    "text": "bébé",
+    "engine": "espeak",
+    "out": "assets/audio/fr/baby.mp3"
+  },
+  {
+    "id": "baby",
+    "code": "de",
+    "text": "Baby",
+    "engine": "espeak",
+    "out": "assets/audio/de/baby.mp3"
+  },
+  {
+    "id": "baby",
+    "code": "zh",
+    "text": "婴儿",
+    "engine": "espeak",
+    "out": "assets/audio/zh/baby.mp3"
+  },
+  {
+    "id": "baby",
+    "code": "ba",
+    "text": "бәпес",
+    "engine": "espeak",
+    "out": "assets/audio/ba/baby.mp3"
+  },
+  {
+    "id": "friend",
+    "code": "ru",
+    "text": "друг",
+    "engine": "sapi",
+    "out": "assets/audio/ru/friend.mp3"
+  },
+  {
+    "id": "friend",
+    "code": "en",
+    "text": "friend",
+    "engine": "sapi",
+    "out": "assets/audio/en/friend.mp3"
+  },
+  {
+    "id": "friend",
+    "code": "fr",
+    "text": "ami",
+    "engine": "espeak",
+    "out": "assets/audio/fr/friend.mp3"
+  },
+  {
+    "id": "friend",
+    "code": "de",
+    "text": "Freund",
+    "engine": "espeak",
+    "out": "assets/audio/de/friend.mp3"
+  },
+  {
+    "id": "friend",
+    "code": "zh",
+    "text": "朋友",
+    "engine": "espeak",
+    "out": "assets/audio/zh/friend.mp3"
+  },
+  {
+    "id": "friend",
+    "code": "ba",
+    "text": "дуҫ",
+    "engine": "espeak",
+    "out": "assets/audio/ba/friend.mp3"
+  },
+  {
+    "id": "neighbour",
+    "code": "ru",
+    "text": "сосед",
+    "engine": "sapi",
+    "out": "assets/audio/ru/neighbour.mp3"
+  },
+  {
+    "id": "neighbour",
+    "code": "en",
+    "text": "neighbour",
+    "engine": "sapi",
+    "out": "assets/audio/en/neighbour.mp3"
+  },
+  {
+    "id": "neighbour",
+    "code": "fr",
+    "text": "voisin",
+    "engine": "espeak",
+    "out": "assets/audio/fr/neighbour.mp3"
+  },
+  {
+    "id": "neighbour",
+    "code": "de",
+    "text": "Nachbar",
+    "engine": "espeak",
+    "out": "assets/audio/de/neighbour.mp3"
+  },
+  {
+    "id": "neighbour",
+    "code": "zh",
+    "text": "邻居",
+    "engine": "espeak",
+    "out": "assets/audio/zh/neighbour.mp3"
+  },
+  {
+    "id": "neighbour",
+    "code": "ba",
+    "text": "күрше",
+    "engine": "espeak",
+    "out": "assets/audio/ba/neighbour.mp3"
+  },
+  {
+    "id": "guest",
+    "code": "ru",
+    "text": "гость",
+    "engine": "sapi",
+    "out": "assets/audio/ru/guest.mp3"
+  },
+  {
+    "id": "guest",
+    "code": "en",
+    "text": "guest",
+    "engine": "sapi",
+    "out": "assets/audio/en/guest.mp3"
+  },
+  {
+    "id": "guest",
+    "code": "fr",
+    "text": "invité",
+    "engine": "espeak",
+    "out": "assets/audio/fr/guest.mp3"
+  },
+  {
+    "id": "guest",
+    "code": "de",
+    "text": "Gast",
+    "engine": "espeak",
+    "out": "assets/audio/de/guest.mp3"
+  },
+  {
+    "id": "guest",
+    "code": "zh",
+    "text": "客人",
+    "engine": "espeak",
+    "out": "assets/audio/zh/guest.mp3"
+  },
+  {
+    "id": "guest",
+    "code": "ba",
+    "text": "ҡунаҡ",
+    "engine": "espeak",
+    "out": "assets/audio/ba/guest.mp3"
   },
   {
     "id": "tree",
@@ -10078,2526 +13606,6 @@
     "text": "умарта",
     "engine": "espeak",
     "out": "assets/audio/ba/beehive.mp3"
-  },
-  {
-    "id": "head",
-    "code": "ru",
-    "text": "голова",
-    "engine": "sapi",
-    "out": "assets/audio/ru/head.mp3"
-  },
-  {
-    "id": "head",
-    "code": "en",
-    "text": "head",
-    "engine": "sapi",
-    "out": "assets/audio/en/head.mp3"
-  },
-  {
-    "id": "head",
-    "code": "fr",
-    "text": "tête",
-    "engine": "espeak",
-    "out": "assets/audio/fr/head.mp3"
-  },
-  {
-    "id": "head",
-    "code": "de",
-    "text": "Kopf",
-    "engine": "espeak",
-    "out": "assets/audio/de/head.mp3"
-  },
-  {
-    "id": "head",
-    "code": "zh",
-    "text": "头",
-    "engine": "espeak",
-    "out": "assets/audio/zh/head.mp3"
-  },
-  {
-    "id": "head",
-    "code": "ba",
-    "text": "баш",
-    "engine": "espeak",
-    "out": "assets/audio/ba/head.mp3"
-  },
-  {
-    "id": "hair",
-    "code": "ru",
-    "text": "волосы",
-    "engine": "sapi",
-    "out": "assets/audio/ru/hair.mp3"
-  },
-  {
-    "id": "hair",
-    "code": "en",
-    "text": "hair",
-    "engine": "sapi",
-    "out": "assets/audio/en/hair.mp3"
-  },
-  {
-    "id": "hair",
-    "code": "fr",
-    "text": "cheveux",
-    "engine": "espeak",
-    "out": "assets/audio/fr/hair.mp3"
-  },
-  {
-    "id": "hair",
-    "code": "de",
-    "text": "Haare",
-    "engine": "espeak",
-    "out": "assets/audio/de/hair.mp3"
-  },
-  {
-    "id": "hair",
-    "code": "zh",
-    "text": "头发",
-    "engine": "espeak",
-    "out": "assets/audio/zh/hair.mp3"
-  },
-  {
-    "id": "hair",
-    "code": "ba",
-    "text": "сәс",
-    "engine": "espeak",
-    "out": "assets/audio/ba/hair.mp3"
-  },
-  {
-    "id": "eye",
-    "code": "ru",
-    "text": "глаз",
-    "engine": "sapi",
-    "out": "assets/audio/ru/eye.mp3"
-  },
-  {
-    "id": "eye",
-    "code": "en",
-    "text": "eye",
-    "engine": "sapi",
-    "out": "assets/audio/en/eye.mp3"
-  },
-  {
-    "id": "eye",
-    "code": "fr",
-    "text": "œil",
-    "engine": "espeak",
-    "out": "assets/audio/fr/eye.mp3"
-  },
-  {
-    "id": "eye",
-    "code": "de",
-    "text": "Auge",
-    "engine": "espeak",
-    "out": "assets/audio/de/eye.mp3"
-  },
-  {
-    "id": "eye",
-    "code": "zh",
-    "text": "眼睛",
-    "engine": "espeak",
-    "out": "assets/audio/zh/eye.mp3"
-  },
-  {
-    "id": "eye",
-    "code": "ba",
-    "text": "күҙ",
-    "engine": "espeak",
-    "out": "assets/audio/ba/eye.mp3"
-  },
-  {
-    "id": "ear",
-    "code": "ru",
-    "text": "ухо",
-    "engine": "sapi",
-    "out": "assets/audio/ru/ear.mp3"
-  },
-  {
-    "id": "ear",
-    "code": "en",
-    "text": "ear",
-    "engine": "sapi",
-    "out": "assets/audio/en/ear.mp3"
-  },
-  {
-    "id": "ear",
-    "code": "fr",
-    "text": "oreille",
-    "engine": "espeak",
-    "out": "assets/audio/fr/ear.mp3"
-  },
-  {
-    "id": "ear",
-    "code": "de",
-    "text": "Ohr",
-    "engine": "espeak",
-    "out": "assets/audio/de/ear.mp3"
-  },
-  {
-    "id": "ear",
-    "code": "zh",
-    "text": "耳朵",
-    "engine": "espeak",
-    "out": "assets/audio/zh/ear.mp3"
-  },
-  {
-    "id": "ear",
-    "code": "ba",
-    "text": "ҡолаҡ",
-    "engine": "espeak",
-    "out": "assets/audio/ba/ear.mp3"
-  },
-  {
-    "id": "nose",
-    "code": "ru",
-    "text": "нос",
-    "engine": "sapi",
-    "out": "assets/audio/ru/nose.mp3"
-  },
-  {
-    "id": "nose",
-    "code": "en",
-    "text": "nose",
-    "engine": "sapi",
-    "out": "assets/audio/en/nose.mp3"
-  },
-  {
-    "id": "nose",
-    "code": "fr",
-    "text": "nez",
-    "engine": "espeak",
-    "out": "assets/audio/fr/nose.mp3"
-  },
-  {
-    "id": "nose",
-    "code": "de",
-    "text": "Nase",
-    "engine": "espeak",
-    "out": "assets/audio/de/nose.mp3"
-  },
-  {
-    "id": "nose",
-    "code": "zh",
-    "text": "鼻子",
-    "engine": "espeak",
-    "out": "assets/audio/zh/nose.mp3"
-  },
-  {
-    "id": "nose",
-    "code": "ba",
-    "text": "танау",
-    "engine": "espeak",
-    "out": "assets/audio/ba/nose.mp3"
-  },
-  {
-    "id": "mouth",
-    "code": "ru",
-    "text": "рот",
-    "engine": "sapi",
-    "out": "assets/audio/ru/mouth.mp3"
-  },
-  {
-    "id": "mouth",
-    "code": "en",
-    "text": "mouth",
-    "engine": "sapi",
-    "out": "assets/audio/en/mouth.mp3"
-  },
-  {
-    "id": "mouth",
-    "code": "fr",
-    "text": "bouche",
-    "engine": "espeak",
-    "out": "assets/audio/fr/mouth.mp3"
-  },
-  {
-    "id": "mouth",
-    "code": "de",
-    "text": "Mund",
-    "engine": "espeak",
-    "out": "assets/audio/de/mouth.mp3"
-  },
-  {
-    "id": "mouth",
-    "code": "zh",
-    "text": "嘴",
-    "engine": "espeak",
-    "out": "assets/audio/zh/mouth.mp3"
-  },
-  {
-    "id": "mouth",
-    "code": "ba",
-    "text": "ауыҙ",
-    "engine": "espeak",
-    "out": "assets/audio/ba/mouth.mp3"
-  },
-  {
-    "id": "tooth",
-    "code": "ru",
-    "text": "зуб",
-    "engine": "sapi",
-    "out": "assets/audio/ru/tooth.mp3"
-  },
-  {
-    "id": "tooth",
-    "code": "en",
-    "text": "tooth",
-    "engine": "sapi",
-    "out": "assets/audio/en/tooth.mp3"
-  },
-  {
-    "id": "tooth",
-    "code": "fr",
-    "text": "dent",
-    "engine": "espeak",
-    "out": "assets/audio/fr/tooth.mp3"
-  },
-  {
-    "id": "tooth",
-    "code": "de",
-    "text": "Zahn",
-    "engine": "espeak",
-    "out": "assets/audio/de/tooth.mp3"
-  },
-  {
-    "id": "tooth",
-    "code": "zh",
-    "text": "牙齿",
-    "engine": "espeak",
-    "out": "assets/audio/zh/tooth.mp3"
-  },
-  {
-    "id": "tooth",
-    "code": "ba",
-    "text": "теш",
-    "engine": "espeak",
-    "out": "assets/audio/ba/tooth.mp3"
-  },
-  {
-    "id": "neck",
-    "code": "ru",
-    "text": "шея",
-    "engine": "sapi",
-    "out": "assets/audio/ru/neck.mp3"
-  },
-  {
-    "id": "neck",
-    "code": "en",
-    "text": "neck",
-    "engine": "sapi",
-    "out": "assets/audio/en/neck.mp3"
-  },
-  {
-    "id": "neck",
-    "code": "fr",
-    "text": "cou",
-    "engine": "espeak",
-    "out": "assets/audio/fr/neck.mp3"
-  },
-  {
-    "id": "neck",
-    "code": "de",
-    "text": "Hals",
-    "engine": "espeak",
-    "out": "assets/audio/de/neck.mp3"
-  },
-  {
-    "id": "neck",
-    "code": "zh",
-    "text": "脖子",
-    "engine": "espeak",
-    "out": "assets/audio/zh/neck.mp3"
-  },
-  {
-    "id": "neck",
-    "code": "ba",
-    "text": "муйын",
-    "engine": "espeak",
-    "out": "assets/audio/ba/neck.mp3"
-  },
-  {
-    "id": "hand",
-    "code": "ru",
-    "text": "рука",
-    "engine": "sapi",
-    "out": "assets/audio/ru/hand.mp3"
-  },
-  {
-    "id": "hand",
-    "code": "en",
-    "text": "hand",
-    "engine": "sapi",
-    "out": "assets/audio/en/hand.mp3"
-  },
-  {
-    "id": "hand",
-    "code": "fr",
-    "text": "main",
-    "engine": "espeak",
-    "out": "assets/audio/fr/hand.mp3"
-  },
-  {
-    "id": "hand",
-    "code": "de",
-    "text": "Hand",
-    "engine": "espeak",
-    "out": "assets/audio/de/hand.mp3"
-  },
-  {
-    "id": "hand",
-    "code": "zh",
-    "text": "手",
-    "engine": "espeak",
-    "out": "assets/audio/zh/hand.mp3"
-  },
-  {
-    "id": "hand",
-    "code": "ba",
-    "text": "ҡул",
-    "engine": "espeak",
-    "out": "assets/audio/ba/hand.mp3"
-  },
-  {
-    "id": "finger",
-    "code": "ru",
-    "text": "палец",
-    "engine": "sapi",
-    "out": "assets/audio/ru/finger.mp3"
-  },
-  {
-    "id": "finger",
-    "code": "en",
-    "text": "finger",
-    "engine": "sapi",
-    "out": "assets/audio/en/finger.mp3"
-  },
-  {
-    "id": "finger",
-    "code": "fr",
-    "text": "doigt",
-    "engine": "espeak",
-    "out": "assets/audio/fr/finger.mp3"
-  },
-  {
-    "id": "finger",
-    "code": "de",
-    "text": "Finger",
-    "engine": "espeak",
-    "out": "assets/audio/de/finger.mp3"
-  },
-  {
-    "id": "finger",
-    "code": "zh",
-    "text": "手指",
-    "engine": "espeak",
-    "out": "assets/audio/zh/finger.mp3"
-  },
-  {
-    "id": "finger",
-    "code": "ba",
-    "text": "бармаҡ",
-    "engine": "espeak",
-    "out": "assets/audio/ba/finger.mp3"
-  },
-  {
-    "id": "leg",
-    "code": "ru",
-    "text": "нога",
-    "engine": "sapi",
-    "out": "assets/audio/ru/leg.mp3"
-  },
-  {
-    "id": "leg",
-    "code": "en",
-    "text": "leg",
-    "engine": "sapi",
-    "out": "assets/audio/en/leg.mp3"
-  },
-  {
-    "id": "leg",
-    "code": "fr",
-    "text": "jambe",
-    "engine": "espeak",
-    "out": "assets/audio/fr/leg.mp3"
-  },
-  {
-    "id": "leg",
-    "code": "de",
-    "text": "Bein",
-    "engine": "espeak",
-    "out": "assets/audio/de/leg.mp3"
-  },
-  {
-    "id": "leg",
-    "code": "zh",
-    "text": "腿",
-    "engine": "espeak",
-    "out": "assets/audio/zh/leg.mp3"
-  },
-  {
-    "id": "leg",
-    "code": "ba",
-    "text": "аяҡ",
-    "engine": "espeak",
-    "out": "assets/audio/ba/leg.mp3"
-  },
-  {
-    "id": "back",
-    "code": "ru",
-    "text": "спина",
-    "engine": "sapi",
-    "out": "assets/audio/ru/back.mp3"
-  },
-  {
-    "id": "back",
-    "code": "en",
-    "text": "back",
-    "engine": "sapi",
-    "out": "assets/audio/en/back.mp3"
-  },
-  {
-    "id": "back",
-    "code": "fr",
-    "text": "dos",
-    "engine": "espeak",
-    "out": "assets/audio/fr/back.mp3"
-  },
-  {
-    "id": "back",
-    "code": "de",
-    "text": "Rücken",
-    "engine": "espeak",
-    "out": "assets/audio/de/back.mp3"
-  },
-  {
-    "id": "back",
-    "code": "zh",
-    "text": "背",
-    "engine": "espeak",
-    "out": "assets/audio/zh/back.mp3"
-  },
-  {
-    "id": "back",
-    "code": "ba",
-    "text": "арҡа",
-    "engine": "espeak",
-    "out": "assets/audio/ba/back.mp3"
-  },
-  {
-    "id": "shirt",
-    "code": "ru",
-    "text": "рубашка",
-    "engine": "sapi",
-    "out": "assets/audio/ru/shirt.mp3"
-  },
-  {
-    "id": "shirt",
-    "code": "en",
-    "text": "shirt",
-    "engine": "sapi",
-    "out": "assets/audio/en/shirt.mp3"
-  },
-  {
-    "id": "shirt",
-    "code": "fr",
-    "text": "chemise",
-    "engine": "espeak",
-    "out": "assets/audio/fr/shirt.mp3"
-  },
-  {
-    "id": "shirt",
-    "code": "de",
-    "text": "Hemd",
-    "engine": "espeak",
-    "out": "assets/audio/de/shirt.mp3"
-  },
-  {
-    "id": "shirt",
-    "code": "zh",
-    "text": "衬衫",
-    "engine": "espeak",
-    "out": "assets/audio/zh/shirt.mp3"
-  },
-  {
-    "id": "shirt",
-    "code": "ba",
-    "text": "күлдәк",
-    "engine": "espeak",
-    "out": "assets/audio/ba/shirt.mp3"
-  },
-  {
-    "id": "tshirt",
-    "code": "ru",
-    "text": "футболка",
-    "engine": "sapi",
-    "out": "assets/audio/ru/tshirt.mp3"
-  },
-  {
-    "id": "tshirt",
-    "code": "en",
-    "text": "T-shirt",
-    "engine": "sapi",
-    "out": "assets/audio/en/tshirt.mp3"
-  },
-  {
-    "id": "tshirt",
-    "code": "fr",
-    "text": "tee-shirt",
-    "engine": "espeak",
-    "out": "assets/audio/fr/tshirt.mp3"
-  },
-  {
-    "id": "tshirt",
-    "code": "de",
-    "text": "T-Shirt",
-    "engine": "espeak",
-    "out": "assets/audio/de/tshirt.mp3"
-  },
-  {
-    "id": "tshirt",
-    "code": "zh",
-    "text": "T恤",
-    "engine": "espeak",
-    "out": "assets/audio/zh/tshirt.mp3"
-  },
-  {
-    "id": "tshirt",
-    "code": "ba",
-    "text": "футболка",
-    "engine": "espeak",
-    "out": "assets/audio/ba/tshirt.mp3"
-  },
-  {
-    "id": "trousers",
-    "code": "ru",
-    "text": "брюки",
-    "engine": "sapi",
-    "out": "assets/audio/ru/trousers.mp3"
-  },
-  {
-    "id": "trousers",
-    "code": "en",
-    "text": "trousers",
-    "engine": "sapi",
-    "out": "assets/audio/en/trousers.mp3"
-  },
-  {
-    "id": "trousers",
-    "code": "fr",
-    "text": "pantalon",
-    "engine": "espeak",
-    "out": "assets/audio/fr/trousers.mp3"
-  },
-  {
-    "id": "trousers",
-    "code": "de",
-    "text": "Hose",
-    "engine": "espeak",
-    "out": "assets/audio/de/trousers.mp3"
-  },
-  {
-    "id": "trousers",
-    "code": "zh",
-    "text": "裤子",
-    "engine": "espeak",
-    "out": "assets/audio/zh/trousers.mp3"
-  },
-  {
-    "id": "trousers",
-    "code": "ba",
-    "text": "салбар",
-    "engine": "espeak",
-    "out": "assets/audio/ba/trousers.mp3"
-  },
-  {
-    "id": "skirt",
-    "code": "ru",
-    "text": "юбка",
-    "engine": "sapi",
-    "out": "assets/audio/ru/skirt.mp3"
-  },
-  {
-    "id": "skirt",
-    "code": "en",
-    "text": "skirt",
-    "engine": "sapi",
-    "out": "assets/audio/en/skirt.mp3"
-  },
-  {
-    "id": "skirt",
-    "code": "fr",
-    "text": "jupe",
-    "engine": "espeak",
-    "out": "assets/audio/fr/skirt.mp3"
-  },
-  {
-    "id": "skirt",
-    "code": "de",
-    "text": "Rock",
-    "engine": "espeak",
-    "out": "assets/audio/de/skirt.mp3"
-  },
-  {
-    "id": "skirt",
-    "code": "zh",
-    "text": "裙子",
-    "engine": "espeak",
-    "out": "assets/audio/zh/skirt.mp3"
-  },
-  {
-    "id": "skirt",
-    "code": "ba",
-    "text": "итәк",
-    "engine": "espeak",
-    "out": "assets/audio/ba/skirt.mp3"
-  },
-  {
-    "id": "dress",
-    "code": "ru",
-    "text": "платье",
-    "engine": "sapi",
-    "out": "assets/audio/ru/dress.mp3"
-  },
-  {
-    "id": "dress",
-    "code": "en",
-    "text": "dress",
-    "engine": "sapi",
-    "out": "assets/audio/en/dress.mp3"
-  },
-  {
-    "id": "dress",
-    "code": "fr",
-    "text": "robe",
-    "engine": "espeak",
-    "out": "assets/audio/fr/dress.mp3"
-  },
-  {
-    "id": "dress",
-    "code": "de",
-    "text": "Kleid",
-    "engine": "espeak",
-    "out": "assets/audio/de/dress.mp3"
-  },
-  {
-    "id": "dress",
-    "code": "zh",
-    "text": "连衣裙",
-    "engine": "espeak",
-    "out": "assets/audio/zh/dress.mp3"
-  },
-  {
-    "id": "dress",
-    "code": "ba",
-    "text": "күлдәк озон",
-    "engine": "espeak",
-    "out": "assets/audio/ba/dress.mp3"
-  },
-  {
-    "id": "coat",
-    "code": "ru",
-    "text": "пальто",
-    "engine": "sapi",
-    "out": "assets/audio/ru/coat.mp3"
-  },
-  {
-    "id": "coat",
-    "code": "en",
-    "text": "coat",
-    "engine": "sapi",
-    "out": "assets/audio/en/coat.mp3"
-  },
-  {
-    "id": "coat",
-    "code": "fr",
-    "text": "manteau",
-    "engine": "espeak",
-    "out": "assets/audio/fr/coat.mp3"
-  },
-  {
-    "id": "coat",
-    "code": "de",
-    "text": "Mantel",
-    "engine": "espeak",
-    "out": "assets/audio/de/coat.mp3"
-  },
-  {
-    "id": "coat",
-    "code": "zh",
-    "text": "大衣",
-    "engine": "espeak",
-    "out": "assets/audio/zh/coat.mp3"
-  },
-  {
-    "id": "coat",
-    "code": "ba",
-    "text": "пальто",
-    "engine": "espeak",
-    "out": "assets/audio/ba/coat.mp3"
-  },
-  {
-    "id": "jacket",
-    "code": "ru",
-    "text": "куртка",
-    "engine": "sapi",
-    "out": "assets/audio/ru/jacket.mp3"
-  },
-  {
-    "id": "jacket",
-    "code": "en",
-    "text": "jacket",
-    "engine": "sapi",
-    "out": "assets/audio/en/jacket.mp3"
-  },
-  {
-    "id": "jacket",
-    "code": "fr",
-    "text": "blouson",
-    "engine": "espeak",
-    "out": "assets/audio/fr/jacket.mp3"
-  },
-  {
-    "id": "jacket",
-    "code": "de",
-    "text": "Jacke",
-    "engine": "espeak",
-    "out": "assets/audio/de/jacket.mp3"
-  },
-  {
-    "id": "jacket",
-    "code": "zh",
-    "text": "夹克",
-    "engine": "espeak",
-    "out": "assets/audio/zh/jacket.mp3"
-  },
-  {
-    "id": "jacket",
-    "code": "ba",
-    "text": "куртка",
-    "engine": "espeak",
-    "out": "assets/audio/ba/jacket.mp3"
-  },
-  {
-    "id": "sweater",
-    "code": "ru",
-    "text": "свитер",
-    "engine": "sapi",
-    "out": "assets/audio/ru/sweater.mp3"
-  },
-  {
-    "id": "sweater",
-    "code": "en",
-    "text": "sweater",
-    "engine": "sapi",
-    "out": "assets/audio/en/sweater.mp3"
-  },
-  {
-    "id": "sweater",
-    "code": "fr",
-    "text": "pull",
-    "engine": "espeak",
-    "out": "assets/audio/fr/sweater.mp3"
-  },
-  {
-    "id": "sweater",
-    "code": "de",
-    "text": "Pullover",
-    "engine": "espeak",
-    "out": "assets/audio/de/sweater.mp3"
-  },
-  {
-    "id": "sweater",
-    "code": "zh",
-    "text": "毛衣",
-    "engine": "espeak",
-    "out": "assets/audio/zh/sweater.mp3"
-  },
-  {
-    "id": "sweater",
-    "code": "ba",
-    "text": "свитер",
-    "engine": "espeak",
-    "out": "assets/audio/ba/sweater.mp3"
-  },
-  {
-    "id": "socks",
-    "code": "ru",
-    "text": "носки",
-    "engine": "sapi",
-    "out": "assets/audio/ru/socks.mp3"
-  },
-  {
-    "id": "socks",
-    "code": "en",
-    "text": "socks",
-    "engine": "sapi",
-    "out": "assets/audio/en/socks.mp3"
-  },
-  {
-    "id": "socks",
-    "code": "fr",
-    "text": "chaussettes",
-    "engine": "espeak",
-    "out": "assets/audio/fr/socks.mp3"
-  },
-  {
-    "id": "socks",
-    "code": "de",
-    "text": "Socken",
-    "engine": "espeak",
-    "out": "assets/audio/de/socks.mp3"
-  },
-  {
-    "id": "socks",
-    "code": "zh",
-    "text": "袜子",
-    "engine": "espeak",
-    "out": "assets/audio/zh/socks.mp3"
-  },
-  {
-    "id": "socks",
-    "code": "ba",
-    "text": "ойоҡбаш",
-    "engine": "espeak",
-    "out": "assets/audio/ba/socks.mp3"
-  },
-  {
-    "id": "belt",
-    "code": "ru",
-    "text": "ремень",
-    "engine": "sapi",
-    "out": "assets/audio/ru/belt.mp3"
-  },
-  {
-    "id": "belt",
-    "code": "en",
-    "text": "belt",
-    "engine": "sapi",
-    "out": "assets/audio/en/belt.mp3"
-  },
-  {
-    "id": "belt",
-    "code": "fr",
-    "text": "ceinture",
-    "engine": "espeak",
-    "out": "assets/audio/fr/belt.mp3"
-  },
-  {
-    "id": "belt",
-    "code": "de",
-    "text": "Gürtel",
-    "engine": "espeak",
-    "out": "assets/audio/de/belt.mp3"
-  },
-  {
-    "id": "belt",
-    "code": "zh",
-    "text": "腰带",
-    "engine": "espeak",
-    "out": "assets/audio/zh/belt.mp3"
-  },
-  {
-    "id": "belt",
-    "code": "ba",
-    "text": "ҡайыш",
-    "engine": "espeak",
-    "out": "assets/audio/ba/belt.mp3"
-  },
-  {
-    "id": "button",
-    "code": "ru",
-    "text": "пуговица",
-    "engine": "sapi",
-    "out": "assets/audio/ru/button.mp3"
-  },
-  {
-    "id": "button",
-    "code": "en",
-    "text": "button",
-    "engine": "sapi",
-    "out": "assets/audio/en/button.mp3"
-  },
-  {
-    "id": "button",
-    "code": "fr",
-    "text": "bouton",
-    "engine": "espeak",
-    "out": "assets/audio/fr/button.mp3"
-  },
-  {
-    "id": "button",
-    "code": "de",
-    "text": "Knopf",
-    "engine": "espeak",
-    "out": "assets/audio/de/button.mp3"
-  },
-  {
-    "id": "button",
-    "code": "zh",
-    "text": "纽扣",
-    "engine": "espeak",
-    "out": "assets/audio/zh/button.mp3"
-  },
-  {
-    "id": "button",
-    "code": "ba",
-    "text": "төймә",
-    "engine": "espeak",
-    "out": "assets/audio/ba/button.mp3"
-  },
-  {
-    "id": "pocket",
-    "code": "ru",
-    "text": "карман",
-    "engine": "sapi",
-    "out": "assets/audio/ru/pocket.mp3"
-  },
-  {
-    "id": "pocket",
-    "code": "en",
-    "text": "pocket",
-    "engine": "sapi",
-    "out": "assets/audio/en/pocket.mp3"
-  },
-  {
-    "id": "pocket",
-    "code": "fr",
-    "text": "poche",
-    "engine": "espeak",
-    "out": "assets/audio/fr/pocket.mp3"
-  },
-  {
-    "id": "pocket",
-    "code": "de",
-    "text": "Tasche",
-    "engine": "espeak",
-    "out": "assets/audio/de/pocket.mp3"
-  },
-  {
-    "id": "pocket",
-    "code": "zh",
-    "text": "口袋",
-    "engine": "espeak",
-    "out": "assets/audio/zh/pocket.mp3"
-  },
-  {
-    "id": "pocket",
-    "code": "ba",
-    "text": "кеҫә",
-    "engine": "espeak",
-    "out": "assets/audio/ba/pocket.mp3"
-  },
-  {
-    "id": "milk",
-    "code": "ru",
-    "text": "молоко",
-    "engine": "sapi",
-    "out": "assets/audio/ru/milk.mp3"
-  },
-  {
-    "id": "milk",
-    "code": "en",
-    "text": "milk",
-    "engine": "sapi",
-    "out": "assets/audio/en/milk.mp3"
-  },
-  {
-    "id": "milk",
-    "code": "fr",
-    "text": "lait",
-    "engine": "espeak",
-    "out": "assets/audio/fr/milk.mp3"
-  },
-  {
-    "id": "milk",
-    "code": "de",
-    "text": "Milch",
-    "engine": "espeak",
-    "out": "assets/audio/de/milk.mp3"
-  },
-  {
-    "id": "milk",
-    "code": "zh",
-    "text": "牛奶",
-    "engine": "espeak",
-    "out": "assets/audio/zh/milk.mp3"
-  },
-  {
-    "id": "milk",
-    "code": "ba",
-    "text": "һөт",
-    "engine": "espeak",
-    "out": "assets/audio/ba/milk.mp3"
-  },
-  {
-    "id": "cheese",
-    "code": "ru",
-    "text": "сыр",
-    "engine": "sapi",
-    "out": "assets/audio/ru/cheese.mp3"
-  },
-  {
-    "id": "cheese",
-    "code": "en",
-    "text": "cheese",
-    "engine": "sapi",
-    "out": "assets/audio/en/cheese.mp3"
-  },
-  {
-    "id": "cheese",
-    "code": "fr",
-    "text": "fromage",
-    "engine": "espeak",
-    "out": "assets/audio/fr/cheese.mp3"
-  },
-  {
-    "id": "cheese",
-    "code": "de",
-    "text": "Käse",
-    "engine": "espeak",
-    "out": "assets/audio/de/cheese.mp3"
-  },
-  {
-    "id": "cheese",
-    "code": "zh",
-    "text": "奶酪",
-    "engine": "espeak",
-    "out": "assets/audio/zh/cheese.mp3"
-  },
-  {
-    "id": "cheese",
-    "code": "ba",
-    "text": "ҡорот",
-    "engine": "espeak",
-    "out": "assets/audio/ba/cheese.mp3"
-  },
-  {
-    "id": "butter",
-    "code": "ru",
-    "text": "масло",
-    "engine": "sapi",
-    "out": "assets/audio/ru/butter.mp3"
-  },
-  {
-    "id": "butter",
-    "code": "en",
-    "text": "butter",
-    "engine": "sapi",
-    "out": "assets/audio/en/butter.mp3"
-  },
-  {
-    "id": "butter",
-    "code": "fr",
-    "text": "beurre",
-    "engine": "espeak",
-    "out": "assets/audio/fr/butter.mp3"
-  },
-  {
-    "id": "butter",
-    "code": "de",
-    "text": "Butter",
-    "engine": "espeak",
-    "out": "assets/audio/de/butter.mp3"
-  },
-  {
-    "id": "butter",
-    "code": "zh",
-    "text": "黄油",
-    "engine": "espeak",
-    "out": "assets/audio/zh/butter.mp3"
-  },
-  {
-    "id": "butter",
-    "code": "ba",
-    "text": "май",
-    "engine": "espeak",
-    "out": "assets/audio/ba/butter.mp3"
-  },
-  {
-    "id": "egg",
-    "code": "ru",
-    "text": "яйцо",
-    "engine": "sapi",
-    "out": "assets/audio/ru/egg.mp3"
-  },
-  {
-    "id": "egg",
-    "code": "en",
-    "text": "egg",
-    "engine": "sapi",
-    "out": "assets/audio/en/egg.mp3"
-  },
-  {
-    "id": "egg",
-    "code": "fr",
-    "text": "œuf",
-    "engine": "espeak",
-    "out": "assets/audio/fr/egg.mp3"
-  },
-  {
-    "id": "egg",
-    "code": "de",
-    "text": "Ei",
-    "engine": "espeak",
-    "out": "assets/audio/de/egg.mp3"
-  },
-  {
-    "id": "egg",
-    "code": "zh",
-    "text": "鸡蛋",
-    "engine": "espeak",
-    "out": "assets/audio/zh/egg.mp3"
-  },
-  {
-    "id": "egg",
-    "code": "ba",
-    "text": "йомортҡа",
-    "engine": "espeak",
-    "out": "assets/audio/ba/egg.mp3"
-  },
-  {
-    "id": "meat",
-    "code": "ru",
-    "text": "мясо",
-    "engine": "sapi",
-    "out": "assets/audio/ru/meat.mp3"
-  },
-  {
-    "id": "meat",
-    "code": "en",
-    "text": "meat",
-    "engine": "sapi",
-    "out": "assets/audio/en/meat.mp3"
-  },
-  {
-    "id": "meat",
-    "code": "fr",
-    "text": "viande",
-    "engine": "espeak",
-    "out": "assets/audio/fr/meat.mp3"
-  },
-  {
-    "id": "meat",
-    "code": "de",
-    "text": "Fleisch",
-    "engine": "espeak",
-    "out": "assets/audio/de/meat.mp3"
-  },
-  {
-    "id": "meat",
-    "code": "zh",
-    "text": "肉",
-    "engine": "espeak",
-    "out": "assets/audio/zh/meat.mp3"
-  },
-  {
-    "id": "meat",
-    "code": "ba",
-    "text": "ит",
-    "engine": "espeak",
-    "out": "assets/audio/ba/meat.mp3"
-  },
-  {
-    "id": "soup",
-    "code": "ru",
-    "text": "суп",
-    "engine": "sapi",
-    "out": "assets/audio/ru/soup.mp3"
-  },
-  {
-    "id": "soup",
-    "code": "en",
-    "text": "soup",
-    "engine": "sapi",
-    "out": "assets/audio/en/soup.mp3"
-  },
-  {
-    "id": "soup",
-    "code": "fr",
-    "text": "soupe",
-    "engine": "espeak",
-    "out": "assets/audio/fr/soup.mp3"
-  },
-  {
-    "id": "soup",
-    "code": "de",
-    "text": "Suppe",
-    "engine": "espeak",
-    "out": "assets/audio/de/soup.mp3"
-  },
-  {
-    "id": "soup",
-    "code": "zh",
-    "text": "汤",
-    "engine": "espeak",
-    "out": "assets/audio/zh/soup.mp3"
-  },
-  {
-    "id": "soup",
-    "code": "ba",
-    "text": "һурпа",
-    "engine": "espeak",
-    "out": "assets/audio/ba/soup.mp3"
-  },
-  {
-    "id": "porridge",
-    "code": "ru",
-    "text": "каша",
-    "engine": "sapi",
-    "out": "assets/audio/ru/porridge.mp3"
-  },
-  {
-    "id": "porridge",
-    "code": "en",
-    "text": "porridge",
-    "engine": "sapi",
-    "out": "assets/audio/en/porridge.mp3"
-  },
-  {
-    "id": "porridge",
-    "code": "fr",
-    "text": "bouillie",
-    "engine": "espeak",
-    "out": "assets/audio/fr/porridge.mp3"
-  },
-  {
-    "id": "porridge",
-    "code": "de",
-    "text": "Brei",
-    "engine": "espeak",
-    "out": "assets/audio/de/porridge.mp3"
-  },
-  {
-    "id": "porridge",
-    "code": "zh",
-    "text": "粥",
-    "engine": "espeak",
-    "out": "assets/audio/zh/porridge.mp3"
-  },
-  {
-    "id": "porridge",
-    "code": "ba",
-    "text": "бутҡа",
-    "engine": "espeak",
-    "out": "assets/audio/ba/porridge.mp3"
-  },
-  {
-    "id": "potato",
-    "code": "ru",
-    "text": "картошка",
-    "engine": "sapi",
-    "out": "assets/audio/ru/potato.mp3"
-  },
-  {
-    "id": "potato",
-    "code": "en",
-    "text": "potato",
-    "engine": "sapi",
-    "out": "assets/audio/en/potato.mp3"
-  },
-  {
-    "id": "potato",
-    "code": "fr",
-    "text": "pomme de terre",
-    "engine": "espeak",
-    "out": "assets/audio/fr/potato.mp3"
-  },
-  {
-    "id": "potato",
-    "code": "de",
-    "text": "Kartoffel",
-    "engine": "espeak",
-    "out": "assets/audio/de/potato.mp3"
-  },
-  {
-    "id": "potato",
-    "code": "zh",
-    "text": "土豆",
-    "engine": "espeak",
-    "out": "assets/audio/zh/potato.mp3"
-  },
-  {
-    "id": "potato",
-    "code": "ba",
-    "text": "картуф",
-    "engine": "espeak",
-    "out": "assets/audio/ba/potato.mp3"
-  },
-  {
-    "id": "carrot",
-    "code": "ru",
-    "text": "морковь",
-    "engine": "sapi",
-    "out": "assets/audio/ru/carrot.mp3"
-  },
-  {
-    "id": "carrot",
-    "code": "en",
-    "text": "carrot",
-    "engine": "sapi",
-    "out": "assets/audio/en/carrot.mp3"
-  },
-  {
-    "id": "carrot",
-    "code": "fr",
-    "text": "carotte",
-    "engine": "espeak",
-    "out": "assets/audio/fr/carrot.mp3"
-  },
-  {
-    "id": "carrot",
-    "code": "de",
-    "text": "Karotte",
-    "engine": "espeak",
-    "out": "assets/audio/de/carrot.mp3"
-  },
-  {
-    "id": "carrot",
-    "code": "zh",
-    "text": "胡萝卜",
-    "engine": "espeak",
-    "out": "assets/audio/zh/carrot.mp3"
-  },
-  {
-    "id": "carrot",
-    "code": "ba",
-    "text": "кишер",
-    "engine": "espeak",
-    "out": "assets/audio/ba/carrot.mp3"
-  },
-  {
-    "id": "cabbage",
-    "code": "ru",
-    "text": "капуста",
-    "engine": "sapi",
-    "out": "assets/audio/ru/cabbage.mp3"
-  },
-  {
-    "id": "cabbage",
-    "code": "en",
-    "text": "cabbage",
-    "engine": "sapi",
-    "out": "assets/audio/en/cabbage.mp3"
-  },
-  {
-    "id": "cabbage",
-    "code": "fr",
-    "text": "chou",
-    "engine": "espeak",
-    "out": "assets/audio/fr/cabbage.mp3"
-  },
-  {
-    "id": "cabbage",
-    "code": "de",
-    "text": "Kohl",
-    "engine": "espeak",
-    "out": "assets/audio/de/cabbage.mp3"
-  },
-  {
-    "id": "cabbage",
-    "code": "zh",
-    "text": "白菜",
-    "engine": "espeak",
-    "out": "assets/audio/zh/cabbage.mp3"
-  },
-  {
-    "id": "cabbage",
-    "code": "ba",
-    "text": "кәбеҫтә",
-    "engine": "espeak",
-    "out": "assets/audio/ba/cabbage.mp3"
-  },
-  {
-    "id": "tomato",
-    "code": "ru",
-    "text": "помидор",
-    "engine": "sapi",
-    "out": "assets/audio/ru/tomato.mp3"
-  },
-  {
-    "id": "tomato",
-    "code": "en",
-    "text": "tomato",
-    "engine": "sapi",
-    "out": "assets/audio/en/tomato.mp3"
-  },
-  {
-    "id": "tomato",
-    "code": "fr",
-    "text": "tomate",
-    "engine": "espeak",
-    "out": "assets/audio/fr/tomato.mp3"
-  },
-  {
-    "id": "tomato",
-    "code": "de",
-    "text": "Tomate",
-    "engine": "espeak",
-    "out": "assets/audio/de/tomato.mp3"
-  },
-  {
-    "id": "tomato",
-    "code": "zh",
-    "text": "番茄",
-    "engine": "espeak",
-    "out": "assets/audio/zh/tomato.mp3"
-  },
-  {
-    "id": "tomato",
-    "code": "ba",
-    "text": "помидор",
-    "engine": "espeak",
-    "out": "assets/audio/ba/tomato.mp3"
-  },
-  {
-    "id": "honey",
-    "code": "ru",
-    "text": "мёд",
-    "engine": "sapi",
-    "out": "assets/audio/ru/honey.mp3"
-  },
-  {
-    "id": "honey",
-    "code": "en",
-    "text": "honey",
-    "engine": "sapi",
-    "out": "assets/audio/en/honey.mp3"
-  },
-  {
-    "id": "honey",
-    "code": "fr",
-    "text": "miel",
-    "engine": "espeak",
-    "out": "assets/audio/fr/honey.mp3"
-  },
-  {
-    "id": "honey",
-    "code": "de",
-    "text": "Honig",
-    "engine": "espeak",
-    "out": "assets/audio/de/honey.mp3"
-  },
-  {
-    "id": "honey",
-    "code": "zh",
-    "text": "蜂蜜",
-    "engine": "espeak",
-    "out": "assets/audio/zh/honey.mp3"
-  },
-  {
-    "id": "honey",
-    "code": "ba",
-    "text": "бал",
-    "engine": "espeak",
-    "out": "assets/audio/ba/honey.mp3"
-  },
-  {
-    "id": "plate",
-    "code": "ru",
-    "text": "тарелка",
-    "engine": "sapi",
-    "out": "assets/audio/ru/plate.mp3"
-  },
-  {
-    "id": "plate",
-    "code": "en",
-    "text": "plate",
-    "engine": "sapi",
-    "out": "assets/audio/en/plate.mp3"
-  },
-  {
-    "id": "plate",
-    "code": "fr",
-    "text": "assiette",
-    "engine": "espeak",
-    "out": "assets/audio/fr/plate.mp3"
-  },
-  {
-    "id": "plate",
-    "code": "de",
-    "text": "Teller",
-    "engine": "espeak",
-    "out": "assets/audio/de/plate.mp3"
-  },
-  {
-    "id": "plate",
-    "code": "zh",
-    "text": "盘子",
-    "engine": "espeak",
-    "out": "assets/audio/zh/plate.mp3"
-  },
-  {
-    "id": "plate",
-    "code": "ba",
-    "text": "тәрилкә",
-    "engine": "espeak",
-    "out": "assets/audio/ba/plate.mp3"
-  },
-  {
-    "id": "cup",
-    "code": "ru",
-    "text": "чашка",
-    "engine": "sapi",
-    "out": "assets/audio/ru/cup.mp3"
-  },
-  {
-    "id": "cup",
-    "code": "en",
-    "text": "cup",
-    "engine": "sapi",
-    "out": "assets/audio/en/cup.mp3"
-  },
-  {
-    "id": "cup",
-    "code": "fr",
-    "text": "tasse",
-    "engine": "espeak",
-    "out": "assets/audio/fr/cup.mp3"
-  },
-  {
-    "id": "cup",
-    "code": "de",
-    "text": "Tasse",
-    "engine": "espeak",
-    "out": "assets/audio/de/cup.mp3"
-  },
-  {
-    "id": "cup",
-    "code": "zh",
-    "text": "杯子",
-    "engine": "espeak",
-    "out": "assets/audio/zh/cup.mp3"
-  },
-  {
-    "id": "cup",
-    "code": "ba",
-    "text": "сынаяҡ",
-    "engine": "espeak",
-    "out": "assets/audio/ba/cup.mp3"
-  },
-  {
-    "id": "glass",
-    "code": "ru",
-    "text": "стакан",
-    "engine": "sapi",
-    "out": "assets/audio/ru/glass.mp3"
-  },
-  {
-    "id": "glass",
-    "code": "en",
-    "text": "glass",
-    "engine": "sapi",
-    "out": "assets/audio/en/glass.mp3"
-  },
-  {
-    "id": "glass",
-    "code": "fr",
-    "text": "verre",
-    "engine": "espeak",
-    "out": "assets/audio/fr/glass.mp3"
-  },
-  {
-    "id": "glass",
-    "code": "de",
-    "text": "Glas",
-    "engine": "espeak",
-    "out": "assets/audio/de/glass.mp3"
-  },
-  {
-    "id": "glass",
-    "code": "zh",
-    "text": "玻璃杯",
-    "engine": "espeak",
-    "out": "assets/audio/zh/glass.mp3"
-  },
-  {
-    "id": "glass",
-    "code": "ba",
-    "text": "стакан",
-    "engine": "espeak",
-    "out": "assets/audio/ba/glass.mp3"
-  },
-  {
-    "id": "spoon",
-    "code": "ru",
-    "text": "ложка",
-    "engine": "sapi",
-    "out": "assets/audio/ru/spoon.mp3"
-  },
-  {
-    "id": "spoon",
-    "code": "en",
-    "text": "spoon",
-    "engine": "sapi",
-    "out": "assets/audio/en/spoon.mp3"
-  },
-  {
-    "id": "spoon",
-    "code": "fr",
-    "text": "cuillère",
-    "engine": "espeak",
-    "out": "assets/audio/fr/spoon.mp3"
-  },
-  {
-    "id": "spoon",
-    "code": "de",
-    "text": "Löffel",
-    "engine": "espeak",
-    "out": "assets/audio/de/spoon.mp3"
-  },
-  {
-    "id": "spoon",
-    "code": "zh",
-    "text": "勺子",
-    "engine": "espeak",
-    "out": "assets/audio/zh/spoon.mp3"
-  },
-  {
-    "id": "spoon",
-    "code": "ba",
-    "text": "ҡалаҡ",
-    "engine": "espeak",
-    "out": "assets/audio/ba/spoon.mp3"
-  },
-  {
-    "id": "fork",
-    "code": "ru",
-    "text": "вилка",
-    "engine": "sapi",
-    "out": "assets/audio/ru/fork.mp3"
-  },
-  {
-    "id": "fork",
-    "code": "en",
-    "text": "fork",
-    "engine": "sapi",
-    "out": "assets/audio/en/fork.mp3"
-  },
-  {
-    "id": "fork",
-    "code": "fr",
-    "text": "fourchette",
-    "engine": "espeak",
-    "out": "assets/audio/fr/fork.mp3"
-  },
-  {
-    "id": "fork",
-    "code": "de",
-    "text": "Gabel",
-    "engine": "espeak",
-    "out": "assets/audio/de/fork.mp3"
-  },
-  {
-    "id": "fork",
-    "code": "zh",
-    "text": "叉子",
-    "engine": "espeak",
-    "out": "assets/audio/zh/fork.mp3"
-  },
-  {
-    "id": "fork",
-    "code": "ba",
-    "text": "сәнске",
-    "engine": "espeak",
-    "out": "assets/audio/ba/fork.mp3"
-  },
-  {
-    "id": "knife",
-    "code": "ru",
-    "text": "нож",
-    "engine": "sapi",
-    "out": "assets/audio/ru/knife.mp3"
-  },
-  {
-    "id": "knife",
-    "code": "en",
-    "text": "knife",
-    "engine": "sapi",
-    "out": "assets/audio/en/knife.mp3"
-  },
-  {
-    "id": "knife",
-    "code": "fr",
-    "text": "couteau",
-    "engine": "espeak",
-    "out": "assets/audio/fr/knife.mp3"
-  },
-  {
-    "id": "knife",
-    "code": "de",
-    "text": "Messer",
-    "engine": "espeak",
-    "out": "assets/audio/de/knife.mp3"
-  },
-  {
-    "id": "knife",
-    "code": "zh",
-    "text": "刀",
-    "engine": "espeak",
-    "out": "assets/audio/zh/knife.mp3"
-  },
-  {
-    "id": "knife",
-    "code": "ba",
-    "text": "бысаҡ",
-    "engine": "espeak",
-    "out": "assets/audio/ba/knife.mp3"
-  },
-  {
-    "id": "teapot",
-    "code": "ru",
-    "text": "заварочный чайник",
-    "engine": "sapi",
-    "out": "assets/audio/ru/teapot.mp3"
-  },
-  {
-    "id": "teapot",
-    "code": "en",
-    "text": "teapot",
-    "engine": "sapi",
-    "out": "assets/audio/en/teapot.mp3"
-  },
-  {
-    "id": "teapot",
-    "code": "fr",
-    "text": "théière",
-    "engine": "espeak",
-    "out": "assets/audio/fr/teapot.mp3"
-  },
-  {
-    "id": "teapot",
-    "code": "de",
-    "text": "Teekanne",
-    "engine": "espeak",
-    "out": "assets/audio/de/teapot.mp3"
-  },
-  {
-    "id": "teapot",
-    "code": "zh",
-    "text": "茶壶",
-    "engine": "espeak",
-    "out": "assets/audio/zh/teapot.mp3"
-  },
-  {
-    "id": "teapot",
-    "code": "ba",
-    "text": "сәйнүк ҙур",
-    "engine": "espeak",
-    "out": "assets/audio/ba/teapot.mp3"
-  },
-  {
-    "id": "jug",
-    "code": "ru",
-    "text": "кувшин",
-    "engine": "sapi",
-    "out": "assets/audio/ru/jug.mp3"
-  },
-  {
-    "id": "jug",
-    "code": "en",
-    "text": "jug",
-    "engine": "sapi",
-    "out": "assets/audio/en/jug.mp3"
-  },
-  {
-    "id": "jug",
-    "code": "fr",
-    "text": "pichet",
-    "engine": "espeak",
-    "out": "assets/audio/fr/jug.mp3"
-  },
-  {
-    "id": "jug",
-    "code": "de",
-    "text": "Krug",
-    "engine": "espeak",
-    "out": "assets/audio/de/jug.mp3"
-  },
-  {
-    "id": "jug",
-    "code": "zh",
-    "text": "水壶罐",
-    "engine": "espeak",
-    "out": "assets/audio/zh/jug.mp3"
-  },
-  {
-    "id": "jug",
-    "code": "ba",
-    "text": "кувшин",
-    "engine": "espeak",
-    "out": "assets/audio/ba/jug.mp3"
-  },
-  {
-    "id": "bowl",
-    "code": "ru",
-    "text": "миска",
-    "engine": "sapi",
-    "out": "assets/audio/ru/bowl.mp3"
-  },
-  {
-    "id": "bowl",
-    "code": "en",
-    "text": "bowl",
-    "engine": "sapi",
-    "out": "assets/audio/en/bowl.mp3"
-  },
-  {
-    "id": "bowl",
-    "code": "fr",
-    "text": "bol",
-    "engine": "espeak",
-    "out": "assets/audio/fr/bowl.mp3"
-  },
-  {
-    "id": "bowl",
-    "code": "de",
-    "text": "Schüssel",
-    "engine": "espeak",
-    "out": "assets/audio/de/bowl.mp3"
-  },
-  {
-    "id": "bowl",
-    "code": "zh",
-    "text": "碗",
-    "engine": "espeak",
-    "out": "assets/audio/zh/bowl.mp3"
-  },
-  {
-    "id": "bowl",
-    "code": "ba",
-    "text": "табаҡ",
-    "engine": "espeak",
-    "out": "assets/audio/ba/bowl.mp3"
-  },
-  {
-    "id": "tablecloth",
-    "code": "ru",
-    "text": "скатерть",
-    "engine": "sapi",
-    "out": "assets/audio/ru/tablecloth.mp3"
-  },
-  {
-    "id": "tablecloth",
-    "code": "en",
-    "text": "tablecloth",
-    "engine": "sapi",
-    "out": "assets/audio/en/tablecloth.mp3"
-  },
-  {
-    "id": "tablecloth",
-    "code": "fr",
-    "text": "nappe",
-    "engine": "espeak",
-    "out": "assets/audio/fr/tablecloth.mp3"
-  },
-  {
-    "id": "tablecloth",
-    "code": "de",
-    "text": "Tischdecke",
-    "engine": "espeak",
-    "out": "assets/audio/de/tablecloth.mp3"
-  },
-  {
-    "id": "tablecloth",
-    "code": "zh",
-    "text": "桌布",
-    "engine": "espeak",
-    "out": "assets/audio/zh/tablecloth.mp3"
-  },
-  {
-    "id": "tablecloth",
-    "code": "ba",
-    "text": "ашъяулыҡ",
-    "engine": "espeak",
-    "out": "assets/audio/ba/tablecloth.mp3"
-  },
-  {
-    "id": "sugarbowl",
-    "code": "ru",
-    "text": "сахарница",
-    "engine": "sapi",
-    "out": "assets/audio/ru/sugarbowl.mp3"
-  },
-  {
-    "id": "sugarbowl",
-    "code": "en",
-    "text": "sugar bowl",
-    "engine": "sapi",
-    "out": "assets/audio/en/sugarbowl.mp3"
-  },
-  {
-    "id": "sugarbowl",
-    "code": "fr",
-    "text": "sucrier",
-    "engine": "espeak",
-    "out": "assets/audio/fr/sugarbowl.mp3"
-  },
-  {
-    "id": "sugarbowl",
-    "code": "de",
-    "text": "Zuckerdose",
-    "engine": "espeak",
-    "out": "assets/audio/de/sugarbowl.mp3"
-  },
-  {
-    "id": "sugarbowl",
-    "code": "zh",
-    "text": "糖罐",
-    "engine": "espeak",
-    "out": "assets/audio/zh/sugarbowl.mp3"
-  },
-  {
-    "id": "sugarbowl",
-    "code": "ba",
-    "text": "шәкәр һауыты",
-    "engine": "espeak",
-    "out": "assets/audio/ba/sugarbowl.mp3"
-  },
-  {
-    "id": "breadbox",
-    "code": "ru",
-    "text": "хлебница",
-    "engine": "sapi",
-    "out": "assets/audio/ru/breadbox.mp3"
-  },
-  {
-    "id": "breadbox",
-    "code": "en",
-    "text": "bread bin",
-    "engine": "sapi",
-    "out": "assets/audio/en/breadbox.mp3"
-  },
-  {
-    "id": "breadbox",
-    "code": "fr",
-    "text": "boîte à pain",
-    "engine": "espeak",
-    "out": "assets/audio/fr/breadbox.mp3"
-  },
-  {
-    "id": "breadbox",
-    "code": "de",
-    "text": "Brotkasten",
-    "engine": "espeak",
-    "out": "assets/audio/de/breadbox.mp3"
-  },
-  {
-    "id": "breadbox",
-    "code": "zh",
-    "text": "面包盒",
-    "engine": "espeak",
-    "out": "assets/audio/zh/breadbox.mp3"
-  },
-  {
-    "id": "breadbox",
-    "code": "ba",
-    "text": "икмәк һауыты",
-    "engine": "espeak",
-    "out": "assets/audio/ba/breadbox.mp3"
-  },
-  {
-    "id": "mother",
-    "code": "ru",
-    "text": "мама",
-    "engine": "sapi",
-    "out": "assets/audio/ru/mother.mp3"
-  },
-  {
-    "id": "mother",
-    "code": "en",
-    "text": "mother",
-    "engine": "sapi",
-    "out": "assets/audio/en/mother.mp3"
-  },
-  {
-    "id": "mother",
-    "code": "fr",
-    "text": "mère",
-    "engine": "espeak",
-    "out": "assets/audio/fr/mother.mp3"
-  },
-  {
-    "id": "mother",
-    "code": "de",
-    "text": "Mutter",
-    "engine": "espeak",
-    "out": "assets/audio/de/mother.mp3"
-  },
-  {
-    "id": "mother",
-    "code": "zh",
-    "text": "妈妈",
-    "engine": "espeak",
-    "out": "assets/audio/zh/mother.mp3"
-  },
-  {
-    "id": "mother",
-    "code": "ba",
-    "text": "әсәй",
-    "engine": "espeak",
-    "out": "assets/audio/ba/mother.mp3"
-  },
-  {
-    "id": "father",
-    "code": "ru",
-    "text": "папа",
-    "engine": "sapi",
-    "out": "assets/audio/ru/father.mp3"
-  },
-  {
-    "id": "father",
-    "code": "en",
-    "text": "father",
-    "engine": "sapi",
-    "out": "assets/audio/en/father.mp3"
-  },
-  {
-    "id": "father",
-    "code": "fr",
-    "text": "père",
-    "engine": "espeak",
-    "out": "assets/audio/fr/father.mp3"
-  },
-  {
-    "id": "father",
-    "code": "de",
-    "text": "Vater",
-    "engine": "espeak",
-    "out": "assets/audio/de/father.mp3"
-  },
-  {
-    "id": "father",
-    "code": "zh",
-    "text": "爸爸",
-    "engine": "espeak",
-    "out": "assets/audio/zh/father.mp3"
-  },
-  {
-    "id": "father",
-    "code": "ba",
-    "text": "атай",
-    "engine": "espeak",
-    "out": "assets/audio/ba/father.mp3"
-  },
-  {
-    "id": "son",
-    "code": "ru",
-    "text": "сын",
-    "engine": "sapi",
-    "out": "assets/audio/ru/son.mp3"
-  },
-  {
-    "id": "son",
-    "code": "en",
-    "text": "son",
-    "engine": "sapi",
-    "out": "assets/audio/en/son.mp3"
-  },
-  {
-    "id": "son",
-    "code": "fr",
-    "text": "fils",
-    "engine": "espeak",
-    "out": "assets/audio/fr/son.mp3"
-  },
-  {
-    "id": "son",
-    "code": "de",
-    "text": "Sohn",
-    "engine": "espeak",
-    "out": "assets/audio/de/son.mp3"
-  },
-  {
-    "id": "son",
-    "code": "zh",
-    "text": "儿子",
-    "engine": "espeak",
-    "out": "assets/audio/zh/son.mp3"
-  },
-  {
-    "id": "son",
-    "code": "ba",
-    "text": "ул",
-    "engine": "espeak",
-    "out": "assets/audio/ba/son.mp3"
-  },
-  {
-    "id": "daughter",
-    "code": "ru",
-    "text": "дочь",
-    "engine": "sapi",
-    "out": "assets/audio/ru/daughter.mp3"
-  },
-  {
-    "id": "daughter",
-    "code": "en",
-    "text": "daughter",
-    "engine": "sapi",
-    "out": "assets/audio/en/daughter.mp3"
-  },
-  {
-    "id": "daughter",
-    "code": "fr",
-    "text": "fille",
-    "engine": "espeak",
-    "out": "assets/audio/fr/daughter.mp3"
-  },
-  {
-    "id": "daughter",
-    "code": "de",
-    "text": "Tochter",
-    "engine": "espeak",
-    "out": "assets/audio/de/daughter.mp3"
-  },
-  {
-    "id": "daughter",
-    "code": "zh",
-    "text": "女儿",
-    "engine": "espeak",
-    "out": "assets/audio/zh/daughter.mp3"
-  },
-  {
-    "id": "daughter",
-    "code": "ba",
-    "text": "ҡыҙ",
-    "engine": "espeak",
-    "out": "assets/audio/ba/daughter.mp3"
-  },
-  {
-    "id": "brother",
-    "code": "ru",
-    "text": "брат",
-    "engine": "sapi",
-    "out": "assets/audio/ru/brother.mp3"
-  },
-  {
-    "id": "brother",
-    "code": "en",
-    "text": "brother",
-    "engine": "sapi",
-    "out": "assets/audio/en/brother.mp3"
-  },
-  {
-    "id": "brother",
-    "code": "fr",
-    "text": "frère",
-    "engine": "espeak",
-    "out": "assets/audio/fr/brother.mp3"
-  },
-  {
-    "id": "brother",
-    "code": "de",
-    "text": "Bruder",
-    "engine": "espeak",
-    "out": "assets/audio/de/brother.mp3"
-  },
-  {
-    "id": "brother",
-    "code": "zh",
-    "text": "兄弟",
-    "engine": "espeak",
-    "out": "assets/audio/zh/brother.mp3"
-  },
-  {
-    "id": "brother",
-    "code": "ba",
-    "text": "ағай",
-    "engine": "espeak",
-    "out": "assets/audio/ba/brother.mp3"
-  },
-  {
-    "id": "sister",
-    "code": "ru",
-    "text": "сестра",
-    "engine": "sapi",
-    "out": "assets/audio/ru/sister.mp3"
-  },
-  {
-    "id": "sister",
-    "code": "en",
-    "text": "sister",
-    "engine": "sapi",
-    "out": "assets/audio/en/sister.mp3"
-  },
-  {
-    "id": "sister",
-    "code": "fr",
-    "text": "sœur",
-    "engine": "espeak",
-    "out": "assets/audio/fr/sister.mp3"
-  },
-  {
-    "id": "sister",
-    "code": "de",
-    "text": "Schwester",
-    "engine": "espeak",
-    "out": "assets/audio/de/sister.mp3"
-  },
-  {
-    "id": "sister",
-    "code": "zh",
-    "text": "姐妹",
-    "engine": "espeak",
-    "out": "assets/audio/zh/sister.mp3"
-  },
-  {
-    "id": "sister",
-    "code": "ba",
-    "text": "апай",
-    "engine": "espeak",
-    "out": "assets/audio/ba/sister.mp3"
-  },
-  {
-    "id": "grandmother",
-    "code": "ru",
-    "text": "бабушка",
-    "engine": "sapi",
-    "out": "assets/audio/ru/grandmother.mp3"
-  },
-  {
-    "id": "grandmother",
-    "code": "en",
-    "text": "grandmother",
-    "engine": "sapi",
-    "out": "assets/audio/en/grandmother.mp3"
-  },
-  {
-    "id": "grandmother",
-    "code": "fr",
-    "text": "grand-mère",
-    "engine": "espeak",
-    "out": "assets/audio/fr/grandmother.mp3"
-  },
-  {
-    "id": "grandmother",
-    "code": "de",
-    "text": "Großmutter",
-    "engine": "espeak",
-    "out": "assets/audio/de/grandmother.mp3"
-  },
-  {
-    "id": "grandmother",
-    "code": "zh",
-    "text": "奶奶",
-    "engine": "espeak",
-    "out": "assets/audio/zh/grandmother.mp3"
-  },
-  {
-    "id": "grandmother",
-    "code": "ba",
-    "text": "өләсәй",
-    "engine": "espeak",
-    "out": "assets/audio/ba/grandmother.mp3"
-  },
-  {
-    "id": "grandfather",
-    "code": "ru",
-    "text": "дедушка",
-    "engine": "sapi",
-    "out": "assets/audio/ru/grandfather.mp3"
-  },
-  {
-    "id": "grandfather",
-    "code": "en",
-    "text": "grandfather",
-    "engine": "sapi",
-    "out": "assets/audio/en/grandfather.mp3"
-  },
-  {
-    "id": "grandfather",
-    "code": "fr",
-    "text": "grand-père",
-    "engine": "espeak",
-    "out": "assets/audio/fr/grandfather.mp3"
-  },
-  {
-    "id": "grandfather",
-    "code": "de",
-    "text": "Großvater",
-    "engine": "espeak",
-    "out": "assets/audio/de/grandfather.mp3"
-  },
-  {
-    "id": "grandfather",
-    "code": "zh",
-    "text": "爷爷",
-    "engine": "espeak",
-    "out": "assets/audio/zh/grandfather.mp3"
-  },
-  {
-    "id": "grandfather",
-    "code": "ba",
-    "text": "олатай",
-    "engine": "espeak",
-    "out": "assets/audio/ba/grandfather.mp3"
-  },
-  {
-    "id": "baby",
-    "code": "ru",
-    "text": "малыш",
-    "engine": "sapi",
-    "out": "assets/audio/ru/baby.mp3"
-  },
-  {
-    "id": "baby",
-    "code": "en",
-    "text": "baby",
-    "engine": "sapi",
-    "out": "assets/audio/en/baby.mp3"
-  },
-  {
-    "id": "baby",
-    "code": "fr",
-    "text": "bébé",
-    "engine": "espeak",
-    "out": "assets/audio/fr/baby.mp3"
-  },
-  {
-    "id": "baby",
-    "code": "de",
-    "text": "Baby",
-    "engine": "espeak",
-    "out": "assets/audio/de/baby.mp3"
-  },
-  {
-    "id": "baby",
-    "code": "zh",
-    "text": "婴儿",
-    "engine": "espeak",
-    "out": "assets/audio/zh/baby.mp3"
-  },
-  {
-    "id": "baby",
-    "code": "ba",
-    "text": "бәпес",
-    "engine": "espeak",
-    "out": "assets/audio/ba/baby.mp3"
-  },
-  {
-    "id": "friend",
-    "code": "ru",
-    "text": "друг",
-    "engine": "sapi",
-    "out": "assets/audio/ru/friend.mp3"
-  },
-  {
-    "id": "friend",
-    "code": "en",
-    "text": "friend",
-    "engine": "sapi",
-    "out": "assets/audio/en/friend.mp3"
-  },
-  {
-    "id": "friend",
-    "code": "fr",
-    "text": "ami",
-    "engine": "espeak",
-    "out": "assets/audio/fr/friend.mp3"
-  },
-  {
-    "id": "friend",
-    "code": "de",
-    "text": "Freund",
-    "engine": "espeak",
-    "out": "assets/audio/de/friend.mp3"
-  },
-  {
-    "id": "friend",
-    "code": "zh",
-    "text": "朋友",
-    "engine": "espeak",
-    "out": "assets/audio/zh/friend.mp3"
-  },
-  {
-    "id": "friend",
-    "code": "ba",
-    "text": "дуҫ",
-    "engine": "espeak",
-    "out": "assets/audio/ba/friend.mp3"
-  },
-  {
-    "id": "neighbour",
-    "code": "ru",
-    "text": "сосед",
-    "engine": "sapi",
-    "out": "assets/audio/ru/neighbour.mp3"
-  },
-  {
-    "id": "neighbour",
-    "code": "en",
-    "text": "neighbour",
-    "engine": "sapi",
-    "out": "assets/audio/en/neighbour.mp3"
-  },
-  {
-    "id": "neighbour",
-    "code": "fr",
-    "text": "voisin",
-    "engine": "espeak",
-    "out": "assets/audio/fr/neighbour.mp3"
-  },
-  {
-    "id": "neighbour",
-    "code": "de",
-    "text": "Nachbar",
-    "engine": "espeak",
-    "out": "assets/audio/de/neighbour.mp3"
-  },
-  {
-    "id": "neighbour",
-    "code": "zh",
-    "text": "邻居",
-    "engine": "espeak",
-    "out": "assets/audio/zh/neighbour.mp3"
-  },
-  {
-    "id": "neighbour",
-    "code": "ba",
-    "text": "күрше",
-    "engine": "espeak",
-    "out": "assets/audio/ba/neighbour.mp3"
-  },
-  {
-    "id": "guest",
-    "code": "ru",
-    "text": "гость",
-    "engine": "sapi",
-    "out": "assets/audio/ru/guest.mp3"
-  },
-  {
-    "id": "guest",
-    "code": "en",
-    "text": "guest",
-    "engine": "sapi",
-    "out": "assets/audio/en/guest.mp3"
-  },
-  {
-    "id": "guest",
-    "code": "fr",
-    "text": "invité",
-    "engine": "espeak",
-    "out": "assets/audio/fr/guest.mp3"
-  },
-  {
-    "id": "guest",
-    "code": "de",
-    "text": "Gast",
-    "engine": "espeak",
-    "out": "assets/audio/de/guest.mp3"
-  },
-  {
-    "id": "guest",
-    "code": "zh",
-    "text": "客人",
-    "engine": "espeak",
-    "out": "assets/audio/zh/guest.mp3"
-  },
-  {
-    "id": "guest",
-    "code": "ba",
-    "text": "ҡунаҡ",
-    "engine": "espeak",
-    "out": "assets/audio/ba/guest.mp3"
   },
   {
     "id": "car",

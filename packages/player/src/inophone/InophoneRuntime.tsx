@@ -166,6 +166,14 @@ const InophoneRuntime: React.FC<Props> = ({ properties, width, height }) => {
       if (ctx.ok && ctx.data) setContext(ctx.data);
       if (lib.ok && lib.data) setLibrary(lib.data);
       if (profs.ok && profs.data) setProfiles(profs.data);
+
+      // ОТКАЗ ПРИ ЗАГРУЗКЕ НЕ МОЛЧИТ. Первая версия просто не присваивала
+      // данные, и повреждённый profiles.json выглядел на экране как ПУСТОЙ
+      // СПИСОК — то есть как потеря работы детей. Хранилище бросает внятную
+      // ошибку про резервную копию, а рантайм её проглатывал; поймано
+      // разделом 10 программы испытаний, а не тестом.
+      const startupError = [profs, sets, stats].find((r) => !r.ok)?.error;
+      if (startupError) setError(startupError);
       // Настройки, сохранённые на устройстве, важнее выставленных педагогом в
       // редакторе: их меняли позже и осознанно, уже на этой машине
       if (sets.ok && sets.data) setSettings(sets.data);

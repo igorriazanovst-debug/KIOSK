@@ -28,6 +28,7 @@ import city from './catalogue/city.mjs';
 import nature from './catalogue/nature.mjs';
 import person from './catalogue/person.mjs';
 import activities from './catalogue/activities.mjs';
+import shopping from './catalogue/shopping.mjs';
 import holidays from './catalogue/holidays.mjs';
 
 const HERE = path.dirname(fileURLToPath(import.meta.url));
@@ -46,7 +47,9 @@ if (!fs.existsSync(sharedPath)) {
 const { inophone } = createRequire(import.meta.url)(sharedPath);
 const { SCENE_IMAGE_DIR, CONCEPT_IMAGE_DIR, AUDIO_DIR, LANGUAGE_CODES } = inophone;
 
-const THEMES = [home, city, nature, person, activities, holidays];
+// Порядок — как в перечне ТЗ строки 97: квартира, город, покупки, человек,
+// затем остальные
+const THEMES = [home, city, shopping, person, nature, activities, holidays];
 
 /** Признак заглушки — В СОДЕРЖИМОМ файла, а не в его имени */
 const PLACEHOLDER_MARK = 'заглушка';
@@ -141,6 +144,7 @@ const THEME_BACKDROP = {
   nature:     { sky: '#d9ecf7', ground: '#c2d8a4', line: '#a9c489' },
   person:     { sky: '#f0e9f2', ground: '#ddd2e0', line: '#c8bace' },
   activities: { sky: '#eceff2', ground: '#d5d9de', line: '#bcc2c9' },
+  shopping:   { sky: '#eaf2ec', ground: '#d6e0d8', line: '#bcc9bf' },
   holidays:   { sky: '#f4ecf7', ground: '#e3d7e8', line: '#cbb9d2' },
 };
 
