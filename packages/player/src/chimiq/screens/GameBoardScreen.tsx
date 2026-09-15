@@ -166,7 +166,33 @@ const GameBoardScreen: React.FC<Props> = ({
       padding: 0,
       cursor: hasAnsweredRef.current ? 'default' : 'pointer',
       transition: 'background 120ms ease, border-color 120ms ease',
+      // Обратная связь по клику не должна различаться ТОЛЬКО цветом (см.
+      // тот же урок, уже применённый в «АзбукоСлов»: «верный и неверный
+      // различаются не только цветом, но и значком — среди детей нарушение
+      // цветовосприятия обычное дело», актуально и для взрослых
+      // дальтоников-посетителей киоска). Глиф ✓/✗ ниже дублирует цвет.
+      display: activeFeedback ? 'flex' : undefined,
+      alignItems: activeFeedback ? 'center' : undefined,
+      justifyContent: activeFeedback ? 'center' : undefined,
     };
+  }
+
+  function feedbackGlyph(activeFeedback: { correct: boolean } | null): React.ReactNode {
+    if (!activeFeedback) return null;
+    return (
+      <span
+        aria-hidden="true"
+        style={{
+          color: '#ffffff',
+          fontSize: '1.4em',
+          fontWeight: 700,
+          textShadow: '0 1px 3px rgba(0, 0, 0, 0.6)',
+          lineHeight: 1,
+        }}
+      >
+        {activeFeedback.correct ? '✓' : '✗'}
+      </span>
+    );
   }
 
   function pointPosition(point: ChimiqPoint): React.CSSProperties {
@@ -303,7 +329,9 @@ const GameBoardScreen: React.FC<Props> = ({
                 onClick={() => handleTileClick(tile)}
                 style={{ ...pointStyle(tile, activeFeedback), ...pointPosition(tile) }}
                 aria-label={tile.isCorrect ? 'correct-point' : `decoy-${tile.key}`}
-              />
+              >
+                {feedbackGlyph(activeFeedback)}
+              </button>
             );
           })}
         </div>
