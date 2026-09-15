@@ -1,7 +1,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { scoreForAnswer, assignQuestions, nextTurn, summarizeResults } from './gameLogic.ts';
-import { CHIMIQ_DEFAULT_POINT_SIZE, type ChimiqQuestion } from './model/schema.ts';
+import { scoreForAnswer, assignQuestions, nextTurn, summarizeResults, buildBoardTiles } from './gameLogic.ts';
+import { CHIMIQ_DEFAULT_POINT_SIZE, type ChimiqQuestion, type ChimiqPoint } from './model/schema.ts';
 
 function q(overrides: Partial<ChimiqQuestion> = {}): ChimiqQuestion {
   return {
@@ -62,6 +62,74 @@ test('assignQuestions is deterministic given a fixed rng', () => {
   const a = assignQuestions(pool, 1, 3, fixedRng);
   const b = assignQuestions(pool, 1, 3, fixedRng);
   assert.deepEqual(a, b);
+});
+
+// buildBoardTiles - найденный баг (2026-09-15, жалоба пользователя «только
+// некоторые иконки можно было прям нажать, хотя их в разы больше»): каждый
+// вопрос уровня рисуется СВОЕЙ отдельной плиткой на общей картинке уровня
+// (Фаза 7, ~53-61 плитка/уровень), но кликабельными раньше были только
+// плитка ТЕКУЩЕГО вопроса + 15 статичных generic-decoy - остальные
+// нарисованные плитки (другие вопросы того же уровня) были мёртвой зоной:
+// выглядят как варианты ответа, но клик по ним ничего не делает. Заодно
+// это была причина жалобы «пул ответов никак не меняется» - тот же
+// статичный набор из 15 decoy был единственным, что реагировало на клик,
+// при любом вопросе. Исправление: тайл КАЖДОГО вопроса уровня становится
+// кликабельным decoy-кандидатом для любого ДРУГОГО вопроса того же уровня.
+
+function point(overrides: Partial<ChimiqPoint> = {}): ChimiqPoint {
+  return { x: 0, y: 0, width: CHIMIQ_DEFAULT_POINT_SIZE, height: CHIMIQ_DEFAULT_POINT_SIZE, ...overrides };
+}
+
+test('buildBoardTiles includes a tile for every OTHER question in the level as a clickable decoy', () => {
+  const current = q({ id: 'q1', x: 10, y: 10 });
+  const other1 = q({ id: 'q2', x: 200, y: 10 });
+  const other2 = q({ id: 'q3', x: 400, y: 10 });
+  const tiles = buildBoardTiles(current, [current, other1, other2], []);
+  assert.equal(tiles.length, 3);
+  const byKey = new Map(tiles.map((t) => [t.key, t]));
+  assert.equal(byKey.get('10_10')?.isCorrect, true);
+  assert.equal(byKey.get('200_10')?.isCorrect, false);
+  assert.equal(byKey.get('400_10')?.isCorrect, false);
+});
+
+test('buildBoardTiles marks exactly one tile as correct, matching the current question coordinates', () => {
+  const current = q({ id: 'q1', x: 10, y: 10 });
+  const levelQuestions = [current, q({ id: 'q2', x: 200, y: 10 }), q({ id: 'q3', x: 400, y: 10 })];
+  const tiles = buildBoardTiles(current, levelQuestions, []);
+  const correctTiles = tiles.filter((t) => t.isCorrect);
+  assert.equal(correctTiles.length, 1);
+  assert.equal(correctTiles[0].x, 10);
+  assert.equal(correctTiles[0].y, 10);
+});
+
+test('buildBoardTiles includes generic decoy points alongside level questions', () => {
+  const current = q({ id: 'q1', x: 10, y: 10 });
+  const other = q({ id: 'q2', x: 200, y: 10 });
+  const decoys = [point({ x: 500, y: 10 }), point({ x: 700, y: 10 })];
+  const tiles = buildBoardTiles(current, [current, other], decoys);
+  assert.equal(tiles.length, 4);
+  assert.equal(tiles.every((t) => !t.isCorrect || (t.x === 10 && t.y === 10)), true);
+});
+
+test('buildBoardTiles includes per-question decoyPoints, still supported for custom quizzes', () => {
+  const current = q({ id: 'q1', x: 10, y: 10, decoyPoints: [point({ x: 900, y: 10 })] });
+  const tiles = buildBoardTiles(current, [current], []);
+  assert.equal(tiles.length, 2);
+});
+
+test('buildBoardTiles deduplicates tiles that share the same rounded coordinates, correct tile always wins', () => {
+  const current = q({ id: 'q1', x: 10, y: 10 });
+  const collidingOther = q({ id: 'q2', x: 10.2, y: 9.8 }); // rounds to the same key as current
+  const tiles = buildBoardTiles(current, [current, collidingOther], []);
+  assert.equal(tiles.length, 1);
+  assert.equal(tiles[0].isCorrect, true);
+});
+
+test('buildBoardTiles excludes questions from OTHER levels even if passed in by mistake', () => {
+  const current = q({ id: 'q1', x: 10, y: 10, level: 1 });
+  const otherLevel = q({ id: 'q2', x: 200, y: 10, level: 2 });
+  const tiles = buildBoardTiles(current, [current, otherLevel], []);
+  assert.equal(tiles.length, 1);
 });
 
 test('summarizeResults aggregates score and correctness per player', () => {

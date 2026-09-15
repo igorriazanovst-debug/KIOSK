@@ -4,7 +4,7 @@
 // идентична rusiq (та же линейка «ОС3 IQ», тот же механизм подсчёта) — см.
 // план реализации `Тип9_ХимIQ/Тип9_план_реализации.md` §1.
 
-import type { ChimiqQuestion } from './model/schema.ts';
+import type { ChimiqPoint, ChimiqQuestion } from './model/schema.ts';
 
 export function scoreForAnswer(price: number, timeSeconds: number, elapsedSeconds: number, isCorrect: boolean): number {
   if (!isCorrect) return 0;
@@ -44,6 +44,68 @@ export function assignQuestions(
     result.push(shuffled.slice(p * questionsPerPlayer, (p + 1) * questionsPerPlayer));
   }
   return result;
+}
+
+export interface ChimiqBoardTile {
+  key: string;
+  x: number;
+  y: number;
+  width: number;
+  height: number;
+  isCorrect: boolean;
+}
+
+function tileKey(point: { x: number; y: number }): string {
+  return `${Math.round(point.x)}_${Math.round(point.y)}`;
+}
+
+/**
+ * Строит полный набор кликабельных тайлов игрового поля для одного вопроса.
+ *
+ * НАЙДЕННЫЙ БАГ (жалоба пользователя 2026-09-15 «только некоторые иконки
+ * можно было прям нажать, хотя их в разы больше, список вообще не
+ * менялся»): каждый вопрос уровня нарисован СВОЕЙ отдельной плиткой на
+ * общей картинке уровня (Фаза 7 плана реализации — ~53-61 плитка на
+ * уровень), но раньше кликабельными были только плитка ТЕКУЩЕГО вопроса +
+ * 15 статичных generic-decoy — остальные ~40-60 нарисованных плиток
+ * выглядели как варианты ответа, но не реагировали на клик вообще. Тот же
+ * статичный набор из 15 decoy был единственным источником "неверных"
+ * вариантов при ЛЮБОМ вопросе — отсюда и жалоба "пул ответов не меняется".
+ *
+ * Исправление: тайл КАЖДОГО вопроса уровня становится кликабельным
+ * decoy-кандидатом для любого ДРУГОГО вопроса того же уровня — то, что
+ * нарисовано на картинке, то и кликабельно, без каких-либо изменений в
+ * самих изображениях/контенте (подтверждено сверкой: количество уникальных
+ * координат на уровень 1:1 совпадает с числом видимых плиток на картинке,
+ * коллизий координат нет ни на одном из 3 уровней).
+ */
+export function buildBoardTiles(
+  question: ChimiqQuestion,
+  levelQuestions: ChimiqQuestion[],
+  genericDecoyPoints: ChimiqPoint[],
+): ChimiqBoardTile[] {
+  const correctKey = tileKey(question);
+  const map = new Map<string, ChimiqBoardTile>();
+
+  const addTile = (p: { x: number; y: number; width: number; height: number }) => {
+    const key = tileKey(p);
+    map.set(key, { key, x: p.x, y: p.y, width: p.width, height: p.height, isCorrect: key === correctKey });
+  };
+
+  for (const p of genericDecoyPoints) addTile(p);
+  for (const p of levelQuestions) {
+    if (p.id === question.id || p.level !== question.level) continue;
+    addTile(p);
+  }
+  for (const p of question.decoyPoints) addTile(p);
+
+  // Ставится последним и явно, а не полагается на порядок выше: если у
+  // чужого вопроса/decoy-точки координаты случайно совпали бы с текущим
+  // вопросом после округления, верный ответ обязан победить коллизию, а не
+  // молча потеряться под decoy той же клетки.
+  map.set(correctKey, { key: correctKey, x: question.x, y: question.y, width: question.width, height: question.height, isCorrect: true });
+
+  return Array.from(map.values());
 }
 
 export interface ChimiqAnswerEvent {

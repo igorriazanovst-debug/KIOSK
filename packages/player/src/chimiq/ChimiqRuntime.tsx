@@ -183,6 +183,7 @@ export default function ChimiqRuntime({ properties }: Props) {
   if (phase === 'board' && setup) {
     const image = activeQuiz.images[String(setup.level)];
     const decoyPoints = activeQuiz.genericDecoyPoints.filter((p) => p.level === setup.level);
+    const levelQuestions = activeQuiz.questions.filter((q) => q.level === setup.level);
     return (
       <GameBoardScreen
         imageUrl={levelImageUrl(image.fileName)}
@@ -190,6 +191,7 @@ export default function ChimiqRuntime({ properties }: Props) {
         imageHeight={image.height}
         playerNames={setup.playerNames}
         questionsByPlayer={questionsByPlayer}
+        levelQuestions={levelQuestions}
         genericDecoyPoints={decoyPoints}
         onFinished={handleGameFinished}
       />

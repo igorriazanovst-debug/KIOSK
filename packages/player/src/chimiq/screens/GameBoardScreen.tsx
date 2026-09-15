@@ -1,7 +1,7 @@
 // packages/player/src/chimiq/screens/GameBoardScreen.tsx
 import React, { useEffect, useRef, useState } from 'react';
 import type { ChimiqPoint, ChimiqQuestion } from '../model/schema.ts';
-import { scoreForAnswer, nextTurn, type ChimiqAnswerEvent } from '../gameLogic.ts';
+import { scoreForAnswer, nextTurn, buildBoardTiles, type ChimiqAnswerEvent, type ChimiqBoardTile } from '../gameLogic.ts';
 import { chimiqItemImageUrl } from '../chimiqMediaUrl.ts';
 import '../chimiqTheme.css';
 
@@ -11,6 +11,7 @@ interface Props {
   imageHeight: number;
   playerNames: string[];
   questionsByPlayer: ChimiqQuestion[][];
+  levelQuestions: ChimiqQuestion[];
   genericDecoyPoints: ChimiqPoint[];
   onFinished: (answers: ChimiqAnswerEvent[]) => void;
 }
@@ -25,6 +26,7 @@ interface Props {
 // - явная обработка истечения таймера отдельным эффектом (без неё вопрос
 //   можно держать открытым бесконечно — реальный баг, найденный на РусIQ).
 const DISPLAY_MAX_WIDTH_CSS = 'min(1200px, 92vw)';
+const ZOOM_SCALE = 1.6;
 
 const POINT_COLOR = 'rgba(90, 90, 90, 0.28)';
 const POINT_RING = '2px solid rgba(255, 255, 255, 0.5)';
@@ -32,47 +34,28 @@ const FEEDBACK_CORRECT_COLOR = 'rgba(62, 207, 126, 0.85)';
 const FEEDBACK_WRONG_COLOR = 'rgba(255, 107, 107, 0.85)';
 const FEEDBACK_DURATION_MS = 900;
 
-interface BoardTile {
-  key: string;
-  x: number;
-  y: number;
-  width: number;
-  height: number;
-  isCorrect: boolean;
-}
-
-function tileKey(point: { x: number; y: number }): string {
-  return `${Math.round(point.x)}_${Math.round(point.y)}`;
-}
-
-function buildTiles(question: ChimiqQuestion, genericDecoyPoints: ChimiqPoint[]): BoardTile[] {
-  const correctKey = tileKey(question);
-  const map = new Map<string, BoardTile>();
-  for (const p of genericDecoyPoints) {
-    const key = tileKey(p);
-    map.set(key, { key, x: p.x, y: p.y, width: p.width, height: p.height, isCorrect: key === correctKey });
-  }
-  for (const p of question.decoyPoints) {
-    const key = tileKey(p);
-    map.set(key, { key, x: p.x, y: p.y, width: p.width, height: p.height, isCorrect: key === correctKey });
-  }
-  map.set(correctKey, { key: correctKey, x: question.x, y: question.y, width: question.width, height: question.height, isCorrect: true });
-  return Array.from(map.values());
-}
-
-const GameBoardScreen: React.FC<Props> = ({ imageUrl, imageWidth, imageHeight, playerNames, questionsByPlayer, genericDecoyPoints, onFinished }) => {
+const GameBoardScreen: React.FC<Props> = ({ imageUrl, imageWidth, imageHeight, playerNames, questionsByPlayer, levelQuestions, genericDecoyPoints, onFinished }) => {
   const [currentPlayer, setCurrentPlayer] = useState(0);
   const [questionIndexByPlayer, setQuestionIndexByPlayer] = useState<number[]>(() => playerNames.map(() => 0));
   const [elapsed, setElapsed] = useState(0);
   const [answers, setAnswers] = useState<ChimiqAnswerEvent[]>([]);
   const [hintShown, setHintShown] = useState(false);
   const [feedback, setFeedback] = useState<{ key: string; correct: boolean } | null>(null);
+  // Найдено по жалобе пользователя (2026-09-15): текст ответа нарисован
+  // ПИКСЕЛЯМИ на статичной картинке уровня (не HTML-текст), поэтому
+  // системный "увеличить страницу" браузера тут не помогает так, как
+  // помог бы для обычного текста — при плотной сетке ~50-70 плиток на
+  // уровень мелкий текст на некоторых плитках плохо читается с
+  // расстояния экрана киоска. Кнопка «Крупнее» отображает картинку и
+  // точки в её натуральном (или крупнее) пиксельном размере вместо
+  // подогнанного под окно — поле становится прокручиваемым.
+  const [zoomed, setZoomed] = useState(false);
 
   const hasAnsweredRef = useRef(false);
   const feedbackTimeoutRef = useRef<number | null>(null);
 
   const currentQuestion = questionsByPlayer[currentPlayer][questionIndexByPlayer[currentPlayer]];
-  const tiles = buildTiles(currentQuestion, genericDecoyPoints);
+  const tiles = buildBoardTiles(currentQuestion, levelQuestions, genericDecoyPoints);
 
   useEffect(() => {
     setElapsed(0);
@@ -113,7 +96,7 @@ const GameBoardScreen: React.FC<Props> = ({ imageUrl, imageWidth, imageHeight, p
     setCurrentPlayer((prev) => nextTurn(prev, playerNames.length));
   }
 
-  function handleTileClick(tile: BoardTile) {
+  function handleTileClick(tile: ChimiqBoardTile) {
     if (hasAnsweredRef.current) return;
     hasAnsweredRef.current = true;
     const correct = tile.isCorrect;
@@ -195,6 +178,9 @@ const GameBoardScreen: React.FC<Props> = ({ imageUrl, imageWidth, imageHeight, p
           <span className="ciq-scoreboard-item">
             Очки сейчас: <strong>{liveScore}</strong>
           </span>
+          <button onClick={() => setZoomed((z) => !z)} className="ciq-btn ciq-btn-ghost ciq-btn-small" aria-pressed={zoomed}>
+            {zoomed ? 'Обычный размер' : '🔍 Крупнее'}
+          </button>
           <button onClick={handleGiveUp} className="ciq-btn ciq-btn-danger ciq-btn-small">
             Сдаюсь
           </button>
@@ -233,9 +219,14 @@ const GameBoardScreen: React.FC<Props> = ({ imageUrl, imageWidth, imageHeight, p
           flex: '1 1 auto',
           minHeight: 0,
           display: 'flex',
-          justifyContent: 'center',
+          justifyContent: zoomed ? 'flex-start' : 'center',
           alignItems: 'flex-start',
-          overflow: 'hidden',
+          // «Крупнее» намеренно переключает overflow на auto: увеличенное
+          // (scale) поле больше своего исходного места в раскладке, и без
+          // прокрутки часть плиток снова стала бы физически недостижимой —
+          // тот же класс проблемы, что уже был исправлен для обычного
+          // размера (см. комментарий ниже), только по своей причине.
+          overflow: zoomed ? 'auto' : 'hidden',
           paddingTop: 20,
           boxSizing: 'border-box',
         }}
@@ -252,13 +243,22 @@ const GameBoardScreen: React.FC<Props> = ({ imageUrl, imageWidth, imageHeight, p
             position: 'relative',
             width: 'auto',
             height: 'auto',
-            maxWidth: DISPLAY_MAX_WIDTH_CSS,
-            maxHeight: '100%',
+            // «Крупнее» задаёт maxWidth В ПИКСЕЛЯХ картинки (не CSS
+            // transform: scale) намеренно: transform не меняет размер,
+            // который занимает элемент в потоке разметки, поэтому
+            // прокручиваемый родитель не узнал бы о новом, большем размере
+            // содержимого без хрупких margin-заглушек на глаз. Явный
+            // pixel-width, наоборот, растит сам блок по обычной раскладке —
+            // overflow:auto родителя получает корректные границы прокрутки
+            // бесплатно.
+            maxWidth: zoomed ? `${Math.round(imageWidth * ZOOM_SCALE)}px` : DISPLAY_MAX_WIDTH_CSS,
+            maxHeight: zoomed ? 'none' : '100%',
             aspectRatio: `${imageWidth} / ${imageHeight}`,
             borderRadius: 10,
             overflow: 'hidden',
             boxShadow: '0 12px 32px rgba(0, 0, 0, 0.5)',
             border: '2px solid var(--ciq-border)',
+            transition: 'max-width 150ms ease',
           }}
         >
           <img src={imageUrl} alt="" style={{ width: '100%', height: '100%', display: 'block' }} />
