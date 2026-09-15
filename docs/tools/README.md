@@ -22,6 +22,7 @@
 | `restand.sh` | Поднимает стенд с **чистого** хранилища |
 | `plan-alphabet.json` | Сценарий для «АзбукоСлов» — 21 снимок |
 | `plan-words.json` | Сценарий для «Я знаю много слов» — 15 снимков |
+| `shoot-chimiq.js` | Снимки для «ХимIQ» (12 шт.) — прямой Node/CDP-драйвер, не JSON-DSL `shoot.mjs` (см. комментарий в файле, почему) |
 
 ## Как пересобрать снимки
 
@@ -126,10 +127,13 @@ Markdown со ссылками на папку снимков **нельзя п�
 # HTML
 python md2html.py ../alphabet-user-guide.md ../alphabet-user-guide.html "АзбукоСлов — инструкция пользователя"
 python md2html.py ../words-user-guide.md    ../words-user-guide.html    "Я знаю много слов — инструкция пользователя"
+python md2html.py ../chimiq-user-guide.md   ../chimiq-user-guide.html   "ХимIQ — инструкция пользователя"
 
-# PDF (electron.exe — из packages/player/node_modules)
+# PDF (electron.exe — из packages/player/node_modules; loadFile резолвит путь
+# от каталога pdf-print/, поэтому надёжнее передавать АБСОЛЮТНЫЕ пути, не ../)
 electron.exe pdf-print ../alphabet-user-guide.html ../alphabet-user-guide.pdf
 electron.exe pdf-print ../words-user-guide.html    ../words-user-guide.pdf
+electron.exe pdf-print C:\путь\до\docs\chimiq-user-guide.html C:\путь\до\docs\chimiq-user-guide.pdf
 ```
 
 **Почему Electron, а не headless Chrome.** Chrome на машине разработки молча
