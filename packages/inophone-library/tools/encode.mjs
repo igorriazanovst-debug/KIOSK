@@ -55,6 +55,14 @@ for (const code of fs.readdirSync(wavRoot)) {
       continue;
     }
 
+    // БАШКИРСКИЙ ЗАМЕДЛЯЕТСЯ. Голос Silero говорит в обычном темпе — слово из
+    // трёх слогов укладывается в полсекунды. Для пособия, где за диктором
+    // повторяют, это быстро: у остальных пяти языков темп снижен настройками
+    // самих синтезаторов (SAPI Rate −2, eSpeak 130), а у Silero такой ручки
+    // нет, поэтому замедляем на выходе. `atempo` меняет темп, не трогая высоту
+    // голоса, — замедление не превращает женский голос в мужской
+    const slow = code === 'ba' ? 'atempo=0.85,' : '';
+
     try {
       execFileSync(
         ff,
@@ -63,7 +71,7 @@ for (const code of fs.readdirSync(wavRoot)) {
           '-i', src,
           // Порядок фильтров значим: сначала срезаем тишину, потом выравниваем
           // громкость — иначе loudnorm считает уровень вместе с паузами
-          '-af', 'silenceremove=start_periods=1:start_silence=0.05:start_threshold=-45dB,areverse,silenceremove=start_periods=1:start_silence=0.05:start_threshold=-45dB,areverse,loudnorm=I=-16:TP=-1.5:LRA=11',
+          '-af', `${slow}silenceremove=start_periods=1:start_silence=0.05:start_threshold=-45dB,areverse,silenceremove=start_periods=1:start_silence=0.05:start_threshold=-45dB,areverse,loudnorm=I=-16:TP=-1.5:LRA=11`,
           '-ar', '44100', '-ac', '1', '-b:a', '96k',
           dst,
         ],
