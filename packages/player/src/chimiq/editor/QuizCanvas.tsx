@@ -37,6 +37,15 @@ interface Props {
   imageUrl: string;
   imageWidth: number;
   imageHeight: number;
+  // Найденный баг (2026-09-15, тот же класс, что на игровом поле —
+  // GameBoardScreen.tsx): масштаб раньше считался ТОЛЬКО от ширины
+  // (CANVAS_WIDTH / imageWidth) — для высоких изображений (наш уровень 1,
+  // 1520×1440) канвас получался выше доступного окна (~852px против
+  // ~779px), и нижняя часть с частью точек физически не помещалась.
+  // maxHeightPx — измеренная EditorScreen доступная высота; если задана,
+  // масштаб выбирается по МЕНЬШЕЙ из двух границ (ширина/высота), чтобы
+  // канвас целиком помещался в видимую область.
+  maxHeightPx?: number;
   questions: ChimiqQuestion[];
   genericDecoyPoints: ChimiqPoint[];
   selectedQuestionId: string | null;
@@ -60,6 +69,7 @@ const QuizCanvas: React.FC<Props> = ({
   imageUrl,
   imageWidth,
   imageHeight,
+  maxHeightPx,
   questions,
   genericDecoyPoints,
   selectedQuestionId,
@@ -82,7 +92,10 @@ const QuizCanvas: React.FC<Props> = ({
   const stageRef = useRef<Konva.Stage | null>(null);
   const transformerRef = useRef<Konva.Transformer | null>(null);
 
-  const scale = CANVAS_WIDTH / imageWidth;
+  const scaleByWidth = CANVAS_WIDTH / imageWidth;
+  const scaleByHeight = maxHeightPx && maxHeightPx > 0 ? maxHeightPx / imageHeight : Infinity;
+  const scale = Math.min(scaleByWidth, scaleByHeight);
+  const canvasWidth = imageWidth * scale;
   const canvasHeight = imageHeight * scale;
 
   useEffect(() => {
@@ -132,12 +145,12 @@ const QuizCanvas: React.FC<Props> = ({
   }
 
   return (
-    <Stage ref={stageRef} width={CANVAS_WIDTH} height={canvasHeight} onClick={handleStageClick}>
+    <Stage ref={stageRef} width={canvasWidth} height={canvasHeight} onClick={handleStageClick}>
       <Layer>
         {backgroundImage ? (
-          <KonvaImage image={backgroundImage} x={0} y={0} width={CANVAS_WIDTH} height={canvasHeight} listening={false} />
+          <KonvaImage image={backgroundImage} x={0} y={0} width={canvasWidth} height={canvasHeight} listening={false} />
         ) : (
-          <Rect x={0} y={0} width={CANVAS_WIDTH} height={canvasHeight} fill="#eee" listening={false} />
+          <Rect x={0} y={0} width={canvasWidth} height={canvasHeight} fill="#eee" listening={false} />
         )}
 
         {questions.map((question) => {
@@ -162,7 +175,7 @@ const QuizCanvas: React.FC<Props> = ({
                 strokeWidth={isSelected ? 2 : 0}
                 draggable
                 dragBoundFunc={(pos) => ({
-                  x: Math.max(0, Math.min(CANVAS_WIDTH, pos.x)),
+                  x: Math.max(0, Math.min(canvasWidth, pos.x)),
                   y: Math.max(0, Math.min(canvasHeight, pos.y)),
                 })}
                 onClick={() => onSelectQuestion(question.id)}
@@ -189,7 +202,7 @@ const QuizCanvas: React.FC<Props> = ({
                     opacity={0.55}
                     draggable
                     dragBoundFunc={(pos) => ({
-                      x: Math.max(0, Math.min(CANVAS_WIDTH, pos.x)),
+                      x: Math.max(0, Math.min(canvasWidth, pos.x)),
                       y: Math.max(0, Math.min(canvasHeight, pos.y)),
                     })}
                     onClick={() => onSelectDecoyOfQuestion(question.id, decoyIndex)}
@@ -224,7 +237,7 @@ const QuizCanvas: React.FC<Props> = ({
               opacity={0.55}
               draggable
               dragBoundFunc={(pos) => ({
-                x: Math.max(0, Math.min(CANVAS_WIDTH, pos.x)),
+                x: Math.max(0, Math.min(canvasWidth, pos.x)),
                 y: Math.max(0, Math.min(canvasHeight, pos.y)),
               })}
               onClick={() => onSelectGenericDecoy(index)}

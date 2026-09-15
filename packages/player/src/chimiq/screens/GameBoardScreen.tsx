@@ -163,77 +163,117 @@ const GameBoardScreen: React.FC<Props> = ({ imageUrl, imageWidth, imageHeight, p
     };
   }
 
+  // Найденный баг (2026-09-15, по жалобе «не все ответы видны»): контейнер
+  // картинки раньше подгонялся ТОЛЬКО под ширину (width: DISPLAY_MAX_WIDTH_CSS
+  // + aspectRatio), без учёта доступной высоты окна. Для высоких изображений
+  // (уровень 2/3, 1710×1440/1280) это давало высоту ~1000-1140px против
+  // фиксированных 800px окна плеера — нижняя часть поля с частью кликабельных
+  // точек (иногда включая саму верную) физически обрезалась окном, скролла
+  // не было. Живой CDP-замер подтвердил: 8 из 16 точек, включая
+  // correct-point, оказывались ниже window.innerHeight.
+  //
+  // Исправление — flex-раскладка на всю высоту окна: «шапка» (счёт+вопрос+
+  // подсказка, высота которой меняется от вопроса к вопросу) не сжимается,
+  // а картинка получает оставшееся пространство (flex: 1) и масштабируется
+  // ОДНОВРЕМЕННО по ширине И высоте (width/height: auto + max-width/
+  // max-height + aspectRatio — Chromium корректно решает такую систему
+  // ограничений, сохраняя пропорции). Никаких зашитых в px оценок высоты
+  // шапки — тот же класс хрупкого предположения уже один раз стоил бага.
   return (
-    <div className="ciq-page" style={{ padding: 0 }}>
-      <div className="ciq-scoreboard">
-        <span className="ciq-scoreboard-item">
-          Вопрос <strong>{questionIndexByPlayer[currentPlayer] + 1}</strong>/{questionsByPlayer[currentPlayer].length}
-        </span>
-        <span className="ciq-scoreboard-item">
-          Ходит: <strong>{playerNames[currentPlayer]}</strong>
-        </span>
-        <span className={`ciq-scoreboard-item ${remainingSeconds <= 5 ? 'ciq-scoreboard-timer-urgent' : 'ciq-scoreboard-timer'}`}>
-          Таймер: <strong>{remainingSeconds}с</strong>
-        </span>
-        <span className="ciq-scoreboard-item">
-          Очки сейчас: <strong>{liveScore}</strong>
-        </span>
-        <button onClick={handleGiveUp} className="ciq-btn ciq-btn-danger ciq-btn-small">
-          Сдаюсь
-        </button>
-      </div>
-      <p className="ciq-question-text">{currentQuestion.text}</p>
-      {currentQuestion.questionImage && (
-        <img
-          src={chimiqItemImageUrl(currentQuestion.questionImage)}
-          alt=""
-          style={{ display: 'block', maxWidth: 220, maxHeight: 160, margin: '10px auto 0', borderRadius: 8 }}
-        />
-      )}
-      {currentQuestion.helpText.length > 0 && (
-        <div className="ciq-hint">
-          {hintShown ? (
-            <>
-              <p className="ciq-hint-text">Подсказка: {currentQuestion.helpText}</p>
-              {currentQuestion.hintImage && (
-                <img
-                  src={chimiqItemImageUrl(currentQuestion.hintImage)}
-                  alt=""
-                  style={{ display: 'block', maxWidth: 220, maxHeight: 160, margin: '6px auto 0', borderRadius: 8 }}
-                />
-              )}
-            </>
-          ) : (
-            <button onClick={handleShowHint} className="ciq-btn ciq-btn-ghost ciq-btn-small">
-              Показать подсказку
-            </button>
-          )}
+    <div className="ciq-page" style={{ padding: 0, height: '100vh', display: 'flex', flexDirection: 'column', boxSizing: 'border-box' }}>
+      <div style={{ flex: '0 0 auto' }}>
+        <div className="ciq-scoreboard">
+          <span className="ciq-scoreboard-item">
+            Вопрос <strong>{questionIndexByPlayer[currentPlayer] + 1}</strong>/{questionsByPlayer[currentPlayer].length}
+          </span>
+          <span className="ciq-scoreboard-item">
+            Ходит: <strong>{playerNames[currentPlayer]}</strong>
+          </span>
+          <span className={`ciq-scoreboard-item ${remainingSeconds <= 5 ? 'ciq-scoreboard-timer-urgent' : 'ciq-scoreboard-timer'}`}>
+            Таймер: <strong>{remainingSeconds}с</strong>
+          </span>
+          <span className="ciq-scoreboard-item">
+            Очки сейчас: <strong>{liveScore}</strong>
+          </span>
+          <button onClick={handleGiveUp} className="ciq-btn ciq-btn-danger ciq-btn-small">
+            Сдаюсь
+          </button>
         </div>
-      )}
+        <p className="ciq-question-text">{currentQuestion.text}</p>
+        {currentQuestion.questionImage && (
+          <img
+            src={chimiqItemImageUrl(currentQuestion.questionImage)}
+            alt=""
+            style={{ display: 'block', maxWidth: 220, maxHeight: 160, margin: '10px auto 0', borderRadius: 8 }}
+          />
+        )}
+        {currentQuestion.helpText.length > 0 && (
+          <div className="ciq-hint">
+            {hintShown ? (
+              <>
+                <p className="ciq-hint-text">Подсказка: {currentQuestion.helpText}</p>
+                {currentQuestion.hintImage && (
+                  <img
+                    src={chimiqItemImageUrl(currentQuestion.hintImage)}
+                    alt=""
+                    style={{ display: 'block', maxWidth: 220, maxHeight: 160, margin: '6px auto 0', borderRadius: 8 }}
+                  />
+                )}
+              </>
+            ) : (
+              <button onClick={handleShowHint} className="ciq-btn ciq-btn-ghost ciq-btn-small">
+                Показать подсказку
+              </button>
+            )}
+          </div>
+        )}
+      </div>
       <div
         style={{
-          position: 'relative',
-          width: DISPLAY_MAX_WIDTH_CSS,
-          aspectRatio: `${imageWidth} / ${imageHeight}`,
-          margin: '20px auto 0',
-          borderRadius: 10,
+          flex: '1 1 auto',
+          minHeight: 0,
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'flex-start',
           overflow: 'hidden',
-          boxShadow: '0 12px 32px rgba(0, 0, 0, 0.5)',
-          border: '2px solid var(--ciq-border)',
+          paddingTop: 20,
+          boxSizing: 'border-box',
         }}
       >
-        <img src={imageUrl} alt="" style={{ width: '100%', height: '100%', display: 'block' }} />
-        {tiles.map((tile) => {
-          const activeFeedback = feedback && feedback.key === tile.key ? feedback : null;
-          return (
-            <button
-              key={tile.key}
-              onClick={() => handleTileClick(tile)}
-              style={{ ...pointStyle(tile, activeFeedback), ...pointPosition(tile) }}
-              aria-label={tile.isCorrect ? 'correct-point' : `decoy-${tile.key}`}
-            />
-          );
-        })}
+        {/* margin-top на этом блоке (вместо paddingTop на родителе) складывался
+            ПОВЕРХ maxHeight: '100%' — родитель отводил 100% под сам блок, а
+            margin ещё на 20px толкал его ниже, из-за чего последняя строка
+            сетки на уровне 3 (самое частое соотношение сторон) на 14px
+            вылезала за window.innerHeight вместе с иногда попадавшим туда
+            correct-point. Найдено живым CDP-замером geometry после первой
+            версии фикса — той же дисциплиной, что и сам баг. */}
+        <div
+          style={{
+            position: 'relative',
+            width: 'auto',
+            height: 'auto',
+            maxWidth: DISPLAY_MAX_WIDTH_CSS,
+            maxHeight: '100%',
+            aspectRatio: `${imageWidth} / ${imageHeight}`,
+            borderRadius: 10,
+            overflow: 'hidden',
+            boxShadow: '0 12px 32px rgba(0, 0, 0, 0.5)',
+            border: '2px solid var(--ciq-border)',
+          }}
+        >
+          <img src={imageUrl} alt="" style={{ width: '100%', height: '100%', display: 'block' }} />
+          {tiles.map((tile) => {
+            const activeFeedback = feedback && feedback.key === tile.key ? feedback : null;
+            return (
+              <button
+                key={tile.key}
+                onClick={() => handleTileClick(tile)}
+                style={{ ...pointStyle(tile, activeFeedback), ...pointPosition(tile) }}
+                aria-label={tile.isCorrect ? 'correct-point' : `decoy-${tile.key}`}
+              />
+            );
+          })}
+        </div>
       </div>
     </div>
   );

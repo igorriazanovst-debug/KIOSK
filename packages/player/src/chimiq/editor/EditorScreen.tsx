@@ -9,7 +9,7 @@
 // вкладка (не редактируемое поле формы — см. комментарий в
 // PointEditForm.tsx, почему смена уровня вопроса отдельным полем опасна).
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { initHistory, pushHistory, undo, redo, canUndo, canRedo, type History } from '../../chrono/history.ts';
 import QuizCanvas, { type QuizCanvasAddMode } from './QuizCanvas.tsx';
 import PointEditForm from './PointEditForm.tsx';
@@ -104,6 +104,29 @@ const EditorScreen: React.FC<Props> = ({ initialQuiz, pendingLevel1Image, onExit
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  // Найденный баг (2026-09-15): QuizCanvas масштабировал Konva Stage ТОЛЬКО
+  // от ширины (900px) — для высокого изображения-карты (наш уровень 1,
+  // 1520×1440) канвас получался выше окна плеера (~852px против ~779px),
+  // и нижняя часть с точками физически не помещалась, без скролла. Меряем
+  // реальную доступную высоту (а не гадаем константу в px — та же
+  // дисциплина, что уже стоила бага один раз) и передаём в QuizCanvas,
+  // чтобы он выбрал масштаб по МЕНЬШЕЙ из границ ширина/высота.
+  const canvasWrapperRef = useRef<HTMLDivElement | null>(null);
+  const [canvasMaxHeight, setCanvasMaxHeight] = useState<number | undefined>(undefined);
+
+  useEffect(() => {
+    function measure() {
+      const el = canvasWrapperRef.current;
+      if (!el) return;
+      const top = el.getBoundingClientRect().top;
+      const available = window.innerHeight - top - 16;
+      setCanvasMaxHeight(available > 0 ? available : undefined);
+    }
+    measure();
+    window.addEventListener('resize', measure);
+    return () => window.removeEventListener('resize', measure);
+  }, [currentEditLevel]);
 
   const quiz = history.present;
   const hasUnsavedChanges = lastSavedQuiz === null || JSON.stringify(lastSavedQuiz) !== JSON.stringify(quiz);
@@ -445,11 +468,12 @@ const EditorScreen: React.FC<Props> = ({ initialQuiz, pendingLevel1Image, onExit
             <p style={{ fontSize: 13, color: 'var(--ciq-text-muted)' }}>
               Общих ложных точек на этом уровне: {levelGenericDecoys.length} из рекомендуемых 10
             </p>
-            <div style={{ borderRadius: 10, overflow: 'hidden', border: '2px solid var(--ciq-border)', display: 'inline-block' }}>
+            <div ref={canvasWrapperRef} style={{ borderRadius: 10, overflow: 'hidden', border: '2px solid var(--ciq-border)', display: 'inline-block' }}>
               <QuizCanvas
                 imageUrl={levelImageUrl}
                 imageWidth={levelImageMeta?.width ?? 1}
                 imageHeight={levelImageMeta?.height ?? 1}
+                maxHeightPx={canvasMaxHeight}
                 questions={levelQuestions}
                 genericDecoyPoints={levelGenericDecoys}
                 selectedQuestionId={selection?.kind === 'question' ? selection.questionId : null}
