@@ -4,13 +4,19 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
-import { registerChimiqIpc, readUserData, writeUserDataAtomic, resolveBaseDir, listQuizMetadata, loadQuizFile, saveQuizFile, deleteQuizFile, resolveQuizzesDir, saveQuizLevelImage, saveQuizItemImage, deleteQuizItemImage } from './ipc.js';
+import { registerChimiqIpc, readUserData, writeUserDataAtomic, resolveBaseDir, listQuizMetadata, loadQuizFile, saveQuizFile, deleteQuizFile, resolveQuizzesDir, saveQuizLevelImage, saveQuizItemImage, deleteQuizItemImage, ChimiqStoreError } from './ipc.js';
 
+// invoke оборачивает вызов обработчика в Promise.resolve().then(...), а не
+// зовёт его напрямую - реальный Electron ipcMain.handle всегда отдаёт
+// результат/ошибку рендереру через Promise (см. registerChimiqIpc load
+// handler rejects when userdata.json is corrupted ниже: обработчик,
+// бросающий СИНХРОННО, без этой обёртки провалил бы assert.rejects, потому
+// что исключение улетело бы мимо Promise-цепочки, а не в реальном IPC).
 function fakeIpcMain() {
   const handlers = new Map();
   return {
     handle: (channel, fn) => handlers.set(channel, fn),
-    invoke: (channel, ...args) => handlers.get(channel)({}, ...args),
+    invoke: (channel, ...args) => Promise.resolve().then(() => handlers.get(channel)({}, ...args)),
   };
 }
 
@@ -35,6 +41,41 @@ test('writeUserDataAtomic then readUserData round-trips the same data', () => {
   const data = { schemaVersion: 1, sessions: [{ id: 's1', quizId: 'q1', playedAtIso: '2026-01-01T00:00:00.000Z', players: [] }], soundOn: false };
   writeUserDataAtomic(filePath, data);
   assert.deepEqual(readUserData(filePath), data);
+});
+
+// Находка при сверке с ТЗ (docs/chimiq-acceptance-matrix.md §3): раньше
+// readUserData не различала "файла нет" (легитимно, устройство новое) от
+// "файл есть, но повреждён" (диск/AV/ручная правка) - оба случая молча
+// схлопывались в FALLBACK_USER_DATA, из-за чего повреждение userdata.json
+// выглядело как "статистика ещё не копилась", а не как ошибка. Тот же
+// класс дефекта уже был закрыт для auth.json (см. chrono/atomicJson.js) -
+// здесь применяется тот же fail-loud паттерн, что и в alphabet/profileStore
+// (readOrDefault бросает AlphabetStoreError на повреждённых профилях).
+test('readUserData throws ChimiqStoreError when the file exists but is not valid JSON', () => {
+  const tmp = fs.mkdtempSync(path.join(os.tmpdir(), 'chimiq-ipc-corrupt-'));
+  const filePath = path.join(tmp, 'userdata.json');
+  fs.writeFileSync(filePath, '{not valid json');
+  assert.throws(() => readUserData(filePath), ChimiqStoreError);
+});
+
+test('readUserData throws ChimiqStoreError when the file is valid JSON but not a record (e.g. an array)', () => {
+  const tmp = fs.mkdtempSync(path.join(os.tmpdir(), 'chimiq-ipc-corrupt-shape-'));
+  const filePath = path.join(tmp, 'userdata.json');
+  fs.writeFileSync(filePath, '[1,2,3]');
+  assert.throws(() => readUserData(filePath), ChimiqStoreError);
+});
+
+test('registerChimiqIpc load handler rejects when userdata.json is corrupted, without touching the file', async () => {
+  const tmp = fs.mkdtempSync(path.join(os.tmpdir(), 'chimiq-ipc-register-corrupt-'));
+  const app = { getPath: () => tmp };
+  const ipcMain = fakeIpcMain();
+  registerChimiqIpc({ ipcMain, app });
+  const filePath = path.join(tmp, 'kiosk-chimiq', 'userdata.json');
+  fs.writeFileSync(filePath, '{not valid json');
+
+  await assert.rejects(() => ipcMain.invoke('chimiq:load-user-data'), ChimiqStoreError);
+  // Повреждённый файл не должен быть молча перезаписан фолбэком.
+  assert.equal(fs.readFileSync(filePath, 'utf-8'), '{not valid json');
 });
 
 test('registerChimiqIpc wires load/save handlers end-to-end', async () => {

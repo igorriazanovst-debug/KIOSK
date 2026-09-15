@@ -27,15 +27,28 @@ declare global {
   }
 }
 
-export async function loadUserData(): Promise<ChimiqUserData> {
-  if (typeof window === 'undefined' || !window.chimiqAPI) return FALLBACK;
+export interface LoadUserDataResult {
+  data: ChimiqUserData;
+  // true, только когда данные РЕАЛЬНО были на диске, но не удалось их
+  // использовать (IPC отклонён - см. ChimiqStoreError в electron/chimiq/ipc.js
+  // - либо содержимое не проходит схему). НЕ true на первом запуске, когда
+  // файла ещё нет: отсутствие данных - не повреждение. Различие важно для
+  // ChimiqRuntime - молча откатываться к пустой истории партий на
+  // повреждённом файле означало бы потерю статистики без предупреждения
+  // (находка сверки с ТЗ, docs/chimiq-acceptance-matrix.md §3).
+  corrupted: boolean;
+}
+
+export async function loadUserData(): Promise<LoadUserDataResult> {
+  if (typeof window === 'undefined' || !window.chimiqAPI) return { data: FALLBACK, corrupted: false };
+  let raw: unknown;
   try {
-    const raw = await window.chimiqAPI.loadUserData();
-    const parsed = ChimiqUserDataSchema.safeParse(raw);
-    return parsed.success ? parsed.data : FALLBACK;
+    raw = await window.chimiqAPI.loadUserData();
   } catch {
-    return FALLBACK;
+    return { data: FALLBACK, corrupted: true };
   }
+  const parsed = ChimiqUserDataSchema.safeParse(raw);
+  return parsed.success ? { data: parsed.data, corrupted: false } : { data: FALLBACK, corrupted: true };
 }
 
 export function saveUserData(data: ChimiqUserData): void {

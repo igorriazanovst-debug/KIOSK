@@ -11,12 +11,26 @@ const fs = require('fs');
 const path = require('path');
 
 const { resolveWithinRoot } = require('../chrono/pathGuard');
+const { atomicWriteJson, readJsonStatus } = require('../chrono/atomicJson');
 
 const CHIMIQ_APP_DIR_NAME = 'kiosk-chimiq';
 const USERDATA_FILE_NAME = 'userdata.json';
 const QUIZZES_DIR_NAME = 'quizzes';
 
 const FALLBACK_USER_DATA = { schemaVersion: 1, sessions: [], soundOn: true };
+
+// Fail-loud при повреждении userdata.json - тот же паттерн, что
+// AlphabetStoreError в alphabet/profileStore.js. userdata.json хранит
+// историю партий (FR-010 сводная статистика) - молчаливый откат к пустому
+// FALLBACK_USER_DATA на повреждённом файле выглядел бы для педагога как
+// потеря накопленной статистики, а не как поломка файла (находка при
+// сверке с ТЗ, docs/chimiq-acceptance-matrix.md §3).
+class ChimiqStoreError extends Error {
+  constructor(message) {
+    super(message);
+    this.name = 'ChimiqStoreError';
+  }
+}
 
 function resolveBaseDir(app) {
   try {
@@ -35,20 +49,16 @@ function isPlainRecord(value) {
 }
 
 function readUserData(filePath) {
-  try {
-    const raw = fs.readFileSync(filePath, 'utf-8');
-    const parsed = JSON.parse(raw);
-    if (!isPlainRecord(parsed)) return FALLBACK_USER_DATA;
-    return parsed;
-  } catch {
-    return FALLBACK_USER_DATA;
+  const status = readJsonStatus(filePath);
+  if (!status.exists) return FALLBACK_USER_DATA;
+  if (!status.valid || !isPlainRecord(status.data)) {
+    throw new ChimiqStoreError(`Файл данных ХимIQ повреждён: ${path.basename(filePath)}`);
   }
+  return status.data;
 }
 
 function writeUserDataAtomic(filePath, data) {
-  const tmpPath = `${filePath}.tmp`;
-  fs.writeFileSync(tmpPath, JSON.stringify(data), 'utf-8');
-  fs.renameSync(tmpPath, filePath);
+  atomicWriteJson(filePath, data);
 }
 
 function resolveQuizzesDir(baseDir) {
@@ -269,6 +279,7 @@ function registerChimiqIpc({ ipcMain, app }) {
 
 module.exports = {
   registerChimiqIpc,
+  ChimiqStoreError,
   readUserData,
   writeUserDataAtomic,
   resolveBaseDir,

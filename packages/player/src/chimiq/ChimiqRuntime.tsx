@@ -56,11 +56,20 @@ export default function ChimiqRuntime({ properties }: Props) {
   const [finalAnswers, setFinalAnswers] = useState<ChimiqAnswerEvent[]>([]);
   const [userData, setUserData] = useState<ChimiqUserData>(INITIAL_USER_DATA);
   const [editingQuiz, setEditingQuiz] = useState<{ quiz: ChimiqQuiz; pendingLevel1Image: { buffer: ArrayBuffer; mimeType: string } | null } | null>(null);
+  // Сохранённые данные (история партий, PIN учителя) существовали на диске,
+  // но не смогли загрузиться - НЕ первый запуск, а повреждённый файл (см.
+  // ChimiqStoreError в electron/chimiq/ipc.js). Показывается один раз на
+  // интро-экране, чтобы педагог не принял пустую статистику за "ещё не
+  // играли" - находка сверки с ТЗ, docs/chimiq-acceptance-matrix.md §3.
+  const [storageWarning, setStorageWarning] = useState<string | null>(null);
 
   useEffect(() => {
     loadUserData()
-      .then(async (loaded) => {
+      .then(async ({ data: loaded, corrupted }) => {
         setUserData(loaded);
+        if (corrupted) {
+          setStorageWarning('Не удалось прочитать сохранённые данные ХимIQ (история партий, статистика) — файл повреждён. Начато с чистого состояния; сохранение новых партий работает как обычно.');
+        }
         if (loaded.activeQuizId !== null) {
           const custom = await loadQuiz(loaded.activeQuizId);
           setActiveQuiz(custom ?? BUILTIN_QUIZ);
@@ -154,6 +163,7 @@ export default function ChimiqRuntime({ properties }: Props) {
         onPlay={() => setPhase('setup')}
         onTeacherMode={() => setPhase('teacherGate')}
         onShowThematicGallery={() => setPhase('thematicGallery')}
+        storageWarning={storageWarning}
       />
     );
   }

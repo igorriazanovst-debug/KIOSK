@@ -7,9 +7,10 @@ interface Props {
   onPlay: () => void;
   onTeacherMode: () => void;
   onShowThematicGallery: () => void;
+  storageWarning?: string | null;
 }
 
-const IntroScreen: React.FC<Props> = ({ quiz, onPlay, onTeacherMode, onShowThematicGallery }) => (
+const IntroScreen: React.FC<Props> = ({ quiz, onPlay, onTeacherMode, onShowThematicGallery, storageWarning }) => (
   <div className="ciq-page">
     <div className="ciq-page-narrow" style={{ position: 'relative', textAlign: 'center' }}>
       <button onClick={onTeacherMode} className="ciq-btn ciq-btn-ghost ciq-btn-small" style={{ position: 'absolute', top: 0, right: 0 }}>
@@ -36,6 +37,11 @@ const IntroScreen: React.FC<Props> = ({ quiz, onPlay, onTeacherMode, onShowThema
           Играть!
         </button>
       </div>
+      {storageWarning && (
+        <p data-testid="chimiq-storage-warning" style={{ marginTop: 24, fontSize: 13, color: 'var(--ciq-text-muted)' }}>
+          {storageWarning}
+        </p>
+      )}
     </div>
   </div>
 );
