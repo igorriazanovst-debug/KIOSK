@@ -7,7 +7,7 @@
 // (chimiqRealContent.json, 3 измеренных изображения-карты по уровням),
 // демо-сетка Фазы 3 (chimiqDemoContent.json) больше не используется как
 // BUILTIN_QUIZ, но остаётся в репо как fixture для editor-тестов.
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import './chimiqTheme.css';
 import IntroScreen from './screens/IntroScreen.tsx';
 import GameSetupScreen, { type GameSetupResult } from './screens/GameSetupScreen.tsx';
@@ -19,10 +19,10 @@ import EditorScreen from './editor/EditorScreen.tsx';
 import DailyStatsScreen from './screens/DailyStatsScreen.tsx';
 import ThematicGalleryScreen from './screens/ThematicGalleryScreen.tsx';
 import { loadQuiz, saveQuiz, saveQuizLevelImage } from './editor/quizStore.ts';
-import { ChimiqQuizSchema, CHIMIQ_USERDATA_SCHEMA_VERSION, type ChimiqQuestion, type ChimiqQuiz, type ChimiqUserData } from './model/schema.ts';
+import { CHIMIQ_USERDATA_SCHEMA_VERSION, type ChimiqQuestion, type ChimiqQuiz, type ChimiqUserData } from './model/schema.ts';
 import { assignQuestions, summarizeResults, type ChimiqAnswerEvent } from './gameLogic.ts';
 import { loadUserData, saveUserData } from './userDataStorage.ts';
-import realContentJson from './content/chimiqRealContent.json' with { type: 'json' };
+import { BUILTIN_QUIZ_VARIANTS, pickRandomVariant } from './quizVariants.ts';
 
 // Изображение-карта — плоская строка пути в public/, без import (см. урок
 // §4 ретроспективы Тип7: import.meta ломает non-module сборку
@@ -31,8 +31,6 @@ import realContentJson from './content/chimiqRealContent.json' with { type: 'jso
 function levelImageUrl(fileName: string): string {
   return `./chimiq/${fileName}`;
 }
-
-const BUILTIN_QUIZ: ChimiqQuiz = ChimiqQuizSchema.parse(realContentJson);
 
 interface Props {
   properties: { title?: string };
@@ -50,6 +48,11 @@ const INITIAL_USER_DATA: ChimiqUserData = {
 };
 
 export default function ChimiqRuntime({ properties }: Props) {
+  // Случайный выбор раскладки встроенной викторины ОДИН РАЗ за монтирование
+  // виджета (не за партию - см. quizVariants.ts) - предложение пользователя
+  // 2026-09-16 против "памяти места": один и тот же статичный набор тайлов
+  // на картинке уровня показывался при каждой партии.
+  const BUILTIN_QUIZ = useMemo(() => pickRandomVariant(BUILTIN_QUIZ_VARIANTS), []);
   const [phase, setPhase] = useState<Phase>('loading');
   const [activeQuiz, setActiveQuiz] = useState<ChimiqQuiz>(BUILTIN_QUIZ);
   const [setup, setSetup] = useState<GameSetupResult | null>(null);
