@@ -2,16 +2,4 @@
   <rect width="1280" height="800" fill="#d9ecf7"/>
   <rect y="496" width="1280" height="304" fill="#c2d8a4"/>
   <line x1="0" y1="496" x2="1280" y2="496" stroke="#a9c489" stroke-width="3"/>
-  <image href="../concepts/mountain.svg" x="98" y="96" width="151" height="151" preserveAspectRatio="xMidYMid meet"/>
-  <image href="../concepts/rock.svg" x="315" y="79" width="139" height="139" preserveAspectRatio="xMidYMid meet"/>
-  <image href="../concepts/snow.svg" x="548" y="113" width="120" height="120" preserveAspectRatio="xMidYMid meet"/>
-  <image href="../concepts/cave.svg" x="810" y="75" width="166" height="166" preserveAspectRatio="xMidYMid meet"/>
-  <image href="../concepts/waterfall.svg" x="1051" y="82" width="156" height="156" preserveAspectRatio="xMidYMid meet"/>
-  <image href="../concepts/eagle.svg" x="128" y="318" width="141" height="141" preserveAspectRatio="xMidYMid meet"/>
-  <image href="../concepts/goat.svg" x="444" y="338" width="154" height="154" preserveAspectRatio="xMidYMid meet"/>
-  <image href="../concepts/tent.svg" x="752" y="315" width="158" height="158" preserveAspectRatio="xMidYMid meet"/>
-  <image href="../concepts/backpack.svg" x="1064" y="311" width="144" height="144" preserveAspectRatio="xMidYMid meet"/>
-  <image href="../concepts/rope.svg" x="108" y="574" width="150" height="150" preserveAspectRatio="xMidYMid meet"/>
-  <image href="../concepts/campfire.svg" x="586" y="594" width="163" height="163" preserveAspectRatio="xMidYMid meet"/>
-  <image href="../concepts/trail.svg" x="860" y="550" width="163" height="163" preserveAspectRatio="xMidYMid meet"/>
 </svg>

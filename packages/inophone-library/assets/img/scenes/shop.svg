@@ -2,16 +2,4 @@
   <rect width="1280" height="800" fill="#eaf2ec"/>
   <rect y="496" width="1280" height="304" fill="#d6e0d8"/>
   <line x1="0" y1="496" x2="1280" y2="496" stroke="#bcc9bf" stroke-width="3"/>
-  <image href="../concepts/counter.svg" x="66" y="82" width="169" height="169" preserveAspectRatio="xMidYMid meet"/>
-  <image href="../concepts/cashdesk.svg" x="363" y="93" width="138" height="138" preserveAspectRatio="xMidYMid meet"/>
-  <image href="../concepts/trolley.svg" x="597" y="91" width="138" height="138" preserveAspectRatio="xMidYMid meet"/>
-  <image href="../concepts/money.svg" x="808" y="114" width="138" height="138" preserveAspectRatio="xMidYMid meet"/>
-  <image href="../concepts/receipt.svg" x="1096" y="139" width="100" height="100" preserveAspectRatio="xMidYMid meet"/>
-  <image href="../concepts/pricetag.svg" x="103" y="319" width="115" height="115" preserveAspectRatio="xMidYMid meet"/>
-  <image href="../concepts/scales_shop.svg" x="379" y="293" width="145" height="145" preserveAspectRatio="xMidYMid meet"/>
-  <image href="../concepts/packet.svg" x="746" y="306" width="163" height="163" preserveAspectRatio="xMidYMid meet"/>
-  <image href="../concepts/seller.svg" x="1069" y="345" width="147" height="147" preserveAspectRatio="xMidYMid meet"/>
-  <image href="../concepts/buyer.svg" x="177" y="558" width="157" height="157" preserveAspectRatio="xMidYMid meet"/>
-  <image href="../concepts/shelves.svg" x="474" y="572" width="188" height="188" preserveAspectRatio="xMidYMid meet"/>
-  <image href="../concepts/fridge_shop.svg" x="1003" y="542" width="196" height="196" preserveAspectRatio="xMidYMid meet"/>
 </svg>

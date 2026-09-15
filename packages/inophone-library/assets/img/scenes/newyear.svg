@@ -2,16 +2,4 @@
   <rect width="1280" height="800" fill="#f4ecf7"/>
   <rect y="496" width="1280" height="304" fill="#e3d7e8"/>
   <line x1="0" y1="496" x2="1280" y2="496" stroke="#cbb9d2" stroke-width="3"/>
-  <image href="../concepts/toydecoration.svg" x="95" y="104" width="133" height="133" preserveAspectRatio="xMidYMid meet"/>
-  <image href="../concepts/tinsel.svg" x="358" y="91" width="125" height="125" preserveAspectRatio="xMidYMid meet"/>
-  <image href="../concepts/star_top.svg" x="580" y="105" width="125" height="125" preserveAspectRatio="xMidYMid meet"/>
-  <image href="../concepts/snowman.svg" x="807" y="89" width="125" height="125" preserveAspectRatio="xMidYMid meet"/>
-  <image href="../concepts/snowflake.svg" x="1085" y="108" width="126" height="126" preserveAspectRatio="xMidYMid meet"/>
-  <image href="../concepts/firework.svg" x="126" y="306" width="157" height="157" preserveAspectRatio="xMidYMid meet"/>
-  <image href="../concepts/santa.svg" x="447" y="330" width="159" height="159" preserveAspectRatio="xMidYMid meet"/>
-  <image href="../concepts/mitten.svg" x="744" y="294" width="140" height="140" preserveAspectRatio="xMidYMid meet"/>
-  <image href="../concepts/icicle.svg" x="1013" y="322" width="142" height="142" preserveAspectRatio="xMidYMid meet"/>
-  <image href="../concepts/skatingrink.svg" x="78" y="547" width="152" height="152" preserveAspectRatio="xMidYMid meet"/>
-  <image href="../concepts/chime.svg" x="609" y="589" width="162" height="162" preserveAspectRatio="xMidYMid meet"/>
-  <image href="../concepts/bell_toy.svg" x="1009" y="582" width="170" height="170" preserveAspectRatio="xMidYMid meet"/>
 </svg>

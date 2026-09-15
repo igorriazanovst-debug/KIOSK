@@ -16,7 +16,7 @@
 import React from 'react';
 import type { inophone } from '@kiosk/shared';
 import { palette } from '../ui';
-import { sceneImageUrl } from '../mediaUrl';
+import { conceptImageUrl, sceneImageUrl } from '../mediaUrl';
 
 type Scene = inophone.Scene;
 
@@ -39,6 +39,16 @@ function centroid(points: string): { x: number; y: number } {
   const x = pairs.reduce((s, p) => s + p[0], 0) / pairs.length;
   const y = pairs.reduce((s, p) => s + p[1], 0) / pairs.length;
   return { x, y };
+}
+
+/** Рамка многоугольника — сюда вписывается рисунок предмета */
+function boundingBox(points: string): { x: number; y: number; w: number; h: number } {
+  const pairs = points.split(' ').map((p) => p.split(',').map(Number));
+  const xs = pairs.map((p) => p[0]);
+  const ys = pairs.map((p) => p[1]);
+  const x = Math.min(...xs);
+  const y = Math.min(...ys);
+  return { x, y, w: Math.max(...xs) - x, h: Math.max(...ys) - y };
 }
 
 const SceneStage: React.FC<StageProps> = ({
@@ -65,6 +75,33 @@ const SceneStage: React.FC<StageProps> = ({
       role="group"
     >
       <image href={sceneImageUrl(scene.id)} x={0} y={0} width={width} height={height} />
+
+      {/*
+        ПРЕДМЕТЫ РИСУЕТ РАНТАЙМ, а не подложка. Раньше сборка вкладывала их
+        внутрь подложки относительной ссылкой `../concepts/<id>.svg`, и в
+        приложении не грузился НИ ОДИН: протокол отдаёт файл по адресу вида
+        `inophonelib://asset/img%2Fscenes%2F…`, где весь путь — один
+        закодированный кусок, и «..» уходит выше корня. Поле выглядело пустым,
+        а в режиме обучения это маскировали подписи объектов.
+
+        Рисунок берётся из ТЕХ ЖЕ КООРДИНАТ, что и контур попадания, поэтому
+        разъехаться они больше не могут.
+      */}
+      {scene.hotspots.map((h) => {
+        const b = boundingBox(h.points);
+        return (
+          <image
+            key={`art-${h.conceptId}`}
+            href={conceptImageUrl(h.conceptId)}
+            x={b.x}
+            y={b.y}
+            width={b.w}
+            height={b.h}
+            preserveAspectRatio="xMidYMid meet"
+            pointerEvents="none"
+          />
+        );
+      })}
 
       {scene.hotspots.map((h) => {
         const isVerdict = verdict?.conceptId === h.conceptId;

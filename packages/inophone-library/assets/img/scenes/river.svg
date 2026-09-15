@@ -2,16 +2,4 @@
   <rect width="1280" height="800" fill="#d9ecf7"/>
   <rect y="496" width="1280" height="304" fill="#c2d8a4"/>
   <line x1="0" y1="496" x2="1280" y2="496" stroke="#a9c489" stroke-width="3"/>
-  <image href="../concepts/water.svg" x="81" y="84" width="127" height="127" preserveAspectRatio="xMidYMid meet"/>
-  <image href="../concepts/bank.svg" x="340" y="93" width="127" height="127" preserveAspectRatio="xMidYMid meet"/>
-  <image href="../concepts/bridge.svg" x="564" y="78" width="170" height="170" preserveAspectRatio="xMidYMid meet"/>
-  <image href="../concepts/boat.svg" x="813" y="110" width="130" height="130" preserveAspectRatio="xMidYMid meet"/>
-  <image href="../concepts/fish.svg" x="1074" y="82" width="141" height="141" preserveAspectRatio="xMidYMid meet"/>
-  <image href="../concepts/fishingrod.svg" x="153" y="354" width="145" height="145" preserveAspectRatio="xMidYMid meet"/>
-  <image href="../concepts/reed.svg" x="398" y="320" width="163" height="163" preserveAspectRatio="xMidYMid meet"/>
-  <image href="../concepts/stone.svg" x="693" y="309" width="155" height="155" preserveAspectRatio="xMidYMid meet"/>
-  <image href="../concepts/sand_river.svg" x="1008" y="345" width="156" height="156" preserveAspectRatio="xMidYMid meet"/>
-  <image href="../concepts/wave.svg" x="117" y="587" width="165" height="165" preserveAspectRatio="xMidYMid meet"/>
-  <image href="../concepts/frog.svg" x="630" y="592" width="163" height="163" preserveAspectRatio="xMidYMid meet"/>
-  <image href="../concepts/dragonfly.svg" x="905" y="600" width="156" height="156" preserveAspectRatio="xMidYMid meet"/>
 </svg>

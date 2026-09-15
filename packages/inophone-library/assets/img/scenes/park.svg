@@ -2,16 +2,4 @@
   <rect width="1280" height="800" fill="#dfe9f2"/>
   <rect y="496" width="1280" height="304" fill="#c9c9c9"/>
   <line x1="0" y1="496" x2="1280" y2="496" stroke="#b0b0b0" stroke-width="3"/>
-  <image href="../concepts/swing.svg" x="115" y="77" width="138" height="138" preserveAspectRatio="xMidYMid meet"/>
-  <image href="../concepts/slide.svg" x="313" y="79" width="121" height="121" preserveAspectRatio="xMidYMid meet"/>
-  <image href="../concepts/sandbox.svg" x="548" y="113" width="126" height="126" preserveAspectRatio="xMidYMid meet"/>
-  <image href="../concepts/fountain.svg" x="785" y="85" width="121" height="121" preserveAspectRatio="xMidYMid meet"/>
-  <image href="../concepts/pond.svg" x="1024" y="80" width="133" height="133" preserveAspectRatio="xMidYMid meet"/>
-  <image href="../concepts/duck.svg" x="78" y="338" width="150" height="150" preserveAspectRatio="xMidYMid meet"/>
-  <image href="../concepts/path.svg" x="385" y="314" width="162" height="162" preserveAspectRatio="xMidYMid meet"/>
-  <image href="../concepts/lawn.svg" x="665" y="298" width="185" height="185" preserveAspectRatio="xMidYMid meet"/>
-  <image href="../concepts/bicycle.svg" x="1052" y="292" width="150" height="150" preserveAspectRatio="xMidYMid meet"/>
-  <image href="../concepts/kite.svg" x="223" y="538" width="172" height="172" preserveAspectRatio="xMidYMid meet"/>
-  <image href="../concepts/icecream.svg" x="633" y="583" width="168" height="168" preserveAspectRatio="xMidYMid meet"/>
-  <image href="../concepts/pigeon.svg" x="931" y="598" width="164" height="164" preserveAspectRatio="xMidYMid meet"/>
 </svg>

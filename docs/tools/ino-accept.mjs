@@ -253,6 +253,34 @@ if (want(4)) {
   const labels = await ev(`document.querySelectorAll('[data-testid=inophone-stage] text').length`);
   ok('4.1b', 'все объекты подписаны', labels === 12, `подписей ${labels}`);
 
+  // КАРТИНКИ ПРОВЕРЯЮТСЯ ПО ФАКТУ ЗАГРУЗКИ, а не по наличию тега <image>.
+  // Дефект, который это ловит, дошёл до пользователя: подложка ссылалась на
+  // рисунки относительным путём, в приложении не грузился ни один, и поле
+  // было пустым. Тег при этом был на месте, а моя проверка рендера открывала
+  // подложку через file://, где относительные ссылки работают — и потому
+  // смотрела не тем путём, каким смотрит приложение
+  const art = await ev(`(() => {
+    const imgs = [...document.querySelectorAll('[data-testid=inophone-stage] image')];
+    const loaded = imgs.filter(i => {
+      const b = i.getBoundingClientRect();
+      return b.width > 0 && b.height > 0;
+    });
+    return imgs.length + '/' + loaded.length;
+  })()`);
+  const naturalOk = await ev(`(() => new Promise(resolve => {
+    const hrefs = [...document.querySelectorAll('[data-testid=inophone-stage] image')]
+      .map(i => i.getAttribute('href')).filter(Boolean);
+    Promise.all(hrefs.map(h => new Promise(r => {
+      const im = new Image();
+      im.onload = () => r(true);
+      im.onerror = () => r(false);
+      im.src = h;
+      setTimeout(() => r(false), 4000);
+    }))).then(rs => resolve(rs.filter(Boolean).length + '/' + rs.length));
+  }))()`);
+  const [good, total] = String(naturalOk).split('/').map(Number);
+  ok('4.1c', 'рисунки предметов на сцене действительно грузятся', total > 12 && good === total, `${good} из ${total}`);
+
   await click(t('inophone-hotspot-bed'));
   const card = await ev(`(() => {
     const c = document.querySelector('[data-testid=inophone-card]');
@@ -276,6 +304,22 @@ if (want(5)) {
   ok('5.1', 'задание показано', !!task, String(task));
   const noLabels = await ev(`document.querySelectorAll('[data-testid=inophone-stage] text').length`);
   ok('5.2', 'объекты НЕ подписаны', noLabels === 0, `подписей ${noLabels}`);
+
+  // Отдельно от 4.1c: именно в тренировке отсутствие рисунков ничем не
+  // маскируется, и поле выглядит пустым — так дефект и заметил пользователь
+  const artTrain = await ev(`(() => new Promise(resolve => {
+    const hrefs = [...document.querySelectorAll('[data-testid=inophone-stage] image')]
+      .map(i => i.getAttribute('href')).filter(Boolean);
+    Promise.all(hrefs.map(h => new Promise(r => {
+      const im = new Image();
+      im.onload = () => r(true);
+      im.onerror = () => r(false);
+      im.src = h;
+      setTimeout(() => r(false), 4000);
+    }))).then(rs => resolve(rs.filter(Boolean).length + '/' + rs.length));
+  }))()`);
+  const [g2, t2] = String(artTrain).split('/').map(Number);
+  ok('5.2b', 'в тренировке рисунки предметов видны', t2 > 12 && g2 === t2, `${g2} из ${t2}`);
 
   // Заведомо неверный ответ: берём объект, отличный от загаданного
   const before = await ev(`document.querySelector('[data-testid=inophone-score]').innerText`);

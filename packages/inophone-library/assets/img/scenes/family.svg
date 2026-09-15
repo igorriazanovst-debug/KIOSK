@@ -2,16 +2,4 @@
   <rect width="1280" height="800" fill="#f0e9f2"/>
   <rect y="496" width="1280" height="304" fill="#ddd2e0"/>
   <line x1="0" y1="496" x2="1280" y2="496" stroke="#c8bace" stroke-width="3"/>
-  <image href="../concepts/mother.svg" x="118" y="120" width="126" height="126" preserveAspectRatio="xMidYMid meet"/>
-  <image href="../concepts/father.svg" x="352" y="108" width="138" height="138" preserveAspectRatio="xMidYMid meet"/>
-  <image href="../concepts/son.svg" x="594" y="80" width="121" height="121" preserveAspectRatio="xMidYMid meet"/>
-  <image href="../concepts/daughter.svg" x="830" y="133" width="121" height="121" preserveAspectRatio="xMidYMid meet"/>
-  <image href="../concepts/brother.svg" x="1045" y="115" width="123" height="123" preserveAspectRatio="xMidYMid meet"/>
-  <image href="../concepts/sister.svg" x="135" y="329" width="152" height="152" preserveAspectRatio="xMidYMid meet"/>
-  <image href="../concepts/grandmother.svg" x="367" y="335" width="148" height="148" preserveAspectRatio="xMidYMid meet"/>
-  <image href="../concepts/grandfather.svg" x="723" y="314" width="145" height="145" preserveAspectRatio="xMidYMid meet"/>
-  <image href="../concepts/baby.svg" x="992" y="317" width="151" height="151" preserveAspectRatio="xMidYMid meet"/>
-  <image href="../concepts/friend.svg" x="240" y="544" width="154" height="154" preserveAspectRatio="xMidYMid meet"/>
-  <image href="../concepts/neighbour.svg" x="627" y="580" width="157" height="157" preserveAspectRatio="xMidYMid meet"/>
-  <image href="../concepts/guest.svg" x="930" y="592" width="156" height="156" preserveAspectRatio="xMidYMid meet"/>
 </svg>

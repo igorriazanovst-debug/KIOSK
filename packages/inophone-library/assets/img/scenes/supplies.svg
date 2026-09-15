@@ -2,16 +2,4 @@
   <rect width="1280" height="800" fill="#eceff2"/>
   <rect y="496" width="1280" height="304" fill="#d5d9de"/>
   <line x1="0" y1="496" x2="1280" y2="496" stroke="#bcc2c9" stroke-width="3"/>
-  <image href="../concepts/schoolbag.svg" x="100" y="117" width="127" height="127" preserveAspectRatio="xMidYMid meet"/>
-  <image href="../concepts/pencil.svg" x="343" y="96" width="136" height="136" preserveAspectRatio="xMidYMid meet"/>
-  <image href="../concepts/rubber.svg" x="625" y="106" width="98" height="98" preserveAspectRatio="xMidYMid meet"/>
-  <image href="../concepts/ruler.svg" x="812" y="104" width="123" height="123" preserveAspectRatio="xMidYMid meet"/>
-  <image href="../concepts/scissors.svg" x="1058" y="117" width="131" height="131" preserveAspectRatio="xMidYMid meet"/>
-  <image href="../concepts/glue.svg" x="149" y="347" width="101" height="101" preserveAspectRatio="xMidYMid meet"/>
-  <image href="../concepts/paints.svg" x="392" y="294" width="145" height="145" preserveAspectRatio="xMidYMid meet"/>
-  <image href="../concepts/brush_art.svg" x="673" y="316" width="148" height="148" preserveAspectRatio="xMidYMid meet"/>
-  <image href="../concepts/pencilcase.svg" x="1033" y="314" width="152" height="152" preserveAspectRatio="xMidYMid meet"/>
-  <image href="../concepts/sharpener.svg" x="70" y="584" width="114" height="114" preserveAspectRatio="xMidYMid meet"/>
-  <image href="../concepts/diary.svg" x="622" y="568" width="161" height="161" preserveAspectRatio="xMidYMid meet"/>
-  <image href="../concepts/textbook.svg" x="1023" y="552" width="159" height="159" preserveAspectRatio="xMidYMid meet"/>
 </svg>

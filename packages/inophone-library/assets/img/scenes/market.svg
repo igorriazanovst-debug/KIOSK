@@ -2,16 +2,4 @@
   <rect width="1280" height="800" fill="#eaf2ec"/>
   <rect y="496" width="1280" height="304" fill="#d6e0d8"/>
   <line x1="0" y1="496" x2="1280" y2="496" stroke="#bcc9bf" stroke-width="3"/>
-  <image href="../concepts/watermelon.svg" x="83" y="114" width="122" height="122" preserveAspectRatio="xMidYMid meet"/>
-  <image href="../concepts/grapes.svg" x="346" y="95" width="137" height="137" preserveAspectRatio="xMidYMid meet"/>
-  <image href="../concepts/onion.svg" x="574" y="75" width="133" height="133" preserveAspectRatio="xMidYMid meet"/>
-  <image href="../concepts/cucumber.svg" x="845" y="107" width="132" height="132" preserveAspectRatio="xMidYMid meet"/>
-  <image href="../concepts/nuts.svg" x="1058" y="103" width="140" height="140" preserveAspectRatio="xMidYMid meet"/>
-  <image href="../concepts/sack.svg" x="66" y="334" width="150" height="150" preserveAspectRatio="xMidYMid meet"/>
-  <image href="../concepts/crate.svg" x="361" y="343" width="140" height="140" preserveAspectRatio="xMidYMid meet"/>
-  <image href="../concepts/awning.svg" x="665" y="318" width="146" height="146" preserveAspectRatio="xMidYMid meet"/>
-  <image href="../concepts/coin.svg" x="1076" y="384" width="107" height="107" preserveAspectRatio="xMidYMid meet"/>
-  <image href="../concepts/purse.svg" x="109" y="572" width="160" height="160" preserveAspectRatio="xMidYMid meet"/>
-  <image href="../concepts/weight.svg" x="475" y="588" width="149" height="149" preserveAspectRatio="xMidYMid meet"/>
-  <image href="../concepts/apron.svg" x="965" y="582" width="150" height="150" preserveAspectRatio="xMidYMid meet"/>
 </svg>

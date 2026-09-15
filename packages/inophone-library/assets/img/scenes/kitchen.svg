@@ -2,16 +2,4 @@
   <rect width="1280" height="800" fill="#e7eef6"/>
   <rect y="496" width="1280" height="304" fill="#d8c9a8"/>
   <line x1="0" y1="496" x2="1280" y2="496" stroke="#c4b391" stroke-width="3"/>
-  <image href="../concepts/table.svg" x="83" y="78" width="150" height="150" preserveAspectRatio="xMidYMid meet"/>
-  <image href="../concepts/chair.svg" x="353" y="86" width="128" height="128" preserveAspectRatio="xMidYMid meet"/>
-  <image href="../concepts/fridge.svg" x="560" y="76" width="163" height="163" preserveAspectRatio="xMidYMid meet"/>
-  <image href="../concepts/stove.svg" x="802" y="83" width="170" height="170" preserveAspectRatio="xMidYMid meet"/>
-  <image href="../concepts/kettle.svg" x="1065" y="115" width="137" height="137" preserveAspectRatio="xMidYMid meet"/>
-  <image href="../concepts/pan.svg" x="110" y="302" width="161" height="161" preserveAspectRatio="xMidYMid meet"/>
-  <image href="../concepts/pot.svg" x="455" y="303" width="145" height="145" preserveAspectRatio="xMidYMid meet"/>
-  <image href="../concepts/sink.svg" x="768" y="319" width="150" height="150" preserveAspectRatio="xMidYMid meet"/>
-  <image href="../concepts/tap.svg" x="1039" y="344" width="157" height="157" preserveAspectRatio="xMidYMid meet"/>
-  <image href="../concepts/shelf.svg" x="179" y="555" width="172" height="172" preserveAspectRatio="xMidYMid meet"/>
-  <image href="../concepts/bread.svg" x="634" y="558" width="150" height="150" preserveAspectRatio="xMidYMid meet"/>
-  <image href="../concepts/salt.svg" x="914" y="580" width="122" height="122" preserveAspectRatio="xMidYMid meet"/>
 </svg>

@@ -2,16 +2,4 @@
   <rect width="1280" height="800" fill="#f0e9f2"/>
   <rect y="496" width="1280" height="304" fill="#ddd2e0"/>
   <line x1="0" y1="496" x2="1280" y2="496" stroke="#c8bace" stroke-width="3"/>
-  <image href="../concepts/milk.svg" x="97" y="87" width="129" height="129" preserveAspectRatio="xMidYMid meet"/>
-  <image href="../concepts/cheese.svg" x="337" y="97" width="122" height="122" preserveAspectRatio="xMidYMid meet"/>
-  <image href="../concepts/butter.svg" x="599" y="125" width="125" height="125" preserveAspectRatio="xMidYMid meet"/>
-  <image href="../concepts/egg.svg" x="842" y="87" width="123" height="123" preserveAspectRatio="xMidYMid meet"/>
-  <image href="../concepts/meat.svg" x="1021" y="112" width="141" height="141" preserveAspectRatio="xMidYMid meet"/>
-  <image href="../concepts/soup.svg" x="162" y="322" width="142" height="142" preserveAspectRatio="xMidYMid meet"/>
-  <image href="../concepts/porridge.svg" x="470" y="330" width="143" height="143" preserveAspectRatio="xMidYMid meet"/>
-  <image href="../concepts/potato.svg" x="750" y="294" width="146" height="146" preserveAspectRatio="xMidYMid meet"/>
-  <image href="../concepts/carrot.svg" x="1005" y="330" width="146" height="146" preserveAspectRatio="xMidYMid meet"/>
-  <image href="../concepts/cabbage.svg" x="143" y="568" width="174" height="174" preserveAspectRatio="xMidYMid meet"/>
-  <image href="../concepts/tomato.svg" x="476" y="602" width="156" height="156" preserveAspectRatio="xMidYMid meet"/>
-  <image href="../concepts/honey.svg" x="913" y="577" width="174" height="174" preserveAspectRatio="xMidYMid meet"/>
 </svg>

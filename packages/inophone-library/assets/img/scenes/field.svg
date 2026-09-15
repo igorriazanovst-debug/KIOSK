@@ -2,16 +2,4 @@
   <rect width="1280" height="800" fill="#d9ecf7"/>
   <rect y="496" width="1280" height="304" fill="#c2d8a4"/>
   <line x1="0" y1="496" x2="1280" y2="496" stroke="#a9c489" stroke-width="3"/>
-  <image href="../concepts/grass.svg" x="110" y="75" width="139" height="139" preserveAspectRatio="xMidYMid meet"/>
-  <image href="../concepts/flower.svg" x="361" y="95" width="124" height="124" preserveAspectRatio="xMidYMid meet"/>
-  <image href="../concepts/wheat.svg" x="580" y="95" width="152" height="152" preserveAspectRatio="xMidYMid meet"/>
-  <image href="../concepts/haystack.svg" x="835" y="80" width="136" height="136" preserveAspectRatio="xMidYMid meet"/>
-  <image href="../concepts/butterfly.svg" x="1082" y="103" width="127" height="127" preserveAspectRatio="xMidYMid meet"/>
-  <image href="../concepts/bee.svg" x="138" y="312" width="104" height="104" preserveAspectRatio="xMidYMid meet"/>
-  <image href="../concepts/grasshopper.svg" x="508" y="362" width="108" height="108" preserveAspectRatio="xMidYMid meet"/>
-  <image href="../concepts/scarecrow.svg" x="746" y="293" width="160" height="160" preserveAspectRatio="xMidYMid meet"/>
-  <image href="../concepts/tractor.svg" x="1001" y="307" width="183" height="183" preserveAspectRatio="xMidYMid meet"/>
-  <image href="../concepts/sun.svg" x="111" y="557" width="166" height="166" preserveAspectRatio="xMidYMid meet"/>
-  <image href="../concepts/cloud.svg" x="498" y="586" width="157" height="157" preserveAspectRatio="xMidYMid meet"/>
-  <image href="../concepts/rainbow.svg" x="896" y="558" width="161" height="161" preserveAspectRatio="xMidYMid meet"/>
 </svg>

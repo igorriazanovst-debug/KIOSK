@@ -137,6 +137,17 @@ for (const concept of concepts) {
  * Сцена держится на предметах: именно их ищет ученик. Подробный фон с
  * нарисованными вещами спорил бы с ними — ребёнок тыкал бы в нарисованный на
  * фоне шкаф, которого нет среди объектов, и получал «неверно» без объяснения.
+ *
+ * ПРЕДМЕТЫ В ПОДЛОЖКУ НЕ ВКЛАДЫВАЮТСЯ. Раньше сборка вписывала сюда
+ * `<image href="../concepts/<id>.svg">`, и в приложении не грузилось НИ ОДНО:
+ * протокол отдаёт файл по адресу вида `inophonelib://asset/img%2Fscenes%2F…`,
+ * где весь путь — один закодированный кусок, и относительная ссылка «..»
+ * уходит выше корня. На экране это выглядело как пустое поле, а в режиме
+ * обучения маскировалось подписями объектов.
+ *
+ * Теперь предметы рисует рантайм (SceneStage) по координатам хотспотов —
+ * каждый своим адресом протокола. Заодно исчез второй источник координат:
+ * картинка и контур попадания больше не могут разъехаться.
  */
 const THEME_BACKDROP = {
   home:       { sky: '#e7eef6', ground: '#d8c9a8', line: '#c4b391' },
@@ -159,14 +170,6 @@ function sceneSvg(scene) {
     `<rect y="${horizon}" width="${VIEW.width}" height="${VIEW.height - horizon}" fill="${bg.ground}"/>`,
     `<line x1="0" y1="${horizon}" x2="${VIEW.width}" y2="${horizon}" stroke="${bg.line}" stroke-width="3"/>`,
   ];
-  for (const p of scene._placed) {
-    // Ссылка ОТНОСИТЕЛЬНАЯ: подложка и иллюстрации лежат в одном пакете и
-    // грузятся одной схемой протокола
-    const href = `../concepts/${p.id}.svg`;
-    parts.push(
-      `<image href="${href}" x="${p.x}" y="${p.y}" width="${p.w}" height="${p.h}" preserveAspectRatio="xMidYMid meet"/>`
-    );
-  }
   return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${VIEW.width} ${VIEW.height}" width="${VIEW.width}" height="${VIEW.height}">\n  ${parts.join('\n  ')}\n</svg>\n`;
 }
 

@@ -2,16 +2,4 @@
   <rect width="1280" height="800" fill="#eceff2"/>
   <rect y="496" width="1280" height="304" fill="#d5d9de"/>
   <line x1="0" y1="496" x2="1280" y2="496" stroke="#bcc2c9" stroke-width="3"/>
-  <image href="../concepts/cat.svg" x="85" y="96" width="137" height="137" preserveAspectRatio="xMidYMid meet"/>
-  <image href="../concepts/dog.svg" x="340" y="86" width="126" height="126" preserveAspectRatio="xMidYMid meet"/>
-  <image href="../concepts/cow.svg" x="558" y="83" width="169" height="169" preserveAspectRatio="xMidYMid meet"/>
-  <image href="../concepts/horse.svg" x="783" y="79" width="170" height="170" preserveAspectRatio="xMidYMid meet"/>
-  <image href="../concepts/sheep.svg" x="1090" y="80" width="131" height="131" preserveAspectRatio="xMidYMid meet"/>
-  <image href="../concepts/goat_farm.svg" x="136" y="341" width="142" height="142" preserveAspectRatio="xMidYMid meet"/>
-  <image href="../concepts/hen.svg" x="443" y="319" width="160" height="160" preserveAspectRatio="xMidYMid meet"/>
-  <image href="../concepts/goose.svg" x="722" y="321" width="160" height="160" preserveAspectRatio="xMidYMid meet"/>
-  <image href="../concepts/rabbit.svg" x="1000" y="346" width="142" height="142" preserveAspectRatio="xMidYMid meet"/>
-  <image href="../concepts/pig.svg" x="85" y="585" width="173" height="173" preserveAspectRatio="xMidYMid meet"/>
-  <image href="../concepts/mouse.svg" x="601" y="566" width="156" height="156" preserveAspectRatio="xMidYMid meet"/>
-  <image href="../concepts/bird.svg" x="1023" y="583" width="158" height="158" preserveAspectRatio="xMidYMid meet"/>
 </svg>
