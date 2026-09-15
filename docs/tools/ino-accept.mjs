@@ -231,7 +231,16 @@ if (want(3)) {
   const first = await ev(`document.querySelector('[data-testid^="inophone-profile-"]').dataset.testid`);
   await click(t(first));
   const body = await text();
-  for (const [num, name] of [['3.2a', 'Дом'], ['3.2b', 'Город'], ['3.2c', 'Покупки'], ['3.2d', 'Человек']]) {
+  // ВСЕ ПЯТЬ обязательных тем ТЗ строки 97, и названия СВЕРЯЮТСЯ ДОСЛОВНО.
+  // «Дом» по смыслу та же «квартира», но на приёмке перечень читают построчно,
+  // и объяснять расхождение пришлось бы голосом
+  for (const [num, name] of [
+    ['3.2a', 'Квартира'],
+    ['3.2b', 'Город'],
+    ['3.2c', 'Покупки'],
+    ['3.2d', 'Человек'],
+    ['3.2e', 'Путешествие'],
+  ]) {
     ok(num, `тема «${name}» из перечня ТЗ есть`, body.includes(name));
   }
   const scenes = await ev(`document.querySelectorAll('[data-testid^="inophone-scene-"]').length`);

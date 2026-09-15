@@ -5544,510 +5544,6 @@
     "out": "assets/audio/ba/pigeon.mp3"
   },
   {
-    "id": "train",
-    "code": "ru",
-    "text": "поезд",
-    "engine": "sapi",
-    "out": "assets/audio/ru/train.mp3"
-  },
-  {
-    "id": "train",
-    "code": "en",
-    "text": "train",
-    "engine": "sapi",
-    "out": "assets/audio/en/train.mp3"
-  },
-  {
-    "id": "train",
-    "code": "fr",
-    "text": "train",
-    "engine": "espeak",
-    "out": "assets/audio/fr/train.mp3"
-  },
-  {
-    "id": "train",
-    "code": "de",
-    "text": "Zug",
-    "engine": "espeak",
-    "out": "assets/audio/de/train.mp3"
-  },
-  {
-    "id": "train",
-    "code": "zh",
-    "text": "火车",
-    "engine": "espeak",
-    "out": "assets/audio/zh/train.mp3"
-  },
-  {
-    "id": "train",
-    "code": "ba",
-    "text": "поезд",
-    "engine": "espeak",
-    "out": "assets/audio/ba/train.mp3"
-  },
-  {
-    "id": "platform",
-    "code": "ru",
-    "text": "перрон",
-    "engine": "sapi",
-    "out": "assets/audio/ru/platform.mp3"
-  },
-  {
-    "id": "platform",
-    "code": "en",
-    "text": "platform",
-    "engine": "sapi",
-    "out": "assets/audio/en/platform.mp3"
-  },
-  {
-    "id": "platform",
-    "code": "fr",
-    "text": "quai",
-    "engine": "espeak",
-    "out": "assets/audio/fr/platform.mp3"
-  },
-  {
-    "id": "platform",
-    "code": "de",
-    "text": "Bahnsteig",
-    "engine": "espeak",
-    "out": "assets/audio/de/platform.mp3"
-  },
-  {
-    "id": "platform",
-    "code": "zh",
-    "text": "站台",
-    "engine": "espeak",
-    "out": "assets/audio/zh/platform.mp3"
-  },
-  {
-    "id": "platform",
-    "code": "ba",
-    "text": "перрон",
-    "engine": "espeak",
-    "out": "assets/audio/ba/platform.mp3"
-  },
-  {
-    "id": "rails",
-    "code": "ru",
-    "text": "рельсы",
-    "engine": "sapi",
-    "out": "assets/audio/ru/rails.mp3"
-  },
-  {
-    "id": "rails",
-    "code": "en",
-    "text": "rails",
-    "engine": "sapi",
-    "out": "assets/audio/en/rails.mp3"
-  },
-  {
-    "id": "rails",
-    "code": "fr",
-    "text": "rails",
-    "engine": "espeak",
-    "out": "assets/audio/fr/rails.mp3"
-  },
-  {
-    "id": "rails",
-    "code": "de",
-    "text": "Gleise",
-    "engine": "espeak",
-    "out": "assets/audio/de/rails.mp3"
-  },
-  {
-    "id": "rails",
-    "code": "zh",
-    "text": "铁轨",
-    "engine": "espeak",
-    "out": "assets/audio/zh/rails.mp3"
-  },
-  {
-    "id": "rails",
-    "code": "ba",
-    "text": "рельстар",
-    "engine": "espeak",
-    "out": "assets/audio/ba/rails.mp3"
-  },
-  {
-    "id": "ticket",
-    "code": "ru",
-    "text": "билет",
-    "engine": "sapi",
-    "out": "assets/audio/ru/ticket.mp3"
-  },
-  {
-    "id": "ticket",
-    "code": "en",
-    "text": "ticket",
-    "engine": "sapi",
-    "out": "assets/audio/en/ticket.mp3"
-  },
-  {
-    "id": "ticket",
-    "code": "fr",
-    "text": "billet",
-    "engine": "espeak",
-    "out": "assets/audio/fr/ticket.mp3"
-  },
-  {
-    "id": "ticket",
-    "code": "de",
-    "text": "Fahrkarte",
-    "engine": "espeak",
-    "out": "assets/audio/de/ticket.mp3"
-  },
-  {
-    "id": "ticket",
-    "code": "zh",
-    "text": "车票",
-    "engine": "espeak",
-    "out": "assets/audio/zh/ticket.mp3"
-  },
-  {
-    "id": "ticket",
-    "code": "ba",
-    "text": "билет",
-    "engine": "espeak",
-    "out": "assets/audio/ba/ticket.mp3"
-  },
-  {
-    "id": "suitcase",
-    "code": "ru",
-    "text": "чемодан",
-    "engine": "sapi",
-    "out": "assets/audio/ru/suitcase.mp3"
-  },
-  {
-    "id": "suitcase",
-    "code": "en",
-    "text": "suitcase",
-    "engine": "sapi",
-    "out": "assets/audio/en/suitcase.mp3"
-  },
-  {
-    "id": "suitcase",
-    "code": "fr",
-    "text": "valise",
-    "engine": "espeak",
-    "out": "assets/audio/fr/suitcase.mp3"
-  },
-  {
-    "id": "suitcase",
-    "code": "de",
-    "text": "Koffer",
-    "engine": "espeak",
-    "out": "assets/audio/de/suitcase.mp3"
-  },
-  {
-    "id": "suitcase",
-    "code": "zh",
-    "text": "行李箱",
-    "engine": "espeak",
-    "out": "assets/audio/zh/suitcase.mp3"
-  },
-  {
-    "id": "suitcase",
-    "code": "ba",
-    "text": "чемодан",
-    "engine": "espeak",
-    "out": "assets/audio/ba/suitcase.mp3"
-  },
-  {
-    "id": "schedule",
-    "code": "ru",
-    "text": "табло",
-    "engine": "sapi",
-    "out": "assets/audio/ru/schedule.mp3"
-  },
-  {
-    "id": "schedule",
-    "code": "en",
-    "text": "departure board",
-    "engine": "sapi",
-    "out": "assets/audio/en/schedule.mp3"
-  },
-  {
-    "id": "schedule",
-    "code": "fr",
-    "text": "tableau des départs",
-    "engine": "espeak",
-    "out": "assets/audio/fr/schedule.mp3"
-  },
-  {
-    "id": "schedule",
-    "code": "de",
-    "text": "Anzeigetafel",
-    "engine": "espeak",
-    "out": "assets/audio/de/schedule.mp3"
-  },
-  {
-    "id": "schedule",
-    "code": "zh",
-    "text": "时刻表",
-    "engine": "espeak",
-    "out": "assets/audio/zh/schedule.mp3"
-  },
-  {
-    "id": "schedule",
-    "code": "ba",
-    "text": "табло",
-    "engine": "espeak",
-    "out": "assets/audio/ba/schedule.mp3"
-  },
-  {
-    "id": "waitingroom",
-    "code": "ru",
-    "text": "зал ожидания",
-    "engine": "sapi",
-    "out": "assets/audio/ru/waitingroom.mp3"
-  },
-  {
-    "id": "waitingroom",
-    "code": "en",
-    "text": "waiting room",
-    "engine": "sapi",
-    "out": "assets/audio/en/waitingroom.mp3"
-  },
-  {
-    "id": "waitingroom",
-    "code": "fr",
-    "text": "salle d’attente",
-    "engine": "espeak",
-    "out": "assets/audio/fr/waitingroom.mp3"
-  },
-  {
-    "id": "waitingroom",
-    "code": "de",
-    "text": "Wartesaal",
-    "engine": "espeak",
-    "out": "assets/audio/de/waitingroom.mp3"
-  },
-  {
-    "id": "waitingroom",
-    "code": "zh",
-    "text": "候车室",
-    "engine": "espeak",
-    "out": "assets/audio/zh/waitingroom.mp3"
-  },
-  {
-    "id": "waitingroom",
-    "code": "ba",
-    "text": "көтөү залы",
-    "engine": "espeak",
-    "out": "assets/audio/ba/waitingroom.mp3"
-  },
-  {
-    "id": "conductor",
-    "code": "ru",
-    "text": "проводник",
-    "engine": "sapi",
-    "out": "assets/audio/ru/conductor.mp3"
-  },
-  {
-    "id": "conductor",
-    "code": "en",
-    "text": "train conductor",
-    "engine": "sapi",
-    "out": "assets/audio/en/conductor.mp3"
-  },
-  {
-    "id": "conductor",
-    "code": "fr",
-    "text": "contrôleur",
-    "engine": "espeak",
-    "out": "assets/audio/fr/conductor.mp3"
-  },
-  {
-    "id": "conductor",
-    "code": "de",
-    "text": "Schaffner",
-    "engine": "espeak",
-    "out": "assets/audio/de/conductor.mp3"
-  },
-  {
-    "id": "conductor",
-    "code": "zh",
-    "text": "列车员",
-    "engine": "espeak",
-    "out": "assets/audio/zh/conductor.mp3"
-  },
-  {
-    "id": "conductor",
-    "code": "ba",
-    "text": "проводник",
-    "engine": "espeak",
-    "out": "assets/audio/ba/conductor.mp3"
-  },
-  {
-    "id": "luggage",
-    "code": "ru",
-    "text": "багаж",
-    "engine": "sapi",
-    "out": "assets/audio/ru/luggage.mp3"
-  },
-  {
-    "id": "luggage",
-    "code": "en",
-    "text": "luggage",
-    "engine": "sapi",
-    "out": "assets/audio/en/luggage.mp3"
-  },
-  {
-    "id": "luggage",
-    "code": "fr",
-    "text": "bagages",
-    "engine": "espeak",
-    "out": "assets/audio/fr/luggage.mp3"
-  },
-  {
-    "id": "luggage",
-    "code": "de",
-    "text": "Gepäck",
-    "engine": "espeak",
-    "out": "assets/audio/de/luggage.mp3"
-  },
-  {
-    "id": "luggage",
-    "code": "zh",
-    "text": "行李",
-    "engine": "espeak",
-    "out": "assets/audio/zh/luggage.mp3"
-  },
-  {
-    "id": "luggage",
-    "code": "ba",
-    "text": "багаж",
-    "engine": "espeak",
-    "out": "assets/audio/ba/luggage.mp3"
-  },
-  {
-    "id": "clock_station",
-    "code": "ru",
-    "text": "вокзальные часы",
-    "engine": "sapi",
-    "out": "assets/audio/ru/clock_station.mp3"
-  },
-  {
-    "id": "clock_station",
-    "code": "en",
-    "text": "station clock",
-    "engine": "sapi",
-    "out": "assets/audio/en/clock_station.mp3"
-  },
-  {
-    "id": "clock_station",
-    "code": "fr",
-    "text": "horloge de gare",
-    "engine": "espeak",
-    "out": "assets/audio/fr/clock_station.mp3"
-  },
-  {
-    "id": "clock_station",
-    "code": "de",
-    "text": "Bahnhofsuhr",
-    "engine": "espeak",
-    "out": "assets/audio/de/clock_station.mp3"
-  },
-  {
-    "id": "clock_station",
-    "code": "zh",
-    "text": "车站大钟",
-    "engine": "espeak",
-    "out": "assets/audio/zh/clock_station.mp3"
-  },
-  {
-    "id": "clock_station",
-    "code": "ba",
-    "text": "вокзал сәғәте",
-    "engine": "espeak",
-    "out": "assets/audio/ba/clock_station.mp3"
-  },
-  {
-    "id": "kiosk",
-    "code": "ru",
-    "text": "киоск",
-    "engine": "sapi",
-    "out": "assets/audio/ru/kiosk.mp3"
-  },
-  {
-    "id": "kiosk",
-    "code": "en",
-    "text": "kiosk",
-    "engine": "sapi",
-    "out": "assets/audio/en/kiosk.mp3"
-  },
-  {
-    "id": "kiosk",
-    "code": "fr",
-    "text": "kiosque",
-    "engine": "espeak",
-    "out": "assets/audio/fr/kiosk.mp3"
-  },
-  {
-    "id": "kiosk",
-    "code": "de",
-    "text": "Kiosk",
-    "engine": "espeak",
-    "out": "assets/audio/de/kiosk.mp3"
-  },
-  {
-    "id": "kiosk",
-    "code": "zh",
-    "text": "小卖部",
-    "engine": "espeak",
-    "out": "assets/audio/zh/kiosk.mp3"
-  },
-  {
-    "id": "kiosk",
-    "code": "ba",
-    "text": "киоск",
-    "engine": "espeak",
-    "out": "assets/audio/ba/kiosk.mp3"
-  },
-  {
-    "id": "bus",
-    "code": "ru",
-    "text": "автобус",
-    "engine": "sapi",
-    "out": "assets/audio/ru/bus.mp3"
-  },
-  {
-    "id": "bus",
-    "code": "en",
-    "text": "bus",
-    "engine": "sapi",
-    "out": "assets/audio/en/bus.mp3"
-  },
-  {
-    "id": "bus",
-    "code": "fr",
-    "text": "autobus",
-    "engine": "espeak",
-    "out": "assets/audio/fr/bus.mp3"
-  },
-  {
-    "id": "bus",
-    "code": "de",
-    "text": "Bus",
-    "engine": "espeak",
-    "out": "assets/audio/de/bus.mp3"
-  },
-  {
-    "id": "bus",
-    "code": "zh",
-    "text": "公共汽车",
-    "engine": "espeak",
-    "out": "assets/audio/zh/bus.mp3"
-  },
-  {
-    "id": "bus",
-    "code": "ba",
-    "text": "автобус",
-    "engine": "espeak",
-    "out": "assets/audio/ba/bus.mp3"
-  },
-  {
     "id": "menu",
     "code": "ru",
     "text": "меню",
@@ -10582,6 +10078,1518 @@
     "text": "ҡунаҡ",
     "engine": "espeak",
     "out": "assets/audio/ba/guest.mp3"
+  },
+  {
+    "id": "train",
+    "code": "ru",
+    "text": "поезд",
+    "engine": "sapi",
+    "out": "assets/audio/ru/train.mp3"
+  },
+  {
+    "id": "train",
+    "code": "en",
+    "text": "train",
+    "engine": "sapi",
+    "out": "assets/audio/en/train.mp3"
+  },
+  {
+    "id": "train",
+    "code": "fr",
+    "text": "train",
+    "engine": "espeak",
+    "out": "assets/audio/fr/train.mp3"
+  },
+  {
+    "id": "train",
+    "code": "de",
+    "text": "Zug",
+    "engine": "espeak",
+    "out": "assets/audio/de/train.mp3"
+  },
+  {
+    "id": "train",
+    "code": "zh",
+    "text": "火车",
+    "engine": "espeak",
+    "out": "assets/audio/zh/train.mp3"
+  },
+  {
+    "id": "train",
+    "code": "ba",
+    "text": "поезд",
+    "engine": "espeak",
+    "out": "assets/audio/ba/train.mp3"
+  },
+  {
+    "id": "platform",
+    "code": "ru",
+    "text": "перрон",
+    "engine": "sapi",
+    "out": "assets/audio/ru/platform.mp3"
+  },
+  {
+    "id": "platform",
+    "code": "en",
+    "text": "platform",
+    "engine": "sapi",
+    "out": "assets/audio/en/platform.mp3"
+  },
+  {
+    "id": "platform",
+    "code": "fr",
+    "text": "quai",
+    "engine": "espeak",
+    "out": "assets/audio/fr/platform.mp3"
+  },
+  {
+    "id": "platform",
+    "code": "de",
+    "text": "Bahnsteig",
+    "engine": "espeak",
+    "out": "assets/audio/de/platform.mp3"
+  },
+  {
+    "id": "platform",
+    "code": "zh",
+    "text": "站台",
+    "engine": "espeak",
+    "out": "assets/audio/zh/platform.mp3"
+  },
+  {
+    "id": "platform",
+    "code": "ba",
+    "text": "перрон",
+    "engine": "espeak",
+    "out": "assets/audio/ba/platform.mp3"
+  },
+  {
+    "id": "rails",
+    "code": "ru",
+    "text": "рельсы",
+    "engine": "sapi",
+    "out": "assets/audio/ru/rails.mp3"
+  },
+  {
+    "id": "rails",
+    "code": "en",
+    "text": "rails",
+    "engine": "sapi",
+    "out": "assets/audio/en/rails.mp3"
+  },
+  {
+    "id": "rails",
+    "code": "fr",
+    "text": "rails",
+    "engine": "espeak",
+    "out": "assets/audio/fr/rails.mp3"
+  },
+  {
+    "id": "rails",
+    "code": "de",
+    "text": "Gleise",
+    "engine": "espeak",
+    "out": "assets/audio/de/rails.mp3"
+  },
+  {
+    "id": "rails",
+    "code": "zh",
+    "text": "铁轨",
+    "engine": "espeak",
+    "out": "assets/audio/zh/rails.mp3"
+  },
+  {
+    "id": "rails",
+    "code": "ba",
+    "text": "рельстар",
+    "engine": "espeak",
+    "out": "assets/audio/ba/rails.mp3"
+  },
+  {
+    "id": "ticket",
+    "code": "ru",
+    "text": "билет",
+    "engine": "sapi",
+    "out": "assets/audio/ru/ticket.mp3"
+  },
+  {
+    "id": "ticket",
+    "code": "en",
+    "text": "ticket",
+    "engine": "sapi",
+    "out": "assets/audio/en/ticket.mp3"
+  },
+  {
+    "id": "ticket",
+    "code": "fr",
+    "text": "billet",
+    "engine": "espeak",
+    "out": "assets/audio/fr/ticket.mp3"
+  },
+  {
+    "id": "ticket",
+    "code": "de",
+    "text": "Fahrkarte",
+    "engine": "espeak",
+    "out": "assets/audio/de/ticket.mp3"
+  },
+  {
+    "id": "ticket",
+    "code": "zh",
+    "text": "车票",
+    "engine": "espeak",
+    "out": "assets/audio/zh/ticket.mp3"
+  },
+  {
+    "id": "ticket",
+    "code": "ba",
+    "text": "билет",
+    "engine": "espeak",
+    "out": "assets/audio/ba/ticket.mp3"
+  },
+  {
+    "id": "suitcase",
+    "code": "ru",
+    "text": "чемодан",
+    "engine": "sapi",
+    "out": "assets/audio/ru/suitcase.mp3"
+  },
+  {
+    "id": "suitcase",
+    "code": "en",
+    "text": "suitcase",
+    "engine": "sapi",
+    "out": "assets/audio/en/suitcase.mp3"
+  },
+  {
+    "id": "suitcase",
+    "code": "fr",
+    "text": "valise",
+    "engine": "espeak",
+    "out": "assets/audio/fr/suitcase.mp3"
+  },
+  {
+    "id": "suitcase",
+    "code": "de",
+    "text": "Koffer",
+    "engine": "espeak",
+    "out": "assets/audio/de/suitcase.mp3"
+  },
+  {
+    "id": "suitcase",
+    "code": "zh",
+    "text": "行李箱",
+    "engine": "espeak",
+    "out": "assets/audio/zh/suitcase.mp3"
+  },
+  {
+    "id": "suitcase",
+    "code": "ba",
+    "text": "чемодан",
+    "engine": "espeak",
+    "out": "assets/audio/ba/suitcase.mp3"
+  },
+  {
+    "id": "schedule",
+    "code": "ru",
+    "text": "табло",
+    "engine": "sapi",
+    "out": "assets/audio/ru/schedule.mp3"
+  },
+  {
+    "id": "schedule",
+    "code": "en",
+    "text": "departure board",
+    "engine": "sapi",
+    "out": "assets/audio/en/schedule.mp3"
+  },
+  {
+    "id": "schedule",
+    "code": "fr",
+    "text": "tableau des départs",
+    "engine": "espeak",
+    "out": "assets/audio/fr/schedule.mp3"
+  },
+  {
+    "id": "schedule",
+    "code": "de",
+    "text": "Anzeigetafel",
+    "engine": "espeak",
+    "out": "assets/audio/de/schedule.mp3"
+  },
+  {
+    "id": "schedule",
+    "code": "zh",
+    "text": "时刻表",
+    "engine": "espeak",
+    "out": "assets/audio/zh/schedule.mp3"
+  },
+  {
+    "id": "schedule",
+    "code": "ba",
+    "text": "табло",
+    "engine": "espeak",
+    "out": "assets/audio/ba/schedule.mp3"
+  },
+  {
+    "id": "waitingroom",
+    "code": "ru",
+    "text": "зал ожидания",
+    "engine": "sapi",
+    "out": "assets/audio/ru/waitingroom.mp3"
+  },
+  {
+    "id": "waitingroom",
+    "code": "en",
+    "text": "waiting room",
+    "engine": "sapi",
+    "out": "assets/audio/en/waitingroom.mp3"
+  },
+  {
+    "id": "waitingroom",
+    "code": "fr",
+    "text": "salle d’attente",
+    "engine": "espeak",
+    "out": "assets/audio/fr/waitingroom.mp3"
+  },
+  {
+    "id": "waitingroom",
+    "code": "de",
+    "text": "Wartesaal",
+    "engine": "espeak",
+    "out": "assets/audio/de/waitingroom.mp3"
+  },
+  {
+    "id": "waitingroom",
+    "code": "zh",
+    "text": "候车室",
+    "engine": "espeak",
+    "out": "assets/audio/zh/waitingroom.mp3"
+  },
+  {
+    "id": "waitingroom",
+    "code": "ba",
+    "text": "көтөү залы",
+    "engine": "espeak",
+    "out": "assets/audio/ba/waitingroom.mp3"
+  },
+  {
+    "id": "conductor",
+    "code": "ru",
+    "text": "проводник",
+    "engine": "sapi",
+    "out": "assets/audio/ru/conductor.mp3"
+  },
+  {
+    "id": "conductor",
+    "code": "en",
+    "text": "train conductor",
+    "engine": "sapi",
+    "out": "assets/audio/en/conductor.mp3"
+  },
+  {
+    "id": "conductor",
+    "code": "fr",
+    "text": "contrôleur",
+    "engine": "espeak",
+    "out": "assets/audio/fr/conductor.mp3"
+  },
+  {
+    "id": "conductor",
+    "code": "de",
+    "text": "Schaffner",
+    "engine": "espeak",
+    "out": "assets/audio/de/conductor.mp3"
+  },
+  {
+    "id": "conductor",
+    "code": "zh",
+    "text": "列车员",
+    "engine": "espeak",
+    "out": "assets/audio/zh/conductor.mp3"
+  },
+  {
+    "id": "conductor",
+    "code": "ba",
+    "text": "проводник",
+    "engine": "espeak",
+    "out": "assets/audio/ba/conductor.mp3"
+  },
+  {
+    "id": "luggage",
+    "code": "ru",
+    "text": "багаж",
+    "engine": "sapi",
+    "out": "assets/audio/ru/luggage.mp3"
+  },
+  {
+    "id": "luggage",
+    "code": "en",
+    "text": "luggage",
+    "engine": "sapi",
+    "out": "assets/audio/en/luggage.mp3"
+  },
+  {
+    "id": "luggage",
+    "code": "fr",
+    "text": "bagages",
+    "engine": "espeak",
+    "out": "assets/audio/fr/luggage.mp3"
+  },
+  {
+    "id": "luggage",
+    "code": "de",
+    "text": "Gepäck",
+    "engine": "espeak",
+    "out": "assets/audio/de/luggage.mp3"
+  },
+  {
+    "id": "luggage",
+    "code": "zh",
+    "text": "行李",
+    "engine": "espeak",
+    "out": "assets/audio/zh/luggage.mp3"
+  },
+  {
+    "id": "luggage",
+    "code": "ba",
+    "text": "багаж",
+    "engine": "espeak",
+    "out": "assets/audio/ba/luggage.mp3"
+  },
+  {
+    "id": "clock_station",
+    "code": "ru",
+    "text": "вокзальные часы",
+    "engine": "sapi",
+    "out": "assets/audio/ru/clock_station.mp3"
+  },
+  {
+    "id": "clock_station",
+    "code": "en",
+    "text": "station clock",
+    "engine": "sapi",
+    "out": "assets/audio/en/clock_station.mp3"
+  },
+  {
+    "id": "clock_station",
+    "code": "fr",
+    "text": "horloge de gare",
+    "engine": "espeak",
+    "out": "assets/audio/fr/clock_station.mp3"
+  },
+  {
+    "id": "clock_station",
+    "code": "de",
+    "text": "Bahnhofsuhr",
+    "engine": "espeak",
+    "out": "assets/audio/de/clock_station.mp3"
+  },
+  {
+    "id": "clock_station",
+    "code": "zh",
+    "text": "车站大钟",
+    "engine": "espeak",
+    "out": "assets/audio/zh/clock_station.mp3"
+  },
+  {
+    "id": "clock_station",
+    "code": "ba",
+    "text": "вокзал сәғәте",
+    "engine": "espeak",
+    "out": "assets/audio/ba/clock_station.mp3"
+  },
+  {
+    "id": "kiosk",
+    "code": "ru",
+    "text": "киоск",
+    "engine": "sapi",
+    "out": "assets/audio/ru/kiosk.mp3"
+  },
+  {
+    "id": "kiosk",
+    "code": "en",
+    "text": "kiosk",
+    "engine": "sapi",
+    "out": "assets/audio/en/kiosk.mp3"
+  },
+  {
+    "id": "kiosk",
+    "code": "fr",
+    "text": "kiosque",
+    "engine": "espeak",
+    "out": "assets/audio/fr/kiosk.mp3"
+  },
+  {
+    "id": "kiosk",
+    "code": "de",
+    "text": "Kiosk",
+    "engine": "espeak",
+    "out": "assets/audio/de/kiosk.mp3"
+  },
+  {
+    "id": "kiosk",
+    "code": "zh",
+    "text": "小卖部",
+    "engine": "espeak",
+    "out": "assets/audio/zh/kiosk.mp3"
+  },
+  {
+    "id": "kiosk",
+    "code": "ba",
+    "text": "киоск",
+    "engine": "espeak",
+    "out": "assets/audio/ba/kiosk.mp3"
+  },
+  {
+    "id": "bus",
+    "code": "ru",
+    "text": "автобус",
+    "engine": "sapi",
+    "out": "assets/audio/ru/bus.mp3"
+  },
+  {
+    "id": "bus",
+    "code": "en",
+    "text": "bus",
+    "engine": "sapi",
+    "out": "assets/audio/en/bus.mp3"
+  },
+  {
+    "id": "bus",
+    "code": "fr",
+    "text": "autobus",
+    "engine": "espeak",
+    "out": "assets/audio/fr/bus.mp3"
+  },
+  {
+    "id": "bus",
+    "code": "de",
+    "text": "Bus",
+    "engine": "espeak",
+    "out": "assets/audio/de/bus.mp3"
+  },
+  {
+    "id": "bus",
+    "code": "zh",
+    "text": "公共汽车",
+    "engine": "espeak",
+    "out": "assets/audio/zh/bus.mp3"
+  },
+  {
+    "id": "bus",
+    "code": "ba",
+    "text": "автобус",
+    "engine": "espeak",
+    "out": "assets/audio/ba/bus.mp3"
+  },
+  {
+    "id": "passport",
+    "code": "ru",
+    "text": "паспорт",
+    "engine": "sapi",
+    "out": "assets/audio/ru/passport.mp3"
+  },
+  {
+    "id": "passport",
+    "code": "en",
+    "text": "passport",
+    "engine": "sapi",
+    "out": "assets/audio/en/passport.mp3"
+  },
+  {
+    "id": "passport",
+    "code": "fr",
+    "text": "passeport",
+    "engine": "espeak",
+    "out": "assets/audio/fr/passport.mp3"
+  },
+  {
+    "id": "passport",
+    "code": "de",
+    "text": "Reisepass",
+    "engine": "espeak",
+    "out": "assets/audio/de/passport.mp3"
+  },
+  {
+    "id": "passport",
+    "code": "zh",
+    "text": "护照",
+    "engine": "espeak",
+    "out": "assets/audio/zh/passport.mp3"
+  },
+  {
+    "id": "passport",
+    "code": "ba",
+    "text": "паспорт",
+    "engine": "espeak",
+    "out": "assets/audio/ba/passport.mp3"
+  },
+  {
+    "id": "boardingpass",
+    "code": "ru",
+    "text": "посадочный талон",
+    "engine": "sapi",
+    "out": "assets/audio/ru/boardingpass.mp3"
+  },
+  {
+    "id": "boardingpass",
+    "code": "en",
+    "text": "boarding pass",
+    "engine": "sapi",
+    "out": "assets/audio/en/boardingpass.mp3"
+  },
+  {
+    "id": "boardingpass",
+    "code": "fr",
+    "text": "carte d’embarquement",
+    "engine": "espeak",
+    "out": "assets/audio/fr/boardingpass.mp3"
+  },
+  {
+    "id": "boardingpass",
+    "code": "de",
+    "text": "Bordkarte",
+    "engine": "espeak",
+    "out": "assets/audio/de/boardingpass.mp3"
+  },
+  {
+    "id": "boardingpass",
+    "code": "zh",
+    "text": "登机牌",
+    "engine": "espeak",
+    "out": "assets/audio/zh/boardingpass.mp3"
+  },
+  {
+    "id": "boardingpass",
+    "code": "ba",
+    "text": "ултырыу талоны",
+    "engine": "espeak",
+    "out": "assets/audio/ba/boardingpass.mp3"
+  },
+  {
+    "id": "checkin",
+    "code": "ru",
+    "text": "стойка регистрации",
+    "engine": "sapi",
+    "out": "assets/audio/ru/checkin.mp3"
+  },
+  {
+    "id": "checkin",
+    "code": "en",
+    "text": "check-in desk",
+    "engine": "sapi",
+    "out": "assets/audio/en/checkin.mp3"
+  },
+  {
+    "id": "checkin",
+    "code": "fr",
+    "text": "comptoir d’enregistrement",
+    "engine": "espeak",
+    "out": "assets/audio/fr/checkin.mp3"
+  },
+  {
+    "id": "checkin",
+    "code": "de",
+    "text": "Check-in-Schalter",
+    "engine": "espeak",
+    "out": "assets/audio/de/checkin.mp3"
+  },
+  {
+    "id": "checkin",
+    "code": "zh",
+    "text": "值机柜台",
+    "engine": "espeak",
+    "out": "assets/audio/zh/checkin.mp3"
+  },
+  {
+    "id": "checkin",
+    "code": "ba",
+    "text": "теркәлеү урыны",
+    "engine": "espeak",
+    "out": "assets/audio/ba/checkin.mp3"
+  },
+  {
+    "id": "baggagebelt",
+    "code": "ru",
+    "text": "багажная лента",
+    "engine": "sapi",
+    "out": "assets/audio/ru/baggagebelt.mp3"
+  },
+  {
+    "id": "baggagebelt",
+    "code": "en",
+    "text": "baggage belt",
+    "engine": "sapi",
+    "out": "assets/audio/en/baggagebelt.mp3"
+  },
+  {
+    "id": "baggagebelt",
+    "code": "fr",
+    "text": "tapis à bagages",
+    "engine": "espeak",
+    "out": "assets/audio/fr/baggagebelt.mp3"
+  },
+  {
+    "id": "baggagebelt",
+    "code": "de",
+    "text": "Gepäckband",
+    "engine": "espeak",
+    "out": "assets/audio/de/baggagebelt.mp3"
+  },
+  {
+    "id": "baggagebelt",
+    "code": "zh",
+    "text": "行李传送带",
+    "engine": "espeak",
+    "out": "assets/audio/zh/baggagebelt.mp3"
+  },
+  {
+    "id": "baggagebelt",
+    "code": "ba",
+    "text": "багаж таҫмаһы",
+    "engine": "espeak",
+    "out": "assets/audio/ba/baggagebelt.mp3"
+  },
+  {
+    "id": "runway",
+    "code": "ru",
+    "text": "взлётная полоса",
+    "engine": "sapi",
+    "out": "assets/audio/ru/runway.mp3"
+  },
+  {
+    "id": "runway",
+    "code": "en",
+    "text": "runway",
+    "engine": "sapi",
+    "out": "assets/audio/en/runway.mp3"
+  },
+  {
+    "id": "runway",
+    "code": "fr",
+    "text": "piste",
+    "engine": "espeak",
+    "out": "assets/audio/fr/runway.mp3"
+  },
+  {
+    "id": "runway",
+    "code": "de",
+    "text": "Startbahn",
+    "engine": "espeak",
+    "out": "assets/audio/de/runway.mp3"
+  },
+  {
+    "id": "runway",
+    "code": "zh",
+    "text": "跑道",
+    "engine": "espeak",
+    "out": "assets/audio/zh/runway.mp3"
+  },
+  {
+    "id": "runway",
+    "code": "ba",
+    "text": "осоу юлы",
+    "engine": "espeak",
+    "out": "assets/audio/ba/runway.mp3"
+  },
+  {
+    "id": "terminal",
+    "code": "ru",
+    "text": "терминал",
+    "engine": "sapi",
+    "out": "assets/audio/ru/terminal.mp3"
+  },
+  {
+    "id": "terminal",
+    "code": "en",
+    "text": "terminal",
+    "engine": "sapi",
+    "out": "assets/audio/en/terminal.mp3"
+  },
+  {
+    "id": "terminal",
+    "code": "fr",
+    "text": "terminal",
+    "engine": "espeak",
+    "out": "assets/audio/fr/terminal.mp3"
+  },
+  {
+    "id": "terminal",
+    "code": "de",
+    "text": "Terminal",
+    "engine": "espeak",
+    "out": "assets/audio/de/terminal.mp3"
+  },
+  {
+    "id": "terminal",
+    "code": "zh",
+    "text": "航站楼",
+    "engine": "espeak",
+    "out": "assets/audio/zh/terminal.mp3"
+  },
+  {
+    "id": "terminal",
+    "code": "ba",
+    "text": "терминал",
+    "engine": "espeak",
+    "out": "assets/audio/ba/terminal.mp3"
+  },
+  {
+    "id": "stewardess",
+    "code": "ru",
+    "text": "стюардесса",
+    "engine": "sapi",
+    "out": "assets/audio/ru/stewardess.mp3"
+  },
+  {
+    "id": "stewardess",
+    "code": "en",
+    "text": "flight attendant",
+    "engine": "sapi",
+    "out": "assets/audio/en/stewardess.mp3"
+  },
+  {
+    "id": "stewardess",
+    "code": "fr",
+    "text": "hôtesse de l’air",
+    "engine": "espeak",
+    "out": "assets/audio/fr/stewardess.mp3"
+  },
+  {
+    "id": "stewardess",
+    "code": "de",
+    "text": "Flugbegleiterin",
+    "engine": "espeak",
+    "out": "assets/audio/de/stewardess.mp3"
+  },
+  {
+    "id": "stewardess",
+    "code": "zh",
+    "text": "空乘",
+    "engine": "espeak",
+    "out": "assets/audio/zh/stewardess.mp3"
+  },
+  {
+    "id": "stewardess",
+    "code": "ba",
+    "text": "стюардесса",
+    "engine": "espeak",
+    "out": "assets/audio/ba/stewardess.mp3"
+  },
+  {
+    "id": "porthole",
+    "code": "ru",
+    "text": "иллюминатор",
+    "engine": "sapi",
+    "out": "assets/audio/ru/porthole.mp3"
+  },
+  {
+    "id": "porthole",
+    "code": "en",
+    "text": "cabin window",
+    "engine": "sapi",
+    "out": "assets/audio/en/porthole.mp3"
+  },
+  {
+    "id": "porthole",
+    "code": "fr",
+    "text": "hublot",
+    "engine": "espeak",
+    "out": "assets/audio/fr/porthole.mp3"
+  },
+  {
+    "id": "porthole",
+    "code": "de",
+    "text": "Kabinenfenster",
+    "engine": "espeak",
+    "out": "assets/audio/de/porthole.mp3"
+  },
+  {
+    "id": "porthole",
+    "code": "zh",
+    "text": "舷窗",
+    "engine": "espeak",
+    "out": "assets/audio/zh/porthole.mp3"
+  },
+  {
+    "id": "porthole",
+    "code": "ba",
+    "text": "иллюминатор",
+    "engine": "espeak",
+    "out": "assets/audio/ba/porthole.mp3"
+  },
+  {
+    "id": "seatbelt",
+    "code": "ru",
+    "text": "ремень безопасности",
+    "engine": "sapi",
+    "out": "assets/audio/ru/seatbelt.mp3"
+  },
+  {
+    "id": "seatbelt",
+    "code": "en",
+    "text": "seat belt",
+    "engine": "sapi",
+    "out": "assets/audio/en/seatbelt.mp3"
+  },
+  {
+    "id": "seatbelt",
+    "code": "fr",
+    "text": "ceinture de sécurité",
+    "engine": "espeak",
+    "out": "assets/audio/fr/seatbelt.mp3"
+  },
+  {
+    "id": "seatbelt",
+    "code": "de",
+    "text": "Sicherheitsgurt",
+    "engine": "espeak",
+    "out": "assets/audio/de/seatbelt.mp3"
+  },
+  {
+    "id": "seatbelt",
+    "code": "zh",
+    "text": "安全带",
+    "engine": "espeak",
+    "out": "assets/audio/zh/seatbelt.mp3"
+  },
+  {
+    "id": "seatbelt",
+    "code": "ba",
+    "text": "хәүефһеҙлек ҡайышы",
+    "engine": "espeak",
+    "out": "assets/audio/ba/seatbelt.mp3"
+  },
+  {
+    "id": "travelbag",
+    "code": "ru",
+    "text": "дорожная сумка",
+    "engine": "sapi",
+    "out": "assets/audio/ru/travelbag.mp3"
+  },
+  {
+    "id": "travelbag",
+    "code": "en",
+    "text": "travel bag",
+    "engine": "sapi",
+    "out": "assets/audio/en/travelbag.mp3"
+  },
+  {
+    "id": "travelbag",
+    "code": "fr",
+    "text": "sac de voyage",
+    "engine": "espeak",
+    "out": "assets/audio/fr/travelbag.mp3"
+  },
+  {
+    "id": "travelbag",
+    "code": "de",
+    "text": "Reisetasche",
+    "engine": "espeak",
+    "out": "assets/audio/de/travelbag.mp3"
+  },
+  {
+    "id": "travelbag",
+    "code": "zh",
+    "text": "旅行包",
+    "engine": "espeak",
+    "out": "assets/audio/zh/travelbag.mp3"
+  },
+  {
+    "id": "travelbag",
+    "code": "ba",
+    "text": "юл сумкаһы",
+    "engine": "espeak",
+    "out": "assets/audio/ba/travelbag.mp3"
+  },
+  {
+    "id": "customs",
+    "code": "ru",
+    "text": "таможня",
+    "engine": "sapi",
+    "out": "assets/audio/ru/customs.mp3"
+  },
+  {
+    "id": "customs",
+    "code": "en",
+    "text": "customs",
+    "engine": "sapi",
+    "out": "assets/audio/en/customs.mp3"
+  },
+  {
+    "id": "customs",
+    "code": "fr",
+    "text": "douane",
+    "engine": "espeak",
+    "out": "assets/audio/fr/customs.mp3"
+  },
+  {
+    "id": "customs",
+    "code": "de",
+    "text": "Zoll",
+    "engine": "espeak",
+    "out": "assets/audio/de/customs.mp3"
+  },
+  {
+    "id": "customs",
+    "code": "zh",
+    "text": "海关",
+    "engine": "espeak",
+    "out": "assets/audio/zh/customs.mp3"
+  },
+  {
+    "id": "customs",
+    "code": "ba",
+    "text": "таможня",
+    "engine": "espeak",
+    "out": "assets/audio/ba/customs.mp3"
+  },
+  {
+    "id": "scanner",
+    "code": "ru",
+    "text": "рамка металлоискателя",
+    "engine": "sapi",
+    "out": "assets/audio/ru/scanner.mp3"
+  },
+  {
+    "id": "scanner",
+    "code": "en",
+    "text": "metal detector",
+    "engine": "sapi",
+    "out": "assets/audio/en/scanner.mp3"
+  },
+  {
+    "id": "scanner",
+    "code": "fr",
+    "text": "portique de sécurité",
+    "engine": "espeak",
+    "out": "assets/audio/fr/scanner.mp3"
+  },
+  {
+    "id": "scanner",
+    "code": "de",
+    "text": "Metalldetektor",
+    "engine": "espeak",
+    "out": "assets/audio/de/scanner.mp3"
+  },
+  {
+    "id": "scanner",
+    "code": "zh",
+    "text": "安检门",
+    "engine": "espeak",
+    "out": "assets/audio/zh/scanner.mp3"
+  },
+  {
+    "id": "scanner",
+    "code": "ba",
+    "text": "металл табыу рамкаһы",
+    "engine": "espeak",
+    "out": "assets/audio/ba/scanner.mp3"
+  },
+  {
+    "id": "reception",
+    "code": "ru",
+    "text": "стойка администратора",
+    "engine": "sapi",
+    "out": "assets/audio/ru/reception.mp3"
+  },
+  {
+    "id": "reception",
+    "code": "en",
+    "text": "reception desk",
+    "engine": "sapi",
+    "out": "assets/audio/en/reception.mp3"
+  },
+  {
+    "id": "reception",
+    "code": "fr",
+    "text": "réception",
+    "engine": "espeak",
+    "out": "assets/audio/fr/reception.mp3"
+  },
+  {
+    "id": "reception",
+    "code": "de",
+    "text": "Rezeption",
+    "engine": "espeak",
+    "out": "assets/audio/de/reception.mp3"
+  },
+  {
+    "id": "reception",
+    "code": "zh",
+    "text": "前台",
+    "engine": "espeak",
+    "out": "assets/audio/zh/reception.mp3"
+  },
+  {
+    "id": "reception",
+    "code": "ba",
+    "text": "администратор урыны",
+    "engine": "espeak",
+    "out": "assets/audio/ba/reception.mp3"
+  },
+  {
+    "id": "keycard",
+    "code": "ru",
+    "text": "карта-ключ",
+    "engine": "sapi",
+    "out": "assets/audio/ru/keycard.mp3"
+  },
+  {
+    "id": "keycard",
+    "code": "en",
+    "text": "key card",
+    "engine": "sapi",
+    "out": "assets/audio/en/keycard.mp3"
+  },
+  {
+    "id": "keycard",
+    "code": "fr",
+    "text": "carte-clé",
+    "engine": "espeak",
+    "out": "assets/audio/fr/keycard.mp3"
+  },
+  {
+    "id": "keycard",
+    "code": "de",
+    "text": "Schlüsselkarte",
+    "engine": "espeak",
+    "out": "assets/audio/de/keycard.mp3"
+  },
+  {
+    "id": "keycard",
+    "code": "zh",
+    "text": "房卡",
+    "engine": "espeak",
+    "out": "assets/audio/zh/keycard.mp3"
+  },
+  {
+    "id": "keycard",
+    "code": "ba",
+    "text": "асҡыс картаһы",
+    "engine": "espeak",
+    "out": "assets/audio/ba/keycard.mp3"
+  },
+  {
+    "id": "bellboy",
+    "code": "ru",
+    "text": "носильщик",
+    "engine": "sapi",
+    "out": "assets/audio/ru/bellboy.mp3"
+  },
+  {
+    "id": "bellboy",
+    "code": "en",
+    "text": "porter",
+    "engine": "sapi",
+    "out": "assets/audio/en/bellboy.mp3"
+  },
+  {
+    "id": "bellboy",
+    "code": "fr",
+    "text": "bagagiste",
+    "engine": "espeak",
+    "out": "assets/audio/fr/bellboy.mp3"
+  },
+  {
+    "id": "bellboy",
+    "code": "de",
+    "text": "Gepäckträger",
+    "engine": "espeak",
+    "out": "assets/audio/de/bellboy.mp3"
+  },
+  {
+    "id": "bellboy",
+    "code": "zh",
+    "text": "行李员",
+    "engine": "espeak",
+    "out": "assets/audio/zh/bellboy.mp3"
+  },
+  {
+    "id": "bellboy",
+    "code": "ba",
+    "text": "йөк ташыусы",
+    "engine": "espeak",
+    "out": "assets/audio/ba/bellboy.mp3"
+  },
+  {
+    "id": "luggagecart",
+    "code": "ru",
+    "text": "тележка для багажа",
+    "engine": "sapi",
+    "out": "assets/audio/ru/luggagecart.mp3"
+  },
+  {
+    "id": "luggagecart",
+    "code": "en",
+    "text": "luggage cart",
+    "engine": "sapi",
+    "out": "assets/audio/en/luggagecart.mp3"
+  },
+  {
+    "id": "luggagecart",
+    "code": "fr",
+    "text": "chariot à bagages",
+    "engine": "espeak",
+    "out": "assets/audio/fr/luggagecart.mp3"
+  },
+  {
+    "id": "luggagecart",
+    "code": "de",
+    "text": "Gepäckwagen",
+    "engine": "espeak",
+    "out": "assets/audio/de/luggagecart.mp3"
+  },
+  {
+    "id": "luggagecart",
+    "code": "zh",
+    "text": "行李车",
+    "engine": "espeak",
+    "out": "assets/audio/zh/luggagecart.mp3"
+  },
+  {
+    "id": "luggagecart",
+    "code": "ba",
+    "text": "багаж арбаһы",
+    "engine": "espeak",
+    "out": "assets/audio/ba/luggagecart.mp3"
+  },
+  {
+    "id": "safe",
+    "code": "ru",
+    "text": "сейф",
+    "engine": "sapi",
+    "out": "assets/audio/ru/safe.mp3"
+  },
+  {
+    "id": "safe",
+    "code": "en",
+    "text": "safe",
+    "engine": "sapi",
+    "out": "assets/audio/en/safe.mp3"
+  },
+  {
+    "id": "safe",
+    "code": "fr",
+    "text": "coffre-fort",
+    "engine": "espeak",
+    "out": "assets/audio/fr/safe.mp3"
+  },
+  {
+    "id": "safe",
+    "code": "de",
+    "text": "Safe",
+    "engine": "espeak",
+    "out": "assets/audio/de/safe.mp3"
+  },
+  {
+    "id": "safe",
+    "code": "zh",
+    "text": "保险箱",
+    "engine": "espeak",
+    "out": "assets/audio/zh/safe.mp3"
+  },
+  {
+    "id": "safe",
+    "code": "ba",
+    "text": "сейф",
+    "engine": "espeak",
+    "out": "assets/audio/ba/safe.mp3"
+  },
+  {
+    "id": "minibar",
+    "code": "ru",
+    "text": "мини-бар",
+    "engine": "sapi",
+    "out": "assets/audio/ru/minibar.mp3"
+  },
+  {
+    "id": "minibar",
+    "code": "en",
+    "text": "minibar",
+    "engine": "sapi",
+    "out": "assets/audio/en/minibar.mp3"
+  },
+  {
+    "id": "minibar",
+    "code": "fr",
+    "text": "minibar",
+    "engine": "espeak",
+    "out": "assets/audio/fr/minibar.mp3"
+  },
+  {
+    "id": "minibar",
+    "code": "de",
+    "text": "Minibar",
+    "engine": "espeak",
+    "out": "assets/audio/de/minibar.mp3"
+  },
+  {
+    "id": "minibar",
+    "code": "zh",
+    "text": "迷你吧",
+    "engine": "espeak",
+    "out": "assets/audio/zh/minibar.mp3"
+  },
+  {
+    "id": "minibar",
+    "code": "ba",
+    "text": "мини-бар",
+    "engine": "espeak",
+    "out": "assets/audio/ba/minibar.mp3"
+  },
+  {
+    "id": "deskbell",
+    "code": "ru",
+    "text": "звонок на стойке",
+    "engine": "sapi",
+    "out": "assets/audio/ru/deskbell.mp3"
+  },
+  {
+    "id": "deskbell",
+    "code": "en",
+    "text": "service bell",
+    "engine": "sapi",
+    "out": "assets/audio/en/deskbell.mp3"
+  },
+  {
+    "id": "deskbell",
+    "code": "fr",
+    "text": "sonnette de comptoir",
+    "engine": "espeak",
+    "out": "assets/audio/fr/deskbell.mp3"
+  },
+  {
+    "id": "deskbell",
+    "code": "de",
+    "text": "Tischglocke",
+    "engine": "espeak",
+    "out": "assets/audio/de/deskbell.mp3"
+  },
+  {
+    "id": "deskbell",
+    "code": "zh",
+    "text": "服务铃",
+    "engine": "espeak",
+    "out": "assets/audio/zh/deskbell.mp3"
+  },
+  {
+    "id": "deskbell",
+    "code": "ba",
+    "text": "өҫтәл ҡыңғырауы",
+    "engine": "espeak",
+    "out": "assets/audio/ba/deskbell.mp3"
+  },
+  {
+    "id": "bathrobe",
+    "code": "ru",
+    "text": "халат",
+    "engine": "sapi",
+    "out": "assets/audio/ru/bathrobe.mp3"
+  },
+  {
+    "id": "bathrobe",
+    "code": "en",
+    "text": "bathrobe",
+    "engine": "sapi",
+    "out": "assets/audio/en/bathrobe.mp3"
+  },
+  {
+    "id": "bathrobe",
+    "code": "fr",
+    "text": "peignoir",
+    "engine": "espeak",
+    "out": "assets/audio/fr/bathrobe.mp3"
+  },
+  {
+    "id": "bathrobe",
+    "code": "de",
+    "text": "Bademantel",
+    "engine": "espeak",
+    "out": "assets/audio/de/bathrobe.mp3"
+  },
+  {
+    "id": "bathrobe",
+    "code": "zh",
+    "text": "浴袍",
+    "engine": "espeak",
+    "out": "assets/audio/zh/bathrobe.mp3"
+  },
+  {
+    "id": "bathrobe",
+    "code": "ba",
+    "text": "халат",
+    "engine": "espeak",
+    "out": "assets/audio/ba/bathrobe.mp3"
+  },
+  {
+    "id": "hanger",
+    "code": "ru",
+    "text": "плечики",
+    "engine": "sapi",
+    "out": "assets/audio/ru/hanger.mp3"
+  },
+  {
+    "id": "hanger",
+    "code": "en",
+    "text": "clothes hanger",
+    "engine": "sapi",
+    "out": "assets/audio/en/hanger.mp3"
+  },
+  {
+    "id": "hanger",
+    "code": "fr",
+    "text": "cintre",
+    "engine": "espeak",
+    "out": "assets/audio/fr/hanger.mp3"
+  },
+  {
+    "id": "hanger",
+    "code": "de",
+    "text": "Kleiderbügel",
+    "engine": "espeak",
+    "out": "assets/audio/de/hanger.mp3"
+  },
+  {
+    "id": "hanger",
+    "code": "zh",
+    "text": "衣架子",
+    "engine": "espeak",
+    "out": "assets/audio/zh/hanger.mp3"
+  },
+  {
+    "id": "hanger",
+    "code": "ba",
+    "text": "кейем элгесе",
+    "engine": "espeak",
+    "out": "assets/audio/ba/hanger.mp3"
+  },
+  {
+    "id": "balcony",
+    "code": "ru",
+    "text": "балкон",
+    "engine": "sapi",
+    "out": "assets/audio/ru/balcony.mp3"
+  },
+  {
+    "id": "balcony",
+    "code": "en",
+    "text": "balcony",
+    "engine": "sapi",
+    "out": "assets/audio/en/balcony.mp3"
+  },
+  {
+    "id": "balcony",
+    "code": "fr",
+    "text": "balcon",
+    "engine": "espeak",
+    "out": "assets/audio/fr/balcony.mp3"
+  },
+  {
+    "id": "balcony",
+    "code": "de",
+    "text": "Balkon",
+    "engine": "espeak",
+    "out": "assets/audio/de/balcony.mp3"
+  },
+  {
+    "id": "balcony",
+    "code": "zh",
+    "text": "阳台",
+    "engine": "espeak",
+    "out": "assets/audio/zh/balcony.mp3"
+  },
+  {
+    "id": "balcony",
+    "code": "ba",
+    "text": "балкон",
+    "engine": "espeak",
+    "out": "assets/audio/ba/balcony.mp3"
+  },
+  {
+    "id": "roomnumber",
+    "code": "ru",
+    "text": "номер на двери",
+    "engine": "sapi",
+    "out": "assets/audio/ru/roomnumber.mp3"
+  },
+  {
+    "id": "roomnumber",
+    "code": "en",
+    "text": "room number",
+    "engine": "sapi",
+    "out": "assets/audio/en/roomnumber.mp3"
+  },
+  {
+    "id": "roomnumber",
+    "code": "fr",
+    "text": "numéro de chambre",
+    "engine": "espeak",
+    "out": "assets/audio/fr/roomnumber.mp3"
+  },
+  {
+    "id": "roomnumber",
+    "code": "de",
+    "text": "Zimmernummer",
+    "engine": "espeak",
+    "out": "assets/audio/de/roomnumber.mp3"
+  },
+  {
+    "id": "roomnumber",
+    "code": "zh",
+    "text": "门牌号",
+    "engine": "espeak",
+    "out": "assets/audio/zh/roomnumber.mp3"
+  },
+  {
+    "id": "roomnumber",
+    "code": "ba",
+    "text": "ишектәге һан",
+    "engine": "espeak",
+    "out": "assets/audio/ba/roomnumber.mp3"
+  },
+  {
+    "id": "guidebook",
+    "code": "ru",
+    "text": "путеводитель",
+    "engine": "sapi",
+    "out": "assets/audio/ru/guidebook.mp3"
+  },
+  {
+    "id": "guidebook",
+    "code": "en",
+    "text": "guidebook",
+    "engine": "sapi",
+    "out": "assets/audio/en/guidebook.mp3"
+  },
+  {
+    "id": "guidebook",
+    "code": "fr",
+    "text": "guide touristique",
+    "engine": "espeak",
+    "out": "assets/audio/fr/guidebook.mp3"
+  },
+  {
+    "id": "guidebook",
+    "code": "de",
+    "text": "Reiseführer",
+    "engine": "espeak",
+    "out": "assets/audio/de/guidebook.mp3"
+  },
+  {
+    "id": "guidebook",
+    "code": "zh",
+    "text": "旅游指南",
+    "engine": "espeak",
+    "out": "assets/audio/zh/guidebook.mp3"
+  },
+  {
+    "id": "guidebook",
+    "code": "ba",
+    "text": "юл күрһәткесе",
+    "engine": "espeak",
+    "out": "assets/audio/ba/guidebook.mp3"
   },
   {
     "id": "tree",

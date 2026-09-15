@@ -28,13 +28,14 @@ import nature from './catalogue/nature.mjs';
 import person from './catalogue/person.mjs';
 import activities from './catalogue/activities.mjs';
 import shopping from './catalogue/shopping.mjs';
+import travel from './catalogue/travel.mjs';
 import holidays from './catalogue/holidays.mjs';
 
 const HERE = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.join(HERE, '..');
 const { inophone } = createRequire(import.meta.url)(path.resolve(ROOT, '../shared/dist/index.js'));
 
-const THEMES = [home, city, shopping, person, nature, activities, holidays];
+const THEMES = [home, city, shopping, person, travel, nature, activities, holidays];
 
 /** Совпадает ли башкирское написание с русским с точностью до регистра */
 function sameAsRussian(ru, ba) {

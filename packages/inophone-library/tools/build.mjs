@@ -29,6 +29,7 @@ import nature from './catalogue/nature.mjs';
 import person from './catalogue/person.mjs';
 import activities from './catalogue/activities.mjs';
 import shopping from './catalogue/shopping.mjs';
+import travel from './catalogue/travel.mjs';
 import holidays from './catalogue/holidays.mjs';
 
 const HERE = path.dirname(fileURLToPath(import.meta.url));
@@ -49,7 +50,7 @@ const { SCENE_IMAGE_DIR, CONCEPT_IMAGE_DIR, AUDIO_DIR, LANGUAGE_CODES } = inopho
 
 // Порядок — как в перечне ТЗ строки 97: квартира, город, покупки, человек,
 // затем остальные
-const THEMES = [home, city, shopping, person, nature, activities, holidays];
+const THEMES = [home, city, shopping, person, travel, nature, activities, holidays];
 
 /** Признак заглушки — В СОДЕРЖИМОМ файла, а не в его имени */
 const PLACEHOLDER_MARK = 'заглушка';
@@ -156,6 +157,7 @@ const THEME_BACKDROP = {
   person:     { sky: '#f0e9f2', ground: '#ddd2e0', line: '#c8bace' },
   activities: { sky: '#eceff2', ground: '#d5d9de', line: '#bcc2c9' },
   shopping:   { sky: '#eaf2ec', ground: '#d6e0d8', line: '#bcc9bf' },
+  travel:     { sky: '#e4edf5', ground: '#cfd8e2', line: '#b4c0cd' },
   holidays:   { sky: '#f4ecf7', ground: '#e3d7e8', line: '#cbb9d2' },
 };
 

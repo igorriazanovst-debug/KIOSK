@@ -1,9 +1,9 @@
 // packages/inophone-library/tools/catalogue/city.mjs
-// Тема «Город» — шесть сцен, 72 понятия.
+// Тема «Город» — пять сцен, 60 понятий.
 //
-// Сцена «Магазин» ПЕРЕЕХАЛА в тему «Покупки»: ТЗ строка 97 требует «покупки»
-// именно темой, а не подтемой города, и на приёмке перечень тем сверяют
-// построчно.
+// Сцены «Магазин» и «Вокзал» ПЕРЕЕХАЛИ в темы «Покупки» и «Путешествие»: ТЗ
+// строка 97 требует их именно темами, а не подтемами города, и на приёмке
+// перечень тем сверяют построчно.
 //
 // Здесь сознательно много слов, которые инофону нужны В ПЕРВУЮ ОЧЕРЕДЬ:
 // «аптека», «остановка», «билет», «врач», «расписание». Пособие рассчитано не
@@ -85,24 +85,6 @@ export default {
         { id: 'kite',       ru: 'воздушный змей', en: 'kite',     fr: 'cerf-volant',  de: 'Drachen',      zh: '风筝', ba: 'осҡос' },
         { id: 'icecream',   ru: 'мороженое',  en: 'ice cream',    fr: 'glace',        de: 'Eis',          zh: '冰淇淋', ba: 'туңдырма' },
         { id: 'pigeon',     ru: 'голубь',     en: 'pigeon',       fr: 'pigeon',       de: 'Taube',        zh: '鸽子', ba: 'күгәрсен' },
-      ],
-    },
-    {
-      id: 'station',
-      titles: { ru: 'Вокзал', en: 'Station', fr: 'Gare', de: 'Bahnhof', zh: '火车站', ba: 'Вокзал' },
-      words: [
-        { id: 'train',      ru: 'поезд',      en: 'train',        fr: 'train',        de: 'Zug',          zh: '火车', ba: 'поезд' },
-        { id: 'platform',   ru: 'перрон',     en: 'platform',     fr: 'quai',         de: 'Bahnsteig',    zh: '站台', ba: 'перрон' },
-        { id: 'rails',      ru: 'рельсы',     en: 'rails',        fr: 'rails',        de: 'Gleise',       zh: '铁轨', ba: 'рельстар' },
-        { id: 'ticket',     ru: 'билет',      en: 'ticket',       fr: 'billet',       de: 'Fahrkarte',    zh: '车票', ba: 'билет' },
-        { id: 'suitcase',   ru: 'чемодан',    en: 'suitcase',     fr: 'valise',       de: 'Koffer',       zh: '行李箱', ba: 'чемодан' },
-        { id: 'schedule',   ru: 'табло',      en: 'departure board', fr: 'tableau des départs', de: 'Anzeigetafel', zh: '时刻表', ba: 'табло' },
-        { id: 'waitingroom',ru: 'зал ожидания', en: 'waiting room', fr: 'salle d’attente', de: 'Wartesaal', zh: '候车室', ba: 'көтөү залы' },
-        { id: 'conductor',  ru: 'проводник',  en: 'train conductor', fr: 'contrôleur',de: 'Schaffner',    zh: '列车员', ba: 'проводник' },
-        { id: 'luggage',    ru: 'багаж',      en: 'luggage',      fr: 'bagages',      de: 'Gepäck',       zh: '行李', ba: 'багаж' },
-        { id: 'clock_station', ru: 'вокзальные часы', en: 'station clock', fr: 'horloge de gare', de: 'Bahnhofsuhr', zh: '车站大钟', ba: 'вокзал сәғәте' },
-        { id: 'kiosk',      ru: 'киоск',      en: 'kiosk',        fr: 'kiosque',      de: 'Kiosk',        zh: '小卖部', ba: 'киоск' },
-        { id: 'bus',        ru: 'автобус',    en: 'bus',          fr: 'autobus',      de: 'Bus',          zh: '公共汽车', ba: 'автобус' },
       ],
     },
     {

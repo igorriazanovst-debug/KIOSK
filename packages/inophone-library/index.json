@@ -4,12 +4,12 @@
     {
       "id": "home",
       "titles": {
-        "ru": "Дом",
+        "ru": "Квартира",
         "en": "Home",
         "fr": "Maison",
         "de": "Zuhause",
         "zh": "家",
-        "ba": "Өй"
+        "ba": "Фатир"
       },
       "sceneIds": [
         "bedroom",
@@ -36,7 +36,6 @@
         "school",
         "hospital",
         "park",
-        "station",
         "cafe"
       ]
     },
@@ -72,6 +71,22 @@
         "food",
         "tableware",
         "family"
+      ]
+    },
+    {
+      "id": "travel",
+      "titles": {
+        "ru": "Путешествие",
+        "en": "Travel",
+        "fr": "Voyage",
+        "de": "Reise",
+        "zh": "旅行",
+        "ba": "Сәйәхәт"
+      },
+      "sceneIds": [
+        "station",
+        "airport",
+        "hotel"
       ]
     },
     {
@@ -845,71 +860,6 @@
       ]
     },
     {
-      "id": "station",
-      "titles": {
-        "ru": "Вокзал",
-        "en": "Station",
-        "fr": "Gare",
-        "de": "Bahnhof",
-        "zh": "火车站",
-        "ba": "Вокзал"
-      },
-      "viewBox": {
-        "width": 1280,
-        "height": 800
-      },
-      "hotspots": [
-        {
-          "conceptId": "train",
-          "points": "89,89 246,89 246,246 89,246"
-        },
-        {
-          "conceptId": "platform",
-          "points": "334,101 460,101 460,227 334,227"
-        },
-        {
-          "conceptId": "rails",
-          "points": "556,88 694,88 694,226 556,226"
-        },
-        {
-          "conceptId": "ticket",
-          "points": "819,110 950,110 950,241 819,241"
-        },
-        {
-          "conceptId": "suitcase",
-          "points": "1096,96 1221,96 1221,221 1096,221"
-        },
-        {
-          "conceptId": "schedule",
-          "points": "173,297 316,297 316,440 173,440"
-        },
-        {
-          "conceptId": "waitingroom",
-          "points": "368,297 563,297 563,492 368,492"
-        },
-        {
-          "conceptId": "conductor",
-          "points": "690,344 841,344 841,495 690,495"
-        },
-        {
-          "conceptId": "luggage",
-          "points": "1007,304 1164,304 1164,461 1007,461"
-        },
-        {
-          "conceptId": "clock_station",
-          "points": "108,598 264,598 264,754 108,754"
-        },
-        {
-          "conceptId": "kiosk",
-          "points": "597,592 755,592 755,750 597,750"
-        },
-        {
-          "conceptId": "bus",
-          "points": "1007,537 1218,537 1218,748 1007,748"
-        }
-      ]
-    },
-    {
       "id": "cafe",
       "titles": {
         "ru": "Кафе",
@@ -1491,6 +1441,201 @@
         {
           "conceptId": "guest",
           "points": "930,592 1086,592 1086,748 930,748"
+        }
+      ]
+    },
+    {
+      "id": "station",
+      "titles": {
+        "ru": "Вокзал",
+        "en": "Station",
+        "fr": "Gare",
+        "de": "Bahnhof",
+        "zh": "火车站",
+        "ba": "Вокзал"
+      },
+      "viewBox": {
+        "width": 1280,
+        "height": 800
+      },
+      "hotspots": [
+        {
+          "conceptId": "train",
+          "points": "89,89 246,89 246,246 89,246"
+        },
+        {
+          "conceptId": "platform",
+          "points": "334,101 460,101 460,227 334,227"
+        },
+        {
+          "conceptId": "rails",
+          "points": "556,88 694,88 694,226 556,226"
+        },
+        {
+          "conceptId": "ticket",
+          "points": "819,110 950,110 950,241 819,241"
+        },
+        {
+          "conceptId": "suitcase",
+          "points": "1096,96 1221,96 1221,221 1096,221"
+        },
+        {
+          "conceptId": "schedule",
+          "points": "173,297 316,297 316,440 173,440"
+        },
+        {
+          "conceptId": "waitingroom",
+          "points": "368,297 563,297 563,492 368,492"
+        },
+        {
+          "conceptId": "conductor",
+          "points": "690,344 841,344 841,495 690,495"
+        },
+        {
+          "conceptId": "luggage",
+          "points": "1007,304 1164,304 1164,461 1007,461"
+        },
+        {
+          "conceptId": "clock_station",
+          "points": "108,598 264,598 264,754 108,754"
+        },
+        {
+          "conceptId": "kiosk",
+          "points": "597,592 755,592 755,750 597,750"
+        },
+        {
+          "conceptId": "bus",
+          "points": "1007,537 1218,537 1218,748 1007,748"
+        }
+      ]
+    },
+    {
+      "id": "airport",
+      "titles": {
+        "ru": "Аэропорт",
+        "en": "Airport",
+        "fr": "Aéroport",
+        "de": "Flughafen",
+        "zh": "机场",
+        "ba": "Аэропорт"
+      },
+      "viewBox": {
+        "width": 1280,
+        "height": 800
+      },
+      "hotspots": [
+        {
+          "conceptId": "passport",
+          "points": "84,79 205,79 205,200 84,200"
+        },
+        {
+          "conceptId": "boardingpass",
+          "points": "312,128 433,128 433,249 312,249"
+        },
+        {
+          "conceptId": "checkin",
+          "points": "565,106 696,106 696,237 565,237"
+        },
+        {
+          "conceptId": "baggagebelt",
+          "points": "787,87 912,87 912,212 787,212"
+        },
+        {
+          "conceptId": "runway",
+          "points": "1024,125 1148,125 1148,249 1024,249"
+        },
+        {
+          "conceptId": "terminal",
+          "points": "156,306 302,306 302,452 156,452"
+        },
+        {
+          "conceptId": "stewardess",
+          "points": "395,335 558,335 558,498 395,498"
+        },
+        {
+          "conceptId": "porthole",
+          "points": "725,306 886,306 886,467 725,467"
+        },
+        {
+          "conceptId": "seatbelt",
+          "points": "1042,295 1200,295 1200,453 1042,453"
+        },
+        {
+          "conceptId": "travelbag",
+          "points": "111,541 282,541 282,712 111,712"
+        },
+        {
+          "conceptId": "customs",
+          "points": "526,567 689,567 689,730 526,730"
+        },
+        {
+          "conceptId": "scanner",
+          "points": "970,543 1131,543 1131,704 970,704"
+        }
+      ]
+    },
+    {
+      "id": "hotel",
+      "titles": {
+        "ru": "Гостиница",
+        "en": "Hotel",
+        "fr": "Hôtel",
+        "de": "Hotel",
+        "zh": "酒店",
+        "ba": "Ҡунаҡханә"
+      },
+      "viewBox": {
+        "width": 1280,
+        "height": 800
+      },
+      "hotspots": [
+        {
+          "conceptId": "reception",
+          "points": "79,79 204,79 204,204 79,204"
+        },
+        {
+          "conceptId": "keycard",
+          "points": "347,99 475,99 475,227 347,227"
+        },
+        {
+          "conceptId": "bellboy",
+          "points": "607,133 728,133 728,254 607,254"
+        },
+        {
+          "conceptId": "luggagecart",
+          "points": "831,106 953,106 953,228 831,228"
+        },
+        {
+          "conceptId": "safe",
+          "points": "1044,113 1182,113 1182,251 1044,251"
+        },
+        {
+          "conceptId": "minibar",
+          "points": "120,314 278,314 278,472 120,472"
+        },
+        {
+          "conceptId": "deskbell",
+          "points": "423,297 584,297 584,458 423,458"
+        },
+        {
+          "conceptId": "bathrobe",
+          "points": "715,345 854,345 854,484 715,484"
+        },
+        {
+          "conceptId": "hanger",
+          "points": "1030,298 1176,298 1176,444 1030,444"
+        },
+        {
+          "conceptId": "balcony",
+          "points": "141,584 295,584 295,738 141,738"
+        },
+        {
+          "conceptId": "roomnumber",
+          "points": "519,539 692,539 692,712 519,712"
+        },
+        {
+          "conceptId": "guidebook",
+          "points": "1032,556 1202,556 1202,726 1032,726"
         }
       ]
     },
@@ -6367,366 +6512,6 @@
       }
     },
     {
-      "id": "train",
-      "hasPicture": true,
-      "translations": {
-        "ru": {
-          "text": "поезд",
-          "hasAudio": true
-        },
-        "en": {
-          "text": "train",
-          "hasAudio": true
-        },
-        "fr": {
-          "text": "train",
-          "hasAudio": true
-        },
-        "de": {
-          "text": "Zug",
-          "hasAudio": true
-        },
-        "zh": {
-          "text": "火车",
-          "hasAudio": true
-        },
-        "ba": {
-          "text": "поезд",
-          "hasAudio": true
-        }
-      }
-    },
-    {
-      "id": "platform",
-      "hasPicture": true,
-      "translations": {
-        "ru": {
-          "text": "перрон",
-          "hasAudio": true
-        },
-        "en": {
-          "text": "platform",
-          "hasAudio": true
-        },
-        "fr": {
-          "text": "quai",
-          "hasAudio": true
-        },
-        "de": {
-          "text": "Bahnsteig",
-          "hasAudio": true
-        },
-        "zh": {
-          "text": "站台",
-          "hasAudio": true
-        },
-        "ba": {
-          "text": "перрон",
-          "hasAudio": true
-        }
-      }
-    },
-    {
-      "id": "rails",
-      "hasPicture": true,
-      "translations": {
-        "ru": {
-          "text": "рельсы",
-          "hasAudio": true
-        },
-        "en": {
-          "text": "rails",
-          "hasAudio": true
-        },
-        "fr": {
-          "text": "rails",
-          "hasAudio": true
-        },
-        "de": {
-          "text": "Gleise",
-          "hasAudio": true
-        },
-        "zh": {
-          "text": "铁轨",
-          "hasAudio": true
-        },
-        "ba": {
-          "text": "рельстар",
-          "hasAudio": true
-        }
-      }
-    },
-    {
-      "id": "ticket",
-      "hasPicture": true,
-      "translations": {
-        "ru": {
-          "text": "билет",
-          "hasAudio": true
-        },
-        "en": {
-          "text": "ticket",
-          "hasAudio": true
-        },
-        "fr": {
-          "text": "billet",
-          "hasAudio": true
-        },
-        "de": {
-          "text": "Fahrkarte",
-          "hasAudio": true
-        },
-        "zh": {
-          "text": "车票",
-          "hasAudio": true
-        },
-        "ba": {
-          "text": "билет",
-          "hasAudio": true
-        }
-      }
-    },
-    {
-      "id": "suitcase",
-      "hasPicture": true,
-      "translations": {
-        "ru": {
-          "text": "чемодан",
-          "hasAudio": true
-        },
-        "en": {
-          "text": "suitcase",
-          "hasAudio": true
-        },
-        "fr": {
-          "text": "valise",
-          "hasAudio": true
-        },
-        "de": {
-          "text": "Koffer",
-          "hasAudio": true
-        },
-        "zh": {
-          "text": "行李箱",
-          "hasAudio": true
-        },
-        "ba": {
-          "text": "чемодан",
-          "hasAudio": true
-        }
-      }
-    },
-    {
-      "id": "schedule",
-      "hasPicture": true,
-      "translations": {
-        "ru": {
-          "text": "табло",
-          "hasAudio": true
-        },
-        "en": {
-          "text": "departure board",
-          "hasAudio": true
-        },
-        "fr": {
-          "text": "tableau des départs",
-          "hasAudio": true
-        },
-        "de": {
-          "text": "Anzeigetafel",
-          "hasAudio": true
-        },
-        "zh": {
-          "text": "时刻表",
-          "hasAudio": true
-        },
-        "ba": {
-          "text": "табло",
-          "hasAudio": true
-        }
-      }
-    },
-    {
-      "id": "waitingroom",
-      "hasPicture": true,
-      "translations": {
-        "ru": {
-          "text": "зал ожидания",
-          "hasAudio": true
-        },
-        "en": {
-          "text": "waiting room",
-          "hasAudio": true
-        },
-        "fr": {
-          "text": "salle d’attente",
-          "hasAudio": true
-        },
-        "de": {
-          "text": "Wartesaal",
-          "hasAudio": true
-        },
-        "zh": {
-          "text": "候车室",
-          "hasAudio": true
-        },
-        "ba": {
-          "text": "көтөү залы",
-          "hasAudio": true
-        }
-      }
-    },
-    {
-      "id": "conductor",
-      "hasPicture": true,
-      "translations": {
-        "ru": {
-          "text": "проводник",
-          "hasAudio": true
-        },
-        "en": {
-          "text": "train conductor",
-          "hasAudio": true
-        },
-        "fr": {
-          "text": "contrôleur",
-          "hasAudio": true
-        },
-        "de": {
-          "text": "Schaffner",
-          "hasAudio": true
-        },
-        "zh": {
-          "text": "列车员",
-          "hasAudio": true
-        },
-        "ba": {
-          "text": "проводник",
-          "hasAudio": true
-        }
-      }
-    },
-    {
-      "id": "luggage",
-      "hasPicture": true,
-      "translations": {
-        "ru": {
-          "text": "багаж",
-          "hasAudio": true
-        },
-        "en": {
-          "text": "luggage",
-          "hasAudio": true
-        },
-        "fr": {
-          "text": "bagages",
-          "hasAudio": true
-        },
-        "de": {
-          "text": "Gepäck",
-          "hasAudio": true
-        },
-        "zh": {
-          "text": "行李",
-          "hasAudio": true
-        },
-        "ba": {
-          "text": "багаж",
-          "hasAudio": true
-        }
-      }
-    },
-    {
-      "id": "clock_station",
-      "hasPicture": true,
-      "translations": {
-        "ru": {
-          "text": "вокзальные часы",
-          "hasAudio": true
-        },
-        "en": {
-          "text": "station clock",
-          "hasAudio": true
-        },
-        "fr": {
-          "text": "horloge de gare",
-          "hasAudio": true
-        },
-        "de": {
-          "text": "Bahnhofsuhr",
-          "hasAudio": true
-        },
-        "zh": {
-          "text": "车站大钟",
-          "hasAudio": true
-        },
-        "ba": {
-          "text": "вокзал сәғәте",
-          "hasAudio": true
-        }
-      }
-    },
-    {
-      "id": "kiosk",
-      "hasPicture": true,
-      "translations": {
-        "ru": {
-          "text": "киоск",
-          "hasAudio": true
-        },
-        "en": {
-          "text": "kiosk",
-          "hasAudio": true
-        },
-        "fr": {
-          "text": "kiosque",
-          "hasAudio": true
-        },
-        "de": {
-          "text": "Kiosk",
-          "hasAudio": true
-        },
-        "zh": {
-          "text": "小卖部",
-          "hasAudio": true
-        },
-        "ba": {
-          "text": "киоск",
-          "hasAudio": true
-        }
-      }
-    },
-    {
-      "id": "bus",
-      "hasPicture": true,
-      "translations": {
-        "ru": {
-          "text": "автобус",
-          "hasAudio": true
-        },
-        "en": {
-          "text": "bus",
-          "hasAudio": true
-        },
-        "fr": {
-          "text": "autobus",
-          "hasAudio": true
-        },
-        "de": {
-          "text": "Bus",
-          "hasAudio": true
-        },
-        "zh": {
-          "text": "公共汽车",
-          "hasAudio": true
-        },
-        "ba": {
-          "text": "автобус",
-          "hasAudio": true
-        }
-      }
-    },
-    {
       "id": "menu",
       "hasPicture": true,
       "translations": {
@@ -9962,6 +9747,1086 @@
         },
         "ba": {
           "text": "ҡунаҡ",
+          "hasAudio": true
+        }
+      }
+    },
+    {
+      "id": "train",
+      "hasPicture": true,
+      "translations": {
+        "ru": {
+          "text": "поезд",
+          "hasAudio": true
+        },
+        "en": {
+          "text": "train",
+          "hasAudio": true
+        },
+        "fr": {
+          "text": "train",
+          "hasAudio": true
+        },
+        "de": {
+          "text": "Zug",
+          "hasAudio": true
+        },
+        "zh": {
+          "text": "火车",
+          "hasAudio": true
+        },
+        "ba": {
+          "text": "поезд",
+          "hasAudio": true
+        }
+      }
+    },
+    {
+      "id": "platform",
+      "hasPicture": true,
+      "translations": {
+        "ru": {
+          "text": "перрон",
+          "hasAudio": true
+        },
+        "en": {
+          "text": "platform",
+          "hasAudio": true
+        },
+        "fr": {
+          "text": "quai",
+          "hasAudio": true
+        },
+        "de": {
+          "text": "Bahnsteig",
+          "hasAudio": true
+        },
+        "zh": {
+          "text": "站台",
+          "hasAudio": true
+        },
+        "ba": {
+          "text": "перрон",
+          "hasAudio": true
+        }
+      }
+    },
+    {
+      "id": "rails",
+      "hasPicture": true,
+      "translations": {
+        "ru": {
+          "text": "рельсы",
+          "hasAudio": true
+        },
+        "en": {
+          "text": "rails",
+          "hasAudio": true
+        },
+        "fr": {
+          "text": "rails",
+          "hasAudio": true
+        },
+        "de": {
+          "text": "Gleise",
+          "hasAudio": true
+        },
+        "zh": {
+          "text": "铁轨",
+          "hasAudio": true
+        },
+        "ba": {
+          "text": "рельстар",
+          "hasAudio": true
+        }
+      }
+    },
+    {
+      "id": "ticket",
+      "hasPicture": true,
+      "translations": {
+        "ru": {
+          "text": "билет",
+          "hasAudio": true
+        },
+        "en": {
+          "text": "ticket",
+          "hasAudio": true
+        },
+        "fr": {
+          "text": "billet",
+          "hasAudio": true
+        },
+        "de": {
+          "text": "Fahrkarte",
+          "hasAudio": true
+        },
+        "zh": {
+          "text": "车票",
+          "hasAudio": true
+        },
+        "ba": {
+          "text": "билет",
+          "hasAudio": true
+        }
+      }
+    },
+    {
+      "id": "suitcase",
+      "hasPicture": true,
+      "translations": {
+        "ru": {
+          "text": "чемодан",
+          "hasAudio": true
+        },
+        "en": {
+          "text": "suitcase",
+          "hasAudio": true
+        },
+        "fr": {
+          "text": "valise",
+          "hasAudio": true
+        },
+        "de": {
+          "text": "Koffer",
+          "hasAudio": true
+        },
+        "zh": {
+          "text": "行李箱",
+          "hasAudio": true
+        },
+        "ba": {
+          "text": "чемодан",
+          "hasAudio": true
+        }
+      }
+    },
+    {
+      "id": "schedule",
+      "hasPicture": true,
+      "translations": {
+        "ru": {
+          "text": "табло",
+          "hasAudio": true
+        },
+        "en": {
+          "text": "departure board",
+          "hasAudio": true
+        },
+        "fr": {
+          "text": "tableau des départs",
+          "hasAudio": true
+        },
+        "de": {
+          "text": "Anzeigetafel",
+          "hasAudio": true
+        },
+        "zh": {
+          "text": "时刻表",
+          "hasAudio": true
+        },
+        "ba": {
+          "text": "табло",
+          "hasAudio": true
+        }
+      }
+    },
+    {
+      "id": "waitingroom",
+      "hasPicture": true,
+      "translations": {
+        "ru": {
+          "text": "зал ожидания",
+          "hasAudio": true
+        },
+        "en": {
+          "text": "waiting room",
+          "hasAudio": true
+        },
+        "fr": {
+          "text": "salle d’attente",
+          "hasAudio": true
+        },
+        "de": {
+          "text": "Wartesaal",
+          "hasAudio": true
+        },
+        "zh": {
+          "text": "候车室",
+          "hasAudio": true
+        },
+        "ba": {
+          "text": "көтөү залы",
+          "hasAudio": true
+        }
+      }
+    },
+    {
+      "id": "conductor",
+      "hasPicture": true,
+      "translations": {
+        "ru": {
+          "text": "проводник",
+          "hasAudio": true
+        },
+        "en": {
+          "text": "train conductor",
+          "hasAudio": true
+        },
+        "fr": {
+          "text": "contrôleur",
+          "hasAudio": true
+        },
+        "de": {
+          "text": "Schaffner",
+          "hasAudio": true
+        },
+        "zh": {
+          "text": "列车员",
+          "hasAudio": true
+        },
+        "ba": {
+          "text": "проводник",
+          "hasAudio": true
+        }
+      }
+    },
+    {
+      "id": "luggage",
+      "hasPicture": true,
+      "translations": {
+        "ru": {
+          "text": "багаж",
+          "hasAudio": true
+        },
+        "en": {
+          "text": "luggage",
+          "hasAudio": true
+        },
+        "fr": {
+          "text": "bagages",
+          "hasAudio": true
+        },
+        "de": {
+          "text": "Gepäck",
+          "hasAudio": true
+        },
+        "zh": {
+          "text": "行李",
+          "hasAudio": true
+        },
+        "ba": {
+          "text": "багаж",
+          "hasAudio": true
+        }
+      }
+    },
+    {
+      "id": "clock_station",
+      "hasPicture": true,
+      "translations": {
+        "ru": {
+          "text": "вокзальные часы",
+          "hasAudio": true
+        },
+        "en": {
+          "text": "station clock",
+          "hasAudio": true
+        },
+        "fr": {
+          "text": "horloge de gare",
+          "hasAudio": true
+        },
+        "de": {
+          "text": "Bahnhofsuhr",
+          "hasAudio": true
+        },
+        "zh": {
+          "text": "车站大钟",
+          "hasAudio": true
+        },
+        "ba": {
+          "text": "вокзал сәғәте",
+          "hasAudio": true
+        }
+      }
+    },
+    {
+      "id": "kiosk",
+      "hasPicture": true,
+      "translations": {
+        "ru": {
+          "text": "киоск",
+          "hasAudio": true
+        },
+        "en": {
+          "text": "kiosk",
+          "hasAudio": true
+        },
+        "fr": {
+          "text": "kiosque",
+          "hasAudio": true
+        },
+        "de": {
+          "text": "Kiosk",
+          "hasAudio": true
+        },
+        "zh": {
+          "text": "小卖部",
+          "hasAudio": true
+        },
+        "ba": {
+          "text": "киоск",
+          "hasAudio": true
+        }
+      }
+    },
+    {
+      "id": "bus",
+      "hasPicture": true,
+      "translations": {
+        "ru": {
+          "text": "автобус",
+          "hasAudio": true
+        },
+        "en": {
+          "text": "bus",
+          "hasAudio": true
+        },
+        "fr": {
+          "text": "autobus",
+          "hasAudio": true
+        },
+        "de": {
+          "text": "Bus",
+          "hasAudio": true
+        },
+        "zh": {
+          "text": "公共汽车",
+          "hasAudio": true
+        },
+        "ba": {
+          "text": "автобус",
+          "hasAudio": true
+        }
+      }
+    },
+    {
+      "id": "passport",
+      "hasPicture": true,
+      "translations": {
+        "ru": {
+          "text": "паспорт",
+          "hasAudio": true
+        },
+        "en": {
+          "text": "passport",
+          "hasAudio": true
+        },
+        "fr": {
+          "text": "passeport",
+          "hasAudio": true
+        },
+        "de": {
+          "text": "Reisepass",
+          "hasAudio": true
+        },
+        "zh": {
+          "text": "护照",
+          "hasAudio": true
+        },
+        "ba": {
+          "text": "паспорт",
+          "hasAudio": true
+        }
+      }
+    },
+    {
+      "id": "boardingpass",
+      "hasPicture": true,
+      "translations": {
+        "ru": {
+          "text": "посадочный талон",
+          "hasAudio": true
+        },
+        "en": {
+          "text": "boarding pass",
+          "hasAudio": true
+        },
+        "fr": {
+          "text": "carte d’embarquement",
+          "hasAudio": true
+        },
+        "de": {
+          "text": "Bordkarte",
+          "hasAudio": true
+        },
+        "zh": {
+          "text": "登机牌",
+          "hasAudio": true
+        },
+        "ba": {
+          "text": "ултырыу талоны",
+          "hasAudio": true
+        }
+      }
+    },
+    {
+      "id": "checkin",
+      "hasPicture": true,
+      "translations": {
+        "ru": {
+          "text": "стойка регистрации",
+          "hasAudio": true
+        },
+        "en": {
+          "text": "check-in desk",
+          "hasAudio": true
+        },
+        "fr": {
+          "text": "comptoir d’enregistrement",
+          "hasAudio": true
+        },
+        "de": {
+          "text": "Check-in-Schalter",
+          "hasAudio": true
+        },
+        "zh": {
+          "text": "值机柜台",
+          "hasAudio": true
+        },
+        "ba": {
+          "text": "теркәлеү урыны",
+          "hasAudio": true
+        }
+      }
+    },
+    {
+      "id": "baggagebelt",
+      "hasPicture": true,
+      "translations": {
+        "ru": {
+          "text": "багажная лента",
+          "hasAudio": true
+        },
+        "en": {
+          "text": "baggage belt",
+          "hasAudio": true
+        },
+        "fr": {
+          "text": "tapis à bagages",
+          "hasAudio": true
+        },
+        "de": {
+          "text": "Gepäckband",
+          "hasAudio": true
+        },
+        "zh": {
+          "text": "行李传送带",
+          "hasAudio": true
+        },
+        "ba": {
+          "text": "багаж таҫмаһы",
+          "hasAudio": true
+        }
+      }
+    },
+    {
+      "id": "runway",
+      "hasPicture": true,
+      "translations": {
+        "ru": {
+          "text": "взлётная полоса",
+          "hasAudio": true
+        },
+        "en": {
+          "text": "runway",
+          "hasAudio": true
+        },
+        "fr": {
+          "text": "piste",
+          "hasAudio": true
+        },
+        "de": {
+          "text": "Startbahn",
+          "hasAudio": true
+        },
+        "zh": {
+          "text": "跑道",
+          "hasAudio": true
+        },
+        "ba": {
+          "text": "осоу юлы",
+          "hasAudio": true
+        }
+      }
+    },
+    {
+      "id": "terminal",
+      "hasPicture": true,
+      "translations": {
+        "ru": {
+          "text": "терминал",
+          "hasAudio": true
+        },
+        "en": {
+          "text": "terminal",
+          "hasAudio": true
+        },
+        "fr": {
+          "text": "terminal",
+          "hasAudio": true
+        },
+        "de": {
+          "text": "Terminal",
+          "hasAudio": true
+        },
+        "zh": {
+          "text": "航站楼",
+          "hasAudio": true
+        },
+        "ba": {
+          "text": "терминал",
+          "hasAudio": true
+        }
+      }
+    },
+    {
+      "id": "stewardess",
+      "hasPicture": true,
+      "translations": {
+        "ru": {
+          "text": "стюардесса",
+          "hasAudio": true
+        },
+        "en": {
+          "text": "flight attendant",
+          "hasAudio": true
+        },
+        "fr": {
+          "text": "hôtesse de l’air",
+          "hasAudio": true
+        },
+        "de": {
+          "text": "Flugbegleiterin",
+          "hasAudio": true
+        },
+        "zh": {
+          "text": "空乘",
+          "hasAudio": true
+        },
+        "ba": {
+          "text": "стюардесса",
+          "hasAudio": true
+        }
+      }
+    },
+    {
+      "id": "porthole",
+      "hasPicture": true,
+      "translations": {
+        "ru": {
+          "text": "иллюминатор",
+          "hasAudio": true
+        },
+        "en": {
+          "text": "cabin window",
+          "hasAudio": true
+        },
+        "fr": {
+          "text": "hublot",
+          "hasAudio": true
+        },
+        "de": {
+          "text": "Kabinenfenster",
+          "hasAudio": true
+        },
+        "zh": {
+          "text": "舷窗",
+          "hasAudio": true
+        },
+        "ba": {
+          "text": "иллюминатор",
+          "hasAudio": true
+        }
+      }
+    },
+    {
+      "id": "seatbelt",
+      "hasPicture": true,
+      "translations": {
+        "ru": {
+          "text": "ремень безопасности",
+          "hasAudio": true
+        },
+        "en": {
+          "text": "seat belt",
+          "hasAudio": true
+        },
+        "fr": {
+          "text": "ceinture de sécurité",
+          "hasAudio": true
+        },
+        "de": {
+          "text": "Sicherheitsgurt",
+          "hasAudio": true
+        },
+        "zh": {
+          "text": "安全带",
+          "hasAudio": true
+        },
+        "ba": {
+          "text": "хәүефһеҙлек ҡайышы",
+          "hasAudio": true
+        }
+      }
+    },
+    {
+      "id": "travelbag",
+      "hasPicture": true,
+      "translations": {
+        "ru": {
+          "text": "дорожная сумка",
+          "hasAudio": true
+        },
+        "en": {
+          "text": "travel bag",
+          "hasAudio": true
+        },
+        "fr": {
+          "text": "sac de voyage",
+          "hasAudio": true
+        },
+        "de": {
+          "text": "Reisetasche",
+          "hasAudio": true
+        },
+        "zh": {
+          "text": "旅行包",
+          "hasAudio": true
+        },
+        "ba": {
+          "text": "юл сумкаһы",
+          "hasAudio": true
+        }
+      }
+    },
+    {
+      "id": "customs",
+      "hasPicture": true,
+      "translations": {
+        "ru": {
+          "text": "таможня",
+          "hasAudio": true
+        },
+        "en": {
+          "text": "customs",
+          "hasAudio": true
+        },
+        "fr": {
+          "text": "douane",
+          "hasAudio": true
+        },
+        "de": {
+          "text": "Zoll",
+          "hasAudio": true
+        },
+        "zh": {
+          "text": "海关",
+          "hasAudio": true
+        },
+        "ba": {
+          "text": "таможня",
+          "hasAudio": true
+        }
+      }
+    },
+    {
+      "id": "scanner",
+      "hasPicture": true,
+      "translations": {
+        "ru": {
+          "text": "рамка металлоискателя",
+          "hasAudio": true
+        },
+        "en": {
+          "text": "metal detector",
+          "hasAudio": true
+        },
+        "fr": {
+          "text": "portique de sécurité",
+          "hasAudio": true
+        },
+        "de": {
+          "text": "Metalldetektor",
+          "hasAudio": true
+        },
+        "zh": {
+          "text": "安检门",
+          "hasAudio": true
+        },
+        "ba": {
+          "text": "металл табыу рамкаһы",
+          "hasAudio": true
+        }
+      }
+    },
+    {
+      "id": "reception",
+      "hasPicture": true,
+      "translations": {
+        "ru": {
+          "text": "стойка администратора",
+          "hasAudio": true
+        },
+        "en": {
+          "text": "reception desk",
+          "hasAudio": true
+        },
+        "fr": {
+          "text": "réception",
+          "hasAudio": true
+        },
+        "de": {
+          "text": "Rezeption",
+          "hasAudio": true
+        },
+        "zh": {
+          "text": "前台",
+          "hasAudio": true
+        },
+        "ba": {
+          "text": "администратор урыны",
+          "hasAudio": true
+        }
+      }
+    },
+    {
+      "id": "keycard",
+      "hasPicture": true,
+      "translations": {
+        "ru": {
+          "text": "карта-ключ",
+          "hasAudio": true
+        },
+        "en": {
+          "text": "key card",
+          "hasAudio": true
+        },
+        "fr": {
+          "text": "carte-clé",
+          "hasAudio": true
+        },
+        "de": {
+          "text": "Schlüsselkarte",
+          "hasAudio": true
+        },
+        "zh": {
+          "text": "房卡",
+          "hasAudio": true
+        },
+        "ba": {
+          "text": "асҡыс картаһы",
+          "hasAudio": true
+        }
+      }
+    },
+    {
+      "id": "bellboy",
+      "hasPicture": true,
+      "translations": {
+        "ru": {
+          "text": "носильщик",
+          "hasAudio": true
+        },
+        "en": {
+          "text": "porter",
+          "hasAudio": true
+        },
+        "fr": {
+          "text": "bagagiste",
+          "hasAudio": true
+        },
+        "de": {
+          "text": "Gepäckträger",
+          "hasAudio": true
+        },
+        "zh": {
+          "text": "行李员",
+          "hasAudio": true
+        },
+        "ba": {
+          "text": "йөк ташыусы",
+          "hasAudio": true
+        }
+      }
+    },
+    {
+      "id": "luggagecart",
+      "hasPicture": true,
+      "translations": {
+        "ru": {
+          "text": "тележка для багажа",
+          "hasAudio": true
+        },
+        "en": {
+          "text": "luggage cart",
+          "hasAudio": true
+        },
+        "fr": {
+          "text": "chariot à bagages",
+          "hasAudio": true
+        },
+        "de": {
+          "text": "Gepäckwagen",
+          "hasAudio": true
+        },
+        "zh": {
+          "text": "行李车",
+          "hasAudio": true
+        },
+        "ba": {
+          "text": "багаж арбаһы",
+          "hasAudio": true
+        }
+      }
+    },
+    {
+      "id": "safe",
+      "hasPicture": true,
+      "translations": {
+        "ru": {
+          "text": "сейф",
+          "hasAudio": true
+        },
+        "en": {
+          "text": "safe",
+          "hasAudio": true
+        },
+        "fr": {
+          "text": "coffre-fort",
+          "hasAudio": true
+        },
+        "de": {
+          "text": "Safe",
+          "hasAudio": true
+        },
+        "zh": {
+          "text": "保险箱",
+          "hasAudio": true
+        },
+        "ba": {
+          "text": "сейф",
+          "hasAudio": true
+        }
+      }
+    },
+    {
+      "id": "minibar",
+      "hasPicture": true,
+      "translations": {
+        "ru": {
+          "text": "мини-бар",
+          "hasAudio": true
+        },
+        "en": {
+          "text": "minibar",
+          "hasAudio": true
+        },
+        "fr": {
+          "text": "minibar",
+          "hasAudio": true
+        },
+        "de": {
+          "text": "Minibar",
+          "hasAudio": true
+        },
+        "zh": {
+          "text": "迷你吧",
+          "hasAudio": true
+        },
+        "ba": {
+          "text": "мини-бар",
+          "hasAudio": true
+        }
+      }
+    },
+    {
+      "id": "deskbell",
+      "hasPicture": true,
+      "translations": {
+        "ru": {
+          "text": "звонок на стойке",
+          "hasAudio": true
+        },
+        "en": {
+          "text": "service bell",
+          "hasAudio": true
+        },
+        "fr": {
+          "text": "sonnette de comptoir",
+          "hasAudio": true
+        },
+        "de": {
+          "text": "Tischglocke",
+          "hasAudio": true
+        },
+        "zh": {
+          "text": "服务铃",
+          "hasAudio": true
+        },
+        "ba": {
+          "text": "өҫтәл ҡыңғырауы",
+          "hasAudio": true
+        }
+      }
+    },
+    {
+      "id": "bathrobe",
+      "hasPicture": true,
+      "translations": {
+        "ru": {
+          "text": "халат",
+          "hasAudio": true
+        },
+        "en": {
+          "text": "bathrobe",
+          "hasAudio": true
+        },
+        "fr": {
+          "text": "peignoir",
+          "hasAudio": true
+        },
+        "de": {
+          "text": "Bademantel",
+          "hasAudio": true
+        },
+        "zh": {
+          "text": "浴袍",
+          "hasAudio": true
+        },
+        "ba": {
+          "text": "халат",
+          "hasAudio": true
+        }
+      }
+    },
+    {
+      "id": "hanger",
+      "hasPicture": true,
+      "translations": {
+        "ru": {
+          "text": "плечики",
+          "hasAudio": true
+        },
+        "en": {
+          "text": "clothes hanger",
+          "hasAudio": true
+        },
+        "fr": {
+          "text": "cintre",
+          "hasAudio": true
+        },
+        "de": {
+          "text": "Kleiderbügel",
+          "hasAudio": true
+        },
+        "zh": {
+          "text": "衣架子",
+          "hasAudio": true
+        },
+        "ba": {
+          "text": "кейем элгесе",
+          "hasAudio": true
+        }
+      }
+    },
+    {
+      "id": "balcony",
+      "hasPicture": true,
+      "translations": {
+        "ru": {
+          "text": "балкон",
+          "hasAudio": true
+        },
+        "en": {
+          "text": "balcony",
+          "hasAudio": true
+        },
+        "fr": {
+          "text": "balcon",
+          "hasAudio": true
+        },
+        "de": {
+          "text": "Balkon",
+          "hasAudio": true
+        },
+        "zh": {
+          "text": "阳台",
+          "hasAudio": true
+        },
+        "ba": {
+          "text": "балкон",
+          "hasAudio": true
+        }
+      }
+    },
+    {
+      "id": "roomnumber",
+      "hasPicture": true,
+      "translations": {
+        "ru": {
+          "text": "номер на двери",
+          "hasAudio": true
+        },
+        "en": {
+          "text": "room number",
+          "hasAudio": true
+        },
+        "fr": {
+          "text": "numéro de chambre",
+          "hasAudio": true
+        },
+        "de": {
+          "text": "Zimmernummer",
+          "hasAudio": true
+        },
+        "zh": {
+          "text": "门牌号",
+          "hasAudio": true
+        },
+        "ba": {
+          "text": "ишектәге һан",
+          "hasAudio": true
+        }
+      }
+    },
+    {
+      "id": "guidebook",
+      "hasPicture": true,
+      "translations": {
+        "ru": {
+          "text": "путеводитель",
+          "hasAudio": true
+        },
+        "en": {
+          "text": "guidebook",
+          "hasAudio": true
+        },
+        "fr": {
+          "text": "guide touristique",
+          "hasAudio": true
+        },
+        "de": {
+          "text": "Reiseführer",
+          "hasAudio": true
+        },
+        "zh": {
+          "text": "旅游指南",
+          "hasAudio": true
+        },
+        "ba": {
+          "text": "юл күрһәткесе",
           "hasAudio": true
         }
       }
