@@ -201,6 +201,21 @@ test('ChimiqUserDataSchema defaults activeQuizId and teacherPinHash to null', ()
   }
 });
 
+// boardZoomed - находка 2026-09-15 (предложение пользователя «сохранить выбор
+// Крупнее между партиями»): без явного поля в userData кнопка «Крупнее»
+// сбрасывалась при каждой новой игре.
+test('ChimiqUserDataSchema defaults boardZoomed to false', () => {
+  const result = ChimiqUserDataSchema.safeParse({ schemaVersion: CHIMIQ_USERDATA_SCHEMA_VERSION, sessions: [] });
+  assert.equal(result.success, true);
+  if (result.success) assert.equal(result.data.boardZoomed, false);
+});
+
+test('ChimiqUserDataSchema accepts an explicit boardZoomed', () => {
+  const result = ChimiqUserDataSchema.safeParse({ schemaVersion: CHIMIQ_USERDATA_SCHEMA_VERSION, sessions: [], boardZoomed: true });
+  assert.equal(result.success, true);
+  if (result.success) assert.equal(result.data.boardZoomed, true);
+});
+
 test('ChimiqUserDataSchema accepts an explicit activeQuizId and teacherPinHash', () => {
   const result = ChimiqUserDataSchema.safeParse({
     schemaVersion: CHIMIQ_USERDATA_SCHEMA_VERSION,

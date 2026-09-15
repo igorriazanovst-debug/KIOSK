@@ -14,6 +14,7 @@ const FALLBACK: ChimiqUserData = {
   schemaVersion: CHIMIQ_USERDATA_SCHEMA_VERSION,
   sessions: [],
   soundOn: true,
+  boardZoomed: false,
   activeQuizId: null,
   teacherPinHash: null,
 };

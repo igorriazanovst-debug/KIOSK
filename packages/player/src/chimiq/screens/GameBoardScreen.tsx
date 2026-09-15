@@ -3,6 +3,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import type { ChimiqPoint, ChimiqQuestion } from '../model/schema.ts';
 import { scoreForAnswer, nextTurn, buildBoardTiles, type ChimiqAnswerEvent, type ChimiqBoardTile } from '../gameLogic.ts';
 import { chimiqItemImageUrl } from '../chimiqMediaUrl.ts';
+import { playCorrectTone, playWrongTone } from '../sound.ts';
 import '../chimiqTheme.css';
 
 interface Props {
@@ -14,6 +15,13 @@ interface Props {
   levelQuestions: ChimiqQuestion[];
   genericDecoyPoints: ChimiqPoint[];
   onFinished: (answers: ChimiqAnswerEvent[]) => void;
+  soundOn: boolean;
+  onSoundToggle: () => void;
+  // Настройка «Крупнее» хранится в userData (ChimiqRuntime) и переживает
+  // новую партию - без этого пропа она сбрасывалась бы при каждом заходе
+  // на игровое поле (находка/предложение пользователя 2026-09-15).
+  initialZoomed: boolean;
+  onZoomedChange: (zoomed: boolean) => void;
 }
 
 // Прямая адаптация rusiq/screens/GameBoardScreen.tsx (Тип 7) — те же
@@ -34,7 +42,20 @@ const FEEDBACK_CORRECT_COLOR = 'rgba(62, 207, 126, 0.85)';
 const FEEDBACK_WRONG_COLOR = 'rgba(255, 107, 107, 0.85)';
 const FEEDBACK_DURATION_MS = 900;
 
-const GameBoardScreen: React.FC<Props> = ({ imageUrl, imageWidth, imageHeight, playerNames, questionsByPlayer, levelQuestions, genericDecoyPoints, onFinished }) => {
+const GameBoardScreen: React.FC<Props> = ({
+  imageUrl,
+  imageWidth,
+  imageHeight,
+  playerNames,
+  questionsByPlayer,
+  levelQuestions,
+  genericDecoyPoints,
+  onFinished,
+  soundOn,
+  onSoundToggle,
+  initialZoomed,
+  onZoomedChange,
+}) => {
   const [currentPlayer, setCurrentPlayer] = useState(0);
   const [questionIndexByPlayer, setQuestionIndexByPlayer] = useState<number[]>(() => playerNames.map(() => 0));
   const [elapsed, setElapsed] = useState(0);
@@ -49,7 +70,15 @@ const GameBoardScreen: React.FC<Props> = ({ imageUrl, imageWidth, imageHeight, p
   // расстояния экрана киоска. Кнопка «Крупнее» отображает картинку и
   // точки в её натуральном (или крупнее) пиксельном размере вместо
   // подогнанного под окно — поле становится прокручиваемым.
-  const [zoomed, setZoomed] = useState(false);
+  const [zoomed, setZoomed] = useState(initialZoomed);
+
+  function toggleZoomed() {
+    setZoomed((z) => {
+      const next = !z;
+      onZoomedChange(next);
+      return next;
+    });
+  }
 
   const hasAnsweredRef = useRef(false);
   const feedbackTimeoutRef = useRef<number | null>(null);
@@ -101,6 +130,7 @@ const GameBoardScreen: React.FC<Props> = ({ imageUrl, imageWidth, imageHeight, p
     hasAnsweredRef.current = true;
     const correct = tile.isCorrect;
     const score = correct ? scoreForAnswer(currentQuestion.price, currentQuestion.timeSeconds, elapsed, true) : 0;
+    if (soundOn) (correct ? playCorrectTone : playWrongTone)();
     setFeedback({ key: tile.key, correct });
     feedbackTimeoutRef.current = window.setTimeout(() => {
       setFeedback(null);
@@ -178,8 +208,11 @@ const GameBoardScreen: React.FC<Props> = ({ imageUrl, imageWidth, imageHeight, p
           <span className="ciq-scoreboard-item">
             Очки сейчас: <strong>{liveScore}</strong>
           </span>
-          <button onClick={() => setZoomed((z) => !z)} className="ciq-btn ciq-btn-ghost ciq-btn-small" aria-pressed={zoomed}>
+          <button onClick={toggleZoomed} className="ciq-btn ciq-btn-ghost ciq-btn-small" aria-pressed={zoomed}>
             {zoomed ? 'Обычный размер' : '🔍 Крупнее'}
+          </button>
+          <button onClick={onSoundToggle} className="ciq-btn ciq-btn-ghost ciq-btn-small" aria-pressed={soundOn}>
+            {soundOn ? '🔊 Звук' : '🔇 Звук выкл.'}
           </button>
           <button onClick={handleGiveUp} className="ciq-btn ciq-btn-danger ciq-btn-small">
             Сдаюсь

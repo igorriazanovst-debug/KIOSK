@@ -186,6 +186,11 @@ export const ChimiqUserDataSchema = z.object({
   schemaVersion: z.literal(CHIMIQ_USERDATA_SCHEMA_VERSION),
   sessions: z.array(ChimiqSessionSchema).default([]),
   soundOn: z.boolean().default(true),
+  // Предпочтение «Крупнее» на игровом поле, сохраняется между партиями (по
+  // предложению пользователя 2026-09-15) - без этого поля кнопка сбрасывалась
+  // при каждой новой игре, и тому, кому нужен крупный текст, приходилось
+  // включать её заново каждый раз.
+  boardZoomed: z.boolean().default(false),
   // null = играется встроенная методическая викторина «Химия», не magic-id.
   activeQuizId: z.string().nullable().default(null),
   // null = пароль режима учителя ещё не задан.

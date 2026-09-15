@@ -44,6 +44,7 @@ const INITIAL_USER_DATA: ChimiqUserData = {
   schemaVersion: CHIMIQ_USERDATA_SCHEMA_VERSION,
   sessions: [],
   soundOn: true,
+  boardZoomed: false,
   activeQuizId: null,
   teacherPinHash: null,
 };
@@ -104,6 +105,16 @@ export default function ChimiqRuntime({ properties }: Props) {
       setUserData(updated);
       saveUserData(updated);
     }
+  }
+
+  // Общий обработчик для настроек игрового поля, которые должны пережить
+  // перезапуск и новую партию (звук, «Крупнее») - тот же принцип, что уже
+  // применяется к teacherPinHash ниже: правка одного поля userData не
+  // должна требовать отдельного обработчика на каждую настройку.
+  function handleBoardPreferenceChange(patch: Partial<Pick<ChimiqUserData, 'soundOn' | 'boardZoomed'>>) {
+    const updated: ChimiqUserData = { ...userData, ...patch };
+    setUserData(updated);
+    saveUserData(updated);
   }
 
   function handleRestart() {
@@ -194,6 +205,10 @@ export default function ChimiqRuntime({ properties }: Props) {
         levelQuestions={levelQuestions}
         genericDecoyPoints={decoyPoints}
         onFinished={handleGameFinished}
+        soundOn={userData.soundOn}
+        onSoundToggle={() => handleBoardPreferenceChange({ soundOn: !userData.soundOn })}
+        initialZoomed={userData.boardZoomed}
+        onZoomedChange={(zoomed) => handleBoardPreferenceChange({ boardZoomed: zoomed })}
       />
     );
   }
