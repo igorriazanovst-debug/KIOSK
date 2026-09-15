@@ -13,6 +13,7 @@ import { isEmailAllowedForWords, projectDataHasWordsWidget } from '../config/wor
 import { isEmailAllowedForAlphabet, projectDataHasAlphabetWidget } from '../config/alphabetAccess';
 import { isEmailAllowedForChimiq, projectDataHasChimiqWidget } from '../config/chimiqAccess';
 import { isEmailAllowedForInophone, projectDataHasInophoneWidget } from '../config/inophoneAccess';
+import { isEmailAllowedForBioiq, projectDataHasBioiqWidget } from '../config/bioiqAccess';
 import multer from 'multer';
 import path from 'path';
 
@@ -260,6 +261,10 @@ export class ProjectController {
         return res.status(403).json({
           error: 'Inophone widget not allowed',
           message: 'Виджет «Инофон» пока недоступен для этого аккаунта'
+      if (projectDataHasBioiqWidget(projectData) && !isEmailAllowedForBioiq(req.client.email)) {
+        return res.status(403).json({
+          error: 'BioIQ widget not allowed',
+          message: 'Виджет «БиоIQ» пока недоступен для этого аккаунта'
         });
       }
 
@@ -492,6 +497,12 @@ export class ProjectController {
         return res.status(403).json({
           error: 'Inophone widget not allowed',
           message: 'Виджет «Инофон» пока недоступен для этого аккаунта'
+        projectDataHasBioiqWidget(updates.projectData) &&
+        !isEmailAllowedForBioiq(req.client.email)
+      ) {
+        return res.status(403).json({
+          error: 'BioIQ widget not allowed',
+          message: 'Виджет «БиоIQ» пока недоступен для этого аккаунта'
         });
       }
 

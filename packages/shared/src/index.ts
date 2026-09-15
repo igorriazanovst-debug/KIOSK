@@ -52,6 +52,9 @@ export * from './rusiq/widgetProperties';
 
 // ХимIQ (Тип 9)
 export * from './chimiq/widgetProperties';
+// «Био IQ» (Тип 10) — копия движка «ХимIQ» по решению пользователя от
+// 16.09.2026; см. Био_план_реализации.md §0.4
+export * from './bioiq/widgetProperties';
 
 // Words («Я знаю много слов», Тип 2)
 export * from './words/widgetProperties';

@@ -141,6 +141,30 @@ contextBridge.exposeInMainWorld('chimiqAPI', {
   importQuiz: () => ipcRenderer.invoke('chimiq:import-quiz')
 });
 
+// Пользовательские данные (история результатов/настройки) и каталог викторин
+// виджета «БиоIQ» (Тип 10) — отдельный namespace, тот же принцип, что
+// chimiqAPI выше. Namespace отдельный, а не общий с «ХимIQ», потому что за
+// ним стоит другой каталог на диске: смешивать викторины по химии и по
+// биологии нельзя.
+contextBridge.exposeInMainWorld('bioiqAPI', {
+  loadUserData: () => ipcRenderer.invoke('bioiq:load-user-data'),
+  saveUserData: (data) => ipcRenderer.invoke('bioiq:save-user-data', data),
+  listQuizzes: () => ipcRenderer.invoke('bioiq:list-quizzes'),
+  loadQuiz: (quizId) => ipcRenderer.invoke('bioiq:load-quiz', quizId),
+  saveQuiz: (quiz) => ipcRenderer.invoke('bioiq:save-quiz', quiz),
+  deleteQuiz: (quizId) => ipcRenderer.invoke('bioiq:delete-quiz', quizId),
+  // Своя картинка на каждый из 3 уровней, не один общий фон.
+  saveQuizLevelImage: (quizId, level, arrayBuffer, mimeType) =>
+    ipcRenderer.invoke('bioiq:save-quiz-level-image', quizId, level, arrayBuffer, mimeType),
+  saveQuizItemImage: (quizId, questionId, kind, arrayBuffer, mimeType) =>
+    ipcRenderer.invoke('bioiq:save-quiz-item-image', quizId, questionId, kind, arrayBuffer, mimeType),
+  deleteQuizItemImage: (fileName) => ipcRenderer.invoke('bioiq:delete-quiz-item-image', fileName),
+  // FR-014/FR-019 ТЗ Типа 10 - обмен викторинами между проектами KIOSK
+  // через уже установленный Плеер.
+  exportQuiz: (fileContentJson, suggestedFileName) => ipcRenderer.invoke('bioiq:export-quiz', fileContentJson, suggestedFileName),
+  importQuiz: () => ipcRenderer.invoke('bioiq:import-quiz')
+});
+
 // Локальное хранилище виджета «Я знаю много слов» (Тип 2) — профили детей,
 // настройки занятия и достижения. Отдельный namespace, используется только
 // виджетом words.

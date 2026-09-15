@@ -6,6 +6,7 @@ const { registerNatComIpc } = require('./natcom/ipc');
 const { registerMathmachineIpc } = require('./mathmachine/ipc');
 const { registerRusiqIpc } = require('./rusiq/ipc');
 const { registerChimiqIpc } = require('./chimiq/ipc');
+const { registerBioiqIpc } = require('./bioiq/ipc');
 const { registerWordsIpc } = require('./words/ipc');
 const { registerAlphabetIpc } = require('./alphabet/ipc');
 const { registerInophoneIpc } = require('./inophone/ipc');
@@ -67,6 +68,11 @@ try {
     // принцип, что rusiqmedia - без bypassCSP, схема явно добавлена в
     // CSP-заголовок ниже.
     { scheme: 'chimiqmedia', privileges: { standard: true, secure: true, supportFetchAPI: true, stream: true } },
+    // bioiqmedia - то же для виджета «БиоIQ» (Тип 10). Виджет скопирован с
+    // «ХимIQ» (см. Био_план_реализации.md §0.4), поэтому и схема устроена
+    // одинаково; каталоги данных при этом РАЗНЫЕ - kiosk-bioiq против
+    // kiosk-chimiq, иначе викторины двух предметов легли бы в одну папку.
+    { scheme: 'bioiqmedia', privileges: { standard: true, secure: true, supportFetchAPI: true, stream: true } },
     // wordslib - поставочная (read-only) библиотека виджета «Я знаю много
     // слов» (packages/words-library/assets/): иллюстрации и озвучка. Тот же
     // принцип, что chronomedia/natcomlib - без bypassCSP, схема явно
@@ -107,6 +113,7 @@ let wordsBaseDir = null;
 let natcomAssetsDir = null;
 let rusiqQuizzesDir = null;
 let chimiqQuizzesDir = null;
+let bioiqQuizzesDir = null;
 let natcomLibrary = null;
 
 // ═══ OFFLINE-CACHE-MODULE-V1 — Офлайн-кэш медиафайлов ═══════════════════════════
@@ -1254,6 +1261,16 @@ app.whenReady().then(() => {
     fileLog('[chimiq] failed to initialize local storage:', err && err.message);
   }
 
+  // Пользовательские данные (история/настройки) и каталог викторин виджета
+  // «БиоIQ» (Тип 10) — канал 'bioiq:*', тот же принцип, что у chimiq выше.
+  try {
+    const { baseDir: bioiqBaseDir, isFallback: bioiqIsFallback, quizzesDir: bioiqQuizzesDirResult } = registerBioiqIpc({ ipcMain, app });
+    bioiqQuizzesDir = bioiqQuizzesDirResult;
+    fileLog('[bioiq] storage dir:', bioiqBaseDir, bioiqIsFallback ? '(fallback: no write access to shared dir)' : '');
+  } catch (err) {
+    fileLog('[bioiq] failed to initialize local storage:', err && err.message);
+  }
+
   // FR-013/FR-018 (Фаза 2b) - экспорт/импорт файла викторины между
   // проектами KIOSK. Согласованная реинтерпретация буквального «без
   // установки продукта» (см. Тип7_трассировочная_матрица.md) - файл
@@ -1323,6 +1340,41 @@ app.whenReady().then(() => {
       return { ok: true, content: raw };
     } catch (err) {
       fileLog('[chimiq] import failed:', err && err.message);
+      return { ok: false };
+    }
+  });
+
+  // FR-014/FR-019 ТЗ Типа 10 - обмен викторинами виджета «БиоIQ», тот же
+  // принцип, что chimiq:export-quiz/import-quiz выше. Имя файла по умолчанию
+  // своё (quiz.bioiq.json): викторина по биологии и викторина по химии не
+  // взаимозаменяемы - у них разные изображения и разные банки вопросов.
+  ipcMain.handle('bioiq:export-quiz', async (_event, fileContentJson, suggestedFileName) => {
+    if (typeof fileContentJson !== 'string' || fileContentJson.length === 0) return { ok: false };
+    try {
+      const result = await dialog.showSaveDialog(mainWindow, {
+        defaultPath: typeof suggestedFileName === 'string' && suggestedFileName.length > 0 ? suggestedFileName : 'quiz.bioiq.json',
+        filters: [{ name: 'Викторина БиоIQ', extensions: ['json'] }]
+      });
+      if (result.canceled || !result.filePath) return { ok: false, canceled: true };
+      fs.writeFileSync(result.filePath, fileContentJson, 'utf-8');
+      return { ok: true, filePath: result.filePath };
+    } catch (err) {
+      fileLog('[bioiq] export failed:', err && err.message);
+      return { ok: false };
+    }
+  });
+
+  ipcMain.handle('bioiq:import-quiz', async () => {
+    try {
+      const result = await dialog.showOpenDialog(mainWindow, {
+        properties: ['openFile'],
+        filters: [{ name: 'Викторина БиоIQ', extensions: ['json'] }]
+      });
+      if (result.canceled || result.filePaths.length === 0) return { ok: false, canceled: true };
+      const raw = fs.readFileSync(result.filePaths[0], 'utf-8');
+      return { ok: true, content: raw };
+    } catch (err) {
+      fileLog('[bioiq] import failed:', err && err.message);
       return { ok: false };
     }
   });
@@ -1403,7 +1455,7 @@ app.whenReady().then(() => {
         ...details.responseHeaders,
         // chronomedia:/natcomlib: добавлены явно (не полагаемся на bypassCSP
         // этих схем - его нет, см. registerSchemesAsPrivileged выше).
-        'Content-Security-Policy': ["default-src 'self' 'unsafe-inline' 'unsafe-eval' data: file: blob: chronomedia: natcomlib: rusiqmedia: chimiqmedia: wordslib: wordsuser: alphabetlib: alphabetuser: inophonelib: http: https: ws: wss:"]
+        'Content-Security-Policy': ["default-src 'self' 'unsafe-inline' 'unsafe-eval' data: file: blob: chronomedia: natcomlib: rusiqmedia: chimiqmedia: bioiqmedia: wordslib: wordsuser: alphabetlib: alphabetuser: inophonelib: http: https: ws: wss:"]
       }
     });
   });
@@ -1745,6 +1797,35 @@ app.whenReady().then(() => {
       const u = new URL(request.url);
       const fileName = decodeURIComponent(u.pathname.replace(/^\/+/, ''));
       const filePath = chronoResolveWithinRoot(chimiqQuizzesDir, fileName);
+
+      if (!fs.existsSync(filePath) || !fs.statSync(filePath).isFile()) {
+        return new Response('Not found', { status: 404 });
+      }
+
+      const stat = fs.statSync(filePath);
+      const mime = guessMime(fileName, filePath);
+      const stream = fs.createReadStream(filePath);
+      return new Response(nodeStreamToWeb(stream), {
+        status: 200,
+        headers: { 'Content-Type': mime, 'Content-Length': String(stat.size) }
+      });
+    } catch {
+      return new Response('Not found', { status: 404 });
+    }
+  });
+
+  // Обработчик протокола bioiqmedia://level/<fileName> и bioiqmedia://item/
+  // <fileName> - то же для «БиоIQ» (Тип 10), packages/player/electron/
+  // bioiq/ipc.js resolveQuizzesDir. Корень СВОЙ (bioiqQuizzesDir): будь он
+  // общий с «ХимIQ», картинка одной викторины открывалась бы по ссылке
+  // другой, а удаление викторины по химии ломало бы викторину по биологии.
+  protocol.handle('bioiqmedia', async (request) => {
+    try {
+      if (!bioiqQuizzesDir) return new Response('Not initialized', { status: 503 });
+
+      const u = new URL(request.url);
+      const fileName = decodeURIComponent(u.pathname.replace(/^\/+/, ''));
+      const filePath = chronoResolveWithinRoot(bioiqQuizzesDir, fileName);
 
       if (!fs.existsSync(filePath) || !fs.statSync(filePath).isFile()) {
         return new Response('Not found', { status: 404 });

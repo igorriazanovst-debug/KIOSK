@@ -34,11 +34,13 @@ const ALPHABET_WIDGET_TYPE = 'alphabet';
 // "chimiq" (Тип 9, «ХимIQ») — того же рода, седьмой в списке; тот же класс
 // виджета, что rusiq (квиз по координатам точек на изображении)
 const CHIMIQ_WIDGET_TYPE = 'chimiq';
+// "bioiq" (Тип 10, «Био IQ») — копия движка «ХимIQ», тот же класс виджета
+const BIOIQ_WIDGET_TYPE = 'bioiq';
 // "inophone" (Тип 4, «Инофон») — восьмой. Отдельного предиката, как у
 // alphabet, не заводим: он нужен только тем виджетам, чей главный процесс
 // спрашивает про свой тип отдельно, а общий список и так покрывает окно
 const INOPHONE_WIDGET_TYPE = 'inophone';
-const STANDALONE_APP_WIDGET_TYPES = [CHRONOLINE_WIDGET_TYPE, NATCOM_WIDGET_TYPE, MATHMACHINE_WIDGET_TYPE, PERIODICTABLE_WIDGET_TYPE, RUSIQ_WIDGET_TYPE, WORDS_WIDGET_TYPE, ALPHABET_WIDGET_TYPE, CHIMIQ_WIDGET_TYPE, INOPHONE_WIDGET_TYPE];
+const STANDALONE_APP_WIDGET_TYPES = [CHRONOLINE_WIDGET_TYPE, NATCOM_WIDGET_TYPE, MATHMACHINE_WIDGET_TYPE, PERIODICTABLE_WIDGET_TYPE, RUSIQ_WIDGET_TYPE, WORDS_WIDGET_TYPE, ALPHABET_WIDGET_TYPE, CHIMIQ_WIDGET_TYPE, INOPHONE_WIDGET_TYPE, BIOIQ_WIDGET_TYPE];
 
 const BASE_WINDOW_OPTIONS = Object.freeze({
   width: 1280,
@@ -174,5 +176,6 @@ module.exports = {
   WORDS_WIDGET_TYPE,
   ALPHABET_WIDGET_TYPE,
   INOPHONE_WIDGET_TYPE,
+  BIOIQ_WIDGET_TYPE,
   STANDALONE_APP_WIDGET_TYPES,
 };
