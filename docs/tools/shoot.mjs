@@ -7,11 +7,14 @@
 // Шаги читаются из файла сценария: { "порт": N, "каталог": "...", "шаги": [...] }
 // Каждый шаг — объект:
 //   { "клик": "testid" }            нажать
+//   { "первый": "префикс-testid" }  нажать первый элемент с таким началом testid
+//   { "прокрути": "testid" }      прокрутить к элементу перед снимком
 //   { "ввод": ["testid", "текст"] } набрать в поле (через сеттер прототипа,
 //                                   иначе React не заметит)
 //   { "жди": 600 }                  подождать
 //   { "снимок": "имя", "подпись": "..." }  сохранить PNG
 //   { "проверь": "testid" }         убедиться, что элемент есть, иначе падаем
+//   { "верно4": N } / { "неверно4": true }   Тип 4: ответить на сцене верно/неверно
 //
 // Сценарий ПАДАЕТ на первой же неудаче. Молча пропущенный шаг дал бы снимок
 // не того экрана, а подпись осталась бы прежней — именно так инструкции и
@@ -78,6 +81,24 @@ for (const [i, step] of plan.шаги.entries()) {
   const label = JSON.stringify(step).slice(0, 90);
   try {
     if (step.клик) await click(step.клик);
+    else if (step.прокрути) {
+      // Прокрутить к элементу перед снимком. Нужно там, где экран длиннее
+      // окна: «Сведения о пакете» не помещаются целиком, и без прокрутки
+      // нижняя половина обрезается ровно посередине строки.
+      const ok = await ev(`(()=>{const e=document.querySelector('[data-testid="${step.прокрути}"]');
+        if(!e) return false; e.scrollIntoView({block:'center'}); return true})()`);
+      if (!ok) throw new Error(`нечего прокручивать: нет [${step.прокрути}]`);
+      await wait(400);
+    }
+    else if (step.первый) {
+      // Нажать первый элемент, чей testid начинается с заданного. Нужно там,
+      // где в testid попадает сгенерированный идентификатор: ученики Типа 4
+      // заводятся с UUID, и записать их в сценарий заранее нельзя.
+      const found = await ev(`(()=>{const e=document.querySelector('[data-testid^="${step.первый}"]');
+        return e?e.dataset.testid:null})()`);
+      if (!found) throw new Error(`нет ни одного элемента с testid, начинающимся на «${step.первый}»`);
+      await click(found);
+    }
     else if (step.ввод) {
       const [testId, text] = step.ввод;
       await ev(`(()=>{const el=document.querySelector('[data-testid="${testId}"]');
@@ -123,6 +144,28 @@ for (const [i, step] of plan.шаги.entries()) {
       if (!wrong) throw new Error('не нашлось неверной карточки');
       await click(`option-${wrong}`);
       await wait(400);
+    } else if (step.верно4 !== undefined) {
+      // Тип 4: загаданный объект назван скрытой подсказкой inophone-expected,
+      // объекты сцены адресуются inophone-hotspot-<id>. Ответ берётся у самой
+      // игры, а не подбирается: подбор прошёл бы и на сломанной проверке
+      // ответа, и снимок «верно» получился бы там, где засчитывается что
+      // угодно.
+      for (let k = 0; k < (step.верно4 || 1); k++) {
+        const expected = await ev(`document.querySelector('[data-testid=inophone-expected]')?.textContent?.trim() ?? null`);
+        if (!expected) break;
+        await click(`inophone-hotspot-${expected}`);
+        await wait(step.пауза ?? 900);
+      }
+    } else if (step.неверно4) {
+      const expected = await ev(`document.querySelector('[data-testid=inophone-expected]')?.textContent?.trim() ?? null`);
+      if (!expected) throw new Error('на сцене нет задания — отвечать нечему');
+      const wrong = await ev(`(()=>{const ids=[...document.querySelectorAll('[data-testid^=inophone-hotspot-]')]
+        .map(e=>e.dataset.testid.replace('inophone-hotspot-',''))
+        .filter(v=>v!==${JSON.stringify(expected)});
+        return ids.length?ids[0]:null})()`);
+      if (!wrong) throw new Error('на сцене не нашлось неверного объекта');
+      await click(`inophone-hotspot-${wrong}`);
+      await wait(step.пауза ?? 900);
     } else if (step.неверно) {
       const wrong = await ev(`(()=>{const exp=document.querySelector('[data-testid=play-expected]')?.innerText?.trim();
         const opts=[...document.querySelectorAll('[data-testid^=play-option-]')]

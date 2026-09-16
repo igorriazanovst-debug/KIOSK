@@ -394,6 +394,21 @@ const InophoneRuntime: React.FC<Props> = ({ properties, width, height }) => {
     return scene ? inophone.localTitle(scene.titles, interfaceLanguage) : sceneId;
   };
 
+  // Языки, у которых в ПОДКЛЮЧЁННОМ ПАКЕТЕ есть хоть одна запись
+  // произношения. Спрашивается у самого пакета, а не у таблицы языков:
+  // таблица знает про теги СИСТЕМНЫХ голосов, а это другое. У башкирского
+  // системного тега нет и не будет, а записи в пакете есть.
+  const audioLanguages = useMemo(() => {
+    const set = new Set<LanguageCode>();
+    if (!library) return set;
+    for (const concept of library.concepts) {
+      for (const code of inophone.LANGUAGE_CODES) {
+        if (concept.translations[code]?.hasAudio) set.add(code);
+      }
+    }
+    return set;
+  }, [library]);
+
   // ─── экраны ────────────────────────────────────────────────────────────
 
   const menuButtons = (
@@ -407,7 +422,7 @@ const InophoneRuntime: React.FC<Props> = ({ properties, width, height }) => {
       <BigButton onClick={() => setScreen({ name: 'settings' })} tone="secondary" testId="inophone-open-settings">
         Настройки
       </BigButton>
-      <BigButton onClick={() => setScreen({ name: 'diagnostics' })} tone="secondary">
+      <BigButton onClick={() => setScreen({ name: 'diagnostics' })} tone="secondary" testId="inophone-open-diagnostics">
         О пакете
       </BigButton>
     </div>
@@ -453,6 +468,7 @@ const InophoneRuntime: React.FC<Props> = ({ properties, width, height }) => {
         return (
           <SettingsScreen
             settings={settings}
+            audioLanguages={audioLanguages}
             onChange={changeSettings}
             onBack={() => setScreen({ name: 'catalogue' })}
           />

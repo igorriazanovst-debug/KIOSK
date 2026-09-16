@@ -75,7 +75,7 @@ const ResultsScreen: React.FC<Props> = ({
       <BigButton onClick={onAgain} testId="inophone-again">
         Ещё раз
       </BigButton>
-      <BigButton onClick={onBack} tone="secondary">
+      <BigButton onClick={onBack} tone="secondary" testId="inophone-results-back">
         К темам
       </BigButton>
     </div>

@@ -147,6 +147,15 @@ const SceneScreen: React.FC<SceneScreenProps> = ({
           <BigButton onClick={onRepeatTask} tone="secondary" testId="inophone-repeat">
             Повторить
           </BigButton>
+          {/* Скрытая подсказка для живого прогона: какой объект сейчас загадан.
+              Ученику не видна. Нужна, чтобы сценарий съёмки инструкции и
+              приёмочные проверки ОТВЕЧАЛИ ВЕРНО, а не подбирали ответ
+              перебором: подбор проходит и на сломанной проверке ответа, и
+              снимок «верно» получился бы даже там, где программа засчитывает
+              что угодно. Тот же приём, что play-expected у Типа 3. */}
+          <span data-testid="inophone-expected" hidden>
+            {task.conceptId}
+          </span>
         </Panel>
       )}
 

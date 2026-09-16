@@ -16,11 +16,22 @@ import { BigButton, Panel, ScreenHeader, palette } from '../ui';
 
 interface Props {
   settings: InophoneSettings;
+  /**
+   * Языки, у которых в ПОДКЛЮЧЁННОМ ПАКЕТЕ есть хоть одна запись произношения.
+   *
+   * Раньше эту надпись выводили из `speechTag` — тега системного голоса. Это
+   * разные вещи, и разошлись они ровно тогда, когда башкирский озвучили: тега
+   * у башкирского по-прежнему нет (ни один системный синтезатор его не знает),
+   * а 444 записи в пакете есть. Экран при этом продолжал сообщать педагогу,
+   * что произношения нет, — то есть врал про то, что лежит рядом на диске.
+   * Нашлось это просмотром снимка при сборке инструкции.
+   */
+  audioLanguages: ReadonlySet<LanguageCode>;
   onChange: (next: InophoneSettings) => void;
   onBack: () => void;
 }
 
-const SettingsScreen: React.FC<Props> = ({ settings, onChange, onBack }) => {
+const SettingsScreen: React.FC<Props> = ({ settings, audioLanguages, onChange, onBack }) => {
   const setInterface = (code: LanguageCode) => {
     const kept = settings.studyLanguages.filter((c) => c !== code);
     const fallback = inophone.LANGUAGE_CODES.find((c) => c !== code)!;
@@ -109,7 +120,7 @@ const SettingsScreen: React.FC<Props> = ({ settings, onChange, onBack }) => {
               active={settings.studyLanguages.includes(l.code)}
               onClick={() => toggleStudy(l.code)}
               label={l.nativeName}
-              sub={l.speechTag ? l.russianName : `${l.russianName} — озвучка синтезом недоступна`}
+              sub={audioLanguages.has(l.code) ? l.russianName : `${l.russianName} — произношение в пакете не записано`}
             />
           ))}
         </div>

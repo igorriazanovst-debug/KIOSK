@@ -60,7 +60,7 @@ const DiagnosticsScreen: React.FC<Props> = ({
   <div>
     <ScreenHeader title="Сведения о пакете" onBack={onBack} />
 
-    <Panel style={{ marginBottom: 20 }}>
+    <Panel style={{ marginBottom: 20 }} data-testid="inophone-storage-note">
       <Row label="Данные занятия" value={baseDir} />
       {isFallback && (
         <Row
@@ -78,7 +78,7 @@ const DiagnosticsScreen: React.FC<Props> = ({
     )}
 
     {quotas && (
-      <Panel style={{ marginBottom: 20 }}>
+      <Panel style={{ marginBottom: 20 }} data-testid="inophone-quotas">
         <div style={{ fontSize: 24, fontWeight: 700, color: palette.text, marginBottom: 8 }}>
           Требования ТЗ по объёму
         </div>
@@ -89,7 +89,7 @@ const DiagnosticsScreen: React.FC<Props> = ({
     )}
 
     {completeness && (
-      <Panel>
+      <Panel data-testid="inophone-completeness">
         <div style={{ fontSize: 24, fontWeight: 700, color: palette.text, marginBottom: 8 }}>
           Комплектность файлов
         </div>

@@ -121,11 +121,14 @@ export const Banner: React.FC<{ text: string; tone: 'error' | 'notice' }> = ({ t
   </div>
 );
 
-export const Panel: React.FC<{ children: React.ReactNode; style?: React.CSSProperties }> = ({
-  children,
-  style,
-}) => (
+export const Panel: React.FC<{
+  children: React.ReactNode;
+  style?: React.CSSProperties;
+  /** Нужен сценарию съёмки инструкции: по нему панель кадрируется или прячется */
+  'data-testid'?: string;
+}> = ({ children, style, 'data-testid': testId }) => (
   <div
+    data-testid={testId}
     style={{
       background: palette.panel,
       border: `2px solid ${palette.panelEdge}`,
