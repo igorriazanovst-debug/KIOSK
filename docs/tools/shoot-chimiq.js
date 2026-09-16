@@ -18,30 +18,47 @@
 // подмены project.json - здесь не автоматизирована):
 //   1. Собрать packages/player с TEST-ONLY project.json (canvas + один
 //      виджет "chimiq", БЕЗ serverUrl/licenseKeyHash) - `npm run package`.
+//      widget.properties ДОЛЖНО быть объектом ({} минимум) - Player.tsx
+//      безусловно читает widget.properties.opacity, отсутствие ключа
+//      (например "props" вместо "properties") роняет рендер целиком с
+//      TypeError ещё до первого кадра (найдено 2026-09-16).
 //   2. Немедленно восстановить реальный electron/project.json.
 //   3. Очистить %AppData%\kiosk-chimiq (чистое состояние - см. restand.sh
 //      идею у alphabet/words, здесь сделано вручную: Remove-Item).
 //   4. Start-Process ".../dist-electron/win-unpacked/Kiosk Player.exe"
 //      -ArgumentList "--remote-debugging-port=9333"
 //   5. GET http://127.0.0.1:9333/json -> взять webSocketDebuggerUrl
-//      страницы type:"page".
+//      страницы type:"page" И её PID процесса (см. §16 ниже).
 //
 // ЗАПУСК:
-//   node shoot-chimiq.js "ws://127.0.0.1:9333/devtools/page/<ID>"
+//   node shoot-chimiq.js "ws://127.0.0.1:9333/devtools/page/<ID>" <PID>
 //
 // Снимки сохраняются в ../img/chimiq/ (докидываются поверх существующих
 // с теми же именами).
+//
+// СКРИНШОТ ЧЕРЕЗ GDI, НЕ CDP (найдено 2026-09-16, регенерация для раунда
+// тематических иллюстраций). `Page.captureScreenshot` по сырому CDP-
+// вебсокету здесь повторно ЗАВИСАЛ намертво (см. Сценарий_разработки_фичи.md
+// §5a - известная проблема, не связана с кодом фичи) - весь скрипт стопорился
+// на первом же screenshot('01-интро'), окно оставалось живым и отвечающим на
+// Runtime.evaluate. Заменено на `gdi-screenshot.ps1` (Win32 GDI, по PID
+// процесса окна) - тот же CDP-driver для кликов/чтения DOM, другой механизм
+// снятия картинки. Обязателен второй аргумент CLI - PID главного процесса
+// окна (Get-CimInstance/Get-Process, НЕ дочерние --type=renderer/gpu/utility).
 
 const path = require('path');
 const fs = require('fs');
+const { execFileSync } = require('child_process');
 const WebSocket = require(path.join(__dirname, '..', '..', 'packages', 'player', 'node_modules', 'ws'));
 
 const WS_URL = process.argv[2];
-if (!WS_URL) {
-  console.error('нужен аргумент: ws:// URL страницы (см. GET http://127.0.0.1:9333/json)');
+const PID = process.argv[3];
+if (!WS_URL || !PID) {
+  console.error('нужны аргументы: ws:// URL страницы И PID главного процесса окна (см. GET http://127.0.0.1:9333/json и Get-Process)');
   process.exit(2);
 }
 const OUT_DIR = path.join(__dirname, '..', 'img', 'chimiq');
+const GDI_SCRIPT = path.join(__dirname, 'gdi-screenshot.ps1');
 fs.mkdirSync(OUT_DIR, { recursive: true });
 
 const ws = new WebSocket(WS_URL);
@@ -69,9 +86,9 @@ async function evalJs(expression, awaitPromise = false) {
 }
 
 async function screenshot(name) {
-  const res = await send('Page.captureScreenshot', { format: 'png' });
-  fs.writeFileSync(path.join(OUT_DIR, `${name}.png`), Buffer.from(res.result.data, 'base64'));
-  console.log('saved', name);
+  const outPath = path.join(OUT_DIR, `${name}.png`);
+  const out = execFileSync('powershell.exe', ['-NoProfile', '-ExecutionPolicy', 'Bypass', '-File', GDI_SCRIPT, '-ProcessId', PID, '-OutPath', outPath], { encoding: 'utf8' });
+  console.log('saved', name, '->', out.trim());
 }
 
 async function click(selector) {
