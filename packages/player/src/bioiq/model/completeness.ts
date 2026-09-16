@@ -62,6 +62,22 @@ export function rectsOverlap(a: Rect, b: Rect): boolean {
   return a.x < b.x + b.width && b.x < a.x + a.width && a.y < b.y + b.height && b.y < a.y + a.height;
 }
 
+/**
+ * ПОЛНОЕ СОВПАДЕНИЕ ОБЛАСТЕЙ — НЕ ДЕФЕКТ, а обычное дело: про один и тот же
+ * орган спрашивают по-разному («Какой орган перекачивает кровь?» и «Какой
+ * орган сокращается 70 раз в минуту?»), и область ответа у таких вопросов
+ * одна и та же.
+ *
+ * Опасность даёт ЧАСТИЧНОЕ наложение: там на поле оказываются ДВЕ разные
+ * кнопки, одна поверх другой, и клик достаётся верхней. Совпадающие же
+ * `buildBoardTiles` схлопывает в одну плитку по ключу координат — и делает
+ * это намеренно, отдельно позаботившись, чтобы правильный ответ победил
+ * в такой коллизии.
+ */
+function sameRect(a: Rect, b: Rect): boolean {
+  return a.x === b.x && a.y === b.y && a.width === b.width && a.height === b.height;
+}
+
 const LEVELS: BioiqLevelId[] = [1, 2, 3];
 
 export function checkBioiqQuiz(quiz: BioiqQuiz): BioiqQuizProblem[] {
@@ -110,6 +126,7 @@ export function checkBioiqQuiz(quiz: BioiqQuiz): BioiqQuizProblem[] {
 
     for (let i = 0; i < named.length; i += 1) {
       for (let j = i + 1; j < named.length; j += 1) {
+        if (sameRect(named[i].rect, named[j].rect)) continue;
         if (rectsOverlap(named[i].rect, named[j].rect)) {
           problems.push({
             requirement: 'FR-013',

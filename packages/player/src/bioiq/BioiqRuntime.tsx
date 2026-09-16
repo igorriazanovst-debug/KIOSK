@@ -3,10 +3,10 @@
 // Фаза 4 (редактор, план реализации Тип10_БиоIQ §5): полная машина
 // состояний — интро → (учитель: PIN → каталог → редактор) / (игрок:
 // настройка → поле → результаты). Прямая адаптация rusiq/RusiqRuntime.tsx
-// (Тип 7). Фаза 7: встроенная викторина — реальный банк 168 вопросов
-// (bioiqRealContent.json, 3 измеренных изображения-карты по уровням),
-// демо-сетка Фазы 3 (bioiqDemoContent.json) больше не используется как
-// BUILTIN_QUIZ, но остаётся в репо как fixture для editor-тестов.
+// (Тип 7). Встроенная методическая викторина — 120 вопросов по биологии
+// (bioiqRealContent.json), по одной карте на каждый из трёх уровней.
+// bioiqDemoContent.json — образец на 12 вопросов для тестов редактора,
+// собирается тем же tools/bioiq/build-content.mjs из того же банка.
 import React, { useEffect, useState } from 'react';
 import './bioiqTheme.css';
 import IntroScreen from './screens/IntroScreen.tsx';

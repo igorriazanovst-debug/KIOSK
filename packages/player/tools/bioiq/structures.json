@@ -1,0 +1,804 @@
+{
+  "1": {
+    "title": "Строение клетки",
+    "width": 1800,
+    "height": 1200,
+    "structures": [
+      {
+        "id": "animal-membrane",
+        "label": "Клеточная мембрана животной клетки",
+        "x": 95,
+        "y": 555,
+        "width": 70,
+        "height": 130
+      },
+      {
+        "id": "animal-cytoplasm",
+        "label": "Цитоплазма животной клетки",
+        "x": 380,
+        "y": 750,
+        "width": 120,
+        "height": 80
+      },
+      {
+        "id": "animal-nucleus",
+        "label": "Ядро животной клетки",
+        "x": 525,
+        "y": 590,
+        "width": 80,
+        "height": 60
+      },
+      {
+        "id": "animal-nucleolus",
+        "label": "Ядрышко",
+        "x": 446,
+        "y": 498,
+        "width": 80,
+        "height": 80
+      },
+      {
+        "id": "animal-mitochondrion",
+        "label": "Митохондрия",
+        "x": 585,
+        "y": 375,
+        "width": 150,
+        "height": 90
+      },
+      {
+        "id": "animal-rough-er",
+        "label": "Шероховатая эндоплазматическая сеть",
+        "x": 615,
+        "y": 635,
+        "width": 190,
+        "height": 130
+      },
+      {
+        "id": "animal-smooth-er",
+        "label": "Гладкая эндоплазматическая сеть",
+        "x": 185,
+        "y": 660,
+        "width": 170,
+        "height": 110
+      },
+      {
+        "id": "animal-golgi",
+        "label": "Аппарат Гольджи",
+        "x": 190,
+        "y": 450,
+        "width": 170,
+        "height": 140
+      },
+      {
+        "id": "animal-lysosome",
+        "label": "Лизосома",
+        "x": 565,
+        "y": 815,
+        "width": 70,
+        "height": 70
+      },
+      {
+        "id": "animal-ribosome",
+        "label": "Рибосома",
+        "x": 277,
+        "y": 792,
+        "width": 46,
+        "height": 46
+      },
+      {
+        "id": "animal-centriole",
+        "label": "Клеточный центр",
+        "x": 695,
+        "y": 480,
+        "width": 130,
+        "height": 100
+      },
+      {
+        "id": "plant-wall",
+        "label": "Клеточная стенка",
+        "x": 1280,
+        "y": 307,
+        "width": 200,
+        "height": 46
+      },
+      {
+        "id": "plant-membrane",
+        "label": "Клеточная мембрана растительной клетки",
+        "x": 1036,
+        "y": 550,
+        "width": 44,
+        "height": 150
+      },
+      {
+        "id": "plant-vacuole",
+        "label": "Вакуоль",
+        "x": 1260,
+        "y": 525,
+        "width": 240,
+        "height": 200
+      },
+      {
+        "id": "plant-nucleus",
+        "label": "Ядро растительной клетки",
+        "x": 1062,
+        "y": 372,
+        "width": 148,
+        "height": 148
+      },
+      {
+        "id": "plant-chloroplast",
+        "label": "Хлоропласт",
+        "x": 1088,
+        "y": 649,
+        "width": 124,
+        "height": 82
+      },
+      {
+        "id": "plant-mitochondrion",
+        "label": "Митохондрия растительной клетки",
+        "x": 1565,
+        "y": 765,
+        "width": 118,
+        "height": 70
+      },
+      {
+        "id": "plant-cytoplasm",
+        "label": "Цитоплазма растительной клетки",
+        "x": 1590,
+        "y": 365,
+        "width": 100,
+        "height": 90
+      }
+    ],
+    "decoys": [
+      {
+        "x": 213,
+        "y": 778,
+        "width": 44,
+        "height": 44
+      },
+      {
+        "x": 328,
+        "y": 833,
+        "width": 44,
+        "height": 44
+      },
+      {
+        "x": 654,
+        "y": 784,
+        "width": 52,
+        "height": 52
+      },
+      {
+        "x": 274,
+        "y": 367,
+        "width": 112,
+        "height": 66
+      },
+      {
+        "x": 395,
+        "y": 665,
+        "width": 50,
+        "height": 50
+      },
+      {
+        "x": 457,
+        "y": 397,
+        "width": 46,
+        "height": 46
+      },
+      {
+        "x": 272,
+        "y": 591,
+        "width": 40,
+        "height": 40
+      },
+      {
+        "x": 1078,
+        "y": 779,
+        "width": 124,
+        "height": 82
+      },
+      {
+        "x": 1566,
+        "y": 479,
+        "width": 124,
+        "height": 82
+      },
+      {
+        "x": 1558,
+        "y": 609,
+        "width": 124,
+        "height": 82
+      },
+      {
+        "x": 1268,
+        "y": 378,
+        "width": 44,
+        "height": 44
+      },
+      {
+        "x": 1348,
+        "y": 828,
+        "width": 44,
+        "height": 44
+      },
+      {
+        "x": 1445,
+        "y": 820,
+        "width": 50,
+        "height": 50
+      }
+    ],
+    "fileName": "level1_map.png"
+  },
+  "2": {
+    "title": "Строение растений",
+    "width": 1800,
+    "height": 1200,
+    "structures": [
+      {
+        "id": "main-root",
+        "label": "Главный корень",
+        "x": 260,
+        "y": 920,
+        "width": 60,
+        "height": 110
+      },
+      {
+        "id": "lateral-root",
+        "label": "Боковой корень",
+        "x": 354,
+        "y": 917,
+        "width": 80,
+        "height": 58
+      },
+      {
+        "id": "root-collar",
+        "label": "Корневая шейка",
+        "x": 262,
+        "y": 719,
+        "width": 56,
+        "height": 46
+      },
+      {
+        "id": "stem",
+        "label": "Стебель",
+        "x": 262,
+        "y": 595,
+        "width": 56,
+        "height": 90
+      },
+      {
+        "id": "leaf-blade",
+        "label": "Листовая пластинка",
+        "x": 127,
+        "y": 503,
+        "width": 110,
+        "height": 62
+      },
+      {
+        "id": "leaf-vein-outer",
+        "label": "Жилка листа",
+        "x": 254,
+        "y": 535,
+        "width": 48,
+        "height": 34
+      },
+      {
+        "id": "petiole",
+        "label": "Черешок",
+        "x": 247,
+        "y": 458,
+        "width": 46,
+        "height": 36
+      },
+      {
+        "id": "flower",
+        "label": "Цветок",
+        "x": 245,
+        "y": 197,
+        "width": 90,
+        "height": 70
+      },
+      {
+        "id": "bud",
+        "label": "Бутон",
+        "x": 379,
+        "y": 296,
+        "width": 66,
+        "height": 96
+      },
+      {
+        "id": "fruit",
+        "label": "Плод",
+        "x": 107,
+        "y": 585,
+        "width": 82,
+        "height": 82
+      },
+      {
+        "id": "pedicel",
+        "label": "Цветоножка",
+        "x": 804,
+        "y": 957,
+        "width": 52,
+        "height": 70
+      },
+      {
+        "id": "receptacle",
+        "label": "Цветоложе",
+        "x": 770,
+        "y": 888,
+        "width": 120,
+        "height": 44
+      },
+      {
+        "id": "sepal",
+        "label": "Чашелистик",
+        "x": 638,
+        "y": 778,
+        "width": 84,
+        "height": 60
+      },
+      {
+        "id": "petal",
+        "label": "Лепесток",
+        "x": 620,
+        "y": 495,
+        "width": 60,
+        "height": 70
+      },
+      {
+        "id": "anther",
+        "label": "Пыльник",
+        "x": 635,
+        "y": 586,
+        "width": 58,
+        "height": 88
+      },
+      {
+        "id": "filament",
+        "label": "Тычиночная нить",
+        "x": 935,
+        "y": 688,
+        "width": 50,
+        "height": 64
+      },
+      {
+        "id": "ovary",
+        "label": "Завязь",
+        "x": 839,
+        "y": 789,
+        "width": 62,
+        "height": 62
+      },
+      {
+        "id": "ovule",
+        "label": "Семязачаток",
+        "x": 776,
+        "y": 744,
+        "width": 52,
+        "height": 52
+      },
+      {
+        "id": "style",
+        "label": "Столбик",
+        "x": 805,
+        "y": 560,
+        "width": 50,
+        "height": 80
+      },
+      {
+        "id": "stigma",
+        "label": "Рыльце",
+        "x": 775,
+        "y": 484,
+        "width": 110,
+        "height": 60
+      },
+      {
+        "id": "leaf-upper-skin",
+        "label": "Кожица листа",
+        "x": 1265,
+        "y": 172,
+        "width": 150,
+        "height": 42
+      },
+      {
+        "id": "palisade",
+        "label": "Столбчатая ткань",
+        "x": 1265,
+        "y": 223,
+        "width": 150,
+        "height": 80
+      },
+      {
+        "id": "spongy",
+        "label": "Губчатая ткань",
+        "x": 1265,
+        "y": 332,
+        "width": 150,
+        "height": 76
+      },
+      {
+        "id": "leaf-vein",
+        "label": "Проводящий пучок",
+        "x": 1518,
+        "y": 322,
+        "width": 124,
+        "height": 88
+      },
+      {
+        "id": "leaf-lower-skin",
+        "label": "Нижняя кожица",
+        "x": 1265,
+        "y": 425,
+        "width": 130,
+        "height": 38
+      },
+      {
+        "id": "stoma",
+        "label": "Устьице",
+        "x": 1534,
+        "y": 418,
+        "width": 76,
+        "height": 56
+      },
+      {
+        "id": "seed-coat",
+        "label": "Семенная кожура",
+        "x": 1365,
+        "y": 618,
+        "width": 150,
+        "height": 60
+      },
+      {
+        "id": "cotyledon",
+        "label": "Семядоля",
+        "x": 1502,
+        "y": 730,
+        "width": 100,
+        "height": 120
+      },
+      {
+        "id": "embryo-root",
+        "label": "Зародышевый корешок",
+        "x": 1247,
+        "y": 837,
+        "width": 90,
+        "height": 70
+      },
+      {
+        "id": "embryo-bud",
+        "label": "Зародышевая почечка",
+        "x": 1247,
+        "y": 649,
+        "width": 62,
+        "height": 62
+      }
+    ],
+    "decoys": [
+      {
+        "x": 335,
+        "y": 645,
+        "width": 110,
+        "height": 62
+      },
+      {
+        "x": 154,
+        "y": 847,
+        "width": 80,
+        "height": 54
+      },
+      {
+        "x": 158,
+        "y": 970,
+        "width": 80,
+        "height": 60
+      },
+      {
+        "x": 698,
+        "y": 587,
+        "width": 56,
+        "height": 86
+      },
+      {
+        "x": 967,
+        "y": 586,
+        "width": 58,
+        "height": 88
+      },
+      {
+        "x": 940,
+        "y": 778,
+        "width": 84,
+        "height": 60
+      },
+      {
+        "x": 1620,
+        "y": 172,
+        "width": 100,
+        "height": 42
+      },
+      {
+        "x": 1495,
+        "y": 223,
+        "width": 110,
+        "height": 80
+      },
+      {
+        "x": 1650,
+        "y": 332,
+        "width": 80,
+        "height": 76
+      },
+      {
+        "x": 1355,
+        "y": 880,
+        "width": 90,
+        "height": 56
+      },
+      {
+        "x": 1545,
+        "y": 652,
+        "width": 90,
+        "height": 56
+      }
+    ],
+    "fileName": "level2_map.png"
+  },
+  "3": {
+    "title": "Организм человека",
+    "width": 1800,
+    "height": 1200,
+    "structures": [
+      {
+        "id": "trachea",
+        "label": "Трахея",
+        "x": 443,
+        "y": 167,
+        "width": 54,
+        "height": 66
+      },
+      {
+        "id": "lung",
+        "label": "Лёгкое",
+        "x": 321,
+        "y": 342,
+        "width": 90,
+        "height": 120
+      },
+      {
+        "id": "heart",
+        "label": "Сердце",
+        "x": 452,
+        "y": 358,
+        "width": 76,
+        "height": 76
+      },
+      {
+        "id": "liver",
+        "label": "Печень",
+        "x": 315,
+        "y": 559,
+        "width": 110,
+        "height": 70
+      },
+      {
+        "id": "stomach",
+        "label": "Желудок",
+        "x": 532,
+        "y": 586,
+        "width": 84,
+        "height": 84
+      },
+      {
+        "id": "spleen",
+        "label": "Селезёнка",
+        "x": 622,
+        "y": 527,
+        "width": 56,
+        "height": 66
+      },
+      {
+        "id": "pancreas",
+        "label": "Поджелудочная железа",
+        "x": 396,
+        "y": 663,
+        "width": 88,
+        "height": 50
+      },
+      {
+        "id": "diaphragm",
+        "label": "Диафрагма",
+        "x": 443,
+        "y": 544,
+        "width": 84,
+        "height": 36
+      },
+      {
+        "id": "kidney",
+        "label": "Почка",
+        "x": 237,
+        "y": 702,
+        "width": 66,
+        "height": 80
+      },
+      {
+        "id": "large-intestine",
+        "label": "Толстая кишка",
+        "x": 294,
+        "y": 822,
+        "width": 60,
+        "height": 76
+      },
+      {
+        "id": "small-intestine",
+        "label": "Тонкая кишка",
+        "x": 417,
+        "y": 858,
+        "width": 86,
+        "height": 56
+      },
+      {
+        "id": "bladder",
+        "label": "Мочевой пузырь",
+        "x": 425,
+        "y": 961,
+        "width": 90,
+        "height": 62
+      },
+      {
+        "id": "aorta",
+        "label": "Аорта",
+        "x": 1145,
+        "y": 178,
+        "width": 90,
+        "height": 56
+      },
+      {
+        "id": "pulmonary-trunk",
+        "label": "Лёгочный ствол",
+        "x": 1240,
+        "y": 162,
+        "width": 76,
+        "height": 56
+      },
+      {
+        "id": "vena-cava",
+        "label": "Верхняя полая вена",
+        "x": 946,
+        "y": 292,
+        "width": 84,
+        "height": 60
+      },
+      {
+        "id": "pulmonary-vein",
+        "label": "Лёгочные вены",
+        "x": 1500,
+        "y": 316,
+        "width": 84,
+        "height": 56
+      },
+      {
+        "id": "right-atrium",
+        "label": "Правое предсердие",
+        "x": 1101,
+        "y": 399,
+        "width": 110,
+        "height": 70
+      },
+      {
+        "id": "left-atrium",
+        "label": "Левое предсердие",
+        "x": 1309,
+        "y": 399,
+        "width": 110,
+        "height": 70
+      },
+      {
+        "id": "right-ventricle",
+        "label": "Правый желудочек",
+        "x": 1121,
+        "y": 635,
+        "width": 110,
+        "height": 110
+      },
+      {
+        "id": "left-ventricle",
+        "label": "Левый желудочек",
+        "x": 1299,
+        "y": 635,
+        "width": 110,
+        "height": 110
+      },
+      {
+        "id": "tricuspid",
+        "label": "Трёхстворчатый клапан",
+        "x": 1125,
+        "y": 525,
+        "width": 110,
+        "height": 42
+      },
+      {
+        "id": "bicuspid",
+        "label": "Двустворчатый клапан",
+        "x": 1289,
+        "y": 525,
+        "width": 110,
+        "height": 42
+      },
+      {
+        "id": "septum",
+        "label": "Межжелудочковая перегородка",
+        "x": 1236,
+        "y": 740,
+        "width": 48,
+        "height": 100
+      }
+    ],
+    "decoys": [
+      {
+        "x": 529,
+        "y": 342,
+        "width": 90,
+        "height": 120
+      },
+      {
+        "x": 637,
+        "y": 702,
+        "width": 66,
+        "height": 80
+      },
+      {
+        "x": 586,
+        "y": 822,
+        "width": 60,
+        "height": 76
+      },
+      {
+        "x": 390,
+        "y": 750,
+        "width": 80,
+        "height": 44
+      },
+      {
+        "x": 539,
+        "y": 282,
+        "width": 70,
+        "height": 56
+      },
+      {
+        "x": 1185,
+        "y": 870,
+        "width": 70,
+        "height": 60
+      },
+      {
+        "x": 1012,
+        "y": 530,
+        "width": 76,
+        "height": 60
+      },
+      {
+        "x": 1438,
+        "y": 530,
+        "width": 76,
+        "height": 60
+      },
+      {
+        "x": 1070,
+        "y": 830,
+        "width": 80,
+        "height": 60
+      },
+      {
+        "x": 1370,
+        "y": 850,
+        "width": 80,
+        "height": 60
+      }
+    ],
+    "fileName": "level3_map.png"
+  }
+}
