@@ -43,6 +43,16 @@ const FEEDBACK_CORRECT_COLOR = 'rgba(62, 207, 126, 0.85)';
 const FEEDBACK_WRONG_COLOR = 'rgba(255, 107, 107, 0.85)';
 const FEEDBACK_DURATION_MS = 900;
 
+const QUESTION_IMAGE_WIDTH = 220;
+const QUESTION_IMAGE_HEIGHT = 160;
+const QUESTION_IMAGE_STYLE: React.CSSProperties = {
+  display: 'block',
+  maxWidth: QUESTION_IMAGE_WIDTH,
+  maxHeight: QUESTION_IMAGE_HEIGHT,
+  margin: '10px auto 0',
+  borderRadius: 8,
+};
+
 const GameBoardScreen: React.FC<Props> = ({
   imageUrl,
   imageWidth,
@@ -86,6 +96,15 @@ const GameBoardScreen: React.FC<Props> = ({
 
   const currentQuestion = questionsByPlayer[currentPlayer][questionIndexByPlayer[currentPlayer]];
   const tiles = buildBoardTiles(currentQuestion, levelQuestions, genericDecoyPoints);
+  // FR-008/FR-015 ТЗ - нейтральная иллюстрация по теме вопроса, когда своя
+  // картинка (questionImage) не загружена - см. questionThemeImages.ts,
+  // почему не персональная под ответ. Фоллбэк работает только для 6 тем
+  // встроенного банка (THEME_IMAGE_FILE) - у свободных тем, которые задаёт
+  // педагог в своей викторине, картинки просто не будет (null), это by
+  // design, не баг.
+  const questionImageSrc = currentQuestion.questionImage
+    ? chimiqItemImageUrl(currentQuestion.questionImage)
+    : questionThemeImageUrl(currentQuestion.theme);
 
   useEffect(() => {
     setElapsed(0);
@@ -246,26 +265,14 @@ const GameBoardScreen: React.FC<Props> = ({
           </button>
         </div>
         <p className="ciq-question-text">{currentQuestion.text}</p>
-        {currentQuestion.questionImage ? (
+        {questionImageSrc && (
           <img
-            src={chimiqItemImageUrl(currentQuestion.questionImage)}
+            src={questionImageSrc}
             alt=""
-            style={{ display: 'block', maxWidth: 220, maxHeight: 160, margin: '10px auto 0', borderRadius: 8 }}
+            width={QUESTION_IMAGE_WIDTH}
+            height={QUESTION_IMAGE_HEIGHT}
+            style={QUESTION_IMAGE_STYLE}
           />
-        ) : (
-          // FR-008/FR-015 ТЗ - нейтральная иллюстрация по теме вопроса,
-          // когда своя картинка (questionImage) не загружена - см.
-          // questionThemeImages.ts, почему не персональная под ответ.
-          (() => {
-            const themeUrl = questionThemeImageUrl(currentQuestion.theme);
-            return themeUrl ? (
-              <img
-                src={themeUrl}
-                alt=""
-                style={{ display: 'block', maxWidth: 220, maxHeight: 160, margin: '10px auto 0', borderRadius: 8 }}
-              />
-            ) : null;
-          })()
         )}
         {currentQuestion.helpText.length > 0 && (
           <div className="ciq-hint">
