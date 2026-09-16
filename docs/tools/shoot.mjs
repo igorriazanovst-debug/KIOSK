@@ -7,6 +7,8 @@
 // Шаги читаются из файла сценария: { "порт": N, "каталог": "...", "шаги": [...] }
 // Каждый шаг — объект:
 //   { "клик": "testid" }            нажать
+//   { "текст": "Играть" }           нажать кнопку по видимому тексту
+//   { "поле": [1, "Аня"] }          набрать в N-е поле ввода на экране
 //   { "первый": "префикс-testid" }  нажать первый элемент с таким началом testid
 //   { "прокрути": "testid" }      прокрутить к элементу перед снимком
 //   { "ввод": ["testid", "текст"] } набрать в поле (через сеттер прототипа,
@@ -15,6 +17,7 @@
 //   { "снимок": "имя", "подпись": "..." }  сохранить PNG
 //   { "проверь": "testid" }         убедиться, что элемент есть, иначе падаем
 //   { "верно4": N } / { "неверно4": true }   Тип 4: ответить на сцене верно/неверно
+//   { "верно10": N } / { "неверно10": true } Тип 10: ответить на поле верно/неверно
 //
 // Сценарий ПАДАЕТ на первой же неудаче. Молча пропущенный шаг дал бы снимок
 // не того экрана, а подпись осталась бы прежней — именно так инструкции и
@@ -81,6 +84,77 @@ for (const [i, step] of plan.шаги.entries()) {
   const label = JSON.stringify(step).slice(0, 90);
   try {
     if (step.клик) await click(step.клик);
+    else if (step.текст) {
+      // Нажать кнопку по ВИДИМОМУ ТЕКСТУ.
+      //
+      // Для «БиоIQ» (Тип 10) и «ХимIQ» (Тип 9) это единственный разумный
+      // способ: у них на экранах почти нет data-testid, а навешивать их
+      // десятками ради снимков — значит менять продукт под инструмент.
+      // Текст кнопки при этом не менее устойчив: если надпись изменили,
+      // инструкция всё равно устарела, и сценарий обязан упасть.
+      //
+      // Совпадение ТОЧНОЕ после нормализации регистра и пробелов: подстрока
+      // ловила «Играть» внутри «Играть эту», и снимок выходил не тот.
+      const found = await ev(`(()=>{const want=${JSON.stringify(step.текст)}.replace(/\\s+/g,' ').trim().toLowerCase();
+        const els=[...document.querySelectorAll('button, a, [role=button]')]
+          .filter(e=>{const r=e.getBoundingClientRect(); return r.width>0&&r.height>0&&!e.disabled;});
+        const exact=els.find(e=>(e.innerText||'').replace(/\\s+/g,' ').trim().toLowerCase()===want);
+        const el=exact||els.find(e=>(e.innerText||'').replace(/\\s+/g,' ').trim().toLowerCase().includes(want));
+        if(!el) return null;
+        el.scrollIntoView({block:'center'});
+        const r=el.getBoundingClientRect();
+        return JSON.stringify({x:Math.round(r.left+r.width/2),y:Math.round(r.top+r.height/2),
+          label:(el.innerText||'').replace(/\\s+/g,' ').trim().slice(0,40)})})()`);
+      if (!found) throw new Error(`на экране нет кнопки с текстом «${step.текст}»`);
+      const { x, y } = JSON.parse(found);
+      await send('Input.dispatchMouseEvent', { type: 'mousePressed', x, y, button: 'left', clickCount: 1 });
+      await send('Input.dispatchMouseEvent', { type: 'mouseReleased', x, y, button: 'left', clickCount: 1 });
+      await wait(step.пауза ?? plan.пауза ?? 320);
+    }
+    else if (step.поле) {
+      // Набрать в N-е по счёту поле ввода на экране (нумерация с 1). Нужно
+      // там, где у полей нет ни testid, ни уникального placeholder: два
+      // одинаковых поля PIN, три поля имён игроков.
+      const [n, text] = step.поле;
+      const ok = await ev(`(()=>{const els=[...document.querySelectorAll('input, textarea')]
+          .filter(e=>{const r=e.getBoundingClientRect(); return r.width>0&&r.height>0;});
+        const el=els[${Number(n) - 1}];
+        if(!el) return false;
+        const proto=el instanceof HTMLTextAreaElement?HTMLTextAreaElement.prototype:HTMLInputElement.prototype;
+        Object.getOwnPropertyDescriptor(proto,'value').set.call(el, ${JSON.stringify(text)});
+        el.dispatchEvent(new Event('input',{bubbles:true}));
+        return true})()`);
+      if (!ok) throw new Error(`на экране нет поля ввода №${n}`);
+      await wait(220);
+    }
+    else if (step.верно10 !== undefined) {
+      // Тип 10: плитка верного ответа помечена aria-label="correct-point"
+      // самим игровым экраном. Ответ берётся у игры, а не подбирается:
+      // подбор прошёл бы и на сломанной проверке ответа.
+      for (let k = 0; k < (step.верно10 || 1); k += 1) {
+        const box = await ev(`(()=>{const e=document.querySelector('[aria-label="correct-point"]');
+          if(!e) return null; e.scrollIntoView({block:'center'});
+          const r=e.getBoundingClientRect();
+          return JSON.stringify({x:Math.round(r.left+r.width/2),y:Math.round(r.top+r.height/2)})})()`);
+        if (!box) break;
+        const { x, y } = JSON.parse(box);
+        await send('Input.dispatchMouseEvent', { type: 'mousePressed', x, y, button: 'left', clickCount: 1 });
+        await send('Input.dispatchMouseEvent', { type: 'mouseReleased', x, y, button: 'left', clickCount: 1 });
+        await wait(step.пауза ?? 1100);
+      }
+    }
+    else if (step.неверно10) {
+      const box = await ev(`(()=>{const e=[...document.querySelectorAll('[aria-label^="decoy-"]')]
+          .find(x=>{const r=x.getBoundingClientRect(); return r.width>0&&r.height>0;});
+        if(!e) return null; e.scrollIntoView({block:'center'});
+        const r=e.getBoundingClientRect();
+        return JSON.stringify({x:Math.round(r.left+r.width/2),y:Math.round(r.top+r.height/2)})})()`);
+      if (!box) throw new Error('на поле нет ни одной неверной плитки');
+      const { x, y } = JSON.parse(box);
+      await send('Input.dispatchMouseEvent', { type: 'mousePressed', x, y, button: 'left', clickCount: 1 });
+      await send('Input.dispatchMouseEvent', { type: 'mouseReleased', x, y, button: 'left', clickCount: 1 });
+      await wait(step.пауза ?? 1100);
+    }
     else if (step.прокрути) {
       // Прокрутить к элементу перед снимком. Нужно там, где экран длиннее
       // окна: «Сведения о пакете» не помещаются целиком, и без прокрутки

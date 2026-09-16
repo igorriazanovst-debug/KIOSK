@@ -61,7 +61,8 @@ export default function BioiqRuntime({ properties }: Props) {
   // но не смогли загрузиться - НЕ первый запуск, а повреждённый файл (см.
   // BioiqStoreError в electron/bioiq/ipc.js). Показывается один раз на
   // интро-экране, чтобы педагог не принял пустую статистику за "ещё не
-  // играли" - находка сверки с ТЗ, docs/bioiq-acceptance-matrix.md §3.
+  // играли". Проверяется пунктом 7.1 программы испытаний
+  // (docs/bioiq-test-plan.md).
   const [storageWarning, setStorageWarning] = useState<string | null>(null);
 
   useEffect(() => {
