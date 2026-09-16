@@ -12,6 +12,7 @@ import { isEmailAllowedForRusiq, projectDataHasRusiqWidget } from '../config/rus
 import { isEmailAllowedForWords, projectDataHasWordsWidget } from '../config/wordsAccess';
 import { isEmailAllowedForAlphabet, projectDataHasAlphabetWidget } from '../config/alphabetAccess';
 import { isEmailAllowedForChimiq, projectDataHasChimiqWidget } from '../config/chimiqAccess';
+import { isEmailAllowedForInophone, projectDataHasInophoneWidget } from '../config/inophoneAccess';
 import multer from 'multer';
 import path from 'path';
 
@@ -255,6 +256,13 @@ export class ProjectController {
         });
       }
 
+      if (projectDataHasInophoneWidget(projectData) && !isEmailAllowedForInophone(req.client.email)) {
+        return res.status(403).json({
+          error: 'Inophone widget not allowed',
+          message: 'Виджет «Инофон» пока недоступен для этого аккаунта'
+        });
+      }
+
       const project = await ProjectService.createProject({
         name,
         description,
@@ -473,6 +481,17 @@ export class ProjectController {
         return res.status(403).json({
           error: 'ChimIQ widget not allowed',
           message: 'Виджет «ХимIQ» пока недоступен для этого аккаунта'
+        });
+      }
+
+      if (
+        Object.prototype.hasOwnProperty.call(updates, 'projectData') &&
+        projectDataHasInophoneWidget(updates.projectData) &&
+        !isEmailAllowedForInophone(req.client.email)
+      ) {
+        return res.status(403).json({
+          error: 'Inophone widget not allowed',
+          message: 'Виджет «Инофон» пока недоступен для этого аккаунта'
         });
       }
 
