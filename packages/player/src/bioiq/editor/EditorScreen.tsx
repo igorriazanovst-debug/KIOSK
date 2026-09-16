@@ -9,7 +9,7 @@
 // вкладка (не редактируемое поле формы — см. комментарий в
 // PointEditForm.tsx, почему смена уровня вопроса отдельным полем опасна).
 
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { initHistory, pushHistory, undo, redo, canUndo, canRedo, type History } from '../../chrono/history.ts';
 import QuizCanvas, { type QuizCanvasAddMode } from './QuizCanvas.tsx';
 import PointEditForm from './PointEditForm.tsx';
@@ -17,6 +17,7 @@ import { hashSecret } from './pinAuth.ts';
 import { saveQuiz, saveQuizLevelImage, saveQuizItemImage, deleteQuizItemImage, type BioiqItemImageKind } from './quizStore.ts';
 import { bioiqLevelImageMediaUrl, bioiqItemImageUrl } from '../bioiqMediaUrl.ts';
 import { BioiqQuizSchema, BIOIQ_DEFAULT_POINT_SIZE, type BioiqLevelId, type BioiqPoint, type BioiqQuestion, type BioiqQuiz } from '../model/schema.ts';
+import { checkBioiqQuiz, BIOIQ_MIN_GENERIC_DECOYS_PER_LEVEL } from '../model/completeness.ts';
 import '../bioiqTheme.css';
 
 const ITEM_IMAGE_FIELD_BY_KIND: Record<BioiqItemImageKind, 'questionImage' | 'answerImage' | 'hintImage'> = {
@@ -401,6 +402,11 @@ const EditorScreen: React.FC<Props> = ({ initialQuiz, pendingLevel1Image, onExit
     setAddMode('none');
   }
 
+  // Пересчёт только при смене викторины: на уровне с шестью десятками
+  // вопросов проверка перебирает пары областей, а перерисовок у редактора
+  // много (каждый символ в поле вопроса).
+  const completeness = useMemo(() => checkBioiqQuiz(quiz), [quiz]);
+
   return (
     <div className="ciq-page" style={{ display: 'flex', gap: 20, alignItems: 'flex-start' }}>
       <div>
@@ -465,8 +471,14 @@ const EditorScreen: React.FC<Props> = ({ initialQuiz, pendingLevel1Image, onExit
                 Заменить карту уровня
               </label>
             </div>
+            {/* Число берётся из константы, а не пишется в тексте. Раньше здесь
+                стояла десятка строкой, и она разошлась бы с проверкой при
+                первой же правке границы. Слово тоже изменено: у ТЗ 10
+                (FR-013, строка 307) это «не менее 10» — требование, а не
+                рекомендация, и на приёмке его проверяют пересчётом. */}
             <p style={{ fontSize: 13, color: 'var(--ciq-text-muted)' }}>
-              Общих ложных точек на этом уровне: {levelGenericDecoys.length} из рекомендуемых 10
+              Общих ложных точек на этом уровне: {levelGenericDecoys.length} из требуемых по ТЗ{' '}
+              {BIOIQ_MIN_GENERIC_DECOYS_PER_LEVEL}
             </p>
             <div ref={canvasWrapperRef} style={{ borderRadius: 10, overflow: 'hidden', border: '2px solid var(--ciq-border)', display: 'inline-block' }}>
               <QuizCanvas
@@ -616,6 +628,27 @@ const EditorScreen: React.FC<Props> = ({ initialQuiz, pendingLevel1Image, onExit
               </button>
             )}
           </div>
+        </div>
+        {/* Готовность викторины — СПИСОК, А НЕ ЗАПРЕТ. Требования ТЗ (десять
+            точек без привязки на уровень, уникальные наборы уровней) описывают
+            готовую викторину, а не каждое промежуточное состояние работы.
+            Педагог, собирающий викторину с нуля (FR-018), первые полчаса
+            неизбежно ей не соответствует; запрет сохранения означал бы «не
+            сохраняйся, пока не закончишь», то есть потерю работы. Поэтому —
+            перечислить поимённо и не мешать. */}
+        <div className="ciq-card" style={{ marginTop: 16 }}>
+          <p style={{ margin: '0 0 8px', color: 'var(--ciq-text-muted)' }}>Готовность викторины</p>
+          {completeness.length === 0 ? (
+            <p style={{ margin: 0 }}>Требования к готовой викторине выполнены.</p>
+          ) : (
+            <ul style={{ margin: 0, paddingLeft: 18 }}>
+              {completeness.map((p, i) => (
+                <li key={i} style={{ marginBottom: 4 }}>
+                  <span style={{ color: 'var(--ciq-text-muted)' }}>{p.requirement}:</span> {p.message}
+                </li>
+              ))}
+            </ul>
+          )}
         </div>
         {saveError && <p className="ciq-error">{saveError}</p>}
         <div style={{ marginTop: 16, display: 'flex', gap: 8 }}>

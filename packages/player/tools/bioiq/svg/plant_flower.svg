@@ -1,0 +1,62 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1100" viewBox="0 0 1600 1100">
+  <rect width="1600" height="1100" fill="#0d1620"/>
+  <text x="46" y="60" fill="#e8eef4" font-size="36" font-weight="700" font-family="system-ui, 'Segoe UI', sans-serif">Строение цветка</text>
+  <line x1="46" y1="80" x2="1554" y2="80" stroke="#24384a" stroke-width="2"/>
+  <path d="M 800 1020 L 800 860" stroke="#4f9a56" stroke-width="16" stroke-linecap="round"/>
+  <path d="M 696 860 q 104 86 208 0 z" fill="#4f9a56" stroke="#8fe09a" stroke-width="4"/>
+  <path d="M 700 854 q -78 -48 -116 -134 q 86 38 126 114 z" fill="#3f7a46" stroke="#8fe09a" stroke-width="3.5"/>
+      <path d="M 900 854 q 78 -48 116 -134 q -86 38 -126 114 z" fill="#3f7a46" stroke="#8fe09a" stroke-width="3.5"/>
+  <path d="M 704 840 q -180 -170 -104 -370 q 124 124 172 332 z" fill="#d86f9a" stroke="#f3b6cd" stroke-width="4"/>
+      <path d="M 896 840 q 180 -170 104 -370 q -124 124 -172 332 z" fill="#d86f9a" stroke="#f3b6cd" stroke-width="4"/>
+  <g>
+    <path d="M 737 830 q -72 -140 -180 -236" stroke="#e8c65e" stroke-width="7" fill="none"/>
+    <ellipse cx="620" cy="592" rx="24" ry="40" fill="#e8c65e" stroke="#f6e3a6" stroke-width="3.5" transform="rotate(-25.714285714285715 620 592)"/>
+  </g>
+  <g>
+    <path d="M 760.1 830 q -45.6 -140 -114 -236" stroke="#e8c65e" stroke-width="7" fill="none"/>
+    <ellipse cx="686" cy="592" rx="24" ry="40" fill="#e8c65e" stroke="#f6e3a6" stroke-width="3.5" transform="rotate(-16.285714285714285 686 592)"/>
+  </g>
+  <g>
+    <path d="M 839.9 830 q 45.6 -140 114 -236" stroke="#e8c65e" stroke-width="7" fill="none"/>
+    <ellipse cx="914" cy="592" rx="24" ry="40" fill="#e8c65e" stroke="#f6e3a6" stroke-width="3.5" transform="rotate(16.285714285714285 914 592)"/>
+  </g>
+  <g>
+    <path d="M 863 830 q 72 -140 180 -236" stroke="#e8c65e" stroke-width="7" fill="none"/>
+    <ellipse cx="980" cy="592" rx="24" ry="40" fill="#e8c65e" stroke="#f6e3a6" stroke-width="3.5" transform="rotate(25.714285714285715 980 592)"/>
+  </g>
+  <ellipse cx="800" cy="764" rx="82" ry="100" fill="#6fb8a2" stroke="#b6e5d7" stroke-width="5"/>
+  <circle cx="772" cy="754" r="18" fill="#d3f2c4" stroke="#8fe09a" stroke-width="3"/>
+      <circle cx="828" cy="774" r="18" fill="#d3f2c4" stroke="#8fe09a" stroke-width="3"/>
+  <path d="M 800 664 L 800 508" stroke="#6fb8a2" stroke-width="15" stroke-linecap="round"/>
+  <ellipse cx="800" cy="486" rx="56" ry="29" fill="#b6e5d7" stroke="#d9f6ee" stroke-width="4"/>
+  <path d="M 620 592 L 362 150" stroke="#6d8ba3" stroke-width="1.6" fill="none"/>
+  <circle cx="620" cy="592" r="5" fill="#6d8ba3"/>
+  <text x="340" y="157" text-anchor="end" fill="#e8eef4" font-size="21" font-family="system-ui, 'Segoe UI', sans-serif">Пыльник</text>
+  <path d="M 632 620 L 362 375" stroke="#6d8ba3" stroke-width="1.6" fill="none"/>
+  <circle cx="632" cy="620" r="5" fill="#6d8ba3"/>
+  <text x="340" y="382" text-anchor="end" fill="#e8eef4" font-size="21" font-family="system-ui, 'Segoe UI', sans-serif">Лепесток</text>
+  <path d="M 632 782 L 362 600" stroke="#6d8ba3" stroke-width="1.6" fill="none"/>
+  <circle cx="632" cy="782" r="5" fill="#6d8ba3"/>
+  <text x="340" y="607" text-anchor="end" fill="#e8eef4" font-size="21" font-family="system-ui, 'Segoe UI', sans-serif">Чашелистик</text>
+  <path d="M 800 894 L 362 825" stroke="#6d8ba3" stroke-width="1.6" fill="none"/>
+  <circle cx="800" cy="894" r="5" fill="#6d8ba3"/>
+  <text x="340" y="832" text-anchor="end" fill="#e8eef4" font-size="21" font-family="system-ui, 'Segoe UI', sans-serif">Цветоложе</text>
+  <path d="M 800 980 L 362 1050" stroke="#6d8ba3" stroke-width="1.6" fill="none"/>
+  <circle cx="800" cy="980" r="5" fill="#6d8ba3"/>
+  <text x="340" y="1057" text-anchor="end" fill="#e8eef4" font-size="21" font-family="system-ui, 'Segoe UI', sans-serif">Цветоножка</text>
+  <path d="M 800 486 L 1218 150" stroke="#6d8ba3" stroke-width="1.6" fill="none"/>
+  <circle cx="800" cy="486" r="5" fill="#6d8ba3"/>
+  <text x="1240" y="157" text-anchor="start" fill="#e8eef4" font-size="21" font-family="system-ui, 'Segoe UI', sans-serif">Рыльце</text>
+  <path d="M 800 570 L 1218 375" stroke="#6d8ba3" stroke-width="1.6" fill="none"/>
+  <circle cx="800" cy="570" r="5" fill="#6d8ba3"/>
+  <text x="1240" y="382" text-anchor="start" fill="#e8eef4" font-size="21" font-family="system-ui, 'Segoe UI', sans-serif">Столбик</text>
+  <path d="M 950 680 L 1218 600" stroke="#6d8ba3" stroke-width="1.6" fill="none"/>
+  <circle cx="950" cy="680" r="5" fill="#6d8ba3"/>
+  <text x="1240" y="607" text-anchor="start" fill="#e8eef4" font-size="21" font-family="system-ui, 'Segoe UI', sans-serif">Тычиночная нить</text>
+  <path d="M 772 754 L 1218 825" stroke="#6d8ba3" stroke-width="1.6" fill="none"/>
+  <circle cx="772" cy="754" r="5" fill="#6d8ba3"/>
+  <text x="1240" y="832" text-anchor="start" fill="#e8eef4" font-size="21" font-family="system-ui, 'Segoe UI', sans-serif">Семязачаток</text>
+  <path d="M 852 800 L 1218 1050" stroke="#6d8ba3" stroke-width="1.6" fill="none"/>
+  <circle cx="852" cy="800" r="5" fill="#6d8ba3"/>
+  <text x="1240" y="1057" text-anchor="start" fill="#e8eef4" font-size="21" font-family="system-ui, 'Segoe UI', sans-serif">Завязь</text>
+</svg>

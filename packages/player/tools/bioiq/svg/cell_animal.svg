@@ -1,0 +1,55 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1100" viewBox="0 0 1600 1100">
+  <rect width="1600" height="1100" fill="#0d1620"/>
+  <text x="46" y="60" fill="#e8eef4" font-size="36" font-weight="700" font-family="system-ui, 'Segoe UI', sans-serif">Строение животной клетки</text>
+  <line x1="46" y1="80" x2="1554" y2="80" stroke="#24384a" stroke-width="2"/>
+  <ellipse cx="800" cy="600" rx="330" ry="270" fill="#1d3a4d" stroke="#7fd4c1" stroke-width="7"/>
+  
+  <circle cx="810" cy="570" r="108" fill="#3c4f86" stroke="#9fb0e8" stroke-width="5"/>
+  <circle cx="780" cy="542" r="36" fill="#2a3566" stroke="#9fb0e8" stroke-width="3"/>
+  <g transform="translate(955 425) rotate(-20)">
+    <ellipse rx="72" ry="34" fill="#b5553f" stroke="#e08b6e" stroke-width="4"/>
+    <path d="M -50 -12 q 20 26 0 26 M -20 -18 q 22 34 0 36 M 12 -18 q 22 34 0 36 M 42 -12 q 20 26 0 26"
+          fill="none" stroke="#f0bda8" stroke-width="4"/>
+  </g>
+  <g transform="translate(620 740) rotate(15)">
+    <ellipse rx="72" ry="34" fill="#b5553f" stroke="#e08b6e" stroke-width="4"/>
+    <path d="M -50 -12 q 20 26 0 26 M -20 -18 q 22 34 0 36 M 12 -18 q 22 34 0 36 M 42 -12 q 20 26 0 26"
+          fill="none" stroke="#f0bda8" stroke-width="4"/>
+  </g>
+  <path d="M 845 655 q 90 -26 180 0" fill="none" stroke="#86b9d6" stroke-width="7" stroke-linecap="round"/><circle cx="845.0" cy="647.0" r="5" fill="#d8e9f2"/><circle cx="875.0" cy="639.8" r="5" fill="#d8e9f2"/><circle cx="905.0" cy="635.4" r="5" fill="#d8e9f2"/><circle cx="935.0" cy="634.0" r="5" fill="#d8e9f2"/><circle cx="965.0" cy="635.4" r="5" fill="#d8e9f2"/><circle cx="995.0" cy="639.8" r="5" fill="#d8e9f2"/><circle cx="1025.0" cy="647.0" r="5" fill="#d8e9f2"/><path d="M 845 689 q 90 -26 180 0" fill="none" stroke="#86b9d6" stroke-width="7" stroke-linecap="round"/><circle cx="845.0" cy="681.0" r="5" fill="#d8e9f2"/><circle cx="875.0" cy="673.8" r="5" fill="#d8e9f2"/><circle cx="905.0" cy="669.4" r="5" fill="#d8e9f2"/><circle cx="935.0" cy="668.0" r="5" fill="#d8e9f2"/><circle cx="965.0" cy="669.4" r="5" fill="#d8e9f2"/><circle cx="995.0" cy="673.8" r="5" fill="#d8e9f2"/><circle cx="1025.0" cy="681.0" r="5" fill="#d8e9f2"/><path d="M 845 723 q 90 -26 180 0" fill="none" stroke="#86b9d6" stroke-width="7" stroke-linecap="round"/><circle cx="845.0" cy="715.0" r="5" fill="#d8e9f2"/><circle cx="875.0" cy="707.8" r="5" fill="#d8e9f2"/><circle cx="905.0" cy="703.4" r="5" fill="#d8e9f2"/><circle cx="935.0" cy="702.0" r="5" fill="#d8e9f2"/><circle cx="965.0" cy="703.4" r="5" fill="#d8e9f2"/><circle cx="995.0" cy="707.8" r="5" fill="#d8e9f2"/><circle cx="1025.0" cy="715.0" r="5" fill="#d8e9f2"/><path d="M 845 757 q 90 -26 180 0" fill="none" stroke="#86b9d6" stroke-width="7" stroke-linecap="round"/><circle cx="845.0" cy="749.0" r="5" fill="#d8e9f2"/><circle cx="875.0" cy="741.8" r="5" fill="#d8e9f2"/><circle cx="905.0" cy="737.4" r="5" fill="#d8e9f2"/><circle cx="935.0" cy="736.0" r="5" fill="#d8e9f2"/><circle cx="965.0" cy="737.4" r="5" fill="#d8e9f2"/><circle cx="995.0" cy="741.8" r="5" fill="#d8e9f2"/><circle cx="1025.0" cy="749.0" r="5" fill="#d8e9f2"/>
+  <path d="M 515 470 q 70 -26 140 0" fill="none" stroke="#d8b25e" stroke-width="7" stroke-linecap="round"/><path d="M 515 491 q 70 -26 140 0" fill="none" stroke="#d8b25e" stroke-width="7" stroke-linecap="round"/><path d="M 515 512 q 70 -26 140 0" fill="none" stroke="#d8b25e" stroke-width="7" stroke-linecap="round"/><path d="M 515 533 q 70 -26 140 0" fill="none" stroke="#d8b25e" stroke-width="7" stroke-linecap="round"/><path d="M 515 554 q 70 -26 140 0" fill="none" stroke="#d8b25e" stroke-width="7" stroke-linecap="round"/><circle cx="633" cy="582" r="11" fill="#d8b25e"/><circle cx="607" cy="604" r="8" fill="#d8b25e"/>
+  <circle cx="860" cy="805" r="27" fill="#8e6fb8" stroke="#c4a8e6" stroke-width="4"/>
+    <circle cx="935" cy="780" r="18" fill="#8e6fb8" stroke="#c4a8e6" stroke-width="4"/>
+  <circle cx="550" cy="645" r="8" fill="#d8e9f2"/><circle cx="590" cy="678" r="8" fill="#d8e9f2"/><circle cx="532" cy="595" r="8" fill="#d8e9f2"/><circle cx="635" cy="662" r="8" fill="#d8e9f2"/><circle cx="568" cy="718" r="8" fill="#d8e9f2"/>
+  <rect x="985" y="540" width="6" height="60" rx="3" fill="#6fb8a2" stroke="#b6e5d7" stroke-width="2"/><rect x="994" y="540" width="6" height="60" rx="3" fill="#6fb8a2" stroke="#b6e5d7" stroke-width="2"/><rect x="1003" y="540" width="6" height="60" rx="3" fill="#6fb8a2" stroke="#b6e5d7" stroke-width="2"/><rect x="1007" y="592" width="60" height="6" rx="3" fill="#6fb8a2" stroke="#b6e5d7" stroke-width="2"/><rect x="1007" y="601" width="60" height="6" rx="3" fill="#6fb8a2" stroke="#b6e5d7" stroke-width="2"/><rect x="1007" y="610" width="60" height="6" rx="3" fill="#6fb8a2" stroke="#b6e5d7" stroke-width="2"/>
+  <path d="M 567 409 L 362 150" stroke="#6d8ba3" stroke-width="1.6" fill="none"/>
+  <circle cx="567" cy="409" r="5" fill="#6d8ba3"/>
+  <text x="340" y="157" text-anchor="end" fill="#e8eef4" font-size="21" font-family="system-ui, 'Segoe UI', sans-serif">Клеточная мембрана</text>
+  <path d="M 585 502 L 362 330" stroke="#6d8ba3" stroke-width="1.6" fill="none"/>
+  <circle cx="585" cy="502" r="5" fill="#6d8ba3"/>
+  <text x="340" y="337" text-anchor="end" fill="#e8eef4" font-size="21" font-family="system-ui, 'Segoe UI', sans-serif">Аппарат Гольджи</text>
+  <path d="M 780 542 L 362 510" stroke="#6d8ba3" stroke-width="1.6" fill="none"/>
+  <circle cx="780" cy="542" r="5" fill="#6d8ba3"/>
+  <text x="340" y="517" text-anchor="end" fill="#e8eef4" font-size="21" font-family="system-ui, 'Segoe UI', sans-serif">Ядрышко</text>
+  <path d="M 872 632 L 362 690" stroke="#6d8ba3" stroke-width="1.6" fill="none"/>
+  <circle cx="872" cy="632" r="5" fill="#6d8ba3"/>
+  <text x="340" y="697" text-anchor="end" fill="#e8eef4" font-size="21" font-family="system-ui, 'Segoe UI', sans-serif">Ядро</text>
+  <path d="M 590 678 L 362 870" stroke="#6d8ba3" stroke-width="1.6" fill="none"/>
+  <circle cx="590" cy="678" r="5" fill="#6d8ba3"/>
+  <text x="340" y="877" text-anchor="end" fill="#e8eef4" font-size="21" font-family="system-ui, 'Segoe UI', sans-serif">Рибосомы</text>
+  <path d="M 720 815 L 362 1050" stroke="#6d8ba3" stroke-width="1.6" fill="none"/>
+  <circle cx="720" cy="815" r="5" fill="#6d8ba3"/>
+  <text x="340" y="1057" text-anchor="end" fill="#e8eef4" font-size="21" font-family="system-ui, 'Segoe UI', sans-serif">Цитоплазма</text>
+  <path d="M 955 425 L 1218 150" stroke="#6d8ba3" stroke-width="1.6" fill="none"/>
+  <circle cx="955" cy="425" r="5" fill="#6d8ba3"/>
+  <text x="1240" y="157" text-anchor="start" fill="#e8eef4" font-size="21" font-family="system-ui, 'Segoe UI', sans-serif">Митохондрия</text>
+  <path d="M 1015 582 L 1218 450" stroke="#6d8ba3" stroke-width="1.6" fill="none"/>
+  <circle cx="1015" cy="582" r="5" fill="#6d8ba3"/>
+  <text x="1240" y="457" text-anchor="start" fill="#e8eef4" font-size="21" font-family="system-ui, 'Segoe UI', sans-serif">Клеточный центр</text>
+  <path d="M 1025 706 L 1218 750" stroke="#6d8ba3" stroke-width="1.6" fill="none"/>
+  <circle cx="1025" cy="706" r="5" fill="#6d8ba3"/>
+  <text x="1240" y="757" text-anchor="start" fill="#e8eef4" font-size="21" font-family="system-ui, 'Segoe UI', sans-serif">Эндоплазматическая сеть</text>
+  <path d="M 860 805 L 1218 1050" stroke="#6d8ba3" stroke-width="1.6" fill="none"/>
+  <circle cx="860" cy="805" r="5" fill="#6d8ba3"/>
+  <text x="1240" y="1057" text-anchor="start" fill="#e8eef4" font-size="21" font-family="system-ui, 'Segoe UI', sans-serif">Лизосома</text>
+</svg>

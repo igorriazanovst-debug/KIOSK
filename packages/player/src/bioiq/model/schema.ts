@@ -191,7 +191,7 @@ export const BioiqUserDataSchema = z.object({
   // при каждой новой игре, и тому, кому нужен крупный текст, приходилось
   // включать её заново каждый раз.
   boardZoomed: z.boolean().default(false),
-  // null = играется встроенная методическая викторина «Химия», не magic-id.
+  // null = играется встроенная методическая викторина, не magic-id.
   activeQuizId: z.string().nullable().default(null),
   // null = пароль режима учителя ещё не задан.
   teacherPinHash: z.string().nullable().default(null),

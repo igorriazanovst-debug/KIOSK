@@ -1,26 +1,16 @@
 // packages/player/src/bioiq/editor/SpecialCharPicker.tsx
-// FR-014 ТЗ (строка 253) - спецсимволы в тексте вопроса/ответа/подсказки.
-// Механика вставки — прямая копия rusiq/editor/SpecialCharPicker.tsx (Тип
-// 7): срез selectionStart/selectionEnd, курсор возвращается сразу после
-// вставленного символа.
+// FR-015 ТЗ 10 (строка 308) — «вставить в текст вопроса, ответа или подсказки
+// спецсимволы». Механика вставки — прямая копия rusiq/editor/
+// SpecialCharPicker.tsx (Тип 7): срез selectionStart/selectionEnd, курсор
+// возвращается сразу после вставленного символа.
 //
-// НАБОР СИМВОЛОВ ОТЛИЧАЕТСЯ ОТ РусIQ — ключевое требование эталона для
-// химии (`БиоIQ_3.1.1_разбор.md` §5, справка 4.4: «панель надстрочных и
-// подстрочных знаков... критично для химических формул, индексов,
-// зарядов»): подстрочные и надстрочные цифры для индексов формул (H₂O,
-// KMnO₄) и зарядов ионов (Na⁺, SO₄²⁻), плюс стрелка реакции. Общий
-// русскоязычный набор РусIQ сохранён — он нужен для обычного текста
-// вопроса не меньше, чем химический.
+// Сам набор символов и обоснование его состава — в specialChars.ts, отдельным
+// модулем: прогон тестов идёт через `node --experimental-strip-types`, а он
+// понимает .ts и не понимает .tsx, и иначе состав набора нечем было бы
+// проверить.
 
 import React from 'react';
-
-const GENERAL_CHARS = ['«', '»', '—', '–', '…', '№', '§', 'ё', 'Ё', '©'];
-const SUBSCRIPT_DIGITS = ['₀', '₁', '₂', '₃', '₄', '₅', '₆', '₇', '₈', '₉'];
-const SUPERSCRIPT_DIGITS = ['⁰', '¹', '²', '³', '⁴', '⁵', '⁶', '⁷', '⁸', '⁹'];
-const CHARGE_SIGNS = ['⁺', '⁻'];
-const REACTION_ARROW = ['→'];
-
-const BIOIQ_SPECIAL_CHARS = [...GENERAL_CHARS, ...SUBSCRIPT_DIGITS, ...SUPERSCRIPT_DIGITS, ...CHARGE_SIGNS, ...REACTION_ARROW];
+import { BIOIQ_SPECIAL_CHARS } from './specialChars.ts';
 
 interface Props {
   targetRef: React.RefObject<HTMLTextAreaElement | HTMLInputElement | null>;
