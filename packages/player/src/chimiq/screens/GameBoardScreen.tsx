@@ -3,6 +3,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import type { ChimiqPoint, ChimiqQuestion } from '../model/schema.ts';
 import { scoreForAnswer, nextTurn, buildBoardTiles, type ChimiqAnswerEvent, type ChimiqBoardTile } from '../gameLogic.ts';
 import { chimiqItemImageUrl } from '../chimiqMediaUrl.ts';
+import { questionThemeImageUrl } from '../questionThemeImages.ts';
 import { playCorrectTone, playWrongTone } from '../sound.ts';
 import '../chimiqTheme.css';
 
@@ -245,12 +246,26 @@ const GameBoardScreen: React.FC<Props> = ({
           </button>
         </div>
         <p className="ciq-question-text">{currentQuestion.text}</p>
-        {currentQuestion.questionImage && (
+        {currentQuestion.questionImage ? (
           <img
             src={chimiqItemImageUrl(currentQuestion.questionImage)}
             alt=""
             style={{ display: 'block', maxWidth: 220, maxHeight: 160, margin: '10px auto 0', borderRadius: 8 }}
           />
+        ) : (
+          // FR-008/FR-015 ТЗ - нейтральная иллюстрация по теме вопроса,
+          // когда своя картинка (questionImage) не загружена - см.
+          // questionThemeImages.ts, почему не персональная под ответ.
+          (() => {
+            const themeUrl = questionThemeImageUrl(currentQuestion.theme);
+            return themeUrl ? (
+              <img
+                src={themeUrl}
+                alt=""
+                style={{ display: 'block', maxWidth: 220, maxHeight: 160, margin: '10px auto 0', borderRadius: 8 }}
+              />
+            ) : null;
+          })()
         )}
         {currentQuestion.helpText.length > 0 && (
           <div className="ciq-hint">
