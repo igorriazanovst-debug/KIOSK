@@ -1,12 +1,21 @@
 // packages/player/src/physastroiq/PhysastroiqRuntime.tsx
 //
-// Фаза 4 (редактор, план реализации Тип11_ФизАстроIQ §5): полная машина
-// состояний — интро → (учитель: PIN → каталог → редактор) / (игрок:
-// настройка → поле → результаты). Прямая адаптация rusiq/RusiqRuntime.tsx
-// (Тип 7). Встроенная методическая викторина — 120 вопросов по биологии
-// (physastroiqRealContent.json), по одной карте на каждый из трёх уровней.
+// Полная машина состояний — интро → (учитель: PIN → каталог → редактор) /
+// (игрок: настройка → поле → результаты). Прямая адаптация
+// rusiq/RusiqRuntime.tsx (Тип 7).
+//
+// ВСТРОЕННЫХ ВИКТОРИН ДВЕ, ПО ЧИСЛУ ПРЕДМЕТОВ (FR-004, строка 325: «Предмет —
+// физика, астрономия»; FR-021, строка 342: методические материалы в виде
+// готовой игры-викторины). У каждой свои три карты и свои 90 вопросов.
+//
+// ПОЧЕМУ ПРЕДМЕТ ВЫБИРАЕТСЯ НА ИНТРО-ЭКРАНЕ, А НЕ В РЕЖИМЕ УЧИТЕЛЯ. Выбор
+// между физикой и астрономией — это выбор урока, его делают каждый раз, а не
+// настраивают однажды под PIN-кодом. Но если педагог назначил активной свою
+// собственную викторину, переключатель прячется: его выбор не должен
+// сбрасываться первым же нажатием.
+//
 // physastroiqDemoContent.json — образец на 12 вопросов для тестов редактора,
-// собирается тем же tools/physastroiq/build-content.mjs из того же банка.
+// собирается тем же tools/physastroiq/build-content.mjs из тех же банков.
 import React, { useEffect, useState } from 'react';
 import './physastroiqTheme.css';
 import IntroScreen from './screens/IntroScreen.tsx';
@@ -22,7 +31,8 @@ import { loadQuiz, saveQuiz, saveQuizLevelImage } from './editor/quizStore.ts';
 import { PhysastroiqQuizSchema, PHYSASTROIQ_USERDATA_SCHEMA_VERSION, type PhysastroiqQuestion, type PhysastroiqQuiz, type PhysastroiqUserData } from './model/schema.ts';
 import { assignQuestions, summarizeResults, type PhysastroiqAnswerEvent } from './gameLogic.ts';
 import { loadUserData, saveUserData } from './userDataStorage.ts';
-import realContentJson from './content/physastroiqRealContent.json' with { type: 'json' };
+import physicsContentJson from './content/physastroiqPhysicsContent.json' with { type: 'json' };
+import astroContentJson from './content/physastroiqAstroContent.json' with { type: 'json' };
 
 // Изображение-карта — плоская строка пути в public/, без import (см. урок
 // §4 ретроспективы Тип7: import.meta ломает non-module сборку
@@ -32,7 +42,23 @@ function levelImageUrl(fileName: string): string {
   return `./physastroiq/${fileName}`;
 }
 
-const BUILTIN_QUIZ: PhysastroiqQuiz = PhysastroiqQuizSchema.parse(realContentJson);
+const BUILTIN_QUIZZES: PhysastroiqQuiz[] = [
+  PhysastroiqQuizSchema.parse(physicsContentJson),
+  PhysastroiqQuizSchema.parse(astroContentJson),
+];
+
+/**
+ * Викторина, которая открывается, пока ничего не выбрано.
+ *
+ * Она же — запасной вариант, если сохранённый activeQuizId указывает в
+ * никуда: собственную викторину педагог мог удалить, а запись о ней осталась.
+ * Показать в этом случае пустой экран было бы хуже, чем показать физику.
+ */
+const DEFAULT_BUILTIN = BUILTIN_QUIZZES[0];
+
+function findBuiltin(quizId: string | null): PhysastroiqQuiz | undefined {
+  return BUILTIN_QUIZZES.find((q) => q.id === quizId);
+}
 
 interface Props {
   properties: { title?: string };
@@ -51,7 +77,7 @@ const INITIAL_USER_DATA: PhysastroiqUserData = {
 
 export default function PhysastroiqRuntime({ properties }: Props) {
   const [phase, setPhase] = useState<Phase>('loading');
-  const [activeQuiz, setActiveQuiz] = useState<PhysastroiqQuiz>(BUILTIN_QUIZ);
+  const [activeQuiz, setActiveQuiz] = useState<PhysastroiqQuiz>(DEFAULT_BUILTIN);
   const [setup, setSetup] = useState<GameSetupResult | null>(null);
   const [questionsByPlayer, setQuestionsByPlayer] = useState<PhysastroiqQuestion[][]>([]);
   const [finalAnswers, setFinalAnswers] = useState<PhysastroiqAnswerEvent[]>([]);
@@ -72,11 +98,17 @@ export default function PhysastroiqRuntime({ properties }: Props) {
         if (corrupted) {
           setStorageWarning('Не удалось прочитать сохранённые данные ФизАстроIQ (история партий, статистика) — файл повреждён. Начато с чистого состояния; сохранение новых партий работает как обычно.');
         }
-        if (loaded.activeQuizId !== null) {
+        // Порядок важен: идентификатор встроенной викторины в хранилище
+        // пользовательских не найдётся, и без этой проверки выбор предмета
+        // молча сбрасывался бы на физику при каждом запуске.
+        const builtin = findBuiltin(loaded.activeQuizId);
+        if (builtin) {
+          setActiveQuiz(builtin);
+        } else if (loaded.activeQuizId !== null) {
           const custom = await loadQuiz(loaded.activeQuizId);
-          setActiveQuiz(custom ?? BUILTIN_QUIZ);
+          setActiveQuiz(custom ?? DEFAULT_BUILTIN);
         } else {
-          setActiveQuiz(BUILTIN_QUIZ);
+          setActiveQuiz(DEFAULT_BUILTIN);
         }
         setPhase('intro');
       })
@@ -118,6 +150,29 @@ export default function PhysastroiqRuntime({ properties }: Props) {
     saveUserData(updated);
   }
 
+  /**
+   * Назначает активную викторину: встроенную по идентификатору, свою — из
+   * хранилища, null — предмет по умолчанию.
+   *
+   * Обработчик общий для каталога учителя и переключателя предмета на
+   * интро-экране: два места, меняющие одно и то же поле userData разными
+   * путями, разошлись бы при первой же правке.
+   */
+  async function handleSetActiveQuiz(quizId: string | null) {
+    const updated: PhysastroiqUserData = { ...userData, activeQuizId: quizId };
+    setUserData(updated);
+    saveUserData(updated);
+    const builtin = findBuiltin(quizId);
+    if (builtin) {
+      setActiveQuiz(builtin);
+    } else if (quizId !== null) {
+      const custom = await loadQuiz(quizId);
+      setActiveQuiz(custom ?? DEFAULT_BUILTIN);
+    } else {
+      setActiveQuiz(DEFAULT_BUILTIN);
+    }
+  }
+
   function handleRestart() {
     setPhase('intro');
     setSetup(null);
@@ -134,17 +189,21 @@ export default function PhysastroiqRuntime({ properties }: Props) {
     setPhase('catalog');
   }
 
-  // Дублирует встроенную демо-викторину как отправную точку для
-  // собственной — копирует ВСЕ изображения её уровней (не одно, как у
-  // rusiq: там на всю викторину одна картинка), т.к. до сохранения
-  // duplicated.images всё ещё ссылается на demo_grid.png из public/,
-  // недоступный по physastroiqmedia://.
-  async function handleDuplicateBuiltin() {
+  // Дублирует встроенную викторину как отправную точку для собственной —
+  // копирует ВСЕ изображения её уровней (не одно, как у rusiq: там на всю
+  // викторину одна картинка), т.к. до сохранения duplicated.images всё ещё
+  // ссылается на файл из public/, недоступный по physastroiqmedia://.
+  //
+  // Встроенных викторин две, поэтому дублируется НАЗВАННАЯ, а не «та самая»:
+  // педагог, строящий свою викторину по астрономии, не должен получить копию
+  // физики.
+  async function handleDuplicateBuiltin(sourceId: string) {
+    const source = findBuiltin(sourceId) ?? DEFAULT_BUILTIN;
     try {
       const newId = crypto.randomUUID();
-      const patchedImages: typeof BUILTIN_QUIZ.images = {};
-      for (const levelKey of Object.keys(BUILTIN_QUIZ.images)) {
-        const meta = BUILTIN_QUIZ.images[levelKey];
+      const patchedImages: typeof source.images = {};
+      for (const levelKey of Object.keys(source.images)) {
+        const meta = source.images[levelKey];
         const response = await fetch(levelImageUrl(meta.fileName));
         if (!response.ok) throw new Error('fetch failed for level ' + levelKey);
         const buffer = await response.arrayBuffer();
@@ -153,9 +212,9 @@ export default function PhysastroiqRuntime({ properties }: Props) {
         patchedImages[levelKey] = { ...meta, fileName: saved.fileName };
       }
       const duplicated: PhysastroiqQuiz = {
-        ...BUILTIN_QUIZ,
+        ...source,
         id: newId,
-        title: `${BUILTIN_QUIZ.title} (копия)`,
+        title: `${source.title} (копия)`,
         passwordHash: null,
         images: patchedImages,
       };
@@ -172,6 +231,8 @@ export default function PhysastroiqRuntime({ properties }: Props) {
     return (
       <IntroScreen
         quiz={activeQuiz}
+        subjects={BUILTIN_QUIZZES.map((q) => ({ id: q.id, title: q.title }))}
+        onSelectSubject={handleSetActiveQuiz}
         onPlay={() => setPhase('setup')}
         onTeacherMode={() => setPhase('teacherGate')}
         onShowThematicGallery={() => setPhase('thematicGallery')}
@@ -221,19 +282,9 @@ export default function PhysastroiqRuntime({ properties }: Props) {
   if (phase === 'catalog') {
     return (
       <QuizCatalogScreen
-        builtinQuizTitle={BUILTIN_QUIZ.title}
+        builtinQuizzes={BUILTIN_QUIZZES.map((q) => ({ id: q.id, title: q.title, questionCount: q.questions.length }))}
         activeQuizId={userData.activeQuizId}
-        onSetActiveQuiz={async (quizId) => {
-          const updated: PhysastroiqUserData = { ...userData, activeQuizId: quizId };
-          setUserData(updated);
-          saveUserData(updated);
-          if (quizId !== null) {
-            const custom = await loadQuiz(quizId);
-            setActiveQuiz(custom ?? BUILTIN_QUIZ);
-          } else {
-            setActiveQuiz(BUILTIN_QUIZ);
-          }
-        }}
+        onSetActiveQuiz={handleSetActiveQuiz}
         onEditQuiz={(quiz, pendingLevel1Image) => {
           setEditingQuiz({ quiz, pendingLevel1Image });
           setPhase('editor');
@@ -270,6 +321,8 @@ export default function PhysastroiqRuntime({ properties }: Props) {
   return (
     <IntroScreen
       quiz={activeQuiz}
+      subjects={BUILTIN_QUIZZES.map((q) => ({ id: q.id, title: q.title }))}
+      onSelectSubject={handleSetActiveQuiz}
       onPlay={() => setPhase('setup')}
       onTeacherMode={() => setPhase('teacherGate')}
       onShowThematicGallery={() => setPhase('thematicGallery')}

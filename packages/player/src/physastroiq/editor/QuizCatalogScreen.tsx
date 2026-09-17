@@ -20,12 +20,23 @@ import {
   persistItemImageViaIpc,
 } from './quizExport.ts';
 
+interface BuiltinEntry {
+  id: string;
+  title: string;
+  questionCount: number;
+}
+
 interface Props {
-  builtinQuizTitle: string;
+  /**
+   * Встроенные викторины — по одной на предмет (FR-004, строка 325).
+   * Список, а не одно название: их две, и каждую можно назначить активной и
+   * продублировать отдельно от другой.
+   */
+  builtinQuizzes: BuiltinEntry[];
   activeQuizId: string | null;
   onSetActiveQuiz: (quizId: string | null) => void;
   onEditQuiz: (quiz: PhysastroiqQuiz, pendingLevel1Image: { buffer: ArrayBuffer; mimeType: string } | null) => void;
-  onDuplicateBuiltin: () => Promise<void>;
+  onDuplicateBuiltin: (quizId: string) => Promise<void>;
   onShowDailyStats: () => void;
   onExit: () => void;
 }
@@ -58,7 +69,7 @@ async function buildBlankQuiz(result: NewQuizResult): Promise<{ quiz: Physastroi
 
 type PendingAction = 'edit' | 'delete' | 'duplicate' | 'export';
 
-const QuizCatalogScreen: React.FC<Props> = ({ builtinQuizTitle, activeQuizId, onSetActiveQuiz, onEditQuiz, onDuplicateBuiltin, onShowDailyStats, onExit }) => {
+const QuizCatalogScreen: React.FC<Props> = ({ builtinQuizzes, activeQuizId, onSetActiveQuiz, onEditQuiz, onDuplicateBuiltin, onShowDailyStats, onExit }) => {
   const [entries, setEntries] = useState<QuizListEntry[]>([]);
   const [showNewQuizModal, setShowNewQuizModal] = useState(false);
   const [passwordPromptFor, setPasswordPromptFor] = useState<{ id: string; passwordHash: string; action: PendingAction } | null>(null);
@@ -206,19 +217,26 @@ const QuizCatalogScreen: React.FC<Props> = ({ builtinQuizTitle, activeQuizId, on
           Каталог викторин
         </h2>
         <div className="ciq-divider" />
-        <div className={`ciq-row ${activeQuizId === null ? 'ciq-row-active' : ''}`}>
-          <span className="ciq-row-title">
-            {activeQuizId === null ? '★ ' : ''}
-            {builtinQuizTitle}
-            <span className="ciq-row-title-badge">(встроенная)</span>
-          </span>
-          <button onClick={() => onSetActiveQuiz(null)} className="ciq-btn ciq-btn-small">
-            Играть эту
-          </button>
-          <button onClick={() => onDuplicateBuiltin().then(refresh)} className="ciq-btn ciq-btn-muted ciq-btn-small">
-            Дублировать
-          </button>
-        </div>
+        {builtinQuizzes.map((builtin, i) => {
+          // Первая встроенная викторина активна и тогда, когда ничего не
+          // выбрано: activeQuizId === null означает «предмет по умолчанию».
+          const isActive = activeQuizId === builtin.id || (activeQuizId === null && i === 0);
+          return (
+            <div key={builtin.id} className={`ciq-row ${isActive ? 'ciq-row-active' : ''}`} data-testid={`physastroiq-builtin-${builtin.id}`}>
+              <span className="ciq-row-title">
+                {isActive ? '★ ' : ''}
+                {builtin.title}
+                <span className="ciq-row-title-badge">(встроенная, {builtin.questionCount} вопр.)</span>
+              </span>
+              <button onClick={() => onSetActiveQuiz(builtin.id)} className="ciq-btn ciq-btn-small">
+                Играть эту
+              </button>
+              <button onClick={() => onDuplicateBuiltin(builtin.id).then(refresh)} className="ciq-btn ciq-btn-muted ciq-btn-small">
+                Дублировать
+              </button>
+            </div>
+          );
+        })}
         {entries.map((entry) => (
           <div key={entry.id} className={`ciq-row ${activeQuizId === entry.id ? 'ciq-row-active' : ''}`}>
             <span className="ciq-row-title">

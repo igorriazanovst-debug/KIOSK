@@ -23,21 +23,29 @@
 // пустой цитоплазме, для неё безупречен. Урок Типа 4 — два дефекта из двух
 // нашлись просмотром картинок, а не прогоном.
 //
-// Запуск: node tools/physastroiq/overlay-structures.mjs <каталог svg уровней> <каталог вывода>
+// Запуск: node tools/physastroiq/overlay-structures.mjs <physics|astro> [каталог svg] [каталог вывода]
 
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const HERE = path.dirname(fileURLToPath(import.meta.url));
-const SRC = process.argv[2] || path.join(HERE, 'levelsvg');
-const OUT = process.argv[3] || path.join(HERE, 'overlay');
+// Предмет обязателен: карт теперь два набора, и накладывать координаты физики
+// на карту астрономии бессмысленно.
+const SUBJECT = process.argv[2];
+const PREFIX = { physics: 'phys', astro: 'astro' }[SUBJECT];
+if (!PREFIX) {
+  console.error('нужен предмет: physics или astro');
+  process.exit(1);
+}
+const SRC = process.argv[3] || path.join(HERE, 'levelsvg');
+const OUT = process.argv[4] || path.join(HERE, 'overlay');
 
-const meta = JSON.parse(fs.readFileSync(path.join(HERE, 'structures.json'), 'utf-8'));
+const meta = JSON.parse(fs.readFileSync(path.join(HERE, `structures-${SUBJECT}.json`), 'utf-8'));
 fs.mkdirSync(OUT, { recursive: true });
 
 for (const [id, level] of Object.entries(meta)) {
-  const svgPath = path.join(SRC, `level${id}.svg`);
+  const svgPath = path.join(SRC, `${PREFIX}_level${id}_map.svg`);
   if (!fs.existsSync(svgPath)) {
     console.error(`нет рисунка уровня ${id}: ${svgPath}`);
     process.exitCode = 1;
@@ -55,7 +63,7 @@ for (const [id, level] of Object.entries(meta)) {
   }
 
   const out = svg.replace('</svg>', marks.join('\n  ') + '\n</svg>');
-  fs.writeFileSync(path.join(OUT, `level${id}.svg`), out, 'utf-8');
+  fs.writeFileSync(path.join(OUT, `${PREFIX}_level${id}.svg`), out, 'utf-8');
   console.log(`уровень ${id}: областей ${level.structures.length} + обманок ${level.decoys.length}`);
 }
 console.log(`\nотладочные рисунки: ${OUT}`);

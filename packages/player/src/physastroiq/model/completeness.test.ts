@@ -8,7 +8,8 @@ import {
   rectsOverlap,
   PHYSASTROIQ_MIN_GENERIC_DECOYS_PER_LEVEL,
 } from './completeness.ts';
-import realContent from '../content/physastroiqRealContent.json' with { type: 'json' };
+import physicsContent from '../content/physastroiqPhysicsContent.json' with { type: 'json' };
+import astroContent from '../content/physastroiqAstroContent.json' with { type: 'json' };
 
 function decoys(level: 1 | 2 | 3, count: number, startX = 0) {
   return Array.from({ length: count }, (_, i) => ({
@@ -195,11 +196,19 @@ test('FR-009: уровень без изображения-карты назва
   assert.ok(found.some((p) => p.requirement === 'FR-008' && p.message.includes('уровень 3')));
 });
 
-test('поставляемая методическая викторина проходит проверку комплектности', () => {
+test('ОБЕ поставляемые викторины проходят проверку комплектности', () => {
   // Главный тест файла: всё остальное здесь проверяет саму проверку, а этот —
   // то, что едет заказчику. Если в поставке меньше десяти точек-обманок на
   // уровне или области налезают друг на друга, узнать об этом надо здесь, а
   // не на приёмке.
-  const quiz = PhysastroiqQuizSchema.parse(realContent);
-  assert.deepEqual(checkPhysastroiqQuiz(quiz), []);
+  //
+  // Проверяются обе: встроенных викторин две, по числу предметов, и
+  // благополучие одной ничего не говорит о второй.
+  for (const [name, raw] of [
+    ['Физика', physicsContent],
+    ['Астрономия', astroContent],
+  ] as const) {
+    const quiz = PhysastroiqQuizSchema.parse(raw);
+    assert.deepEqual(checkPhysastroiqQuiz(quiz), [], `викторина «${name}»`);
+  }
 });

@@ -387,3 +387,133 @@ export function craterMark(cx, cy, r) {
 export function boxAround(x, y, w, h, color = PALETTE.muted) {
   return `<rect x="${x}" y="${y}" width="${w}" height="${h}" rx="10" fill="none" stroke="${color}" stroke-width="1.6" stroke-dasharray="7 6" opacity="0.75"/>`;
 }
+
+// ─── Ещё элементы цепи (для игровых карт уровней) ──────────────────────────
+
+/** Реостат: резистор со скользящим контактом — косая стрелка поверх. */
+export function rheostatSym(cx, cy, w = 96, h = 36) {
+  return `${resistorSym(cx, cy, w, h)}
+  ${vec(cx - w * 0.55, cy + h * 0.9, cx + w * 0.5, cy - h * 0.95, { color: PALETTE.wire, width: 2.6, head: 13 })}`;
+}
+
+/** Плавкий предохранитель: прямоугольник с проволокой насквозь. */
+export function fuseSym(cx, cy, w = 90, h = 30) {
+  return `<rect x="${cx - w / 2}" y="${cy - h / 2}" width="${w}" height="${h}" fill="${PALETTE.bg}" stroke="${PALETTE.wire}" stroke-width="2.6"/>
+  ${line(cx - w / 2, cy, cx + w / 2, cy, { color: PALETTE.wire, width: 2.2 })}`;
+}
+
+/** Электродвигатель: окружность с буквой М. */
+export function motorSym(cx, cy, r = 32) {
+  return meterSym(cx, cy, 'М', r);
+}
+
+/** Электрический звонок: полусфера с язычком. */
+export function bellSym(cx, cy, r = 30) {
+  return `<path d="M ${cx - r} ${cy} A ${r} ${r} 0 0 1 ${cx + r} ${cy} Z" fill="${PALETTE.bg}" stroke="${PALETTE.wire}" stroke-width="2.6"/>
+  ${line(cx - r, cy, cx + r, cy, { color: PALETTE.wire, width: 2.6 })}
+  ${dot(cx, cy + 9, 5, PALETTE.wire)}`;
+}
+
+/** Конденсатор: две параллельные пластины с зазором. */
+export function capacitorSym(cx, cy, h = 44, gap = 14) {
+  return `${line(cx - gap / 2, cy - h / 2, cx - gap / 2, cy + h / 2, { color: PALETTE.wire, width: 4 })}
+  ${line(cx + gap / 2, cy - h / 2, cx + gap / 2, cy + h / 2, { color: PALETTE.wire, width: 4 })}`;
+}
+
+/** Нагревательный элемент: зигзаг спирали в рамке. */
+export function heaterSym(cx, cy, w = 100, h = 40) {
+  const n = 6;
+  const step = w / n;
+  const pts = [];
+  for (let i = 0; i <= n; i += 1) {
+    pts.push(`${cx - w / 2 + i * step},${cy + (i % 2 ? h * 0.3 : -h * 0.3)}`);
+  }
+  return `<rect x="${cx - w / 2}" y="${cy - h / 2}" width="${w}" height="${h}" fill="${PALETTE.bg}" stroke="${PALETTE.wire}" stroke-width="2.6"/>
+  <polyline points="${pts.join(' ')}" fill="none" stroke="${PALETTE.hot}" stroke-width="3"/>`;
+}
+
+/** Заземление: три убывающие черты под вертикальным выводом. */
+export function groundSym(cx, cy, w = 56) {
+  return `${line(cx, cy - 26, cx, cy, { color: PALETTE.wire, width: 2.6 })}
+  ${line(cx - w / 2, cy, cx + w / 2, cy, { color: PALETTE.wire, width: 3.4 })}
+  ${line(cx - w / 3, cy + 11, cx + w / 3, cy + 11, { color: PALETTE.wire, width: 3 })}
+  ${line(cx - w / 6, cy + 22, cx + w / 6, cy + 22, { color: PALETTE.wire, width: 2.6 })}`;
+}
+
+/**
+ * Клемма (зажим) — маленький квадрат с выводом.
+ *
+ * На картах уровней клеммы служат ТОЧКАМИ БЕЗ ПРИВЯЗКИ (FR-013). Это
+ * настоящая деталь схемы, но ни один вопрос про неё не спрашивает: щёлкнув по
+ * клемме, ученик ошибается осмысленно, а не промахивается мимо всего. Брать
+ * обманками вторые экземпляры приборов нельзя — тогда правильных мест на
+ * карте оказалось бы два, а засчитывалось бы одно.
+ */
+export function terminalSym(cx, cy, r = 11) {
+  return `<rect x="${cx - r}" y="${cy - r}" width="${r * 2}" height="${r * 2}" rx="3" fill="${PALETTE.body}" stroke="${PALETTE.wire}" stroke-width="2"/>
+  ${dot(cx, cy, r * 0.34, PALETTE.wire)}`;
+}
+
+// ─── Механика (для игровых карт уровней) ───────────────────────────────────
+
+/** Блок: колесо с осью и ободом. */
+export function pulley(cx, cy, r = 44) {
+  return `<circle cx="${cx}" cy="${cy}" r="${r}" fill="${PALETTE.body}" stroke="${PALETTE.metal}" stroke-width="4"/>
+  <circle cx="${cx}" cy="${cy}" r="${r * 0.62}" fill="none" stroke="${PALETTE.metal}" stroke-width="2"/>
+  ${dot(cx, cy, 6, PALETTE.metal)}`;
+}
+
+/** Пружина: синусоида вдоль вертикали (динамометр, подвес груза). */
+export function springCoil(cx, yTop, yBottom, turns = 7, amp = 18) {
+  const h = yBottom - yTop;
+  const step = h / (turns * 2);
+  const pts = [`${cx},${yTop}`];
+  for (let i = 1; i <= turns * 2; i += 1) {
+    pts.push(`${cx + (i % 2 ? amp : -amp)},${yTop + i * step}`);
+  }
+  pts.push(`${cx},${yBottom}`);
+  return `<polyline points="${pts.join(' ')}" fill="none" stroke="${PALETTE.metal}" stroke-width="3.4" stroke-linejoin="round"/>`;
+}
+
+/** Зубчатое колесо. */
+export function gearWheel(cx, cy, r = 52, teeth = 12) {
+  const parts = [`<circle cx="${cx}" cy="${cy}" r="${r}" fill="${PALETTE.body}" stroke="${PALETTE.metal}" stroke-width="3"/>`];
+  for (let i = 0; i < teeth; i += 1) {
+    const a = (i / teeth) * Math.PI * 2;
+    const x1 = cx + Math.cos(a) * r;
+    const y1 = cy + Math.sin(a) * r;
+    const x2 = cx + Math.cos(a) * (r + 13);
+    const y2 = cy + Math.sin(a) * (r + 13);
+    parts.push(line(x1, y1, x2, y2, { color: PALETTE.metal, width: 9 }));
+  }
+  parts.push(`<circle cx="${cx}" cy="${cy}" r="${r * 0.3}" fill="${PALETTE.bg}" stroke="${PALETTE.metal}" stroke-width="3"/>`);
+  return parts.join('\n  ');
+}
+
+// ─── Оптика (для игровых карт уровней) ─────────────────────────────────────
+
+/** Собирающая линза: двояковыпуклая, со стрелками-остриями наружу. */
+export function convexLens(cx, cy, half = 120, bulge = 46) {
+  return `<path d="M ${cx} ${cy - half} Q ${cx + bulge} ${cy} ${cx} ${cy + half} Q ${cx - bulge} ${cy} ${cx} ${cy - half} Z" fill="${PALETTE.lensFill}" stroke="${PALETTE.lens}" stroke-width="3"/>`;
+}
+
+/** Рассеивающая линза: двояковогнутая. */
+export function concaveLens(cx, cy, half = 120, waist = 16) {
+  return `<path d="M ${cx - 30} ${cy - half} L ${cx + 30} ${cy - half} Q ${cx + waist} ${cy} ${cx + 30} ${cy + half} L ${cx - 30} ${cy + half} Q ${cx - waist} ${cy} ${cx - 30} ${cy - half} Z" fill="${PALETTE.lensFill}" stroke="${PALETTE.lens}" stroke-width="3"/>`;
+}
+
+/** Плоское зеркало: отражающая грань и штриховка с изнанки. */
+export function flatMirror(x, yTop, yBottom) {
+  const hatch = [];
+  for (let y = yTop + 8; y < yBottom; y += 18) {
+    hatch.push(line(x, y, x + 16, y + 14, { color: PALETTE.metal, width: 2 }));
+  }
+  return `${line(x, yTop, x, yBottom, { color: PALETTE.lens, width: 5 })}
+  ${hatch.join('\n  ')}`;
+}
+
+/** Треугольная призма. */
+export function prism(cx, cy, size = 110) {
+  const h = size * 0.866;
+  return `<polygon points="${cx},${cy - h * 0.66} ${cx - size / 2},${cy + h * 0.34} ${cx + size / 2},${cy + h * 0.34}" fill="${PALETTE.lensFill}" stroke="${PALETTE.lens}" stroke-width="3"/>`;
+}

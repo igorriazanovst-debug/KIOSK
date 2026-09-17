@@ -42,7 +42,7 @@ const OUT = process.argv[2] || path.join(PLAYER, '..', '..', 'docs', 'physastroi
 const PER_LEVEL = 4;
 
 const real = JSON.parse(
-  fs.readFileSync(path.join(PLAYER, 'src', 'physastroiq', 'content', 'physastroiqRealContent.json'), 'utf-8')
+  fs.readFileSync(path.join(PLAYER, 'src', 'physastroiq', 'content', 'physastroiqPhysicsContent.json'), 'utf-8')
 );
 
 // Берём по нескольку вопросов с РАЗНЫМИ темами: проверяющему полезнее увидеть

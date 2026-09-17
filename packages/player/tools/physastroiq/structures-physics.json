@@ -1,0 +1,616 @@
+{
+  "1": {
+    "title": "Электрическая цепь",
+    "width": 1800,
+    "height": 1200,
+    "structures": [
+      {
+        "id": "lamp",
+        "label": "Лампа накаливания",
+        "x": 505,
+        "y": 280,
+        "width": 110,
+        "height": 100
+      },
+      {
+        "id": "rheostat",
+        "label": "Реостат",
+        "x": 830,
+        "y": 284,
+        "width": 140,
+        "height": 92
+      },
+      {
+        "id": "resistor",
+        "label": "Резистор",
+        "x": 1235,
+        "y": 140,
+        "width": 140,
+        "height": 80
+      },
+      {
+        "id": "heater",
+        "label": "Нагревательный элемент",
+        "x": 1230,
+        "y": 429,
+        "width": 150,
+        "height": 82
+      },
+      {
+        "id": "ammeter",
+        "label": "Амперметр",
+        "x": 1495,
+        "y": 515,
+        "width": 90,
+        "height": 90
+      },
+      {
+        "id": "motor",
+        "label": "Электродвигатель",
+        "x": 1495,
+        "y": 755,
+        "width": 90,
+        "height": 90
+      },
+      {
+        "id": "fuse",
+        "label": "Плавкий предохранитель",
+        "x": 1180,
+        "y": 905,
+        "width": 140,
+        "height": 90
+      },
+      {
+        "id": "switch",
+        "label": "Ключ",
+        "x": 890,
+        "y": 880,
+        "width": 120,
+        "height": 100
+      },
+      {
+        "id": "battery",
+        "label": "Источник тока",
+        "x": 540,
+        "y": 895,
+        "width": 120,
+        "height": 110
+      },
+      {
+        "id": "bell",
+        "label": "Электрический звонок",
+        "x": 210,
+        "y": 741,
+        "width": 100,
+        "height": 90
+      },
+      {
+        "id": "coil",
+        "label": "Катушка (электромагнит)",
+        "x": 680,
+        "y": 637,
+        "width": 275,
+        "height": 90
+      },
+      {
+        "id": "ground",
+        "label": "Заземление",
+        "x": 1045,
+        "y": 756,
+        "width": 110,
+        "height": 100
+      },
+      {
+        "id": "capacitor",
+        "label": "Конденсатор",
+        "x": 1300,
+        "y": 777,
+        "width": 100,
+        "height": 96
+      },
+      {
+        "id": "voltmeter",
+        "label": "Вольтметр",
+        "x": 512,
+        "y": 164,
+        "width": 96,
+        "height": 92
+      }
+    ],
+    "decoys": [
+      {
+        "x": 243,
+        "y": 313,
+        "width": 34,
+        "height": 34
+      },
+      {
+        "x": 383,
+        "y": 313,
+        "width": 34,
+        "height": 34
+      },
+      {
+        "x": 1033,
+        "y": 313,
+        "width": 34,
+        "height": 34
+      },
+      {
+        "x": 1523,
+        "y": 313,
+        "width": 34,
+        "height": 34
+      },
+      {
+        "x": 1133,
+        "y": 313,
+        "width": 34,
+        "height": 34
+      },
+      {
+        "x": 1443,
+        "y": 313,
+        "width": 34,
+        "height": 34
+      },
+      {
+        "x": 243,
+        "y": 933,
+        "width": 34,
+        "height": 34
+      },
+      {
+        "x": 743,
+        "y": 933,
+        "width": 34,
+        "height": 34
+      },
+      {
+        "x": 1063,
+        "y": 933,
+        "width": 34,
+        "height": 34
+      },
+      {
+        "x": 1523,
+        "y": 933,
+        "width": 34,
+        "height": 34
+      },
+      {
+        "x": 433,
+        "y": 683,
+        "width": 34,
+        "height": 34
+      },
+      {
+        "x": 1463,
+        "y": 683,
+        "width": 34,
+        "height": 34
+      },
+      {
+        "x": 243,
+        "y": 683,
+        "width": 34,
+        "height": 34
+      }
+    ],
+    "fileName": "phys_level1_map.png"
+  },
+  "2": {
+    "title": "Простые механизмы и силы",
+    "width": 1800,
+    "height": 1200,
+    "structures": [
+      {
+        "id": "lever",
+        "label": "Рычаг",
+        "x": 545,
+        "y": 288,
+        "width": 140,
+        "height": 46
+      },
+      {
+        "id": "fulcrum",
+        "label": "Точка опоры",
+        "x": 385,
+        "y": 327,
+        "width": 110,
+        "height": 110
+      },
+      {
+        "id": "stand",
+        "label": "Штатив",
+        "x": 826,
+        "y": 1026,
+        "width": 190,
+        "height": 48
+      },
+      {
+        "id": "spring",
+        "label": "Пружина",
+        "x": 965,
+        "y": 590,
+        "width": 90,
+        "height": 200
+      },
+      {
+        "id": "fixed-pulley",
+        "label": "Неподвижный блок",
+        "x": 1192,
+        "y": 217,
+        "width": 116,
+        "height": 116
+      },
+      {
+        "id": "movable-pulley",
+        "label": "Подвижный блок",
+        "x": 1288,
+        "y": 506,
+        "width": 108,
+        "height": 108
+      },
+      {
+        "id": "rope",
+        "label": "Трос",
+        "x": 1168,
+        "y": 600,
+        "width": 56,
+        "height": 150
+      },
+      {
+        "id": "load",
+        "label": "Груз",
+        "x": 1274,
+        "y": 636,
+        "width": 136,
+        "height": 118
+      },
+      {
+        "id": "incline",
+        "label": "Наклонная плоскость",
+        "x": 470,
+        "y": 940,
+        "width": 210,
+        "height": 100
+      },
+      {
+        "id": "wedge",
+        "label": "Клин",
+        "x": 246,
+        "y": 696,
+        "width": 190,
+        "height": 98
+      },
+      {
+        "id": "pendulum",
+        "label": "Нитяной маятник",
+        "x": 910,
+        "y": 450,
+        "width": 100,
+        "height": 100
+      },
+      {
+        "id": "gear",
+        "label": "Зубчатое колесо",
+        "x": 1205,
+        "y": 805,
+        "width": 190,
+        "height": 190
+      },
+      {
+        "id": "axle",
+        "label": "Вал",
+        "x": 1432,
+        "y": 880,
+        "width": 188,
+        "height": 40
+      },
+      {
+        "id": "screw",
+        "label": "Винт",
+        "x": 1176,
+        "y": 1006,
+        "width": 308,
+        "height": 54
+      }
+    ],
+    "decoys": [
+      {
+        "x": 164,
+        "y": 147,
+        "width": 32,
+        "height": 32
+      },
+      {
+        "x": 504,
+        "y": 147,
+        "width": 32,
+        "height": 32
+      },
+      {
+        "x": 744,
+        "y": 147,
+        "width": 32,
+        "height": 32
+      },
+      {
+        "x": 1004,
+        "y": 147,
+        "width": 32,
+        "height": 32
+      },
+      {
+        "x": 1584,
+        "y": 147,
+        "width": 32,
+        "height": 32
+      },
+      {
+        "x": 134,
+        "y": 544,
+        "width": 32,
+        "height": 32
+      },
+      {
+        "x": 134,
+        "y": 884,
+        "width": 32,
+        "height": 32
+      },
+      {
+        "x": 1634,
+        "y": 544,
+        "width": 32,
+        "height": 32
+      },
+      {
+        "x": 1634,
+        "y": 744,
+        "width": 32,
+        "height": 32
+      },
+      {
+        "x": 284,
+        "y": 1104,
+        "width": 32,
+        "height": 32
+      },
+      {
+        "x": 624,
+        "y": 1104,
+        "width": 32,
+        "height": 32
+      },
+      {
+        "x": 884,
+        "y": 1104,
+        "width": 32,
+        "height": 32
+      },
+      {
+        "x": 1544,
+        "y": 1104,
+        "width": 32,
+        "height": 32
+      }
+    ],
+    "fileName": "phys_level2_map.png"
+  },
+  "3": {
+    "title": "Оптика: линзы, зеркала и ход лучей",
+    "width": 1800,
+    "height": 1200,
+    "structures": [
+      {
+        "id": "convex-lens",
+        "label": "Собирающая линза",
+        "x": 478,
+        "y": 330,
+        "width": 84,
+        "height": 160
+      },
+      {
+        "id": "focus",
+        "label": "Фокус",
+        "x": 603,
+        "y": 373,
+        "width": 74,
+        "height": 74
+      },
+      {
+        "id": "optical-axis",
+        "label": "Главная оптическая ось",
+        "x": 150,
+        "y": 384,
+        "width": 100,
+        "height": 52
+      },
+      {
+        "id": "object-arrow",
+        "label": "Предмет",
+        "x": 240,
+        "y": 296,
+        "width": 80,
+        "height": 84
+      },
+      {
+        "id": "image-arrow",
+        "label": "Изображение",
+        "x": 716,
+        "y": 432,
+        "width": 88,
+        "height": 96
+      },
+      {
+        "id": "flat-mirror",
+        "label": "Плоское зеркало",
+        "x": 1088,
+        "y": 196,
+        "width": 74,
+        "height": 124
+      },
+      {
+        "id": "normal",
+        "label": "Перпендикуляр к зеркалу",
+        "x": 1248,
+        "y": 328,
+        "width": 116,
+        "height": 54
+      },
+      {
+        "id": "incident-ray",
+        "label": "Падающий луч",
+        "x": 1312,
+        "y": 226,
+        "width": 96,
+        "height": 66
+      },
+      {
+        "id": "reflected-ray",
+        "label": "Отражённый луч",
+        "x": 1312,
+        "y": 444,
+        "width": 96,
+        "height": 66
+      },
+      {
+        "id": "light-source",
+        "label": "Источник света",
+        "x": 1415,
+        "y": 117,
+        "width": 110,
+        "height": 110
+      },
+      {
+        "id": "prism",
+        "label": "Треугольная призма",
+        "x": 1120,
+        "y": 828,
+        "width": 124,
+        "height": 112
+      },
+      {
+        "id": "white-ray",
+        "label": "Белый луч",
+        "x": 968,
+        "y": 772,
+        "width": 110,
+        "height": 64
+      },
+      {
+        "id": "spectrum",
+        "label": "Спектр",
+        "x": 1470,
+        "y": 916,
+        "width": 170,
+        "height": 132
+      },
+      {
+        "id": "concave-lens",
+        "label": "Рассеивающая линза",
+        "x": 452,
+        "y": 845,
+        "width": 96,
+        "height": 110
+      },
+      {
+        "id": "refracted-ray",
+        "label": "Преломлённый луч",
+        "x": 700,
+        "y": 990,
+        "width": 130,
+        "height": 76
+      }
+    ],
+    "decoys": [
+      {
+        "x": 200,
+        "y": 572,
+        "width": 40,
+        "height": 44
+      },
+      {
+        "x": 340,
+        "y": 572,
+        "width": 40,
+        "height": 44
+      },
+      {
+        "x": 640,
+        "y": 572,
+        "width": 40,
+        "height": 44
+      },
+      {
+        "x": 800,
+        "y": 572,
+        "width": 40,
+        "height": 44
+      },
+      {
+        "x": 200,
+        "y": 1062,
+        "width": 40,
+        "height": 44
+      },
+      {
+        "x": 360,
+        "y": 1062,
+        "width": 40,
+        "height": 44
+      },
+      {
+        "x": 600,
+        "y": 1062,
+        "width": 40,
+        "height": 44
+      },
+      {
+        "x": 860,
+        "y": 1062,
+        "width": 40,
+        "height": 44
+      },
+      {
+        "x": 1000,
+        "y": 532,
+        "width": 40,
+        "height": 44
+      },
+      {
+        "x": 1230,
+        "y": 532,
+        "width": 40,
+        "height": 44
+      },
+      {
+        "x": 1540,
+        "y": 532,
+        "width": 40,
+        "height": 44
+      },
+      {
+        "x": 1000,
+        "y": 1052,
+        "width": 40,
+        "height": 44
+      },
+      {
+        "x": 1310,
+        "y": 1052,
+        "width": 40,
+        "height": 44
+      },
+      {
+        "x": 1600,
+        "y": 1052,
+        "width": 40,
+        "height": 44
+      }
+    ],
+    "fileName": "phys_level3_map.png"
+  }
+}
