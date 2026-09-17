@@ -42,6 +42,19 @@ const FEEDBACK_CORRECT_COLOR = 'rgba(62, 207, 126, 0.85)';
 const FEEDBACK_WRONG_COLOR = 'rgba(255, 107, 107, 0.85)';
 const FEEDBACK_DURATION_MS = 900;
 
+// width/height резервируют место до загрузки (без сдвига вёрстки); contain —
+// потому что сюда попадают только картинки учителя с произвольными пропорциями
+const QUESTION_IMAGE_WIDTH = 220;
+const QUESTION_IMAGE_HEIGHT = 160;
+const QUESTION_IMAGE_STYLE: React.CSSProperties = {
+  display: 'block',
+  maxWidth: QUESTION_IMAGE_WIDTH,
+  maxHeight: QUESTION_IMAGE_HEIGHT,
+  objectFit: 'contain',
+  margin: '10px auto 0',
+  borderRadius: 8,
+};
+
 const GameBoardScreen: React.FC<Props> = ({
   imageUrl,
   imageWidth,
@@ -249,7 +262,9 @@ const GameBoardScreen: React.FC<Props> = ({
           <img
             src={bioiqItemImageUrl(currentQuestion.questionImage)}
             alt=""
-            style={{ display: 'block', maxWidth: 220, maxHeight: 160, margin: '10px auto 0', borderRadius: 8 }}
+            width={QUESTION_IMAGE_WIDTH}
+            height={QUESTION_IMAGE_HEIGHT}
+            style={QUESTION_IMAGE_STYLE}
           />
         )}
         {currentQuestion.helpText.length > 0 && (
