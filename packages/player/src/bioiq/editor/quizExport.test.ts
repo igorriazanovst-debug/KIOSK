@@ -25,6 +25,7 @@ function validQuestion(overrides: Partial<BioiqQuestion> = {}): BioiqQuestion {
     width: 100,
     height: 100,
     decoyPoints: [],
+    alsoCorrectPoints: [],
     price: 100,
     timeSeconds: 30,
     level: 1,

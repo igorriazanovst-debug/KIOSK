@@ -5,7 +5,7 @@ import { BIOIQ_DEFAULT_POINT_SIZE, type BioiqQuestion, type BioiqPoint } from '.
 
 function q(overrides: Partial<BioiqQuestion> = {}): BioiqQuestion {
   return {
-    id: 'q1', text: 't', answer: 'a', helpText: '', x: 0, y: 0, width: BIOIQ_DEFAULT_POINT_SIZE, height: BIOIQ_DEFAULT_POINT_SIZE, decoyPoints: [],
+    id: 'q1', text: 't', answer: 'a', helpText: '', x: 0, y: 0, width: BIOIQ_DEFAULT_POINT_SIZE, height: BIOIQ_DEFAULT_POINT_SIZE, decoyPoints: [], alsoCorrectPoints: [],
     price: 100, timeSeconds: 30, level: 1, theme: 'A', questionImage: null, answerImage: null, hintImage: null,
     ...overrides,
   };
@@ -159,4 +159,19 @@ test('neutralTileLabels: подпись не зависит от правиль�
   const reversed = neutralTileLabels([...tiles].reverse());
   assert.deepEqual([...reversed.entries()].sort(), [...labels.entries()].sort());
   assert.equal(new Set(labels.values()).size, tiles.length);
+});
+
+test('buildBoardTiles: двойник структуры верен для своего вопроса и обманка для чужого', () => {
+  const base = { helpText: '', decoyPoints: [], price: 100, timeSeconds: 30, level: 1 as const, theme: 't', questionImage: null, answerImage: null, hintImage: null, width: 50, height: 50 };
+  const lung = { ...base, id: 'lung', text: 'q', answer: 'Лёгкое', x: 100, y: 100, alsoCorrectPoints: [{ x: 300, y: 100, width: 50, height: 50 }] };
+  const heart = { ...base, id: 'heart', text: 'q', answer: 'Сердце', x: 200, y: 100, alsoCorrectPoints: [] };
+  const generic = [{ x: 300, y: 100, width: 50, height: 50 }];
+
+  const forLung = buildBoardTiles(lung, [lung, heart], generic);
+  assert.deepEqual(forLung.filter((t) => t.isCorrect).map((t) => t.key).sort(), ['100_100', '300_100']);
+  assert.equal(forLung.length, 3);
+
+  const forHeart = buildBoardTiles(heart, [lung, heart], generic);
+  assert.deepEqual(forHeart.filter((t) => t.isCorrect).map((t) => t.key), ['200_100']);
+  assert.equal(forHeart.find((t) => t.key === '300_100')?.isCorrect, false);
 });

@@ -20,6 +20,16 @@ const OUT = path.join(HERE, '..', '..', 'src', 'bioiq', 'content', 'bioiqRealCon
 
 const structures = JSON.parse(fs.readFileSync(path.join(HERE, 'structures.json'), 'utf-8'));
 
+// Рисовалка отдаёт ЛЕВЫЙ ВЕРХНИЙ угол области (boxAround), а схема викторины
+// и игровое поле понимают x/y как ЦЕНТР. Без пересчёта каждая область на поле
+// стояла выше и левее своего объекта на половину собственного размера.
+const centered = (box) => ({
+  x: Math.round(box.x + box.width / 2),
+  y: Math.round(box.y + box.height / 2),
+  width: box.width,
+  height: box.height,
+});
+
 const problems = [];
 const questions = [];
 const genericDecoyPoints = [];
@@ -51,11 +61,9 @@ for (const levelId of [1, 2, 3]) {
       text: q.text,
       answer: q.answer,
       helpText: q.hint,
-      x: s.x,
-      y: s.y,
-      width: s.width,
-      height: s.height,
+      ...centered(s),
       decoyPoints: [],
+      alsoCorrectPoints: level.decoys.filter((d) => d.twinOf === s.id).map(centered),
       price: rules.price,
       timeSeconds: rules.timeSeconds,
       level: levelId,
@@ -72,11 +80,12 @@ for (const levelId of [1, 2, 3]) {
   // заодно закрывает дыру «нарисовано, но нажать нельзя».
   for (const s of level.structures) {
     if (!used.has(s.id)) {
-      genericDecoyPoints.push({ x: s.x, y: s.y, width: s.width, height: s.height, level: levelId });
+      genericDecoyPoints.push({ ...centered(s), level: levelId });
     }
   }
   for (const d of level.decoys) {
-    genericDecoyPoints.push({ x: d.x, y: d.y, width: d.width, height: d.height, level: levelId });
+    if (d.twinOf && !byId.has(d.twinOf)) problems.push(`уровень ${levelId}: двойник ссылается на несуществующую структуру «${d.twinOf}»`);
+    genericDecoyPoints.push({ ...centered(d), level: levelId });
   }
 }
 

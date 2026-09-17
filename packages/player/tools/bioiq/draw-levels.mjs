@@ -64,10 +64,14 @@ function plate() {
       svg.push(drawing);
       structures.push({ id, label, ...box });
     },
-    /** Точка без привязки к вопросу: рисунок есть, имени нет. */
-    decoy(drawing, box) {
+    /**
+     * Точка без привязки к вопросу: рисунок есть, имени нет. twinOf — id
+     * структуры, вторым экземпляром которой эта точка является (второе лёгкое,
+     * второй хлоропласт): для вопросов об этой структуре клик по двойнику верен.
+     */
+    decoy(drawing, box, twinOf) {
       svg.push(drawing);
-      decoys.push(box);
+      decoys.push(twinOf ? { ...box, twinOf } : box);
     },
     build(title) {
       return {
@@ -120,10 +124,10 @@ function level1() {
   p.put('animal-centriole', 'Клеточный центр', centriole(760, 540), boxAround(760, 530, 130, 100));
 
   // Обманки животной клетки — настоящие объекты без имени
-  p.decoy(ribosomes([[235, 800]], 9), boxAround(235, 800, 44, 44));
-  p.decoy(ribosomes([[350, 855]], 9), boxAround(350, 855, 44, 44));
-  p.decoy(lysosome(680, 810, 19), boxAround(680, 810, 52, 52));
-  p.decoy(mitochondrion(330, 400, 12, 52, 25), boxAround(330, 400, 112, 66));
+  p.decoy(ribosomes([[235, 800]], 9), boxAround(235, 800, 44, 44), 'animal-ribosome');
+  p.decoy(ribosomes([[350, 855]], 9), boxAround(350, 855, 44, 44), 'animal-ribosome');
+  p.decoy(lysosome(680, 810, 19), boxAround(680, 810, 52, 52), 'animal-lysosome');
+  p.decoy(mitochondrion(330, 400, 12, 52, 25), boxAround(330, 400, 112, 66), 'animal-mitochondrion');
   p.decoy(`<circle cx="420" cy="690" r="15" fill="${PALETTE.golgi}"/>`, boxAround(420, 690, 50, 50));
   p.decoy(`<circle cx="480" cy="420" r="13" fill="${PALETTE.er}"/>`, boxAround(480, 420, 46, 46));
   // Нижний пузырёк, отшнуровавшийся от Гольджи: он НАРИСОВАН, поэтому обязан
@@ -161,12 +165,12 @@ function level1() {
   p.put('plant-cytoplasm', 'Цитоплазма растительной клетки', '', boxAround(1640, 410, 100, 90));
 
   // Обманки растительной клетки — вторые экземпляры органоидов, без имени
-  p.decoy(chloroplast(1140, 820, 12), boxAround(1140, 820, 124, 82));
-  p.decoy(chloroplast(1628, 520, 20), boxAround(1628, 520, 124, 82));
-  p.decoy(chloroplast(1620, 650, -14), boxAround(1620, 650, 124, 82));
-  p.decoy(ribosomes([[1290, 400]], 9), boxAround(1290, 400, 44, 44));
-  p.decoy(ribosomes([[1370, 850]], 9), boxAround(1370, 850, 44, 44));
-  p.decoy(lysosome(1470, 845, 18), boxAround(1470, 845, 50, 50));
+  p.decoy(chloroplast(1140, 820, 12), boxAround(1140, 820, 124, 82), 'plant-chloroplast');
+  p.decoy(chloroplast(1628, 520, 20), boxAround(1628, 520, 124, 82), 'plant-chloroplast');
+  p.decoy(chloroplast(1620, 650, -14), boxAround(1620, 650, 124, 82), 'plant-chloroplast');
+  p.decoy(ribosomes([[1290, 400]], 9), boxAround(1290, 400, 44, 44), 'animal-ribosome');
+  p.decoy(ribosomes([[1370, 850]], 9), boxAround(1370, 850, 44, 44), 'animal-ribosome');
+  p.decoy(lysosome(1470, 845, 18), boxAround(1470, 845, 50, 50), 'animal-lysosome');
 
   return p.build('Строение клетки');
 }
@@ -245,9 +249,9 @@ function level2() {
     boxAround(sx - 142, 626, 82, 82)
   );
 
-  p.decoy(leaf(700, 1), boxAround(sx + 100, 676, 110, 62));
-  p.decoy('', boxAround(sx - 96, ground + 114, 80, 54));
-  p.decoy('', boxAround(sx - 92, ground + 240, 80, 60));
+  p.decoy(leaf(700, 1), boxAround(sx + 100, 676, 110, 62), 'leaf-blade');
+  p.decoy('', boxAround(sx - 96, ground + 114, 80, 54), 'lateral-root');
+  p.decoy('', boxAround(sx - 92, ground + 240, 80, 60), 'lateral-root');
 
   // ── B. Цветок в разрезе, вторая колонка
   const fx = 830;
@@ -290,9 +294,9 @@ function level2() {
   p.put('style', 'Столбик', `<path d="M ${fx} ${fbase - 194} L ${fx} ${fbase - 344}" stroke="${PALETTE.centriole}" stroke-width="14" stroke-linecap="round"/>`, boxAround(fx, fbase - 280, 50, 80));
   p.put('stigma', 'Рыльце', `<ellipse cx="${fx}" cy="${fbase - 366}" rx="52" ry="27" fill="${PALETTE.centrioleEdge}" stroke="#d9f6ee" stroke-width="4"/>`, boxAround(fx, fbase - 366, 110, 60));
 
-  p.decoy('', boxAround(fx - 104, fbase - 250, 56, 86));
-  p.decoy('', boxAround(fx + 166, fbase - 250, 58, 88));
-  p.decoy('', boxAround(fx + 152, fbase - 72, 84, 60));
+  p.decoy('', boxAround(fx - 104, fbase - 250, 56, 86), 'anther');
+  p.decoy('', boxAround(fx + 166, fbase - 250, 58, 88), 'anther');
+  p.decoy('', boxAround(fx + 152, fbase - 72, 84, 60), 'sepal');
 
   // ── C. Лист в разрезе, правый верх
   const lx = 1250;
@@ -328,9 +332,9 @@ function level2() {
     boxAround(lx + 322, ly + 276, 76, 56)
   );
 
-  p.decoy('', boxAround(lx + 420, ly + 23, 100, 42));
-  p.decoy('', boxAround(lx + 300, ly + 93, 110, 80));
-  p.decoy('', boxAround(lx + 440, ly + 200, 80, 76));
+  p.decoy('', boxAround(lx + 420, ly + 23, 100, 42), 'leaf-upper-skin');
+  p.decoy('', boxAround(lx + 300, ly + 93, 110, 80), 'palisade');
+  p.decoy('', boxAround(lx + 440, ly + 200, 80, 76), 'spongy');
 
   // ── D. Семя в разрезе, правый низ
   const dx0 = 1440;
@@ -362,8 +366,8 @@ function level2() {
     boxAround(dx0 - 162, dy0 - 110, 62, 62)
   );
 
-  p.decoy('', boxAround(dx0 - 40, dy0 + 118, 90, 56));
-  p.decoy('', boxAround(dx0 + 150, dy0 - 110, 90, 56));
+  p.decoy('', boxAround(dx0 - 40, dy0 + 118, 90, 56), 'seed-coat');
+  p.decoy('', boxAround(dx0 + 150, dy0 - 110, 90, 56), 'seed-coat');
 
   return p.build('Строение растений');
 }
@@ -462,11 +466,11 @@ function level3() {
     boxAround(cx, 992, 90, 62)
   );
 
-  p.decoy('', boxAround(cx + 104, 402, 90, 120));
-  p.decoy('', boxAround(cx + 200, 742, 66, 80));
-  p.decoy('', boxAround(cx + 146, 860, 60, 76));
-  p.decoy('', boxAround(cx - 40, 772, 80, 44));
-  p.decoy('', boxAround(cx + 104, 310, 70, 56));
+  p.decoy('', boxAround(cx + 104, 402, 90, 120), 'lung');
+  p.decoy('', boxAround(cx + 200, 742, 66, 80), 'kidney');
+  p.decoy('', boxAround(cx + 146, 860, 60, 76), 'large-intestine');
+  p.decoy('', boxAround(cx - 40, 772, 80, 44), 'large-intestine');
+  p.decoy('', boxAround(cx + 104, 310, 70, 56), 'lung');
 
   // ── B. Сердце в разрезе, правая часть плиты
   const hx = 1260;

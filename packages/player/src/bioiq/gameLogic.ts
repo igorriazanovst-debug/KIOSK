@@ -98,6 +98,12 @@ export function buildBoardTiles(
     addTile(p);
   }
   for (const p of question.decoyPoints) addTile(p);
+  // После обманок: двойник обычно уже лежит в genericDecoyPoints (для чужих
+  // вопросов он обманка) и должен быть перезаписан как верный.
+  for (const p of question.alsoCorrectPoints) {
+    const key = tileKey(p);
+    map.set(key, { key, x: p.x, y: p.y, width: p.width, height: p.height, isCorrect: true });
+  }
 
   // Ставится последним и явно, а не полагается на порядок выше: если у
   // чужого вопроса/decoy-точки координаты случайно совпали бы с текущим

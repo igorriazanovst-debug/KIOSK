@@ -72,6 +72,7 @@ function makeBlankQuestion(point: BioiqPoint, level: BioiqLevelId): BioiqQuestio
     width: BIOIQ_DEFAULT_POINT_SIZE,
     height: BIOIQ_DEFAULT_POINT_SIZE,
     decoyPoints: [],
+    alsoCorrectPoints: [],
     price: 100,
     timeSeconds: 30,
     level,

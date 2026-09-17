@@ -93,3 +93,33 @@ test('в текстах вопросов не осталось химии Тип
     assert.ok(!all.includes(word), `в вопросах осталось слово «${word}»`);
   }
 });
+
+// Рисовалка отдаёт левый верхний угол области, викторина хранит ЦЕНТР. Один
+// раз это уже разошлось: все области на поле стояли выше и левее своих
+// объектов на половину размера, а мелкие (рибосома, устьице) — целиком мимо.
+test('координаты вопросов — центр области, нарисованной на карте', () => {
+  const structures = JSON.parse(fs.readFileSync(path.join(HERE, '..', '..', '..', 'tools', 'bioiq', 'structures.json'), 'utf-8'));
+  const quiz = BioiqQuizSchema.parse(realContent);
+  for (const level of ['1', '2', '3']) {
+    const centers = new Set(
+      structures[level].structures.map((s: { x: number; y: number; width: number; height: number }) => `${Math.round(s.x + s.width / 2)}_${Math.round(s.y + s.height / 2)}`),
+    );
+    for (const q of quiz.questions.filter((item) => String(item.level) === level)) {
+      assert.ok(centers.has(`${q.x}_${q.y}`), `${q.id}: (${q.x}, ${q.y}) не совпадает с центром ни одной структуры уровня ${level}`);
+    }
+  }
+});
+
+test('второй экземпляр структуры на карте засчитывается как верный ответ', () => {
+  const quiz = BioiqQuizSchema.parse(realContent);
+  const withTwins = (answer: string) => quiz.questions.filter((q) => q.answer === answer && q.alsoCorrectPoints.length > 0).length;
+  for (const answer of ['Лёгкое', 'Почка', 'Толстая кишка', 'Хлоропласт', 'Рибосома', 'Пыльник', 'Боковой корень']) {
+    assert.ok(withTwins(answer) > 0, `у вопросов про «${answer}» нет двойников, хотя на карте структура нарисована не один раз`);
+  }
+  for (const q of quiz.questions) {
+    for (const twin of q.alsoCorrectPoints) {
+      const isClickable = quiz.genericDecoyPoints.some((d) => d.level === q.level && d.x === twin.x && d.y === twin.y);
+      assert.ok(isClickable, `${q.id}: двойник (${twin.x}, ${twin.y}) не входит в кликабельные точки уровня`);
+    }
+  }
+});

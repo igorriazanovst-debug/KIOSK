@@ -171,7 +171,9 @@ if (want(2)) {
   const tiles = await ev(`document.querySelectorAll('[data-testid="correct-point"], [data-testid^="decoy-"]').length`);
   ok('2.6', 'кликабельных областей на поле больше десяти', tiles > 10, `областей ${tiles}`);
   const correct = await ev(`document.querySelectorAll('[data-testid="correct-point"]').length`);
-  ok('2.7', 'верная область ровно одна', correct === 1, `их ${correct}`);
+  // Не «ровно одна»: у структуры, нарисованной на карте несколько раз (второе
+  // лёгкое, второй хлоропласт), верны все её экземпляры.
+  ok('2.7', 'верная область есть, и верных меньшинство', correct >= 1 && correct <= 4 && correct < tiles / 2, `их ${correct} из ${tiles}`);
 
   await click('ПОКАЗАТЬ ПОДСКАЗКУ');
   ok('2.8', 'подсказка появляется по нажатию', /Подсказка/i.test(await text()));

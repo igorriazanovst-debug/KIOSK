@@ -37,6 +37,9 @@ export const BioiqQuestionSchema = z.object({
   width: z.number().positive().default(BIOIQ_DEFAULT_POINT_SIZE),
   height: z.number().positive().default(BIOIQ_DEFAULT_POINT_SIZE),
   decoyPoints: z.array(BioiqPointSchema).default([]),
+  // Другие экземпляры ТОЙ ЖЕ структуры на картинке (второе лёгкое, второй
+  // хлоропласт): клик по ним — тоже верный ответ, а не ошибка.
+  alsoCorrectPoints: z.array(BioiqPointSchema).default([]),
   price: z.number().int().positive(),
   timeSeconds: z.number().int().positive(),
   level: BioiqLevelIdSchema,
@@ -151,6 +154,9 @@ export const BioiqQuizSchema = BioiqQuizShapeSchema.superRefine((quiz, ctx) => {
     checkPointInBounds(question, bounds, ['questions', qIndex], ctx);
     question.decoyPoints.forEach((point, pIndex) => {
       checkPointInBounds(point, bounds, ['questions', qIndex, 'decoyPoints', pIndex], ctx);
+    });
+    question.alsoCorrectPoints.forEach((point, pIndex) => {
+      checkPointInBounds(point, bounds, ['questions', qIndex, 'alsoCorrectPoints', pIndex], ctx);
     });
   });
 

@@ -31,6 +31,7 @@ function question(level: 1 | 2 | 3, id: string, text: string, x: number, y: numb
     width: 100,
     height: 100,
     decoyPoints: [],
+    alsoCorrectPoints: [],
     price: 10,
     timeSeconds: 30,
     level,
@@ -202,4 +203,12 @@ test('поставляемая методическая викторина пр�
   // не на приёмке.
   const quiz = BioiqQuizSchema.parse(realContent);
   assert.deepEqual(checkBioiqQuiz(quiz), []);
+});
+
+test('rectsOverlap: x/y — центр области, размеры могут различаться', () => {
+  // Большая область с центром (100,100) занимает 50..150; маленькая 20×20 с
+  // центром (145,100) лежит внутри неё. От левого верхнего угла это выглядело
+  // бы как «не пересекаются».
+  assert.equal(rectsOverlap({ x: 100, y: 100, width: 100, height: 100 }, { x: 145, y: 100, width: 20, height: 20 }), true);
+  assert.equal(rectsOverlap({ x: 100, y: 100, width: 100, height: 100 }, { x: 160, y: 100, width: 20, height: 20 }), false);
 });
