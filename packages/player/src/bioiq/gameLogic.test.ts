@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { scoreForAnswer, assignQuestions, nextTurn, summarizeResults, buildBoardTiles } from './gameLogic.ts';
+import { scoreForAnswer, assignQuestions, nextTurn, summarizeResults, buildBoardTiles, neutralTileLabels } from './gameLogic.ts';
 import { BIOIQ_DEFAULT_POINT_SIZE, type BioiqQuestion, type BioiqPoint } from './model/schema.ts';
 
 function q(overrides: Partial<BioiqQuestion> = {}): BioiqQuestion {
@@ -142,4 +142,21 @@ test('summarizeResults aggregates score and correctness per player', () => {
     { name: 'Аня', score: 150, correctCount: 2, totalCount: 2 },
     { name: 'Боря', score: 0, correctCount: 0, totalCount: 1 },
   ]);
+});
+
+test('neutralTileLabels: подпись не зависит от правильности и порядка рендера', () => {
+  const tiles = [
+    { key: 'c', x: 300, y: 100 },
+    { key: 'a', x: 100, y: 100 },
+    { key: 'correct', x: 50, y: 900 },
+    { key: 'b', x: 200, y: 50 },
+  ];
+  const labels = neutralTileLabels(tiles);
+  assert.equal(labels.get('b'), 'Область 1');
+  assert.equal(labels.get('a'), 'Область 2');
+  assert.equal(labels.get('c'), 'Область 3');
+  assert.equal(labels.get('correct'), 'Область 4');
+  const reversed = neutralTileLabels([...tiles].reverse());
+  assert.deepEqual([...reversed.entries()].sort(), [...labels.entries()].sort());
+  assert.equal(new Set(labels.values()).size, tiles.length);
 });

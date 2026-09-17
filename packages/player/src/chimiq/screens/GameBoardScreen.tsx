@@ -1,7 +1,7 @@
 // packages/player/src/chimiq/screens/GameBoardScreen.tsx
 import React, { useEffect, useRef, useState } from 'react';
 import type { ChimiqPoint, ChimiqQuestion } from '../model/schema.ts';
-import { scoreForAnswer, nextTurn, buildBoardTiles, type ChimiqAnswerEvent, type ChimiqBoardTile } from '../gameLogic.ts';
+import { scoreForAnswer, nextTurn, neutralTileLabels, buildBoardTiles, type ChimiqAnswerEvent, type ChimiqBoardTile } from '../gameLogic.ts';
 import { chimiqItemImageUrl } from '../chimiqMediaUrl.ts';
 import { questionThemeImageUrl } from '../questionThemeImages.ts';
 import { playCorrectTone, playWrongTone } from '../sound.ts';
@@ -96,6 +96,7 @@ const GameBoardScreen: React.FC<Props> = ({
 
   const currentQuestion = questionsByPlayer[currentPlayer][questionIndexByPlayer[currentPlayer]];
   const tiles = buildBoardTiles(currentQuestion, levelQuestions, genericDecoyPoints);
+  const tileLabels = neutralTileLabels(tiles);
   // FR-008/FR-015 ТЗ - нейтральная иллюстрация по теме вопроса, когда своя
   // картинка (questionImage) не загружена - см. questionThemeImages.ts,
   // почему не персональная под ответ. Фоллбэк работает только для 6 тем
@@ -350,7 +351,8 @@ const GameBoardScreen: React.FC<Props> = ({
                 key={tile.key}
                 onClick={() => handleTileClick(tile)}
                 style={{ ...pointStyle(tile, activeFeedback), ...pointPosition(tile) }}
-                aria-label={tile.isCorrect ? 'correct-point' : `decoy-${tile.key}`}
+                aria-label={tileLabels.get(tile.key)}
+                data-testid={tile.isCorrect ? 'correct-point' : `decoy-${tile.key}`}
               >
                 {feedbackGlyph(activeFeedback)}
               </button>

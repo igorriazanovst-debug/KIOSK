@@ -132,3 +132,14 @@ export function summarizeResults(playerNames: string[], answers: ChimiqAnswerEve
     };
   });
 }
+
+/**
+ * Нейтральные подписи областей для программ экранного доступа: «Область N»,
+ * N — порядок по положению на картинке (сверху вниз, слева направо). Нельзя
+ * нумеровать по порядку рендера — верная область всегда рисуется последней,
+ * и подпись снова выдала бы ответ.
+ */
+export function neutralTileLabels(tiles: ReadonlyArray<{ key: string; x: number; y: number }>): Map<string, string> {
+  const ordered = [...tiles].sort((a, b) => a.y - b.y || a.x - b.x || a.key.localeCompare(b.key));
+  return new Map(ordered.map((tile, index) => [tile.key, `Область ${index + 1}`]));
+}

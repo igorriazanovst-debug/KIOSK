@@ -1,7 +1,7 @@
 // packages/player/src/rusiq/screens/GameBoardScreen.tsx
 import React, { useEffect, useRef, useState } from 'react';
 import type { RusiqPoint, RusiqQuestion } from '../model/schema.ts';
-import { scoreForAnswer, nextTurn, type RusiqAnswerEvent } from '../gameLogic.ts';
+import { scoreForAnswer, nextTurn, neutralTileLabels, type RusiqAnswerEvent } from '../gameLogic.ts';
 import { rusiqItemImageUrl } from '../rusiqMediaUrl.ts';
 import '../rusiqTheme.css';
 
@@ -97,6 +97,7 @@ const GameBoardScreen: React.FC<Props> = ({ imageUrl, imageWidth, imageHeight, p
 
   const currentQuestion = questionsByPlayer[currentPlayer][questionIndexByPlayer[currentPlayer]];
   const tiles = buildTiles(currentQuestion, genericDecoyPoints);
+  const tileLabels = neutralTileLabels(tiles);
 
   // Обнуляет таймер и заводит секундный тик на каждый новый вопрос
   // (смена currentPlayer или его индекса вопроса). Само истечение времени
@@ -287,7 +288,8 @@ const GameBoardScreen: React.FC<Props> = ({ imageUrl, imageWidth, imageHeight, p
               key={tile.key}
               onClick={() => handleTileClick(tile)}
               style={{ ...pointStyle(tile, activeFeedback), ...pointPosition(tile) }}
-              aria-label={tile.isCorrect ? 'correct-point' : `decoy-${tile.key}`}
+              aria-label={tileLabels.get(tile.key)}
+              data-testid={tile.isCorrect ? 'correct-point' : `decoy-${tile.key}`}
             />
           );
         })}

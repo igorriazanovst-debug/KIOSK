@@ -151,9 +151,9 @@ async function main() {
   for (let i = 0; i < 20; i++) {
     const onResults = await evalJs(`document.body.innerText.includes('Результаты')`);
     if (onResults) break;
-    const hasPoint = await evalJs(`!!document.querySelector('[aria-label="correct-point"]')`);
+    const hasPoint = await evalJs(`!!document.querySelector('[data-testid="correct-point"]')`);
     if (!hasPoint) break;
-    await click('[aria-label="correct-point"]');
+    await click('[data-testid="correct-point"]');
     await sleep(1100);
   }
   await screenshot('08-результаты');

@@ -128,11 +128,11 @@ for (const [i, step] of plan.шаги.entries()) {
       await wait(220);
     }
     else if (step.верно10 !== undefined) {
-      // Тип 10: плитка верного ответа помечена aria-label="correct-point"
+      // Тип 10: плитка верного ответа помечена data-testid="correct-point"
       // самим игровым экраном. Ответ берётся у игры, а не подбирается:
       // подбор прошёл бы и на сломанной проверке ответа.
       for (let k = 0; k < (step.верно10 || 1); k += 1) {
-        const box = await ev(`(()=>{const e=document.querySelector('[aria-label="correct-point"]');
+        const box = await ev(`(()=>{const e=document.querySelector('[data-testid="correct-point"]');
           if(!e) return null; e.scrollIntoView({block:'center'});
           const r=e.getBoundingClientRect();
           return JSON.stringify({x:Math.round(r.left+r.width/2),y:Math.round(r.top+r.height/2)})})()`);
@@ -144,7 +144,7 @@ for (const [i, step] of plan.шаги.entries()) {
       }
     }
     else if (step.неверно10) {
-      const box = await ev(`(()=>{const e=[...document.querySelectorAll('[aria-label^="decoy-"]')]
+      const box = await ev(`(()=>{const e=[...document.querySelectorAll('[data-testid^="decoy-"]')]
           .find(x=>{const r=x.getBoundingClientRect(); return r.width>0&&r.height>0;});
         if(!e) return null; e.scrollIntoView({block:'center'});
         const r=e.getBoundingClientRect();

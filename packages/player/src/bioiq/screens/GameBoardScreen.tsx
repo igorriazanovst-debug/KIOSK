@@ -1,7 +1,7 @@
 // packages/player/src/bioiq/screens/GameBoardScreen.tsx
 import React, { useEffect, useRef, useState } from 'react';
 import type { BioiqPoint, BioiqQuestion } from '../model/schema.ts';
-import { scoreForAnswer, nextTurn, buildBoardTiles, type BioiqAnswerEvent, type BioiqBoardTile } from '../gameLogic.ts';
+import { scoreForAnswer, nextTurn, neutralTileLabels, buildBoardTiles, type BioiqAnswerEvent, type BioiqBoardTile } from '../gameLogic.ts';
 import { bioiqItemImageUrl } from '../bioiqMediaUrl.ts';
 import { playCorrectTone, playWrongTone } from '../sound.ts';
 import '../bioiqTheme.css';
@@ -98,6 +98,7 @@ const GameBoardScreen: React.FC<Props> = ({
 
   const currentQuestion = questionsByPlayer[currentPlayer][questionIndexByPlayer[currentPlayer]];
   const tiles = buildBoardTiles(currentQuestion, levelQuestions, genericDecoyPoints);
+  const tileLabels = neutralTileLabels(tiles);
 
   useEffect(() => {
     setElapsed(0);
@@ -343,7 +344,8 @@ const GameBoardScreen: React.FC<Props> = ({
                 key={tile.key}
                 onClick={() => handleTileClick(tile)}
                 style={{ ...pointStyle(tile, activeFeedback), ...pointPosition(tile) }}
-                aria-label={tile.isCorrect ? 'correct-point' : `decoy-${tile.key}`}
+                aria-label={tileLabels.get(tile.key)}
+                data-testid={tile.isCorrect ? 'correct-point' : `decoy-${tile.key}`}
               >
                 {feedbackGlyph(activeFeedback)}
               </button>

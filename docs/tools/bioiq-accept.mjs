@@ -168,9 +168,9 @@ if (want(2)) {
     /Таймер/i.test(board) && /Очки сейчас/i.test(board) && board.includes('?'));
 
   // 8.5 программы испытаний: нарисованного, но не нажимаемого быть не должно
-  const tiles = await ev(`document.querySelectorAll('[aria-label="correct-point"], [aria-label^="decoy-"]').length`);
+  const tiles = await ev(`document.querySelectorAll('[data-testid="correct-point"], [data-testid^="decoy-"]').length`);
   ok('2.6', 'кликабельных областей на поле больше десяти', tiles > 10, `областей ${tiles}`);
-  const correct = await ev(`document.querySelectorAll('[aria-label="correct-point"]').length`);
+  const correct = await ev(`document.querySelectorAll('[data-testid="correct-point"]').length`);
   ok('2.7', 'верная область ровно одна', correct === 1, `их ${correct}`);
 
   await click('ПОКАЗАТЬ ПОДСКАЗКУ');
@@ -180,9 +180,9 @@ if (want(2)) {
   // сломанной проверке ответа.
   const scoreBefore = Number(String(await text()).match(/Очки сейчас:\s*(\d+)/)?.[1] ?? -1);
   const turnBefore = String(await text()).match(/Ходит:\s*(\S+)/)?.[1] ?? '';
-  await ev(`(()=>{const e=document.querySelector('[aria-label="correct-point"]');
+  await ev(`(()=>{const e=document.querySelector('[data-testid="correct-point"]');
     e.scrollIntoView({block:'center'}); return true})()`);
-  const cbox = await ev(`(()=>{const e=document.querySelector('[aria-label="correct-point"]');
+  const cbox = await ev(`(()=>{const e=document.querySelector('[data-testid="correct-point"]');
     const r=e.getBoundingClientRect();
     return JSON.stringify({x:Math.round(r.left+r.width/2),y:Math.round(r.top+r.height/2)})})()`);
   const c = JSON.parse(cbox);
@@ -202,9 +202,9 @@ if (want(2)) {
   for (let i = 0; i < 12; i += 1) {
     const done = await ev(`document.body.innerText.includes('РЕЗУЛЬТАТЫ')`);
     if (done) break;
-    const has = await ev(`!!document.querySelector('[aria-label="correct-point"]')`);
+    const has = await ev(`!!document.querySelector('[data-testid="correct-point"]')`);
     if (!has) { await wait(900); continue; }
-    const b = JSON.parse(await ev(`(()=>{const e=document.querySelector('[aria-label="correct-point"]');
+    const b = JSON.parse(await ev(`(()=>{const e=document.querySelector('[data-testid="correct-point"]');
       e.scrollIntoView({block:'center'}); const r=e.getBoundingClientRect();
       return JSON.stringify({x:Math.round(r.left+r.width/2),y:Math.round(r.top+r.height/2)})})()`));
     await send('Input.dispatchMouseEvent', { type: 'mousePressed', x: b.x, y: b.y, button: 'left', clickCount: 1 });
