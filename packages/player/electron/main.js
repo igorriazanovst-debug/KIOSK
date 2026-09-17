@@ -7,6 +7,7 @@ const { registerMathmachineIpc } = require('./mathmachine/ipc');
 const { registerRusiqIpc } = require('./rusiq/ipc');
 const { registerChimiqIpc } = require('./chimiq/ipc');
 const { registerBioiqIpc } = require('./bioiq/ipc');
+const { registerPhysastroiqIpc } = require('./physastroiq/ipc');
 const { registerWordsIpc } = require('./words/ipc');
 const { registerAlphabetIpc } = require('./alphabet/ipc');
 const { registerInophoneIpc } = require('./inophone/ipc');
@@ -73,6 +74,10 @@ try {
     // одинаково; каталоги данных при этом РАЗНЫЕ - kiosk-bioiq против
     // kiosk-chimiq, иначе викторины двух предметов легли бы в одну папку.
     { scheme: 'bioiqmedia', privileges: { standard: true, secure: true, supportFetchAPI: true, stream: true } },
+    // physastroiqmedia — то же для «ФизАстроIQ» (Тип 11). Каталог данных и
+    // корень протокола СВОИ: общий с «БиоIQ» означал бы, что удаление
+    // викторины по биологии ломает викторину по физике.
+    { scheme: 'physastroiqmedia', privileges: { standard: true, secure: true, supportFetchAPI: true, stream: true } },
     // wordslib - поставочная (read-only) библиотека виджета «Я знаю много
     // слов» (packages/words-library/assets/): иллюстрации и озвучка. Тот же
     // принцип, что chronomedia/natcomlib - без bypassCSP, схема явно
@@ -114,6 +119,7 @@ let natcomAssetsDir = null;
 let rusiqQuizzesDir = null;
 let chimiqQuizzesDir = null;
 let bioiqQuizzesDir = null;
+let physastroiqQuizzesDir = null;
 let natcomLibrary = null;
 
 // ═══ OFFLINE-CACHE-MODULE-V1 — Офлайн-кэш медиафайлов ═══════════════════════════
@@ -1271,6 +1277,16 @@ app.whenReady().then(() => {
     fileLog('[bioiq] failed to initialize local storage:', err && err.message);
   }
 
+  // Пользовательские данные и каталог викторин виджета «ФизАстроIQ» (Тип 11)
+  // — канал 'physastroiq:*', тот же принцип, что у bioiq выше.
+  try {
+    const { baseDir: physastroiqBaseDir, isFallback: physastroiqIsFallback, quizzesDir: physastroiqQuizzesDirResult } = registerPhysastroiqIpc({ ipcMain, app });
+    physastroiqQuizzesDir = physastroiqQuizzesDirResult;
+    fileLog('[physastroiq] storage dir:', physastroiqBaseDir, physastroiqIsFallback ? '(fallback: no write access to shared dir)' : '');
+  } catch (err) {
+    fileLog('[physastroiq] failed to initialize local storage:', err && err.message);
+  }
+
   // FR-013/FR-018 (Фаза 2b) - экспорт/импорт файла викторины между
   // проектами KIOSK. Согласованная реинтерпретация буквального «без
   // установки продукта» (см. Тип7_трассировочная_матрица.md) - файл
@@ -1379,6 +1395,41 @@ app.whenReady().then(() => {
     }
   });
 
+  // FR-014/FR-019 ТЗ Типа 11 — обмен викторинами виджета «ФизАстроIQ».
+  // Расширение своё (.physastroiq.json): викторина по физике и астрономии не
+  // взаимозаменяема с биологической или химической, и открытие одной вместо
+  // другой выглядело бы для педагога как порча данных.
+  ipcMain.handle('physastroiq:export-quiz', async (_event, fileContentJson, suggestedFileName) => {
+    if (typeof fileContentJson !== 'string' || fileContentJson.length === 0) return { ok: false };
+    try {
+      const result = await dialog.showSaveDialog(mainWindow, {
+        defaultPath: typeof suggestedFileName === 'string' && suggestedFileName.length > 0 ? suggestedFileName : 'quiz.physastroiq.json',
+        filters: [{ name: 'Викторина ФизАстроIQ', extensions: ['json'] }]
+      });
+      if (result.canceled || !result.filePath) return { ok: false, canceled: true };
+      fs.writeFileSync(result.filePath, fileContentJson, 'utf-8');
+      return { ok: true, filePath: result.filePath };
+    } catch (err) {
+      fileLog('[physastroiq] export failed:', err && err.message);
+      return { ok: false };
+    }
+  });
+
+  ipcMain.handle('physastroiq:import-quiz', async () => {
+    try {
+      const result = await dialog.showOpenDialog(mainWindow, {
+        properties: ['openFile'],
+        filters: [{ name: 'Викторина ФизАстроIQ', extensions: ['json'] }]
+      });
+      if (result.canceled || result.filePaths.length === 0) return { ok: false, canceled: true };
+      const raw = fs.readFileSync(result.filePaths[0], 'utf-8');
+      return { ok: true, content: raw };
+    } catch (err) {
+      fileLog('[physastroiq] import failed:', err && err.message);
+      return { ok: false };
+    }
+  });
+
   // Локальное хранилище виджета «Я знаю много слов» (Тип 2). Как и у natcom,
   // регистрация безусловная и на существующих клиентов не влияет: канал
   // 'words:*' используется только виджетом words.
@@ -1455,7 +1506,7 @@ app.whenReady().then(() => {
         ...details.responseHeaders,
         // chronomedia:/natcomlib: добавлены явно (не полагаемся на bypassCSP
         // этих схем - его нет, см. registerSchemesAsPrivileged выше).
-        'Content-Security-Policy': ["default-src 'self' 'unsafe-inline' 'unsafe-eval' data: file: blob: chronomedia: natcomlib: rusiqmedia: chimiqmedia: bioiqmedia: wordslib: wordsuser: alphabetlib: alphabetuser: inophonelib: http: https: ws: wss:"]
+        'Content-Security-Policy': ["default-src 'self' 'unsafe-inline' 'unsafe-eval' data: file: blob: chronomedia: natcomlib: rusiqmedia: chimiqmedia: bioiqmedia: physastroiqmedia: wordslib: wordsuser: alphabetlib: alphabetuser: inophonelib: http: https: ws: wss:"]
       }
     });
   });
@@ -1826,6 +1877,34 @@ app.whenReady().then(() => {
       const u = new URL(request.url);
       const fileName = decodeURIComponent(u.pathname.replace(/^\/+/, ''));
       const filePath = chronoResolveWithinRoot(bioiqQuizzesDir, fileName);
+
+      if (!fs.existsSync(filePath) || !fs.statSync(filePath).isFile()) {
+        return new Response('Not found', { status: 404 });
+      }
+
+      const stat = fs.statSync(filePath);
+      const mime = guessMime(fileName, filePath);
+      const stream = fs.createReadStream(filePath);
+      return new Response(nodeStreamToWeb(stream), {
+        status: 200,
+        headers: { 'Content-Type': mime, 'Content-Length': String(stat.size) }
+      });
+    } catch {
+      return new Response('Not found', { status: 404 });
+    }
+  });
+
+  // Обработчик протокола physastroiqmedia://level/<fileName> и
+  // physastroiqmedia://item/<fileName> — то же для «ФизАстроIQ» (Тип 11).
+  // Корень СВОЙ: будь он общий с «БиоIQ», картинка одной викторины
+  // открывалась бы по ссылке другой.
+  protocol.handle('physastroiqmedia', async (request) => {
+    try {
+      if (!physastroiqQuizzesDir) return new Response('Not initialized', { status: 503 });
+
+      const u = new URL(request.url);
+      const fileName = decodeURIComponent(u.pathname.replace(/^\/+/, ''));
+      const filePath = chronoResolveWithinRoot(physastroiqQuizzesDir, fileName);
 
       if (!fs.existsSync(filePath) || !fs.statSync(filePath).isFile()) {
         return new Response('Not found', { status: 404 });

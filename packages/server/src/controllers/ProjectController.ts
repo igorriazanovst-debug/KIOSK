@@ -14,6 +14,7 @@ import { isEmailAllowedForAlphabet, projectDataHasAlphabetWidget } from '../conf
 import { isEmailAllowedForChimiq, projectDataHasChimiqWidget } from '../config/chimiqAccess';
 import { isEmailAllowedForInophone, projectDataHasInophoneWidget } from '../config/inophoneAccess';
 import { isEmailAllowedForBioiq, projectDataHasBioiqWidget } from '../config/bioiqAccess';
+import { isEmailAllowedForPhysastroiq, projectDataHasPhysastroiqWidget } from '../config/physastroiqAccess';
 import multer from 'multer';
 import path from 'path';
 
@@ -271,6 +272,13 @@ export class ProjectController {
         });
       }
 
+      if (projectDataHasPhysastroiqWidget(projectData) && !isEmailAllowedForPhysastroiq(req.client.email)) {
+        return res.status(403).json({
+          error: 'PhysAstroIQ widget not allowed',
+          message: 'Виджет «ФизАстроIQ» пока недоступен для этого аккаунта'
+        });
+      }
+
       const project = await ProjectService.createProject({
         name,
         description,
@@ -511,6 +519,17 @@ export class ProjectController {
         return res.status(403).json({
           error: 'BioIQ widget not allowed',
           message: 'Виджет «БиоIQ» пока недоступен для этого аккаунта'
+        });
+      }
+
+      if (
+        Object.prototype.hasOwnProperty.call(updates, 'projectData') &&
+        projectDataHasPhysastroiqWidget(updates.projectData) &&
+        !isEmailAllowedForPhysastroiq(req.client.email)
+      ) {
+        return res.status(403).json({
+          error: 'PhysAstroIQ widget not allowed',
+          message: 'Виджет «ФизАстроIQ» пока недоступен для этого аккаунта'
         });
       }
 

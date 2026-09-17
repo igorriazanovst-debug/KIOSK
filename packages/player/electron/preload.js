@@ -165,6 +165,25 @@ contextBridge.exposeInMainWorld('bioiqAPI', {
   importQuiz: () => ipcRenderer.invoke('bioiq:import-quiz')
 });
 
+// Пользовательские данные и каталог викторин виджета «ФизАстроIQ» (Тип 11) —
+// отдельный namespace, тот же принцип, что bioiqAPI выше. Отдельный, а не
+// общий, потому что за ним стоит другой каталог на диске.
+contextBridge.exposeInMainWorld('physastroiqAPI', {
+  loadUserData: () => ipcRenderer.invoke('physastroiq:load-user-data'),
+  saveUserData: (data) => ipcRenderer.invoke('physastroiq:save-user-data', data),
+  listQuizzes: () => ipcRenderer.invoke('physastroiq:list-quizzes'),
+  loadQuiz: (quizId) => ipcRenderer.invoke('physastroiq:load-quiz', quizId),
+  saveQuiz: (quiz) => ipcRenderer.invoke('physastroiq:save-quiz', quiz),
+  deleteQuiz: (quizId) => ipcRenderer.invoke('physastroiq:delete-quiz', quizId),
+  saveQuizLevelImage: (quizId, level, arrayBuffer, mimeType) =>
+    ipcRenderer.invoke('physastroiq:save-quiz-level-image', quizId, level, arrayBuffer, mimeType),
+  saveQuizItemImage: (quizId, questionId, kind, arrayBuffer, mimeType) =>
+    ipcRenderer.invoke('physastroiq:save-quiz-item-image', quizId, questionId, kind, arrayBuffer, mimeType),
+  deleteQuizItemImage: (fileName) => ipcRenderer.invoke('physastroiq:delete-quiz-item-image', fileName),
+  exportQuiz: (fileContentJson, suggestedFileName) => ipcRenderer.invoke('physastroiq:export-quiz', fileContentJson, suggestedFileName),
+  importQuiz: () => ipcRenderer.invoke('physastroiq:import-quiz')
+});
+
 // Локальное хранилище виджета «Я знаю много слов» (Тип 2) — профили детей,
 // настройки занятия и достижения. Отдельный namespace, используется только
 // виджетом words.

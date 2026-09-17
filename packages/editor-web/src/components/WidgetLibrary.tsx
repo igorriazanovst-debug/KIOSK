@@ -1,9 +1,9 @@
 import React from 'react';
 import { useEditorStore } from '../stores/editorStore';
-import { Square, Type, Image, Video, MousePointer, Menu, Globe, Compass, History, TreePine, Calculator, Atom, MessagesSquare, Languages, BookOpen, Beaker, Leaf } from 'lucide-react';
+import { Square, Type, Image, Video, MousePointer, Menu, Globe, Compass, History, TreePine, Calculator, Atom, MessagesSquare, Languages, BookOpen, Beaker, Leaf, Orbit } from 'lucide-react';
 import OutlinePanel from './OutlinePanel';
 import { NAVIGATION_WIDGET_TYPE, NAVIGATION_DEFAULT_PROPS, NAVIGATION_DEFAULT_SIZE } from '../utils/navigation/widgetType';
-import { INOPHONE_WIDGET_TYPE, INOPHONE_DEFAULT_PROPS, INOPHONE_DEFAULT_SIZE, CHRONOLINE_WIDGET_TYPE, CHRONOLINE_DEFAULT_PROPS, CHRONOLINE_DEFAULT_SIZE, NATCOM_WIDGET_TYPE, NATCOM_DEFAULT_PROPS, NATCOM_DEFAULT_SIZE, MATHMACHINE_WIDGET_TYPE, MATHMACHINE_DEFAULT_PROPS, MATHMACHINE_DEFAULT_SIZE, PERIODICTABLE_WIDGET_TYPE, PERIODICTABLE_DEFAULT_PROPS, PERIODICTABLE_DEFAULT_SIZE, RUSIQ_WIDGET_TYPE, RUSIQ_DEFAULT_PROPS, RUSIQ_DEFAULT_SIZE, WORDS_WIDGET_TYPE, WORDS_DEFAULT_PROPS, WORDS_DEFAULT_SIZE, ALPHABET_WIDGET_TYPE, ALPHABET_DEFAULT_PROPS, ALPHABET_DEFAULT_SIZE, CHIMIQ_WIDGET_TYPE, CHIMIQ_DEFAULT_PROPS, CHIMIQ_DEFAULT_SIZE, BIOIQ_WIDGET_TYPE, BIOIQ_DEFAULT_PROPS, BIOIQ_DEFAULT_SIZE } from '@kiosk/shared';
+import { INOPHONE_WIDGET_TYPE, INOPHONE_DEFAULT_PROPS, INOPHONE_DEFAULT_SIZE, CHRONOLINE_WIDGET_TYPE, CHRONOLINE_DEFAULT_PROPS, CHRONOLINE_DEFAULT_SIZE, NATCOM_WIDGET_TYPE, NATCOM_DEFAULT_PROPS, NATCOM_DEFAULT_SIZE, MATHMACHINE_WIDGET_TYPE, MATHMACHINE_DEFAULT_PROPS, MATHMACHINE_DEFAULT_SIZE, PERIODICTABLE_WIDGET_TYPE, PERIODICTABLE_DEFAULT_PROPS, PERIODICTABLE_DEFAULT_SIZE, RUSIQ_WIDGET_TYPE, RUSIQ_DEFAULT_PROPS, RUSIQ_DEFAULT_SIZE, WORDS_WIDGET_TYPE, WORDS_DEFAULT_PROPS, WORDS_DEFAULT_SIZE, ALPHABET_WIDGET_TYPE, ALPHABET_DEFAULT_PROPS, ALPHABET_DEFAULT_SIZE, CHIMIQ_WIDGET_TYPE, CHIMIQ_DEFAULT_PROPS, CHIMIQ_DEFAULT_SIZE, BIOIQ_WIDGET_TYPE, BIOIQ_DEFAULT_PROPS, BIOIQ_DEFAULT_SIZE, PHYSASTROIQ_WIDGET_TYPE, PHYSASTROIQ_DEFAULT_PROPS, PHYSASTROIQ_DEFAULT_SIZE } from '@kiosk/shared';
 import { apiClient } from '../services/api-client';
 import './WidgetLibrary.css';
 
@@ -23,6 +23,7 @@ const WORDS_ALLOWED_EMAILS = ['mokretcov.m@poznaikino.ru'];
 const ALPHABET_ALLOWED_EMAILS = ['mokretcov.m@poznaikino.ru'];
 const CHIMIQ_ALLOWED_EMAILS = ['mokretcov.m@poznaikino.ru'];
 const BIOIQ_ALLOWED_EMAILS = ['mokretcov.m@poznaikino.ru'];
+const PHYSASTROIQ_ALLOWED_EMAILS = ['mokretcov.m@poznaikino.ru'];
 
 const WidgetLibrary: React.FC = () => {
   const { addWidget, project } = useEditorStore();
@@ -37,6 +38,7 @@ const WidgetLibrary: React.FC = () => {
   const isAlphabetAllowed = !!currentUserEmail && ALPHABET_ALLOWED_EMAILS.includes(currentUserEmail.toLowerCase());
   const isChimiqAllowed = !!currentUserEmail && CHIMIQ_ALLOWED_EMAILS.includes(currentUserEmail.toLowerCase());
   const isBioiqAllowed = !!currentUserEmail && BIOIQ_ALLOWED_EMAILS.includes(currentUserEmail.toLowerCase());
+  const isPhysastroiqAllowed = !!currentUserEmail && PHYSASTROIQ_ALLOWED_EMAILS.includes(currentUserEmail.toLowerCase());
 
   const widgetTypes = [
     {
@@ -192,6 +194,13 @@ const WidgetLibrary: React.FC = () => {
       icon: Leaf,
       defaultProps: BIOIQ_DEFAULT_PROPS,
       defaultSize: BIOIQ_DEFAULT_SIZE
+    }] : []),
+    ...(isPhysastroiqAllowed ? [{
+      type: PHYSASTROIQ_WIDGET_TYPE,
+      name: 'ФизАстро IQ',
+      icon: Orbit,
+      defaultProps: PHYSASTROIQ_DEFAULT_PROPS,
+      defaultSize: PHYSASTROIQ_DEFAULT_SIZE
     }] : []),
     ...(isInophoneAllowed ? [{
       type: INOPHONE_WIDGET_TYPE,
