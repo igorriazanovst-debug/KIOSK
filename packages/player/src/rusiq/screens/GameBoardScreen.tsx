@@ -1,7 +1,7 @@
 // packages/player/src/rusiq/screens/GameBoardScreen.tsx
 import React, { useEffect, useRef, useState } from 'react';
 import type { RusiqPoint, RusiqQuestion } from '../model/schema.ts';
-import { scoreForAnswer, nextTurn, neutralTileLabels, type RusiqAnswerEvent } from '../gameLogic.ts';
+import { scoreForAnswer, nextTurn, neutralTileLabels, orderTilesByPosition, type RusiqAnswerEvent } from '../gameLogic.ts';
 import { rusiqItemImageUrl } from '../rusiqMediaUrl.ts';
 import '../rusiqTheme.css';
 
@@ -96,7 +96,7 @@ const GameBoardScreen: React.FC<Props> = ({ imageUrl, imageWidth, imageHeight, p
   const feedbackTimeoutRef = useRef<number | null>(null);
 
   const currentQuestion = questionsByPlayer[currentPlayer][questionIndexByPlayer[currentPlayer]];
-  const tiles = buildTiles(currentQuestion, genericDecoyPoints);
+  const tiles = orderTilesByPosition(buildTiles(currentQuestion, genericDecoyPoints));
   const tileLabels = neutralTileLabels(tiles);
 
   // Обнуляет таймер и заводит секундный тик на каждый новый вопрос
@@ -287,7 +287,7 @@ const GameBoardScreen: React.FC<Props> = ({ imageUrl, imageWidth, imageHeight, p
             <button
               key={tile.key}
               onClick={() => handleTileClick(tile)}
-              style={{ ...pointStyle(tile, activeFeedback), ...pointPosition(tile) }}
+              style={{ ...pointStyle(tile, activeFeedback), ...pointPosition(tile), zIndex: tile.isCorrect ? 1 : 0 }}
               aria-label={tileLabels.get(tile.key)}
               data-testid={tile.isCorrect ? 'correct-point' : `decoy-${tile.key}`}
             />

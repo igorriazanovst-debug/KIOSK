@@ -1,7 +1,7 @@
 // packages/player/src/bioiq/screens/GameBoardScreen.tsx
 import React, { useEffect, useRef, useState } from 'react';
 import type { BioiqPoint, BioiqQuestion } from '../model/schema.ts';
-import { scoreForAnswer, nextTurn, neutralTileLabels, buildBoardTiles, type BioiqAnswerEvent, type BioiqBoardTile } from '../gameLogic.ts';
+import { scoreForAnswer, nextTurn, neutralTileLabels, orderTilesByPosition, buildBoardTiles, type BioiqAnswerEvent, type BioiqBoardTile } from '../gameLogic.ts';
 import { bioiqItemImageUrl } from '../bioiqMediaUrl.ts';
 import { questionThemeImageUrl } from '../questionThemeImages.ts';
 import { playCorrectTone, playWrongTone } from '../sound.ts';
@@ -98,7 +98,7 @@ const GameBoardScreen: React.FC<Props> = ({
   const feedbackTimeoutRef = useRef<number | null>(null);
 
   const currentQuestion = questionsByPlayer[currentPlayer][questionIndexByPlayer[currentPlayer]];
-  const tiles = buildBoardTiles(currentQuestion, levelQuestions, genericDecoyPoints);
+  const tiles = orderTilesByPosition(buildBoardTiles(currentQuestion, levelQuestions, genericDecoyPoints));
   const tileLabels = neutralTileLabels(tiles);
   // Своя картинка вопроса (викторина учителя) важнее; иначе — картинка темы.
   const questionImageSrc = currentQuestion.questionImage
@@ -348,7 +348,7 @@ const GameBoardScreen: React.FC<Props> = ({
               <button
                 key={tile.key}
                 onClick={() => handleTileClick(tile)}
-                style={{ ...pointStyle(tile, activeFeedback), ...pointPosition(tile) }}
+                style={{ ...pointStyle(tile, activeFeedback), ...pointPosition(tile), zIndex: tile.isCorrect ? 1 : 0 }}
                 aria-label={tileLabels.get(tile.key)}
                 data-testid={tile.isCorrect ? 'correct-point' : `decoy-${tile.key}`}
               >

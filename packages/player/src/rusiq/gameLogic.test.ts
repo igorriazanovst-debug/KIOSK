@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { scoreForAnswer, assignQuestions, nextTurn, summarizeResults, neutralTileLabels } from './gameLogic.ts';
+import { scoreForAnswer, assignQuestions, nextTurn, summarizeResults, neutralTileLabels, orderTilesByPosition } from './gameLogic.ts';
 import { RUSIQ_DEFAULT_POINT_SIZE, type RusiqQuestion } from './model/schema.ts';
 
 function q(overrides: Partial<RusiqQuestion> = {}): RusiqQuestion {
@@ -91,4 +91,10 @@ test('neutralTileLabels: подпись не зависит от правиль�
   const reversed = neutralTileLabels([...tiles].reverse());
   assert.deepEqual([...reversed.entries()].sort(), [...labels.entries()].sort());
   assert.equal(new Set(labels.values()).size, tiles.length);
+});
+
+test('orderTilesByPosition: верная область не оказывается последней только потому, что построена последней', () => {
+  const tiles = [{ key: 'd1', x: 500, y: 500 }, { key: 'd2', x: 100, y: 900 }, { key: 'correct', x: 300, y: 100 }];
+  assert.deepEqual(orderTilesByPosition(tiles).map((t) => t.key), ['correct', 'd1', 'd2']);
+  assert.deepEqual(tiles.map((t) => t.key), ['d1', 'd2', 'correct']);
 });

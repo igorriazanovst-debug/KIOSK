@@ -1,7 +1,7 @@
 // packages/player/src/chimiq/screens/GameBoardScreen.tsx
 import React, { useEffect, useRef, useState } from 'react';
 import type { ChimiqPoint, ChimiqQuestion } from '../model/schema.ts';
-import { scoreForAnswer, nextTurn, neutralTileLabels, buildBoardTiles, type ChimiqAnswerEvent, type ChimiqBoardTile } from '../gameLogic.ts';
+import { scoreForAnswer, nextTurn, neutralTileLabels, orderTilesByPosition, buildBoardTiles, type ChimiqAnswerEvent, type ChimiqBoardTile } from '../gameLogic.ts';
 import { chimiqItemImageUrl } from '../chimiqMediaUrl.ts';
 import { questionThemeImageUrl } from '../questionThemeImages.ts';
 import { playCorrectTone, playWrongTone } from '../sound.ts';
@@ -95,7 +95,7 @@ const GameBoardScreen: React.FC<Props> = ({
   const feedbackTimeoutRef = useRef<number | null>(null);
 
   const currentQuestion = questionsByPlayer[currentPlayer][questionIndexByPlayer[currentPlayer]];
-  const tiles = buildBoardTiles(currentQuestion, levelQuestions, genericDecoyPoints);
+  const tiles = orderTilesByPosition(buildBoardTiles(currentQuestion, levelQuestions, genericDecoyPoints));
   const tileLabels = neutralTileLabels(tiles);
   // FR-008/FR-015 ТЗ - нейтральная иллюстрация по теме вопроса, когда своя
   // картинка (questionImage) не загружена - см. questionThemeImages.ts,
@@ -350,7 +350,7 @@ const GameBoardScreen: React.FC<Props> = ({
               <button
                 key={tile.key}
                 onClick={() => handleTileClick(tile)}
-                style={{ ...pointStyle(tile, activeFeedback), ...pointPosition(tile) }}
+                style={{ ...pointStyle(tile, activeFeedback), ...pointPosition(tile), zIndex: tile.isCorrect ? 1 : 0 }}
                 aria-label={tileLabels.get(tile.key)}
                 data-testid={tile.isCorrect ? 'correct-point' : `decoy-${tile.key}`}
               >

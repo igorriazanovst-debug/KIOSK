@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { scoreForAnswer, assignQuestions, nextTurn, summarizeResults, buildBoardTiles, neutralTileLabels } from './gameLogic.ts';
+import { scoreForAnswer, assignQuestions, nextTurn, summarizeResults, buildBoardTiles, neutralTileLabels, orderTilesByPosition } from './gameLogic.ts';
 import { BIOIQ_DEFAULT_POINT_SIZE, type BioiqQuestion, type BioiqPoint } from './model/schema.ts';
 
 function q(overrides: Partial<BioiqQuestion> = {}): BioiqQuestion {
@@ -174,4 +174,10 @@ test('buildBoardTiles: двойник структуры верен для св�
   const forHeart = buildBoardTiles(heart, [lung, heart], generic);
   assert.deepEqual(forHeart.filter((t) => t.isCorrect).map((t) => t.key), ['200_100']);
   assert.equal(forHeart.find((t) => t.key === '300_100')?.isCorrect, false);
+});
+
+test('orderTilesByPosition: верная область не оказывается последней только потому, что построена последней', () => {
+  const tiles = [{ key: 'd1', x: 500, y: 500 }, { key: 'd2', x: 100, y: 900 }, { key: 'correct', x: 300, y: 100 }];
+  assert.deepEqual(orderTilesByPosition(tiles).map((t) => t.key), ['correct', 'd1', 'd2']);
+  assert.deepEqual(tiles.map((t) => t.key), ['d1', 'd2', 'correct']);
 });
