@@ -77,7 +77,7 @@
 
 | Где | Что | Сколько |
 |---|---|--:|
-| `packages/player` | всего тестов | 1151 |
+| `packages/player` | всего тестов | 1162 |
 | | из них `bioiq` | **157** |
 | `packages/shared` | всего | 676 |
 | `packages/server` | доступ к виджету по email | 6 |
