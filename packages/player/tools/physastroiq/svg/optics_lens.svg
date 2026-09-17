@@ -1,0 +1,65 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1100" viewBox="0 0 1600 1100">
+  <rect width="1600" height="1100" fill="#0d1620"/>
+  <text x="46" y="60" fill="#e8eef4" font-size="36" font-weight="700" font-family="system-ui, 'Segoe UI', sans-serif">Собирающая линза: построение изображения</text>
+  <line x1="46" y1="80" x2="1554" y2="80" stroke="#24384a" stroke-width="2"/>
+  <line x1="420" y1="600" x2="1180" y2="600" stroke="#9fb3c4" stroke-width="1.6" stroke-dasharray="9 7" stroke-linecap="round"/>
+  <path d="M 800 460 Q 856 600 800 740 Q 744 600 800 460 Z" fill="#1b3d4e" stroke="#6fb8d8" stroke-width="3"/>
+  <line x1="800" y1="432" x2="800.0" y2="441.0" stroke="#6fb8d8" stroke-width="2.4" stroke-linecap="round"/>
+  <polygon points="795.2,441.0 804.8,441.0 800,452" fill="#6fb8d8"/>
+  <line x1="800" y1="768" x2="800.0" y2="759.0" stroke="#6fb8d8" stroke-width="2.4" stroke-linecap="round"/>
+  <polygon points="804.8,759.0 795.2,759.0 800,748" fill="#6fb8d8"/>
+  <circle cx="800" cy="600" r="6" fill="#e8eef4"/>
+  <circle cx="650" cy="600" r="6" fill="#f0d264"/>
+  <text x="650" y="630" text-anchor="middle" fill="#f0d264" font-size="22" font-family="system-ui, 'Segoe UI', sans-serif" font-weight="700">F</text>
+  <circle cx="950" cy="600" r="6" fill="#f0d264"/>
+  <text x="950" y="630" text-anchor="middle" fill="#f0d264" font-size="22" font-family="system-ui, 'Segoe UI', sans-serif" font-weight="700">F</text>
+  <circle cx="500" cy="600" r="5" fill="#9fb3c4"/>
+  <text x="500" y="630" text-anchor="middle" fill="#9fb3c4" font-size="21" font-family="system-ui, 'Segoe UI', sans-serif">2F</text>
+  <circle cx="1100" cy="600" r="5" fill="#9fb3c4"/>
+  <text x="1100" y="630" text-anchor="middle" fill="#9fb3c4" font-size="21" font-family="system-ui, 'Segoe UI', sans-serif">2F</text>
+  <line x1="800" y1="750" x2="800" y2="910" stroke="#9fb3c4" stroke-width="1.2" stroke-dasharray="5 5" stroke-linecap="round"/>
+  <line x1="950" y1="750" x2="950" y2="910" stroke="#9fb3c4" stroke-width="1.2" stroke-dasharray="5 5" stroke-linecap="round"/>
+  <line x1="875" y1="900" x2="811.0" y2="900.0" stroke="#9fb3c4" stroke-width="1.6" stroke-linecap="round"/>
+  <polygon points="811.0,895.2 811.0,904.8 800,900" fill="#9fb3c4"/>
+  <line x1="875" y1="900" x2="939.0" y2="900.0" stroke="#9fb3c4" stroke-width="1.6" stroke-linecap="round"/>
+  <polygon points="939.0,904.8 939.0,895.2 950,900" fill="#9fb3c4"/>
+  <text x="875" y="888" text-anchor="middle" fill="#9fb3c4" font-size="19" font-family="system-ui, 'Segoe UI', sans-serif">фокусное расстояние F</text>
+  <line x1="500" y1="600" x2="500.0" y2="496.0" stroke="#7fd4c1" stroke-width="4.5" stroke-linecap="round"/>
+  <polygon points="507.0,496.0 493.0,496.0 500,480" fill="#7fd4c1"/>
+  <line x1="1100" y1="600" x2="1100.0" y2="704.0" stroke="#e0724f" stroke-width="4.5" stroke-linecap="round"/>
+  <polygon points="1093.0,704.0 1107.0,704.0 1100,720" fill="#e0724f"/>
+  <line x1="500" y1="480" x2="800" y2="480" stroke="#f0d264" stroke-width="2.4" stroke-linecap="round"/>
+  <line x1="800" y1="480" x2="1100" y2="720" stroke="#f0d264" stroke-width="2.4" stroke-linecap="round"/>
+  <line x1="710" y1="480" x2="732.0" y2="480.0" stroke="#f0d264" stroke-width="2.4" stroke-linecap="round"/>
+  <polygon points="732.0,485.3 732.0,474.7 744,480" fill="#f0d264"/>
+  <line x1="500" y1="480" x2="1100" y2="720" stroke="#6fb8d8" stroke-width="2.4" stroke-linecap="round"/>
+  <text x="800" y="1000" text-anchor="middle" fill="#e8eef4" font-size="27" font-family="system-ui, 'Segoe UI', sans-serif" font-weight="700">Формула тонкой линзы:  1/F = 1/d + 1/f</text>
+  <text x="800" y="1036" text-anchor="middle" fill="#9fb3c4" font-size="19" font-family="system-ui, 'Segoe UI', sans-serif">предмет в двойном фокусе — изображение тоже в двойном фокусе и той же величины</text>
+  <path d="M 610 480 L 362 222.5" stroke="#9fb3c4" stroke-width="1.6" fill="none" opacity="0.8"/>
+  <circle cx="610" cy="480" r="5" fill="#9fb3c4"/>
+  <text x="340" y="217" text-anchor="end" fill="#e8eef4" font-size="21" font-family="system-ui, 'Segoe UI', sans-serif"><tspan x="340" dy="0">Луч вдоль оси — после линзы</tspan><tspan x="340" dy="25">через фокус</tspan></text>
+  <path d="M 500 530 L 362 432.5" stroke="#9fb3c4" stroke-width="1.6" fill="none" opacity="0.8"/>
+  <circle cx="500" cy="530" r="5" fill="#9fb3c4"/>
+  <text x="340" y="439.5" text-anchor="end" fill="#e8eef4" font-size="21" font-family="system-ui, 'Segoe UI', sans-serif"><tspan x="340" dy="0">Предмет</tspan></text>
+  <path d="M 650 540 L 362 642.5" stroke="#9fb3c4" stroke-width="1.6" fill="none" opacity="0.8"/>
+  <circle cx="650" cy="540" r="5" fill="#9fb3c4"/>
+  <text x="340" y="637" text-anchor="end" fill="#e8eef4" font-size="21" font-family="system-ui, 'Segoe UI', sans-serif"><tspan x="340" dy="0">Луч через центр не</tspan><tspan x="340" dy="25">преломляется</tspan></text>
+  <path d="M 470 600 L 362 852.5" stroke="#9fb3c4" stroke-width="1.6" fill="none" opacity="0.8"/>
+  <circle cx="470" cy="600" r="5" fill="#9fb3c4"/>
+  <text x="340" y="859.5" text-anchor="end" fill="#e8eef4" font-size="21" font-family="system-ui, 'Segoe UI', sans-serif"><tspan x="340" dy="0">Главная оптическая ось</tspan></text>
+  <path d="M 840 504 L 1218 160" stroke="#9fb3c4" stroke-width="1.6" fill="none" opacity="0.8"/>
+  <circle cx="840" cy="504" r="5" fill="#9fb3c4"/>
+  <text x="1240" y="167" text-anchor="start" fill="#e8eef4" font-size="21" font-family="system-ui, 'Segoe UI', sans-serif"><tspan x="1240" dy="0">Собирающая линза</tspan></text>
+  <path d="M 800 600 L 1218 370" stroke="#9fb3c4" stroke-width="1.6" fill="none" opacity="0.8"/>
+  <circle cx="800" cy="600" r="5" fill="#9fb3c4"/>
+  <text x="1240" y="377" text-anchor="start" fill="#e8eef4" font-size="21" font-family="system-ui, 'Segoe UI', sans-serif"><tspan x="1240" dy="0">Оптический центр O</tspan></text>
+  <path d="M 950 600 L 1218 580" stroke="#9fb3c4" stroke-width="1.6" fill="none" opacity="0.8"/>
+  <circle cx="950" cy="600" r="5" fill="#9fb3c4"/>
+  <text x="1240" y="587" text-anchor="start" fill="#e8eef4" font-size="21" font-family="system-ui, 'Segoe UI', sans-serif"><tspan x="1240" dy="0">Фокус F</tspan></text>
+  <path d="M 1100 670 L 1218 790" stroke="#9fb3c4" stroke-width="1.6" fill="none" opacity="0.8"/>
+  <circle cx="1100" cy="670" r="5" fill="#9fb3c4"/>
+  <text x="1240" y="784.5" text-anchor="start" fill="#e8eef4" font-size="21" font-family="system-ui, 'Segoe UI', sans-serif"><tspan x="1240" dy="0">Действительное перевёрнутое</tspan><tspan x="1240" dy="25">изображение</tspan></text>
+  <path d="M 875 900 L 1218 1000" stroke="#9fb3c4" stroke-width="1.6" fill="none" opacity="0.8"/>
+  <circle cx="875" cy="900" r="5" fill="#9fb3c4"/>
+  <text x="1240" y="1007" text-anchor="start" fill="#e8eef4" font-size="21" font-family="system-ui, 'Segoe UI', sans-serif"><tspan x="1240" dy="0">Фокусное расстояние</tspan></text>
+</svg>

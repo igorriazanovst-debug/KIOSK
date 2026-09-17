@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1100" viewBox="0 0 1600 1100">
+  <rect width="1600" height="1100" fill="#0d1620"/>
+  <text x="46" y="60" fill="#e8eef4" font-size="36" font-weight="700" font-family="system-ui, 'Segoe UI', sans-serif">Архимедова сила и условия плавания тел</text>
+  <line x1="46" y1="80" x2="1554" y2="80" stroke="#24384a" stroke-width="2"/>
+  <rect x="430" y="420" width="740" height="510" fill="#2b5f7a"/>
+  <path d="M 430 300 L 430 930 L 1170 930 L 1170 300" fill="none" stroke="#8fa8bd" stroke-width="3"/>
+  <line x1="430" y1="420" x2="1170" y2="420" stroke="#8fd0e8" stroke-width="3" stroke-linecap="round"/>
+  
+  <rect x="548" y="624" width="104" height="72" rx="6" fill="#2b4256" stroke="#7fa3bd" stroke-width="2"/>
+  <line x1="600" y1="624" x2="600.0" y2="508.0" stroke="#7fd4c1" stroke-width="4" stroke-linecap="round"/>
+  <polygon points="607.0,508.0 593.0,508.0 600,492" fill="#7fd4c1"/>
+  <line x1="600" y1="696" x2="600.0" y2="764.0" stroke="#e0724f" stroke-width="4" stroke-linecap="round"/>
+  <polygon points="593.0,764.0 607.0,764.0 600,780" fill="#e0724f"/>
+  <text x="600" y="666" text-anchor="middle" fill="#e8eef4" font-size="24" font-family="system-ui, 'Segoe UI', sans-serif" font-weight="700">1</text>
+  <text x="600" y="480" text-anchor="middle" fill="#7fd4c1" font-size="21" font-family="system-ui, 'Segoe UI', sans-serif" font-weight="700">FА</text>
+  <text x="600" y="806" text-anchor="middle" fill="#e0724f" font-size="21" font-family="system-ui, 'Segoe UI', sans-serif" font-weight="700">mg</text>
+  <rect x="748" y="624" width="104" height="72" rx="6" fill="#2b4256" stroke="#7fa3bd" stroke-width="2"/>
+  <line x1="800" y1="624" x2="800.0" y2="508.0" stroke="#7fd4c1" stroke-width="4" stroke-linecap="round"/>
+  <polygon points="807.0,508.0 793.0,508.0 800,492" fill="#7fd4c1"/>
+  <line x1="800" y1="696" x2="800.0" y2="812.0" stroke="#e0724f" stroke-width="4" stroke-linecap="round"/>
+  <polygon points="793.0,812.0 807.0,812.0 800,828" fill="#e0724f"/>
+  <text x="800" y="666" text-anchor="middle" fill="#e8eef4" font-size="24" font-family="system-ui, 'Segoe UI', sans-serif" font-weight="700">2</text>
+  <text x="800" y="480" text-anchor="middle" fill="#7fd4c1" font-size="21" font-family="system-ui, 'Segoe UI', sans-serif" font-weight="700">FА</text>
+  <text x="800" y="854" text-anchor="middle" fill="#e0724f" font-size="21" font-family="system-ui, 'Segoe UI', sans-serif" font-weight="700">mg</text>
+  <rect x="948" y="624" width="104" height="72" rx="6" fill="#2b4256" stroke="#7fa3bd" stroke-width="2"/>
+  <line x1="1000" y1="624" x2="1000.0" y2="508.0" stroke="#7fd4c1" stroke-width="4" stroke-linecap="round"/>
+  <polygon points="1007.0,508.0 993.0,508.0 1000,492" fill="#7fd4c1"/>
+  <line x1="1000" y1="696" x2="1000.0" y2="864.0" stroke="#e0724f" stroke-width="4" stroke-linecap="round"/>
+  <polygon points="993.0,864.0 1007.0,864.0 1000,880" fill="#e0724f"/>
+  <text x="1000" y="666" text-anchor="middle" fill="#e8eef4" font-size="24" font-family="system-ui, 'Segoe UI', sans-serif" font-weight="700">3</text>
+  <text x="1000" y="480" text-anchor="middle" fill="#7fd4c1" font-size="21" font-family="system-ui, 'Segoe UI', sans-serif" font-weight="700">FА</text>
+  <text x="1000" y="906" text-anchor="middle" fill="#e0724f" font-size="21" font-family="system-ui, 'Segoe UI', sans-serif" font-weight="700">mg</text>
+  <text x="800" y="1000" text-anchor="middle" fill="#e8eef4" font-size="27" font-family="system-ui, 'Segoe UI', sans-serif" font-weight="700">Архимедова сила:  FА = ρж · g · V</text>
+  <text x="800" y="1036" text-anchor="middle" fill="#9fb3c4" font-size="19" font-family="system-ui, 'Segoe UI', sans-serif">V — объём ПОГРУЖЁННОЙ части тела; от плотности самого тела сила не зависит</text>
+  <text x="800" y="178" text-anchor="middle" fill="#9fb3c4" font-size="21" font-family="system-ui, 'Segoe UI', sans-serif">Три тела одинакового объёма, но разной плотности: выталкивающая сила у них одна и та же</text>
+  <text x="800" y="208" text-anchor="middle" fill="#9fb3c4" font-size="19" font-family="system-ui, 'Segoe UI', sans-serif">различается только вес — он и решает, всплывёт тело или утонет</text>
+  <path d="M 490 420 L 362 383.33333333333337" stroke="#9fb3c4" stroke-width="1.6" fill="none" opacity="0.8"/>
+  <circle cx="490" cy="420" r="5" fill="#9fb3c4"/>
+  <text x="340" y="377.83333333333337" text-anchor="end" fill="#e8eef4" font-size="21" font-family="system-ui, 'Segoe UI', sans-serif"><tspan x="340" dy="0">Свободная поверхность</tspan><tspan x="340" dy="25">жидкости</tspan></text>
+  <path d="M 600 660 L 362 593.3333333333334" stroke="#9fb3c4" stroke-width="1.6" fill="none" opacity="0.8"/>
+  <circle cx="600" cy="660" r="5" fill="#9fb3c4"/>
+  <text x="340" y="600.3333333333334" text-anchor="end" fill="#e8eef4" font-size="21" font-family="system-ui, 'Segoe UI', sans-serif"><tspan x="340" dy="0">1. FА &gt; mg — тело всплывает</tspan></text>
+  <path d="M 476 700 L 362 803.3333333333334" stroke="#9fb3c4" stroke-width="1.6" fill="none" opacity="0.8"/>
+  <circle cx="476" cy="700" r="5" fill="#9fb3c4"/>
+  <text x="340" y="810.3333333333334" text-anchor="end" fill="#e8eef4" font-size="21" font-family="system-ui, 'Segoe UI', sans-serif"><tspan x="340" dy="0">Жидкость плотностью ρж</tspan></text>
+  <path d="M 800 660 L 1218 555" stroke="#9fb3c4" stroke-width="1.6" fill="none" opacity="0.8"/>
+  <circle cx="800" cy="660" r="5" fill="#9fb3c4"/>
+  <text x="1240" y="562" text-anchor="start" fill="#e8eef4" font-size="21" font-family="system-ui, 'Segoe UI', sans-serif"><tspan x="1240" dy="0">2. FА = mg — тело плавает</tspan></text>
+  <path d="M 1000 660 L 1218 765" stroke="#9fb3c4" stroke-width="1.6" fill="none" opacity="0.8"/>
+  <circle cx="1000" cy="660" r="5" fill="#9fb3c4"/>
+  <text x="1240" y="772" text-anchor="start" fill="#e8eef4" font-size="21" font-family="system-ui, 'Segoe UI', sans-serif"><tspan x="1240" dy="0">3. FА &lt; mg — тело тонет</tspan></text>
+</svg>

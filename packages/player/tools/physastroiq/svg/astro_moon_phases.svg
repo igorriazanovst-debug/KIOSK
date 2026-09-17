@@ -1,0 +1,97 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1100" viewBox="0 0 1600 1100">
+  <rect width="1600" height="1100" fill="#0d1620"/>
+  <text x="46" y="60" fill="#e8eef4" font-size="36" font-weight="700" font-family="system-ui, 'Segoe UI', sans-serif">Фазы Луны</text>
+  <line x1="46" y1="80" x2="1554" y2="80" stroke="#24384a" stroke-width="2"/>
+  <circle cx="250" cy="590" r="34" fill="#f2c14e" stroke="#f7e09a" stroke-width="2"/>
+  <line x1="288.08" y1="590" x2="295.56" y2="590" stroke="#f7e09a" stroke-width="2.4" stroke-linecap="round"/>
+  <line x1="285.1813325980298" y1="604.5725851044626" x2="292.0919515012142" y2="607.4350571785535" stroke="#f7e09a" stroke-width="2.4" stroke-linecap="round"/>
+  <line x1="276.9266262275837" y1="616.9266262275837" x2="282.21578495085913" y2="622.2157849508591" stroke="#f7e09a" stroke-width="2.4" stroke-linecap="round"/>
+  <line x1="264.57258510446263" y1="625.1813325980298" x2="267.4350571785535" y2="632.0919515012142" stroke="#f7e09a" stroke-width="2.4" stroke-linecap="round"/>
+  <line x1="250" y1="628.08" x2="250" y2="635.56" stroke="#f7e09a" stroke-width="2.4" stroke-linecap="round"/>
+  <line x1="235.42741489553737" y1="625.1813325980298" x2="232.56494282144652" y2="632.0919515012142" stroke="#f7e09a" stroke-width="2.4" stroke-linecap="round"/>
+  <line x1="223.07337377241626" y1="616.9266262275837" x2="217.7842150491409" y2="622.2157849508591" stroke="#f7e09a" stroke-width="2.4" stroke-linecap="round"/>
+  <line x1="214.8186674019702" y1="604.5725851044626" x2="207.90804849878577" y2="607.4350571785535" stroke="#f7e09a" stroke-width="2.4" stroke-linecap="round"/>
+  <line x1="211.92" y1="590" x2="204.44" y2="590" stroke="#f7e09a" stroke-width="2.4" stroke-linecap="round"/>
+  <line x1="214.8186674019702" y1="575.4274148955374" x2="207.90804849878577" y2="572.5649428214465" stroke="#f7e09a" stroke-width="2.4" stroke-linecap="round"/>
+  <line x1="223.07337377241626" y1="563.0733737724163" x2="217.78421504914087" y2="557.7842150491409" stroke="#f7e09a" stroke-width="2.4" stroke-linecap="round"/>
+  <line x1="235.42741489553737" y1="554.8186674019702" x2="232.5649428214465" y2="547.9080484987858" stroke="#f7e09a" stroke-width="2.4" stroke-linecap="round"/>
+  <line x1="250" y1="551.92" x2="250" y2="544.44" stroke="#f7e09a" stroke-width="2.4" stroke-linecap="round"/>
+  <line x1="264.57258510446263" y1="554.8186674019702" x2="267.4350571785535" y2="547.9080484987858" stroke="#f7e09a" stroke-width="2.4" stroke-linecap="round"/>
+  <line x1="276.9266262275837" y1="563.0733737724163" x2="282.2157849508591" y2="557.7842150491409" stroke="#f7e09a" stroke-width="2.4" stroke-linecap="round"/>
+  <line x1="285.18133259802977" y1="575.4274148955374" x2="292.0919515012142" y2="572.5649428214465" stroke="#f7e09a" stroke-width="2.4" stroke-linecap="round"/>
+  <line x1="300" y1="480" x2="388.0" y2="480.0" stroke="#f7e09a" stroke-width="2.4" stroke-linecap="round"/>
+  <polygon points="388.0,485.3 388.0,474.7 400,480" fill="#f7e09a"/>
+  <line x1="300" y1="535" x2="388.0" y2="535.0" stroke="#f7e09a" stroke-width="2.4" stroke-linecap="round"/>
+  <polygon points="388.0,540.3 388.0,529.7 400,535" fill="#f7e09a"/>
+  <line x1="300" y1="590" x2="388.0" y2="590.0" stroke="#f7e09a" stroke-width="2.4" stroke-linecap="round"/>
+  <polygon points="388.0,595.3 388.0,584.7 400,590" fill="#f7e09a"/>
+  <line x1="300" y1="645" x2="388.0" y2="645.0" stroke="#f7e09a" stroke-width="2.4" stroke-linecap="round"/>
+  <polygon points="388.0,650.3 388.0,639.7 400,645" fill="#f7e09a"/>
+  <line x1="300" y1="700" x2="388.0" y2="700.0" stroke="#f7e09a" stroke-width="2.4" stroke-linecap="round"/>
+  <polygon points="388.0,705.3 388.0,694.7 400,700" fill="#f7e09a"/>
+  <text x="250" y="658" text-anchor="middle" fill="#e8eef4" font-size="21" font-family="system-ui, 'Segoe UI', sans-serif" font-weight="700">Солнце</text>
+  <text x="350" y="452" text-anchor="middle" fill="#9fb3c4" font-size="17" font-family="system-ui, 'Segoe UI', sans-serif">солнечные лучи</text>
+  <circle cx="940" cy="590" r="40" fill="#1b2b3a" stroke="#9fb3c4" stroke-width="1.4"/>
+  <path d="M 940 550 A 40 40 0 0 0 940 630 A 0.00 40 0 0 1 940 550 Z" fill="#5b8fc9"/>
+  <text x="940" y="658" text-anchor="middle" fill="#e8eef4" font-size="21" font-family="system-ui, 'Segoe UI', sans-serif" font-weight="700">Земля</text>
+  <circle cx="940" cy="590" r="205" fill="none" stroke="#3c556b" stroke-width="1.6" stroke-dasharray="8 8"/>
+  <circle cx="735" cy="590" r="24" fill="#1a242e" stroke="#9fb3c4" stroke-width="1.4"/>
+  <path d="M 735 566 A 24 24 0 0 0 735 614 A 0.00 24 0 0 1 735 566 Z" fill="#d9dee3"/>
+  <line x1="709" y1="590" x2="670" y2="590" stroke="#3c556b" stroke-width="1.2" stroke-dasharray="4 5" stroke-linecap="round"/>
+  <circle cx="640" cy="590" r="28" fill="#1a242e" stroke="#9fb3c4" stroke-width="1.4"/>
+  <path d="M 640 562 A 28 28 0 0 0 640 618 A 28.00 28 0 0 1 640 562 Z" fill="#d9dee3"/>
+  <text x="594" y="596" text-anchor="end" fill="#e8eef4" font-size="20" font-family="system-ui, 'Segoe UI', sans-serif" font-weight="700">Новолуние</text>
+  <text x="594" y="620" text-anchor="end" fill="#9fb3c4" font-size="16" font-family="system-ui, 'Segoe UI', sans-serif">Луна между Землёй и Солнцем</text>
+  <circle cx="795.0431098567578" cy="445.0431098567577" r="24" fill="#1a242e" stroke="#9fb3c4" stroke-width="1.4"/>
+  <path d="M 795.0431098567578 421.0431098567577 A 24 24 0 0 0 795.0431098567578 469.0431098567577 A 0.00 24 0 0 1 795.0431098567578 421.0431098567577 Z" fill="#d9dee3"/>
+  <line x1="776.6583335459076" y1="426.6583335459075" x2="749.0811690796321" y2="399.08116907963216" stroke="#3c556b" stroke-width="1.2" stroke-dasharray="4 5" stroke-linecap="round"/>
+  <circle cx="727.8679656440357" cy="377.86796564403573" r="28" fill="#1a242e" stroke="#9fb3c4" stroke-width="1.4"/>
+  <path d="M 727.8679656440357 349.86796564403573 A 28 28 0 0 1 727.8679656440357 405.86796564403573 A 19.80 28 0 0 0 727.8679656440357 349.86796564403573 Z" fill="#d9dee3"/>
+  <text x="695.3410537094546" y="351.3410537094545" text-anchor="end" fill="#e8eef4" font-size="20" font-family="system-ui, 'Segoe UI', sans-serif" font-weight="700">Растущий серп</text>
+  
+  <circle cx="940" cy="385" r="24" fill="#1a242e" stroke="#9fb3c4" stroke-width="1.4"/>
+  <path d="M 940 361 A 24 24 0 0 0 940 409 A 0.00 24 0 0 1 940 361 Z" fill="#d9dee3"/>
+  <line x1="940" y1="359" x2="940" y2="320" stroke="#3c556b" stroke-width="1.2" stroke-dasharray="4 5" stroke-linecap="round"/>
+  <circle cx="940" cy="290" r="28" fill="#1a242e" stroke="#9fb3c4" stroke-width="1.4"/>
+  <path d="M 940 262 A 28 28 0 0 1 940 318 A 0.00 28 0 0 0 940 262 Z" fill="#d9dee3"/>
+  <text x="940" y="234" text-anchor="middle" fill="#e8eef4" font-size="20" font-family="system-ui, 'Segoe UI', sans-serif" font-weight="700">Первая четверть</text>
+  <text x="940" y="258" text-anchor="middle" fill="#9fb3c4" font-size="16" font-family="system-ui, 'Segoe UI', sans-serif">видна правая половина</text>
+  <circle cx="1084.9568901432422" cy="445.0431098567578" r="24" fill="#1a242e" stroke="#9fb3c4" stroke-width="1.4"/>
+  <path d="M 1084.9568901432422 421.0431098567578 A 24 24 0 0 0 1084.9568901432422 469.0431098567578 A 0.00 24 0 0 1 1084.9568901432422 421.0431098567578 Z" fill="#d9dee3"/>
+  <line x1="1103.3416664540923" y1="426.65833354590757" x2="1130.9188309203678" y2="399.08116907963216" stroke="#3c556b" stroke-width="1.2" stroke-dasharray="4 5" stroke-linecap="round"/>
+  <circle cx="1152.1320343559642" cy="377.86796564403573" r="28" fill="#1a242e" stroke="#9fb3c4" stroke-width="1.4"/>
+  <path d="M 1152.1320343559642 349.86796564403573 A 28 28 0 0 1 1152.1320343559642 405.86796564403573 A 19.80 28 0 0 1 1152.1320343559642 349.86796564403573 Z" fill="#d9dee3"/>
+  <text x="1184.6589462905454" y="351.34105370945457" text-anchor="start" fill="#e8eef4" font-size="20" font-family="system-ui, 'Segoe UI', sans-serif" font-weight="700">Растущая Луна</text>
+  
+  <circle cx="1145" cy="590" r="24" fill="#1a242e" stroke="#9fb3c4" stroke-width="1.4"/>
+  <path d="M 1145 566 A 24 24 0 0 0 1145 614 A 0.00 24 0 0 1 1145 566 Z" fill="#d9dee3"/>
+  <line x1="1171" y1="590" x2="1210" y2="590" stroke="#3c556b" stroke-width="1.2" stroke-dasharray="4 5" stroke-linecap="round"/>
+  <circle cx="1240" cy="590" r="28" fill="#1a242e" stroke="#9fb3c4" stroke-width="1.4"/>
+  <path d="M 1240 562 A 28 28 0 0 1 1240 618 A 28.00 28 0 0 1 1240 562 Z" fill="#d9dee3"/>
+  <text x="1286" y="596" text-anchor="start" fill="#e8eef4" font-size="20" font-family="system-ui, 'Segoe UI', sans-serif" font-weight="700">Полнолуние</text>
+  <text x="1286" y="620" text-anchor="start" fill="#9fb3c4" font-size="16" font-family="system-ui, 'Segoe UI', sans-serif">Земля между Луной и Солнцем</text>
+  <circle cx="1084.9568901432422" cy="734.9568901432423" r="24" fill="#1a242e" stroke="#9fb3c4" stroke-width="1.4"/>
+  <path d="M 1084.9568901432422 710.9568901432423 A 24 24 0 0 0 1084.9568901432422 758.9568901432423 A 0.00 24 0 0 1 1084.9568901432422 710.9568901432423 Z" fill="#d9dee3"/>
+  <line x1="1103.3416664540923" y1="753.3416664540925" x2="1130.9188309203678" y2="780.9188309203678" stroke="#3c556b" stroke-width="1.2" stroke-dasharray="4 5" stroke-linecap="round"/>
+  <circle cx="1152.1320343559642" cy="802.1320343559643" r="28" fill="#1a242e" stroke="#9fb3c4" stroke-width="1.4"/>
+  <path d="M 1152.1320343559642 774.1320343559643 A 28 28 0 0 0 1152.1320343559642 830.1320343559643 A 19.80 28 0 0 0 1152.1320343559642 774.1320343559643 Z" fill="#d9dee3"/>
+  <text x="1184.6589462905454" y="840.6589462905455" text-anchor="start" fill="#e8eef4" font-size="20" font-family="system-ui, 'Segoe UI', sans-serif" font-weight="700">Убывающая Луна</text>
+  
+  <circle cx="940" cy="795" r="24" fill="#1a242e" stroke="#9fb3c4" stroke-width="1.4"/>
+  <path d="M 940 771 A 24 24 0 0 0 940 819 A 0.00 24 0 0 1 940 771 Z" fill="#d9dee3"/>
+  <line x1="940" y1="821" x2="940" y2="860" stroke="#3c556b" stroke-width="1.2" stroke-dasharray="4 5" stroke-linecap="round"/>
+  <circle cx="940" cy="890" r="28" fill="#1a242e" stroke="#9fb3c4" stroke-width="1.4"/>
+  <path d="M 940 862 A 28 28 0 0 0 940 918 A 0.00 28 0 0 1 940 862 Z" fill="#d9dee3"/>
+  <text x="939.9999999999999" y="958" text-anchor="middle" fill="#e8eef4" font-size="20" font-family="system-ui, 'Segoe UI', sans-serif" font-weight="700">Последняя четверть</text>
+  <text x="939.9999999999999" y="982" text-anchor="middle" fill="#9fb3c4" font-size="16" font-family="system-ui, 'Segoe UI', sans-serif">видна левая половина</text>
+  <circle cx="795.0431098567577" cy="734.9568901432422" r="24" fill="#1a242e" stroke="#9fb3c4" stroke-width="1.4"/>
+  <path d="M 795.0431098567577 710.9568901432422 A 24 24 0 0 0 795.0431098567577 758.9568901432422 A 0.00 24 0 0 1 795.0431098567577 710.9568901432422 Z" fill="#d9dee3"/>
+  <line x1="776.6583335459075" y1="753.3416664540924" x2="749.0811690796322" y2="780.9188309203679" stroke="#3c556b" stroke-width="1.2" stroke-dasharray="4 5" stroke-linecap="round"/>
+  <circle cx="727.8679656440357" cy="802.1320343559643" r="28" fill="#1a242e" stroke="#9fb3c4" stroke-width="1.4"/>
+  <path d="M 727.8679656440357 774.1320343559643 A 28 28 0 0 0 727.8679656440357 830.1320343559643 A 19.80 28 0 0 1 727.8679656440357 774.1320343559643 Z" fill="#d9dee3"/>
+  <text x="695.3410537094545" y="840.6589462905454" text-anchor="end" fill="#e8eef4" font-size="20" font-family="system-ui, 'Segoe UI', sans-serif" font-weight="700">Старый месяц</text>
+  
+  <text x="800" y="128" text-anchor="middle" fill="#9fb3c4" font-size="19" font-family="system-ui, 'Segoe UI', sans-serif">Луна всегда освещена Солнцем ровно наполовину — меняется лишь то, какую часть освещённой половины видно с Земли</text>
+  <text x="800" y="1062" text-anchor="middle" fill="#9fb3c4" font-size="19" font-family="system-ui, 'Segoe UI', sans-serif">Полный оборот фаз — синодический месяц, около 29,5 суток</text>
+  
+</svg>

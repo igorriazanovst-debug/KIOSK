@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1100" viewBox="0 0 1600 1100">
+  <rect width="1600" height="1100" fill="#0d1620"/>
+  <text x="46" y="60" fill="#e8eef4" font-size="36" font-weight="700" font-family="system-ui, 'Segoe UI', sans-serif">Силы, действующие на тело на наклонной плоскости</text>
+  <line x1="46" y1="80" x2="1554" y2="80" stroke="#24384a" stroke-width="2"/>
+  <polygon points="430,900 1170,900 1170,470" fill="#1d3a4d" stroke="#7fa3bd" stroke-width="2.4"/>
+  <polygon points="768.8,700.8 858.8,648.5 826.6,593.2 736.7,645.5" fill="#2b4256" stroke="#7fa3bd" stroke-width="2.4"/>
+  <line x1="797.7178096056465" y1="647.0027421120428" x2="797.7" y2="806.0" stroke="#e0724f" stroke-width="4" stroke-linecap="round"/>
+  <polygon points="790.7,806.0 804.8,806.0 797.7178096056465,822.0027421120428" fill="#e0724f"/>
+  <text x="819.7178096056465" y="767.0027421120428" text-anchor="start" fill="#e0724f" font-size="24" font-family="system-ui, 'Segoe UI', sans-serif" font-weight="700">mg</text>
+  <line x1="797.7178096056465" y1="647.0027421120428" x2="730.4" y2="531.1" stroke="#7fd4c1" stroke-width="4" stroke-linecap="round"/>
+  <polygon points="736.5,527.6 724.3,534.7 722.3552049246753,517.308957312232" fill="#7fd4c1"/>
+  <text x="695.2923534466403" y="494.8287012802647" text-anchor="middle" fill="#7fd4c1" font-size="24" font-family="system-ui, 'Segoe UI', sans-serif" font-weight="700">N</text>
+  <line x1="797.7178096056465" y1="647.0027421120428" x2="898.0" y2="588.7" stroke="#d8b25e" stroke-width="4" stroke-linecap="round"/>
+  <polygon points="901.6,594.8 894.5,582.6 911.8483402294801,580.6836499927881" fill="#d8b25e"/>
+  <text x="934.3285962614473" y="553.6207985147531" text-anchor="middle" fill="#d8b25e" font-size="24" font-family="system-ui, 'Segoe UI', sans-serif" font-weight="700">Fтр</text>
+  <line x1="797.7178096056465" y1="647.0027421120428" x2="697.4" y2="705.3" stroke="#c48fe0" stroke-width="3" stroke-dasharray="8 6" stroke-linecap="round"/>
+  <polygon points="693.9,699.2 701.0,711.4 683.5872789818129,713.3218342312975" fill="#c48fe0"/>
+  <text x="659.3777724858483" y="747.3895204384121" text-anchor="middle" fill="#c48fe0" font-size="21" font-family="system-ui, 'Segoe UI', sans-serif">mg·sin α</text>
+  <path d="M 560 900 A 130 130 0 0 0 542.4 834.7" fill="none" stroke="#9fb3c4" stroke-width="2"/>
+  <text x="516" y="876" text-anchor="middle" fill="#9fb3c4" font-size="27" font-family="system-ui, 'Segoe UI', sans-serif" font-style="italic">α</text>
+  <line x1="1170" y1="900" x2="1226" y2="900" stroke="#9fb3c4" stroke-width="1.2" stroke-dasharray="5 5" stroke-linecap="round"/>
+  <line x1="1214" y1="470" x2="1214.0" y2="889.0" stroke="#9fb3c4" stroke-width="1.6" stroke-linecap="round"/>
+  <polygon points="1209.2,889.0 1218.8,889.0 1214,900" fill="#9fb3c4"/>
+  <line x1="1214" y1="900" x2="1214.0" y2="481.0" stroke="#9fb3c4" stroke-width="1.6" stroke-linecap="round"/>
+  <polygon points="1218.8,481.0 1209.2,481.0 1214,470" fill="#9fb3c4"/>
+  <line x1="1170" y1="470" x2="1230" y2="470" stroke="#9fb3c4" stroke-width="1.2" stroke-dasharray="5 5" stroke-linecap="round"/>
+  <text x="1250" y="685" text-anchor="start" fill="#9fb3c4" font-size="23" font-family="system-ui, 'Segoe UI', sans-serif" font-style="italic">h</text>
+  <text x="800" y="1020" text-anchor="middle" fill="#9fb3c4" font-size="19" font-family="system-ui, 'Segoe UI', sans-serif">Выигрыша в работе наклонная плоскость не даёт: выигрывая в силе, проигрываем в пути</text>
+  <path d="M 737.4277258608695 543.2477142721941 L 362 370" stroke="#9fb3c4" stroke-width="1.6" fill="none" opacity="0.8"/>
+  <circle cx="737.4277258608695" cy="543.2477142721941" r="5" fill="#9fb3c4"/>
+  <text x="340" y="364.5" text-anchor="end" fill="#e8eef4" font-size="21" font-family="system-ui, 'Segoe UI', sans-serif"><tspan x="340" dy="0">Реакция опоры N — по</tspan><tspan x="340" dy="25">нормали</tspan></text>
+  <path d="M 797.7178096056465 647.0027421120428 L 362 580" stroke="#9fb3c4" stroke-width="1.6" fill="none" opacity="0.8"/>
+  <circle cx="797.7178096056465" cy="647.0027421120428" r="5" fill="#9fb3c4"/>
+  <text x="340" y="587" text-anchor="end" fill="#e8eef4" font-size="21" font-family="system-ui, 'Segoe UI', sans-serif"><tspan x="340" dy="0">Тело массой m</tspan></text>
+  <path d="M 797.7178096056465 787.0027421120428 L 362 790" stroke="#9fb3c4" stroke-width="1.6" fill="none" opacity="0.8"/>
+  <circle cx="797.7178096056465" cy="787.0027421120428" r="5" fill="#9fb3c4"/>
+  <text x="340" y="784.5" text-anchor="end" fill="#e8eef4" font-size="21" font-family="system-ui, 'Segoe UI', sans-serif"><tspan x="340" dy="0">Сила тяжести mg —</tspan><tspan x="340" dy="25">вертикально вниз</tspan></text>
+  <path d="M 534 868 L 362 1000" stroke="#9fb3c4" stroke-width="1.6" fill="none" opacity="0.8"/>
+  <circle cx="534" cy="868" r="5" fill="#9fb3c4"/>
+  <text x="340" y="1007" text-anchor="end" fill="#e8eef4" font-size="21" font-family="system-ui, 'Segoe UI', sans-serif"><tspan x="340" dy="0">Угол наклона α</tspan></text>
+  <path d="M 892.8265851255078 591.736832012664 L 1218 494.6684947413619" stroke="#9fb3c4" stroke-width="1.6" fill="none" opacity="0.8"/>
+  <circle cx="892.8265851255078" cy="591.736832012664" r="5" fill="#9fb3c4"/>
+  <text x="1240" y="489.1684947413619" text-anchor="start" fill="#e8eef4" font-size="21" font-family="system-ui, 'Segoe UI', sans-serif"><tspan x="1240" dy="0">Трение Fтр — против</tspan><tspan x="1240" dy="25">скольжения</tspan></text>
+  <path d="M 702.6090340857852 702.2686522114217 L 1218 704.6684947413619" stroke="#9fb3c4" stroke-width="1.6" fill="none" opacity="0.8"/>
+  <circle cx="702.6090340857852" cy="702.2686522114217" r="5" fill="#9fb3c4"/>
+  <text x="1240" y="699.1684947413619" text-anchor="start" fill="#e8eef4" font-size="21" font-family="system-ui, 'Segoe UI', sans-serif"><tspan x="1240" dy="0">Составляющая mg вдоль</tspan><tspan x="1240" dy="25">склона</tspan></text>
+  <path d="M 1000 820 L 1218 914.6684947413619" stroke="#9fb3c4" stroke-width="1.6" fill="none" opacity="0.8"/>
+  <circle cx="1000" cy="820" r="5" fill="#9fb3c4"/>
+  <text x="1240" y="921.6684947413619" text-anchor="start" fill="#e8eef4" font-size="21" font-family="system-ui, 'Segoe UI', sans-serif"><tspan x="1240" dy="0">Наклонная плоскость</tspan></text>
+</svg>

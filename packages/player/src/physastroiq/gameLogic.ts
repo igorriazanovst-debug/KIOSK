@@ -102,7 +102,7 @@ export function buildBoardTiles(
   // Ставится последним и явно, а не полагается на порядок выше: если у
   // чужого вопроса/decoy-точки координаты случайно совпали бы с текущим
   // вопросом после округления, верный ответ обязан победить коллизию, а не
-  // молча потеряться под decoy той же клетки.
+  // молча потеряться под decoy той же области карты.
   map.set(correctKey, { key: correctKey, x: question.x, y: question.y, width: question.width, height: question.height, isCorrect: true });
 
   return Array.from(map.values());

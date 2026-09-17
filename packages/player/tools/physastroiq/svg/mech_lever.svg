@@ -1,0 +1,54 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1100" viewBox="0 0 1600 1100">
+  <rect width="1600" height="1100" fill="#0d1620"/>
+  <text x="46" y="60" fill="#e8eef4" font-size="36" font-weight="700" font-family="system-ui, 'Segoe UI', sans-serif">Рычаг и условие его равновесия</text>
+  <line x1="46" y1="80" x2="1554" y2="80" stroke="#24384a" stroke-width="2"/>
+  <rect x="470" y="531" width="710" height="18" rx="4" fill="#9fb3c4" stroke="#e8eef4" stroke-width="2"/>
+  <polygon points="800,549 738,690 862,690" fill="#2b4256" stroke="#7fa3bd" stroke-width="2"/>
+  <circle cx="800" cy="540" r="7" fill="#e8eef4"/>
+  <line x1="456" y1="540" x2="456" y2="624" stroke="#9fb3c4" stroke-width="2.4" stroke-linecap="round"/>
+  <rect x="408" y="624" width="96" height="76" rx="6" fill="#2b4256" stroke="#7fa3bd" stroke-width="2"/>
+  <text x="456" y="672" text-anchor="middle" fill="#9fb3c4" font-size="19" font-family="system-ui, 'Segoe UI', sans-serif">груз</text>
+  <line x1="560" y1="540" x2="560.0" y2="682.0" stroke="#7fd4c1" stroke-width="4" stroke-linecap="round"/>
+  <polygon points="553.0,682.0 567.0,682.0 560,698" fill="#7fd4c1"/>
+  <text x="534" y="637.96" text-anchor="end" fill="#7fd4c1" font-size="26" font-family="system-ui, 'Segoe UI', sans-serif" font-weight="700">F₁</text>
+  <line x1="1140" y1="540" x2="1140.0" y2="635.5" stroke="#e0724f" stroke-width="4" stroke-linecap="round"/>
+  <polygon points="1133.0,635.5 1147.0,635.5 1140,651.5294117647059" fill="#e0724f"/>
+  <text x="1166" y="609.1482352941176" text-anchor="start" fill="#e0724f" font-size="26" font-family="system-ui, 'Segoe UI', sans-serif" font-weight="700">F₂</text>
+  <line x1="560" y1="710" x2="560" y2="810" stroke="#9fb3c4" stroke-width="1.2" stroke-dasharray="5 5" stroke-linecap="round"/>
+  <line x1="800" y1="710" x2="800" y2="810" stroke="#9fb3c4" stroke-width="1.2" stroke-dasharray="5 5" stroke-linecap="round"/>
+  <line x1="680" y1="800" x2="571.0" y2="800.0" stroke="#9fb3c4" stroke-width="1.6" stroke-linecap="round"/>
+  <polygon points="571.0,795.2 571.0,804.8 560,800" fill="#9fb3c4"/>
+  <line x1="680" y1="800" x2="789.0" y2="800.0" stroke="#9fb3c4" stroke-width="1.6" stroke-linecap="round"/>
+  <polygon points="789.0,804.8 789.0,795.2 800,800" fill="#9fb3c4"/>
+  <text x="680" y="788" text-anchor="middle" fill="#9fb3c4" font-size="19" font-family="system-ui, 'Segoe UI', sans-serif">плечо l₁</text>
+  <line x1="800" y1="710" x2="800" y2="810" stroke="#9fb3c4" stroke-width="1.2" stroke-dasharray="5 5" stroke-linecap="round"/>
+  <line x1="1140" y1="710" x2="1140" y2="810" stroke="#9fb3c4" stroke-width="1.2" stroke-dasharray="5 5" stroke-linecap="round"/>
+  <line x1="970" y1="800" x2="811.0" y2="800.0" stroke="#9fb3c4" stroke-width="1.6" stroke-linecap="round"/>
+  <polygon points="811.0,795.2 811.0,804.8 800,800" fill="#9fb3c4"/>
+  <line x1="970" y1="800" x2="1129.0" y2="800.0" stroke="#9fb3c4" stroke-width="1.6" stroke-linecap="round"/>
+  <polygon points="1129.0,804.8 1129.0,795.2 1140,800" fill="#9fb3c4"/>
+  <text x="970" y="788" text-anchor="middle" fill="#9fb3c4" font-size="19" font-family="system-ui, 'Segoe UI', sans-serif">плечо l₂</text>
+  <text x="800" y="920" text-anchor="middle" fill="#e8eef4" font-size="27" font-family="system-ui, 'Segoe UI', sans-serif" font-weight="700">Условие равновесия рычага:  F₁ · l₁ = F₂ · l₂</text>
+  <text x="800" y="958" text-anchor="middle" fill="#9fb3c4" font-size="19" font-family="system-ui, 'Segoe UI', sans-serif">во сколько раз длиннее плечо, во столько раз меньше нужная сила</text>
+  <path d="M 700 531 L 362 345.9" stroke="#9fb3c4" stroke-width="1.6" fill="none" opacity="0.8"/>
+  <circle cx="700" cy="531" r="5" fill="#9fb3c4"/>
+  <text x="340" y="340.4" text-anchor="end" fill="#e8eef4" font-size="21" font-family="system-ui, 'Segoe UI', sans-serif"><tspan x="340" dy="0">Рычаг — твёрдое тело,</tspan><tspan x="340" dy="25">вращающееся вокруг опоры</tspan></text>
+  <path d="M 560 650.6 L 362 555.9" stroke="#9fb3c4" stroke-width="1.6" fill="none" opacity="0.8"/>
+  <circle cx="560" cy="650.6" r="5" fill="#9fb3c4"/>
+  <text x="340" y="550.4" text-anchor="end" fill="#e8eef4" font-size="21" font-family="system-ui, 'Segoe UI', sans-serif"><tspan x="340" dy="0">Сила F₁ на коротком плече —</tspan><tspan x="340" dy="25">бо́льшая</tspan></text>
+  <path d="M 456 662 L 362 765.9" stroke="#9fb3c4" stroke-width="1.6" fill="none" opacity="0.8"/>
+  <circle cx="456" cy="662" r="5" fill="#9fb3c4"/>
+  <text x="340" y="760.4" text-anchor="end" fill="#e8eef4" font-size="21" font-family="system-ui, 'Segoe UI', sans-serif"><tspan x="340" dy="0">Груз, который поднимают</tspan><tspan x="340" dy="25">рычагом</tspan></text>
+  <path d="M 680 800 L 362 975.9" stroke="#9fb3c4" stroke-width="1.6" fill="none" opacity="0.8"/>
+  <circle cx="680" cy="800" r="5" fill="#9fb3c4"/>
+  <text x="340" y="970.4" text-anchor="end" fill="#e8eef4" font-size="21" font-family="system-ui, 'Segoe UI', sans-serif"><tspan x="340" dy="0">Плечо l₁ — от оси до линии</tspan><tspan x="340" dy="25">F₁</tspan></text>
+  <path d="M 1140 618.070588235294 L 1218 482.6901960784313" stroke="#9fb3c4" stroke-width="1.6" fill="none" opacity="0.8"/>
+  <circle cx="1140" cy="618.070588235294" r="5" fill="#9fb3c4"/>
+  <text x="1240" y="477.1901960784313" text-anchor="start" fill="#e8eef4" font-size="21" font-family="system-ui, 'Segoe UI', sans-serif"><tspan x="1240" dy="0">Сила F₂ на длинном плече —</tspan><tspan x="1240" dy="25">меньшая</tspan></text>
+  <path d="M 800 660 L 1218 692.6901960784313" stroke="#9fb3c4" stroke-width="1.6" fill="none" opacity="0.8"/>
+  <circle cx="800" cy="660" r="5" fill="#9fb3c4"/>
+  <text x="1240" y="699.6901960784313" text-anchor="start" fill="#e8eef4" font-size="21" font-family="system-ui, 'Segoe UI', sans-serif"><tspan x="1240" dy="0">Точка опоры (ось вращения)</tspan></text>
+  <path d="M 970 800 L 1218 902.6901960784313" stroke="#9fb3c4" stroke-width="1.6" fill="none" opacity="0.8"/>
+  <circle cx="970" cy="800" r="5" fill="#9fb3c4"/>
+  <text x="1240" y="897.1901960784313" text-anchor="start" fill="#e8eef4" font-size="21" font-family="system-ui, 'Segoe UI', sans-serif"><tspan x="1240" dy="0">Плечо l₂ — от оси до линии</tspan><tspan x="1240" dy="25">F₂</tspan></text>
+</svg>

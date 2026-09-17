@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1100" viewBox="0 0 1600 1100">
+  <rect width="1600" height="1100" fill="#0d1620"/>
+  <text x="46" y="60" fill="#e8eef4" font-size="36" font-weight="700" font-family="system-ui, 'Segoe UI', sans-serif">Планеты земной группы и планеты-гиганты</text>
+  <line x1="46" y1="80" x2="1554" y2="80" stroke="#24384a" stroke-width="2"/>
+  <circle cx="-430" cy="560" r="696" fill="#f2c14e" opacity="0.07"/>
+  <circle cx="-430" cy="560" r="696" fill="none" stroke="#f7e09a" stroke-width="2.4"/>
+  <text x="292" y="290" text-anchor="start" fill="#f7e09a" font-size="18" font-family="system-ui, 'Segoe UI', sans-serif">край диска Солнца</text>
+  <text x="292" y="314" text-anchor="start" fill="#9fb3c4" font-size="16" font-family="system-ui, 'Segoe UI', sans-serif">в том же масштабе</text>
+  <circle cx="468.44" cy="560" r="2.44" fill="#9a8f86" stroke="#e8eef4" stroke-width="1.4"/>
+  <circle cx="498.932" cy="560" r="6.0520000000000005" fill="#d8b07a" stroke="#e8eef4" stroke-width="1.4"/>
+  <circle cx="533.355" cy="560" r="6.371" fill="#5b8fc9" stroke="#e8eef4" stroke-width="1.4"/>
+  <circle cx="565.116" cy="560" r="3.39" fill="#c0664a" stroke="#e8eef4" stroke-width="1.4"/>
+  <circle cx="694.4169999999999" cy="560" r="69.911" fill="#c9a179" stroke="#e8eef4" stroke-width="1.4"/>
+  <line x1="638.372763757475" y1="528.2222727272728" x2="750.4612362425248" y2="528.2222727272728" stroke="#8a6a4c" stroke-width="11.651833333333334" opacity="0.5" stroke-linecap="round"/>
+  <line x1="631.4970999999999" y1="560" x2="757.3368999999999" y2="560" stroke="#8a6a4c" stroke-width="11.651833333333334" opacity="0.5" stroke-linecap="round"/>
+  <line x1="638.372763757475" y1="591.7777272727272" x2="750.4612362425248" y2="591.7777272727272" stroke="#8a6a4c" stroke-width="11.651833333333334" opacity="0.5" stroke-linecap="round"/>
+  <circle cx="909.7035999999999" cy="560" r="58.232" fill="#d6c08a" stroke="#e8eef4" stroke-width="1.4"/>
+  <ellipse cx="909.7035999999999" cy="560" rx="119.37559999999999" ry="29.116" fill="none" stroke="#a9986f" stroke-width="14.558" opacity="0.85"/>
+  <circle cx="1080.4412" cy="560" r="25.362000000000002" fill="#8fc6c9" stroke="#e8eef4" stroke-width="1.4"/>
+  <circle cx="1152.4252000000001" cy="560" r="24.622" fill="#5a7fc4" stroke="#e8eef4" stroke-width="1.4"/>
+  <rect x="450" y="520" width="134.50599999999997" height="80" rx="10" fill="none" stroke="#9fb3c4" stroke-width="1.6" stroke-dasharray="7 6" opacity="0.75"/>
+  <text x="517.2529999999999" y="502" text-anchor="middle" fill="#e8eef4" font-size="21" font-family="system-ui, 'Segoe UI', sans-serif" font-weight="700">Планеты земной группы</text>
+  <rect x="604.5059999999999" y="455" width="592.5412000000003" height="210" rx="10" fill="none" stroke="#9fb3c4" stroke-width="1.6" stroke-dasharray="7 6" opacity="0.75"/>
+  <text x="900.7766" y="436" text-anchor="middle" fill="#e8eef4" font-size="21" font-family="system-ui, 'Segoe UI', sans-serif" font-weight="700">Планеты-гиганты</text>
+  <text x="694.4169999999999" y="700" text-anchor="middle" fill="#e8eef4" font-size="20" font-family="system-ui, 'Segoe UI', sans-serif">Юпитер</text>
+  <text x="694.4169999999999" y="724" text-anchor="middle" fill="#9fb3c4" font-size="17" font-family="system-ui, 'Segoe UI', sans-serif">139 822 км</text>
+  <text x="909.7035999999999" y="700" text-anchor="middle" fill="#e8eef4" font-size="20" font-family="system-ui, 'Segoe UI', sans-serif">Сатурн</text>
+  <text x="909.7035999999999" y="724" text-anchor="middle" fill="#9fb3c4" font-size="17" font-family="system-ui, 'Segoe UI', sans-serif">116 464 км</text>
+  <text x="1080.4412" y="700" text-anchor="middle" fill="#e8eef4" font-size="20" font-family="system-ui, 'Segoe UI', sans-serif">Уран</text>
+  <text x="1080.4412" y="724" text-anchor="middle" fill="#9fb3c4" font-size="17" font-family="system-ui, 'Segoe UI', sans-serif">50 724 км</text>
+  <text x="1152.4252000000001" y="752" text-anchor="middle" fill="#e8eef4" font-size="20" font-family="system-ui, 'Segoe UI', sans-serif">Нептун</text>
+  <text x="1152.4252000000001" y="776" text-anchor="middle" fill="#9fb3c4" font-size="17" font-family="system-ui, 'Segoe UI', sans-serif">49 244 км</text>
+  <rect x="440" y="780" width="520" height="250" rx="10" fill="none" stroke="#7fa3bd" stroke-width="1.6" stroke-dasharray="7 6" opacity="0.75"/>
+  <text x="700" y="812" text-anchor="middle" fill="#7fa3bd" font-size="19" font-family="system-ui, 'Segoe UI', sans-serif">Планеты земной группы, увеличено в 8 раз</text>
+  <line x1="450" y1="602" x2="470" y2="780" stroke="#7fa3bd" stroke-width="1.4" stroke-dasharray="6 6" stroke-linecap="round"/>
+  <line x1="584.506" y1="602" x2="930" y2="780" stroke="#7fa3bd" stroke-width="1.4" stroke-dasharray="6 6" stroke-linecap="round"/>
+  <circle cx="489.52" cy="900" r="19.52" fill="#9a8f86" stroke="#e8eef4" stroke-width="1.4"/>
+  <text x="489.52" y="972" text-anchor="middle" fill="#e8eef4" font-size="19" font-family="system-ui, 'Segoe UI', sans-serif">Меркурий</text>
+  <text x="489.52" y="995" text-anchor="middle" fill="#9fb3c4" font-size="16" font-family="system-ui, 'Segoe UI', sans-serif">4 880 км</text>
+  <circle cx="603.456" cy="900" r="48.416000000000004" fill="#d8b07a" stroke="#e8eef4" stroke-width="1.4"/>
+  <text x="603.456" y="972" text-anchor="middle" fill="#e8eef4" font-size="19" font-family="system-ui, 'Segoe UI', sans-serif">Венера</text>
+  <text x="603.456" y="995" text-anchor="middle" fill="#9fb3c4" font-size="16" font-family="system-ui, 'Segoe UI', sans-serif">12 104 км</text>
+  <circle cx="748.84" cy="900" r="50.968" fill="#5b8fc9" stroke="#e8eef4" stroke-width="1.4"/>
+  <text x="748.84" y="972" text-anchor="middle" fill="#e8eef4" font-size="19" font-family="system-ui, 'Segoe UI', sans-serif">Земля</text>
+  <text x="748.84" y="995" text-anchor="middle" fill="#9fb3c4" font-size="16" font-family="system-ui, 'Segoe UI', sans-serif">12 742 км</text>
+  <circle cx="872.928" cy="900" r="27.12" fill="#c0664a" stroke="#e8eef4" stroke-width="1.4"/>
+  <text x="872.928" y="972" text-anchor="middle" fill="#e8eef4" font-size="19" font-family="system-ui, 'Segoe UI', sans-serif">Марс</text>
+  <text x="872.928" y="995" text-anchor="middle" fill="#9fb3c4" font-size="16" font-family="system-ui, 'Segoe UI', sans-serif">6 780 км</text>
+  <text x="1180" y="850" text-anchor="start" fill="#9fb3c4" font-size="19" font-family="system-ui, 'Segoe UI', sans-serif">Общий масштаб для всех восьми:</text>
+  <text x="1180" y="876" text-anchor="start" fill="#9fb3c4" font-size="19" font-family="system-ui, 'Segoe UI', sans-serif">диаметр Юпитера больше земного</text>
+  <text x="1180" y="902" text-anchor="start" fill="#9fb3c4" font-size="19" font-family="system-ui, 'Segoe UI', sans-serif">в 11 раз, а объём — почти в 1300 раз</text>
+  
+</svg>

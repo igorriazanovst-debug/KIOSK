@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1100" viewBox="0 0 1600 1100">
+  <rect width="1600" height="1100" fill="#0d1620"/>
+  <text x="46" y="60" fill="#e8eef4" font-size="36" font-weight="700" font-family="system-ui, 'Segoe UI', sans-serif">Строение атома</text>
+  <line x1="46" y1="80" x2="1554" y2="80" stroke="#24384a" stroke-width="2"/>
+  <circle cx="811.8870304122486" cy="591.6427136020252" r="15" fill="#c9563c" stroke="#0d1620" stroke-width="1.6"/>
+  <circle cx="808.0894480282361" cy="598.8634547778204" r="15" fill="#8296a6" stroke="#0d1620" stroke-width="1.6"/>
+  <circle cx="803.7411426528895" cy="601.4019231557984" r="15" fill="#c9563c" stroke="#0d1620" stroke-width="1.6"/>
+  <circle cx="797.1640587024624" cy="620.1051605308877" r="15" fill="#8296a6" stroke="#0d1620" stroke-width="1.6"/>
+  <circle cx="782.5086443826102" cy="615.3658607729445" r="15" fill="#c9563c" stroke="#0d1620" stroke-width="1.6"/>
+  <circle cx="765.648378075991" cy="606.2925421791796" r="15" fill="#8296a6" stroke="#0d1620" stroke-width="1.6"/>
+  <circle cx="767.0813480503201" cy="585.6215515202944" r="15" fill="#c9563c" stroke="#0d1620" stroke-width="1.6"/>
+  <circle cx="769.6913376247899" cy="566.9139099638955" r="15" fill="#8296a6" stroke="#0d1620" stroke-width="1.6"/>
+  <circle cx="786.817378518957" cy="558.8835847368316" r="15" fill="#c9563c" stroke="#0d1620" stroke-width="1.6"/>
+  <circle cx="807.8766041068429" cy="556.5917702746156" r="15" fill="#8296a6" stroke="#0d1620" stroke-width="1.6"/>
+  <circle cx="822.5136029474198" cy="567.3735743809958" r="15" fill="#c9563c" stroke="#0d1620" stroke-width="1.6"/>
+  <circle cx="836.8984180359517" cy="585.0847457996816" r="15" fill="#8296a6" stroke="#0d1620" stroke-width="1.6"/>
+  <circle cx="400" cy="960" r="15" fill="#c9563c" stroke="#0d1620" stroke-width="1.6"/>
+  <text x="424" y="967" text-anchor="start" fill="#e8eef4" font-size="20" font-family="system-ui, 'Segoe UI', sans-serif">— протон, заряд «+»</text>
+  <circle cx="760" cy="960" r="15" fill="#8296a6" stroke="#0d1620" stroke-width="1.6"/>
+  <text x="784" y="967" text-anchor="start" fill="#e8eef4" font-size="20" font-family="system-ui, 'Segoe UI', sans-serif">— нейтрон, заряда нет</text>
+  <circle cx="1140" cy="960" r="9" fill="#8fd0e8" stroke="#0d1620" stroke-width="1.6"/>
+  <text x="1160" y="967" text-anchor="start" fill="#e8eef4" font-size="20" font-family="system-ui, 'Segoe UI', sans-serif">— электрон, заряд «−»</text>
+  <circle cx="800" cy="590" r="175" fill="none" stroke="#5f7d95" stroke-width="1.8" stroke-dasharray="6 7"/>
+  <circle cx="975" cy="590" r="9" fill="#8fd0e8" stroke="#0d1620" stroke-width="1.6"/>
+  <circle cx="625" cy="590" r="9" fill="#8fd0e8" stroke="#0d1620" stroke-width="1.6"/>
+  <circle cx="800" cy="590" r="330" fill="none" stroke="#5f7d95" stroke-width="1.8" stroke-dasharray="6 7"/>
+  <circle cx="1081.333092279637" cy="762.4867855471175" r="9" fill="#8fd0e8" stroke="#0d1620" stroke-width="1.6"/>
+  <circle cx="627.5132144528825" cy="871.333092279637" r="9" fill="#8fd0e8" stroke="#0d1620" stroke-width="1.6"/>
+  <circle cx="518.666907720363" cy="417.5132144528826" r="9" fill="#8fd0e8" stroke="#0d1620" stroke-width="1.6"/>
+  <circle cx="972.4867855471174" cy="308.66690772036304" r="9" fill="#8fd0e8" stroke="#0d1620" stroke-width="1.6"/>
+  
+  <text x="800" y="178" text-anchor="middle" fill="#9fb3c4" font-size="21" font-family="system-ui, 'Segoe UI', sans-serif">Изображён атом углерода: 6 протонов, 6 нейтронов, 6 электронов</text>
+  <text x="800" y="1040" text-anchor="middle" fill="#9fb3c4" font-size="19" font-family="system-ui, 'Segoe UI', sans-serif">Число протонов равно числу электронов — поэтому атом в целом электрически нейтрален</text>
+  <path d="M 580.128912977658 343.9172799816823 L 362 296.7094339253781" stroke="#9fb3c4" stroke-width="1.6" fill="none" opacity="0.8"/>
+  <circle cx="580.128912977658" cy="343.9172799816823" r="5" fill="#9fb3c4"/>
+  <text x="340" y="291.2094339253781" text-anchor="end" fill="#e8eef4" font-size="21" font-family="system-ui, 'Segoe UI', sans-serif"><tspan x="340" dy="0">Внешняя (валентная)</tspan><tspan x="340" dy="25">оболочка</tspan></text>
+  <path d="M 683.4016962760309 459.50158786907394 L 362 506.7094339253781" stroke="#9fb3c4" stroke-width="1.6" fill="none" opacity="0.8"/>
+  <circle cx="683.4016962760309" cy="459.50158786907394" r="5" fill="#9fb3c4"/>
+  <text x="340" y="501.2094339253781" text-anchor="end" fill="#e8eef4" font-size="21" font-family="system-ui, 'Segoe UI', sans-serif"><tspan x="340" dy="0">Внутренняя электронная</tspan><tspan x="340" dy="25">оболочка</tspan></text>
+  <path d="M 834 620 L 1218 586.2433927735588" stroke="#9fb3c4" stroke-width="1.6" fill="none" opacity="0.8"/>
+  <circle cx="834" cy="620" r="5" fill="#9fb3c4"/>
+  <text x="1240" y="593.2433927735588" text-anchor="start" fill="#e8eef4" font-size="21" font-family="system-ui, 'Segoe UI', sans-serif"><tspan x="1240" dy="0">Ядро атома</tspan></text>
+  <path d="M 1081.333092279637 762.4867855471175 L 1218 796.2433927735588" stroke="#9fb3c4" stroke-width="1.6" fill="none" opacity="0.8"/>
+  <circle cx="1081.333092279637" cy="762.4867855471175" r="5" fill="#9fb3c4"/>
+  <text x="1240" y="790.7433927735588" text-anchor="start" fill="#e8eef4" font-size="21" font-family="system-ui, 'Segoe UI', sans-serif"><tspan x="1240" dy="0">Электрон движется вокруг</tspan><tspan x="1240" dy="25">ядра</tspan></text>
+</svg>
