@@ -45,15 +45,20 @@ const FEEDBACK_DURATION_MS = 900;
 
 // width/height резервируют место до загрузки (без сдвига вёрстки); contain —
 // потому что у картинок учителя пропорции произвольные
-const QUESTION_IMAGE_WIDTH = 220;
-const QUESTION_IMAGE_HEIGHT = 160;
+const QUESTION_IMAGE_WIDTH = 132;
+const QUESTION_IMAGE_HEIGHT = 96;
 const QUESTION_IMAGE_STYLE: React.CSSProperties = {
-  display: 'block',
-  maxWidth: QUESTION_IMAGE_WIDTH,
-  maxHeight: QUESTION_IMAGE_HEIGHT,
+  flex: '0 0 auto',
+  width: QUESTION_IMAGE_WIDTH,
+  height: QUESTION_IMAGE_HEIGHT,
   objectFit: 'contain',
-  margin: '10px auto 0',
   borderRadius: 8,
+};
+const QUESTION_ROW_STYLE: React.CSSProperties = {
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  gap: 16,
 };
 
 const GameBoardScreen: React.FC<Props> = ({
@@ -263,36 +268,37 @@ const GameBoardScreen: React.FC<Props> = ({
             Сдаюсь
           </button>
         </div>
-        <p className="ciq-question-text">{currentQuestion.text}</p>
-        {questionImageSrc && (
-          <img
-            src={questionImageSrc}
-            alt=""
-            width={QUESTION_IMAGE_WIDTH}
-            height={QUESTION_IMAGE_HEIGHT}
-            style={QUESTION_IMAGE_STYLE}
-          />
-        )}
-        {currentQuestion.helpText.length > 0 && (
-          <div className="ciq-hint">
-            {hintShown ? (
-              <>
-                <p className="ciq-hint-text">Подсказка: {currentQuestion.helpText}</p>
-                {currentQuestion.hintImage && (
-                  <img
-                    src={bioiqItemImageUrl(currentQuestion.hintImage)}
-                    alt=""
-                    style={{ display: 'block', maxWidth: 220, maxHeight: 160, margin: '6px auto 0', borderRadius: 8 }}
-                  />
+        {/* Картинка СБОКУ от вопроса, а не над полем: поставленная сверху, она
+            отнимала у поля ~170px высоты, и мелкие области становились
+            слишком мелкими для пальца (замер на установленной сборке). */}
+        <div style={QUESTION_ROW_STYLE}>
+          {questionImageSrc && (
+            <img src={questionImageSrc} alt="" width={QUESTION_IMAGE_WIDTH} height={QUESTION_IMAGE_HEIGHT} style={QUESTION_IMAGE_STYLE} />
+          )}
+          <div style={{ minWidth: 0 }}>
+            <p className="ciq-question-text">{currentQuestion.text}</p>
+            {currentQuestion.helpText.length > 0 && (
+              <div className="ciq-hint">
+                {hintShown ? (
+                  <>
+                    <p className="ciq-hint-text">Подсказка: {currentQuestion.helpText}</p>
+                    {currentQuestion.hintImage && (
+                      <img
+                        src={bioiqItemImageUrl(currentQuestion.hintImage)}
+                        alt=""
+                        style={{ display: 'block', maxWidth: 220, maxHeight: 160, margin: '6px auto 0', borderRadius: 8 }}
+                      />
+                    )}
+                  </>
+                ) : (
+                  <button onClick={handleShowHint} className="ciq-btn ciq-btn-ghost ciq-btn-small">
+                    Показать подсказку
+                  </button>
                 )}
-              </>
-            ) : (
-              <button onClick={handleShowHint} className="ciq-btn ciq-btn-ghost ciq-btn-small">
-                Показать подсказку
-              </button>
+              </div>
             )}
           </div>
-        )}
+        </div>
       </div>
       <div
         style={{
