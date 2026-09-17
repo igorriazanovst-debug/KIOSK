@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="880" height="640" viewBox="0 0 880 640">
+  <defs>
+    <radialGradient id="glow" cx="50%" cy="46%" r="60%">
+      <stop offset="0%" stop-color="#8fe0a0" stop-opacity="0.42"/>
+      <stop offset="100%" stop-color="#8fe0a0" stop-opacity="0"/>
+    </radialGradient>
+    <pattern id="dots" width="40" height="40" patternUnits="userSpaceOnUse">
+      <circle cx="20" cy="20" r="2.5" fill="#8fe0a0" fill-opacity="0.22"/>
+    </pattern>
+  </defs>
+  <rect width="880" height="640" rx="48" fill="#0f1a2b"/>
+  <rect width="880" height="640" rx="48" fill="url(#dots)"/>
+  <rect width="880" height="640" rx="48" fill="url(#glow)"/>
+  <rect x="10" y="10" width="860" height="620" rx="40" fill="none" stroke="#8fe0a0" stroke-opacity="0.55" stroke-width="6"/>
+  
+    <g fill="#ffb27c">
+      <ellipse cx="270" cy="370" rx="78" ry="66"/>
+      <ellipse cx="170" cy="280" rx="34" ry="44"/><ellipse cx="240" cy="230" rx="34" ry="46"/>
+      <ellipse cx="320" cy="232" rx="34" ry="46"/><ellipse cx="382" cy="288" rx="32" ry="42"/>
+    </g>
+    <path d="M 440 160 L 440 480" stroke="#e8f1ff" stroke-opacity="0.5" stroke-width="6" stroke-dasharray="14 16"/>
+    <rect x="570" y="400" width="130" height="90" rx="12" fill="#c98b5a"/>
+    <rect x="552" y="380" width="166" height="34" rx="10" fill="#e0a674"/>
+    <path d="M 635 380 C 635 320 630 280 636 230" stroke="#8fe0a0" stroke-width="12" fill="none" stroke-linecap="round"/>
+    <path d="M 636 300 C 560 300 540 250 548 214 C 600 214 640 250 636 300 Z" fill="#8fe0a0"/>
+    <path d="M 636 260 C 712 258 736 208 726 172 C 674 174 634 210 636 260 Z" fill="#6fcf86"/>
+</svg>

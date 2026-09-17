@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="880" height="640" viewBox="0 0 880 640">
+  <defs>
+    <radialGradient id="glow" cx="50%" cy="46%" r="60%">
+      <stop offset="0%" stop-color="#e0b070" stop-opacity="0.42"/>
+      <stop offset="100%" stop-color="#e0b070" stop-opacity="0"/>
+    </radialGradient>
+    <pattern id="dots" width="40" height="40" patternUnits="userSpaceOnUse">
+      <circle cx="20" cy="20" r="2.5" fill="#e0b070" fill-opacity="0.22"/>
+    </pattern>
+  </defs>
+  <rect width="880" height="640" rx="48" fill="#0f1a2b"/>
+  <rect width="880" height="640" rx="48" fill="url(#dots)"/>
+  <rect width="880" height="640" rx="48" fill="url(#glow)"/>
+  <rect x="10" y="10" width="860" height="620" rx="40" fill="none" stroke="#e0b070" stroke-opacity="0.55" stroke-width="6"/>
+  
+    <g transform="rotate(-6 440 320)">
+      <rect x="290" y="110" width="300" height="420" rx="22" fill="#f4e7c8"/>
+      <rect x="290" y="400" width="300" height="130" fill="#c98b5a"/>
+      <rect x="290" y="508" width="300" height="22" fill="#a86f42"/>
+      <circle cx="440" cy="270" r="92" fill="#8fce7a"/>
+      <g fill="#f4e7c8"><ellipse cx="410" cy="240" rx="15" ry="10" transform="rotate(30 410 240)"/><ellipse cx="470" cy="252" rx="15" ry="10" transform="rotate(30 470 252)"/><ellipse cx="436" cy="290" rx="15" ry="10" transform="rotate(30 436 290)"/><ellipse cx="400" cy="302" rx="15" ry="10" transform="rotate(30 400 302)"/><ellipse cx="478" cy="308" rx="15" ry="10" transform="rotate(30 478 308)"/></g>
+      <rect x="350" y="436" width="180" height="16" rx="8" fill="#f4e7c8"/>
+      <rect x="380" y="468" width="120" height="12" rx="6" fill="#f4e7c8" fill-opacity="0.7"/>
+    </g>
+</svg>

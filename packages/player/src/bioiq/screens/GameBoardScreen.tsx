@@ -3,6 +3,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import type { BioiqPoint, BioiqQuestion } from '../model/schema.ts';
 import { scoreForAnswer, nextTurn, neutralTileLabels, buildBoardTiles, type BioiqAnswerEvent, type BioiqBoardTile } from '../gameLogic.ts';
 import { bioiqItemImageUrl } from '../bioiqMediaUrl.ts';
+import { questionThemeImageUrl } from '../questionThemeImages.ts';
 import { playCorrectTone, playWrongTone } from '../sound.ts';
 import '../bioiqTheme.css';
 
@@ -43,7 +44,7 @@ const FEEDBACK_WRONG_COLOR = 'rgba(255, 107, 107, 0.85)';
 const FEEDBACK_DURATION_MS = 900;
 
 // width/height резервируют место до загрузки (без сдвига вёрстки); contain —
-// потому что сюда попадают только картинки учителя с произвольными пропорциями
+// потому что у картинок учителя пропорции произвольные
 const QUESTION_IMAGE_WIDTH = 220;
 const QUESTION_IMAGE_HEIGHT = 160;
 const QUESTION_IMAGE_STYLE: React.CSSProperties = {
@@ -99,6 +100,10 @@ const GameBoardScreen: React.FC<Props> = ({
   const currentQuestion = questionsByPlayer[currentPlayer][questionIndexByPlayer[currentPlayer]];
   const tiles = buildBoardTiles(currentQuestion, levelQuestions, genericDecoyPoints);
   const tileLabels = neutralTileLabels(tiles);
+  // Своя картинка вопроса (викторина учителя) важнее; иначе — картинка темы.
+  const questionImageSrc = currentQuestion.questionImage
+    ? bioiqItemImageUrl(currentQuestion.questionImage)
+    : questionThemeImageUrl(currentQuestion.theme);
 
   useEffect(() => {
     setElapsed(0);
@@ -259,9 +264,9 @@ const GameBoardScreen: React.FC<Props> = ({
           </button>
         </div>
         <p className="ciq-question-text">{currentQuestion.text}</p>
-        {currentQuestion.questionImage && (
+        {questionImageSrc && (
           <img
-            src={bioiqItemImageUrl(currentQuestion.questionImage)}
+            src={questionImageSrc}
             alt=""
             width={QUESTION_IMAGE_WIDTH}
             height={QUESTION_IMAGE_HEIGHT}

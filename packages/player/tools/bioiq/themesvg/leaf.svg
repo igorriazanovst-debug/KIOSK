@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="880" height="640" viewBox="0 0 880 640">
+  <defs>
+    <radialGradient id="glow" cx="50%" cy="46%" r="60%">
+      <stop offset="0%" stop-color="#ffd95c" stop-opacity="0.42"/>
+      <stop offset="100%" stop-color="#ffd95c" stop-opacity="0"/>
+    </radialGradient>
+    <pattern id="dots" width="40" height="40" patternUnits="userSpaceOnUse">
+      <circle cx="20" cy="20" r="2.5" fill="#ffd95c" fill-opacity="0.22"/>
+    </pattern>
+  </defs>
+  <rect width="880" height="640" rx="48" fill="#0f1a2b"/>
+  <rect width="880" height="640" rx="48" fill="url(#dots)"/>
+  <rect width="880" height="640" rx="48" fill="url(#glow)"/>
+  <rect x="10" y="10" width="860" height="620" rx="40" fill="none" stroke="#ffd95c" stroke-opacity="0.55" stroke-width="6"/>
+  
+    <circle cx="250" cy="240" r="90" fill="#ffd95c"/>
+    <path d="M 366 240 L 410 240" stroke="#ffd95c" stroke-width="14" stroke-linecap="round"/><path d="M 350.4589468389949 298 L 388.5640646055102 320" stroke="#ffd95c" stroke-width="14" stroke-linecap="round"/><path d="M 308 340.45894683899485 L 330 378.56406460551017" stroke="#ffd95c" stroke-width="14" stroke-linecap="round"/><path d="M 250 356 L 250 400" stroke="#ffd95c" stroke-width="14" stroke-linecap="round"/><path d="M 192.00000000000003 340.4589468389949 L 170.00000000000003 378.5640646055102" stroke="#ffd95c" stroke-width="14" stroke-linecap="round"/><path d="M 149.5410531610051 298 L 111.4359353944898 320" stroke="#ffd95c" stroke-width="14" stroke-linecap="round"/><path d="M 134 240 L 90 240.00000000000003" stroke="#ffd95c" stroke-width="14" stroke-linecap="round"/><path d="M 149.5410531610051 182.00000000000003 L 111.43593539448977 160.00000000000006" stroke="#ffd95c" stroke-width="14" stroke-linecap="round"/><path d="M 191.99999999999994 139.54105316100515 L 169.99999999999994 101.43593539448983" stroke="#ffd95c" stroke-width="14" stroke-linecap="round"/><path d="M 249.99999999999997 124 L 249.99999999999997 80" stroke="#ffd95c" stroke-width="14" stroke-linecap="round"/><path d="M 308 139.54105316100512 L 330 101.43593539448983" stroke="#ffd95c" stroke-width="14" stroke-linecap="round"/><path d="M 350.45894683899485 181.99999999999994 L 388.5640646055101 159.99999999999994" stroke="#ffd95c" stroke-width="14" stroke-linecap="round"/>
+    <g fill="none" stroke-width="16" stroke-linecap="round">
+      <path d="M 400 330 C 480 380 540 400 620 400" stroke="#ffe9a0"/>
+      <path d="M 596 374 L 626 400 L 592 424" stroke="#ffe9a0"/>
+      <path d="M 640 470 C 560 520 470 520 390 480" stroke="#8fe0a0"/>
+      <path d="M 414 454 L 386 480 L 420 504" stroke="#8fe0a0"/>
+    </g>
+    <g font-family="system-ui, sans-serif" font-weight="700" font-size="54">
+      <text x="660" y="500" fill="#e8f1ff">CO₂</text><text x="290" y="560" fill="#8fe0a0">O₂</text>
+    </g>
+</svg>
