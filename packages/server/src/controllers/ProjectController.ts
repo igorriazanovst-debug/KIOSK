@@ -261,6 +261,9 @@ export class ProjectController {
         return res.status(403).json({
           error: 'Inophone widget not allowed',
           message: 'Виджет «Инофон» пока недоступен для этого аккаунта'
+        });
+      }
+
       if (projectDataHasBioiqWidget(projectData) && !isEmailAllowedForBioiq(req.client.email)) {
         return res.status(403).json({
           error: 'BioIQ widget not allowed',
@@ -497,6 +500,11 @@ export class ProjectController {
         return res.status(403).json({
           error: 'Inophone widget not allowed',
           message: 'Виджет «Инофон» пока недоступен для этого аккаунта'
+        });
+      }
+
+      if (
+        Object.prototype.hasOwnProperty.call(updates, 'projectData') &&
         projectDataHasBioiqWidget(updates.projectData) &&
         !isEmailAllowedForBioiq(req.client.email)
       ) {
