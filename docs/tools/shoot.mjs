@@ -18,6 +18,10 @@
 //   { "проверь": "testid" }         убедиться, что элемент есть, иначе падаем
 //   { "верно4": N } / { "неверно4": true }   Тип 4: ответить на сцене верно/неверно
 //   { "верно10": N } / { "неверно10": true } Тип 10: ответить на поле верно/неверно
+//   { "холст": [0.5, 0.5] }         нажать точку холста в долях его ширины
+//                                   и высоты. Нужно там, где кликабельные
+//                                   элементы нарисованы на canvas и DOM-узлов
+//                                   не имеют: точки в редакторе викторины.
 //
 // Сценарий ПАДАЕТ на первой же неудаче. Молча пропущенный шаг дал бы снимок
 // не того экрана, а подпись осталась бы прежней — именно так инструкции и
@@ -106,6 +110,22 @@ for (const [i, step] of plan.шаги.entries()) {
         return JSON.stringify({x:Math.round(r.left+r.width/2),y:Math.round(r.top+r.height/2),
           label:(el.innerText||'').replace(/\\s+/g,' ').trim().slice(0,40)})})()`);
       if (!found) throw new Error(`на экране нет кнопки с текстом «${step.текст}»`);
+      const { x, y } = JSON.parse(found);
+      await send('Input.dispatchMouseEvent', { type: 'mousePressed', x, y, button: 'left', clickCount: 1 });
+      await send('Input.dispatchMouseEvent', { type: 'mouseReleased', x, y, button: 'left', clickCount: 1 });
+      await wait(step.пауза ?? plan.пауза ?? 320);
+    }
+    else if (step.холст) {
+      // Точки редактора викторины нарисованы на холсте Konva и DOM-узлов не
+      // имеют — ни по testid, ни по тексту их не нажать. Координаты задаются
+      // в долях размера холста, чтобы снимок не поехал при другом масштабе
+      // окна.
+      const [fx, fy] = step.холст;
+      const found = await ev(`(()=>{const c=document.querySelector('canvas'); if(!c) return null;
+        c.scrollIntoView({block:'center'});
+        const r=c.getBoundingClientRect();
+        return JSON.stringify({x:Math.round(r.left+r.width*${Number(fx)}),y:Math.round(r.top+r.height*${Number(fy)})})})()`);
+      if (!found) throw new Error('на экране нет холста');
       const { x, y } = JSON.parse(found);
       await send('Input.dispatchMouseEvent', { type: 'mousePressed', x, y, button: 'left', clickCount: 1 });
       await send('Input.dispatchMouseEvent', { type: 'mouseReleased', x, y, button: 'left', clickCount: 1 });

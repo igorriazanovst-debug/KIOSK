@@ -24,7 +24,9 @@
 | `plan-words.json` | Сценарий для «Я знаю много слов» — 15 снимков |
 | `plan-inophone.json` | Сценарий для «Инофон» — 20 снимков |
 | `plan-bioiq.json` | Сценарий для «БиоIQ» — 18 снимков |
+| `plan-physastroiq.json` | Сценарий для «ФизАстроIQ» — 22 снимка; снимает ОБА предмета |
 | `bioiq-accept.mjs` | Приёмочный прогон «БиоIQ» на живом приложении — 41 проверка |
+| `physastroiq-accept.mjs` | То же для «ФизАстроIQ» — 46 проверок; закрывает системные диалоги сам, иначе прогон виснет |
 | `ino-accept.mjs` | То же для «Инофона» |
 | `shoot-chimiq.js` | Снимки для «ХимIQ» (12 шт.) — прямой Node/CDP-драйвер, не JSON-DSL `shoot.mjs` (см. комментарий в файле, почему); скриншот через `gdi-screenshot.ps1` (GDI по PID), не `Page.captureScreenshot` — тот зависал (см. §5a `Сценарий_разработки_фичи.md`) |
 | `gdi-screenshot.ps1` | Win32 GDI-скриншот клиентской области окна по PID — обходной путь для `shoot-chimiq.js`, когда `Page.captureScreenshot` виснет; DPI-aware (см. комментарий в файле, зачем) |
@@ -57,6 +59,14 @@ node shoot.mjs plan-inophone.json
 # хранит данные в %APPDATA%, и подмена PROGRAMDATA его не изолирует
 ./restand.sh stage-bioiq 9680 kiosk-bioiq kiosk-bioiq
 node shoot.mjs plan-bioiq.json
+
+# «ФизАстроIQ». Тот же четвёртый аргумент и по той же причине
+./restand.sh stage-physastroiq 9712 kiosk-physastroiq kiosk-physastroiq
+cd ../.. && node KIOSK/docs/tools/shoot.mjs KIOSK/docs/tools/plan-physastroiq.json
+
+# Приёмочный прогон «ФизАстроIQ» — с того же чистого стенда
+./restand.sh stage-physastroiq 9712 kiosk-physastroiq kiosk-physastroiq
+node physastroiq-accept.mjs 9712 all
 
 # Приёмочный прогон «БиоIQ» — с того же чистого стенда
 node bioiq-accept.mjs 9680 all
@@ -119,6 +129,7 @@ node bioiq-accept.mjs 9680 all
 | `{ "проверь": "testid" }` | Убедиться, что элемент есть, иначе падение |
 | `{ "снимок": "имя", "подпись": "..." }` | Сохранить PNG |
 | `{ "целиком": true }` рядом со снимком | Снять окно целиком, без кадрирования |
+| `{ "холст": [0.5, 0.5] }` | Нажать точку холста в долях его ширины и высоты — для элементов, нарисованных на canvas и не имеющих DOM-узлов (точки в редакторе викторины) |
 | `{ "верно": N }` | Тип 3: ответить верно N раз |
 | `{ "неверно": true }` | Тип 3: нажать заведомо неверный вариант |
 | `{ "верно2": N }` | Тип 2: ответить верно N раз |
