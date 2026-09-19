@@ -42,6 +42,24 @@ const FEEDBACK_CORRECT_COLOR = 'rgba(62, 207, 126, 0.85)';
 const FEEDBACK_WRONG_COLOR = 'rgba(255, 107, 107, 0.85)';
 const FEEDBACK_DURATION_MS = 900;
 
+// width/height резервируют место до загрузки (без сдвига вёрстки); contain —
+// пропорции картинок учителя произвольные
+const QUESTION_IMAGE_WIDTH = 132;
+const QUESTION_IMAGE_HEIGHT = 96;
+const QUESTION_IMAGE_STYLE: React.CSSProperties = {
+  flex: '0 0 auto',
+  width: QUESTION_IMAGE_WIDTH,
+  height: QUESTION_IMAGE_HEIGHT,
+  objectFit: 'contain',
+  borderRadius: 8,
+};
+const QUESTION_ROW_STYLE: React.CSSProperties = {
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  gap: 16,
+};
+
 const GameBoardScreen: React.FC<Props> = ({
   imageUrl,
   imageWidth,
@@ -245,34 +263,42 @@ const GameBoardScreen: React.FC<Props> = ({
             Сдаюсь
           </button>
         </div>
-        <p className="ciq-question-text">{currentQuestion.text}</p>
-        {currentQuestion.questionImage && (
-          <img
-            src={physastroiqItemImageUrl(currentQuestion.questionImage)}
-            alt=""
-            style={{ display: 'block', maxWidth: 220, maxHeight: 160, margin: '10px auto 0', borderRadius: 8 }}
-          />
-        )}
-        {currentQuestion.helpText.length > 0 && (
-          <div className="ciq-hint">
-            {hintShown ? (
-              <>
-                <p className="ciq-hint-text">Подсказка: {currentQuestion.helpText}</p>
-                {currentQuestion.hintImage && (
-                  <img
-                    src={physastroiqItemImageUrl(currentQuestion.hintImage)}
-                    alt=""
-                    style={{ display: 'block', maxWidth: 220, maxHeight: 160, margin: '6px auto 0', borderRadius: 8 }}
-                  />
+        {/* Картинка СБОКУ от вопроса, а не над полем: поставленная сверху, она
+            отнимала у поля ~170px высоты (замер на установленной сборке «БиоIQ»). */}
+        <div style={QUESTION_ROW_STYLE}>
+          {currentQuestion.questionImage && (
+            <img
+              src={physastroiqItemImageUrl(currentQuestion.questionImage)}
+              alt=""
+              width={QUESTION_IMAGE_WIDTH}
+              height={QUESTION_IMAGE_HEIGHT}
+              style={QUESTION_IMAGE_STYLE}
+            />
+          )}
+          <div style={{ minWidth: 0 }}>
+            <p className="ciq-question-text">{currentQuestion.text}</p>
+            {currentQuestion.helpText.length > 0 && (
+              <div className="ciq-hint">
+                {hintShown ? (
+                  <>
+                    <p className="ciq-hint-text">Подсказка: {currentQuestion.helpText}</p>
+                    {currentQuestion.hintImage && (
+                      <img
+                        src={physastroiqItemImageUrl(currentQuestion.hintImage)}
+                        alt=""
+                        style={{ display: 'block', maxWidth: 220, maxHeight: 160, margin: '6px auto 0', borderRadius: 8 }}
+                      />
+                    )}
+                  </>
+                ) : (
+                  <button onClick={handleShowHint} className="ciq-btn ciq-btn-ghost ciq-btn-small">
+                    Показать подсказку
+                  </button>
                 )}
-              </>
-            ) : (
-              <button onClick={handleShowHint} className="ciq-btn ciq-btn-ghost ciq-btn-small">
-                Показать подсказку
-              </button>
+              </div>
             )}
           </div>
-        )}
+        </div>
       </div>
       <div
         style={{
