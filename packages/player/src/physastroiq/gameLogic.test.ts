@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { scoreForAnswer, assignQuestions, nextTurn, summarizeResults, buildBoardTiles } from './gameLogic.ts';
+import { scoreForAnswer, assignQuestions, nextTurn, summarizeResults, buildBoardTiles, neutralTileLabels, orderTilesByPosition } from './gameLogic.ts';
 import { PHYSASTROIQ_DEFAULT_POINT_SIZE, type PhysastroiqQuestion, type PhysastroiqPoint } from './model/schema.ts';
 
 function q(overrides: Partial<PhysastroiqQuestion> = {}): PhysastroiqQuestion {
@@ -142,4 +142,31 @@ test('summarizeResults aggregates score and correctness per player', () => {
     { name: 'Аня', score: 150, correctCount: 2, totalCount: 2 },
     { name: 'Боря', score: 0, correctCount: 0, totalCount: 1 },
   ]);
+});
+
+test('neutralTileLabels: подпись не зависит от правильности и порядка рендера', () => {
+  // Раньше верная область имела aria-label="correct-point": программа
+  // экранного доступа называла ответ до щелчка. Подпись теперь нейтральная и
+  // нумеруется по положению на картинке, а не по порядку построения — иначе
+  // верная область, которая строится последней, снова выдавала бы себя.
+  const tiles = [
+    { key: 'c', x: 300, y: 100 },
+    { key: 'a', x: 100, y: 100 },
+    { key: 'correct', x: 50, y: 900 },
+    { key: 'b', x: 200, y: 50 },
+  ];
+  const labels = neutralTileLabels(tiles);
+  assert.equal(labels.get('b'), 'Область 1');
+  assert.equal(labels.get('a'), 'Область 2');
+  assert.equal(labels.get('c'), 'Область 3');
+  assert.equal(labels.get('correct'), 'Область 4');
+  const reversed = neutralTileLabels([...tiles].reverse());
+  assert.deepEqual([...reversed.entries()].sort(), [...labels.entries()].sort());
+  assert.equal(new Set(labels.values()).size, tiles.length);
+});
+
+test('orderTilesByPosition: верная область не оказывается последней только потому, что построена последней', () => {
+  const tiles = [{ key: 'd1', x: 500, y: 500 }, { key: 'd2', x: 100, y: 900 }, { key: 'correct', x: 300, y: 100 }];
+  assert.deepEqual(orderTilesByPosition(tiles).map((t) => t.key), ['correct', 'd1', 'd2']);
+  assert.deepEqual(tiles.map((t) => t.key), ['d1', 'd2', 'correct']);
 });

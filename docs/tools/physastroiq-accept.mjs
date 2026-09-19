@@ -120,13 +120,21 @@ async function click(label) {
   await wait(600);
 }
 
-/** Настоящий щелчок по элементу игрового поля, найденному по aria-label. */
+/**
+ * Настоящий щелчок по элементу игрового поля.
+ *
+ * Крючок — data-testid, а НЕ aria-label. Подпись области нейтральная
+ * («Область N»): раньше у верной области стояло aria-label="correct-point", и
+ * программа экранного доступа называла ответ до щелчка. Исправлено во всех
+ * четырёх виджетах семейства «IQ»; проверка 2.12 следит, чтобы утечка не
+ * вернулась.
+ */
 async function clickAria(label) {
-  const box = await ev(`(()=>{const el=document.querySelector('[aria-label=${JSON.stringify(label)}]');
+  const box = await ev(`(()=>{const el=document.querySelector('[data-testid=${JSON.stringify(label)}]');
     if(!el) return null; el.scrollIntoView({block:'center'});
     const r=el.getBoundingClientRect();
     return JSON.stringify({x:Math.round(r.left+r.width/2),y:Math.round(r.top+r.height/2)})})()`);
-  if (!box) throw new Error(`нет элемента поля с aria-label=${label}`);
+  if (!box) throw new Error(`нет элемента поля с data-testid=${label}`);
   const { x, y } = JSON.parse(box);
   await mouse(x, y);
   // Поле держит вердикт около секунды, и только потом показывает следующий
@@ -169,8 +177,12 @@ async function startGame({ level, questions = 5, playerName = 'Приёмка' }
       return JSON.stringify({
         src: img ? img.getAttribute('src') : null,
         natural: img ? img.naturalWidth + 'x' + img.naturalHeight : null,
-        correct: document.querySelectorAll('[aria-label="correct-point"]').length,
-        decoys: document.querySelectorAll('[aria-label^="decoy"]').length,
+        correct: document.querySelectorAll('[data-testid="correct-point"]').length,
+        decoys: document.querySelectorAll('[data-testid^="decoy-"]').length,
+        leaks: [...document.querySelectorAll('[data-testid="correct-point"],[data-testid^="decoy-"]')]
+          .filter(e => /correct|decoy/i.test(e.getAttribute('aria-label') || '')).length,
+        labels: [...document.querySelectorAll('[data-testid="correct-point"],[data-testid^="decoy-"]')]
+          .map(e => e.getAttribute('aria-label')),
         body: document.body.innerText
       })})()`)
   );
@@ -250,6 +262,10 @@ if (want(2)) {
   await click('Сдаюсь');
   const skipped = await ev(`/Вопрос 3\\/5/.test(document.body.innerText)`);
   ok('2.9', 'кнопка «Сдаюсь» пропускает вопрос (FR-007)', skipped === true);
+
+  ok('2.12', 'подпись области не выдаёт ответ программе экранного доступа',
+    board.leaks === 0 && board.labels.every((l) => /^Область \d+$/.test(String(l))),
+    `подписей с утечкой: ${board.leaks}; пример подписи: ${board.labels[0]}`);
 
   await surrenderAll();
   const results = await text();

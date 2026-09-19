@@ -132,3 +132,18 @@ export function summarizeResults(playerNames: string[], answers: PhysastroiqAnsw
     };
   });
 }
+
+/**
+ * Порядок областей в DOM — по положению на картинке (сверху вниз, слева
+ * направо), а не по порядку построения: верная область строится последней, и
+ * «последняя кнопка при обходе Tab/диктором» выдавала бы ответ так же, как
+ * раньше его выдавала подпись.
+ */
+export function orderTilesByPosition<T extends { key: string; x: number; y: number }>(tiles: ReadonlyArray<T>): T[] {
+  return [...tiles].sort((a, b) => a.y - b.y || a.x - b.x || a.key.localeCompare(b.key));
+}
+
+/** Нейтральные подписи для программ экранного доступа: «Область N» в том же порядке. */
+export function neutralTileLabels(tiles: ReadonlyArray<{ key: string; x: number; y: number }>): Map<string, string> {
+  return new Map(orderTilesByPosition(tiles).map((tile, index) => [tile.key, `Область ${index + 1}`]));
+}

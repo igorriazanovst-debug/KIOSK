@@ -1,7 +1,7 @@
 // packages/player/src/physastroiq/screens/GameBoardScreen.tsx
 import React, { useEffect, useRef, useState } from 'react';
 import type { PhysastroiqPoint, PhysastroiqQuestion } from '../model/schema.ts';
-import { scoreForAnswer, nextTurn, buildBoardTiles, type PhysastroiqAnswerEvent, type PhysastroiqBoardTile } from '../gameLogic.ts';
+import { scoreForAnswer, nextTurn, neutralTileLabels, orderTilesByPosition, buildBoardTiles, type PhysastroiqAnswerEvent, type PhysastroiqBoardTile } from '../gameLogic.ts';
 import { physastroiqItemImageUrl } from '../physastroiqMediaUrl.ts';
 import { playCorrectTone, playWrongTone } from '../sound.ts';
 import '../physastroiqTheme.css';
@@ -84,7 +84,8 @@ const GameBoardScreen: React.FC<Props> = ({
   const feedbackTimeoutRef = useRef<number | null>(null);
 
   const currentQuestion = questionsByPlayer[currentPlayer][questionIndexByPlayer[currentPlayer]];
-  const tiles = buildBoardTiles(currentQuestion, levelQuestions, genericDecoyPoints);
+  const tiles = orderTilesByPosition(buildBoardTiles(currentQuestion, levelQuestions, genericDecoyPoints));
+  const tileLabels = neutralTileLabels(tiles);
 
   useEffect(() => {
     setElapsed(0);
@@ -327,8 +328,9 @@ const GameBoardScreen: React.FC<Props> = ({
               <button
                 key={tile.key}
                 onClick={() => handleTileClick(tile)}
-                style={{ ...pointStyle(tile, activeFeedback), ...pointPosition(tile) }}
-                aria-label={tile.isCorrect ? 'correct-point' : `decoy-${tile.key}`}
+                style={{ ...pointStyle(tile, activeFeedback), ...pointPosition(tile), zIndex: tile.isCorrect ? 1 : 0 }}
+                aria-label={tileLabels.get(tile.key)}
+                data-testid={tile.isCorrect ? 'correct-point' : `decoy-${tile.key}`}
               >
                 {feedbackGlyph(activeFeedback)}
               </button>
