@@ -14,6 +14,8 @@
 //   { "ввод": ["testid", "текст"] } набрать в поле (через сеттер прототипа,
 //                                   иначе React не заметит)
 //   { "жди": 600 }                  подождать
+//   { "дождись": "текст", "секунд": 20 }  ждать ПОЯВЛЕНИЯ текста на экране
+//                                   вместо отсчёта миллисекунд
 //   { "снимок": "имя", "подпись": "..." }  сохранить PNG
 //   { "проверь": "testid" }         убедиться, что элемент есть, иначе падаем
 //   { "верно4": N } / { "неверно4": true }   Тип 4: ответить на сцене верно/неверно
@@ -114,6 +116,27 @@ for (const [i, step] of plan.шаги.entries()) {
       await send('Input.dispatchMouseEvent', { type: 'mousePressed', x, y, button: 'left', clickCount: 1 });
       await send('Input.dispatchMouseEvent', { type: 'mouseReleased', x, y, button: 'left', clickCount: 1 });
       await wait(step.пауза ?? plan.пауза ?? 320);
+    }
+    else if (step.дождись) {
+      // Ждать ПОЯВЛЕНИЯ, а не отсчитывать миллисекунды.
+      //
+      // Фиксированная пауза после старта приложения подводит: на занятой
+      // машине оно не успевает подняться, сценарий щёлкает по экрану
+      // «Загрузка проекта…» и падает на третьем шаге. Увеличивать паузу
+      // бессмысленно — следующий раз машина будет ещё занятее.
+      const deadline = Date.now() + (step.секунд ?? 20) * 1000;
+      let seen = false;
+      while (Date.now() < deadline) {
+        seen = await ev(`document.body.innerText.replace(/\s+/g,' ').toLowerCase()
+          .includes(${JSON.stringify(String(step.дождись).replace(/\s+/g, ' ').toLowerCase())})`);
+        if (seen) break;
+        await wait(400);
+      }
+      if (!seen) {
+        const scene = await ev('document.body.innerText');
+        throw new Error(`не дождался текста «${step.дождись}»; на экране: ${String(scene).slice(0, 200)}`);
+      }
+      await wait(step.пауза ?? 300);
     }
     else if (step.холст) {
       // Точки редактора викторины нарисованы на холсте Konva и DOM-узлов не
