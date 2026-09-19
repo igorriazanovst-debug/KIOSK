@@ -60,7 +60,8 @@ interface Rect {
  * положенные впритык, — обычный приём разметки, и запрещать его нет причин.
  */
 export function rectsOverlap(a: Rect, b: Rect): boolean {
-  return a.x < b.x + b.width && b.x < a.x + a.width && a.y < b.y + b.height && b.y < a.y + a.height;
+  // x/y — ЦЕНТР области, как во всей модели викторины и на игровом поле.
+  return Math.abs(a.x - b.x) * 2 < a.width + b.width && Math.abs(a.y - b.y) * 2 < a.height + b.height;
 }
 
 /**

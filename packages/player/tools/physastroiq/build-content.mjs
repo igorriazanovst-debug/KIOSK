@@ -46,6 +46,17 @@ const SUBJECTS = [
   },
 ];
 
+// Рисовалка отдаёт ЛЕВЫЙ ВЕРХНИЙ угол области, а схема викторины и игровое
+// поле понимают x/y как ЦЕНТР. Без пересчёта каждая область на поле стояла бы
+// выше и левее своего объекта на половину собственного размера (дефект,
+// найденный у «БиоIQ» 18.09.2026 и унаследованный копией).
+const centered = (box) => ({
+  x: Math.round(box.x + box.width / 2),
+  y: Math.round(box.y + box.height / 2),
+  width: box.width,
+  height: box.height,
+});
+
 const problems = [];
 
 function buildSubject(subject) {
@@ -86,10 +97,7 @@ function buildSubject(subject) {
         text: q.text,
         answer: q.answer,
         helpText: q.hint,
-        x: s.x,
-        y: s.y,
-        width: s.width,
-        height: s.height,
+        ...centered(s),
         decoyPoints: [],
         price: rules.price,
         timeSeconds: rules.timeSeconds,
@@ -107,11 +115,11 @@ function buildSubject(subject) {
     // заодно закрывает дыру «нарисовано, но нажать нельзя».
     for (const s of level.structures) {
       if (!used.has(s.id)) {
-        genericDecoyPoints.push({ x: s.x, y: s.y, width: s.width, height: s.height, level: levelId });
+        genericDecoyPoints.push({ ...centered(s), level: levelId });
       }
     }
     for (const d of level.decoys) {
-      genericDecoyPoints.push({ x: d.x, y: d.y, width: d.width, height: d.height, level: levelId });
+      genericDecoyPoints.push({ ...centered(d), level: levelId });
     }
   }
 

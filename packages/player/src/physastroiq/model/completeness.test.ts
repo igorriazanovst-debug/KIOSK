@@ -212,3 +212,8 @@ test('ОБЕ поставляемые викторины проходят про
     assert.deepEqual(checkPhysastroiqQuiz(quiz), [], `викторина «${name}»`);
   }
 });
+
+test('rectsOverlap: x/y — центр области, размеры могут различаться', () => {
+  assert.equal(rectsOverlap({ x: 100, y: 100, width: 100, height: 100 }, { x: 145, y: 100, width: 20, height: 20 }), true);
+  assert.equal(rectsOverlap({ x: 100, y: 100, width: 100, height: 100 }, { x: 160, y: 100, width: 20, height: 20 }), false);
+});

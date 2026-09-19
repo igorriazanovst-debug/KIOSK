@@ -197,3 +197,21 @@ test('в текстах вопросов не осталось биологии 
     }
   }
 });
+
+// Рисовалка отдаёт левый верхний угол области, викторина хранит ЦЕНТР. У
+// «БиоIQ» это однажды разошлось (все области стояли мимо объектов), и копия
+// унаследовала дефект — тест не даёт ему вернуться.
+test('координаты вопросов — центр области, нарисованной на карте (обе викторины)', () => {
+  for (const [file, content] of [['structures-physics.json', physicsContent], ['structures-astro.json', astroContent]] as const) {
+    const structures = JSON.parse(fs.readFileSync(path.join(HERE, '..', '..', '..', 'tools', 'physastroiq', file), 'utf-8'));
+    const quiz = PhysastroiqQuizSchema.parse(content);
+    for (const level of ['1', '2', '3']) {
+      const centers = new Set(
+        structures[level].structures.map((s: { x: number; y: number; width: number; height: number }) => `${Math.round(s.x + s.width / 2)}_${Math.round(s.y + s.height / 2)}`),
+      );
+      for (const q of quiz.questions.filter((item) => String(item.level) === level)) {
+        assert.ok(centers.has(`${q.x}_${q.y}`), `${q.id}: (${q.x}, ${q.y}) не совпадает с центром ни одной структуры уровня ${level}`);
+      }
+    }
+  }
+});
