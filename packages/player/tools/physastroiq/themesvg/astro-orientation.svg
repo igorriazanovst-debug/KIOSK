@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="440" height="320" viewBox="0 0 880 640">
+  <defs>
+    <radialGradient id="glow" cx="50%" cy="46%" r="60%">
+      <stop offset="0%" stop-color="#7fd4c1" stop-opacity="0.36"/>
+      <stop offset="100%" stop-color="#7fd4c1" stop-opacity="0"/>
+    </radialGradient>
+    <pattern id="dots" width="40" height="40" patternUnits="userSpaceOnUse">
+      <circle cx="20" cy="20" r="2.5" fill="#7fd4c1" fill-opacity="0.2"/>
+    </pattern>
+  </defs>
+  <rect width="880" height="640" rx="48" fill="#0d1620"/>
+  <rect width="880" height="640" rx="48" fill="url(#dots)"/>
+  <rect width="880" height="640" rx="48" fill="url(#glow)"/>
+  <rect x="10" y="10" width="860" height="620" rx="40" fill="none" stroke="#7fd4c1" stroke-opacity="0.55" stroke-width="6"/>
+  
+    <circle cx="440" cy="320" r="210" fill="#2b4256" stroke="#e8eef4" stroke-width="16"/>
+    <path d="M 616 320 L 634 320" stroke="#e8eef4" stroke-width="6" stroke-linecap="round"/><path d="M 602.6027977219865 387.3522840962558 L 619.2326293071897 394.2405858788274" stroke="#e8eef4" stroke-width="6" stroke-linecap="round"/><path d="M 564.4507934888323 444.45079348883235 L 577.1787155501902 457.1787155501902" stroke="#e8eef4" stroke-width="6" stroke-linecap="round"/><path d="M 507.3522840962558 482.60279772198646 L 514.2405858788275 499.23262930718965" stroke="#e8eef4" stroke-width="6" stroke-linecap="round"/><path d="M 440 496 L 440 514" stroke="#e8eef4" stroke-width="6" stroke-linecap="round"/><path d="M 372.6477159037442 482.60279772198646 L 365.7594141211726 499.23262930718965" stroke="#e8eef4" stroke-width="6" stroke-linecap="round"/><path d="M 315.54920651116765 444.45079348883235 L 302.8212844498098 457.1787155501902" stroke="#e8eef4" stroke-width="6" stroke-linecap="round"/><path d="M 277.39720227801354 387.3522840962558 L 260.76737069281035 394.24058587882746" stroke="#e8eef4" stroke-width="6" stroke-linecap="round"/><path d="M 264 320 L 246 320" stroke="#e8eef4" stroke-width="6" stroke-linecap="round"/><path d="M 277.39720227801354 252.6477159037442 L 260.76737069281035 245.7594141211726" stroke="#e8eef4" stroke-width="6" stroke-linecap="round"/><path d="M 315.5492065111676 195.54920651116765 L 302.82128444980975 182.82128444980978" stroke="#e8eef4" stroke-width="6" stroke-linecap="round"/><path d="M 372.6477159037441 157.39720227801357 L 365.7594141211725 140.7673706928104" stroke="#e8eef4" stroke-width="6" stroke-linecap="round"/><path d="M 439.99999999999994 144 L 439.99999999999994 126" stroke="#e8eef4" stroke-width="6" stroke-linecap="round"/><path d="M 507.35228409625586 157.39720227801357 L 514.2405858788275 140.7673706928104" stroke="#e8eef4" stroke-width="6" stroke-linecap="round"/><path d="M 564.4507934888323 195.5492065111676 L 577.1787155501902 182.82128444980975" stroke="#e8eef4" stroke-width="6" stroke-linecap="round"/><path d="M 602.6027977219865 252.64771590374409 L 619.2326293071897 245.75941412117248" stroke="#e8eef4" stroke-width="6" stroke-linecap="round"/>
+    <g fill="#e8eef4" font-family="system-ui, sans-serif" font-weight="700" font-size="46" text-anchor="middle">
+      <text x="440" y="186" fill="#7fd4c1">С</text><text x="440" y="486">Ю</text>
+      <text x="292" y="336">З</text><text x="588" y="336">В</text>
+    </g>
+    <g transform="rotate(35 440 320)">
+      <polygon points="440,205 468,320 412,320" fill="#e0524f"/>
+      <polygon points="440,435 468,320 412,320" fill="#e8eef4"/>
+    </g>
+    <circle cx="440" cy="320" r="14" fill="#0d1620"/>
+    <rect x="416" y="62" width="48" height="44" rx="12" fill="#e8eef4"/>
+</svg>

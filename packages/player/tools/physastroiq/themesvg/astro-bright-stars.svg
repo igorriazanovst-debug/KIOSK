@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="440" height="320" viewBox="0 0 880 640">
+  <defs>
+    <radialGradient id="glow" cx="50%" cy="46%" r="60%">
+      <stop offset="0%" stop-color="#ffd95c" stop-opacity="0.36"/>
+      <stop offset="100%" stop-color="#ffd95c" stop-opacity="0"/>
+    </radialGradient>
+    <pattern id="dots" width="40" height="40" patternUnits="userSpaceOnUse">
+      <circle cx="20" cy="20" r="2.5" fill="#ffd95c" fill-opacity="0.2"/>
+    </pattern>
+  </defs>
+  <rect width="880" height="640" rx="48" fill="#0d1620"/>
+  <rect width="880" height="640" rx="48" fill="url(#dots)"/>
+  <rect width="880" height="640" rx="48" fill="url(#glow)"/>
+  <rect x="10" y="10" width="860" height="620" rx="40" fill="none" stroke="#ffd95c" stroke-opacity="0.55" stroke-width="6"/>
+  
+    <circle cx="440" cy="310" r="110" fill="#ffd95c" fill-opacity="0.28"/>
+    <path d="M 440 100 Q 440 310 650 310 Q 440 310 440 520 Q 440 310 230 310 Q 440 310 440 100 Z" fill="#fff4c2" fill-opacity="1"/>
+    <path d="M 190 116 Q 190 180 254 180 Q 190 180 190 244 Q 190 180 126 180 Q 190 180 190 116 Z" fill="#9fd0ff" fill-opacity="1"/>
+    <path d="M 690 396 Q 690 470 764 470 Q 690 470 690 544 Q 690 470 616 470 Q 690 470 690 396 Z" fill="#ffb27c" fill-opacity="1"/>
+    <path d="M 680 120 Q 680 150 710 150 Q 680 150 680 180 Q 680 150 650 150 Q 680 150 680 120 Z" fill="#ffffff" fill-opacity="0.8"/><path d="M 220 466 Q 220 500 254 500 Q 220 500 220 534 Q 220 500 186 500 Q 220 500 220 466 Z" fill="#ffffff" fill-opacity="0.8"/><path d="M 120 324 Q 120 340 136 340 Q 120 340 120 356 Q 120 340 104 340 Q 120 340 120 324 Z" fill="#ffffff" fill-opacity="0.8"/><path d="M 770 304 Q 770 320 786 320 Q 770 320 770 336 Q 770 320 754 320 Q 770 320 770 304 Z" fill="#ffffff" fill-opacity="0.8"/>
+</svg>

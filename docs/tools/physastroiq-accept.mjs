@@ -173,10 +173,22 @@ async function startGame({ level, questions = 5, playerName = 'Приёмка' }
   await click(String(questions));
   await wait(1400);
   return JSON.parse(
-    await ev(`(()=>{const img=document.querySelector('img');
+    // Карта уровня — НЕ первый <img> на экране: перед ней стоит картинка темы
+    // вопроса. Карту ищем по имени файла, картинку темы — по её крючку.
+    // ИНВАРИАНТ: годится только для встроенных викторин — их карты названы
+    // *_map.png. У викторины педагога имя карты произвольное; если startGame
+    // понадобится там, искать карту придётся иначе.
+    await ev(`(()=>{const img=[...document.querySelectorAll('img')].find(i=>/_map\\.png$/.test(i.getAttribute('src')||''))||null;
+      const themeImg=document.querySelector('[data-testid="physastroiq-question-image"]');
+      const box=(e)=>e?e.getBoundingClientRect():null;
+      const inWindow=(r)=>!!r&&r.width>0&&r.top>=0&&r.left>=0&&r.bottom<=window.innerHeight&&r.right<=window.innerWidth;
       return JSON.stringify({
         src: img ? img.getAttribute('src') : null,
         natural: img ? img.naturalWidth + 'x' + img.naturalHeight : null,
+        mapShown: img ? Math.round(box(img).width) + 'x' + Math.round(box(img).height) : null,
+        themeSrc: themeImg ? themeImg.getAttribute('src') : null,
+        themeLoaded: themeImg ? themeImg.complete && themeImg.naturalWidth > 0 : false,
+        themeInWindow: inWindow(box(themeImg)),
         correct: document.querySelectorAll('[data-testid="correct-point"]').length,
         decoys: document.querySelectorAll('[data-testid^="decoy-"]').length,
         leaks: [...document.querySelectorAll('[data-testid="correct-point"],[data-testid^="decoy-"]')]
@@ -267,6 +279,10 @@ if (want(2)) {
     board.leaks === 0 && board.labels.every((l) => /^Область \d+$/.test(String(l))),
     `подписей с утечкой: ${board.leaks}; пример подписи: ${board.labels[0]}`);
 
+  ok('2.13', 'у вопроса встроенной викторины показана картинка темы по физике (FR-009, FR-016)',
+    /questionThemes\/phys-[a-z-]+\.png$/.test(String(board.themeSrc)) && board.themeLoaded && board.themeInWindow,
+    `src: ${board.themeSrc}; загружена: ${board.themeLoaded}; целиком в окне: ${board.themeInWindow}; карта на экране ${board.mapShown}`);
+
   await surrenderAll();
   const results = await text();
   ok('2.10', 'показан экран результатов', /РЕЗУЛЬТАТ/i.test(results));
@@ -299,6 +315,9 @@ if (want(3)) {
   ok('3.5', 'время на вопрос на «Профессионале» меньше (FR-006)',
     Number(String(board.body).match(/Таймер:\s*(\d+)/)?.[1] ?? 99) <= 25,
     String(board.body).match(/Таймер:\s*\d+с/)?.[0]);
+  ok('3.8', 'картинка темы у астрономии своя, а не физическая (FR-009, FR-016)',
+    /questionThemes\/astro-[a-z-]+\.png$/.test(String(board.themeSrc)) && board.themeLoaded && board.themeInWindow,
+    `src: ${board.themeSrc}; загружена: ${board.themeLoaded}; целиком в окне: ${board.themeInWindow}; карта на экране ${board.mapShown}`);
 
   await clickAria('correct-point');
   const moved = await ev(`/Вопрос 2\\/5/.test(document.body.innerText)`);

@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="440" height="320" viewBox="0 0 880 640">
+  <defs>
+    <radialGradient id="glow" cx="50%" cy="46%" r="60%">
+      <stop offset="0%" stop-color="#7fd4c1" stop-opacity="0.36"/>
+      <stop offset="100%" stop-color="#7fd4c1" stop-opacity="0"/>
+    </radialGradient>
+    <pattern id="dots" width="40" height="40" patternUnits="userSpaceOnUse">
+      <circle cx="20" cy="20" r="2.5" fill="#7fd4c1" fill-opacity="0.2"/>
+    </pattern>
+  </defs>
+  <rect width="880" height="640" rx="48" fill="#0d1620"/>
+  <rect width="880" height="640" rx="48" fill="url(#dots)"/>
+  <rect width="880" height="640" rx="48" fill="url(#glow)"/>
+  <rect x="10" y="10" width="860" height="620" rx="40" fill="none" stroke="#7fd4c1" stroke-opacity="0.55" stroke-width="6"/>
+  
+    <g transform="rotate(-20 300 330)">
+      <rect x="120" y="290" width="420" height="84" rx="10" fill="#ffd95c"/>
+      <path d="M 150 290 v 40" stroke="#0d1620" stroke-width="5"/><path d="M 180 290 v 24" stroke="#0d1620" stroke-width="5"/><path d="M 210 290 v 40" stroke="#0d1620" stroke-width="5"/><path d="M 240 290 v 24" stroke="#0d1620" stroke-width="5"/><path d="M 270 290 v 40" stroke="#0d1620" stroke-width="5"/><path d="M 300 290 v 24" stroke="#0d1620" stroke-width="5"/><path d="M 330 290 v 40" stroke="#0d1620" stroke-width="5"/><path d="M 360 290 v 24" stroke="#0d1620" stroke-width="5"/><path d="M 390 290 v 40" stroke="#0d1620" stroke-width="5"/><path d="M 420 290 v 24" stroke="#0d1620" stroke-width="5"/><path d="M 450 290 v 40" stroke="#0d1620" stroke-width="5"/><path d="M 480 290 v 24" stroke="#0d1620" stroke-width="5"/><path d="M 510 290 v 40" stroke="#0d1620" stroke-width="5"/>
+    </g>
+    <rect x="606" y="330" width="148" height="186" fill="#7fd4c1" fill-opacity="0.7"/>
+    <path d="M 600 170 V 500 a 20 20 0 0 0 20 20 H 740 a 20 20 0 0 0 20 -20 V 170" fill="none" stroke="#e8eef4" stroke-width="12" stroke-linejoin="round"/>
+    <path d="M 582 170 H 612 M 748 170 H 778" stroke="#e8eef4" stroke-width="12" stroke-linecap="round"/>
+    <path d="M 700 220 H 748" stroke="#e8eef4" stroke-width="6" stroke-linecap="round"/><path d="M 720 270 H 748" stroke="#e8eef4" stroke-width="6" stroke-linecap="round"/><path d="M 700 320 H 748" stroke="#e8eef4" stroke-width="6" stroke-linecap="round"/><path d="M 720 370 H 748" stroke="#e8eef4" stroke-width="6" stroke-linecap="round"/><path d="M 700 420 H 748" stroke="#e8eef4" stroke-width="6" stroke-linecap="round"/><path d="M 720 470 H 748" stroke="#e8eef4" stroke-width="6" stroke-linecap="round"/>
+</svg>

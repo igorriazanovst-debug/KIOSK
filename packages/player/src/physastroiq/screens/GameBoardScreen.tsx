@@ -3,6 +3,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import type { PhysastroiqPoint, PhysastroiqQuestion } from '../model/schema.ts';
 import { scoreForAnswer, nextTurn, neutralTileLabels, orderTilesByPosition, buildBoardTiles, type PhysastroiqAnswerEvent, type PhysastroiqBoardTile } from '../gameLogic.ts';
 import { physastroiqItemImageUrl } from '../physastroiqMediaUrl.ts';
+import { questionThemeImageUrl } from '../questionThemeImages.ts';
 import { playCorrectTone, playWrongTone } from '../sound.ts';
 import '../physastroiqTheme.css';
 
@@ -104,6 +105,12 @@ const GameBoardScreen: React.FC<Props> = ({
   const currentQuestion = questionsByPlayer[currentPlayer][questionIndexByPlayer[currentPlayer]];
   const tiles = orderTilesByPosition(buildBoardTiles(currentQuestion, levelQuestions, genericDecoyPoints));
   const tileLabels = neutralTileLabels(tiles);
+  // Своя картинка вопроса (викторина учителя) важнее; иначе — картинка темы.
+  // У <img> ниже есть data-testid, которого нет у «БиоIQ»: на нём держатся
+  // приёмочные проверки 2.13 и 3.8 — при переносе «как в БиоIQ» не терять.
+  const questionImageSrc = currentQuestion.questionImage
+    ? physastroiqItemImageUrl(currentQuestion.questionImage)
+    : questionThemeImageUrl(currentQuestion.theme);
 
   useEffect(() => {
     setElapsed(0);
@@ -266,9 +273,10 @@ const GameBoardScreen: React.FC<Props> = ({
         {/* Картинка СБОКУ от вопроса, а не над полем: поставленная сверху, она
             отнимала у поля ~170px высоты (замер на установленной сборке «БиоIQ»). */}
         <div style={QUESTION_ROW_STYLE}>
-          {currentQuestion.questionImage && (
+          {questionImageSrc && (
             <img
-              src={physastroiqItemImageUrl(currentQuestion.questionImage)}
+              data-testid="physastroiq-question-image"
+              src={questionImageSrc}
               alt=""
               width={QUESTION_IMAGE_WIDTH}
               height={QUESTION_IMAGE_HEIGHT}

@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="440" height="320" viewBox="0 0 880 640">
+  <defs>
+    <radialGradient id="glow" cx="50%" cy="46%" r="60%">
+      <stop offset="0%" stop-color="#ffb27c" stop-opacity="0.36"/>
+      <stop offset="100%" stop-color="#ffb27c" stop-opacity="0"/>
+    </radialGradient>
+    <pattern id="dots" width="40" height="40" patternUnits="userSpaceOnUse">
+      <circle cx="20" cy="20" r="2.5" fill="#ffb27c" fill-opacity="0.2"/>
+    </pattern>
+  </defs>
+  <rect width="880" height="640" rx="48" fill="#0d1620"/>
+  <rect width="880" height="640" rx="48" fill="url(#dots)"/>
+  <rect width="880" height="640" rx="48" fill="url(#glow)"/>
+  <rect x="10" y="10" width="860" height="620" rx="40" fill="none" stroke="#ffb27c" stroke-opacity="0.55" stroke-width="6"/>
+  
+    <path d="M 160 118 Q 160 140 182 140 Q 160 140 160 162 Q 160 140 138 140 Q 160 140 160 118 Z" fill="#ffffff" fill-opacity="0.8"/><path d="M 730 92 Q 730 120 758 120 Q 730 120 730 148 Q 730 120 702 120 Q 730 120 730 92 Z" fill="#ffffff" fill-opacity="0.8"/><path d="M 700 480 Q 700 500 720 500 Q 700 500 700 520 Q 700 500 680 500 Q 700 500 700 480 Z" fill="#ffffff" fill-opacity="0.8"/><path d="M 180 504 Q 180 520 196 520 Q 180 520 180 536 Q 180 520 164 520 Q 180 520 180 504 Z" fill="#ffffff" fill-opacity="0.8"/>
+    <g transform="rotate(-20 440 330)">
+      <path d="M 380 380 H 210 M 500 380 H 700" stroke="#9fb3c4" stroke-width="10" stroke-linecap="round"/>
+      <rect x="160" y="362" width="64" height="36" rx="8" fill="#9fb3c4"/>
+      <rect x="690" y="355" width="50" height="50" rx="6" fill="#ffb27c"/>
+      <path d="M 440 425 V 530" stroke="#9fb3c4" stroke-width="6" stroke-linecap="round"/>
+      <path d="M 340 268 L 440 205 L 540 268" fill="none" stroke="#9fb3c4" stroke-width="6"/>
+      <path d="M 440 330 V 205" stroke="#9fb3c4" stroke-width="10"/>
+      <circle cx="440" cy="200" r="14" fill="#ffb27c"/>
+      <path d="M 290 245 Q 440 430 590 245 Z" fill="#e8eef4"/>
+      <rect x="380" y="335" width="120" height="90" rx="10" fill="#2b4256" stroke="#e8eef4" stroke-width="8"/>
+    </g>
+</svg>
