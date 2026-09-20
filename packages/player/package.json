@@ -155,6 +155,7 @@
       "createDesktopShortcut": true,
       "createStartMenuShortcut": true,
       "runAfterFinish": false,
+      "include": "assets/installer.nsh",
       "shortcutName": "Kiosk Player",
       "artifactName": "${productName}-Setup-${version}.${ext}"
     },

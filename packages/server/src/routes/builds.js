@@ -8,6 +8,7 @@ import { dirname } from 'path';
 import crypto from 'crypto';
 import { convertIcoToPng } from '../utils/iconConvert.js';
 import { sanitizePackageName } from '../utils/packageName.js';
+import { withWindowsInstallIdentity } from '../utils/installIdentity.js';
 import { getBuildScript, selectBuildArtifacts } from '../utils/buildArtifacts.js';
 import { detectWindowMode } from '../utils/buildFlags.js';
 import { buildResetConfig } from '../utils/masterCode.js';
@@ -210,7 +211,11 @@ async function buildDistribution(buildId, projectData, appName, appId, iconPath,
     updateStatus('configuring', 20, 'Настройка параметров');
     
     const packageJsonPath = path.join(PLAYER_PATH, 'package.json');
-    const packageJson = JSON.parse(await fs.readFile(packageJsonPath, 'utf-8'));
+    // Своё имя пакета каждому приложению — иначе все они ставятся в одну папку
+    // и затирают друг друга (utils/installIdentity.js)
+    const packageJson = withWindowsInstallIdentity(
+      JSON.parse(await fs.readFile(packageJsonPath, 'utf-8')), appId, platform
+    );
 
     // Строка попадает в package.json, NSIS-скрипт и (для Linux) .desktop-файл —
     // убираем управляющие символы/переводы строк, чтобы кривой appName не

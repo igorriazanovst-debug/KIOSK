@@ -1,6 +1,7 @@
 const { app, BrowserWindow, ipcMain, dialog, Menu } = require('electron');
 const path = require('path');
 const fs = require('fs');
+const { sharedDeviceIdDir, readOrCreateDeviceId } = require('./common/deviceIdStore');
 const { registerChronoIpc } = require('./chrono/ipc');
 const { registerNatComIpc } = require('./natcom/ipc');
 const { registerMathmachineIpc } = require('./mathmachine/ipc');
@@ -1000,19 +1001,8 @@ function findNatComStudentWebDir() {
 }
 
 function getDeviceId() {
-  const configDir = app.getPath('userData');
-  const idFile = path.join(configDir, 'device-id.txt');
-  try {
-    if (fs.existsSync(idFile)) {
-      return fs.readFileSync(idFile, 'utf-8').trim();
-    }
-  } catch {}
-  const id = uuidv4();
-  try {
-    fs.mkdirSync(configDir, { recursive: true });
-    fs.writeFileSync(idFile, id);
-  } catch {}
-  return id;
+  // Общий на компьютер, а не на приложение — см. common/deviceIdStore.js
+  return readOrCreateDeviceId(sharedDeviceIdDir(app.getPath('appData')), uuidv4);
 }
 
 function getLocalIp() {
