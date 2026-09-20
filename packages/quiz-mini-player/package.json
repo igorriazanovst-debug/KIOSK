@@ -1,0 +1,14 @@
+{
+  "name": "@kiosk-platform/quiz-mini-player",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Мини-проигрыватель текстовых викторин: один HTML-файл, открывает викторину из Excel без установки и без сети",
+  "license": "UNLICENSED",
+  "scripts": {
+    "test": "node --test test/*.test.js",
+    "build": "node build.mjs"
+  },
+  "devDependencies": {
+    "xlsx": "https://cdn.sheetjs.com/xlsx-0.20.3/xlsx-0.20.3.tgz"
+  }
+}
