@@ -6,7 +6,7 @@
 // реализации Тип11_ФизАстроIQ.
 
 import React, { useEffect, useState } from 'react';
-import { listQuizzes, loadQuiz, saveQuiz, deleteQuiz, exportQuizFile, importQuizFile, type QuizListEntry } from './quizStore.ts';
+import { listQuizzes, loadQuiz, saveQuiz, deleteQuiz, exportQuizFile, exportStandaloneQuiz, importQuizFile, type QuizListEntry, type StandaloneExportRequest } from './quizStore.ts';
 import { verifySecret } from './pinAuth.ts';
 import NewQuizModal, { type NewQuizResult } from './NewQuizModal.tsx';
 import { PHYSASTROIQ_QUIZ_SCHEMA_VERSION, type PhysastroiqQuiz } from '../model/schema.ts';
@@ -67,7 +67,7 @@ async function buildBlankQuiz(result: NewQuizResult): Promise<{ quiz: Physastroi
   return { quiz, pendingLevel1Image: { buffer: result.level1ImageBuffer, mimeType: result.level1ImageMimeType } };
 }
 
-type PendingAction = 'edit' | 'delete' | 'duplicate' | 'export';
+type PendingAction = 'edit' | 'delete' | 'duplicate' | 'export' | 'export-standalone';
 
 const QuizCatalogScreen: React.FC<Props> = ({ builtinQuizzes, activeQuizId, onSetActiveQuiz, onEditQuiz, onDuplicateBuiltin, onShowDailyStats, onExit }) => {
   const [entries, setEntries] = useState<QuizListEntry[]>([]);
@@ -137,8 +137,40 @@ const QuizCatalogScreen: React.FC<Props> = ({ builtinQuizzes, activeQuizId, onSe
       await refresh();
       return;
     }
+    if (action === 'export-standalone') {
+      const quiz = await loadQuiz(quizId);
+      if (!quiz) {
+        alert('Не удалось открыть викторину — файл повреждён или удалён.');
+        await refresh();
+        return;
+      }
+      await exportStandaloneFlow(quizId, { quizJson: JSON.stringify(quiz), suggestedFileName: quiz.title });
+      return;
+    }
     // action === 'export'
     await exportQuizFlow(quizId);
+  }
+
+  // FR-019 — викторина «для запуска без установки»: таблица Excel с текстом
+  // вопросов и рядом player.html. Карты и картинки не выгружаются: проигрыватель
+  // текстовый, ответ в нём — выбор из четырёх вариантов.
+  async function exportStandaloneFlow(rowId: string, request: StandaloneExportRequest) {
+    setExportingId(rowId);
+    try {
+      const result = await exportStandaloneQuiz(request);
+      if (result.ok) {
+        alert(`Готово. В папке два файла:
+
+• ${result.quizFile}
+• ${result.playerFile}
+
+Откройте player.html в любом браузере и выберите файл викторины. Установка и интернет не нужны.`);
+      } else if (!result.canceled) {
+        alert(`Не удалось сохранить файлы.${result.error ? ' ' + result.error : ''}`);
+      }
+    } finally {
+      setExportingId(null);
+    }
   }
 
   // FR-013 (Фаза 5) - собрать самодостаточный файл (викторина + base64 всех
@@ -234,6 +266,14 @@ const QuizCatalogScreen: React.FC<Props> = ({ builtinQuizzes, activeQuizId, onSe
               <button onClick={() => onDuplicateBuiltin(builtin.id).then(refresh)} className="ciq-btn ciq-btn-muted ciq-btn-small">
                 Дублировать
               </button>
+              <button
+                onClick={() => exportStandaloneFlow(builtin.id, { builtinId: builtin.id, suggestedFileName: `ФизАстроIQ — ${builtin.title}` })}
+                disabled={exportingId === builtin.id}
+                className="ciq-btn ciq-btn-muted ciq-btn-small"
+                data-testid={`physastroiq-standalone-${builtin.id}`}
+              >
+                {exportingId === builtin.id ? 'Экспорт…' : 'Без установки'}
+              </button>
             </div>
           );
         })}
@@ -258,6 +298,13 @@ const QuizCatalogScreen: React.FC<Props> = ({ builtinQuizzes, activeQuizId, onSe
               className="ciq-btn ciq-btn-muted ciq-btn-small"
             >
               {exportingId === entry.id ? 'Экспорт…' : 'Экспорт в файл'}
+            </button>
+            <button
+              onClick={() => requirePasswordThen(entry, 'export-standalone')}
+              disabled={exportingId === entry.id}
+              className="ciq-btn ciq-btn-muted ciq-btn-small"
+            >
+              Без установки
             </button>
             <button onClick={() => requirePasswordThen(entry, 'delete')} className="ciq-btn ciq-btn-danger ciq-btn-small">
               Удалить

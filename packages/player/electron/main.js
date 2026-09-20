@@ -9,6 +9,7 @@ const { registerRusiqIpc } = require('./rusiq/ipc');
 const { registerChimiqIpc } = require('./chimiq/ipc');
 const { registerBioiqIpc } = require('./bioiq/ipc');
 const { registerPhysastroiqIpc } = require('./physastroiq/ipc');
+const { exportStandalone: exportPhysastroiqStandalone, sanitizeFileName: sanitizeStandaloneFileName } = require('./physastroiq/standaloneExport');
 const { registerWordsIpc } = require('./words/ipc');
 const { registerAlphabetIpc } = require('./alphabet/ipc');
 const { registerInophoneIpc } = require('./inophone/ipc');
@@ -1417,6 +1418,34 @@ app.whenReady().then(() => {
     } catch (err) {
       fileLog('[physastroiq] import failed:', err && err.message);
       return { ok: false };
+    }
+  });
+
+  // FR-019: викторина «для запуска без установки» — таблица Excel и рядом
+  // player.html (см. physastroiq/standaloneExport.js). Путь выбирает человек в
+  // системном диалоге; из окна приходит только содержимое и желаемое имя.
+  const PHYSASTROIQ_STANDALONE_MAX_JSON = 5 * 1024 * 1024;
+  ipcMain.handle('physastroiq:export-standalone', async (_event, request) => {
+    try {
+      if (!request || typeof request !== 'object') return { ok: false };
+      const builtinId = typeof request.builtinId === 'string' ? request.builtinId : null;
+      let quiz = null;
+      if (!builtinId) {
+        if (typeof request.quizJson !== 'string' || request.quizJson.length === 0 || request.quizJson.length > PHYSASTROIQ_STANDALONE_MAX_JSON) return { ok: false };
+        quiz = JSON.parse(request.quizJson);
+      }
+      const wishedName = typeof request.suggestedFileName === 'string' ? request.suggestedFileName : '';
+      const safeName = sanitizeStandaloneFileName(wishedName);
+      const result = await dialog.showSaveDialog(mainWindow, {
+        defaultPath: safeName + '.xlsx',
+        filters: [{ name: 'Викторина для мини-проигрывателя (Excel)', extensions: ['xlsx'] }]
+      });
+      if (result.canceled || !result.filePath) return { ok: false, canceled: true };
+      const targetPath = /\.xlsx$/i.test(result.filePath) ? result.filePath : result.filePath + '.xlsx';
+      return exportPhysastroiqStandalone({ targetPath, quiz, builtinId });
+    } catch (err) {
+      fileLog('[physastroiq] standalone export failed:', err && err.message);
+      return { ok: false, error: err && err.message ? String(err.message) : 'Неизвестная ошибка' };
     }
   });
 

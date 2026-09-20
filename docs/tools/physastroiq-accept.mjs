@@ -373,6 +373,17 @@ if (want(5)) {
   ok('5.3', 'есть пошаговое создание викторины с нуля (FR-018)', /СОЗДАТЬ НОВУЮ/i.test(catalog));
   ok('5.4', 'есть обмен викторинами (FR-014)', /ИМПОРТИРОВАТЬ/i.test(catalog));
 
+  // FR-019. Сам экспорт открывает системный диалог сохранения — им прогон не
+  // управляет; запись файлов проверена тестами electron/physastroiq/standaloneExport.test.js.
+  // Здесь проверяется то, что тесты не видят: кнопка есть у ОБЕИХ встроенных
+  // викторин и мост до главного процесса в этой сборке действительно проложен.
+  const standalone = JSON.parse(await ev(`JSON.stringify({
+    buttons: document.querySelectorAll('[data-testid^="physastroiq-standalone-"]').length,
+    api: typeof (window.physastroiqAPI && window.physastroiqAPI.exportStandalone)
+  })`));
+  ok('5.7', 'у обеих встроенных викторин есть экспорт «без установки» (FR-019)',
+    standalone.buttons === 2 && standalone.api === 'function', JSON.stringify(standalone));
+
   await click('Статистика по дням');
   await wait(900);
   const stats = await text();

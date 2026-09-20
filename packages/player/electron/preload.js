@@ -181,6 +181,7 @@ contextBridge.exposeInMainWorld('physastroiqAPI', {
     ipcRenderer.invoke('physastroiq:save-quiz-item-image', quizId, questionId, kind, arrayBuffer, mimeType),
   deleteQuizItemImage: (fileName) => ipcRenderer.invoke('physastroiq:delete-quiz-item-image', fileName),
   exportQuiz: (fileContentJson, suggestedFileName) => ipcRenderer.invoke('physastroiq:export-quiz', fileContentJson, suggestedFileName),
+  exportStandalone: (request) => ipcRenderer.invoke('physastroiq:export-standalone', request),
   importQuiz: () => ipcRenderer.invoke('physastroiq:import-quiz')
 });
 

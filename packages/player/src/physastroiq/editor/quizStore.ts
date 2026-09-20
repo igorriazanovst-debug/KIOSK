@@ -38,6 +38,8 @@ interface PhysastroiqEditorAPI {
   ) => Promise<{ ok: boolean; fileName?: string }>;
   deleteQuizItemImage: (fileName: string) => Promise<{ ok: boolean }>;
   exportQuiz: (fileContentJson: string, suggestedFileName: string) => Promise<{ ok: boolean; filePath?: string; canceled?: boolean }>;
+  /** Нет у плеера старой сборки — поэтому необязателен */
+  exportStandalone?: (request: StandaloneExportRequest) => Promise<StandaloneExportResult>;
   importQuiz: () => Promise<{ ok: boolean; content?: string; canceled?: boolean }>;
 }
 
@@ -139,6 +141,36 @@ export async function exportQuizFile(fileContentJson: string, suggestedFileName:
     return await api.exportQuiz(fileContentJson, suggestedFileName);
   } catch {
     return { ok: false };
+  }
+}
+
+export interface StandaloneExportRequest {
+  /** Встроенная викторина: отдаётся готовый текстовый банк */
+  builtinId?: string;
+  /** Своя викторина: её JSON, из которого возьмётся только текст */
+  quizJson?: string;
+  suggestedFileName: string;
+}
+
+export interface StandaloneExportResult {
+  ok: boolean;
+  canceled?: boolean;
+  quizFile?: string;
+  playerFile?: string;
+  error?: string;
+}
+
+/**
+ * FR-019: викторина «для запуска без установки» — таблица Excel и рядом
+ * player.html, который открывается в любом браузере.
+ */
+export async function exportStandaloneQuiz(request: StandaloneExportRequest): Promise<StandaloneExportResult> {
+  const api = getEditorAPI();
+  if (!api || !api.exportStandalone) return { ok: false, error: 'Эта сборка приложения не умеет такой экспорт.' };
+  try {
+    return await api.exportStandalone(request);
+  } catch (err) {
+    return { ok: false, error: err instanceof Error ? err.message : 'Неизвестная ошибка' };
   }
 }
 
