@@ -3,7 +3,7 @@ const assert = require('node:assert/strict');
 const fs = require('node:fs');
 const os = require('node:os');
 const path = require('node:path');
-const { sharedDeviceIdDir, readOrCreateDeviceId } = require('./deviceIdStore.js');
+const { sharedDeviceIdDir, resolveDeviceIdDir, readOrCreateDeviceId } = require('./deviceIdStore.js');
 
 const tempDir = () => fs.mkdtempSync(path.join(os.tmpdir(), 'kiosk-deviceid-'));
 
@@ -59,4 +59,40 @@ test('гонка первого запуска: если файл появилс
     assert.equal(readOrCreateDeviceId(dir, makeId), 'winner-id');
     assert.equal(fs.readFileSync(path.join(dir, 'device-id.txt'), 'utf-8'), 'winner-id');
   } finally { fs.rmSync(dir, { recursive: true, force: true }); }
+});
+
+test('по умолчанию идентификатор общий на компьютер — поведение прежних сборок не меняется', () => {
+  const appData = path.join('C:', 'Users', 'u', 'AppData', 'Roaming');
+  const userData = path.join(appData, 'Своё приложение');
+  assert.equal(resolveDeviceIdDir({ appDataDir: appData, userDataDir: userData }), sharedDeviceIdDir(appData));
+  assert.equal(resolveDeviceIdDir({ perApp: false, appDataDir: appData, userDataDir: userData }), sharedDeviceIdDir(appData));
+});
+
+test('perApp=true — идентификатор лежит в профиле самого приложения, у каждого приложения свой', () => {
+  const appData = path.join('C:', 'Users', 'u', 'AppData', 'Roaming');
+  const chem = path.join(appData, 'Химия');
+  const bio = path.join(appData, 'Биология');
+  assert.equal(resolveDeviceIdDir({ perApp: true, appDataDir: appData, userDataDir: chem }), chem);
+  assert.notEqual(
+    resolveDeviceIdDir({ perApp: true, appDataDir: appData, userDataDir: chem }),
+    resolveDeviceIdDir({ perApp: true, appDataDir: appData, userDataDir: bio })
+  );
+});
+
+test('perApp включается только строгим true — строка "false" или 1 не должны его включать', () => {
+  const appData = path.join('C:', 'a');
+  const userData = path.join('C:', 'a', 'app');
+  for (const bad of ['true', 'false', 1, {}, null]) {
+    assert.equal(resolveDeviceIdDir({ perApp: bad, appDataDir: appData, userDataDir: userData }), sharedDeviceIdDir(appData));
+  }
+});
+
+test('два приложения с perApp получают разные идентификаторы на одном компьютере', () => {
+  const root = tempDir();
+  try {
+    const a = readOrCreateDeviceId(resolveDeviceIdDir({ perApp: true, appDataDir: root, userDataDir: path.join(root, 'A') }), () => 'id-a');
+    const b = readOrCreateDeviceId(resolveDeviceIdDir({ perApp: true, appDataDir: root, userDataDir: path.join(root, 'B') }), () => 'id-b');
+    assert.equal(a, 'id-a');
+    assert.equal(b, 'id-b');
+  } finally { fs.rmSync(root, { recursive: true, force: true }); }
 });

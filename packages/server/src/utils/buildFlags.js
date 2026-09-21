@@ -22,3 +22,29 @@ export function detectWindowMode(projectData) {
     (widget) => widget && typeof widget === 'object' && widget.type === CHRONOLINE_WIDGET_TYPE
   );
 }
+
+/**
+ * perAppDeviceId: сборка получает собственный идентификатор устройства (а не
+ * общий на компьютер) — нужно, когда у каждого приложения своя лицензия со
+ * своим лимитом мест. Включается только явным запросом админа при сборке.
+ * @param {unknown} value - значение поля из тела запроса (JSON или multipart)
+ * @returns {boolean}
+ */
+export function isPerAppDeviceIdRequested(value) {
+  return value === true || value === 'true';
+}
+
+/**
+ * Единственное место, где флаг perAppDeviceId попадает в project.json сборки.
+ * Значение определяется ТОЛЬКО запросом админа: то, что лежит в данных проекта
+ * (их пишет клиент), отбрасывается — иначе клиент включил бы режим сам и занял
+ * бы больше мест лицензии, чем ему выдано.
+ * @param {unknown} projectData
+ * @param {boolean} requested
+ * @returns {unknown} копия проекта; входной объект не меняется
+ */
+export function applyPerAppDeviceId(projectData, requested) {
+  if (!projectData || typeof projectData !== 'object') return projectData;
+  const { perAppDeviceId: _stored, ...rest } = projectData;
+  return requested === true ? { ...rest, perAppDeviceId: true } : rest;
+}

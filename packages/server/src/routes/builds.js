@@ -10,7 +10,7 @@ import { convertIcoToPng } from '../utils/iconConvert.js';
 import { sanitizePackageName } from '../utils/packageName.js';
 import { withWindowsInstallIdentity } from '../utils/installIdentity.js';
 import { getBuildScript, selectBuildArtifacts } from '../utils/buildArtifacts.js';
-import { detectWindowMode } from '../utils/buildFlags.js';
+import { detectWindowMode, isPerAppDeviceIdRequested, applyPerAppDeviceId } from '../utils/buildFlags.js';
 import { buildResetConfig } from '../utils/masterCode.js';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -163,7 +163,7 @@ function runCommand(command, args, cwd) {
 }
 
 // Функция сборки дистрибутива
-async function buildDistribution(buildId, projectData, appName, appId, iconPath, serverBaseUrl = 'http://localhost:3002', licenseKey = null, platform = 'win') {
+async function buildDistribution(buildId, projectData, appName, appId, iconPath, serverBaseUrl = 'http://localhost:3002', licenseKey = null, platform = 'win', perAppDeviceId = false) {
   const updateStatus = (status, progress, message) => {
     builds.set(buildId, {
       ...builds.get(buildId),
@@ -179,7 +179,8 @@ async function buildDistribution(buildId, projectData, appName, appId, iconPath,
 
     // 1. Копируем проект в player/electron/project.json
     // Заменяем относительные URL на абсолютные чтобы Electron мог загрузить файлы
-    const resolvedProjectData = resolveProjectUrls(projectData, serverBaseUrl);
+    // Флаг perAppDeviceId берётся только из запроса админа, не из данных проекта
+    const resolvedProjectData = resolveProjectUrls(applyPerAppDeviceId(projectData, perAppDeviceId), serverBaseUrl);
 
     // Добавляем serverUrl и licenseKeyHash для аутентификации плеера
     resolvedProjectData.serverUrl = serverBaseUrl;
@@ -616,7 +617,7 @@ router.post('/for-license/:licenseId', async (req, res, next) => {
       projectData.id = projectId;
     }
 
-    buildDistribution(buildId, projectData, appName, appId, req.file?.path, serverBaseUrl, license.licenseKey, platform).catch(err => {
+    buildDistribution(buildId, projectData, appName, appId, req.file?.path, serverBaseUrl, license.licenseKey, platform, isPerAppDeviceIdRequested(req.body.perAppDeviceId)).catch(err => {
       console.error(`Build ${buildId} failed:`, err);
     });
   } catch (error) {

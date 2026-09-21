@@ -1,6 +1,7 @@
 // packages/player/electron/common/deviceIdStore.js
 //
-// Идентификатор устройства — ОДИН НА КОМПЬЮТЕР, а не на приложение.
+// Идентификатор устройства — по умолчанию ОДИН НА КОМПЬЮТЕР, а не на приложение
+// (исключение — сборки с perAppDeviceId, см. resolveDeviceIdDir ниже).
 //
 // Сервер считает занятые места лицензии по deviceId. Раньше идентификатор
 // лежал в профиле приложения (userData), и это было одно и то же место у всех
@@ -20,6 +21,18 @@ const DEVICE_ID_FILE = 'device-id.txt';
 
 function sharedDeviceIdDir(appDataDir) {
   return path.join(appDataDir, '@kiosk-platform', 'player');
+}
+
+// perApp — только строгий true из project.json сборки (см. server/src/utils/
+// buildFlags.js). Нужен, когда каждому приложению выдаётся своя лицензия со
+// своим лимитом мест: общий идентификатор закрепил бы компьютер за лицензией
+// первого установленного приложения, и остальные не получили бы доступ к своему
+// проекту. Сборки без флага работают как раньше — идентификатор общий.
+// Внимание: приложение, пересобранное с флагом и установленное поверх старой
+// версии, получит НОВЫЙ идентификатор и займёт новое место; старое освобождают
+// вручную (DELETE /api/admin/devices/:id).
+function resolveDeviceIdDir({ perApp, appDataDir, userDataDir }) {
+  return perApp === true ? userDataDir : sharedDeviceIdDir(appDataDir);
 }
 
 function readStoredId(idFile) {
@@ -62,4 +75,4 @@ function readOrCreateDeviceId(dir, makeId) {
   return id;
 }
 
-module.exports = { sharedDeviceIdDir, readOrCreateDeviceId };
+module.exports = { sharedDeviceIdDir, resolveDeviceIdDir, readOrCreateDeviceId };

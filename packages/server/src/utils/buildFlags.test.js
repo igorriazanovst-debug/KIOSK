@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { detectWindowMode } from './buildFlags.js';
+import { detectWindowMode, isPerAppDeviceIdRequested, applyPerAppDeviceId } from './buildFlags.js';
 
 test('detectWindowMode is false for a project with no widgets', () => {
   assert.equal(detectWindowMode({ widgets: [] }), false);
@@ -60,4 +60,44 @@ test('detectWindowMode ignores malformed entries inside widgets array', () => {
     }),
     false
   );
+});
+
+test('isPerAppDeviceIdRequested is false when the flag is absent', () => {
+  assert.equal(isPerAppDeviceIdRequested(undefined), false);
+  assert.equal(isPerAppDeviceIdRequested(null), false);
+  assert.equal(isPerAppDeviceIdRequested(''), false);
+});
+
+test('isPerAppDeviceIdRequested accepts boolean true and the string "true" (multipart/JSON bodies)', () => {
+  assert.equal(isPerAppDeviceIdRequested(true), true);
+  assert.equal(isPerAppDeviceIdRequested('true'), true);
+});
+
+test('isPerAppDeviceIdRequested rejects everything else, including "false", "1" and objects', () => {
+  for (const v of [false, 'false', '1', 1, 'yes', {}, []]) {
+    assert.equal(isPerAppDeviceIdRequested(v), false, String(v));
+  }
+});
+
+test('applyPerAppDeviceId sets the flag only when requested', () => {
+  assert.equal(applyPerAppDeviceId({ id: 'p', widgets: [] }, true).perAppDeviceId, true);
+  assert.equal('perAppDeviceId' in applyPerAppDeviceId({ id: 'p' }, false), false);
+});
+
+test('applyPerAppDeviceId strips a flag smuggled in via the stored project data', () => {
+  const stored = { id: 'p', perAppDeviceId: true, widgets: [] };
+  assert.equal('perAppDeviceId' in applyPerAppDeviceId(stored, false), false);
+  assert.equal(applyPerAppDeviceId(stored, true).perAppDeviceId, true);
+});
+
+test('applyPerAppDeviceId does not mutate its input and keeps other fields', () => {
+  const stored = { id: 'p', name: 'X', perAppDeviceId: true };
+  const out = applyPerAppDeviceId(stored, false);
+  assert.equal(stored.perAppDeviceId, true);
+  assert.deepEqual(out, { id: 'p', name: 'X' });
+});
+
+test('applyPerAppDeviceId passes non-objects through untouched', () => {
+  assert.equal(applyPerAppDeviceId(null, true), null);
+  assert.equal(applyPerAppDeviceId('str', true), 'str');
 });

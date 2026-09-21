@@ -1,7 +1,7 @@
 const { app, BrowserWindow, ipcMain, dialog, Menu } = require('electron');
 const path = require('path');
 const fs = require('fs');
-const { sharedDeviceIdDir, readOrCreateDeviceId } = require('./common/deviceIdStore');
+const { resolveDeviceIdDir, readOrCreateDeviceId } = require('./common/deviceIdStore');
 const { registerChronoIpc } = require('./chrono/ipc');
 const { registerNatComIpc } = require('./natcom/ipc');
 const { registerMathmachineIpc } = require('./mathmachine/ipc');
@@ -110,6 +110,8 @@ let mainWindow = null;
 let activationWindow = null;
 let allowActivationClose = false;
 let currentProject = null;
+// perAppDeviceId: режим идентификатора устройства из встроенного project.json (см. common/deviceIdStore.js)
+let perAppDeviceId = false;
 let chronoBaseDir = null;
 let natcomBaseDir = null;
 let wordsAssetsDir = null;
@@ -448,6 +450,9 @@ function loadEmbeddedProject() {
       try {
         const projectData = fs.readFileSync(projectPath, 'utf-8');
         currentProject = JSON.parse(projectData);
+        // Читается один раз из встроенного project.json: currentProject
+        // потом пересобирается из ответов сервера и этого флага не несёт.
+        perAppDeviceId = currentProject.perAppDeviceId === true;
         console.log(`✅ Project loaded from: ${projectPath}`);
         console.log(`   Name: ${currentProject.name || 'unnamed'}`);
         console.log(`   Widgets: ${currentProject.widgets ? currentProject.widgets.length : 0}`);
@@ -1002,8 +1007,13 @@ function findNatComStudentWebDir() {
 }
 
 function getDeviceId() {
-  // Общий на компьютер, а не на приложение — см. common/deviceIdStore.js
-  return readOrCreateDeviceId(sharedDeviceIdDir(app.getPath('appData')), uuidv4);
+  // Общий на компьютер, а не на приложение — см. common/deviceIdStore.js;
+  // исключение — сборки с perAppDeviceId (своя лицензия у каждого приложения)
+  return readOrCreateDeviceId(resolveDeviceIdDir({
+    perApp: perAppDeviceId,
+    appDataDir: app.getPath('appData'),
+    userDataDir: app.getPath('userData')
+  }), uuidv4);
 }
 
 function getLocalIp() {
