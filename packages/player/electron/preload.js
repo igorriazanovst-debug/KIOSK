@@ -292,3 +292,11 @@ contextBridge.exposeInMainWorld('inophoneAPI', {
     ipcRenderer.invoke('inophone:record-session', profileId, sceneId, byLanguage),
   clearStatistics: (profileId) => ipcRenderer.invoke('inophone:clear-statistics', profileId)
 });
+
+// Виджет «ЭУМК» («Инфосреда»): хранилище «ключ - строка» в файле профиля
+// приложения. Вызовы синхронные, ответ - {ok, value|error}; разбирает его
+// рендерер (src/eumk/persistentStorage.ts).
+contextBridge.exposeInMainWorld('eumkAPI', {
+  getItem: (key) => ipcRenderer.sendSync('eumk:get-item', key),
+  setItem: (key, value) => ipcRenderer.sendSync('eumk:set-item', key, value)
+});

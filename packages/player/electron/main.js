@@ -9,6 +9,7 @@ const { registerRusiqIpc } = require('./rusiq/ipc');
 const { registerChimiqIpc } = require('./chimiq/ipc');
 const { registerBioiqIpc } = require('./bioiq/ipc');
 const { registerPhysastroiqIpc } = require('./physastroiq/ipc');
+const { registerEumkIpc } = require('./eumk/ipc');
 const { exportStandalone: exportPhysastroiqStandalone, sanitizeFileName: sanitizeStandaloneFileName } = require('./physastroiq/standaloneExport');
 const { registerWordsIpc } = require('./words/ipc');
 const { registerAlphabetIpc } = require('./alphabet/ipc');
@@ -1286,6 +1287,15 @@ app.whenReady().then(() => {
     fileLog('[physastroiq] storage dir:', physastroiqBaseDir, physastroiqIsFallback ? '(fallback: no write access to shared dir)' : '');
   } catch (err) {
     fileLog('[physastroiq] failed to initialize local storage:', err && err.message);
+  }
+
+  // Учётные записи и результаты виджета «ЭУМК» - файл в профиле приложения
+  // (каналы 'eumk:*'): localStorage терялся при внезапном завершении процесса.
+  try {
+    const { baseDir: eumkBaseDir } = registerEumkIpc({ ipcMain, app });
+    fileLog('[eumk] data dir:', eumkBaseDir);
+  } catch (err) {
+    fileLog('[eumk] failed to initialize local storage:', err && err.message);
   }
 
   // FR-013/FR-018 (Фаза 2b) - экспорт/импорт файла викторины между

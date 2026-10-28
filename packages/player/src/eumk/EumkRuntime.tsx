@@ -15,6 +15,7 @@ import CasesScreen from './screens/CasesScreen.tsx';
 import ReferencesScreen from './screens/ReferencesScreen.tsx';
 import ResultsScreen from './screens/ResultsScreen.tsx';
 import ErrorBoundary from './components/ErrorBoundary.tsx';
+import { pickStorage, type StorageHost } from './persistentStorage.ts';
 
 interface Props {
   properties: { title?: string; content?: unknown };
@@ -24,12 +25,9 @@ const SECTION_TITLES: Record<Section, string> = {
   theory: 'Теория', test: 'Итоговый тест', tasks: 'Практические задания', games: 'Игры', cases: 'Кейсы', references: 'Справочные материалы', results: 'Мои результаты',
 };
 
-function browserStorage(): Storage | null {
-  try {
-    return window.localStorage;
-  } catch {
-    return null;
-  }
+// В собранном приложении данные лежат в файле профиля (мост eumkAPI), в браузере - в localStorage.
+function appStorage() {
+  return pickStorage(window as unknown as StorageHost);
 }
 
 function Shell({ title, user, onBack, onSwitch, children }: { title: string; user: string | null; onBack: (() => void) | null; onSwitch: (() => void) | null; children: React.ReactNode }) {
@@ -63,7 +61,7 @@ export default function EumkRuntime({ properties }: Props) {
 }
 
 function Loaded({ content }: { content: EumkContent }) {
-  const storage = useMemo(browserStorage, []);
+  const storage = useMemo(appStorage, []);
   const initial = useMemo(() => (storage ? loadUserData(storage, content.id) : { status: 'empty' as const, data: { schemaVersion: 1 as const, accounts: [], results: [], taskProgress: {}, soundOn: true } }), [storage, content.id]);
   const [data, setData] = useState<EumkUserData>(initial.data);
   const [corrupt, setCorrupt] = useState(initial.status === 'corrupt');
