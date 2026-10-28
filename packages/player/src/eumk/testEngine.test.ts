@@ -128,3 +128,17 @@ test('formatDuration renders minutes and seconds', () => {
   assert.equal(formatDuration(65), '1 мин 05 с');
   assert.equal(formatDuration(3725), '62 мин 05 с');
 });
+
+test('buildTest flags isRepeat when every combination has been issued', () => {
+  const bank = makeBank(1, 2);
+  const first = buildTest({ bank, count: 2, rng: seededRng(1), previousSignatures: [] });
+  assert.equal(first.isRepeat, false);
+  const second = buildTest({ bank, count: 2, rng: seededRng(2), previousSignatures: [first.signature] });
+  assert.equal(second.isRepeat, true);
+});
+
+test('buildTest fills a short block from the others when blocks are uneven', () => {
+  const bank = [...makeBank(1, 1), ...makeBank(9, 1).map((q) => ({ ...q, id: `z-${q.id}`, block: 'b9' }))];
+  const t = buildTest({ bank, count: 6, rng: seededRng(3), previousSignatures: [] });
+  assert.equal(t.questions.length, 6);
+});

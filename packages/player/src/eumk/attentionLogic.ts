@@ -172,6 +172,7 @@ export interface PlayOutcome {
 
 export function starsFor(outcome: PlayOutcome, level: AttentionLevel, data: AttentionData): 0 | 1 | 2 | 3 {
   if (!outcome.finished) return 0;
+  if (!(level.timeLimitSec > 0)) return 0;
   const share = effectiveSeconds(outcome.seconds, outcome.errors, level) / level.timeLimitSec;
   const fits = (rule: StarRule) => outcome.errors <= rule.maxErrors && share <= rule.maxTimeShare;
   if (fits(data.scoring.stars3)) return 3;

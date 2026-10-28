@@ -42,8 +42,15 @@ export interface ObservationData {
 
 export const SCENES_PER_PLAY = 4;
 
+const DEFAULT_TOLERANCE = 7;
+
+function toleranceOf(value: unknown): number {
+  const n = Number(value);
+  return Number.isFinite(n) && n > 0 ? n : DEFAULT_TOLERANCE;
+}
+
 export function observationData(game: EumkGame): ObservationData {
-  return { scenes: (game.data.scenes ?? []) as ObservationScene[], tolerance: Number(game.data.tolerance ?? 7) };
+  return { scenes: (game.data.scenes ?? []) as ObservationScene[], tolerance: toleranceOf(game.data.tolerance) };
 }
 
 export function observationLevels(data: ObservationData): number[] {
@@ -71,14 +78,18 @@ export function tapScene(play: ScenePlay, point: { x: number; y: number }, toler
   let nearest = -1;
   let nearestDistance = Infinity;
   play.scene.differences.forEach((d, index) => {
+    if (play.found.includes(index)) return;
     const distance = Math.hypot(d.x - point.x, d.y - point.y);
     if (distance <= tolerance && distance < nearestDistance) {
       nearest = index;
       nearestDistance = distance;
     }
   });
-  if (nearest === -1) return { ...play, errors: play.errors + 1 };
-  if (play.found.includes(nearest)) return play;
+  if (nearest === -1) {
+    // Нажатие рядом с уже найденным отличием - не ошибка.
+    const nearFound = play.found.some((i) => Math.hypot(play.scene.differences[i].x - point.x, play.scene.differences[i].y - point.y) <= tolerance);
+    return nearFound ? play : { ...play, errors: play.errors + 1 };
+  }
   const found = [...play.found, nearest];
   return { ...play, found, finished: found.length === play.scene.differences.length };
 }

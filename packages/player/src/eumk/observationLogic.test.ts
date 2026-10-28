@@ -65,3 +65,16 @@ test('scenesForLevel returns a bounded random selection without repeats', () => 
   assert.ok(picked.length <= 2);
   assert.equal(new Set(picked.map((s) => s.id)).size, picked.length);
 });
+
+test('a tap near a found and an unfound difference finds the unfound one', () => {
+  const close: ObservationScene = { ...scene, differences: [{ kind: 'a', object: 'a', x: 50, y: 50, text: 'A' }, { kind: 'b', object: 'b', x: 54, y: 50, text: 'B' }] };
+  let play = tapScene(startScenePlay(close), { x: 50, y: 50 }, 7);
+  play = tapScene(play, { x: 51, y: 50 }, 7);
+  assert.deepEqual(play.found, [0, 1]);
+  assert.equal(play.errors, 0);
+});
+
+test('a non-numeric tolerance falls back to the default', () => {
+  const g = content.games.find((x) => x.type === 'observation')!;
+  assert.equal(observationData({ ...g, data: { ...g.data, tolerance: 'мусор' } }).tolerance, 7);
+});

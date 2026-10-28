@@ -35,7 +35,18 @@ export function loadUserData(storage: KeyValueStorage, contentId: string): Loade
   try {
     return { status: 'ok', data: EumkUserDataSchema.parse(JSON.parse(raw)) };
   } catch {
+    backupCorrupt(storage, contentId, raw);
     return { status: 'corrupt', data: emptyUserData() };
+  }
+}
+
+// Повреждённые данные сохраняются рядом под другим ключом: новая запись
+// не должна стереть единственную копию, из которой можно что-то спасти.
+function backupCorrupt(storage: KeyValueStorage, contentId: string, raw: string): void {
+  try {
+    storage.setItem(`${storageKey(contentId)}:corrupt`, raw);
+  } catch {
+    // нет места для копии - ничего не поделать
   }
 }
 

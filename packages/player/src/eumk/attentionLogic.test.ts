@@ -126,3 +126,8 @@ test('starsFor follows the scoring thresholds', () => {
   assert.equal(starsFor({ errors: 0, seconds: 59, finished: true }, level, data), 1);
   assert.equal(starsFor({ errors: 0, seconds: 10, finished: false }, level, data), 0);
 });
+
+test('starsFor gives 0 stars instead of NaN when the time limit is missing', () => {
+  const level = { ...levels[0], timeLimitSec: 0 };
+  assert.equal(starsFor({ errors: 0, seconds: 1, finished: true }, level, data), 0);
+});

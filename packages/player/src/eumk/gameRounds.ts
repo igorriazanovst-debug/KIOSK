@@ -6,7 +6,7 @@
 // своих модулях (attentionLogic.ts, observationLogic.ts).
 
 import { pickWithoutRepeat, shuffled, type Rng } from './rng.ts';
-import type { EumkGame, EumkTask } from './model/schema.ts';
+import { TaskSchema, type EumkGame, type EumkTask } from './model/schema.ts';
 
 export const ROUND_GAME_TYPES: readonly EumkGame['type'][] = ['syllables', 'logic', 'costume', 'sequence', 'speech', 'ecology', 'math'];
 export const ROUNDS_PER_PLAY = 10;
@@ -38,7 +38,7 @@ const LABELS: Record<string, string> = {
 
 function label(value: unknown): string {
   const text = String(value);
-  return LABELS[text] ?? text;
+  return Object.prototype.hasOwnProperty.call(LABELS, text) ? LABELS[text] : text;
 }
 
 function rows(game: EumkGame, key: string): Row[] {
@@ -114,7 +114,7 @@ function syllableRounds(game: EumkGame, level: number, rng: Rng): GameRound[] {
 function costumeRounds(game: EumkGame, _level: number, rng: Rng): GameRound[] {
   return pickWithoutRepeat(rows(game, 'heroes'), ROUNDS_PER_PLAY, rng).map((h) => {
     const right = pickWithoutRepeat((h.correct as unknown[]).map(String), 3, rng);
-    const wrong = pickWithoutRepeat((h.wrong as unknown[]).map(String), 3, rng);
+    const wrong = pickWithoutRepeat((h.wrong as unknown[]).map(String).filter((w) => !right.includes(w)), 3, rng);
     const options = shuffled([...right, ...wrong], rng);
     return round(`${game.id}-${str(h, 'hero')}`, {
       id: `${game.id}-${str(h, 'hero')}`, block: '', section: '', title: str(h, 'hero'),
@@ -242,7 +242,7 @@ function ecologyRounds(game: EumkGame, level: number, rng: Rng): GameRound[] {
   const pairs = (rows(game, 'pairs') as unknown as Pair[]).filter((p) => kinds.includes(p.kind));
   const count = Math.min(Number(config.cards ?? ROUNDS_PER_PLAY), pairs.length);
   return pickWithoutRepeat(pairs, count, rng).map((p, index) => {
-    const allowed = questionTypes.filter((t) => (t !== 'winter' || p.winter !== null) && (t !== 'wild' || !!p.wildOrDomestic) && (t !== 'food' || p.foodType !== 'plant'));
+    const allowed = questionTypes.filter((t) => (t !== 'winter' || p.winter != null) && (t !== 'wild' || !!p.wildOrDomestic) && (t !== 'food' || p.foodType !== 'plant'));
     const type = allowed.length > 0 ? allowed[Math.floor(rng() * allowed.length)] : 'habitat';
     const id = `${game.id}-L${level}-${p.id}-${type}`;
     if (type === 'food') {
@@ -289,7 +289,17 @@ function mathRounds(game: EumkGame, level: number, rng: Rng): GameRound[] {
 
 // ---------- Вход ----------
 
+// Данные игр приходят из контента и не проверяются схемой до уровня полей,
+// поэтому раунд, собранный из битой записи, отбрасывается, а не роняет игру.
 export function buildGameRounds(game: EumkGame, level: number, rng: Rng): GameRound[] {
+  try {
+    return generateRounds(game, level, rng).filter((r) => TaskSchema.safeParse(r.task).success);
+  } catch {
+    return [];
+  }
+}
+
+function generateRounds(game: EumkGame, level: number, rng: Rng): GameRound[] {
   switch (game.type) {
     case 'logic': return logicRounds(game, level, rng);
     case 'syllables': return syllableRounds(game, level, rng);

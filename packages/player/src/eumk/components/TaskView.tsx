@@ -37,7 +37,7 @@ function ChoiceEditor({ options, value, onChange, locked, multiple, correct }: E
     onChange(value.includes(index) ? value.filter((i) => i !== index) : [...value, index]);
   };
   return (
-    <div role={multiple ? 'group' : 'radiogroup'}>
+    <div role={multiple ? 'group' : 'radiogroup'} aria-label="Варианты ответа">
       {options.map((option, index) => {
         const chosen = value.includes(index);
         const state = correct ? (correct.includes(index) ? 'right' : chosen ? 'wrong' : '') : chosen ? 'chosen' : '';
@@ -57,7 +57,7 @@ function OrderEditor({ items, value, onChange, locked }: EditorProps<number[]> &
   return (
     <div>
       <p className="eumk-muted">Нажимай карточки по порядку. Нажми на выбранную, чтобы убрать её.</p>
-      <div className="eumk-card" aria-label="Твой порядок" style={{ minHeight: 64 }}>
+      <div className="eumk-card" role="group" aria-label="Твой порядок" style={{ minHeight: 64 }}>
         {value.length === 0 ? <span className="eumk-muted">Пока пусто</span> : value.map((i, pos) => (
           <button key={i} type="button" className="eumk-chip chosen" disabled={locked} onClick={() => onChange(value.filter((v) => v !== i))} style={{ margin: 4 }}>
             {pos + 1}. {items[i]}

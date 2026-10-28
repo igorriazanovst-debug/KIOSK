@@ -61,7 +61,7 @@ export default function AttentionGame({ data, level, onExit }: Props) {
         {board.cells.map((cell) => (
           <button key={cell.id} type="button" className={`eumk-cell${play.found.includes(cell.id) ? ' found' : ''}${play.wrong.includes(cell.id) ? ' miss' : ''}`}
             style={level.mode === 'find_word' ? { fontSize: 18 } : undefined} onClick={() => setPlay(tapCell(play, cell.id))}>
-            {cell.text}
+            {play.found.includes(cell.id) ? '✓ ' : play.wrong.includes(cell.id) ? '✗ ' : ''}{cell.text}
           </button>
         ))}
       </div>

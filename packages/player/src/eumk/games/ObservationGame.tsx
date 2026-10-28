@@ -34,11 +34,11 @@ export default function ObservationGame({ data, level, onExit }: Props) {
   const [total, setTotal] = useState(0);
   const [missed, setMissed] = useState(false);
 
-  const restart = () => { setRun(run + 1); setIndex(0); setPlay(null); setTotal(0); };
+  const restart = () => { setRun(run + 1); setIndex(0); setPlay(null); setTotal(0); setMissed(false); };
   const scene = scenes[index];
   const current = play && play.scene.id === scene?.id ? play : scene ? startScenePlay(scene) : null;
 
-  if (!scene || !current) {
+  if (scenes.length === 0) {
     return <div className="eumk-card"><p>Для этого уровня нет картинок.</p><button type="button" className="eumk-btn" onClick={onExit}>Назад</button></div>;
   }
   if (index >= scenes.length) {
@@ -54,6 +54,7 @@ export default function ObservationGame({ data, level, onExit }: Props) {
     );
   }
 
+  if (!scene || !current) return null;
   const marks = current.found.map((i) => ({ x: scene.differences[i].x, y: scene.differences[i].y }));
   const tap = (point: { x: number; y: number }) => {
     const before = current.errors;

@@ -20,7 +20,7 @@ export function ReportView({ report, blockTitles }: { report: TestReport; blockT
     <div>
       <div className="eumk-card">
         <div className="eumk-row" style={{ gap: 32 }}>
-          <div><div className="eumk-muted">Отметка</div><div className="eumk-big" aria-label={`Отметка ${report.grade}`}>{report.grade}</div></div>
+          <div><div className="eumk-muted">Отметка</div><div className="eumk-big" role="img" aria-label={`Отметка ${report.grade}`}>{report.grade}</div></div>
           <div><div className="eumk-muted">Баллы</div><div className="eumk-big">{report.correct} из {report.total}</div></div>
           <div><div className="eumk-muted">Время</div><div className="eumk-big" style={{ fontSize: 36 }}>{formatDuration(report.durationSeconds)}</div></div>
           <div><div className="eumk-muted">Верных ответов</div><div className="eumk-big" style={{ fontSize: 36 }}>{Math.round(report.share * 100)}%</div></div>

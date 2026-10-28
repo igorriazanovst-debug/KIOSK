@@ -87,6 +87,12 @@ test('loadUserData reports corruption instead of silently resetting', () => {
   assert.deepEqual(loaded.data, emptyUserData());
 });
 
+test('corrupt data is kept under a backup key before it can be overwritten', () => {
+  const storage = memoryStorage({ [storageKey('eumk-nach')]: '{broken' });
+  loadUserData(storage, 'eumk-nach');
+  assert.equal(storage.map[`${storageKey('eumk-nach')}:corrupt`], '{broken');
+});
+
 test('different complexes keep separate storage keys', () => {
   assert.notEqual(storageKey('eumk-nach'), storageKey('eumk-dosh'));
 });

@@ -1,5 +1,6 @@
 // Игры: список, правила, выбор уровня, сама игра.
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
+import ErrorBoundary from '../components/ErrorBoundary.tsx';
 import RoundGame from '../games/RoundGame.tsx';
 import AttentionGame from '../games/AttentionGame.tsx';
 import ObservationGame from '../games/ObservationGame.tsx';
@@ -26,6 +27,7 @@ export default function GamesScreen({ content }: { content: EumkContent }) {
   const [gameId, setGameId] = useState<string | null>(null);
   const [level, setLevel] = useState<number | null>(null);
   const game = content.games.find((g) => g.id === gameId) ?? null;
+  const observation = useMemo(() => (game && game.type === 'observation' ? observationData(game) : null), [game]);
 
   const back = () => { setLevel(null); };
 
@@ -69,14 +71,14 @@ export default function GamesScreen({ content }: { content: EumkContent }) {
     const chosen = attentionLevels(data).find((l) => l.id === level);
     if (chosen) play = <AttentionGame key={`${game.id}-${level}`} data={data} level={chosen} onExit={back} />;
   } else if (game.type === 'observation') {
-    play = <ObservationGame key={`${game.id}-${level}`} data={observationData(game)} level={level} onExit={back} />;
+    play = <ObservationGame key={`${game.id}-${level}`} data={observation!} level={level} onExit={back} />;
   } else if (ROUND_GAME_TYPES.includes(game.type)) {
     play = <RoundGame key={`${game.id}-${level}`} game={game} level={level} onExit={back} />;
   }
   return (
     <div className="eumk-narrow">
       <button type="button" className="eumk-btn" onClick={back}>← {game.title}: уровни</button>
-      <div style={{ marginTop: 16 }}>{play}</div>
+      <div style={{ marginTop: 16 }}><ErrorBoundary key={`${game.id}-${level}`} label="Игра не запустилась." onReset={back}>{play}</ErrorBoundary></div>
     </div>
   );
 }

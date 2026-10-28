@@ -56,6 +56,7 @@ function checkMulti(correct: readonly number[], answer: unknown): TaskCheck {
 
 function checkOrder(items: readonly string[], answer: unknown): TaskCheck {
   if (!isStringArray(answer)) return WRONG;
+  if (answer.length !== items.length) return WRONG;
   const inPlace = items.filter((item, index) => answer[index] === item).length;
   return result(inPlace / items.length);
 }
@@ -74,6 +75,7 @@ function checkMatch(pairs: readonly (readonly [string, string])[], answer: unkno
 
 function checkGaps(answers: readonly string[], answer: unknown): TaskCheck {
   if (!isStringArray(answer)) return WRONG;
+  if (answer.length !== answers.length) return WRONG;
   const right = answers.filter((expected, index) => answer[index] === expected).length;
   return result(right / answers.length);
 }

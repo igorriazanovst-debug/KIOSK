@@ -196,7 +196,7 @@ export const GradeScaleSchema = z.object({
   five: z.number().min(0).max(1).default(0.9),
   four: z.number().min(0).max(1).default(0.75),
   three: z.number().min(0).max(1).default(0.5),
-});
+}).refine((s) => s.five >= s.four && s.four >= s.three, { message: 'Пороги отметок должны убывать: 5 не ниже 4, 4 не ниже 3' });
 
 export const TestSettingsSchema = z.object({
   questionCount: z.number().int().positive().default(20),
@@ -230,7 +230,15 @@ export const EumkContentSchema = z.object({
   if (content.test.questionCount > content.bank.length) {
     ctx.addIssue({ code: 'custom', path: ['test', 'questionCount'], message: 'Вопросов в тесте больше, чем в банке' });
   }
+  const taskIds = new Set<string>();
+  const gameIds = new Set<string>();
+  content.games.forEach((game, index) => {
+    if (gameIds.has(game.id)) ctx.addIssue({ code: 'custom', path: ['games', index, 'id'], message: `Повторяющийся id игры ${game.id}` });
+    gameIds.add(game.id);
+  });
   content.tasks.forEach((task, index) => {
+    if (taskIds.has(task.id)) ctx.addIssue({ code: 'custom', path: ['tasks', index, 'id'], message: `Повторяющийся id задания ${task.id}` });
+    taskIds.add(task.id);
     if (task.type === 'choice' || task.type === 'multi') {
       if (task.data.correct.some((i) => i >= task.data.options.length)) {
         ctx.addIssue({ code: 'custom', path: ['tasks', index, 'data', 'correct'], message: `Задание ${task.id}: индекс верного ответа вне списка вариантов` });
@@ -242,7 +250,16 @@ export const EumkContentSchema = z.object({
         ctx.addIssue({ code: 'custom', path: ['tasks', index, 'data', 'items'], message: `Задание ${task.id}: у элемента категория вне списка категорий` });
       }
     }
+    if (task.type === 'sort' && new Set(task.data.items.map((i) => i.text)).size !== task.data.items.length) {
+      ctx.addIssue({ code: 'custom', path: ['tasks', index, 'data', 'items'], message: `Задание ${task.id}: повторяются элементы` });
+    }
+    if (task.type === 'match' && new Set(task.data.pairs.map((p) => p[0])).size !== task.data.pairs.length) {
+      ctx.addIssue({ code: 'custom', path: ['tasks', index, 'data', 'pairs'], message: `Задание ${task.id}: повторяются левые части пар` });
+    }
     if (task.type === 'gaps') {
+      if (task.data.answers.some((a) => !task.data.options.includes(a))) {
+        ctx.addIssue({ code: 'custom', path: ['tasks', index, 'data', 'answers'], message: `Задание ${task.id}: ответ пропуска отсутствует среди вариантов` });
+      }
       const gapCount = task.data.text.split('___').length - 1;
       if (gapCount !== task.data.answers.length) {
         ctx.addIssue({ code: 'custom', path: ['tasks', index, 'data', 'answers'], message: `Задание ${task.id}: число пропусков (${gapCount}) не равно числу ответов (${task.data.answers.length})` });

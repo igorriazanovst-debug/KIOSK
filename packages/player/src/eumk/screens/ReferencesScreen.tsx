@@ -18,9 +18,9 @@ export default function ReferencesScreen({ content }: { content: EumkContent }) 
   return (
     <div className="eumk-narrow">
       <h2>Справочные материалы</h2>
-      <div className="eumk-tabs" role="tablist">
+      <div className="eumk-tabs" role="group" aria-label="Вид справочника">
         {tabs.map((t) => (
-          <button key={t.id} type="button" role="tab" aria-selected={tab === t.id} className={`eumk-chip${tab === t.id ? ' chosen' : ''}`} onClick={() => setTab(t.id)}>{t.title} ({t.count})</button>
+          <button key={t.id} type="button" aria-pressed={tab === t.id} className={`eumk-chip${tab === t.id ? ' chosen' : ''}`} onClick={() => setTab(t.id)}>{t.title} ({t.count})</button>
         ))}
       </div>
       <input className="eumk-input" style={{ width: '100%', marginBottom: 16 }} aria-label="Поиск" placeholder="Поиск" value={query} onChange={(e) => setQuery(e.target.value)} />

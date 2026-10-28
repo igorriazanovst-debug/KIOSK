@@ -99,3 +99,10 @@ test('an answer of the wrong shape never throws and is wrong', () => {
   assert.equal(checkTask(t, 'garbage').isCorrect, false);
   assert.equal(checkTask(t, null).share, 0);
 });
+
+test('order and gaps reject an answer longer than expected', () => {
+  const o = task({ ...base, type: 'order', data: { items: ['a', 'b'] } });
+  assert.equal(checkTask(o, ['a', 'b', 'c']).isCorrect, false);
+  const g = task({ ...base, type: 'gaps', data: { text: 'A ___ B', options: ['x', 'y'], answers: ['x'] } });
+  assert.equal(checkTask(g, ['x', 'y']).isCorrect, false);
+});

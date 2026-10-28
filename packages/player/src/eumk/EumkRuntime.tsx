@@ -14,6 +14,7 @@ import GamesScreen from './screens/GamesScreen.tsx';
 import CasesScreen from './screens/CasesScreen.tsx';
 import ReferencesScreen from './screens/ReferencesScreen.tsx';
 import ResultsScreen from './screens/ResultsScreen.tsx';
+import ErrorBoundary from './components/ErrorBoundary.tsx';
 
 interface Props {
   properties: { title?: string; content?: unknown };
@@ -58,7 +59,7 @@ export default function EumkRuntime({ properties }: Props) {
       </Shell>
     );
   }
-  return <Loaded content={parsed.data} />;
+  return <Loaded key={parsed.data.id} content={parsed.data} />;
 }
 
 function Loaded({ content }: { content: EumkContent }) {
@@ -72,7 +73,7 @@ function Loaded({ content }: { content: EumkContent }) {
 
   const commit = useCallback((next: EumkUserData) => {
     setData(next);
-    if (storage && !saveUserData(storage, content.id, next)) setSaveFailed(true);
+    if (storage) setSaveFailed(!saveUserData(storage, content.id, next));
   }, [storage, content.id]);
 
   const account = data.accounts.find((a) => a.id === accountId) ?? null;
@@ -80,6 +81,7 @@ function Loaded({ content }: { content: EumkContent }) {
   if (!account) {
     return (
       <Shell title={content.title} user={null} onBack={null} onSwitch={null}>
+        {saveFailed && <div className="eumk-note bad" role="alert">Не удалось сохранить данные на этом компьютере.</div>}
         <AccountScreen title={content.title} accounts={data.accounts} corrupt={corrupt}
           onSelect={(id) => { setAccountId(id); setSection(null); }}
           onCreate={(name) => {
@@ -113,7 +115,7 @@ function Loaded({ content }: { content: EumkContent }) {
   return (
     <Shell title={section ? `${content.title}: ${SECTION_TITLES[section]}` : content.title} user={account.name} onBack={section ? () => setSection(null) : null} onSwitch={() => { setAccountId(null); setSection(null); }}>
       {saveFailed && <div className="eumk-note bad" role="alert">Не удалось сохранить данные на этом компьютере. Результаты могут пропасть после закрытия приложения.</div>}
-      {body}
+      <ErrorBoundary key={section ?? 'home'} label="Этот раздел не удалось открыть. Остальные разделы работают." onReset={() => setSection(null)}>{body}</ErrorBoundary>
     </Shell>
   );
 }

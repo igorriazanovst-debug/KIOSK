@@ -48,7 +48,7 @@ export default function TasksScreen({ content, progress, onDone }: Props) {
           <h3>{g.title}</h3>
           {g.tasks.map((t) => (
             <button key={t.id} type="button" className="eumk-tile" style={{ marginBottom: 10, minHeight: 0, flexDirection: 'row', alignItems: 'center', width: '100%' }} onClick={() => { setAttempt(attempt + 1); setOpenId(t.id); }}>
-              <span style={{ fontSize: 22 }} aria-label={progress[t.id] ? 'выполнено' : 'не выполнено'}>{progress[t.id] ? '✔' : '○'}</span>
+              <span style={{ fontSize: 22 }} role="img" aria-label={progress[t.id] ? 'выполнено' : 'не выполнено'}>{progress[t.id] ? '✔' : '○'}</span>
               <span className="eumk-grow" style={{ color: 'var(--eumk-ink)', fontSize: 18 }}>{t.title}</span>
               <span>{TYPE_NAMES[t.type]}</span>
             </button>
