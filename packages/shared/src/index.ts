@@ -56,6 +56,8 @@ export * from './chimiq/widgetProperties';
 // 16.09.2026; см. Био_план_реализации.md §0.4
 export * from './bioiq/widgetProperties';
 export * from './physastroiq/widgetProperties';
+// «Инфосреда: ЭУМК» - общий движок двух электронных учебно-методических комплексов
+export * from './eumk/widgetProperties';
 
 
 // Words («Я знаю много слов», Тип 2)

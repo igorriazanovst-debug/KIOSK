@@ -16,6 +16,7 @@ import InophoneRuntime from './inophone/InophoneRuntime';
 import WordsRuntime from './words/WordsRuntime.tsx';
 import ChimiqRuntime from './chimiq/ChimiqRuntime.tsx';
 import BioiqRuntime from './bioiq/BioiqRuntime.tsx';
+import EumkRuntime from './eumk/EumkRuntime.tsx';
 import PhysastroiqRuntime from './physastroiq/PhysastroiqRuntime.tsx';
 
 interface Project {
@@ -661,6 +662,16 @@ const Player: React.FC<PlayerProps> = ({ embedded = false }) => {
             <PhysastroiqRuntime properties={widget.properties as any} />
           </div>
         );
+      case 'eumk':
+        // «Инфосреда: ЭУМК» - общий движок двух электронных учебно-методических комплексов.
+        return (
+          <div
+            key={widget.id}
+            style={{ ...commonStyle, left: 0, top: 0, width: viewportSize.width, height: viewportSize.height, overflow: 'hidden' }}
+          >
+            <EumkRuntime properties={widget.properties as any} />
+          </div>
+        );
       case 'inophone':
         // «Инофон» (Тип 4) — того же рода полноэкранное приложение.
         return (
@@ -1215,7 +1226,7 @@ const Player: React.FC<PlayerProps> = ({ embedded = false }) => {
   // по project.canvas.* и получается больше окна → двойной скролл и обрезка
   // контента (найдено вживую при ручном тестировании «Матемашки»).
   const isStandaloneAppProject = project.widgets.some(
-    (w) => w.type === 'chronoline' || w.type === 'naturalcommunities' || w.type === 'mathmachine' || w.type === 'periodictable' || w.type === 'rusiq' || w.type === 'words' || w.type === 'alphabet' || w.type === 'chimiq' || w.type === 'inophone' || w.type === 'bioiq' || w.type === 'physastroiq'
+    (w) => w.type === 'chronoline' || w.type === 'naturalcommunities' || w.type === 'mathmachine' || w.type === 'periodictable' || w.type === 'rusiq' || w.type === 'words' || w.type === 'alphabet' || w.type === 'chimiq' || w.type === 'inophone' || w.type === 'bioiq' || w.type === 'physastroiq' || w.type === 'eumk'
   );
 
   // Letterbox-масштаб для НЕ-standalone проектов: канвас проектировался под

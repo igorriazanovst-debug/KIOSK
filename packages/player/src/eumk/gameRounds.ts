@@ -260,6 +260,12 @@ function ecologyRounds(game: EumkGame, level: number, rng: Rng): GameRound[] {
 
 // ---------- Математика ----------
 
+const MATH_TITLES: Record<string, string> = {
+  count: 'Счёт', number: 'Число', compare: 'Сравнение', compare_diff: 'На сколько больше', size: 'Величина', shape: 'Фигуры',
+  space: 'Положение в пространстве', time: 'Время', ordinal: 'Порядковый счёт', seriation: 'Сравни по длине и расставь по порядку',
+  classify: 'Группировка', decompose: 'Состав числа', add: 'Сложение', subtract: 'Вычитание',
+};
+
 function mathRounds(game: EumkGame, level: number, rng: Rng): GameRound[] {
   const pool = rows(game, 'tasks').filter((t) => num(t, 'level') === level);
   return pickWithoutRepeat(pool, ROUNDS_PER_PLAY, rng).map((t) => {
@@ -268,14 +274,14 @@ function mathRounds(game: EumkGame, level: number, rng: Rng): GameRound[] {
     const hint = str(t, 'hint') || null;
     if (Array.isArray(t.answer)) {
       return round(id, {
-        id, block: '', section: '', title: str(t, 'type'), instruction: str(t, 'prompt'), explanation: str(t, 'hint'), sources: [],
+        id, block: '', section: '', title: MATH_TITLES[str(t, 'type')] ?? 'Задание', instruction: str(t, 'prompt'), explanation: str(t, 'hint'), sources: [],
         type: 'order', data: { items: (t.answer as unknown[]).map(String) },
       }, hint, scene);
     }
     const options = (t.options as unknown[]).map(label);
     const shown = choiceOptions(label(t.answer), options, rng, options.length);
     return round(id, {
-      id, block: '', section: '', title: str(t, 'type'), instruction: str(t, 'prompt'), explanation: str(t, 'hint'), sources: [],
+      id, block: '', section: '', title: MATH_TITLES[str(t, 'type')] ?? 'Задание', instruction: str(t, 'prompt'), explanation: str(t, 'hint'), sources: [],
       type: 'choice', data: { options: shown.options, correct: shown.correct },
     }, hint, scene);
   });

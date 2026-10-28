@@ -15,6 +15,7 @@ import { isEmailAllowedForChimiq, projectDataHasChimiqWidget } from '../config/c
 import { isEmailAllowedForInophone, projectDataHasInophoneWidget } from '../config/inophoneAccess';
 import { isEmailAllowedForBioiq, projectDataHasBioiqWidget } from '../config/bioiqAccess';
 import { isEmailAllowedForPhysastroiq, projectDataHasPhysastroiqWidget } from '../config/physastroiqAccess';
+import { isEmailAllowedForEumk, projectDataHasEumkWidget } from '../config/eumkAccess';
 import multer from 'multer';
 import path from 'path';
 
@@ -272,6 +273,13 @@ export class ProjectController {
         });
       }
 
+      if (projectDataHasEumkWidget(projectData) && !isEmailAllowedForEumk(req.client.email)) {
+        return res.status(403).json({
+          error: 'Eumk widget not allowed',
+          message: 'Виджет «ЭУМК» пока недоступен для этого аккаунта'
+        });
+      }
+
       if (projectDataHasPhysastroiqWidget(projectData) && !isEmailAllowedForPhysastroiq(req.client.email)) {
         return res.status(403).json({
           error: 'PhysAstroIQ widget not allowed',
@@ -519,6 +527,17 @@ export class ProjectController {
         return res.status(403).json({
           error: 'BioIQ widget not allowed',
           message: 'Виджет «БиоIQ» пока недоступен для этого аккаунта'
+        });
+      }
+
+      if (
+        Object.prototype.hasOwnProperty.call(updates, 'projectData') &&
+        projectDataHasEumkWidget(updates.projectData) &&
+        !isEmailAllowedForEumk(req.client.email)
+      ) {
+        return res.status(403).json({
+          error: 'Eumk widget not allowed',
+          message: 'Виджет «ЭУМК» пока недоступен для этого аккаунта'
         });
       }
 
