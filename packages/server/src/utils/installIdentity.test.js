@@ -30,10 +30,18 @@ test('кириллический appId даёт допустимое ASCII-им�
   assert.match(result.name, /^[a-z0-9][a-z0-9+.-]*$/);
 });
 
-test('на Linux имя пакета не меняется: там пути задаются executableName/packageName', () => {
-  for (const platform of ['deb', 'rpm', 'linux']) {
-    assert.equal(withWindowsInstallIdentity(basePackageJson(), 'com.kiosk.bioiq', platform).name, '@kiosk-platform/player');
+test('на Linux (deb/rpm) имя пакета тоже берётся из appId: у каждого приложения свой профиль и своя активация', () => {
+  for (const platform of ['deb', 'rpm']) {
+    assert.equal(withWindowsInstallIdentity(basePackageJson(), 'com.kiosk.eumknach', platform).name, 'com.kiosk.eumknach');
+    assert.notEqual(
+      withWindowsInstallIdentity(basePackageJson(), 'com.kiosk.eumknach', platform).name,
+      withWindowsInstallIdentity(basePackageJson(), 'com.kiosk.eumkdosh', platform).name,
+    );
   }
+});
+
+test('неизвестная платформа имя пакета не меняет', () => {
+  assert.equal(withWindowsInstallIdentity(basePackageJson(), 'com.kiosk.bioiq', 'mac').name, '@kiosk-platform/player');
 });
 
 test('исходный объект не изменяется', () => {

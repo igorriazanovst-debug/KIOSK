@@ -24,8 +24,14 @@ const SAFE_PREFIX = 'app-';
 // установленного приложения, поэтому длину держим далеко от MAX_PATH.
 const MAX_NAME_LENGTH = 60;
 
+// Linux: имя пакета определяет каталог профиля (~/.config/<имя>), где лежит
+// токен активации. Пока оно было общим («@kiosk-platform/player»), все
+// Linux-приложения на одном компьютере делили профиль и активацию друг друга -
+// при отдельных лицензиях на приложение это недопустимо.
+const IDENTITY_PLATFORMS = new Set(['win', 'deb', 'rpm']);
+
 export function withWindowsInstallIdentity(packageJson, appId, platform) {
-  if (platform !== 'win') return packageJson;
+  if (!IDENTITY_PLATFORMS.has(platform)) return packageJson;
   const base = sanitizePackageName(appId);
   const needsPrefix = WIDGET_DATA_DIR_RE.test(base) || WINDOWS_RESERVED_RE.test(base);
   const name = ((needsPrefix ? SAFE_PREFIX : '') + base)
