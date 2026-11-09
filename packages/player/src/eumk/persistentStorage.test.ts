@@ -2,12 +2,23 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { pickStorage, type EumkBridge } from './persistentStorage.ts';
 
+// Мост без пароля: криптографические ручки не нужны для тестов хранилища.
+function storageBridge(overrides: Partial<EumkBridge> = {}): EumkBridge {
+  return {
+    getItem: () => ({ ok: true, value: null }),
+    setItem: () => ({ ok: true }),
+    hashPassword: async () => { throw new Error('не должно вызываться'); },
+    verifyPassword: async () => { throw new Error('не должно вызываться'); },
+    ...overrides,
+  };
+}
+
 test('uses the file-backed bridge when the app provides it', () => {
   const calls: string[] = [];
-  const bridge: EumkBridge = {
+  const bridge = storageBridge({
     getItem: (k) => { calls.push(`get ${k}`); return { ok: true, value: 'v' }; },
     setItem: (k, v) => { calls.push(`set ${k}=${v}`); return { ok: true }; },
-  };
+  });
   const storage = pickStorage({ eumkAPI: bridge, localStorage: undefined })!;
   storage.setItem('eumk:x', 'a');
   assert.equal(storage.getItem('eumk:x'), 'v');
@@ -15,7 +26,10 @@ test('uses the file-backed bridge when the app provides it', () => {
 });
 
 test('a bridge error is raised, not hidden as an empty value', () => {
-  const bridge: EumkBridge = { getItem: () => ({ ok: false, error: 'Файл данных повреждён' }), setItem: () => ({ ok: false, error: 'диск' }) };
+  const bridge = storageBridge({
+    getItem: () => ({ ok: false, error: 'Файл данных повреждён' }),
+    setItem: () => ({ ok: false, error: 'диск' }),
+  });
   const storage = pickStorage({ eumkAPI: bridge, localStorage: undefined })!;
   assert.throws(() => storage.getItem('eumk:x'), /повреждён/);
   assert.throws(() => storage.setItem('eumk:x', 'a'), /диск/);
@@ -35,7 +49,7 @@ test('returns null when neither storage is reachable', () => {
 });
 
 test('prefers the bridge even when localStorage exists', () => {
-  const bridge: EumkBridge = { getItem: () => ({ ok: true, value: 'from-bridge' }), setItem: () => ({ ok: true }) };
+  const bridge = storageBridge({ getItem: () => ({ ok: true, value: 'from-bridge' }) });
   const ls = { getItem: () => 'from-ls', setItem: () => undefined };
   assert.equal(pickStorage({ eumkAPI: bridge, localStorage: ls })!.getItem('k'), 'from-bridge');
 });

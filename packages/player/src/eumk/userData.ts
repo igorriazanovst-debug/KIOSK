@@ -3,7 +3,7 @@
 // каждого установленного приложения свой профиль, значит, у каждого
 // комплекса свои данные). Все функции изменения возвращают новый объект.
 
-import { EumkUserDataSchema, emptyUserData, type Account, type EumkUserData, type TestResult } from './model/schema.ts';
+import { EumkUserDataSchema, emptyUserData, type Account, type EumkUserData, type PasswordRecord, type TestResult } from './model/schema.ts';
 
 export interface KeyValueStorage {
   getItem(key: string): string | null;
@@ -63,13 +63,26 @@ function newId(prefix: string, now: number): string {
   return `${prefix}-${now.toString(36)}-${Math.floor(Math.random() * 1e6).toString(36)}`;
 }
 
-export function addAccount(data: EumkUserData, name: string, now: number): { data: EumkUserData; account: Account } {
+export function addAccount(
+  data: EumkUserData,
+  name: string,
+  now: number,
+  password: PasswordRecord | null = null,
+): { data: EumkUserData; account: Account } {
   const trimmed = name.trim().replace(/\s+/g, ' ');
   if (trimmed === '') throw new Error('Введите имя');
   const lower = trimmed.toLowerCase();
   if (data.accounts.some((a) => a.name.toLowerCase() === lower)) throw new Error('Такая учётная запись уже есть');
-  const account: Account = { id: newId('acc', now), name: trimmed, createdAt: now };
+  const account: Account = { id: newId('acc', now), name: trimmed, createdAt: now, password };
   return { data: { ...data, accounts: [...data.accounts, account] }, account };
+}
+
+// Записать пароль существующему аккаунту (K5-1): миграция старой записи
+// без пароля, смена пароля и сброс преподавателем (K5-2) идут через эту
+// же функцию - хэш всегда создаётся снаружи (главный процесс/WebCrypto).
+export function setAccountPassword(data: EumkUserData, accountId: string, password: PasswordRecord): EumkUserData {
+  if (!data.accounts.some((a) => a.id === accountId)) throw new Error('Учётная запись не найдена');
+  return { ...data, accounts: data.accounts.map((a) => (a.id === accountId ? { ...a, password } : a)) };
 }
 
 export function removeAccount(data: EumkUserData, accountId: string): EumkUserData {

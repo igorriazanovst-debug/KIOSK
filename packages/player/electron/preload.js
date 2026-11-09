@@ -299,8 +299,12 @@ contextBridge.exposeInMainWorld('inophoneAPI', {
 
 // Виджет «ЭУМК» («Инфосреда»): хранилище «ключ - строка» в файле профиля
 // приложения. Вызовы синхронные, ответ - {ok, value|error}; разбирает его
-// рендерер (src/eumk/persistentStorage.ts).
+// рендерер (src/eumk/persistentStorage.ts). Пароли (K5-1) - асинхронные:
+// PBKDF2 в 600k итераций занимает десятые доли секунды, sendSync заморозил
+// бы интерфейс; ответ - тот же конверт {ok, value|error}.
 contextBridge.exposeInMainWorld('eumkAPI', {
   getItem: (key) => ipcRenderer.sendSync('eumk:get-item', key),
-  setItem: (key, value) => ipcRenderer.sendSync('eumk:set-item', key, value)
+  setItem: (key, value) => ipcRenderer.sendSync('eumk:set-item', key, value),
+  hashPassword: (password) => ipcRenderer.invoke('eumk:hash-password', password),
+  verifyPassword: (password, record) => ipcRenderer.invoke('eumk:verify-password', password, record)
 });

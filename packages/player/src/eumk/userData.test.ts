@@ -1,8 +1,8 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { emptyUserData, type TestResult } from './model/schema.ts';
+import { emptyUserData, type PasswordRecord, type TestResult } from './model/schema.ts';
 import {
-  addAccount, removeAccount, recordResult, signaturesFor, resultsFor, markTask, loadUserData, saveUserData, storageKey,
+  addAccount, removeAccount, recordResult, signaturesFor, resultsFor, markTask, loadUserData, saveUserData, setAccountPassword, storageKey,
   type KeyValueStorage,
 } from './userData.ts';
 
@@ -100,4 +100,44 @@ test('different complexes keep separate storage keys', () => {
 test('saveUserData swallows storage failures and reports them', () => {
   const failing: KeyValueStorage = { getItem: () => null, setItem: () => { throw new Error('quota'); } };
   assert.equal(saveUserData(failing, 'x', emptyUserData()), false);
+});
+
+// ---------- K5-1: пароль учётной записи ----------
+
+const record: PasswordRecord = {
+  version: 1,
+  algo: 'pbkdf2-sha256',
+  iterations: 1000,
+  salt: 'ab'.repeat(16),
+  hash: 'cd'.repeat(32),
+  keyLen: 32,
+};
+
+test('setAccountPassword stores the record on exactly that account and mutates nothing', () => {
+  const withFirst = addAccount(emptyUserData(), 'Ученик 1', 1).data;
+  const withBoth = addAccount(withFirst, 'Ученик 2', 2).data;
+  const firstId = withFirst.accounts[0].id;
+  const next = setAccountPassword(withBoth, firstId, record);
+  assert.equal(withBoth.accounts[0].password, null); // исходный объект не тронут
+  assert.deepEqual(next.accounts.find((a) => a.id === firstId)!.password, record);
+  assert.equal(next.accounts.find((a) => a.id !== firstId)!.password, null);
+});
+
+test('setAccountPassword throws for an unknown account id', () => {
+  assert.throws(() => setAccountPassword(emptyUserData(), 'acc-nope', record), /не найдена/);
+});
+
+test('addAccount can create an account with a password record from the start', () => {
+  const { data, account } = addAccount(emptyUserData(), 'Ученик 1', 5, record);
+  assert.deepEqual(data.accounts[0].password, record);
+  assert.deepEqual(account.password, record);
+});
+
+test('a user-data blob with a password record round-trips through save/load', () => {
+  const storage = memoryStorage();
+  const created = addAccount(emptyUserData(), 'Ученик 1', 5, record).data;
+  saveUserData(storage, 'eumk-nach', created);
+  const loaded = loadUserData(storage, 'eumk-nach');
+  assert.equal(loaded.status, 'ok');
+  assert.deepEqual(loaded.data.accounts[0].password, record);
 });

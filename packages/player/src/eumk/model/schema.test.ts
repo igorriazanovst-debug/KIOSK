@@ -1,7 +1,10 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
-import { EumkContentSchema, GradeScaleSchema } from './schema.ts';
+import {
+  AccountSchema, EumkContentSchema, EumkUserDataSchema, GradeScaleSchema, PasswordRecordSchema,
+  PBKDF2_ALGO_ID, PASSWORD_RECORD_VERSION, PASSWORD_SALT_BYTES,
+} from './schema.ts';
 
 const base = JSON.parse(readFileSync(new URL('../content/nach.content.json', import.meta.url), 'utf8'));
 const clone = () => JSON.parse(JSON.stringify(base));
@@ -43,4 +46,55 @@ test('duplicate sort items or match left parts are rejected', () => {
   const m = d.tasks.find((x: any) => x.type === 'match');
   m.data.pairs[1][0] = m.data.pairs[0][0];
   assert.equal(EumkContentSchema.safeParse(d).success, false);
+});
+
+// ---------- K5-1: пароли локальных учётных записей ----------
+
+const validRecord = {
+  version: PASSWORD_RECORD_VERSION,
+  algo: PBKDF2_ALGO_ID,
+  iterations: 1000,
+  salt: 'ab'.repeat(PASSWORD_SALT_BYTES),
+  hash: 'cd'.repeat(32),
+  keyLen: 32,
+};
+
+test('an account saved before K5-1 (no password field) still parses - password becomes null', () => {
+  const parsed = AccountSchema.parse({ id: 'acc-1', name: 'Ученик 1', createdAt: 123 });
+  assert.equal(parsed.password, null);
+});
+
+test('a legacy user-data blob without any password fields parses unchanged (migration)', () => {
+  const raw = {
+    schemaVersion: 1,
+    accounts: [{ id: 'acc-1', name: 'Ученик 1', createdAt: 123 }],
+    results: [],
+    taskProgress: {},
+    soundOn: true,
+  };
+  const parsed = EumkUserDataSchema.parse(raw);
+  assert.equal(parsed.accounts[0].password, null);
+});
+
+test('PasswordRecordSchema accepts a well-formed PBKDF2 record', () => {
+  assert.equal(PasswordRecordSchema.safeParse(validRecord).success, true);
+});
+
+test('PasswordRecordSchema rejects damaged records', () => {
+  const broken = [
+    { ...validRecord, algo: 'scrypt' },                    // чужой алгоритм
+    { ...validRecord, version: 2 },                        // формат будущей версии
+    { ...validRecord, iterations: 0 },
+    { ...validRecord, iterations: 100000001 },             // абсурдное число итераций
+    { ...validRecord, salt: 'не-hex' },                    // не hex
+    { ...validRecord, salt: 'ab' },                        // соль короче 16 байт
+    { ...validRecord, salt: `${'ab'.repeat(16)}a` },       // нечётная длина hex - обрезанная запись
+    { ...validRecord, hash: 'zz' },                        // не hex и не та длина
+    { ...validRecord, hash: 'cd'.repeat(31) },             // длина хэша не равна keyLen*2
+    { ...validRecord, keyLen: 0 },
+    {},
+  ];
+  for (const bad of broken) {
+    assert.equal(PasswordRecordSchema.safeParse(bad).success, false, `должна быть ошибка для ${JSON.stringify(bad)}`);
+  }
 });

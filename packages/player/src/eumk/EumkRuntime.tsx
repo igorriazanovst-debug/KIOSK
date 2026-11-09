@@ -1,10 +1,11 @@
 // Корневой компонент виджета «ЭУМК»: проверка содержимого, вход по локальной
 // учётной записи, меню и разделы. Одинаков для обоих комплексов - различается
 // только содержимое `properties.content`.
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useMemo, useRef, useState } from 'react';
 import './eumkTheme.css';
 import { EumkContentSchema, type EumkContent, type EumkUserData } from './model/schema.ts';
-import { addAccount, loadUserData, markTask, recordResult, removeAccount, resultsFor, saveUserData, signaturesFor } from './userData.ts';
+import { addAccount, loadUserData, markTask, recordResult, removeAccount, resultsFor, saveUserData, setAccountPassword, signaturesFor } from './userData.ts';
+import { pickPasswordCrypto, type PasswordHost } from './passwords.ts';
 import AccountScreen from './screens/AccountScreen.tsx';
 import HomeScreen, { type Section } from './screens/HomeScreen.tsx';
 import TheoryScreen from './screens/TheoryScreen.tsx';
@@ -28,6 +29,13 @@ const SECTION_TITLES: Record<Section, string> = {
 // В собранном приложении данные лежат в файле профиля (мост eumkAPI), в браузере - в localStorage.
 function appStorage() {
   return pickStorage(window as unknown as StorageHost);
+}
+
+// Пароли хэширует главный процесс (PBKDF2, node:crypto) через тот же мост;
+// в браузерном стенде - WebCrypto. Без того и другого пароли недоступны -
+// AccountScreen явно сообщает об этом, хранимые пароли не обходятся молча.
+function appPasswordCrypto() {
+  return pickPasswordCrypto(window as unknown as PasswordHost);
 }
 
 function Shell({ title, user, onBack, onSwitch, children }: { title: string; user: string | null; onBack: (() => void) | null; onSwitch: (() => void) | null; children: React.ReactNode }) {
@@ -62,12 +70,20 @@ export default function EumkRuntime({ properties }: Props) {
 
 function Loaded({ content }: { content: EumkContent }) {
   const storage = useMemo(appStorage, []);
+  const passwordCrypto = useMemo(appPasswordCrypto, []);
   const initial = useMemo(() => (storage ? loadUserData(storage, content.id) : { status: 'empty' as const, data: { schemaVersion: 1 as const, accounts: [], results: [], taskProgress: {}, soundOn: true } }), [storage, content.id]);
   const [data, setData] = useState<EumkUserData>(initial.data);
   const [corrupt, setCorrupt] = useState(initial.status === 'corrupt');
   const [saveFailed, setSaveFailed] = useState(false);
   const [accountId, setAccountId] = useState<string | null>(null);
   const [section, setSection] = useState<Section | null>(null);
+
+  // Свежайшие данные для асинхронных обработчиков (создание записи, задание
+  // пароля): между рендером и завершением PBKDF2 (~полсекунды) данные могли
+  // измениться - пересобирать изменение поверх устаревшего снимка нельзя,
+  // иначе параллельное удаление/сохранение тихо откатилось бы.
+  const latestData = useRef(data);
+  latestData.current = data;
 
   const commit = useCallback((next: EumkUserData) => {
     setData(next);
@@ -80,11 +96,14 @@ function Loaded({ content }: { content: EumkContent }) {
     return (
       <Shell title={content.title} user={null} onBack={null} onSwitch={null}>
         {saveFailed && <div className="eumk-note bad" role="alert">Не удалось сохранить данные на этом компьютере.</div>}
-        <AccountScreen title={content.title} accounts={data.accounts} corrupt={corrupt}
-          onSelect={(id) => { setAccountId(id); setSection(null); }}
-          onCreate={(name) => {
+        <AccountScreen title={content.title} accounts={data.accounts} corrupt={corrupt} passwordCrypto={passwordCrypto}
+          onLogin={(id) => { setAccountId(id); setSection(null); }}
+          onSetPassword={(id, record) => commit(setAccountPassword(latestData.current, id, record))}
+          onCreate={async (name, password) => {
             try {
-              const created = addAccount(data, name, Date.now());
+              const record = passwordCrypto ? await passwordCrypto.hash(password) : null;
+              // данные берутся ПОСЛЕ await (см. latestData) - не из снимка рендера
+              const created = addAccount(latestData.current, name, Date.now(), record);
               commit(created.data);
               setCorrupt(false);
               setAccountId(created.account.id);
@@ -93,7 +112,7 @@ function Loaded({ content }: { content: EumkContent }) {
               return e instanceof Error ? e.message : 'Не удалось создать запись';
             }
           }}
-          onRemove={(id) => commit(removeAccount(data, id))} />
+          onRemove={(id) => commit(removeAccount(latestData.current, id))} />
       </Shell>
     );
   }

@@ -292,10 +292,68 @@ export const TestResultSchema = z.object({
   questionIds: z.array(NonEmpty).min(1),
 });
 
+// ---------- Пароль локальной учётной записи (K5-1) ----------
+//
+// В хранилище лежит ТОЛЬКО хэш: PBKDF2-HMAC-SHA256, у каждой записи своя
+// криптослучайная соль. Запись самодостаточна (алгоритм и параметры внутри),
+// чтобы проверка не зависела от текущих констант кода: старые записи
+// продолжают проверяться своими параметрами. Версия схемы хранилища
+// (EUMK_SCHEMA_VERSION) не менялась: поле пароля у аккаунта НЕобязательное,
+// старые блобы данных парсятся без миграции.
+
+// Идентификатор формата записи пароля. Появится наследник - схема будет
+// расширена union'ом известных версий, чтобы старые записи оставались
+// проверяемыми; записи НЕизвестных версий сейчас fail-closed (понятная
+// ошибка, не «пароля нет» и не «неверный пароль»).
+export const PASSWORD_RECORD_VERSION = 1;
+
+export const PBKDF2_ALGO_ID = 'pbkdf2-sha256';
+
+// Итерации по OWASP Password Storage Cheat Sheet (2023) для PBKDF2-HMAC-SHA256:
+// 600 000. Значение намеренно продублировано в electron/eumk/passwords.js
+// (главный процесс) - общего пакета у рендерера и главного процесса нет.
+export const PBKDF2_ITERATIONS = 600000;
+
+// Верхняя граница для защиты от испорченной записи: миллионы итераций на
+// каждую попытку входа заморозили бы приложение.
+export const PBKDF2_MAX_ITERATIONS = 5000000;
+
+// Криптослучайная соль на каждого пользователя, 16 байт (128 бит).
+export const PASSWORD_SALT_BYTES = 16;
+
+// Длина ключа PBKDF2 (32 байта = 256 бит) и его пределы для валидации.
+export const PBKDF2_KEYLEN_BYTES = 32;
+export const PBKDF2_MAX_KEYLEN_BYTES = 128;
+
+const HexString = z.string().regex(/^[0-9a-f]+$/, 'ожидалась hex-строка');
+
+export const PasswordRecordSchema = z.object({
+  version: z.literal(PASSWORD_RECORD_VERSION),
+  algo: z.literal(PBKDF2_ALGO_ID),
+  iterations: z.number().int().min(1).max(PBKDF2_MAX_ITERATIONS),
+  salt: HexString,
+  hash: HexString,
+  keyLen: z.number().int().min(16).max(PBKDF2_MAX_KEYLEN_BYTES),
+  // Длины согласованы с параметрами: соль не короче PASSWORD_SALT_BYTES и
+  // чётной длины (нечётный hex - обрезанная запись, её обязана настигнуть
+  // ошибка «повреждена», а не «неверный пароль»), длина хэша ровно keyLen*2.
+}).refine(
+  (record) => record.salt.length % 2 === 0 && record.salt.length >= PASSWORD_SALT_BYTES * 2 && record.hash.length === record.keyLen * 2,
+  { message: 'длины salt/hash не согласованы с keyLen' },
+);
+
+export type PasswordRecord = z.infer<typeof PasswordRecordSchema>;
+
 export const AccountSchema = z.object({
   id: NonEmpty,
   name: NonEmpty,
   createdAt: z.number().int(),
+  // Запись пароля. У аккаунтов, созданных до K5-1, поля нет - при разборе
+  // становится null (миграция: при входе такому аккаунту предлагается
+  // задать пароль). Здесь НЕ строгая схема, а unknown с отдельным разбором
+  // через passwordRecordOf(): испорченная запись пароля не должна
+  // объявлять повреждённым весь файл данных.
+  password: z.unknown().nullable().default(null),
 });
 
 export const EumkUserDataSchema = z.object({

@@ -4,6 +4,7 @@
 // браузере (стенд разработчика, предпросмотр) остаётся localStorage.
 
 import type { KeyValueStorage } from './userData.ts';
+import type { PasswordRecord } from './model/schema.ts';
 
 export interface BridgeReply<T> {
   ok: boolean;
@@ -14,6 +15,10 @@ export interface BridgeReply<T> {
 export interface EumkBridge {
   getItem(key: string): BridgeReply<string | null>;
   setItem(key: string, value: string): BridgeReply<undefined>;
+  // Пароли (K5-1): PBKDF2 считается в главном процессе (node:crypto),
+  // рендерер получает только готовую запись или ответ «подошёл/нет».
+  hashPassword(password: string): Promise<BridgeReply<PasswordRecord>>;
+  verifyPassword(password: string, record: PasswordRecord): Promise<BridgeReply<boolean>>;
 }
 
 export interface StorageHost {

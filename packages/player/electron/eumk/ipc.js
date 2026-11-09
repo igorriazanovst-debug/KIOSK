@@ -7,6 +7,7 @@
 
 const path = require('path');
 const { createEumkStore } = require('./store');
+const { hashPassword, verifyPassword } = require('./passwords');
 
 const DATA_DIR_NAME = 'eumk-data';
 
@@ -29,6 +30,26 @@ function registerEumkIpc({ ipcMain, app }) {
       event.returnValue = { ok: true };
     } catch (err) {
       event.returnValue = { ok: false, error: err && err.message };
+    }
+  });
+
+  // Пароли (K5-1): PBKDF2 в 600k итераций занимает десятые доли секунды,
+  // поэтому handle/invoke с АСИНХРОННЫМ pbkdf2 (не pbkdf2Sync - синхронный
+  // блокировал бы цикл событий главного процесса вместе с остальными
+  // IPC-каналами). Ответ - тот же конверт {ok, value|error}.
+  ipcMain.handle('eumk:hash-password', async (_event, password) => {
+    try {
+      return { ok: true, value: await hashPassword(password) };
+    } catch (err) {
+      return { ok: false, error: err && err.message };
+    }
+  });
+
+  ipcMain.handle('eumk:verify-password', async (_event, password, record) => {
+    try {
+      return { ok: true, value: await verifyPassword(password, record) };
+    } catch (err) {
+      return { ok: false, error: err && err.message };
     }
   });
 
