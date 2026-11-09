@@ -2,6 +2,9 @@ const { app, BrowserWindow, ipcMain, dialog, Menu } = require('electron');
 const path = require('path');
 const fs = require('fs');
 const { resolveDeviceIdDir, readOrCreateDeviceId } = require('./common/deviceIdStore');
+const { applyAutostart, getAutostartState, readAutostartPreference, resolveStartupEnabled, writeAutostartPreference } = require('./common/autostart');
+const { findWindowsUninstaller, detectLinuxPackageManagers, buildUninstallPlan, runUninstallAttempts } = require('./common/uninstall');
+const { verifyUninstallCommand } = require('./common/deviceCommand');
 const { registerChronoIpc } = require('./chrono/ipc');
 const { registerNatComIpc } = require('./natcom/ipc');
 const { registerMathmachineIpc } = require('./mathmachine/ipc');
@@ -974,6 +977,8 @@ let wsConnection = null;
 let heartbeatTimer = null;
 let deviceId = null;
 let reassignInFlight = false;
+let remoteUninstallInFlight = false;
+const processedUninstallCommands = new Set();
 
 // Decode-only (без проверки подписи) чтение claims лицензионного JWT
 // плеера - тот же паттерн, что getCurrentUserEmail() в editor-web: подпись
@@ -1067,6 +1072,10 @@ function startHeartbeat(serverUrl, projectName) {
   deviceId = deviceId || getDeviceId();
 
   function connect() {
+    // После команды удалённого удаления не переподключаемся: иначе
+    // таймер реконнекта может поднять соединение во время работы
+    // деинсталлятора.
+    if (remoteUninstallInFlight) return;
     try {
       const ws = new WebSocket(wsUrl);
       wsConnection = ws;
@@ -1080,11 +1089,77 @@ function startHeartbeat(serverUrl, projectName) {
         try {
           const msg = JSON.parse(data.toString());
           if (msg.type === 'deployment:start' && msg.projectData) {
-            currentProject = msg.projectData;
+            // Не теряем поля авторизации: legacy-деплой присылает только
+            // projectData, без serverUrl/licenseKeyHash. Без них после
+            // первого деплоя перестала бы работать проверка подписи
+            // device:uninstall и переподключение.
+            currentProject = {
+              ...msg.projectData,
+              serverUrl: (currentProject && currentProject.serverUrl) || msg.projectData.serverUrl,
+              licenseKeyHash: (currentProject && currentProject.licenseKeyHash) || msg.projectData.licenseKeyHash
+            };
             if (mainWindow && mainWindow.webContents) {
               sendLoadProject(); // OFFLINE-CACHE-SENDPOINTS-V1
             }
             console.log('[Device] New project deployed:', msg.projectData.name);
+          } else if (msg.type === 'device:uninstall') {
+            const deviceId = getDeviceId();
+            const signatureOk = !!currentProject && verifyUninstallCommand({
+              licenseKeyHash: currentProject.licenseKeyHash,
+              deviceId,
+              commandId: msg.commandId,
+              issuedAt: msg.issuedAt,
+              signature: msg.signature
+            });
+            if (!signatureOk) {
+              fileLog('[uninstall] rejected: missing or invalid signature', {
+                deviceId,
+                commandId: msg.commandId || null
+              });
+              return;
+            }
+            if (remoteUninstallInFlight) {
+              fileLog('[uninstall] ignored duplicate command while uninstall is in flight', {
+                commandId: msg.commandId || null
+              });
+              return;
+            }
+            if (processedUninstallCommands.has(msg.commandId)) {
+              fileLog('[uninstall] ignored replayed command', { commandId: msg.commandId });
+              return;
+            }
+            processedUninstallCommands.add(msg.commandId);
+            if (processedUninstallCommands.size > 100) {
+              const oldest = processedUninstallCommands.values().next().value;
+              if (oldest !== undefined) processedUninstallCommands.delete(oldest);
+            }
+            console.log('[Device] Received signed device:uninstall, starting uninstall...');
+            remoteUninstallInFlight = true;
+            if (heartbeatTimer) { clearInterval(heartbeatTimer); heartbeatTimer = null; }
+            try { ws.close(); } catch {}
+            performRemoteUninstall(msg.reason || msg.commandId || '')
+              .then((result) => {
+                if (!result || !result.ok) {
+                  // Не удалось запустить деинсталлятор: приложение остаётся
+                  // запущенным, чтобы администратор мог повторить команду.
+                  remoteUninstallInFlight = false;
+                  fileLog('[uninstall] failed, app stays running:', result && result.error);
+                  if (currentProject && currentProject.serverUrl) {
+                    startHeartbeat(currentProject.serverUrl, currentProject.name);
+                  }
+                  return;
+                }
+                disableAutostartForUninstall();
+                clearToken();
+                setTimeout(() => app.quit(), 500);
+              })
+              .catch((err) => {
+                remoteUninstallInFlight = false;
+                fileLog('[uninstall] unexpected error:', err && err.message);
+                if (currentProject && currentProject.serverUrl) {
+                  startHeartbeat(currentProject.serverUrl, currentProject.name);
+                }
+              });
           } else if (msg.type === 'device:shutdown') {
             console.log('[Device] Received device:shutdown, quitting...');
             // Стёртый локальный токен — чтобы при следующем запуске плеер не
@@ -1115,6 +1190,11 @@ function startHeartbeat(serverUrl, projectName) {
                 playerToken = msg.token;
                 playerTokenExpiresAt = msg.expiresAt;
                 saveToken(playerToken, playerTokenExpiresAt);
+                if (msg.licenseKeyHash && currentProject) {
+                  // После перепривязки к другой лицензии подпись
+                  // device:uninstall должна проверяться ключом новой лицензии.
+                  currentProject = { ...currentProject, licenseKeyHash: msg.licenseKeyHash };
+                }
 
                 const serverUrl = currentProject ? currentProject.serverUrl : null;
                 const targetProjectId = msg.projectId;
@@ -1140,14 +1220,22 @@ function startHeartbeat(serverUrl, projectName) {
       });
 
       ws.on('close', () => {
+        const isCurrent = wsConnection === ws;
+        if (isCurrent) wsConnection = null;
+        // Старый сокет, который уже заменён новым: не трогаем новый и не
+        // планируем ещё одно переподключение.
+        if (!isCurrent) return;
+        if (remoteUninstallInFlight) {
+          console.log('[Device] Disconnected for remote uninstall — not reconnecting');
+          return;
+        }
         console.log('[Device] Disconnected, reconnecting in 30s...');
-        wsConnection = null;
         setTimeout(connect, 30000);
       });
 
       ws.on('error', (err) => {
         console.error('[Device] WS error:', err.message);
-        wsConnection = null;
+        if (wsConnection === ws) wsConnection = null;
       });
     } catch (err) {
       console.error('[Device] connect failed:', err.message);
@@ -1211,7 +1299,137 @@ function nodeStreamToWeb(nodeStream) {
   });
 }
 
+// ─── Автозапуск после входа в ОС ────────────────────────────────────────────
+function autostartAppId() {
+  try {
+    const pkg = require(path.join(app.getAppPath(), 'package.json'));
+    if (pkg && typeof pkg.name === 'string' && pkg.name) return pkg.name;
+  } catch (_e) {}
+  return app.getName();
+}
+
+function autostartContext() {
+  return {
+    platform: process.platform,
+    app,
+    configDir: app.getPath('appData'),
+    userDataDir: app.getPath('userData'),
+    appId: autostartAppId(),
+    appName: app.getName(),
+    execPath: process.execPath,
+    args: []
+  };
+}
+
+function shouldEnableAutostart() {
+  if (process.argv.includes('--no-autostart')) return false;
+  if (process.env.KIOSK_DISABLE_AUTOSTART === '1') return false;
+  // В dev-режиме не трогаем автозагрузку разработчика; в собранном
+  // приложении включаем по умолчанию — этого требует ТЗ.
+  return app.isPackaged;
+}
+
+function packageNameForUninstall() {
+  try {
+    const pkg = require(path.join(app.getAppPath(), 'package.json'));
+    return pkg && typeof pkg.name === 'string' ? pkg.name : '';
+  } catch (_e) {
+    return '';
+  }
+}
+
+// Снимаем автозапуск только после успешного запуска деинсталлятора:
+// при неудаче приложение должно остаться в автозагрузке, чтобы администратор
+// мог повторить команду.
+function disableAutostartForUninstall() {
+  try {
+    const context = autostartContext();
+    applyAutostart({ ...context, enabled: false });
+    writeAutostartPreference({ ...context, enabled: false });
+  } catch (err) {
+    fileLog('[uninstall] failed to disable autostart:', err && err.message);
+  }
+}
+
+// Удалённое удаление: запускаем штатный деинсталлятор. Данные пользователя
+// не удаляем (P-03).
+async function performRemoteUninstall(reason) {
+  fileLog('[uninstall] remote uninstall requested:', reason || 'no reason');
+
+  let plan;
+  if (process.platform === 'win32') {
+    const installDir = path.dirname(process.execPath);
+    const uninstaller = findWindowsUninstaller({
+      installDir,
+      fs,
+      preferredName: `Uninstall ${app.getName()}.exe`
+    });
+    plan = buildUninstallPlan({ platform: 'win32', uninstallerPath: uninstaller });
+  } else if (process.platform === 'linux') {
+    plan = buildUninstallPlan({
+      platform: 'linux',
+      packageName: packageNameForUninstall(),
+      packageManagers: detectLinuxPackageManagers()
+    });
+  } else {
+    plan = { ok: false, error: `unsupported platform: ${process.platform}` };
+  }
+
+  if (!plan.ok) {
+    fileLog('[uninstall] cannot build uninstall plan:', plan.error);
+    return { ok: false, error: plan.error };
+  }
+
+  const result = await runUninstallAttempts({ attempts: plan.attempts });
+  if (result.ok) {
+    fileLog('[uninstall] started:', result.command, result.args);
+  } else {
+    fileLog('[uninstall] all attempts failed:', result.failed || result.error);
+  }
+  return result;
+}
+
 app.whenReady().then(() => {
+  // Автозапуск: по умолчанию включён в собранном приложении. IPC нужен
+  // административному режиму для просмотра/переключения.
+  try {
+    if (shouldEnableAutostart()) {
+      const context = autostartContext();
+      const preference = readAutostartPreference(context);
+      // Первый запуск — включаем по умолчанию. Если администратор уже
+      // сохранил выбор, применяем именно его (в т.ч. «выключено»), иначе
+      // выключенный автозапуск включался бы снова при каждом старте.
+      const enabled = resolveStartupEnabled(preference);
+      const result = applyAutostart({ ...context, enabled });
+      if (result.ok && (!preference || preference.corrupt)) {
+        // Нет настройки — сохраняем выбранный по умолчанию true. Повреждённый
+        // файл — перезаписываем безопасным false, чтобы не включать снова.
+        writeAutostartPreference({ ...context, enabled });
+      }
+      fileLog('[autostart] startup:', enabled, result);
+    }
+  } catch (err) {
+    fileLog('[autostart] init failed:', err && err.message);
+  }
+  ipcMain.handle('autostart:get', async () => getAutostartState(autostartContext()));
+  ipcMain.handle('autostart:set', async (_event, enabled) => {
+    const context = autostartContext();
+    const result = applyAutostart({ ...context, enabled: enabled === true });
+    const persisted = result.ok
+      ? writeAutostartPreference({ ...context, enabled: enabled === true })
+      : false;
+    if (result.ok && !persisted) {
+      // Настройка ОС изменена, но выбор не сохранён: при следующем старте
+      // он может быть потерян. Сообщаем об этом явно.
+      const failed = { ...result, ok: false, persisted: false, error: 'preference not persisted' };
+      fileLog('[autostart] set:', enabled === true, failed);
+      return failed;
+    }
+    const okResult = { ...result, persisted };
+    fileLog('[autostart] set:', enabled === true, okResult);
+    return okResult;
+  });
+
   // Локальное хранилище проектов «Хронолинии» — не влияет на существующие
   // клиентов, канал 'chrono:*' используется только виджетом chronoline,
   // которого нет в проектах остальных клиентов.

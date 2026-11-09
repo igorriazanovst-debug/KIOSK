@@ -10,7 +10,9 @@ import { ApiError } from '../middleware/errorHandler';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import { getJWTConfig } from '../config/jwt';
-import { deviceSockets } from '../app';
+import { isDeviceSocketVerified } from '../app';
+import { randomUUID } from 'crypto';
+import { buildUninstallSignature } from '../utils/deviceCommand.js';
 
 // BigInt serialization helper
 function replaceBigInt(_key: string, value: any) {
@@ -430,17 +432,51 @@ export class AdminController {
     
     await DeviceService.deactivateDevice(device.deviceId);
     
-    // Если устройство онлайн — отправить device:shutdown по WS
+    // Если устройство онлайн — отправить удалённое удаление. Только
+    // проверенному соединению: иначе команду мог бы получить чужой сокет,
+    // зарегистрировавшийся под тем же deviceId. Для старых/непроверенных
+    // соединений оставляем безопасное выключение.
     try {
       const { getDeviceSockets } = await import('../app');
       const sockets = getDeviceSockets();
       const ws = sockets.get(device.deviceId);
       if (ws && ws.readyState === 1 /* OPEN */) {
-        ws.send(JSON.stringify({ type: 'device:shutdown', reason: 'Deactivated by admin' }));
-        console.log('[Admin] Sent device:shutdown to', device.deviceId);
+        if (isDeviceSocketVerified(device.deviceId)) {
+          const license = await prisma.license.findUnique({
+            where: { id: device.licenseId },
+            select: { licenseKey: true }
+          });
+          const commandId = randomUUID();
+          const issuedAt = Date.now();
+          const { signature } = buildUninstallSignature({
+            licenseKey: license?.licenseKey,
+            deviceId: device.deviceId,
+            commandId,
+            issuedAt
+          });
+          if (signature) {
+            ws.send(JSON.stringify({
+              type: 'device:uninstall',
+              reason: 'Deactivated by admin',
+              commandId,
+              issuedAt,
+              deviceId: device.deviceId,
+              signature
+            }));
+            console.log('[Admin] Sent signed device:uninstall to', device.deviceId);
+          } else {
+            // Без ключа лицензии подпись не построить — безопаснее
+            // ограничиться выключением, чем отправить неподписанную команду.
+            ws.send(JSON.stringify({ type: 'device:shutdown', reason: 'Deactivated by admin' }));
+            console.log('[Admin] No license key for signature; sent device:shutdown to', device.deviceId);
+          }
+        } else {
+          ws.send(JSON.stringify({ type: 'device:shutdown', reason: 'Deactivated by admin' }));
+          console.log('[Admin] Sent device:shutdown to unverified', device.deviceId);
+        }
       }
     } catch (err: any) {
-      console.warn('[Admin] Could not send WS shutdown:', err.message);
+      console.warn('[Admin] Could not send WS uninstall/shutdown:', err.message);
     }
     
     await AuditService.logDeactivation({

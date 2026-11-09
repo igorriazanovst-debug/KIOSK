@@ -45,7 +45,11 @@ contextBridge.exposeInMainWorld('electronAPI', {
   verifyUpdatePassword: (password) => ipcRenderer.invoke('verify-update-password', password),
 
   // Применить обновление
-  applyUpdate: () => ipcRenderer.invoke('apply-update')
+  applyUpdate: () => ipcRenderer.invoke('apply-update'),
+
+  // Автозапуск после входа в ОС
+  getAutostart: () => ipcRenderer.invoke('autostart:get'),
+  setAutostart: (enabled) => ipcRenderer.invoke('autostart:set', enabled)
 });
 
 // Локальное хранилище проектов «Хронолинии» — отдельный namespace, не

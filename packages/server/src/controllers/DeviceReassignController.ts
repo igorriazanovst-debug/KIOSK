@@ -18,6 +18,7 @@ import { DeviceService } from '../services/DeviceService';
 import { TokenService } from '../services/TokenService';
 import { AuditService } from '../services/AuditService';
 import { ProjectAccessService } from '../services/ProjectAccessService';
+import { createHash } from 'crypto';
 import { ApiError } from '../middleware/errorHandler';
 import type { WebSocket } from 'ws';
 
@@ -123,8 +124,9 @@ export class DeviceReassignController {
       appType: AppType.Player
     });
 
+    const licenseKeyHash = createHash('sha256').update(targetLicense.licenseKey).digest('hex');
     try {
-      await sendWs(ws, { type: 'device:reassign', token, expiresAt, projectId });
+      await sendWs(ws, { type: 'device:reassign', token, expiresAt, projectId, licenseKeyHash });
     } catch (sendErr: any) {
       return res.status(502).json({
         success: false,

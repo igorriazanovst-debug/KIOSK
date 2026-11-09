@@ -29,6 +29,8 @@ declare global {
       onUpdateApplied: (callback: (data: { version: number }) => void) => void;
       verifyUpdatePassword: (password: string) => Promise<{ success: boolean; error?: string }>;
       applyUpdate: () => Promise<{ success: boolean; error?: string }>;
+      getAutostart: () => Promise<{ enabled: boolean; supported: boolean; path?: string }>;
+      setAutostart: (enabled: boolean) => Promise<{ ok: boolean; enabled?: boolean; persisted?: boolean; error?: string; path?: string }>;
     };
     /** Виджет «Хронолиния» — локальное хранилище проектов на устройстве (packages/player/electron/chrono) */
     chronoAPI?: {
