@@ -120,3 +120,31 @@ test('PasswordRecordSchema rejects damaged records', () => {
     assert.equal(PasswordRecordSchema.safeParse(bad).success, false, `должна быть ошибка для ${JSON.stringify(bad)}`);
   }
 });
+
+// ---------- Волна 0 (S2): block/section заданий и section банка ----------
+
+test('a task block must reference an existing theory block (S2)', () => {
+  const c = clone();
+  c.tasks[0].block = 'нет-такого-блока';
+  assert.equal(EumkContentSchema.safeParse(c).success, false);
+});
+
+test('a task section must belong to the block of the task itself (S2)', () => {
+  const c = clone();
+  // nt-001 принадлежит n-b1; подсунем секцию чужого блока n-b2.
+  c.tasks[0].section = c.theory[1].sections[0].id;
+  assert.equal(EumkContentSchema.safeParse(c).success, false);
+});
+
+test('a bank question section must belong to the block of the question (S2)', () => {
+  const c = clone();
+  const foreign = c.theory.find((b: any) => b.id !== c.bank[0].block);
+  c.bank[0].section = foreign.sections[0].id;
+  assert.equal(EumkContentSchema.safeParse(c).success, false);
+});
+
+test('an empty task section is tolerated by the schema (checked by the battery)', () => {
+  const c = clone();
+  c.tasks[0].section = '';
+  assert.equal(EumkContentSchema.safeParse(c).success, true);
+});

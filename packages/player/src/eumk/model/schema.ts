@@ -226,11 +226,16 @@ export const EumkContentSchema = z.object({
   test: TestSettingsSchema.default({ questionCount: 20, timeLimitSeconds: null, gradeScale: { five: 0.9, four: 0.75, three: 0.5 } }),
 }).superRefine((content, ctx) => {
   const blockIds = new Set(content.theory.map((b) => b.id));
+  // S2 (волна 0): разделы теории по блокам - для проверки ссылок section.
+  const sectionIds = new Map(content.theory.map((b) => [b.id, new Set(b.sections.map((s) => s.id))]));
   const seen = new Set<string>();
   content.bank.forEach((q, index) => {
     if (seen.has(q.id)) ctx.addIssue({ code: 'custom', path: ['bank', index, 'id'], message: `Повторяющийся id вопроса ${q.id}` });
     seen.add(q.id);
     if (!blockIds.has(q.block)) ctx.addIssue({ code: 'custom', path: ['bank', index, 'block'], message: `Вопрос ${q.id} ссылается на несуществующий блок ${q.block}` });
+    else if (q.section !== '' && !sectionIds.get(q.block)!.has(q.section)) {
+      ctx.addIssue({ code: 'custom', path: ['bank', index, 'section'], message: `Вопрос ${q.id} ссылается на раздел ${q.section}, которого нет в блоке ${q.block}` });
+    }
   });
   if (content.test.questionCount > content.bank.length) {
     ctx.addIssue({ code: 'custom', path: ['test', 'questionCount'], message: 'Вопросов в тесте больше, чем в банке' });
@@ -249,6 +254,20 @@ export const EumkContentSchema = z.object({
   content.tasks.forEach((task, index) => {
     if (taskIds.has(task.id)) ctx.addIssue({ code: 'custom', path: ['tasks', index, 'id'], message: `Повторяющийся id задания ${task.id}` });
     taskIds.add(task.id);
+    // S2 (волна 0): непустая привязка задания к блоку обязана существовать,
+    // а section - принадлежать собственному блоку задания (у заданий без
+    // блока section ищется в любом блоке; пустые значения допускает схема,
+    // их непустоту для контента проверяет батарея инвариантов).
+    if (task.block !== '' && !blockIds.has(task.block)) {
+      ctx.addIssue({ code: 'custom', path: ['tasks', index, 'block'], message: `Задание ${task.id} ссылается на несуществующий блок ${task.block}` });
+    }
+    if (task.section !== '') {
+      const own = task.block !== '' ? sectionIds.get(task.block) : undefined;
+      const sectionKnown = own ? own.has(task.section) : [...sectionIds.values()].some((s) => s.has(task.section));
+      if (!sectionKnown) {
+        ctx.addIssue({ code: 'custom', path: ['tasks', index, 'section'], message: `Задание ${task.id} ссылается на несуществующий раздел ${task.section}` });
+      }
+    }
     if (task.type === 'choice' || task.type === 'multi') {
       if (task.data.correct.some((i) => i >= task.data.options.length)) {
         ctx.addIssue({ code: 'custom', path: ['tasks', index, 'data', 'correct'], message: `Задание ${task.id}: индекс верного ответа вне списка вариантов` });
