@@ -154,6 +154,11 @@ export const GameSchema = z.object({
   type: GameTypeSchema,
   description: z.string().default(''),
   rules: z.string().default(''),
+  // Блок теории, к которому привязана игра (Д-1, K5-контент план §1.5):
+  // паттерн как у заданий (TaskBase.block). '' = без привязки - валидно
+  // (игры «дошкольного» не поблочные); непустое значение проверяется в
+  // superRefine на существование блока.
+  block: z.string().default(''),
   data: z.record(z.string(), z.unknown()).default({}),
   levels: z.array(z.record(z.string(), z.unknown())).default([]),
   sources: z.array(z.unknown()).default([]),
@@ -235,6 +240,11 @@ export const EumkContentSchema = z.object({
   content.games.forEach((game, index) => {
     if (gameIds.has(game.id)) ctx.addIssue({ code: 'custom', path: ['games', index, 'id'], message: `Повторяющийся id игры ${game.id}` });
     gameIds.add(game.id);
+    // Д-1: непустая привязка игры обязана указывать на существующий блок
+    // теории (тот же инвариант, что у вопросов банка).
+    if (game.block !== '' && !blockIds.has(game.block)) {
+      ctx.addIssue({ code: 'custom', path: ['games', index, 'block'], message: `Игра ${game.id} ссылается на несуществующий блок ${game.block}` });
+    }
   });
   content.tasks.forEach((task, index) => {
     if (taskIds.has(task.id)) ctx.addIssue({ code: 'custom', path: ['tasks', index, 'id'], message: `Повторяющийся id задания ${task.id}` });

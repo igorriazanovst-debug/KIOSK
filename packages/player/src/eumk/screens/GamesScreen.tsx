@@ -1,4 +1,5 @@
-// Игры: список, правила, выбор уровня, сама игра.
+// Игры: список по блокам теории (как задания в TasksScreen), правила,
+// выбор уровня, сама игра.
 import React, { useMemo, useState } from 'react';
 import ErrorBoundary from '../components/ErrorBoundary.tsx';
 import RoundGame from '../games/RoundGame.tsx';
@@ -7,6 +8,7 @@ import ObservationGame from '../games/ObservationGame.tsx';
 import { gameLevels, ROUND_GAME_TYPES } from '../gameRounds.ts';
 import { attentionLevels, type AttentionData } from '../attentionLogic.ts';
 import { observationData, observationLevels } from '../observationLogic.ts';
+import { groupGamesByBlock } from '../gameGroups.ts';
 import type { EumkContent, EumkGame } from '../model/schema.ts';
 
 interface LevelChoice {
@@ -32,17 +34,25 @@ export default function GamesScreen({ content }: { content: EumkContent }) {
   const back = () => { setLevel(null); };
 
   if (!game) {
+    // Группировка по блокам теории (Д-1), как у заданий в TasksScreen:
+    // непустые блоки в учебном порядке, игры без привязки - «Другое».
+    const groups = groupGamesByBlock(content.theory, content.games);
     return (
       <div className="eumk-narrow">
         <h2>Игры</h2>
-        <div className="eumk-tiles">
-          {content.games.map((g) => (
-            <button key={g.id} type="button" className="eumk-tile" onClick={() => { setGameId(g.id); setLevel(null); }}>
-              <b>{g.title}</b>
-              <span>{g.description}</span>
-            </button>
-          ))}
-        </div>
+        {groups.map((g) => (
+          <div key={g.key}>
+            <h3>{g.title}</h3>
+            <div className="eumk-tiles">
+              {g.games.map((item) => (
+                <button key={item.id} type="button" className="eumk-tile" onClick={() => { setGameId(item.id); setLevel(null); }}>
+                  <b>{item.title}</b>
+                  <span>{item.description}</span>
+                </button>
+              ))}
+            </div>
+          </div>
+        ))}
       </div>
     );
   }

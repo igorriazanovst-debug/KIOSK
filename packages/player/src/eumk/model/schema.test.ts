@@ -2,7 +2,7 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import {
-  AccountSchema, EumkContentSchema, EumkUserDataSchema, GradeScaleSchema, PasswordRecordSchema,
+  AccountSchema, EumkContentSchema, EumkUserDataSchema, GameSchema, GradeScaleSchema, PasswordRecordSchema,
   PBKDF2_ALGO_ID, PASSWORD_RECORD_VERSION, PASSWORD_SALT_BYTES,
 } from './schema.ts';
 
@@ -27,6 +27,28 @@ test('duplicate task ids are rejected', () => {
 test('duplicate game ids are rejected', () => {
   const c = clone();
   c.games[1].id = c.games[0].id;
+  assert.equal(EumkContentSchema.safeParse(c).success, false);
+});
+
+// ---------- Д-1: привязка игр к блокам теории ----------
+
+test('a game without a block field stays valid with block="" (backward compat)', () => {
+  const parsed = GameSchema.parse({ id: 'ng-test', title: 'Игра тестовая', type: 'logic' });
+  assert.equal(parsed.block, '');
+  // И весь реальный контент без поля block проходит без изменений.
+  assert.equal(EumkContentSchema.safeParse(base).success, true);
+});
+
+test('a game can be attributed to an existing theory block (Д-1)', () => {
+  const c = clone();
+  c.games[0].block = c.theory[1].id;
+  const parsed = EumkContentSchema.parse(c);
+  assert.equal(parsed.games[0].block, 'n-b2');
+});
+
+test('a game block must reference an existing theory block', () => {
+  const c = clone();
+  c.games[0].block = 'нет-такого-блока';
   assert.equal(EumkContentSchema.safeParse(c).success, false);
 });
 
