@@ -23,7 +23,7 @@ function fastRecord(password: string, iterations = 1000): PasswordRecord {
 }
 
 function accountWith(password: unknown): Account {
-  return { id: 'acc-синтетика', name: 'Ученик тестовый', createdAt: 1, password };
+  return { id: 'acc-синтетика', name: 'Ученик тестовый', createdAt: 1, role: 'student' as const, password };
 }
 
 test('MIN_PASSWORD_LENGTH is 6, per the fixed user decision (Ответы 2026-11-09, E-06)', () => {

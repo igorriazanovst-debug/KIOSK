@@ -1,10 +1,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { emptyUserData, type PasswordRecord, type TestResult } from './model/schema.ts';
-import {
-  addAccount, removeAccount, recordResult, signaturesFor, resultsFor, markTask, loadUserData, saveUserData, setAccountPassword, storageKey,
-  type KeyValueStorage,
-} from './userData.ts';
+import { addAccount, removeAccount, recordResult, signaturesFor, resultsFor, markTask, loadUserData, saveUserData, setAccountPassword, storageKey, type KeyValueStorage, clearAccountPassword } from './userData.ts';
 
 function memoryStorage(initial: Record<string, string> = {}): KeyValueStorage & { map: Record<string, string> } {
   const map = { ...initial };
@@ -140,4 +137,21 @@ test('a user-data blob with a password record round-trips through save/load', ()
   const loaded = loadUserData(storage, 'eumk-nach');
   assert.equal(loaded.status, 'ok');
   assert.deepEqual(loaded.data.accounts[0].password, record);
+});
+
+test('addAccount создаёт преподавателя с ролью teacher (K5-2)', () => {
+  const created = addAccount(emptyUserData(), 'Мария Сергеевна', 1, null, 'teacher');
+  assert.equal(created.account.role, 'teacher');
+  // default остаётся student - старые вызовы не меняются
+  assert.equal(addAccount(emptyUserData(), 'Ученик', 1).account.role, 'student');
+});
+
+test('clearAccountPassword очищает пароль обучающегося (сброс преподавателем)', () => {
+  let d = emptyUserData();
+  const rec: PasswordRecord = { version: 1, algo: 'pbkdf2-sha256', iterations: 600000, salt: '00'.repeat(16), hash: '00'.repeat(64), keyLen: 32 };
+  d = addAccount(d, 'Ученик', 1, rec).data;
+  const cleared = clearAccountPassword(d, d.accounts[0].id);
+  assert.equal(cleared.accounts[0].password, null);
+  // исходные данные не тронуты (иммутабельность)
+  assert.notEqual(d.accounts[0].password, null);
 });

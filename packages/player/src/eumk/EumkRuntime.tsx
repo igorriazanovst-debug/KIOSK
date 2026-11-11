@@ -15,6 +15,9 @@ import GamesScreen from './screens/GamesScreen.tsx';
 import CasesScreen from './screens/CasesScreen.tsx';
 import ReferencesScreen from './screens/ReferencesScreen.tsx';
 import ResultsScreen from './screens/ResultsScreen.tsx';
+import TeacherScreen from './screens/TeacherScreen.tsx';
+import { clearAccountPassword } from './userData.ts';
+import { isTeacher } from './teacher.ts';
 import ErrorBoundary from './components/ErrorBoundary.tsx';
 import { pickStorage, type StorageHost } from './persistentStorage.ts';
 
@@ -23,7 +26,7 @@ interface Props {
 }
 
 const SECTION_TITLES: Record<Section, string> = {
-  theory: 'Теория', test: 'Итоговый тест', tasks: 'Практические задания', games: 'Игры', cases: 'Кейсы', references: 'Справочные материалы', results: 'Мои результаты',
+  theory: 'Теория', test: 'Итоговый тест', tasks: 'Практические задания', games: 'Игры', cases: 'Кейсы', references: 'Справочные материалы', results: 'Мои результаты', group: 'Результаты группы',
 };
 
 // В собранном приложении данные лежат в файле профиля (мост eumkAPI), в браузере - в localStorage.
@@ -99,11 +102,11 @@ function Loaded({ content }: { content: EumkContent }) {
         <AccountScreen title={content.title} accounts={data.accounts} corrupt={corrupt} passwordCrypto={passwordCrypto}
           onLogin={(id) => { setAccountId(id); setSection(null); }}
           onSetPassword={(id, record) => commit(setAccountPassword(latestData.current, id, record))}
-          onCreate={async (name, password) => {
+          onCreate={async (name, password, teacher) => {
             try {
               const record = passwordCrypto ? await passwordCrypto.hash(password) : null;
               // данные берутся ПОСЛЕ await (см. latestData) - не из снимка рендера
-              const created = addAccount(latestData.current, name, Date.now(), record);
+              const created = addAccount(latestData.current, name, Date.now(), record, teacher ? 'teacher' : 'student');
               commit(created.data);
               setCorrupt(false);
               setAccountId(created.account.id);
@@ -127,7 +130,8 @@ function Loaded({ content }: { content: EumkContent }) {
     case 'cases': body = <CasesScreen content={content} />; break;
     case 'references': body = <ReferencesScreen content={content} />; break;
     case 'results': body = <ResultsScreen results={resultsFor(data, account.id)} />; break;
-    default: body = <HomeScreen content={content} onOpen={setSection} tasksDone={Object.values(progress).filter(Boolean).length} />;
+    case 'group': body = isTeacher(account) ? <TeacherScreen data={data} onResetPassword={(id) => commit(clearAccountPassword(latestData.current, id))} /> : <HomeScreen content={content} onOpen={setSection} isTeacher={false} tasksDone={Object.values(progress).filter(Boolean).length} />; break;
+    default: body = <HomeScreen content={content} onOpen={setSection} isTeacher={isTeacher(account)} tasksDone={Object.values(progress).filter(Boolean).length} />;
   }
   return (
     <Shell title={section ? `${content.title}: ${SECTION_TITLES[section]}` : content.title} user={account.name} onBack={section ? () => setSection(null) : null} onSwitch={() => { setAccountId(null); setSection(null); }}>

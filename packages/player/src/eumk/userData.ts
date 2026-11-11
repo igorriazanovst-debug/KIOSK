@@ -68,12 +68,13 @@ export function addAccount(
   name: string,
   now: number,
   password: PasswordRecord | null = null,
+  role: Account['role'] = 'student',
 ): { data: EumkUserData; account: Account } {
   const trimmed = name.trim().replace(/\s+/g, ' ');
   if (trimmed === '') throw new Error('Введите имя');
   const lower = trimmed.toLowerCase();
   if (data.accounts.some((a) => a.name.toLowerCase() === lower)) throw new Error('Такая учётная запись уже есть');
-  const account: Account = { id: newId('acc', now), name: trimmed, createdAt: now, password };
+  const account: Account = { id: newId('acc', now), name: trimmed, createdAt: now, role, password };
   return { data: { ...data, accounts: [...data.accounts, account] }, account };
 }
 
@@ -83,6 +84,13 @@ export function addAccount(
 export function setAccountPassword(data: EumkUserData, accountId: string, password: PasswordRecord): EumkUserData {
   if (!data.accounts.some((a) => a.id === accountId)) throw new Error('Учётная запись не найдена');
   return { ...data, accounts: data.accounts.map((a) => (a.id === accountId ? { ...a, password } : a)) };
+}
+
+// Сброс пароля обучающегося преподавателем (K5-2): пароль очищается,
+// при следующем входе ученик задаёт новый (миграция K5-1).
+export function clearAccountPassword(data: EumkUserData, accountId: string): EumkUserData {
+  if (!data.accounts.some((a) => a.id === accountId)) throw new Error('Учётная запись не найдена');
+  return { ...data, accounts: data.accounts.map((a) => (a.id === accountId ? { ...a, password: null } : a)) };
 }
 
 export function removeAccount(data: EumkUserData, accountId: string): EumkUserData {

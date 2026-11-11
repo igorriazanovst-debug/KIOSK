@@ -2,7 +2,7 @@
 import React from 'react';
 import type { EumkContent } from '../model/schema.ts';
 
-export type Section = 'theory' | 'test' | 'tasks' | 'games' | 'cases' | 'references' | 'results';
+export type Section = 'theory' | 'test' | 'tasks' | 'games' | 'cases' | 'references' | 'results' | 'group';
 
 export function plural(n: number, one: string, few: string, many: string): string {
   const mod100 = n % 100;
@@ -16,10 +16,11 @@ export function plural(n: number, one: string, few: string, many: string): strin
 interface Props {
   content: EumkContent;
   onOpen: (section: Section) => void;
+  isTeacher: boolean;
   tasksDone: number;
 }
 
-export default function HomeScreen({ content, onOpen, tasksDone }: Props) {
+export default function HomeScreen({ content, onOpen, tasksDone, isTeacher }: Props) {
   const sectionCount = content.theory.reduce((n, b) => n + b.sections.length, 0);
   const tiles: { id: Section; title: string; text: string; show: boolean }[] = [
     { id: 'theory', title: 'Теория', text: `${content.theory.length} ${plural(content.theory.length, 'блок', 'блока', 'блоков')}, ${sectionCount} ${plural(sectionCount, 'раздел', 'раздела', 'разделов')}`, show: true },
@@ -29,6 +30,7 @@ export default function HomeScreen({ content, onOpen, tasksDone }: Props) {
     { id: 'test', title: 'Итоговый тест', text: `${content.test.questionCount} вопросов из банка в ${content.bank.length}; каждый раз новый набор`, show: true },
     { id: 'references', title: 'Справочные материалы', text: 'Нормативные документы, литература, термины и сокращения', show: true },
     { id: 'results', title: 'Мои результаты', text: 'История прохождения итогового теста', show: true },
+    { id: 'group', title: 'Результаты группы', text: 'Все обучающиеся: итоги, экспорт и печать', show: isTeacher },
   ];
   return (
     <div>

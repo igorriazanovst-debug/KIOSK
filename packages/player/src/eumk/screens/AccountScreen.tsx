@@ -13,7 +13,7 @@ interface Props {
   passwordCrypto: PasswordCrypto | null;
   onLogin: (accountId: string) => void;
   onSetPassword: (accountId: string, record: PasswordRecord) => void;
-  onCreate: (name: string, password: string) => Promise<string | null>; // возвращает текст ошибки
+  onCreate: (name: string, password: string, teacher: boolean) => Promise<string | null>; // возвращает текст ошибки
   onRemove: (accountId: string) => void;
 }
 
@@ -99,6 +99,7 @@ export default function AccountScreen({ title, accounts, corrupt, passwordCrypto
   const [confirmId, setConfirmId] = useState<string | null>(null);
   const [pending, setPending] = useState<Pending | null>(null);
   const [busy, setBusy] = useState(false);
+  const [teacher, setTeacher] = useState(false);
 
   const closeForm = () => {
     setPending(null);
@@ -179,6 +180,10 @@ export default function AccountScreen({ title, accounts, corrupt, passwordCrypto
 
   const create = async () => {
     if (busy) return;
+    if (teacher && (!passwordCrypto || password === '')) {
+      setError('Учётной записи преподавателя нужен пароль (и поддержка паролей на этой машине).');
+      return;
+    }
     if (passwordCrypto) {
       const problem = passwordProblem(password, name);
       if (problem !== null) {
@@ -191,13 +196,14 @@ export default function AccountScreen({ title, accounts, corrupt, passwordCrypto
       }
     }
     setBusy(true);
-    const problem = await onCreate(name, password);
+    const problem = await onCreate(name, password, teacher);
     setBusy(false);
     if (problem !== null) setError(problem);
     else {
       setName('');
       setPassword('');
       setRepeat('');
+      setTeacher(false);
       setError(null);
     }
   };
@@ -240,6 +246,10 @@ export default function AccountScreen({ title, accounts, corrupt, passwordCrypto
                   onChange={(e) => setRepeat(e.target.value)} onKeyDown={(e) => { if (e.key === 'Enter') void create(); }} />
               </>
             )}
+            <label style={{ display: 'flex', gap: 8, alignItems: 'center', margin: '8px 0' }}>
+              <input type="checkbox" checked={teacher} onChange={(e) => setTeacher(e.target.checked)} />
+              <span>Учётная запись преподавателя (видит результаты всех, пароль обязателен)</span>
+            </label>
             <button type="button" className="eumk-btn primary" disabled={busy} onClick={() => void create()}>{busy ? 'Создаём…' : 'Создать'}</button>
           </div>
           {error && <div className="eumk-note bad" role="alert">{error}</div>}
