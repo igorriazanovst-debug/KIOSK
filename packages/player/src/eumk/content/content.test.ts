@@ -39,9 +39,11 @@ test('the test is shorter than the bank, so every attempt is a real selection', 
   for (const c of [nach, dosh]) assert.ok(c.test.questionCount < c.bank.length);
 });
 
-test('the primary games are exactly the five topics named in the specification', () => {
+test('the primary games cover exactly the five topics named in the specification', () => {
+  // С волнами K5 число игр растёт (5 типов x 5 блоков), но множество тем
+  // остаётся ровно теми пятью, что названы в ТЗ.
   assert.deepEqual(
-    nach.games.map((g) => g.type).sort(),
+    [...new Set(nach.games.map((g) => g.type))].sort(),
     ['attention', 'costume', 'logic', 'observation', 'syllables'],
   );
 });

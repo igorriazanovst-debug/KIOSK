@@ -232,17 +232,19 @@ for (const { name, label, content } of SUITES) {
     assert.ok(middle <= 0.6, `верный - средний по величине в ${Math.round(middle * 100)}% числовых вопросов`);
   });
 
-  test(`${name} H5: ранг верного в числовых раундах игры «Логические задачи» варьируется`, () => {
-    const logic = content.games.find((g) => g.type === 'logic');
-    if (!logic) return; // в дошкольном нет logic-игры
-    const tasks = (logic.data.tasks ?? []) as Array<{ options: string[]; correct: number }>;
-    const numeric = tasks.filter((t) => isNumericQuestion(t.options));
-    if (numeric.length < 4) return;
-    const ranks = numeric.map((t) => numericRank(t.options, t.correct));
-    const byRank = [...new Set(ranks)].map((r) => ranks.filter((x) => x === r).length / ranks.length);
-    assert.ok(Math.max(...byRank) <= 0.6, `один ранг занимает больше 60%: ранги ${ranks.join(',')}`);
-    const middle = ranks.filter((r) => r > 0 && r < Math.max(...ranks)).length / ranks.length;
-    assert.ok(middle <= 0.6, `верный - средний по величине в ${Math.round(middle * 100)}% числовых раундов`);
+  test(`${name} H5: ранг верного в числовых раундах каждой logic-игры варьируется`, () => {
+    const logicGames = content.games.filter((g) => g.type === 'logic');
+    if (logicGames.length === 0) return; // в дошкольном нет logic-игр
+    for (const logic of logicGames) {
+      const tasks = (logic.data.tasks ?? []) as Array<{ options: string[]; correct: number }>;
+      const numeric = tasks.filter((t) => isNumericQuestion(t.options));
+      if (numeric.length < 4) continue;
+      const ranks = numeric.map((t) => numericRank(t.options, t.correct));
+      const byRank = [...new Set(ranks)].map((r) => ranks.filter((x) => x === r).length / ranks.length);
+      assert.ok(Math.max(...byRank) <= 0.6, `${logic.id}: один ранг занимает больше 60%: ранги ${ranks.join(',')}`);
+      const middle = ranks.filter((r) => r > 0 && r < Math.max(...ranks)).length / ranks.length;
+      assert.ok(middle <= 0.6, `${logic.id}: верный - средний по величине в ${Math.round(middle * 100)}% числовых раундов`);
+    }
   });
 
   // ---------- H7: порядок слов в тексте ----------

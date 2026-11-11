@@ -20,8 +20,11 @@ function solve(task: EumkTask): unknown {
   }
 }
 
-test('seven games are generated from rounds', () => {
-  assert.equal(games.length, 7);
+test('every round-based game is present, one per base type plus block pools', () => {
+  // С волнами K5 растёт число поблочных пулов: базовая механика - все 7
+  // round-типов представлены минимум один раз.
+  assert.ok(games.length >= 7);
+  assert.equal(new Set(games.map((g) => g.type)).size, 7, 'все 7 round-типов');
 });
 
 test('every game offers at least one level', () => {

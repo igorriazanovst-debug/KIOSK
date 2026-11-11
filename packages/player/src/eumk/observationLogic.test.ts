@@ -6,20 +6,26 @@ import { seededRng } from './rng.ts';
 import { observationData, scenesForLevel, observationLevels, tapScene, startScenePlay, sceneStars, type ObservationScene } from './observationLogic.ts';
 
 const content = parseEumkContent(JSON.parse(readFileSync(new URL('./content/nach.content.json', import.meta.url), 'utf8')));
-const game = content.games.find((g) => g.type === 'observation')!;
-const data = observationData(game);
+// С волны 1 observation-игр несколько (базовая + поблочные): проверяем все.
+const allObservationData = content.games.filter((g) => g.type === 'observation').map((g) => observationData(g));
 
 test('scenes exist for every level', () => {
-  for (const level of observationLevels(data)) assert.ok(scenesForLevel(data, level).length > 0, `level ${level}`);
+  for (const data of allObservationData) {
+    for (const level of observationLevels(data)) assert.ok(scenesForLevel(data, level).length > 0, `level ${level}`);
+  }
 });
 
 test('every scene has as many differences as its answerCount', () => {
-  for (const s of data.scenes) assert.equal(s.differences.length, s.answerCount, s.id);
+  for (const data of allObservationData) {
+    for (const s of data.scenes) assert.equal(s.differences.length, s.answerCount, s.id);
+  }
 });
 
 test('every difference lies inside the canvas', () => {
-  for (const s of data.scenes) for (const d of s.differences) {
-    assert.ok(d.x >= 0 && d.x <= s.canvas.width && d.y >= 0 && d.y <= s.canvas.height, s.id);
+  for (const data of allObservationData) {
+    for (const s of data.scenes) for (const d of s.differences) {
+      assert.ok(d.x >= 0 && d.x <= s.canvas.width && d.y >= 0 && d.y <= s.canvas.height, s.id);
+    }
   }
 });
 
@@ -61,7 +67,7 @@ test('stars drop with errors', () => {
 });
 
 test('scenesForLevel returns a bounded random selection without repeats', () => {
-  const picked = scenesForLevel(data, 3, seededRng(1), 2);
+  const picked = scenesForLevel(allObservationData[0], 3, seededRng(1), 2);
   assert.ok(picked.length <= 2);
   assert.equal(new Set(picked.map((s) => s.id)).size, picked.length);
 });
