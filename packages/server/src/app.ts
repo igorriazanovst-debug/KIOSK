@@ -226,6 +226,48 @@ async function startServer() {
                   // под тем же deviceId.
                   if (verified) {
                     verifiedConnections.set(ws, incomingDeviceId);
+                    // K2-F4: очередь офлайн-удалений. Команда строится заново
+                    // (новый commandId/подпись): клиент помнит выполненные
+                    // commandId в рамках сессии, повтор старого id он бы молча
+                    // проигнорировал. Хранится до итогового ACK (completed).
+                    try {
+                      const deviceRow = await prisma.device.findUnique({
+                        where: { deviceId: incomingDeviceId },
+                        select: { id: true, licenseId: true, pendingUninstall: true, status: true }
+                      });
+                      if (deviceRow?.pendingUninstall && deviceRow.status === 'DEACTIVATED') {
+                        const license = await prisma.license.findUnique({
+                          where: { id: deviceRow.licenseId },
+                          select: { licenseKey: true }
+                        });
+                        const { randomUUID } = await import('crypto');
+                        const { buildUninstallSignature } = await import('./utils/deviceCommand');
+                        const commandId = randomUUID();
+                        const issuedAt = Date.now();
+                        const { signature } = buildUninstallSignature({
+                          licenseKey: license?.licenseKey,
+                          deviceId: incomingDeviceId,
+                          commandId,
+                          issuedAt
+                        });
+                        if (signature) {
+                          ws.send(JSON.stringify({
+                            type: 'device:uninstall',
+                            reason: (deviceRow.pendingUninstall as any).reason || 'Deactivated by admin',
+                            commandId, issuedAt,
+                            deviceId: incomingDeviceId,
+                            signature
+                          }));
+                          await prisma.device.update({
+                            where: { id: deviceRow.id },
+                            data: { pendingUninstall: { commandId, issuedAt, signature, reason: (deviceRow.pendingUninstall as any).reason || 'Deactivated by admin' } }
+                          });
+                          console.log('[WS] Sent queued uninstall to', incomingDeviceId);
+                        }
+                      }
+                    } catch (qErr: any) {
+                      console.error('[WS] Queued uninstall dispatch failed:', qErr.message);
+                    }
                   } else {
                     verifiedConnections.delete(ws);
                   }
@@ -239,6 +281,42 @@ async function startServer() {
                 }
               } catch (err: any) {
                 console.error('[WS] DB error:', err.message);
+              }
+            }
+          } else if (msg.type === 'device:uninstall-result') {
+            // K2-F4: результат удаления с устройства. Принимаем только от
+            // проверенного соединения этого устройства; итоговый результат
+            // (stage=completed) очищает очередь и виден админу.
+            const resultDeviceId = msg.deviceId || connectedDeviceId;
+            if (resultDeviceId && isDeviceSocketVerified(resultDeviceId) && typeof msg.commandId === 'string') {
+              try {
+                const { getPrismaClient } = await import('./config/database');
+                const prisma = getPrismaClient();
+                const deviceRow = await prisma.device.findUnique({
+                  where: { deviceId: resultDeviceId },
+                  select: { id: true, pendingUninstall: true }
+                });
+                const pending = deviceRow?.pendingUninstall as { commandId?: string } | null;
+                if (pending?.commandId === msg.commandId) {
+                  const data: any = {
+                    uninstallResult: {
+                      commandId: msg.commandId,
+                      ok: !!msg.ok,
+                      stage: msg.stage || 'completed',
+                      error: typeof msg.error === 'string' ? msg.error : null,
+                      at: new Date().toISOString()
+                    }
+                  };
+                  if (msg.stage === 'completed' || msg.ok === false) {
+                    data.pendingUninstall = null; // итог получен - очередь чиста
+                  }
+                  await prisma.device.update({ where: { id: deviceRow!.id }, data });
+                  console.log('[WS] uninstall-result', resultDeviceId, msg.stage, 'ok:', msg.ok);
+                } else {
+                  console.warn('[WS] uninstall-result with unknown commandId from', resultDeviceId);
+                }
+              } catch (err: any) {
+                console.error('[WS] uninstall-result DB error:', err.message);
               }
             }
           } else if (msg.type === 'device:heartbeat') {

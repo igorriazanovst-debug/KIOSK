@@ -131,6 +131,13 @@ model Device {
   // доступе к нескольким проектам под одной лицензией через ProjectGrant)
   projectId     String?
 
+  // K2-F4: очередь удалённых удалений. Подписанная команда сохраняется при
+  // деактивации и повторно отправляется при подключении устройства, пока не
+  // придёт итоговый ACK device:uninstall-result (stage=completed).
+  pendingUninstall Json?
+  // Последний итог удаления с устройства (для админ-интерфейса).
+  uninstallResult  Json?
+
   license       License      @relation(fields: [licenseId], references: [id])
   project       Project?     @relation(fields: [projectId], references: [id])
   tokens        Token[]

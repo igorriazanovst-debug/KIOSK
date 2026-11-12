@@ -55,10 +55,15 @@ test('единственный uninstaller находится и без точн
   }
 });
 
-test('план Windows: silent /S и путь uninstaller', () => {
-  const plan = buildUninstallPlan({ platform: 'win32', uninstallerPath: 'C:\\App\\Uninstall App.exe' });
+test('план Windows: silent /S, синхронный --_?=, ожидание кода (K2-F5)', () => {
+  // Без installDir флаг --_?= построить нельзя: явная ошибка вместо ложного успеха.
+  const noDir = buildUninstallPlan({ platform: 'win32', uninstallerPath: 'C:/x/Uninstall App.exe' });
+  assert.equal(noDir.ok, false);
+  const plan = buildUninstallPlan({ platform: 'win32', uninstallerPath: 'C:/x/Uninstall App.exe', installDir: 'C:/x' });
   assert.equal(plan.ok, true);
-  assert.deepEqual(plan.attempts, [{ command: 'C:\\App\\Uninstall App.exe', args: ['/S'] }]);
+  assert.equal(plan.attempts[0].command, 'C:/x/Uninstall App.exe');
+  assert.deepEqual(plan.attempts[0].args, ['/S', '--_?=C:/x']);
+  assert.equal(plan.attempts[0].waitForExit, true);
 });
 
 test('план Windows без uninstaller возвращает ошибку', () => {
@@ -173,3 +178,4 @@ test('runUninstallAttempt: таймаут убивает процесс и во�
   assert.equal(result.error, 'timeout');
   assert.equal(child.killed, true);
 });
+

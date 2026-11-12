@@ -432,53 +432,60 @@ export class AdminController {
     
     await DeviceService.deactivateDevice(device.deviceId);
     
-    // Если устройство онлайн — отправить удалённое удаление. Только
-    // проверенному соединению: иначе команду мог бы получить чужой сокет,
-    // зарегистрировавшийся под тем же deviceId. Для старых/непроверенных
-    // соединений оставляем безопасное выключение.
+    // K2-F4: удалённое удаление с очередью для офлайн-устройств. Подписанная
+    // команда сохраняется в pendingUninstall: если сокета нет - она будет
+    // отправлена при подключении (app.ts); результат придёт ACK-ом
+    // device:uninstall-result и станет виден админу в uninstallResult.
+    let sent = false;
+    let queued = false;
     try {
       const { getDeviceSockets } = await import('../app');
       const sockets = getDeviceSockets();
       const ws = sockets.get(device.deviceId);
-      if (ws && ws.readyState === 1 /* OPEN */) {
-        if (isDeviceSocketVerified(device.deviceId)) {
-          const license = await prisma.license.findUnique({
-            where: { id: device.licenseId },
-            select: { licenseKey: true }
-          });
-          const commandId = randomUUID();
-          const issuedAt = Date.now();
-          const { signature } = buildUninstallSignature({
-            licenseKey: license?.licenseKey,
-            deviceId: device.deviceId,
-            commandId,
-            issuedAt
-          });
-          if (signature) {
-            ws.send(JSON.stringify({
-              type: 'device:uninstall',
-              reason: 'Deactivated by admin',
-              commandId,
-              issuedAt,
-              deviceId: device.deviceId,
-              signature
-            }));
-            console.log('[Admin] Sent signed device:uninstall to', device.deviceId);
-          } else {
-            // Без ключа лицензии подпись не построить — безопаснее
-            // ограничиться выключением, чем отправить неподписанную команду.
-            ws.send(JSON.stringify({ type: 'device:shutdown', reason: 'Deactivated by admin' }));
-            console.log('[Admin] No license key for signature; sent device:shutdown to', device.deviceId);
-          }
-        } else {
-          ws.send(JSON.stringify({ type: 'device:shutdown', reason: 'Deactivated by admin' }));
-          console.log('[Admin] Sent device:shutdown to unverified', device.deviceId);
+      const online = ws && ws.readyState === 1 /* OPEN */ && isDeviceSocketVerified(device.deviceId);
+      const license = await prisma.license.findUnique({
+        where: { id: device.licenseId },
+        select: { licenseKey: true }
+      });
+      const commandId = randomUUID();
+      const issuedAt = Date.now();
+      const { signature } = buildUninstallSignature({
+        licenseKey: license?.licenseKey,
+        deviceId: device.deviceId,
+        commandId,
+        issuedAt
+      });
+      if (signature && online) {
+        ws!.send(JSON.stringify({
+          type: 'device:uninstall',
+          reason: 'Deactivated by admin',
+          commandId, issuedAt,
+          deviceId: device.deviceId,
+          signature
+        }));
+        sent = true;
+        console.log('[Admin] Sent signed device:uninstall to', device.deviceId);
+      } else if (signature) {
+        queued = true;
+        console.log('[Admin] Device offline; uninstall queued for', device.deviceId);
+      } else {
+        // Без ключа лицензии подпись не построить — безопаснее ограничиться
+        // выключением онлайн-сокета; офлайн очередь не образуется.
+        if (online) {
+          ws!.send(JSON.stringify({ type: 'device:shutdown', reason: 'Deactivated by admin' }));
+          console.log('[Admin] No license key for signature; sent device:shutdown to', device.deviceId);
         }
+      }
+      if (signature) {
+        await prisma.device.update({
+          where: { id: device.id },
+          data: { pendingUninstall: { commandId, issuedAt, signature, reason: 'Deactivated by admin' } }
+        });
       }
     } catch (err: any) {
       console.warn('[Admin] Could not send WS uninstall/shutdown:', err.message);
     }
-    
+
     await AuditService.logDeactivation({
       deviceId: device.id,
       licenseId: device.licenseId,
@@ -488,7 +495,13 @@ export class AdminController {
     
     res.json({
       success: true,
-      message: 'Device deactivated successfully'
+      message: sent
+        ? 'Device deactivated; uninstall command sent'
+        : queued
+          ? 'Device deactivated; uninstall will run when the device connects'
+          : 'Device deactivated successfully',
+      sent,
+      queued
     });
   }
   

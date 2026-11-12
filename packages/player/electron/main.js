@@ -1150,9 +1150,21 @@ function startHeartbeat(serverUrl, projectName) {
             console.log('[Device] Received signed device:uninstall, starting uninstall...');
             remoteUninstallInFlight = true;
             if (heartbeatTimer) { clearInterval(heartbeatTimer); heartbeatTimer = null; }
-            try { ws.close(); } catch {}
+            // K2-F4: результат летит серверу по этому же сокету - не закрываем
+            // его до отправки итога ('started' сразу, 'completed' после попытки).
+            const sendUninstallResult = (ok, stage, error) => {
+              try {
+                if (ws.readyState === 1) {
+                  ws.send(JSON.stringify({ type: 'device:uninstall-result', commandId: msg.commandId, deviceId: msg.deviceId, ok, stage, error }));
+                }
+              } catch (e) {
+                fileLog('[uninstall] failed to send result ack:', e && e.message);
+              }
+            };
+            sendUninstallResult(true, 'started');
             performRemoteUninstall(msg.reason || msg.commandId || '')
               .then((result) => {
+                sendUninstallResult(!!(result && result.ok), 'completed', (result && result.error) || undefined);
                 if (result && result.ok) {
                   // K2-F10: токены теперь в userData - чистим явно при удалении ПО,
                   // данные пользователей (P-03) не затрагиваем.
@@ -1399,7 +1411,7 @@ async function performRemoteUninstall(reason) {
       fs,
       preferredName: `Uninstall ${app.getName()}.exe`
     });
-    plan = buildUninstallPlan({ platform: 'win32', uninstallerPath: uninstaller });
+    plan = buildUninstallPlan({ platform: 'win32', uninstallerPath: uninstaller, installDir });
   } else if (process.platform === 'linux') {
     plan = buildUninstallPlan({
       platform: 'linux',

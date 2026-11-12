@@ -47,12 +47,15 @@ function detectLinuxPackageManagers({ fsModule = fs } = {}) {
   return found.length > 0 ? found : ['dpkg', 'rpm'];
 }
 
-function buildUninstallPlan({ platform, uninstallerPath, packageName, packageManagers = ['dpkg', 'rpm'] }) {
+function buildUninstallPlan({ platform, uninstallerPath, packageName, packageManagers = ['dpkg', 'rpm'], installDir = '' }) {
   if (platform === 'win32') {
     if (!uninstallerPath) return { ok: false, error: 'Windows uninstaller not found' };
+    // K2-F5: --_?=<installDir> заставляет NSIS-деинсталлятор работать
+    // синхронно (не копировать себя в temp): код выхода = итог удаления.
+    if (!installDir) return { ok: false, error: 'Windows uninstall requires installDir for the synchronous --_?= flag' };
     return {
       ok: true,
-      attempts: [{ command: uninstallerPath, args: ['/S'] }]
+      attempts: [{ command: uninstallerPath, args: ['/S', `--_?=${installDir}`], waitForExit: true }]
     };
   }
   if (platform === 'linux') {
