@@ -6,6 +6,15 @@ const { applyAutostart, getAutostartState, readAutostartPreference, resolveStart
 const { resolveTokenPath, migrateLegacyTokenFiles, cleanupTokenFiles } = require('./common/tokenStore');
 const { findWindowsUninstaller, detectLinuxPackageManagers, buildUninstallPlan, runUninstallAttempts } = require('./common/uninstall');
 const { verifyUninstallCommand } = require('./common/deviceCommand');
+
+// Живая проверка K2 (V-101): несколько экземпляров приложения спорили за
+// WS-слот устройства - команды уходили не в тот сокет. Один киоск = один
+// процесс: второй экземпляр немедленно завершается.
+const gotSingleInstanceLock = app.requestSingleInstanceLock();
+if (!gotSingleInstanceLock) {
+  console.log('[Init] Another instance is already running; quitting.');
+  app.quit();
+}
 const { registerChronoIpc } = require('./chrono/ipc');
 const { registerNatComIpc } = require('./natcom/ipc');
 const { registerMathmachineIpc } = require('./mathmachine/ipc');
@@ -1127,6 +1136,7 @@ function startHeartbeat(serverUrl, projectName) {
             });
             if (!signatureOk) {
               fileLog('[uninstall] rejected: missing or invalid signature', {
+                clientHashPrefix: currentProject && currentProject.licenseKeyHash ? currentProject.licenseKeyHash.slice(0, 8) : 'none',
                 deviceId,
                 commandId: msg.commandId || null
               });
@@ -1182,6 +1192,12 @@ function startHeartbeat(serverUrl, projectName) {
                   fileLog('[uninstall] failed, app stays running:', result && result.error);
                   if (currentProject && currentProject.serverUrl) {
                     startHeartbeat(currentProject.serverUrl, currentProject.name);
+                  }
+                  // WS-сокет уже закрыт с флагом inFlight и reconnect не был
+                  // запланирован (дефект живой проверки V-101/3) - чиним.
+                  if (!wsConnection) {
+                    fileLog('[uninstall] scheduling WS reconnect after failed attempt');
+                    setTimeout(connect, 5000);
                   }
                   return;
                 }
@@ -1427,7 +1443,10 @@ async function performRemoteUninstall(reason) {
     return { ok: false, error: plan.error };
   }
 
-  const result = await runUninstallAttempts({ attempts: plan.attempts });
+  // 180с: dpkg больших пакетов с триггерами (desktop-file-utils) на медленных
+  // носителях киоска не влезал в 60с - попытка убивалась на середине
+  // (полу-удаление, дефект V-101/2).
+  const result = await runUninstallAttempts({ attempts: plan.attempts, timeoutMs: 180000 });
   if (result.ok) {
     fileLog('[uninstall] started:', result.command, result.args);
   } else {

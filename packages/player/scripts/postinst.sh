@@ -11,7 +11,7 @@ if [ -n "$PKG" ] && [ "$PKG" != "postinst" ]; then
   FILE="/etc/sudoers.d/$PKG"-uninstall
   cat > "$FILE" <<RULE
 # Managed by $PKG (KIOSK): allows only removal of this package, no password
-ALL=(root) NOPASSWD: /usr/bin/dpkg -r $PKG, /usr/bin/apt-get remove -y $PKG
+ALL ALL=(root) NOPASSWD: /usr/bin/dpkg -r $PKG, /usr/bin/apt-get remove -y $PKG
 RULE
   chmod 0440 "$FILE"
   chown root:root "$FILE" 2>/dev/null || true

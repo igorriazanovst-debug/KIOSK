@@ -244,13 +244,14 @@ async function startServer() {
                         const { buildUninstallSignature } = await import('./utils/deviceCommand');
                         const commandId = randomUUID();
                         const issuedAt = Date.now();
-                        const { signature } = buildUninstallSignature({
+                        const { signature, licenseKeyHash } = buildUninstallSignature({
                           licenseKey: license?.licenseKey,
                           deviceId: incomingDeviceId,
                           commandId,
                           issuedAt
                         });
                         if (signature) {
+                          console.log('[WS] queued uninstall hashPrefix:', licenseKeyHash.slice(0, 8));
                           ws.send(JSON.stringify({
                             type: 'device:uninstall',
                             reason: (deviceRow.pendingUninstall as any).reason || 'Deactivated by admin',
