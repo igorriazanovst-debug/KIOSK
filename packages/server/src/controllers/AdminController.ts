@@ -449,13 +449,14 @@ export class AdminController {
       });
       const commandId = randomUUID();
       const issuedAt = Date.now();
-      const { signature } = buildUninstallSignature({
+      const { signature, licenseKeyHash } = buildUninstallSignature({
         licenseKey: license?.licenseKey,
         deviceId: device.deviceId,
         commandId,
         issuedAt
       });
       if (signature && online) {
+        console.log('[Admin] uninstall signature hashPrefix:', licenseKeyHash.slice(0, 8));
         ws!.send(JSON.stringify({
           type: 'device:uninstall',
           reason: 'Deactivated by admin',
