@@ -3,6 +3,7 @@ const path = require('path');
 const fs = require('fs');
 const { resolveDeviceIdDir, readOrCreateDeviceId } = require('./common/deviceIdStore');
 const { applyAutostart, getAutostartState, readAutostartPreference, resolveStartupEnabled, writeAutostartPreference } = require('./common/autostart');
+const { resolveTokenPath, migrateLegacyTokenFiles, cleanupTokenFiles } = require('./common/tokenStore');
 const { findWindowsUninstaller, detectLinuxPackageManagers, buildUninstallPlan, runUninstallAttempts } = require('./common/uninstall');
 const { verifyUninstallCommand } = require('./common/deviceCommand');
 const { registerChronoIpc } = require('./chrono/ipc');
@@ -30,12 +31,22 @@ let natcomServerPort = null;
 let natcomServerError = null;
 
 // ─── Файловое логирование (DEBUG) ───────────────────────────────────────────
-const PLAYER_LOG_FILE = path.join(path.dirname(process.execPath), 'player-debug.log');
+// K2-F10: лог пишется в userData - на Linux каталог установки root-owned.
+// Путь ленивый: строка ниже исполняется до app.ready, но getPath('userData')
+// доступен сразу (вычисляется из имени приложения).
+let playerLogFile = null;
+function playerLogFilePath() {
+  if (!playerLogFile) {
+    try { playerLogFile = path.join(app.getPath('userData'), 'player-debug.log'); }
+    catch { playerLogFile = path.join(path.dirname(process.execPath), 'player-debug.log'); }
+  }
+  return playerLogFile;
+}
 function fileLog(...args) {
   const line = '[' + new Date().toISOString() + '] ' + args.map(a =>
     typeof a === 'object' ? JSON.stringify(a) : String(a)
   ).join(' ') + '\n';
-  try { fs.appendFileSync(PLAYER_LOG_FILE, line); } catch {}
+  try { fs.appendFileSync(playerLogFilePath(), line); } catch {}
 }
 const _origLog = console.log;
 const _origErr = console.error;
@@ -585,15 +596,18 @@ let versionPollTimer = null;
 const VERSION_POLL_INTERVAL = 5 * 60 * 1000; // 5 минут
 
 function getTokenFilePath() {
-  // Токен хранится рядом с exe (удаляется при деинсталляции программы)
-  // и привязан к projectId — смена проекта = новая активация.
-  const dir = path.dirname(process.execPath);
-  const pid = (currentProject && currentProject.id) ? currentProject.id.slice(0, 8) : 'noproj';
-  return path.join(dir, `player-token-${pid}.json`);
+  // K2-F10: токен хранится в userData (запись рядом с exe на Linux падала
+  // молча - EACCES) и привязан к projectId: смена проекта = новая активация.
+  const pid = (currentProject && currentProject.id) ? currentProject.id : null;
+  return resolveTokenPath(app.getPath('userData'), pid);
 }
 
 function loadStoredToken() {
   try {
+    // Разовая миграция токенов из каталога установки (до K2-F10), чтобы
+    // обновление не разлогинивало уже активированные киоски.
+    const moved = migrateLegacyTokenFiles({ execDir: path.dirname(process.execPath), userDataDir: app.getPath('userData') });
+    if (moved.length > 0) console.log('[Auth] Migrated legacy token files:', moved.join(', '));
     const tokenFile = getTokenFilePath();
     if (fs.existsSync(tokenFile)) {
       const data = JSON.parse(fs.readFileSync(tokenFile, 'utf-8'));
@@ -1139,6 +1153,16 @@ function startHeartbeat(serverUrl, projectName) {
             try { ws.close(); } catch {}
             performRemoteUninstall(msg.reason || msg.commandId || '')
               .then((result) => {
+                if (result && result.ok) {
+                  // K2-F10: токены теперь в userData - чистим явно при удалении ПО,
+                  // данные пользователей (P-03) не затрагиваем.
+                  try {
+                    const removed = cleanupTokenFiles(app.getPath('userData'));
+                    fileLog('[uninstall] cleaned token files:', removed.join(', ') || 'none');
+                  } catch (e) {
+                    fileLog('[uninstall] token cleanup failed:', e && e.message);
+                  }
+                }
                 if (!result || !result.ok) {
                   // Не удалось запустить деинсталлятор: приложение остаётся
                   // запущенным, чтобы администратор мог повторить команду.
@@ -1308,6 +1332,17 @@ function autostartAppId() {
   return app.getName();
 }
 
+// K2-F9: человекочитаемое имя для .desktop/реестра автозагрузки берём из
+// productName (прод-пайплайн пишет его в package.json), а не из технического
+// имени пакета: в списке автозагрузки ОС было видно «kiosk-player».
+function autostartAppName() {
+  try {
+    const pkg = require(path.join(app.getAppPath(), 'package.json'));
+    if (pkg && typeof pkg.productName === 'string' && pkg.productName.trim()) return pkg.productName.trim();
+  } catch (_e) {}
+  return app.getName();
+}
+
 function autostartContext() {
   return {
     platform: process.platform,
@@ -1315,7 +1350,7 @@ function autostartContext() {
     configDir: app.getPath('appData'),
     userDataDir: app.getPath('userData'),
     appId: autostartAppId(),
-    appName: app.getName(),
+    appName: autostartAppName(),
     execPath: process.execPath,
     args: []
   };

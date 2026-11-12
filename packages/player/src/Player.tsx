@@ -5,6 +5,7 @@ import PlaylistRenderer from './components/PlaylistRenderer';
 import { serverConnection } from './services/server-connection';
 import ActivationScreen from './components/ActivationScreen';
 import UpdateBanner from './components/UpdateBanner';
+import AdminPanel from './components/AdminPanel';
 import NavigationRuntime from './NavigationRuntime';
 import ChronolineRuntime from './chrono/ChronolineRuntime.tsx';
 import NatComRuntime from './natcom/NatComRuntime.tsx';
@@ -1283,6 +1284,8 @@ const Player: React.FC<PlayerProps> = ({ embedded = false }) => {
           </div>
         </div>
       )}
+      {/* Панель администратора: автозапуск (K2-F9) */}
+      <AdminPanel />
       {/* Плашка обновления */}
       {updateInfo && (
         <UpdateBanner
