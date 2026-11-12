@@ -2,7 +2,7 @@
 //
 // Windows: запускаем штатный Uninstall <App>.exe с /S (NSIS silent).
 // Linux: штатный пакетный менеджер. Приложение работает от пользователя,
-// поэтому сначала pkexec (политика polkit), затем sudo -n (если настроен
+// сначала sudo -n (правило из postinst пакета, K2-F6), затем pkexec (polkit
 // passwordless sudo для kiosk-пользователя). Если ни один способ не
 // разрешён, команда не выполняется — это фиксируется в журнале.
 //
@@ -64,8 +64,11 @@ function buildUninstallPlan({ platform, uninstallerPath, packageName, packageMan
     const attempts = [];
     for (const manager of managers) {
       const args = manager === 'rpm' ? ['-e', packageName] : ['-r', packageName];
-      attempts.push({ command: 'pkexec', args: [manager, ...args], waitForExit: true });
+      // K2-F6: сначала sudo -n - с правилом из postinst пакета это мгновенно
+      // и не требует GUI-агента polkit; pkexec остаётся интерактивным
+      // fallback'ом для администратора за консолью.
       attempts.push({ command: 'sudo', args: ['-n', manager, ...args], waitForExit: true });
+      attempts.push({ command: 'pkexec', args: [manager, ...args], waitForExit: true });
     }
     return { ok: true, attempts };
   }

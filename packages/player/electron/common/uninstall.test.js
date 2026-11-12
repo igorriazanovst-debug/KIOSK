@@ -72,13 +72,12 @@ test('план Windows без uninstaller возвращает ошибку', ()
   assert.match(plan.error, /not found/);
 });
 
-test('план Linux: pkexec, затем sudo -n, пакет из package.json', () => {
-  const plan = buildUninstallPlan({ platform: 'linux', packageName: 'com.kiosk.vmvov' });
+test('план Linux: sudo -n первым (правило K2-F6), затем pkexec; пакет из package.json', () => {
+  const plan = buildUninstallPlan({ platform: 'linux', packageName: 'kiosk-player', packageManagers: ['dpkg'] });
   assert.equal(plan.ok, true);
-  assert.deepEqual(plan.attempts[0], { command: 'pkexec', args: ['dpkg', '-r', 'com.kiosk.vmvov'], waitForExit: true });
-  assert.deepEqual(plan.attempts[1], { command: 'sudo', args: ['-n', 'dpkg', '-r', 'com.kiosk.vmvov'], waitForExit: true });
-  assert.deepEqual(plan.attempts[2], { command: 'pkexec', args: ['rpm', '-e', 'com.kiosk.vmvov'], waitForExit: true });
-  assert.deepEqual(plan.attempts[3], { command: 'sudo', args: ['-n', 'rpm', '-e', 'com.kiosk.vmvov'], waitForExit: true });
+  assert.deepEqual(plan.attempts.map((a) => a.command), ['sudo', 'pkexec']);
+  assert.deepEqual(plan.attempts[0].args, ['-n', 'dpkg', '-r', 'kiosk-player']);
+  assert.equal(plan.attempts[0].waitForExit, true);
 });
 
 test('план Linux использует только обнаруженный пакетный менеджер', () => {
@@ -89,8 +88,8 @@ test('план Linux использует только обнаруженный 
   });
   assert.equal(plan.ok, true);
   assert.equal(plan.attempts.length, 2);
-  assert.deepEqual(plan.attempts[0], { command: 'pkexec', args: ['rpm', '-e', 'com.kiosk.vmvov'], waitForExit: true });
-  assert.deepEqual(plan.attempts[1], { command: 'sudo', args: ['-n', 'rpm', '-e', 'com.kiosk.vmvov'], waitForExit: true });
+  assert.deepEqual(plan.attempts[0], { command: 'sudo', args: ['-n', 'rpm', '-e', 'com.kiosk.vmvov'], waitForExit: true });
+  assert.deepEqual(plan.attempts[1], { command: 'pkexec', args: ['rpm', '-e', 'com.kiosk.vmvov'], waitForExit: true });
 });
 
 test('detectLinuxPackageManagers определяет dpkg/rpm по наличию файлов', () => {

@@ -187,7 +187,9 @@
       "artifactName": "${productName}-${version}-${arch}.${ext}"
     },
     "deb": {
-      "packageName": "kiosk-player"
+      "packageName": "kiosk-player",
+      "afterInstall": "scripts/postinst.sh",
+      "afterRemove": "scripts/postrm.sh"
     },
     "rpm": {
       "packageName": "kiosk-player"
