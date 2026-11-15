@@ -143,24 +143,28 @@ const Player: React.FC<PlayerProps> = ({ embedded = false }) => {
   // вернуться на первую страницу — следующий посетитель видит главную со
   // счётчиками, а не забытую случайную страницу. Не действует на standalone-
   // приложения (ЭУМК и др. — там нет browser-menu, учебный процесс не сбиваем)
-  // и не срабатывает при открытом лайтбоксе.
+  // и не срабатывает при открытом лайтбоксе. Активность = ввод И скролл
+  // (читающий посететель листает страницу и не должен сбрасываться), таймер
+  // перевзводится после каждого срабатывания (одноразовый таймер «умирал»
+  // после первого холостого сброса и больше не следил — найдено вживую).
   const idleResetTimer = useRef<number | null>(null);
   useEffect(() => {
     const hasBrowserMenu = !!project?.widgets?.some((w: any) => w.type === 'browser-menu');
     if (!hasBrowserMenu) return;
     const IDLE_MS = 3 * 60 * 1000;
-    const reset = () => {
+    const arm = () => {
       if (idleResetTimer.current) window.clearTimeout(idleResetTimer.current);
-      idleResetTimer.current = window.setTimeout(() => {
+      idleResetTimer.current = window.setTimeout(function fire() {
         setBrowserActivePages((prev) => (Object.keys(prev).length === 0 || browserZoomImage ? prev : {}));
+        arm();
       }, IDLE_MS);
     };
-    reset();
-    const events: (keyof WindowEventMap)[] = ['pointerdown', 'pointermove', 'keydown'];
-    events.forEach((ev) => window.addEventListener(ev, reset, { passive: true }));
+    arm();
+    const events: (keyof WindowEventMap)[] = ['pointerdown', 'pointermove', 'keydown', 'wheel', 'touchmove'];
+    events.forEach((ev) => window.addEventListener(ev, arm, { passive: true }));
     return () => {
       if (idleResetTimer.current) window.clearTimeout(idleResetTimer.current);
-      events.forEach((ev) => window.removeEventListener(ev, reset));
+      events.forEach((ev) => window.removeEventListener(ev, arm));
     };
   }, [project, browserZoomImage]);
 
