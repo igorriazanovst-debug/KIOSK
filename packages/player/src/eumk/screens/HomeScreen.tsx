@@ -24,7 +24,7 @@ export default function HomeScreen({ content, onOpen, tasksDone, isTeacher }: Pr
   const sectionCount = content.theory.reduce((n, b) => n + b.sections.length, 0);
   const tiles: { id: Section; title: string; text: string; show: boolean }[] = [
     { id: 'theory', title: 'Теория', text: `${content.theory.length} ${plural(content.theory.length, 'блок', 'блока', 'блоков')}, ${sectionCount} ${plural(sectionCount, 'раздел', 'раздела', 'разделов')}`, show: true },
-    { id: 'tasks', title: 'Практические задания', text: `${content.tasks.length} ${plural(content.tasks.length, 'задание', 'задания', 'заданий')}, выполнено верно: ${tasksDone}`, show: content.tasks.length > 0 },
+    { id: 'tasks', title: 'Практические задания', text: `${content.tasks.length} ${plural(content.tasks.length, 'задание', 'задания', 'заданий')} · решено верно: ${tasksDone} из ${content.tasks.length}`, show: content.tasks.length > 0 },
     { id: 'games', title: 'Игры', text: `${content.games.length} ${plural(content.games.length, 'интерактивная игра', 'интерактивные игры', 'интерактивных игр')}`, show: content.games.length > 0 },
     { id: 'cases', title: 'Кейсы', text: `${content.cases.length} ${plural(content.cases.length, 'профессиональная ситуация', 'профессиональные ситуации', 'профессиональных ситуаций')}`, show: content.cases.length > 0 },
     { id: 'test', title: 'Итоговый тест', text: `${content.test.questionCount} вопросов из банка в ${content.bank.length}; каждый раз новый набор`, show: true },
@@ -40,6 +40,19 @@ export default function HomeScreen({ content, onOpen, tasksDone, isTeacher }: Pr
           <button key={t.id} type="button" className="eumk-tile" onClick={() => onOpen(t.id)}>
             <b>{t.title}</b>
             <span>{t.text}</span>
+            {t.id === 'tasks' && content.tasks.length > 0 && (
+              <span
+                className="eumk-progress"
+                role="progressbar"
+                aria-label="Прогресс заданий"
+                aria-valuenow={tasksDone}
+                aria-valuemin={0}
+                aria-valuemax={content.tasks.length}
+                style={{ marginTop: 8, marginBottom: 2 }}
+              >
+                <span style={{ width: `${Math.min(100, Math.round((tasksDone / content.tasks.length) * 100))}%` }} />
+              </span>
+            )}
           </button>
         ))}
       </div>

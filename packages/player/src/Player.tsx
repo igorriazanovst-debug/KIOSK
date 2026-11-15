@@ -124,6 +124,10 @@ const Player: React.FC<PlayerProps> = ({ embedded = false }) => {
   const [popupVisible, setPopupVisible] = useState(false);
   const [popupData, setPopupData] = useState<any>(null);
   const [browserActivePages, setBrowserActivePages] = useState<Record<string, string>>({});
+  // Лайтбокс изображений browser-content: клик по портрету/фото в статье —
+  // полноэкранный просмотр (у галереи свой лайтбокс, его не трогаем —
+  // отличаем по inline-onclick у предков миниатюр галереи).
+  const [browserZoomImage, setBrowserZoomImage] = useState<string | null>(null);
   const videoRefs = useRef<Map<string, HTMLVideoElement>>(new Map());
   // Standalone-app виджеты ("chronoline", "naturalcommunities") - не
   // позиционируемые widget среди прочих, работают и в fullscreen-киоске на
@@ -487,12 +491,21 @@ const Player: React.FC<PlayerProps> = ({ embedded = false }) => {
 
     const handleClick = (e: React.MouseEvent<HTMLDivElement>) => {
       const a = (e.target as HTMLElement).closest('a');
-      if (!a) return;
-      const href = a.getAttribute('href') || '';
-      if (href.startsWith('browser-page://')) {
+      if (a) {
+        const href = a.getAttribute('href') || '';
+        if (href.startsWith('browser-page://')) {
+          e.preventDefault();
+          const pageId = href.replace('browser-page://', '');
+          setBrowserActivePages(prev => ({ ...prev, [browserId]: pageId }));
+        }
+        return;
+      }
+      // Клик по изображению статьи (не миниатюре галереи — у тех inline
+      // onclick у предка) — открываем лайтбокс крупного просмотра.
+      const img = (e.target as HTMLElement).closest('img');
+      if (img && !img.closest('[onclick]')) {
         e.preventDefault();
-        const pageId = href.replace('browser-page://', '');
-        setBrowserActivePages(prev => ({ ...prev, [browserId]: pageId }));
+        setBrowserZoomImage((img as HTMLImageElement).src);
       }
     };
 
@@ -1295,6 +1308,32 @@ const Player: React.FC<PlayerProps> = ({ embedded = false }) => {
             <button className="popup-close" onClick={() => setPopupVisible(false)}>×</button>
             <h3>{popupData.title}</h3>
             <div className="popup-body">{popupData.content}</div>
+          </div>
+        </div>
+      )}
+      {/* Лайтбокс изображения browser-content (музейные портреты/фото) */}
+      {browserZoomImage && (
+        <div
+          onClick={() => setBrowserZoomImage(null)}
+          style={{
+            position: 'fixed', top: 0, left: 0, right: 0, bottom: 0,
+            background: 'rgba(10, 20, 16, 0.93)', zIndex: 100000,
+            display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
+            cursor: 'zoom-out',
+          }}
+        >
+          <img
+            src={browserZoomImage}
+            alt=""
+            style={{
+              maxWidth: '92vw', maxHeight: '84vh', objectFit: 'contain',
+              borderRadius: 8, background: '#ffffff',
+              boxShadow: '0 12px 48px rgba(0, 0, 0, 0.55)',
+              padding: 8,
+            }}
+          />
+          <div style={{ color: '#d8dcd6', fontSize: 15, marginTop: 18, userSelect: 'none' }}>
+            Нажмите, чтобы закрыть
           </div>
         </div>
       )}

@@ -85,8 +85,8 @@
 .eumk-cell { min-height: 56px; font: inherit; font-size: 24px; font-weight: 700; border: 1px solid var(--eumk-line); border-radius: 10px; background: var(--eumk-surface); color: var(--eumk-ink); cursor: pointer; }
 .eumk-cell.found { background: var(--eumk-good-bg); border-color: var(--eumk-good); }
 .eumk-cell.miss { background: var(--eumk-bad-bg); border-color: var(--eumk-bad); }
-.eumk-progress { height: 12px; border-radius: 6px; background: var(--eumk-line); overflow: hidden; margin: 8px 0 16px; }
-.eumk-progress > div { height: 100%; background: var(--eumk-accent); }
+.eumk-progress { height: 12px; border-radius: 6px; background: var(--eumk-line); overflow: hidden; margin: 8px 0 16px; display: block; }
+.eumk-progress > div, .eumk-progress > span { display: block; height: 100%; background: var(--eumk-accent); }
 .eumk-tabs { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 16px; }
 .eumk-split { display: grid; grid-template-columns: 300px 1fr; gap: 24px; align-items: start; }
 .eumk-split > div:last-child { max-width: 900px; }
