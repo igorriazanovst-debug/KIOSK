@@ -1456,6 +1456,29 @@ async function performRemoteUninstall(reason) {
 }
 
 app.whenReady().then(() => {
+  // Скачивания браузерной части (CSV-экспорт ЭУМК и т.п.): сохраняем молча
+  // в «Загрузки» пользователя — у киоска нет файловых диалогов. Без
+  // обработчика will-download Electron молча отбрасывает скачивание по
+  // blob-ссылке (найдено вживую: «Экспорт CSV» не создавал файл).
+  try {
+    const { session } = require('electron');
+    const { uniqueDownloadPath } = require('./common/downloads.js');
+    session.defaultSession.on('will-download', (event, item) => {
+      try {
+        const downloadsDir = app.getPath('downloads');
+        try {
+          if (!fs.existsSync(downloadsDir)) fs.mkdirSync(downloadsDir, { recursive: true }); // eslint-disable-line no-sync
+        } catch (_e) { /* каталог недоступен — Electron покажет свою ошибку */ }
+        const savePath = uniqueDownloadPath(downloadsDir, item.getFilename());
+        item.setSavePath(savePath);
+        fileLog('[download] saving to:', savePath);
+      } catch (err) {
+        fileLog('[download] handler failed:', err && err.message);
+      }
+    });
+  } catch (err) {
+    fileLog('[download] init failed:', err && err.message);
+  }
   // Автозапуск: по умолчанию включён в собранном приложении. IPC нужен
   // административному режиму для просмотра/переключения.
   try {
