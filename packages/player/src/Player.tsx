@@ -387,36 +387,48 @@ const Player: React.FC<PlayerProps> = ({ embedded = false }) => {
     const menuBg: string = widget.properties.menuBgColor || '#2c3e50';
     const menuText: string = widget.properties.menuTextColor || '#ffffff';
     const menuFs: number = widget.properties.menuFontSize || 14;
+    const activeColor: string = widget.properties.activeMenuItemColor || 'rgba(255,255,255,0.75)';
     const isHoriz = orientation === 'horizontal';
     const activePageId = browserActivePages[browserId];
     const topLevel = pages.filter((p: any) => !p.parentId);
+    // Классы с уникальным скоупом: hover-состояния пунктов меню (сенсорные панели
+    // и мышь), активная вертикальная полоса-акцент цвета activeMenuItemColor.
+    const scope = `kbm-${browserId || widget.id}`;
+    const menuCss = `
+      .${scope} .kbm-item:hover, .${scope} .kbm-child:hover { background: rgba(255,255,255,0.10); }
+      .${scope} .kbm-item.kbm-on { box-shadow: inset 5px 0 0 ${activeColor}; }
+      .${scope} .kbm-child.kbm-on { background: rgba(255,255,255,0.12); box-shadow: inset 3px 0 0 ${activeColor}; font-weight: 600; }
+    `;
 
     return (
-      <div key={widget.id} style={{
+      <div key={widget.id} className={scope} style={{
         ...baseStyle,
         background: menuBg,
         display: 'flex',
         flexDirection: isHoriz ? 'row' : 'column',
         overflow: 'hidden',
       }}>
+        <style>{menuCss}</style>
         {topLevel.map((page: any) => {
           const children = pages.filter((p: any) => p.parentId === page.id);
           const isActive = activePageId === page.id || (!activePageId && pages[0]?.id === page.id);
+          const parentOfActive = children.some((c: any) => c.id === activePageId);
           return (
             <div key={page.id} style={{ position: 'relative' }}>
               <div
+                className={`kbm-item${isActive ? ' kbm-on' : ''}`}
                 onClick={() => setBrowserActivePages(prev => ({ ...prev, [browserId]: page.id }))}
                 style={{
                   padding: isHoriz ? `0 ${menuFs}px` : `${Math.round(menuFs * 0.6)}px ${menuFs}px`,
                   color: menuText,
                   fontSize: `${menuFs}px`,
                   cursor: 'pointer',
-                  background: isActive ? 'rgba(255,255,255,0.15)' : 'transparent',
-                  fontWeight: isActive ? 'bold' : 'normal',
+                  background: isActive ? 'rgba(255,255,255,0.15)' : parentOfActive ? 'rgba(255,255,255,0.06)' : 'transparent',
+                  fontWeight: isActive || parentOfActive ? 'bold' : 'normal',
                   whiteSpace: 'nowrap',
                   display: 'flex',
                   alignItems: 'center',
-                  minHeight: isHoriz ? '100%' : `${menuFs * 2.2}px`,
+                  minHeight: isHoriz ? '100%' : `${Math.round(menuFs * 2.6)}px`,
                   userSelect: 'none',
                 }}
               >
@@ -434,16 +446,18 @@ const Player: React.FC<PlayerProps> = ({ embedded = false }) => {
                   {children.map((child: any) => (
                     <div
                       key={child.id}
+                      className={`kbm-child${activePageId === child.id ? ' kbm-on' : ''}`}
                       onClick={(e) => {
                         e.stopPropagation();
                         setBrowserActivePages(prev => ({ ...prev, [browserId]: child.id }));
                       }}
                       style={{
-                        padding: `${Math.round(menuFs * 0.5)}px ${menuFs * 1.5}px`,
+                        padding: `${Math.round(menuFs * 0.55)}px ${menuFs * 1.2}px ${Math.round(menuFs * 0.55)}px ${menuFs * 2}px`,
                         color: menuText,
                         fontSize: `${menuFs - 1}px`,
                         cursor: 'pointer',
                         userSelect: 'none',
+                        opacity: activePageId === child.id ? 1 : 0.88,
                       }}
                     >
                       {child.title}
