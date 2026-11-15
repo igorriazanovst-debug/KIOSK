@@ -139,6 +139,31 @@ const Player: React.FC<PlayerProps> = ({ embedded = false }) => {
   // project.canvas/widget.*.
   const [viewportSize, setViewportSize] = useState({ width: window.innerWidth, height: window.innerHeight });
 
+  // Киоск-гигиена для браузер-проектов (музей): после длительного бездействия
+  // вернуться на первую страницу — следующий посетитель видит главную со
+  // счётчиками, а не забытую случайную страницу. Не действует на standalone-
+  // приложения (ЭУМК и др. — там нет browser-menu, учебный процесс не сбиваем)
+  // и не срабатывает при открытом лайтбоксе.
+  const idleResetTimer = useRef<number | null>(null);
+  useEffect(() => {
+    const hasBrowserMenu = !!project?.widgets?.some((w: any) => w.type === 'browser-menu');
+    if (!hasBrowserMenu) return;
+    const IDLE_MS = 3 * 60 * 1000;
+    const reset = () => {
+      if (idleResetTimer.current) window.clearTimeout(idleResetTimer.current);
+      idleResetTimer.current = window.setTimeout(() => {
+        setBrowserActivePages((prev) => (Object.keys(prev).length === 0 || browserZoomImage ? prev : {}));
+      }, IDLE_MS);
+    };
+    reset();
+    const events: (keyof WindowEventMap)[] = ['pointerdown', 'pointermove', 'keydown'];
+    events.forEach((ev) => window.addEventListener(ev, reset, { passive: true }));
+    return () => {
+      if (idleResetTimer.current) window.clearTimeout(idleResetTimer.current);
+      events.forEach((ev) => window.removeEventListener(ev, reset));
+    };
+  }, [project, browserZoomImage]);
+
   useEffect(() => {
     const onResize = () => setViewportSize({ width: window.innerWidth, height: window.innerHeight });
     window.addEventListener('resize', onResize);

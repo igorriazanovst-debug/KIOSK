@@ -1,8 +1,29 @@
 // Теория: блоки и разделы, таблицы, блок-схемы, иллюстрации, примеры.
-import React, { useState } from 'react';
+// Последний прочитанный раздел запоминается per-обучающийся (localStorage):
+// повторный вход продолжает с места остановки, а не с первого раздела.
+import React, { useEffect, useState } from 'react';
 import type { EumkContent } from '../model/schema.ts';
 
 type Section = EumkContent['theory'][number]['sections'][number];
+
+function lastSectionKey(contentId: string, accountId?: string): string {
+  return `eumk:${contentId}:theory:last${accountId ? ':' + accountId : ''}`;
+}
+
+function readLastSection(content: EumkContent, key: string): { blockId: string; sectionId: string } | null {
+  try {
+    const raw = localStorage.getItem(key);
+    if (!raw) return null;
+    const parsed = JSON.parse(raw);
+    if (!Array.isArray(parsed) || parsed.length !== 2) return null;
+    const [b, s] = parsed;
+    const block = content.theory.find((x) => x.id === b);
+    if (block && block.sections.some((x) => x.id === s)) return { blockId: b, sectionId: s };
+  } catch {
+    // повреждённая запись — начинаем с первого раздела
+  }
+  return null;
+}
 
 function SectionView({ section }: { section: Section }) {
   return (
@@ -55,12 +76,22 @@ function SectionView({ section }: { section: Section }) {
   );
 }
 
-export default function TheoryScreen({ content }: { content: EumkContent }) {
-  const [blockId, setBlockId] = useState(content.theory[0].id);
+export default function TheoryScreen({ content, accountId }: { content: EumkContent; accountId?: string }) {
+  const storageKey = lastSectionKey(content.id, accountId);
+  const saved = readLastSection(content, storageKey);
+  const [blockId, setBlockId] = useState(saved?.blockId ?? content.theory[0].id);
   const block = content.theory.find((b) => b.id === blockId) ?? content.theory[0];
-  const [sectionId, setSectionId] = useState(block.sections[0].id);
+  const [sectionId, setSectionId] = useState(saved?.sectionId ?? block.sections[0].id);
   const section = block.sections.find((s) => s.id === sectionId) ?? block.sections[0];
   const index = block.sections.indexOf(section);
+
+  useEffect(() => {
+    try {
+      localStorage.setItem(storageKey, JSON.stringify([blockId, sectionId]));
+    } catch {
+      // localStorage недоступен — продолжение просто не сохранится
+    }
+  }, [storageKey, blockId, sectionId]);
 
   const pickBlock = (id: string) => {
     setBlockId(id);
@@ -69,6 +100,11 @@ export default function TheoryScreen({ content }: { content: EumkContent }) {
 
   return (
     <div className="eumk-split">
+      {saved && section.id === saved.sectionId && (
+        <div className="eumk-note info" style={{ gridColumn: '1 / -1', marginBottom: 12 }}>
+          Продолжаем с раздела, где вы остановились: «{section.title}».
+        </div>
+      )}
       <nav className="eumk-nav" aria-label="Содержание">
         {content.theory.map((b) => (
           <div key={b.id}>

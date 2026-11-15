@@ -102,7 +102,8 @@ export default function TestScreen({ content, accountId, previousSignatures, onF
         <h2>Итоговый тест</h2>
         <div className="eumk-card">
           <p>В тесте {test.questions.length} вопросов. Они выбираются случайно из банка в {content.bank.length} вопросов, поэтому при каждом входе набор новый.</p>
-          <p>В конце вы получите баллы, отметку и время прохождения. Время идёт с нажатия «Начать».</p>
+          <p>В конце вы получите баллы, отметку и время прохождения.</p>
+          <div className="eumk-note info"><b>Время идёт с нажатия «Начать».</b> Нажимайте, только когда готовы отвечать.</div>
           {test.isRepeat && <div className="eumk-note info">Все возможные наборы уже были, поэтому один из прежних может повториться.</div>}
           <div className="eumk-row">
             <button type="button" className="eumk-btn primary" onClick={() => { startedAt.current = Date.now(); setNow(Date.now()); setStarted(true); }}>Начать</button>

@@ -29,6 +29,10 @@
 .eumk-top h1 { margin: 0; font-size: 22px; flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .eumk-user { color: var(--eumk-muted); font-size: 17px; }
 .eumk-body { flex: 1; min-height: 0; overflow: auto; padding: 22px 30px 34px; }
+/* Тонкий «свой» скроллбар вместо системного (киоск-эстетика) */
+.eumk-body::-webkit-scrollbar { width: 10px; }
+.eumk-body::-webkit-scrollbar-track { background: transparent; }
+.eumk-body::-webkit-scrollbar-thumb { background: var(--eumk-line); border-radius: 5px; border: 2px solid var(--eumk-bg); }
 .eumk-narrow { max-width: 900px; margin: 0 auto; }
 .eumk h2 { font-size: 28px; margin: 0 0 14px; }
 .eumk h3 { font-size: 22px; margin: 18px 0 8px; }
@@ -53,6 +57,8 @@
 .eumk-tile:hover { border-color: var(--eumk-accent); transform: translateY(-3px); box-shadow: 0 8px 22px rgba(29, 36, 51, 0.15); }
 .eumk-tile:active { transform: translateY(0) scale(0.985); box-shadow: none; }
 .eumk-tile::after { content: '→'; margin-top: auto; align-self: flex-end; font-size: 26px; font-weight: 700; color: var(--eumk-accent); }
+.eumk-tile-icon { display: inline-flex; width: 34px; height: 34px; color: var(--eumk-accent); }
+.eumk-tile-icon svg { width: 100%; height: 100%; }
 .eumk-tile b { font-size: 24px; }
 .eumk-tile span { color: var(--eumk-muted); font-size: 17px; }
 .eumk-card { background: var(--eumk-surface); border: 1px solid var(--eumk-line); border-radius: 14px; padding: 20px 26px; margin-bottom: 16px; box-shadow: 0 1px 4px rgba(29, 36, 51, 0.05); }

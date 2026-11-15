@@ -123,7 +123,7 @@ function Loaded({ content }: { content: EumkContent }) {
   const progress = data.taskProgress[account.id] ?? {};
   let body: React.ReactNode;
   switch (section) {
-    case 'theory': body = <TheoryScreen content={content} />; break;
+    case 'theory': body = <TheoryScreen content={content} accountId={account.id} />; break;
     case 'test': body = <TestScreen content={content} accountId={account.id} previousSignatures={signaturesFor(data, account.id)} onFinish={(r) => commit(recordResult(data, r))} onExit={() => setSection(null)} />; break;
     case 'tasks': body = <TasksScreen content={content} progress={progress} onDone={(id, ok) => commit(markTask(data, account.id, id, ok || !!progress[id]))} />; break;
     case 'games': body = <GamesScreen content={content} />; break;
