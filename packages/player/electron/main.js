@@ -896,6 +896,15 @@ ipcMain.handle('activate-with-credentials', async (event, email, password) => {
 // IPC: renderer запрашивает проверку пароля для обновления
 ipcMain.handle('verify-update-password', async (event, password) => {
   if (!currentProject || !currentProject.serverUrl || !playerToken) {
+    // Автономная сборка (без сервера): административный режим обязан работать
+    // и офлайн — сверяем с локальным паролем (resources/admin.password,
+    // по умолчанию «admin», смена правкой файла — см. инструкцию).
+    if (currentProject && !currentProject.serverUrl) {
+      const { verifyLocalAdminPassword } = require('./common/localAdmin.js');
+      return verifyLocalAdminPassword(password, process.resourcesPath || '')
+        ? { success: true }
+        : { success: false, error: 'Неверный пароль' };
+    }
     return { success: false, error: 'Not authenticated' };
   }
   try {
