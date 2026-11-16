@@ -3,6 +3,7 @@
 // повторный вход продолжает с места остановки, а не с первого раздела.
 import React, { useEffect, useState } from 'react';
 import type { EumkContent } from '../model/schema.ts';
+import { splitParagraphs } from '../theoryText.ts';
 
 type Section = EumkContent['theory'][number]['sections'][number];
 
@@ -29,7 +30,7 @@ function SectionView({ section }: { section: Section }) {
   return (
     <article>
       <h2>{section.title}</h2>
-      {section.text.split(/\n{2,}/).map((p, i) => <p key={i}>{p}</p>)}
+      {splitParagraphs(section.text).map((p, i) => <p key={i}>{p}</p>)}
       {section.keyPoints.length > 0 && (
         <div className="eumk-card">
           <b>Главное</b>

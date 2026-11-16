@@ -413,6 +413,25 @@ const Player: React.FC<PlayerProps> = ({ embedded = false }) => {
   };
 
 
+  // Пиктограммы пунктов меню браузер-проектов: контент задаёт page.icon
+  // (строковый ключ); проекты без иконок отображаются как раньше.
+  const iconStroke = { fill: 'none', stroke: 'currentColor', strokeWidth: 1.8, strokeLinecap: 'round' as const, strokeLinejoin: 'round' as const };
+  const BROWSER_MENU_ICONS: Record<string, React.ReactNode> = {
+    home: <svg viewBox="0 0 24 24" {...iconStroke}><path d="M3 10.5 12 3l9 7.5" /><path d="M5.5 9.3V21h13V9.3" /></svg>,
+    list: <svg viewBox="0 0 24 24" {...iconStroke}><path d="M9 6h12M9 12h12M9 18h12" /><path d="M3.5 6h.01M3.5 12h.01M3.5 18h.01" /></svg>,
+    calendar: <svg viewBox="0 0 24 24" {...iconStroke}><rect x="3" y="5" width="18" height="16" rx="2" /><path d="M16 3v4M8 3v4M3 11h18" /></svg>,
+    persons: <svg viewBox="0 0 24 24" {...iconStroke}><circle cx="9" cy="8" r="3.5" /><path d="M2.5 20a6.5 6.5 0 0 1 13 0" /><path d="M16 4.6a3.5 3.5 0 0 1 0 6.8" /><path d="M17.5 13.6a6.5 6.5 0 0 1 4 6.4" /></svg>,
+    swords: <svg viewBox="0 0 24 24" {...iconStroke}><path d="M4 4l9.5 9.5M20 4l-9.5 9.5" /><path d="M14 16l4-4 2 2-4 4z" /><path d="M10 16l-4-4-2 2 4 4z" /></svg>,
+    medal: <svg viewBox="0 0 24 24" {...iconStroke}><circle cx="12" cy="9" r="5" /><path d="M9.2 13.4 7.5 21l4.5-2.6L16.5 21l-1.7-7.6" /></svg>,
+    gallery: <svg viewBox="0 0 24 24" {...iconStroke}><rect x="3" y="4" width="18" height="16" rx="2" /><circle cx="9" cy="10" r="1.6" /><path d="m4 18 5-5 4 4 3-3 5 5" /></svg>,
+    book: <svg viewBox="0 0 24 24" {...iconStroke}><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" /><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" /></svg>,
+  };
+  const browserMenuIcon = (page: any): React.ReactNode => {
+    const icon = BROWSER_MENU_ICONS[page?.icon];
+    if (!icon) return null;
+    return <span style={{ display: 'inline-flex', width: 22, height: 22, marginRight: 10, flex: 'none', opacity: 0.92, alignItems: 'center' }}>{icon}</span>;
+  };
+
   const renderBrowserMenu = (widget: Widget, baseStyle: React.CSSProperties) => {
     const browserId: string = widget.properties.browserId || '';
     const pages: any[] = widget.properties.pages || [];
@@ -465,7 +484,7 @@ const Player: React.FC<PlayerProps> = ({ embedded = false }) => {
                   userSelect: 'none',
                 }}
               >
-                {page.title}
+                {browserMenuIcon(page)}{page.title}
               </div>
               {children.length > 0 && (
                 <div style={{
@@ -522,11 +541,13 @@ const Player: React.FC<PlayerProps> = ({ embedded = false }) => {
       const a = (e.target as HTMLElement).closest('a');
       if (a) {
         const href = a.getAttribute('href') || '';
+        e.preventDefault();
         if (href.startsWith('browser-page://')) {
-          e.preventDefault();
           const pageId = href.replace('browser-page://', '');
           setBrowserActivePages(prev => ({ ...prev, [browserId]: pageId }));
         }
+        // Любая другая ссылка (внешние источники, http) в киоске не открывается:
+        // уход из экспозиции по клику недопустим.
         return;
       }
       // Клик по изображению статьи (не миниатюре галереи — у тех inline
