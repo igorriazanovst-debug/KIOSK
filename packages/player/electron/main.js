@@ -81,6 +81,12 @@ try {
     // CSP-заголовок ниже (см. onHeadersReceived) - остальные директивы
     // (через фолбэк на default-src) продолжают действовать на неё.
     { scheme: 'chronomedia', privileges: { standard: true, secure: true, supportFetchAPI: true, stream: true } },
+    // kioskres — поставочные (read-only) ресурсы вшитого контента (медиа музея):
+    // kioskres://<файл> → <resourcesPath>/museum-media/<файл>. Платформенно-
+    // независимые пути в контенте: один и тот же JSON работает и на Linux
+    // (/opt/...), и на Windows (<каталог установки>\...). Без bypassCSP —
+    // схема добавлена в CSP-заголовок ниже.
+    { scheme: 'kioskres', privileges: { standard: true, secure: true, supportFetchAPI: true, stream: true } },
     // natcomlib - поставочная (read-only) библиотека виджета «Конструктор
     // природных сообществ» (packages/natcom-library/assets/), тот же
     // принцип, что chronomedia - без bypassCSP, схема явно добавлена в
@@ -1861,7 +1867,7 @@ app.whenReady().then(() => {
         ...details.responseHeaders,
         // chronomedia:/natcomlib: добавлены явно (не полагаемся на bypassCSP
         // этих схем - его нет, см. registerSchemesAsPrivileged выше).
-        'Content-Security-Policy': ["default-src 'self' 'unsafe-inline' 'unsafe-eval' data: file: blob: chronomedia: natcomlib: rusiqmedia: chimiqmedia: bioiqmedia: physastroiqmedia: wordslib: wordsuser: alphabetlib: alphabetuser: inophonelib: http: https: ws: wss:"]
+        'Content-Security-Policy': ["default-src 'self' 'unsafe-inline' 'unsafe-eval' data: file: blob: chronomedia: natcomlib: rusiqmedia: chimiqmedia: bioiqmedia: physastroiqmedia: wordslib: wordsuser: alphabetlib: alphabetuser: inophonelib: kioskres: http: https: ws: wss:"]
       }
     });
   });
@@ -1904,6 +1910,56 @@ app.whenReady().then(() => {
       }
 
       // Без Range — отдаём целиком, но с Accept-Ranges чтобы браузер мог seeking
+      const stream = fs.createReadStream(filePath);
+      const webStream = nodeStreamToWeb(stream);
+      return new Response(webStream, {
+        status: 200,
+        headers: {
+          'Content-Type': mime,
+          'Content-Length': String(total),
+          'Accept-Ranges': 'bytes'
+        }
+      });
+    } catch (e) {
+      return new Response('Error: ' + e.message, { status: 500 });
+    }
+  });
+
+  // Обработчик протокола kioskres://<файл> → поставочный ресурс вшитого
+  // контента (<resourcesPath>/museum-media/). Range — для <video>/<audio>
+  // seeking (тот же паттерн, что kioskcache).
+  protocol.handle('kioskres', async (request) => {
+    try {
+      const { resolveKioskresPath, guessMime: resMime } = require('./common/kioskres.js');
+      const root = path.join(process.resourcesPath || '', 'museum-media');
+      const filePath = resolveKioskresPath(request.url, root);
+      if (!filePath || !fs.existsSync(filePath)) {
+        return new Response('Not found', { status: 404 });
+      }
+      const stat = fs.statSync(filePath);
+      const total = stat.size;
+      const mime = resMime(filePath);
+      const rangeHeader = request.headers.get('range') || request.headers.get('Range');
+      if (rangeHeader) {
+        const m = /bytes=(\d*)-(\d*)/.exec(rangeHeader);
+        let start = m && m[1] ? parseInt(m[1], 10) : 0;
+        let end = m && m[2] ? parseInt(m[2], 10) : total - 1;
+        if (isNaN(start) || start < 0) start = 0;
+        if (isNaN(end) || end >= total) end = total - 1;
+        if (start > end) start = 0;
+        const chunkSize = end - start + 1;
+        const stream = fs.createReadStream(filePath, { start, end });
+        const webStream = nodeStreamToWeb(stream);
+        return new Response(webStream, {
+          status: 206,
+          headers: {
+            'Content-Type': mime,
+            'Content-Length': String(chunkSize),
+            'Content-Range': `bytes ${start}-${end}/${total}`,
+            'Accept-Ranges': 'bytes'
+          }
+        });
+      }
       const stream = fs.createReadStream(filePath);
       const webStream = nodeStreamToWeb(stream);
       return new Response(webStream, {
