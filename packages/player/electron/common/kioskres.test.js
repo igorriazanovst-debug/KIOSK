@@ -22,6 +22,15 @@ test('resolveKioskresPath: имя с пробелами/процентами —
   assert.equal(p, path.join('/r', 'video parade.mp4'));
 });
 
+test('resolveKioskresPath: конечный слэш от standard-схемы не ломает путь', () => {
+  // Arrange
+  const root = '/r';
+  // Act
+  const p = resolveKioskresPath('kioskres://m032.jpg/', root);
+  // Assert
+  assert.equal(p, path.join('/r', 'm032.jpg'));
+});
+
 test('resolveKioskresPath: обход каталогов пресекается', () => {
   // Arrange
   const root = '/r';
