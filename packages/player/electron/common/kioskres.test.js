@@ -31,6 +31,15 @@ test('resolveKioskresPath: конечный слэш от standard-схемы н
   assert.equal(p, path.join('/r', 'm032.jpg'));
 });
 
+test('resolveKioskresPath: query-хвост (?utm…) игнорируется', () => {
+  // Arrange
+  const root = '/r';
+  // Act
+  const p = resolveKioskresPath('kioskres://m002.jpg/?utm_source=commons.wikimedia.org&utm_campaign=x', root);
+  // Assert
+  assert.equal(p, path.join('/r', 'm002.jpg'));
+});
+
 test('resolveKioskresPath: обход каталогов пресекается', () => {
   // Arrange
   const root = '/r';

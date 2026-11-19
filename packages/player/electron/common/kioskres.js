@@ -19,7 +19,8 @@ function resolveKioskresPath(url, root) {
   try {
     // standard-схема заставляет браузер добавлять "/" в конец (kioskres://f.jpg/)
     // — POSIX path.normalize конечный слэш НЕ убирает, срезаем сами.
-    rel = decodeURIComponent(m[1]).replace(/^\/+/, '').replace(/\/+$/, '');
+    // Query-хвост (?utm… — артефакт ссылок API Викисклада) игнорируем.
+    rel = decodeURIComponent(m[1].split('?')[0]).replace(/^\/+/, '').replace(/\/+$/, '');
   } catch {
     return null;
   }
