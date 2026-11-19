@@ -31,6 +31,8 @@ declare global {
       applyUpdate: () => Promise<{ success: boolean; error?: string }>;
       getAutostart: () => Promise<{ enabled: boolean; supported: boolean; path?: string }>;
       setAutostart: (enabled: boolean) => Promise<{ ok: boolean; enabled?: boolean; persisted?: boolean; error?: string; path?: string }>;
+      /** Выход из приложения — только из админ-панели (после пароля), MUS-KIOSK-04 */
+      adminExitApp: () => Promise<{ success: boolean }>;
     };
     /** Виджет «Хронолиния» — локальное хранилище проектов на устройстве (packages/player/electron/chrono) */
     chronoAPI?: {

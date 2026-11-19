@@ -137,6 +137,9 @@ try {
 // ─────────────────────────────────────────────────────────────────────────────
 
 let mainWindow = null;
+// Киоск-режим: разрешён ли выход. True ставит только IPC 'admin-exit-app'
+// (кнопка в административной панели после ввода пароля) — MUS-KIOSK-04.
+let kioskExitAllowed = false;
 let activationWindow = null;
 let allowActivationClose = false;
 let currentProject = null;
@@ -419,6 +422,27 @@ function createWindow() {
       preload: path.join(__dirname, 'preload.js')
     }
   });
+
+  // Киоск-защита (ТЗ Калининград, MUS-KIOSK-02/03/04): в полноэкранном
+  // kiosk-режиме (музей и другие канвас-проекты) посетитель не может закрыть
+  // приложение (крестика нет, Alt+F4/Ctrl+Q/Ctrl+W блокируются), открыть
+  // DevTools/перезагрузку или контекстное меню. Выход — только из
+  // административного режима по паролю (IPC 'admin-exit-app').
+  if (windowOptions.kiosk) {
+    mainWindow.on('close', (e) => {
+      if (!kioskExitAllowed) {
+        e.preventDefault();
+        fileLog('[kiosk] window close prevented (exit via admin mode only)');
+      }
+    });
+    const { isBlockedKioskInput } = require('./common/kioskGuard.js');
+    mainWindow.webContents.on('before-input-event', (event, input) => {
+      if (isBlockedKioskInput(input)) event.preventDefault();
+    });
+    mainWindow.webContents.on('context-menu', (e) => {
+      e.preventDefault();
+    });
+  }
 
   // DIAG: ловим ошибки загрузки
   mainWindow.webContents.on('did-fail-load', (e, code, desc, url) => {
@@ -1516,6 +1540,15 @@ app.whenReady().then(() => {
     fileLog('[autostart] init failed:', err && err.message);
   }
   ipcMain.handle('autostart:get', async () => getAutostartState(autostartContext()));
+  // Выход из приложения из административной панели (MUS-KIOSK-04/08,
+  // MUS-ADM-05): кнопка доступна только после ввода пароля администратора
+  // в AdminPanel (renderer сам проверяет пароль через verify-update-password).
+  ipcMain.handle('admin-exit-app', async () => {
+    fileLog('[kiosk] admin exit requested');
+    kioskExitAllowed = true;
+    app.exit(0);
+    return { success: true };
+  });
   ipcMain.handle('autostart:set', async (_event, enabled) => {
     const context = autostartContext();
     const result = applyAutostart({ ...context, enabled: enabled === true });

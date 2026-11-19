@@ -49,7 +49,9 @@ contextBridge.exposeInMainWorld('electronAPI', {
 
   // Автозапуск после входа в ОС
   getAutostart: () => ipcRenderer.invoke('autostart:get'),
-  setAutostart: (enabled) => ipcRenderer.invoke('autostart:set', enabled)
+  setAutostart: (enabled) => ipcRenderer.invoke('autostart:set', enabled),
+  // Выход из приложения — только из админ-панели (после пароля)
+  adminExitApp: () => ipcRenderer.invoke('admin-exit-app')
 });
 
 // Локальное хранилище проектов «Хронолинии» — отдельный namespace, не

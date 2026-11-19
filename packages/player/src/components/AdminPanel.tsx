@@ -108,7 +108,11 @@ export default function AdminPanel() {
                 </div>
                 {error && <p style={{ color: '#ef4444', fontSize: 13, margin: '8px 0 0' }}>{error}</p>}
                 {state?.path && <p style={{ color: '#64748b', fontSize: 11, margin: '8px 0 0', wordBreak: 'break-all' }}>{state.path}</p>}
-                <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: 16 }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', gap: 8, marginTop: 16 }}>
+                  {/* MUS-KIOSK-04/MUS-ADM-05: выход из киоск-приложения — только
+                      здесь, после ввода пароля администратора */}
+                  <button type="button" disabled={busy} onClick={() => { if (window.confirm('Выйти из приложения?')) void window.electronAPI!.adminExitApp(); }}
+                          style={{ ...btnGhost, borderColor: '#7f1d1d', color: '#fca5a5' }}>Выйти из приложения</button>
                   <button type="button" onClick={close} style={btnPrimary}>Готово</button>
                 </div>
               </>
