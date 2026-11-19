@@ -5,7 +5,13 @@ import { EUMK_WIDGET_TYPE } from '@kiosk/shared';
 // аккаунта. Клиентское скрытие в WidgetLibrary.tsx (EUMK_ALLOWED_EMAILS) -
 // только половина рубежа; эта серверная проверка - вторая.
 
-const EUMK_ALLOWED_EMAILS = ['admin@kiosk.local'];
+// Allow-list доступа к ЭУМК-проектам по email. Расширяется через env
+// (запятая): EUMK_ALLOWED_EMAILS=a@x.ru,b@x.ru — для аккаунтов поставки
+// (Калининград: kaliningrad@kiosk.local) без правки кода.
+const EUMK_ALLOWED_EMAILS = (process.env.EUMK_ALLOWED_EMAILS || 'admin@kiosk.local')
+  .split(',')
+  .map((e) => e.trim().toLowerCase())
+  .filter(Boolean);
 
 export function isEmailAllowedForEumk(email: string | undefined | null): boolean {
   if (!email) return false;
