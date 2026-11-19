@@ -178,6 +178,15 @@ export const updateLicenseUserValidators = [
     .isUUID()
     .withMessage('License user ID must be a valid UUID'),
 
+  // Задать конкретный пароль аккаунту (вместо сброса на временный) —
+  // например, при поставке: заказчику выдаётся согласованный пароль.
+  body('password')
+    .optional()
+    .isString()
+    .trim()
+    .isLength({ min: 6, max: 128 })
+    .withMessage('Password must be 6-128 chars'),
+
   body('email')
     .optional()
     .isEmail()

@@ -118,7 +118,7 @@ export class LicenseUserController {
    */
   static async update(req: Request, res: Response) {
     const { id } = req.params;
-    const { email, role, resetPassword } = req.body;
+    const { email, role, resetPassword, password } = req.body;
 
     const prisma = getPrismaClient();
     const user = await prisma.licenseUser.findUnique({ where: { id } });
@@ -143,7 +143,11 @@ export class LicenseUserController {
     if (role) updateData.role = role;
 
     let tempPassword: string | null = null;
-    if (resetPassword) {
+    if (password) {
+      // Конкретный пароль поставки (согласованный с заказчиком) — вместо
+      // сброса на временный. Приоритетнее resetPassword.
+      updateData.passwordHash = await bcrypt.hash(String(password), BCRYPT_ROUNDS);
+    } else if (resetPassword) {
       tempPassword = generateTempPassword();
       updateData.passwordHash = await bcrypt.hash(tempPassword, BCRYPT_ROUNDS);
     }
